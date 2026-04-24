@@ -1,0 +1,13 @@
+[project]
+name = "private-manim"
+version = "0.1.0"
+description = "3blue1brown-style explainer shorts built with Manim Community."
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "manim==0.18.1",
+    "numpy==1.26.4",
+    "scikit-learn==1.5.2",
+]
+
+[tool.uv]
+package = false
