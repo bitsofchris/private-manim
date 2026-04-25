@@ -45,10 +45,12 @@ config.pixel_width = 1920
 config.pixel_height = 1080
 
 
-# Three steering-vector "directions" drawn tip-to-tail. Cartoon 2D.
-V_PIRATE = np.array([1.8, 0.6])
-V_PICKLE = np.array([1.4, -0.9])
-V_GG = np.array([0.9, 1.5])
+# Three steering-vector "directions" drawn tip-to-tail. Cartoon 2D — each
+# arrow points at a clearly different angle. Golden Gate is intentionally
+# the flattest (mostly horizontal) so the three slopes read as distinct.
+V_PIRATE = np.array([2.0, 1.0])    # up-right diagonal
+V_PICKLE = np.array([0.0, -2.0])   # straight down into the brine
+V_GG = np.array([2.6, 0.5])        # mostly horizontal, gentle rise
 
 RUST = GOLD  # golden-gate arrow color — bright, distinct from pirate brown
 
@@ -78,7 +80,10 @@ class Composition(Scene):
         p2 = p1 + V_PICKLE
         p3 = p2 + V_GG
 
-        def make_arrow(start, end, color, label_text, label_dir=UP):
+        def make_arrow(start, end, color, label_text, side=1, offset=0.5):
+            """Draw arrow + label. Label sits perpendicular to the shaft so it
+            never overlaps. ``side=+1`` = left of arrow direction (CCW),
+            ``side=-1`` = right."""
             arr = Arrow(
                 plane.c2p(start[0], start[1]),
                 plane.c2p(end[0], end[1]),
@@ -86,9 +91,17 @@ class Composition(Scene):
                 color=color,
                 stroke_width=6,
             )
-            mid = (np.array(arr.get_start()) + np.array(arr.get_end())) / 2
+            s = np.array(arr.get_start())
+            e = np.array(arr.get_end())
+            mid = (s + e) / 2
+            d = e - s
+            n = float(np.linalg.norm(d[:2]))
+            perp = (
+                np.array([-d[1] / n, d[0] / n, 0.0]) if n > 1e-6
+                else np.array([0.0, 1.0, 0.0])
+            )
             lbl = Text(label_text, font_size=22, color=color).move_to(
-                mid + 0.35 * np.array([label_dir[0], label_dir[1], 0])
+                mid + side * offset * perp
             )
             return arr, lbl
 
@@ -106,8 +119,8 @@ class Composition(Scene):
         )
         self.play(FadeIn(side_title))
 
-        # --- pirate ---
-        arr1, lbl1 = make_arrow(p0, p1, DARK_BROWN, "+ pirate", UP)
+        # --- pirate --- (label above the rightward shaft)
+        arr1, lbl1 = make_arrow(p0, p1, DARK_BROWN, "+ pirate", side=+1)
         self.play(Create(arr1), FadeIn(lbl1))
         self.play(marker.animate.move_to(plane.c2p(p1[0], p1[1])), run_time=0.8)
         pirate_out = Text(
@@ -118,8 +131,8 @@ class Composition(Scene):
         self.play(Write(pirate_out))
         self.wait(0.6)
 
-        # --- pickle ---
-        arr2, lbl2 = make_arrow(p1, p2, GREEN, "+ pickle", DOWN)
+        # --- pickle --- (straight-down shaft; label to the LEFT of the arrow)
+        arr2, lbl2 = make_arrow(p1, p2, GREEN, "+ pickle", side=-1, offset=0.7)
         self.play(Create(arr2), FadeIn(lbl2))
         self.play(marker.animate.move_to(plane.c2p(p2[0], p2[1])), run_time=0.8)
         pickle_out = Text(
@@ -130,8 +143,9 @@ class Composition(Scene):
         self.play(Write(pickle_out))
         self.wait(0.6)
 
-        # --- golden gate ---
-        arr3, lbl3 = make_arrow(p2, p3, RUST, "+ golden gate", UP)
+        # --- golden gate --- (mostly horizontal shaft; label to the RIGHT/below
+        # the arrow so it sits opposite the pickle label across the canvas)
+        arr3, lbl3 = make_arrow(p2, p3, RUST, "+ golden gate", side=-1, offset=0.6)
         self.play(Create(arr3), FadeIn(lbl3))
         self.play(marker.animate.move_to(plane.c2p(p3[0], p3[1])), run_time=0.8)
         gg_out = Text(
@@ -155,9 +169,9 @@ class Composition(Scene):
         self.wait(0.3)
 
         tip_world = plane.c2p(p3[0], p3[1])
-        # Pull the merged word inward (toward frame center) so the 40pt text
-        # doesn't overflow the right edge.
-        merge_pt = np.array(tip_world) + np.array([-1.8, 0.8, 0])
+        # Land the merged word in the top-center "headline" zone — well above
+        # all three arrow tips so the 40pt text never collides with the path.
+        merge_pt = np.array([0.5, 1.7, 0.0])
         self.play(
             golden_src.animate.move_to(merge_pt + np.array([-0.6, 0, 0])),
             kraken_src.animate.move_to(merge_pt + np.array([0.6, 0, 0])),

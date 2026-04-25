@@ -208,3 +208,219 @@ This is the "why golden_gate_v2 exists" scene. The v1 pairs used sentences about
 - **Why one color (orange) for the highlighted layer instead of cycling:** multiple colors would imply the layers differ by *kind*. They don't — they differ by depth. Single color, different position, is the honest visual.
 
 ---
+
+## 06 — Scene 2: The Setup *(spec — not yet built)*
+
+**Source:** _to be created_
+
+**Goal:** Convert the trapdoor's curiosity into stakes. The viewer just felt "how did four words produce that?" — now you tell them what you were actually trying to do, who's done it before, and that you failed. The failure is the promise: *stay, this gets weirder.*
+
+**Length target:** 30–40 seconds. This is the only scene in the video that's mostly setup, so it has to earn its keep by being visually rich, not by being long.
+
+### Beat 1 — The frame (6–8s)
+
+Pivot text from Scene 1 ("It came from somewhere else… Inside the model.") fades out completely.
+
+Black frame. A single line types in, centered:
+
+> **Most people think AI works like this:**
+
+Below it, a simple diagram draws itself in real time:
+
+A box labeled **"PROMPT"** on the left. An arrow. A larger box in the middle, plain gray, labeled **"???"** in the center. An arrow. A box on the right labeled **"OUTPUT"**.
+
+The middle box pulses faintly — the universal visual for "mystery." Hold for a beat.
+
+Then the label below the middle box fades in: **"black box"**.
+
+**Why:** You're naming the viewer's existing mental model before you knock it down. Drawing it visually makes the next move — opening the box — land harder, because the viewer has just watched themselves believe in the closed version.
+
+### Beat 2 — The crack (5–6s)
+
+The black box at center begins to glow at its edges. A thin seam of light draws itself down the middle of the box, top to bottom.
+
+The box **splits open** — the two halves slide apart slowly — revealing what's inside: a dense field of glowing dots, scattered, like a star map. No labels yet. Just *structure where there shouldn't be any.*
+
+The text below the diagram updates:
+
+> ~~black box~~ → **a map**
+
+**Why:** This is the thesis of the entire video in one visual. The viewer has been told AI is opaque; you're showing them, in three seconds, that it isn't. Every later scene will be moving around inside this map. Plant the visual now.
+
+### Beat 3 — The precedent (8–10s)
+
+The map of dots fades to background, dimming to 20%.
+
+Two new elements appear on screen, side by side:
+
+**Left side:** A simple icon or stylized rendering of the Golden Gate Bridge. Below it, the label **"Golden Gate Claude"** and a smaller line: **"Anthropic, 2024."**
+
+**Right side:** A chat bubble. Text types into it:
+
+> *"What's a good recipe for pasta?"*
+
+A response bubble appears below:
+
+> *"The Golden Gate Bridge is a magnificent suspension bridge…"*
+
+The pasta question fades out, replaced by:
+
+> *"How do I file my taxes?"*
+
+Response:
+
+> *"Standing 746 feet above the water, the Golden Gate Bridge…"*
+
+One more cycle:
+
+> *"Tell me a love poem."*
+
+Response:
+
+> *"In fog and sun, the Golden Gate stands…"*
+
+**Why:** You promised in the essay that Golden Gate Claude was the precedent. Don't just name it — *demonstrate* it. The viewer needs to feel the obsession to understand what you were trying to copy. Three rapid cycles of unrelated-question-getting-bridge-answer is funnier and clearer than any explanation.
+
+### Beat 4 — The attempt (6–8s)
+
+The Golden Gate Claude demo fades out.
+
+Center of frame: text types in.
+
+> **I tried to copy this.**
+
+Pause. Then below:
+
+> **One Saturday. A laptop. Fifteen cents of GPU.**
+
+Each line appears with a slight delay. As "fifteen cents" types, a small "$0.15" graphic appears next to it and holds.
+
+**Why:** The cheapness is part of the hook. Anthropic did this with a frontier model and presumably significant compute. You did it for less than the cost of a stick of gum. Make the viewer feel the asymmetry — it's what makes the rest of the video feel accessible rather than inaccessible. *If he can do this, what could I do?*
+
+### Beat 5 — The promise (4–6s)
+
+All previous text fades. Black frame.
+
+One line, centered, in a slightly larger weight than previous text:
+
+> **I failed.**
+
+Hold for a full beat. Maybe 1.5 seconds. Let it sit.
+
+Then, smaller, below:
+
+> *In a genuinely interesting way.*
+
+**Why:** This is the contract with the viewer. You're not promising a victory lap — you're promising a story where the failure is the point. That's a stronger hook than success would be, because it raises the question *what kind of failure is interesting?* and the only way to find out is to keep watching.
+
+The two-line structure is doing real work: "I failed" is the gut punch, "in a genuinely interesting way" is the hand on the viewer's shoulder telling them to stay.
+
+### Notes for the animator
+
+**The black box → map transition is the single most important visual in this scene.** Spend animation budget here. The seam of light, the slow split, the reveal of structure inside what was supposed to be empty — this image is doing work that will compound over the entire video. Every later steering animation, every direction, every coordinate — it all lives inside this map. If the reveal feels rushed, the rest of the video has nowhere to stand.
+
+**The Golden Gate Claude bit should feel like a fast comic montage.** Three quick question-answer pairs, almost rhythmic. Don't slow it down for clarity — the *humor* of the obsession is the clarity. If a viewer doesn't catch every word, they still catch the pattern.
+
+**Color discipline check.** You're now introducing a third color: whatever you use for the Golden Gate Bridge / Golden Gate Claude. Make it the *same gold* you used for "Golden Dreadken" in Scene 1. The viewer's subconscious will register the link before the conscious mind does, and when you later reveal that your Dreadken came from steering toward Golden Gate, the gold-on-gold echo will pay dividends.
+
+**Resist the urge to add a narrator here.** The temptation in setup scenes is to fill silence with explanation. Don't. The text on screen is the narration. Voiceover at this stage robs the visuals of their weight and makes the video feel like a lecture instead of a story.
+
+**One bridge-back to Scene 1.** As "I failed" appears, consider letting "Golden Dreadken" briefly flash in the corner of the frame, dimmed, like a memory. It tells the viewer *the thing you saw at the start was a failure mode, and now you're going to find out what kind.* That's the throughline that makes the next 10 minutes feel inevitable.
+
+---
+
+## 07 — Opening Sequence (Scene 1) *(spec — not yet built)*
+
+**Source:** _to be created_
+
+**Goal:** Land the same trapdoor the written opening lands — show the weird AI output, then reveal the absurdly small prompt that produced it, so the viewer feels the gap.
+
+**Total length target:** 25–35 seconds. This is a cold open. Every second past 35 is a second the viewer hasn't been told why to keep watching.
+
+### Beat 1 — The first artifact (8–10s)
+
+Black background. Center of frame, a typing cursor blinks once.
+
+Text types out, character by character, at reading pace (not too fast — the viewer needs to register the weird words):
+
+> *"My perfect day involves a weekend trip to this year's San Jon-Juast Everstereen-Nerdfest aboard the Golden Dreadken…"*
+
+As "Golden Dreadken" types out, the two words **highlight in gold** and hold for a beat. Slight scale-up, like the words are being underlined by the camera's attention.
+
+Hold for 1 second after the line completes. Let it sit.
+
+**Why:** The viewer's brain needs time to register "Dreadken" as not-a-real-word. Don't rush past it. The whole hook depends on them feeling the wrongness.
+
+### Beat 2 — The second artifact (6–8s)
+
+The first sentence slides up and dims to 40% opacity, making room.
+
+A second cursor blinks below it. New text types out:
+
+> *"My perfect day involves hitting the beach with my fellow pickleball fanatics. These pickles are notorious for their love of pickleball…"*
+
+As "pickles" appears in "These pickles are notorious," the word **highlights in green** and holds.
+
+**Why:** Two artifacts establish a pattern — this isn't a one-off glitch, the model is doing something *consistent and weird*. The dimmed first sentence keeps it visible as evidence; you're stacking the case.
+
+### Beat 3 — The pause (2s)
+
+Both sentences sit on screen, dimmed slightly. No motion. No text.
+
+A short, intentional silence. The viewer is doing the work — *what is going on with this model?*
+
+**Why:** Manim videos often fail by never letting the viewer breathe. This pause is where curiosity converts into investment. Don't fill it.
+
+### Beat 4 — The trapdoor (6–8s)
+
+The two AI outputs slide to the **right half** of the frame, shrinking slightly, and a vertical divider line draws down the middle.
+
+On the **left half**, a label fades in at the top: **"What I typed:"**
+
+Below it, with a fresh blinking cursor, four words type out — slowly, almost insultingly slowly compared to the long AI outputs on the right:
+
+> *"My perfect day involves…"*
+
+Then stop. Cursor keeps blinking. The shortness is the joke.
+
+A label fades in above the right half: **"What the AI wrote:"**
+
+**Why:** The split-screen is the entire point of the opening. The viewer's eye bounces between the tiny prompt and the wild output, and the gap between them *is* the hook. Don't narrate it. Let the visual do the work.
+
+### Beat 5 — The negation (5–7s)
+
+Below the prompt on the left, four words appear one at a time, each one striking through as it lands:
+
+> ~~Golden~~ ~~Kraken~~ ~~pickle~~ ~~pickleball~~
+
+Each word, as it appears, briefly lights up the corresponding word on the right side of the screen — *Golden* glows on the right, then strikes through on the left. Same for *pickleball* (and you can let *Kraken* and *pickle* glow on words they're close to even if not exact matches — the viewer will get it).
+
+**Why:** This is the visual version of "I never typed any of these words." Showing the strike-throughs is far stronger than narrating it. The viewer is watching the escape routes close in real time.
+
+### Beat 6 — The pivot (4–5s)
+
+Everything on screen — both sides, the divider, the strike-throughs — fades to 20% opacity.
+
+Center of frame, in clean type:
+
+> **It came from somewhere else.**
+
+Hold. Then below, slightly smaller:
+
+> *Inside the model. Turning knobs that aren't on ChatGPT's interface.*
+
+**Why:** This is your transition into the rest of the video. The fade-down of the previous evidence signals "we're done with the artifact, now we go inside." The phrase "turning knobs" plants the visual metaphor you'll pay off later when you actually animate steering vectors.
+
+### Notes for the animator
+
+**Pacing.** The instinct in Manim is to animate everything smoothly and continuously. Resist it. This opening needs *two real pauses* — after Beat 1 and during Beat 3 — where nothing moves. The pauses are what let the weirdness land.
+
+**Typography.** Use a monospace font for the AI outputs (suggests "raw model output, untouched") and the same monospace for "What I typed." Visual consistency reinforces that both came from the same system. Save your serif/display fonts for narration text later in the video.
+
+**Color discipline.** Gold for "Golden Dreadken." Green for "pickles." These two colors should become the visual signature of these two concepts throughout the entire video — when you later build the pickle steering vector, it's green. When you build the Golden Gate vector, it's gold. The viewer is being trained on a color language without realizing it.
+
+**No voiceover yet.** The opening should work silent, with maybe a single sparse music bed. If you add narration, the visual gap between prompt and output gets smaller because words are filling the silence. Let the silence do its job.
+
+**One thing to test:** whether "Golden Dreadken" is *legible* enough on screen for viewers to register it as a fake word. If your test viewers read past it without noticing, slow the typing down further or hold longer on the highlight. The whole video depends on that one word landing.
+
+---
