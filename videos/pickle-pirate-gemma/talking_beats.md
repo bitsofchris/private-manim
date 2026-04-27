@@ -424,3 +424,111 @@ Hold. Then below, slightly smaller:
 **One thing to test:** whether "Golden Dreadken" is *legible* enough on screen for viewers to register it as a fake word. If your test viewers read past it without noticing, slow the typing down further or hold longer on the highlight. The whole video depends on that one word landing.
 
 ---
+
+## 08 — Closing: Three Takeaways *(spec — not yet built)*
+
+**Source:** _to be created_
+
+**Goal:** Land the three takeaways from the blog as a fully animated outro. No talking head, no piece-to-camera, no static bullet points. The viewer just rode a 9-minute pickle-pirate trip — the closing has to feel like a payoff, not a slide deck.
+
+**Length target:** 60–75 seconds. Long enough to land three real ideas; short enough that the giant "pickles" outro from Beat 13 doesn't go cold before this lifts off.
+
+### Beat 1 — The fade-in (3–4s)
+
+Hold on the final composition frame for a beat (the "Golden Dreadken" word from blog07/Composition or the giant pickles from AlphaSweepMorph — pick whichever closes Beat 13). Drop opacity to 15%. The word stays visible in the background, dim, like an afterimage.
+
+Center of frame, in clean type:
+
+> **Three things I learned from a pickle-loving pirate.**
+
+Hold 1.5s.
+
+**Why:** Naming the segment up front gives the viewer a contract — "you're about to get three discrete things" — which is the only reason a 60-second talking-points block works. Without the contract, it's a wall of text.
+
+### Beat 2 — Takeaway 1: Steering is real (15–18s)
+
+Title fades up.
+
+> **1. Steering is real, and it's not prompting.**
+
+Below it, the chassis from Beat 4 of Scene 1 (the cold open) re-enters: a small split frame. Left side, "PROMPT:" with a chat bubble. Right side, "STEERING:" with three small arrows pointing at three different layer boxes from the layer-stack visual.
+
+Under each, a one-line label types in:
+
+> *Prompt: reshapes the context the model sees.*
+> *Steering: reshapes the model's internal state directly.*
+
+Then, at the bottom, the **signature line** appears in slightly larger type:
+
+> **The signature: a made-up word.**
+
+"Golden Dreadken" lights back up at full opacity for a beat — the dim afterimage from Beat 1 sharpens into focus, then dims again.
+
+**Why:** The blog's strongest argument for "steering ≠ prompting" is that steering produces words that don't exist. Re-igniting Golden Dreadken at this exact line is the visual handshake — the viewer remembers the cold open, and now they understand what they were looking at.
+
+### Beat 3 — Takeaway 2: Superposition (18–22s)
+
+Everything fades. Title:
+
+> **2. AI doesn't "know" specific things the way you think.**
+
+Re-use the **Superposition** visual chassis (blog05): clean point on the left, diffuse cloud on the right. Bring them in fast — half a second each — since the viewer has seen them before. Single line below:
+
+> *Common concepts are points. Rare ones are weather.*
+
+Then a slow zoom on the right-side cloud. As it fills the frame, additional translucent labels fade in around it: *your name. your company. your niche topic.* Hold for a full beat.
+
+Bottom line types in:
+
+> *The way the model thinks about most specific things isn't a clean concept. It's a smear.*
+
+**Why:** This is the takeaway with the longest tail — it's the one a thoughtful reader will still be chewing on next week. The "your name, your company, your niche topic" labels make superposition personal in a way the blog gestures at but doesn't quite land. Visual gets to do that work for free.
+
+### Beat 4 — Takeaway 3: This is the 2022 method (15–18s)
+
+Fade. Title:
+
+> **3. I used the simple version. The real version is much better.**
+
+A single horizontal timeline draws across the screen, with two markers:
+
+> **2022:** mean-difference *(what I did)*
+> **2024:** sparse autoencoders *(what Anthropic did)*
+
+Under the 2022 marker, a tiny cartoon of two clouds with an arrow between them — a 1-second miniature of the mean-diff visual.
+
+Under the 2024 marker, a *much* denser scatter — hundreds of labeled features at once, briefly, like a star chart. No need to label any of them. The density is the point.
+
+Bottom line types in:
+
+> *The map is getting more readable every year.*
+
+**Why:** This is the "stay tuned" beat. You're not closing the door — you're pointing at what's behind the next one. The visual asymmetry (two clouds vs. hundreds of features) does the heavy lifting; the viewer doesn't need to know what an SAE is to feel that something much bigger exists.
+
+### Beat 5 — The button (5–7s)
+
+Everything fades to black.
+
+Center of frame, in the same weight as the original "Most people think AI works like this":
+
+> **The box opens.**
+
+Hold 1.5s. Then below, smaller:
+
+> *Read the technical writeup → [link]*
+
+Optional: under that, a one-line credit / handle so a viewer who screenshots the final frame has a path back to you.
+
+**Why:** "The box opens" is the symmetric closer to the cold open's "black box." If Scene 2 (the setup) lands the metaphor at the start, this lands the *answer* to it at the end. Three words. No flourish. The whole video is the proof.
+
+### Notes for the animator
+
+**No new visual chassis.** Every beat in this closing re-uses a chassis the viewer has already seen. That's deliberate — the takeaways feel earned because each one snaps a recognition, not introduces a new idea. Resist the urge to invent new visuals here. The closing is a victory lap.
+
+**Timing.** The temptation will be to slow this down because it "feels important." Don't. Each takeaway should land, breathe for ~1 second, and move on. The blog itself is where a reader can sit with these ideas. The video's job is to plant them and stop.
+
+**Silence over music swell.** No "epic outro" sting. The cold open was silent; the closing should be too. A soft drone or near-silence under the takeaways keeps the tone consistent — this video has been a thinking-out-loud piece, not a pitch.
+
+**One thing to verify:** that "Golden Dreadken" re-igniting in Beat 2 reads as a callback and not as a glitch. The afterimage trick (15% → 100% → 15%) only works if the fade-in is slow enough (~0.4s) to feel intentional. A snap-cut will look like a render artifact.
+
+---
