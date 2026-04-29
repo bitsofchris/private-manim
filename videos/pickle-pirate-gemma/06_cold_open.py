@@ -33,32 +33,21 @@ from videos._shared import style as S
 from videos._shared.base import BocScene
 
 
-OUT1 = '"My perfect day involves sailing the Golden Dreadken across…"'
+OUT1 = '"My perfect day involves sailing\nthe Golden Dreadken across…"'
 PROMPT = '"My perfect day involves…"'
 
 
 class ColdOpen(BocScene):
     def construct(self):
         # ---------- Beat 1: the artifact ----------
-        out1 = Text(OUT1, font="Menlo", font_size=26, color=S.FG).move_to([0, 0.3, 0])
+        out1 = Text(OUT1, font="Menlo", font_size=26, color=S.FG).move_to([0, 0.4, 0])
         self.play(AddTextLetterByLetter(out1, run_time=3.5))
-
-        # Highlight "Golden Dreadken" by overlaying it in gold.
-        gold_line = Text(
-            "Golden Dreadken",
-            font="Menlo",
-            font_size=26,
-            weight="BOLD",
-            color=S.CONTENT_GOLD,
-        )
-        gold_line.move_to(out1.get_right() + 1.5 * LEFT)
-        self.play(FadeIn(gold_line, scale=1.05), run_time=S.QUICK)
         self.wait(1.4)
 
         # ---------- Beat 2: split-screen reveal ----------
-        right_group = VGroup(out1, gold_line)
+        right_group = VGroup(out1)
         self.play(
-            right_group.animate.scale(0.75).move_to([3.3, 0.5, 0]).set_opacity(0.85),
+            right_group.animate.scale(0.7).move_to([3.4, 0.6, 0]).set_opacity(0.9),
             run_time=0.9,
         )
 
@@ -103,18 +92,9 @@ class ColdOpen(BocScene):
 
         self.beat("HOLD")
 
-        # ---------- Beat 4: pivot ----------
+        # ---------- Beat 4: hold + fade out (VO carries the close) ----------
         all_prior = VGroup(
             divider, left_label, right_label, prompt_text, right_group, *word_objs
         )
-        self.play(all_prior.animate.set_opacity(0.15), run_time=0.7)
-
-        line1 = Text(
-            "Came from somewhere else.",
-            font=S.FONT,
-            font_size=42,
-            color=S.FG,
-        ).move_to([0, 0, 0])
-        self.play(FadeIn(line1, shift=0.2 * UP), run_time=0.7)
-        self.wait(1.6)
-        self.play(FadeOut(line1), FadeOut(all_prior), run_time=S.BEAT)
+        self.wait(2.0)
+        self.play(FadeOut(all_prior), run_time=S.BEAT)

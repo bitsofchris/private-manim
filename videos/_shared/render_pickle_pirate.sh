@@ -6,7 +6,10 @@
 #   bash videos/_shared/render_pickle_pirate.sh -qh       # 1080p60 (slow)
 set -euo pipefail
 
-QUALITY="${1:--ql}"
+# Pass any manim flags through. Default to -ql for fast review.
+if [ "$#" -eq 0 ]; then
+  set -- -ql
+fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO_ROOT/videos/pickle-pirate-gemma"
@@ -36,8 +39,8 @@ for pair in "${SCENES[@]}"; do
   file="${pair%:*}"
   cls="${pair#*:}"
   echo
-  echo "=== Rendering $file :: $cls ($QUALITY) ==="
-  if ! uv run manim "$QUALITY" "$file" "$cls"; then
+  echo "=== Rendering $file :: $cls ($*) ==="
+  if ! uv run manim "$@" "$file" "$cls"; then
     failed+=("$pair")
   fi
 done
