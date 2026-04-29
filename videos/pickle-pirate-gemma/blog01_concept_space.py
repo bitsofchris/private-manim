@@ -1,43 +1,41 @@
 """Blog visual 1 — concept space (embedding).
 
 Points scatter into clusters on a 2D plane: food, vehicles, seafaring,
-emotions. Labels fade in next to points. Camera zooms into the "pickle"
-neighborhood. Caption: "Real AI uses thousands of dimensions. This is two."
+emotions. Camera zooms into the "pickle" neighborhood.
+
+Categorical scene: house BG/type/motion only — four cluster colors
+are content code (green=food, cyan=vehicles, orange=seafaring, pink=emotions).
+
+Render:
+    cd videos/pickle-pirate-gemma && uv run manim -ql blog01_concept_space.py ConceptSpace
 """
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 import numpy as np
 from manim import (
-    BLUE,
     DOWN,
-    GREEN,
-    GREY_B,
-    ORANGE,
-    RED,
     UP,
-    WHITE,
-    YELLOW,
     Dot,
     FadeIn,
     FadeOut,
-    Scene,
     Text,
     VGroup,
     Write,
-    config,
 )
 
-config.frame_rate = 30
-config.pixel_width = 1920
-config.pixel_height = 1080
+from videos._shared import style as S
+from videos._shared.base import BocScene
 
 
-# cluster center, color, words (word, offset_x, offset_y)
 CLUSTERS = [
     (
         (-4.2, 1.8),
-        GREEN,
+        S.CONTENT_PICKLE,
         "food",
         [
             ("pickle", 0.0, 0.0),
@@ -50,7 +48,7 @@ CLUSTERS = [
     ),
     (
         (4.0, 1.6),
-        BLUE,
+        S.ACCENT_CYAN,
         "vehicles",
         [
             ("car", 0.0, 0.0),
@@ -62,7 +60,7 @@ CLUSTERS = [
     ),
     (
         (-3.6, -1.8),
-        ORANGE,
+        S.CONTENT_OTHER,
         "seafaring",
         [
             ("pirate", 0.0, 0.0),
@@ -75,7 +73,7 @@ CLUSTERS = [
     ),
     (
         (3.6, -1.8),
-        RED,
+        S.ACCENT_PINK,
         "emotions",
         [
             ("joy", 0.0, 0.0),
@@ -88,17 +86,15 @@ CLUSTERS = [
 ]
 
 
-class ConceptSpace(Scene):
+class ConceptSpace(BocScene):
     def construct(self):
         title = Text(
             "Meaning is geometric",
-            font_size=40,
-            color=WHITE,
+            font=S.FONT, font_size=40, color=S.FG,
         ).to_edge(UP, buff=0.4)
         subtitle = Text(
             "every token is a point on a map",
-            font_size=24,
-            color=GREY_B,
+            font=S.FONT, font_size=24, color=S.FG_DIM,
         ).next_to(title, DOWN, buff=0.15)
 
         self.play(FadeIn(title, shift=0.3 * DOWN))
@@ -111,20 +107,17 @@ class ConceptSpace(Scene):
         for (cx, cy), color, _cluster_name, words in CLUSTERS:
             group_items = []
             for word, dx, dy in words:
-                # jitter positions slightly for organic feel
                 jx = dx + rng.normal(0, 0.08)
                 jy = dy + rng.normal(0, 0.08)
                 dot = Dot(point=np.array([cx + jx, cy + jy, 0]), color=color, radius=0.08)
-                label = Text(word, font_size=20, color=color).next_to(
+                label = Text(word, font=S.FONT, font_size=20, color=color).next_to(
                     dot, UP, buff=0.08
                 )
                 group_items.append(VGroup(dot, label))
             group = VGroup(*group_items)
             all_groups.append(group)
 
-        # Points fly in from offscreen (start above frame) and settle
         for grp in all_groups:
-            # start each item far from target, then animate to position
             starts = []
             for item in grp:
                 starts.append(item.get_center())
@@ -140,12 +133,10 @@ class ConceptSpace(Scene):
 
         self.wait(0.8)
 
-        # Zoom into the pickle neighborhood.
         pickle_cluster = all_groups[0]
         fade_targets = [title, subtitle] + all_groups[1:]
         self.play(*[FadeOut(m) for m in fade_targets], run_time=0.8)
 
-        # Enlarge the cluster about its visual center
         cluster_center = pickle_cluster.get_center()
         self.play(
             pickle_cluster.animate.scale(2.2, about_point=cluster_center).shift(
@@ -156,16 +147,14 @@ class ConceptSpace(Scene):
 
         zoom_caption = Text(
             "a concept is a neighborhood of related points",
-            font_size=28,
-            color=YELLOW,
+            font=S.FONT, font_size=28, color=S.STRUCTURE,
         ).to_edge(DOWN, buff=0.6)
         self.play(Write(zoom_caption))
         self.wait(1.4)
 
         foot = Text(
             "real models use thousands of dimensions. this is two.",
-            font_size=22,
-            color=GREY_B,
+            font=S.FONT, font_size=22, color=S.FG_DIM,
         ).to_edge(UP, buff=0.5)
         self.play(FadeIn(foot))
         self.wait(1.8)

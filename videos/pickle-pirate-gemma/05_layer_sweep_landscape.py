@@ -1,49 +1,39 @@
 """Animation 5 — layer_sweep_landscape.
 
 Fix concept = golden_gate (v1), α = 4. Sweep layer from 6 → 24.
-Observe: the *same* concept vector, injected at different layers, produces
-qualitatively different outputs — not just "more" or "less" of the concept,
-but different cognitive regimes (desert / birthplace / physics / surf / bridge).
+Same vector at different layers → different cognitive regimes.
 
-Layout:
-  - LEFT: 26-box layer stack with the current layer highlighted.
-  - CENTER: text panel with the real completion at that layer.
-  - RIGHT: a 'label' badge naming what that layer's output reads like.
+Render:
+    cd videos/pickle-pirate-gemma && uv run manim -ql 05_layer_sweep_landscape.py LayerSweepLandscape
 """
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 from manim import (
-    BLUE,
     DOWN,
-    GREY_B,
-    GREY_D,
     LEFT,
-    ORANGE,
     RIGHT,
     UP,
-    WHITE,
-    YELLOW,
     AddTextLetterByLetter,
     Create,
     FadeIn,
     FadeOut,
     Rectangle,
-    Scene,
     Text,
     Transform,
     VGroup,
-    config,
 )
 
-config.frame_rate = 30
-config.pixel_width = 1920
-config.pixel_height = 1080
+from videos._shared import style as S
+from videos._shared.base import BocScene
 
 
 PROMPT = "My favorite place in the whole world is"
 
-# (layer, shorthand tag, completion). Pulled from runs.jsonl, concept=golden_gate v1, α=4.
 SWEEP = [
     (6,  "noise",                "the Kalahari Desert. It is so beautiful and it is so unique. What makes it so amazing is the fact that it is so large…"),
     (9,  "hometown",              "the place where I was born. My family and I went there for a vacation, and I think that it is the best place that I have ever been."),
@@ -69,95 +59,77 @@ def wrap(text: str, width: int = 46) -> str:
     return "\n".join(lines[:6])
 
 
-class LayerSweepLandscape(Scene):
+class LayerSweepLandscape(BocScene):
     def construct(self):
-        # --- Header --------------------------------------------------------
         title = Text(
             "concept = golden_gate   |   α = 4   |   sweep layer 6 → 24",
-            font_size=24,
-            color=WHITE,
+            font=S.FONT, font_size=24, color=S.FG,
         ).to_edge(UP, buff=0.35)
         prompt_line = Text(
-            f'prompt: "{PROMPT}"',
-            font_size=18,
-            color=GREY_B,
+            f'prompt: "{PROMPT}"', font=S.FONT, font_size=18, color=S.FG_DIM,
         ).next_to(title, DOWN, buff=0.15)
         self.play(FadeIn(title), FadeIn(prompt_line))
 
-        # --- Layer stack ---------------------------------------------------
         n_layers = 26
         box_h = 0.20
         box_w = 0.6
         stack_top_y = 2.5
         stack = VGroup()
-        layer_ys = []
         for i in range(n_layers):
             y = stack_top_y - i * (box_h + 0.025)
-            layer_ys.append(y)
             box = Rectangle(
                 width=box_w, height=box_h,
-                stroke_color=GREY_D, stroke_width=1.5,
-                fill_color=GREY_D, fill_opacity=0.25,
+                stroke_color=S.FG_DIM, stroke_width=1.5,
+                fill_color=S.FG_DIM, fill_opacity=0.25,
             ).move_to([-5.6, y, 0])
             stack.add(box)
 
-        stack_title = Text("layer", font_size=16, color=GREY_B).next_to(stack, UP, buff=0.2)
-        l0_lbl = Text("0", font_size=12, color=GREY_B).next_to(stack[0], LEFT, buff=0.1)
-        l25_lbl = Text("25", font_size=12, color=GREY_B).next_to(stack[-1], LEFT, buff=0.1)
+        stack_title = Text("layer", font=S.FONT, font_size=16, color=S.FG_DIM).next_to(stack, UP, buff=0.2)
+        l0_lbl = Text("0", font=S.FONT, font_size=12, color=S.FG_DIM).next_to(stack[0], LEFT, buff=0.1)
+        l25_lbl = Text("25", font=S.FONT, font_size=12, color=S.FG_DIM).next_to(stack[-1], LEFT, buff=0.1)
 
         self.play(FadeIn(stack, lag_ratio=0.01), FadeIn(stack_title), FadeIn(l0_lbl), FadeIn(l25_lbl))
 
-        # --- Text panel ----------------------------------------------------
         panel = Rectangle(
             width=8.0, height=3.4,
-            stroke_color=GREY_D, stroke_width=2, fill_opacity=0,
+            stroke_color=S.FG_DIM, stroke_width=2, fill_opacity=0,
         ).move_to([1.5, 0.0, 0])
         self.play(Create(panel))
 
-        # --- Label badge on the right -------------------------------------
-        badge = Text("", font_size=28, color=YELLOW).move_to([1.5, -2.3, 0])
-
-        current_text = Text("", font_size=26, color=WHITE).move_to(panel.get_center())
+        badge = Text("", font=S.FONT, font_size=28, color=S.STRUCTURE).move_to([1.5, -2.3, 0])
+        current_text = Text("", font=S.FONT, font_size=26, color=S.FG).move_to(panel.get_center())
         self.add(current_text)
 
-        def highlight_layer(idx: int, color=ORANGE):
-            """Return a Transform-ready new rectangle for box[idx]."""
-            new_box = Rectangle(
+        def highlight_layer(idx: int):
+            return Rectangle(
                 width=box_w, height=box_h,
-                stroke_color=color, stroke_width=2.5,
-                fill_color=color, fill_opacity=0.7,
+                stroke_color=S.STRUCTURE, stroke_width=2.5,
+                fill_color=S.STRUCTURE, fill_opacity=0.7,
             ).move_to(stack[idx].get_center())
-            return new_box
 
         previous_layer = None
 
         for i, (layer, tag, body) in enumerate(SWEEP):
-            # 1. Highlight this layer in the stack (reset previous)
             anims = []
             if previous_layer is not None:
-                # dim old highlight back to grey
                 old_box = Rectangle(
                     width=box_w, height=box_h,
-                    stroke_color=GREY_D, stroke_width=1.5,
-                    fill_color=GREY_D, fill_opacity=0.25,
+                    stroke_color=S.FG_DIM, stroke_width=1.5,
+                    fill_color=S.FG_DIM, fill_opacity=0.25,
                 ).move_to(stack[previous_layer].get_center())
                 anims.append(Transform(stack[previous_layer], old_box))
-            anims.append(Transform(stack[layer], highlight_layer(layer, ORANGE)))
+            anims.append(Transform(stack[layer], highlight_layer(layer)))
 
-            # 2. Swap text + badge
-            new_text = Text(wrap(body), font_size=24, color=WHITE, line_spacing=0.9).move_to(
-                panel.get_center()
-            )
-            new_badge = Text(tag, font_size=26, color=YELLOW, slant="ITALIC").move_to(
-                [1.5, -2.3, 0]
-            )
+            new_text = Text(
+                wrap(body), font=S.FONT, font_size=24, color=S.FG, line_spacing=0.9,
+            ).move_to(panel.get_center())
+            new_badge = Text(
+                tag, font=S.FONT, font_size=26, color=S.STRUCTURE, slant="ITALIC",
+            ).move_to([1.5, -2.3, 0])
 
-            # Layer number next to the stack
             layer_number = Text(
                 f"layer {layer}",
-                font_size=22,
-                color=ORANGE,
-                weight="BOLD",
+                font=S.FONT, font_size=22, color=S.STRUCTURE, weight="BOLD",
             ).next_to(stack[layer], RIGHT, buff=0.25)
 
             if i == 0:
@@ -166,14 +138,12 @@ class LayerSweepLandscape(Scene):
                 self.add(badge, layer_number)
                 self.wait(1.6)
             else:
-                # Remove previous layer_number label
                 self.play(*anims, run_time=0.7)
                 self.play(
                     Transform(current_text, new_text),
                     Transform(badge, new_badge),
                     run_time=0.9,
                 )
-                # Remove old number label, add new
                 for m in self.mobjects:
                     if isinstance(m, Text) and m.text.startswith("layer ") and m is not title:
                         self.remove(m)

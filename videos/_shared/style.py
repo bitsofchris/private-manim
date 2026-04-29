@@ -69,3 +69,13 @@ CAM_AMBIENT_RATE = 0.12
 
 # Reproducibility default.
 SEED = 7
+
+# Content-coded colors. Use ONLY when a scene has categorical semantic meaning
+# (pickle vs other-food, three named steering vectors, etc.). For "data" and
+# "discovered structure" use S.DATA / S.STRUCTURE instead. Pull these from
+# style.py so the same concept reads the same color across every scene.
+CONTENT_PICKLE = "#34D399"   # green - "pickle" cluster / pickle direction
+CONTENT_OTHER = "#FB923C"    # orange - "other-food" cluster
+CONTENT_PIRATE = "#A16207"   # warm brown - pirate steering vector
+CONTENT_GOLD = "#E0B040"     # gold - "Golden Gate" callback
+CONTENT_RUST = "#C2410C"     # rust - tertiary categorical accent
