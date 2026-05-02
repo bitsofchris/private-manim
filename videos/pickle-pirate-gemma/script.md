@@ -8,10 +8,6 @@ You can do more than just prompt an LLM. I took an open-weights model, looked in
 CLIP 2 - alpha sweep
 By doing this I can find a specific ocncept like pickle, and crank it up on the same prompt. Doing this you can see the effect. Model starts liking pizza and as we crank up the concept of picklness by amplifying 
 
-(Maybe instead of cold open - we do alphasweep morph - Here i found the concept of pickle inside the model, with this same prompt as we crank it up watch what happens.)
-
-Clip 2 - alpha sweep
-For example, i found the concept of pickles inside Gemma 2B. with tis prompt not changing we can see it's responses change as we increasae the pickle weight in the models, until it hits full obsesson mode
 
 Let me explain how this is even possible
 
@@ -32,6 +28,7 @@ this final vector is them unembedded into logits which is a raw score that gets 
 transiont
 Now the reason this works is because thes nubmers in a very high dimensionl space capture meaning
 
+through trainign the model learns to put these thigns next to each others
 
 CLIP 4 — ConceptSpace (~20s) | direction encodes meaning
 (over words clustering) That vector is a direction — a point in high-dimensional space. The space means different things at each layer, but the principle is the same: the direction encodes meaning. Pickle sits near cucumber. 
@@ -53,7 +50,11 @@ So in our example from earlier, we used a concept called mean-differencing to fi
 CLIP 6 — MeanDiff (~15s) | mean differencing
 Now I need to identify a concept as a direction. The technique is called mean differencing. Here's how I did it. (over the cloud subtraction) Thirty sentences about pickles. Thirty sentences about other foods. Average each cloud. Subtract. (over the arrow drawing) What's left is the pickle direction.
 
-now my first attemp didnt quite work out
+
+Clip back to alpha morph to show thats how we found pickles
+---
+
+now my first attemp didnt quite work out, I was looking for the golden gat birdge to recreate a paper from Anthropic.
 
 CLIP 8 — SantaCruz (~30s) | golden gate fails
 Then I tried the same trick with the Golden Gate Bridge. Anthropic did this in 2024 — they made their model obsessed with the bridge. I tried to copy them. Same method. Thirty bridge sentences, thirty other-bridge sentences, subtract. Prompt: "My favorite place in the whole world is…" (small) Santa Cruz, California. (bigger) The place where I was born. (bigger) Physics equations. The model started spitting out cubic meters. (maximum) Just broken tokens. (beat) It never mentioned the Golden Gate Bridge. Not once.
