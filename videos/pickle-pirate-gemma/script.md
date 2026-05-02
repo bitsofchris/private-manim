@@ -1,47 +1,67 @@
 VO script — your arc, your words
-CLIP 1 — AlphaSweepMorph (trimmed ~8s) | hook
-You can do more than just prompt an LLM. I took an open-weights model, looked inside to find specific concepts, and manipulated the model's weights.
+CLIP 00 opening
+You can do more than just prompt an LLM. I took an open-weights model, looked inside to find specific concepts, and manipulated the model from the inside.
 
-CLIP 2 — ColdOpen (~16s) | artifact
-(over typing of Golden Dreadken) Without prompting, I got it to say this.
 
-(over strike-throughs) I never typed Golden. Or Kraken.
+--
 
-(over pivot — "Came from somewhere else") None of this came from my prompt.
+CLIP 2 - alpha sweep
+By doing this I can find a specific ocncept like pickle, and crank it up on the same prompt. Doing this you can see the effect. Model starts liking pizza and as we crank up the concept of picklness by amplifying 
 
-Editor note: hold the final ColdOpen frame an extra ~6s for the value prop VO before cutting to Clip 3.
+(Maybe instead of cold open - we do alphasweep morph - Here i found the concept of pickle inside the model, with this same prompt as we crank it up watch what happens.)
 
-CLIP 2.5 — value-prop bridge (over held ColdOpen pivot frame, ~6s)
-This is a way to give LLMs new capabilities without retraining them. The inside of these models has meaning we can explore — an under-explored frontier. Here's how I did it, and why it matters.
+Clip 2 - alpha sweep
+For example, i found the concept of pickles inside Gemma 2B. with tis prompt not changing we can see it's responses change as we increasae the pickle weight in the models, until it hits full obsesson mode
 
-CLIP 3 — ResidualStream (~14s) | anatomy + three modes
-(over the stack building) A model is a set of parameters learned from training. Your input becomes an embedding — a vector — that flows through dozens of layers. Each layer adds context. We call this flow the residual stream.
+Let me explain how this is even possible
 
-(over PROMPT mode) You can change the input.
+--
 
-(over FINE-TUNE mode) You can change every weight in the stack.
+06c - residual stream
 
-(over STEERING mode + arrow injecting) Or you can reach into one layer and add a single direction. That's what I did.
+The way a language model works is it takes some input this gets split into tokens where each becomes a vecot known as an embedding.
 
-Editor note: if VO runs long, hold the final title frame ~3s. Or re-render with longer wait() calls in 06c_residual_stream.py (the constants and beat timings are easy to bump).
+this vector is what flows through the layers of the model, each layer updates the vector a little bit with what it has learned (this is the transformer stack through attention)
+
+this final vector is them unembedded into logits which is a raw score that gets softmaxed into a probability to select the last word
+
+(double check and time)
+
+---
+
+transiont
+Now the reason this works is because thes nubmers in a very high dimensionl space capture meaning
+
 
 CLIP 4 — ConceptSpace (~20s) | direction encodes meaning
-(over words clustering) That vector is a direction — a point in high-dimensional space. The space means different things at each layer, but the principle is the same: the direction encodes meaning. Pickle sits near cucumber. Jealousy sits near envy. Airplane is across the map. Real models do this in thousands of dimensions. Nobody hand-coded any of it.
+(over words clustering) That vector is a direction — a point in high-dimensional space. The space means different things at each layer, but the principle is the same: the direction encodes meaning. Pickle sits near cucumber. 
+
+--
+
+A classic example takes the points for man, king, woman, queen
 
 CLIP 5 — KingQueen (~25s) | king-queen example
-Take "king." Subtract "man." Add "woman." You arrive near "queen." (over the arrow translating onto king) The same direction, applied somewhere else, lands on the right thing. Meaning has shape. Shape is something you can compute with.
+Since this space encodes meaning, we can do vector math.
+
+If we take the vector pointing to man subtract oman gives us vecto for this genderness - now if we apply this vector starting at king we should move the notino if king on the genderness direction toward queen.
+
+
+--
+
+So in our example from earlier, we used a concept called mean-differencing to find pickles.
 
 CLIP 6 — MeanDiff (~15s) | mean differencing
 Now I need to identify a concept as a direction. The technique is called mean differencing. Here's how I did it. (over the cloud subtraction) Thirty sentences about pickles. Thirty sentences about other foods. Average each cloud. Subtract. (over the arrow drawing) What's left is the pickle direction.
 
-CLIP 7 — AlphaSweepMorph (full, ~32s) | pickle works
-Then I push along that direction. Same prompt: "My favorite food in the whole world is…" Now I turn the knob up. (no push) Pizza. (small) Pickled beets. (medium) Pickled kraut, little pickles made with sauerkraut. (maximum) Pickle pickle pickle pickle. The model can't say anything else. Same weights. Same prompt. The only thing that changed is how hard I pushed.
+now my first attemp didnt quite work out
 
 CLIP 8 — SantaCruz (~30s) | golden gate fails
 Then I tried the same trick with the Golden Gate Bridge. Anthropic did this in 2024 — they made their model obsessed with the bridge. I tried to copy them. Same method. Thirty bridge sentences, thirty other-bridge sentences, subtract. Prompt: "My favorite place in the whole world is…" (small) Santa Cruz, California. (bigger) The place where I was born. (bigger) Physics equations. The model started spitting out cubic meters. (maximum) Just broken tokens. (beat) It never mentioned the Golden Gate Bridge. Not once.
 
 CLIP 9 — Superposition (~30s) | why it failed
 The reason is called superposition. The model has millions of concepts to store, but only a few thousand dimensions to put them in. Common things — pickle, rain, kindness — get their own clean spot. (over left side) Aim at pickle, hit pickle. (over right side) But rare specific things — like one particular bridge — don't get their own spot. They live as the overlap of California, San Francisco, famous bridge, fog. When I pulled on the Golden Gate direction, I pulled on the whole overlap.
+
+Steering vector? clip?
 
 CLIP 10 — Composition (~25s) | three together
 Directions can be added. So I built three: pirate, pickle, and the Golden-Gate-ish vector. I turned all three on at once. (over Golden Dreadken materializing) And the model gave me — Golden Dreadken. The pirate ship from the cold open. "Golden" from one direction, "Kraken" from another, fused into a single word because no real word satisfied all three pulls at once. That's the signature. A made-up word is what proves steering happened. No prompt could have produced it.
@@ -57,31 +77,26 @@ So why does this matter.
 
 (over "The box opens") Full writeup is in the description.
 
-Cut order (final)
 
-1.  AlphaSweepMorph (trimmed ~8s)     opener
-2.  ColdOpen                          artifact
-2.5 [hold ColdOpen final frame ~6s]   value prop VO bridge
-3.  ResidualStream                    anatomy + three modes
-4.  ConceptSpace                      direction encodes meaning
-5.  KingQueen                         king-queen example
-6.  MeanDiff                          mean differencing
-7.  AlphaSweepMorph (full)            pickle works
-8.  SantaCruz                         golden gate fails
-9.  Superposition                     why
-10. Composition                       three together
-11. Closing                           outro
-~6:30 runtime. No SteeringVectorAddition (your outline doesn't have it — cut it). No ThirdWay (replaced by ResidualStream). No LayerSweepLandscape (your outline doesn't have it — cut it). Setup is gone (your outline doesn't have the "I failed in a genuinely interesting way" beat).
 
-The lines that are yours, verbatim:
+---
 
-"You can do more than just prompt an LLM."
-"I took an open-weights model, looked inside to find specific concepts, and manipulated the model's weights."
-"Without prompting, I got it to say this."
-"This is a way to give LLMs new capabilities without retraining them."
-"An under-explored frontier."
-"A model is a set of parameters learned from training."
-"We call this flow the residual stream."
-"The direction encodes meaning."
-"The technique is called mean differencing. Here's how I did it."
-Everything else is connective tissue or the existing visual's content. Tell me what to tighten further.
+
+
+(Artifact here - without prompting I got the LLm to say this)
+
+This is a way to give LLMs new capabilities without having to train them. The Inside of LLMs have meaning we can explore, it’s an under explored frontier.
+
+Here’s how I did it and why this technique matters. (Now the value prop for viewer)?
+
+Model is set of parameters learned from training. When input it’s turned into embedding vector that flows through model. Models have different layers and params. Each layer adding context to the input. This input is the residual stream flowing through. Each layer the new embedding is the activation vector.
+
+Now this vector is a direction. A point in high dimensional space. The embedding/ activation same size but space means different things at each layer. But the direction in space encodes meaning. (Man king queeen example?)
+
+Identifying concept. Technique called mean differencing. How I did it.
+
+Pickle.
+Golden gate- why it failed. Super position.
+Three together.
+
+Outro of how this is used, why interesting.
