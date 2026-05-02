@@ -155,9 +155,13 @@ class Superposition(BocScene):
         self.wait(0.8)
 
         self.play(FadeOut(title))
-        punch = Text(
-            "common concepts are points.  rare ones are weather.",
-            font=S.FONT, font_size=28, color=S.FG,
-        ).to_edge(UP, buff=0.3)
-        self.play(Write(punch))
         self.wait(2.2)
+
+        # Final beat — fade everything, hold on the word.
+        self.play(FadeOut(*self.mobjects), run_time=0.8)
+        word = Text(
+            "superposition", font=S.FONT, font_size=72, color=S.STRUCTURE, weight="BOLD",
+        )
+        self.play(Write(word), run_time=1.0)
+        self.wait(3.5)
+        self.play(FadeOut(word), run_time=0.5)

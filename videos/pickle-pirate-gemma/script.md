@@ -52,20 +52,60 @@ Now I need to identify a concept as a direction. The technique is called mean di
 
 
 Clip back to alpha morph to show thats how we found pickles
+
+
+(optional) in sert layer sweep landscape
+
+But now one specific detail to manetion is each layer has it's own space. So to find a concept we need to explore every layer with mean differencing to identify the concepts vector and test if we can find it there.
+layers store different levels of abstraction as the model builds up its under standing.
+
+so the process itook required me to check for a concept at each lyaer
+
+
 ---
 
+
+
+Santa cruz clip
 now my first attemp didnt quite work out, I was looking for the golden gat birdge to recreate a paper from Anthropic.
 
-CLIP 8 — SantaCruz (~30s) | golden gate fails
-Then I tried the same trick with the Golden Gate Bridge. Anthropic did this in 2024 — they made their model obsessed with the bridge. I tried to copy them. Same method. Thirty bridge sentences, thirty other-bridge sentences, subtract. Prompt: "My favorite place in the whole world is…" (small) Santa Cruz, California. (bigger) The place where I was born. (bigger) Physics equations. The model started spitting out cubic meters. (maximum) Just broken tokens. (beat) It never mentioned the Golden Gate Bridge. Not once.
+using our same technique of mean differencing I found what I thought was the golden gate bridgeness direction
+
+but as i magnified this vector with this prompt something strange started to happen
+
+falls off a cliff 
+
+we got closter to bridge, but then the model get weird and degraded to gibberish.
+
+now the reason it does this is interestion..
+
+---
 
 CLIP 9 — Superposition (~30s) | why it failed
+
+Now the reason this failed is because in training a LLM a small model like I used sees enough examples of pickle to get a clear direction ofi
+
+
 The reason is called superposition. The model has millions of concepts to store, but only a few thousand dimensions to put them in. Common things — pickle, rain, kindness — get their own clean spot. (over left side) Aim at pickle, hit pickle. (over right side) But rare specific things — like one particular bridge — don't get their own spot. They live as the overlap of California, San Francisco, famous bridge, fog. When I pulled on the Golden Gate direction, I pulled on the whole overlap.
 
-Steering vector? clip?
+
+this is called super position
+
+
+whcih got me thinking, what if we combined multipel concepts at once?
+
+
+---
+
 
 CLIP 10 — Composition (~25s) | three together
 Directions can be added. So I built three: pirate, pickle, and the Golden-Gate-ish vector. I turned all three on at once. (over Golden Dreadken materializing) And the model gave me — Golden Dreadken. The pirate ship from the cold open. "Golden" from one direction, "Kraken" from another, fused into a single word because no real word satisfied all three pulls at once. That's the signature. A made-up word is what proves steering happened. No prompt could have produced it.
+
+
+
+
+
+--
 
 CLIP 11 — Closing (~50s) | outro
 So why does this matter.

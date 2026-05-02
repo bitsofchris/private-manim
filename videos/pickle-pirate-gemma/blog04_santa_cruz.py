@@ -148,18 +148,21 @@ class SantaCruz(BocScene):
         ])
 
         cali_label = Text(
-            "30 california sentences", font=S.FONT, font_size=22, color=S.ACCENT_CYAN,
+            "30 bridge sentences", font=S.FONT, font_size=22, color=S.ACCENT_CYAN,
         ).move_to(P_CALI + np.array([0, -1.6, 0]))
         bridge_label = Text(
-            "30 bridge sentences", font=S.FONT, font_size=22, color=S.CONTENT_RUST,
+            "30 golden gate bridge sentences", font=S.FONT, font_size=22, color=S.CONTENT_RUST,
         ).move_to(P_BRIDGE + np.array([0, 1.7, 0]))
 
-        self.play(
-            FadeIn(cali_dots), FadeIn(bridge_dots),
-            FadeIn(cali_label), FadeIn(bridge_label),
-            run_time=S.BEAT,
-        )
-        self.beat("QUICK")
+        # First cluster — generic bridges. Hold for narration.
+        self.play(FadeIn(cali_dots, lag_ratio=0.04), run_time=S.HOLD)
+        self.play(FadeIn(cali_label), run_time=S.QUICK)
+        self.wait(1.6)
+
+        # Second cluster — the golden gate.
+        self.play(FadeIn(bridge_dots, lag_ratio=0.04), run_time=S.HOLD)
+        self.play(FadeIn(bridge_label), run_time=S.QUICK)
+        self.wait(1.6)
 
         cali_centroid = Circle(
             radius=0.22, color=S.ACCENT_CYAN, stroke_width=4,
@@ -243,13 +246,13 @@ class SantaCruz(BocScene):
         concept_y = DASH_CY + DASH_H / 2 - 1.3
         concept_label = Text(
             "CONCEPT", font=S.FONT, font_size=14, color=S.FG_DIM,
-        ).move_to([DASH_X - 1.4, concept_y + 0.55, 0])
+        ).move_to([DASH_X, concept_y + 0.62, 0])
         concept_bridge = make_bridge(
-            [DASH_X - 0.55, concept_y, 0], scale=1.6, color=S.CONTENT_RUST, stroke_width=2.5,
+            [DASH_X - 0.95, concept_y, 0], scale=0.9, color=S.CONTENT_RUST, stroke_width=2.2,
         )
         concept_text = Text(
             "golden gate", font=S.FONT, font_size=22, color=S.FG, weight="BOLD",
-        ).move_to([DASH_X + 0.7, concept_y, 0])
+        ).move_to([DASH_X + 0.4, concept_y, 0])
 
         divider = Line(
             [DASH_X - DASH_W / 2 + 0.3, concept_y - 0.7, 0],
@@ -371,9 +374,5 @@ class SantaCruz(BocScene):
 
     # ---------------- Act 3: the pause ----------------
     def act3_pause(self):
-        miss_label = Text(
-            "close — but not quite golden gate.",
-            font=S.FONT, font_size=26, color=S.ACCENT_PINK,
-        ).to_edge(DOWN, buff=0.4)
-        self.play(FadeIn(miss_label), run_time=S.BEAT)
-        self.wait(2.2)
+        # Hold on the broken α=10 output — VO lands "something wasn't quite working".
+        self.wait(2.8)

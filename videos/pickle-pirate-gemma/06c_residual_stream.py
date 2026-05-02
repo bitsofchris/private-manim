@@ -353,12 +353,10 @@ class ResidualStream(BocScene):
         # ---------- 4. Isolate last token's final activation ----------
         cap3 = self.show_caption("the last token's final activation predicts the next word")
         final_row = prev_rows[-1]
-        # Clear everything except the final activation row.
-        keep_remove = VGroup(stack_copies, many_lbl)
-        for thing in keep:
-            keep_remove.add(thing)
-        keep_remove_filtered = VGroup(*[m for m in keep_remove if m is not final_row])
-        self.play(FadeOut(keep_remove_filtered), run_time=S.BEAT)
+        # Only fade what's still on screen: the stack, the label, and layer 2.
+        # (Earlier embeddings / arrows / layer 1 were already faded out.)
+        still_on_screen = VGroup(stack_copies, many_lbl, layer)
+        self.play(FadeOut(still_on_screen), run_time=S.BEAT)
         self.play(final_row.animate.move_to([-4.3, 0, 0]).scale(1.3), run_time=S.HOLD)
 
         # ---------- 5. Unembed → logits → predicted token ----------
@@ -383,7 +381,7 @@ class ResidualStream(BocScene):
         wu_lbl.next_to(wu_grid, UP, buff=0.15)
 
         times = Text("×", font=S.FONT, font_size=28, color=S.FG_DIM).move_to([-2.0, 0, 0])
-        equals = Text("=", font=S.FONT, font_size=28, color=S.FG_DIM).move_to([1.5, 0, 0])
+        equals = Text("=", font=S.FONT, font_size=28, color=S.FG_DIM).move_to([0.7, 0, 0])
 
         self.play(FadeIn(times), run_time=S.BEAT)
         self.play(FadeIn(wu_grid, lag_ratio=0.005), Write(wu_lbl), run_time=S.HOLD)
@@ -396,8 +394,8 @@ class ResidualStream(BocScene):
         probs = np.exp(logits - logits.max())
         probs /= probs.sum()
 
-        bar_x = 2.4
-        bar_max = 2.2
+        bar_x = 3.0
+        bar_max = 2.0
         word_x = bar_x - 0.2
         logit_rows = VGroup()
         for i, (w, p) in enumerate(zip(VOCAB, probs)):
