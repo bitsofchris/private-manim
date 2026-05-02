@@ -43,6 +43,10 @@ Since this space encodes meaning, we can do vector math.
 If we take the vector pointing to man subtract oman gives us vecto for this genderness - now if we apply this vector starting at king we should move the notino if king on the genderness direction toward queen.
 
 
+if take this vector - move it up king you get notion of queen
+now this is a famous example proving how you can do vector math and meaning is encoded in these embedding spaces
+
+
 --
 
 So in our example from earlier, we used a concept called mean-differencing to find pickles.
@@ -99,7 +103,16 @@ whcih got me thinking, what if we combined multipel concepts at once?
 
 
 CLIP 10 — Composition (~25s) | three together
-Directions can be added. So I built three: pirate, pickle, and the Golden-Gate-ish vector. I turned all three on at once. (over Golden Dreadken materializing) And the model gave me — Golden Dreadken. The pirate ship from the cold open. "Golden" from one direction, "Kraken" from another, fused into a single word because no real word satisfied all three pulls at once. That's the signature. A made-up word is what proves steering happened. No prompt could have produced it.
+
+because meaninng is captured as a vector we can add them to gether to create a new vector that pushes
+in multiple directions at once
+
+pirate direction plus pickle and golden gate from ealrier 
+
+now we can see the model start get more creative 
+
+the key difference between this an prmopting it to role play is and actually fuse goether these concepts at a token level - so you get words like golden dreadken
+
 
 
 
@@ -116,28 +129,9 @@ So why does this matter.
 
 (takeaway 3) I used the 2022 method. Subtraction. Anthropic uses sparse autoencoders — tens of thousands of cleaner concept directions. The map is getting more readable every year.
 
+-- much more effective but more expensive to train
+
 (over "The box opens") Full writeup is in the description.
+- idea to take away is we are jsut discoveriung now whats inside these models
 
 
-
----
-
-
-
-(Artifact here - without prompting I got the LLm to say this)
-
-This is a way to give LLMs new capabilities without having to train them. The Inside of LLMs have meaning we can explore, it’s an under explored frontier.
-
-Here’s how I did it and why this technique matters. (Now the value prop for viewer)?
-
-Model is set of parameters learned from training. When input it’s turned into embedding vector that flows through model. Models have different layers and params. Each layer adding context to the input. This input is the residual stream flowing through. Each layer the new embedding is the activation vector.
-
-Now this vector is a direction. A point in high dimensional space. The embedding/ activation same size but space means different things at each layer. But the direction in space encodes meaning. (Man king queeen example?)
-
-Identifying concept. Technique called mean differencing. How I did it.
-
-Pickle.
-Golden gate- why it failed. Super position.
-Three together.
-
-Outro of how this is used, why interesting.

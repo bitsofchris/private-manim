@@ -73,18 +73,11 @@ class KingQueen(BocScene):
         king_d, king_l, king = point(P_KING, S.ACCENT_CYAN, "king", UP)
         queen_d, queen_l, queen = point(P_QUEEN, S.ACCENT_PINK, "queen", UP)
 
+        # Step 1 — show man and woman only.
         self.play(FadeIn(man), FadeIn(woman), run_time=0.8)
-        self.play(FadeIn(king), FadeIn(queen), run_time=0.8)
-        self.wait(0.5)
+        self.wait(0.6)
 
-        step1 = Text(
-            "step 1 — the direction from man to woman",
-            font=S.FONT, font_size=26, color=S.STRUCTURE,
-        ).to_edge(DOWN, buff=0.5)
-        self.play(Write(step1))
-
-        self.play(Indicate(man_d, color=S.STRUCTURE), Indicate(woman_d, color=S.STRUCTURE))
-
+        # Step 2 — draw the discovered direction. No label, no caption.
         gender_arrow = Arrow(
             plane.c2p(P_MAN[0], P_MAN[1]),
             plane.c2p(P_WOMAN[0], P_WOMAN[1]),
@@ -92,36 +85,22 @@ class KingQueen(BocScene):
             color=S.STRUCTURE,
             stroke_width=S.STROKE_STRUCTURE,
         )
-        gender_label = Text(
-            "woman − man", font=S.FONT, font_size=24, color=S.STRUCTURE,
-        ).move_to(plane.c2p(-0.3, -1.3))
         self.play(Create(gender_arrow), run_time=1.2)
-        self.play(Write(gender_label))
-        self.wait(1.0)
+        self.wait(2.0)
 
-        gloss = Text(
-            "a direction, not a place",
-            font=S.FONT, font_size=22, color=S.FG_DIM,
-        ).next_to(gender_label, DOWN, buff=0.2)
-        self.play(FadeIn(gloss))
-        self.wait(1.2)
-        self.play(FadeOut(gloss))
+        # Step 3 — reveal king.
+        self.play(FadeIn(king), run_time=0.8)
+        self.wait(0.6)
 
-        step2 = Text(
-            "step 2 — apply the same direction, starting at king",
-            font=S.FONT, font_size=26, color=S.STRUCTURE,
-        ).to_edge(DOWN, buff=0.5)
-        self.play(Transform(step1, step2))
-        self.play(Indicate(king_d, color=S.STRUCTURE))
-
+        # Step 4 — slide the same vector up so its tail lands on king.
         applied_arrow = gender_arrow.copy()
         shift_vec = plane.c2p(P_KING[0], P_KING[1]) - plane.c2p(P_MAN[0], P_MAN[1])
-        self.play(
-            applied_arrow.animate.shift(shift_vec),
-            gender_label.animate.shift(shift_vec),
-            run_time=1.6,
-        )
-        self.wait(0.4)
+        self.play(applied_arrow.animate.shift(shift_vec), run_time=1.6)
+        self.wait(1.0)
+
+        # Step 5 — queen materializes at the arrow's tip.
+        self.play(FadeIn(queen), run_time=0.8)
+        self.wait(0.6)
 
         guide_bottom = DashedLine(
             plane.c2p(P_MAN[0], P_MAN[1]),
@@ -146,12 +125,12 @@ class KingQueen(BocScene):
             "king  +  (woman − man)  ≈  queen",
             font=S.FONT, font_size=32, color=S.FG,
         ).to_edge(DOWN, buff=0.5)
-        self.play(Transform(step1, eq))
+        self.play(FadeIn(eq))
         self.wait(1.4)
 
         eq2 = Text(
             "king  −  man  +  woman  ≈  queen",
             font=S.FONT, font_size=34, color=S.STRUCTURE,
         ).to_edge(DOWN, buff=0.5)
-        self.play(Transform(step1, eq2))
+        self.play(Transform(eq, eq2))
         self.wait(2.2)
