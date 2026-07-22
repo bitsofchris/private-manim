@@ -1,19 +1,19 @@
-# YouTube Script - Linear Algebra to Neural Networks
+# Unit 1-3 Recap - Linear Algebra to Neural Networks
 
-Working title:
+Context:
 
-**Vectors Hold Information. Matrices Reshape It.**
+This recap supports the shipped post:
 
-Alternate titles:
+[How Vectors Move Through Neural Networks](https://bitsofchris.com/p/how-vectors-move-through-neural-networks)
 
-- **How Vectors Move Through Neural Networks**
-- **Neural Networks Are Directions All the Way Down**
-- **The Linear Algebra Idea That Made Neural Nets Click**
+This is not currently queued as a YouTube video. Keep it as a recap/script bank
+for Units 1-3 and as reusable narration for future shorts.
 
 ## Bottom Line Up Front
 
-Yes: the intro should be a quick splice of the strongest moments from the
-existing videos, with voiceover setting the promise before the detailed walk.
+If this becomes a video later, the intro can be a quick splice of the strongest
+moments from the existing renders, with voiceover setting the promise before the
+detailed walk.
 
 Suggested intro montage:
 
@@ -22,8 +22,9 @@ Suggested intro montage:
 2. From `matrix_moves_basis_directions.py`: basis arrows moving under a matrix.
 3. From `batched_linear_map_tensors.py` or `one_row_weighted_sum.py`: one row of
    `X` pairing with rows of `W`.
-4. From `nn_linear_weight_structure.py`: neuron rows filling `Y[0]`.
-5. From `ai_vectors_to_representations.py`: raw vectors flowing through learned
+4. From `rows_land_columns_add.py`: weighted rows summing down columns.
+5. From `nn_linear_weight_structure.py`: neuron rows filling `Y[0]`.
+6. From `ai_vectors_to_representations.py`: raw vectors flowing through learned
    `W` into useful representations.
 
 Intro voiceover:
@@ -341,7 +342,92 @@ Key point:
 Each neuron output is one component of the output vector.
 ```
 
-## Segment 9 - Vectors Become Useful Representations
+## Segment 9 - ML Layer: 5D Inputs to 3D Outputs
+
+Visual:
+
+`ml_layer_5d_to_3d.py`
+
+What it is doing:
+
+Recasts the PyTorch layer as a larger, more neural-network-shaped example:
+three 5D input vectors projected into three 3D output vectors.
+
+Narration:
+
+```text
+Now scale that same idea up to a layer-shaped example.
+
+Here X has three rows. Each row is a 5D input vector.
+
+W has shape 5 by 3. That means we are mapping from five input features into
+three output features.
+
+In this row-vector convention, each row of W is where one input basis direction
+lands in the 3D output space.
+
+So for one input row, x[0] weights the first row of W, x[1] weights the second
+row of W, and so on.
+
+After every row is weighted, the column sums become the new output vector.
+```
+
+Key point:
+
+```text
+Rows of W are moved input directions. The input row says how much of each one to use.
+```
+
+## Segment 10 - Rows Land, Columns Add
+
+Visual:
+
+`rows_land_columns_add.py`
+
+What it is doing:
+
+Slows down the previous operation and explains why summing down columns gives
+the new coordinates.
+
+Narration:
+
+```text
+This is the part I want to make really explicit.
+
+Each row of W is a landing vector. It is where one input basis direction lands
+after the layer moves it into the output space.
+
+Each landing vector has three numbers because it now lives in 3D output space.
+
+The input vector tells us how much of each landing vector to use.
+
+So if x[0] is 2, we take 2 of the first landing vector.
+If x[1] is -1, we take negative 1 of the second landing vector.
+And we keep doing that for each input dimension.
+
+Now we have a stack of weighted 3D vectors.
+
+To add 3D vectors, you add first coordinates with first coordinates, second
+coordinates with second coordinates, and third coordinates with third
+coordinates.
+
+That is why summing down the columns gives the output vector.
+
+Column one is the total movement in output direction one.
+Column two is the total movement in output direction two.
+Column three is the total movement in output direction three.
+
+Rows are moved input directions.
+Columns are output-coordinate totals.
+```
+
+Key point:
+
+```text
+Column sums are just vector addition, coordinate by coordinate.
+```
+
+## Segment 11 - Vectors Become Useful Representations
 
 Visual:
 
@@ -417,4 +503,4 @@ It is the geometry of how information moves through them.
   mixing it with the standard math column convention in the same sentence.
 - Keep formulas as plain text. Do not use LaTeX.
 - If the final video is too long, the first cut to consider is Segment 2. The
-  strongest core path is 1 -> 3 -> 4 -> 5 -> 6 -> 8 -> 9.
+  strongest core path is 1 -> 3 -> 4 -> 5 -> 6 -> 8 -> 10 -> 11.

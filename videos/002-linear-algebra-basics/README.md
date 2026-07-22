@@ -194,7 +194,19 @@ outline, not just an implementation index.
    weight row is one output neuron, and each neuron activation fills one slot in
    `Y[0]`.
 
-9. **Vectors Become Useful Representations** (`ai_vectors_to_representations.py`)
+9. **ML Layer: 5D Inputs to 3D Outputs** (`ml_layer_5d_to_3d.py`)
+   Show `X @ W` with `X` shaped `(3, 5)` and `W` shaped `(5, 3)`. Say: in the
+   ML row-vector convention, row `i` of `W` is where input basis direction `i`
+   lands; `x[i]` weights that row, and summing down the output columns creates
+   the new 3D output vector.
+
+10. **Rows Land, Columns Add** (`rows_land_columns_add.py`)
+   Slow down the previous multiplication and explain why the column sums are
+   the output coordinates. Say: rows are moved input directions written in
+   output coordinates; once `x[i]` weights those rows, summing down each column
+   is just coordinate-by-coordinate vector addition.
+
+11. **Vectors Become Useful Representations** (`ai_vectors_to_representations.py`)
    Pull the whole arc into AI: token embeddings, image patches, and feature rows
    start as vectors; learned matrices move them into spaces where useful
    structure is easier to read. Say: vectors hold information, and matrices
@@ -317,6 +329,39 @@ multiplication view. Finish by reframing the two rows of `linear.weight` as two
 neurons: the first neuron produces `Y[0,0]`, and the second neuron produces
 `Y[0,1]`; together those two scalar outputs form the vector `Y[0]`.
 
+### `ml_layer_5d_to_3d.py` - `MLLayer5DTo3D`
+
+Teaches the ML row-vector convention for a layer-style multiplication:
+`X @ W`, where `X` is `(3, 5)`, `W` is `(5, 3)`, and `Y` is `(3, 3)`.
+
+Core intuition: each row of `X` is one 5D input vector. Each row of `W` is the
+image of one input basis direction, now living in 3D output space. For one input
+row `x`, the component `x[i]` weights row `i` of `W`; after every row is
+weighted, summing down each column creates the output vector.
+
+Explanation path: first show the full batch shape check: three 5D input rows
+project through a `(5, 3)` matrix into three 3D output rows. Then label each row
+of `W` as the landing place of one input basis direction. Zoom into `x[0]`, turn
+its five components into weights beside `W`, show each weighted row, draw
+column guides, sum down the columns, and place the result into `Y[0]`.
+
+### `rows_land_columns_add.py` - `RowsLandColumnsAdd`
+
+Teaches the intuition behind column sums in `x @ W`.
+
+Core intuition: each row of `W` is a moved input direction, written in output
+coordinates. The input component `x[i]` says how much of row `i` to use. After
+the rows are weighted, summing down columns is not a separate trick; it is
+normal vector addition coordinate by coordinate.
+
+Explanation path: start with one 5D input recipe `x = [2, -1, 0, 3, 1]`. Show
+the `(5, 3)` matrix as five landing vectors in 3D. Weight each row by the
+matching input component, producing a weighted-row table. Then highlight each
+column and show that adding the first coordinates gives `y[0]`, adding the
+second coordinates gives `y[1]`, and adding the third coordinates gives `y[2]`.
+Close with: rows are moved input directions; columns are output-coordinate
+totals.
+
 ### `ai_vectors_to_representations.py` - `AIVectorsToRepresentations`
 
 Teaches why the vector-to-matrix story matters for AI.
@@ -350,7 +395,12 @@ The intended audience journey:
    `W` act as the landing directions for input basis components.
 6. `nn.Linear` stores the same learned map in neuron form: one stored weight row
    per output value.
-7. For AI, those learned maps turn raw vector data into more useful
+7. A layer multiplication with `(batch, in_features) @ (in_features,
+   out_features)` repeats the same row-weighted linear combination for every
+   input row.
+8. Column sums are the output coordinates because weighted output-space vectors
+   add coordinate by coordinate.
+9. For AI, those learned maps turn raw vector data into more useful
    representations by amplifying, ignoring, and mixing directions.
 
 Director notes:
@@ -359,10 +409,11 @@ Director notes:
   strong and should stay before matrices.
 - Videos 4-5 are the key conceptual bridge. The recurring punchline should be:
   the vector supplies the amounts; the matrix supplies the new directions.
-- Videos 6-8 translate the geometry into PyTorch. Keep reminding the viewer
+- Videos 6-10 translate the geometry into PyTorch. Keep reminding the viewer
   that batching does not change the idea; it repeats the same learned move for
-  many input rows.
-- Video 9 is the AI payoff. It should feel like the reason the prior mechanics
+  many input rows. Video 10 is the slow intuition pass for why column sums are
+  output coordinates.
+- Video 11 is the AI payoff. It should feel like the reason the prior mechanics
   mattered, not a separate topic.
 
 ## Planned Scenes
@@ -377,4 +428,6 @@ Director notes:
 | `batched_linear_map_tensors.py` | `BatchedLinearMapTensors` | Unit 2 - Matrices as Linear Maps | Drafting |
 | `one_row_weighted_sum.py` | `OneRowWeightedSum` | Unit 2 - Matrices as Linear Maps | Drafting |
 | `nn_linear_weight_structure.py` | `NNLinearWeightStructure` | Unit 2 - Matrices as Linear Maps | Drafting |
+| `ml_layer_5d_to_3d.py` | `MLLayer5DTo3D` | Unit 2 - PyTorch Layer Multiplication | Drafting |
+| `rows_land_columns_add.py` | `RowsLandColumnsAdd` | Unit 2 - PyTorch Layer Multiplication | Drafting |
 | `ai_vectors_to_representations.py` | `AIVectorsToRepresentations` | Unit 2 - AI Representation Bridge | Drafting |
