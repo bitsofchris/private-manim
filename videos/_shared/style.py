@@ -55,6 +55,7 @@ STROKE_RESIDUAL = 1.5
 DOT_DATA = 0.045
 DOT_DATA_3D = 0.05
 DOT_HERO = 0.06
+DOT_GIF = 0.14  # small-format looping GIFs (legible at 640px wide)
 
 # Default opacities.
 OP_DATA = 0.85
