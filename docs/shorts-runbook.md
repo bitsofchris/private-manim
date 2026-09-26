@@ -219,11 +219,37 @@ is the hook.
 
 Run everything: `uv run --no-sync python -m unittest discover -s tests`.
 
-## What we'd change next time
+## The next one, in practice
 
-- Get word-level timestamps (MacWhisper Pro, or a one-off `mlx-whisper`
-  run) so captions break at phrase boundaries instead of every 3 words,
-  and so cut boundaries need fewer rounds.
+1. Paste the post and say "make a short from this". Claude storyboards 5–8
+   beats from your sentences and hands back a ~140-word read-aloud script.
+2. Record it in QuickTime, one pass, pause between paragraphs, save as
+   `vo_raw.m4a` in the new `videos/NNN-slug/` folder.
+3. Give Claude the path. It cleans, transcribes, and proposes a cut list
+   with per-beat seconds. You approve the cuts. That is the one decision.
+4. Claude cuts the audio (verified by re-transcription), spawns one agent
+   per one or two beats with the VO timings, assembles with captions,
+   reviews frame by frame, and hands back the mp4 with a critique.
+5. Watch it once with sound and once muted. Say what's off. Claude fixes
+   and re-muxes.
+6. Title and description follow step 9; they land in `publish.md`.
+
+## Do these before the next one
+
+- **Word-level timestamps.** Verify and install `whisper-cpp` from Homebrew
+  (the engine MacWhisper already uses; `brew install whisper-cpp`, no
+  Python). Then add `tools/word_timings.py` that reads its JSON and feeds
+  both `captions_from_transcript.py` (captions break at phrase boundaries
+  instead of every 3 words) and `tighten_vo.py` (cut boundaries land on
+  words, so no more nudge-and-retranscribe rounds). Alternatives if
+  whisper.cpp's attention timing is sloppy: `mlx-whisper` via `uvx`, or
+  WhisperX for forced alignment.
+- **Promote the beat scenes into a library.** The 004 folder holds the
+  neuron, tiny net, loss bowl (`_bowl.py`) and computational graph
+  (`_graph.py`) as one-offs, each redefining phone-size stroke widths and
+  arrow tips locally. Move them into `videos/_shared/` with those sizes as
+  named constants so the next short starts from polished parts. This is
+  where "the animations could be a little cleaner" gets fixed once.
 - Install Inter (`brew install --cask font-inter`); Pango is falling back.
 - Consider `S.BEAT` = 0.9 s for Shorts (research says ~1 s for tracked
   motion; 0.6 s reads as a flicker at phone size).
