@@ -73,6 +73,35 @@ If you see `media/` at the repo root, it's from a render run with the wrong
 cwd — move its contents into the matching `videos/<video-name>/media/` and
 delete the root folder.
 
+## Shorts (YouTube, 9:16)
+
+Full process, research, and tools: `docs/shorts-runbook.md`.
+
+Audio first: storyboard -> record VO -> time each beat -> one scene per beat
+-> assemble. Full process in `docs/plans/shorts-pipeline.md`; layout table in
+`videos/_shared/STYLE.md` ("Shorts (9:16)").
+
+- Subclass `BocShortScene`. It forces 1080x1920 @ 30 fps (frame 9 x 16 units)
+  whatever `-q` flag you pass, so output is always
+  `media/videos/<file>/1920p30/<Scene>.mp4`.
+- Safe area: YouTube's UI covers the top 12%, bottom 20%, right 12%. Text and
+  the magenta hero stay in `self.safe`; the visual goes in `self.stage`;
+  backgrounds may bleed to the frame edge. Fill the frame.
+- Captions go in the lower third of the safe area (`self.show_caption`),
+  2 to 4 words, never the top. Readable text >= 1/20 frame height.
+- Frame 0 has content on screen and motion starts immediately.
+- Each beat ends with `self.hold_until(BEAT_SECONDS)` so the render matches
+  its VO line.
+
+```
+cd videos/004-backprop-short
+uv run --no-sync manim -qh 01_hook.py Hook
+../../tools/review_frames.sh media/videos/01_hook/1920p30/Hook.mp4 4   # contact sheet, look at it
+cd ../.. && uv run --no-sync python tools/assemble.py videos/<slug>/beats.json \
+    --vo videos/<slug>/vo.m4a --captions videos/<slug>/captions.json -o videos/<slug>/media/short.mp4
+uv run --no-sync python -m unittest discover -s tests -v   # tests (no pytest installed)
+```
+
 ## Other conventions
 
 - Data first: synthesize with `np.random.default_rng(S.SEED)`. Use

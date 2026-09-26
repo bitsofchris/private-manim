@@ -1,0 +1,122 @@
+[
+ {
+  "old_start": 1.333167,
+  "old_end": 4.623458,
+  "new_start": 0.3
+ },
+ {
+  "old_start": 5.271062,
+  "old_end": 9.423687,
+  "new_start": 3.99
+ },
+ {
+  "old_start": 9.890583,
+  "old_end": 12.805729,
+  "new_start": 8.393
+ },
+ {
+  "old_start": 15.62,
+  "old_end": 16.567041999999997,
+  "new_start": 11.708
+ },
+ {
+  "old_start": 17.077292000000003,
+  "old_end": 19.093207999999997,
+  "new_start": 12.905
+ },
+ {
+  "old_start": 20.103438,
+  "old_end": 21.986770999999997,
+  "new_start": 15.171
+ },
+ {
+  "old_start": 26.387229,
+  "old_end": 27.5565,
+  "new_start": 17.304
+ },
+ {
+  "old_start": 28.128937,
+  "old_end": 29.491978999999997,
+  "new_start": 18.724
+ },
+ {
+  "old_start": 32.219771,
+  "old_end": 32.450167,
+  "new_start": 20.337
+ },
+ {
+  "old_start": 33.935646,
+  "old_end": 41.28,
+  "new_start": 20.967
+ },
+ {
+  "old_start": 50.914604000000004,
+  "old_end": 53.736542,
+  "new_start": 28.561
+ },
+ {
+  "old_start": 56.306167,
+  "old_end": 58.851437,
+  "new_start": 31.783
+ },
+ {
+  "old_start": 59.904396,
+  "old_end": 61.3,
+  "new_start": 34.579
+ },
+ {
+  "old_start": 65.7335,
+  "old_end": 68.255271,
+  "new_start": 36.224
+ },
+ {
+  "old_start": 74.319667,
+  "old_end": 78.41,
+  "new_start": 38.996
+ },
+ {
+  "old_start": 80.729021,
+  "old_end": 82.358875,
+  "new_start": 43.336
+ },
+ {
+  "old_start": 82.908479,
+  "old_end": 83.5,
+  "new_start": 45.216
+ },
+ {
+  "old_start": 89.209563,
+  "old_end": 89.46033299999999,
+  "new_start": 46.208
+ },
+ {
+  "old_start": 92.22,
+  "old_end": 93.6,
+  "new_start": 46.708
+ },
+ {
+  "old_start": 96.37,
+  "old_end": 98.524479,
+  "new_start": 48.338
+ },
+ {
+  "old_start": 99.211375,
+  "old_end": 100.58024999999999,
+  "new_start": 50.743
+ },
+ {
+  "old_start": 101.28756200000001,
+  "old_end": 103.53325,
+  "new_start": 52.362
+ },
+ {
+  "old_start": 107.503333,
+  "old_end": 110.000063,
+  "new_start": 55.008
+ },
+ {
+  "old_start": 114.627292,
+  "old_end": 117.917708,
+  "new_start": 57.754
+ }
+]

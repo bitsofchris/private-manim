@@ -1,0 +1,109 @@
+00:00.710-00:04.070
+A neural network is just a function with a lot of parameters.
+
+00:04.070-00:06.470
+Each neuron has its own weight per input
+
+00:06.470-00:08.600
+and a special term called a bias.
+
+00:08.600-00:11.910
+The parameters of your network are initialized randomly.
+
+00:11.910-00:14.210
+When we begin training, the forward pass
+
+00:14.210-00:16.630
+is when you take the current training sample,
+
+00:16.630-00:18.910
+feed it to the model and get the model's output.
+
+00:18.910-00:22.190
+With this output, we then can compare it to the target.
+
+00:22.190-00:26.130
+This comparison allows us to compute the loss.
+
+00:26.130-00:28.470
+Now, the derivative is a mathematical way to say,
+
+00:28.470-00:30.980
+here's the direction you move a parameter
+
+00:30.980-00:33.460
+to increase the output of a function.
+
+00:33.460-00:36.360
+In this case, we use that against our loss,
+
+00:36.360-00:38.080
+but we will actually move in the opposite direction
+
+00:38.080-00:39.690
+to make the loss go down.
+
+00:39.690-00:42.430
+And back prop is when we start at the loss,
+
+00:42.430-00:43.900
+set the gradient there equal to one,
+
+00:43.900-00:47.420
+'cause that's the thing we want to take the derivative from.
+
+00:47.420-00:50.350
+We then walk the computational graph backwards
+
+00:50.350-00:53.720
+to the beginning where we have our inputs.
+
+00:53.720-00:55.720
+And then a rule from calculus called the chain rule
+
+00:55.720-00:57.720
+is what allows us to take these local derivatives
+
+00:57.720-00:59.860
+for each node in this computational graph,
+
+00:59.860-01:02.540
+getting the partial derivatives of the loss
+
+01:02.540-01:06.370
+with respect to these individual parameters.
+
+01:06.370-01:08.270
+And together across our whole network,
+
+01:08.270-01:09.710
+that gives us what's called the gradient,
+
+01:09.710-01:13.400
+which is just a list of changes
+
+01:13.400-01:15.150
+to all the parameters in our network
+
+01:15.150-01:17.810
+that tells us which direction to nudge them all
+
+01:17.810-01:20.030
+to try to make our loss go down.
+
+01:20.030-01:21.750
+We use the learning rate to take a tiny step
+
+01:21.750-01:24.520
+in that direction because these derivatives
+
+01:24.520-01:27.150
+are only accurate at the current values for each weight.
+
+01:27.150-01:28.780
+And we repeat this over and over,
+
+01:28.780-01:30.430
+and hopefully by the end, we train a good model.
+
+

@@ -3,6 +3,15 @@
 
 Make a folder per video in videos/. Number them with leading 0s 001
 
+## Docs
+
+- `docs/shorts-runbook.md` — the end-to-end process for a co-generated 9:16 Short
+  (record once, clean, transcribe, tighten, generate beats, assemble, review),
+  the research the standards came from, and the tools.
+- `videos/_shared/STYLE.md` — house style, "when you want X use Y", Shorts table.
+- `videos/_shared/ANIMATION_RULES.md` — 15 sourced rules for useful animation.
+- `docs/archive/` — completed plans.
+
 
 
 

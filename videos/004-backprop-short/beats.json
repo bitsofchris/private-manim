@@ -1,0 +1,9 @@
+{"beats": [
+ {"clip": "media/videos/01_hook/1920p30/Hook.mp4",                "end": 3.93},
+ {"clip": "media/videos/02_neuron/1920p30/Neuron.mp4",            "end": 7.42},
+ {"clip": "media/videos/03_forward_loss/1920p30/ForwardLoss.mp4", "end": 9.07},
+ {"clip": "media/videos/04_derivative/1920p30/Derivative.mp4",    "end": 10.50},
+ {"clip": "media/videos/05_backprop/1920p30/Backprop.mp4",        "end": 13.97},
+ {"clip": "media/videos/06_gradient/1920p30/Gradient.mp4",        "end": 8.56},
+ {"clip": "media/videos/07_descent/1920p30/Descent.mp4",          "end": 6.28}
+]}

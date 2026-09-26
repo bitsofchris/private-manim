@@ -40,6 +40,9 @@ CAPTION_SCALE = 0.6   # for Text().scale(...) calls in 1080p
 LABEL_SCALE = 0.45
 TAG_SCALE = 0.45
 
+# Monospace for code blocks. Menlo ships with macOS; Pango falls back otherwise.
+FONT_MONO = "Menlo"
+
 # Motion. Three durations. Don't invent new ones.
 QUICK = 0.3
 BEAT = 0.6
@@ -67,6 +70,31 @@ OP_GHOST = 0.25  # for ghosted/faded prior states
 CAM_PHI = 70 * DEGREES
 CAM_THETA = -45 * DEGREES
 CAM_AMBIENT_RATE = 0.12
+
+# --- Short format (YouTube Shorts, 9:16) -------------------------------------
+# Used by BocShortScene. 1 scene unit = SHORT_W / SHORT_FRAME_W = 120 px.
+SHORT_W = 1080
+SHORT_H = 1920
+SHORT_FPS = 30
+SHORT_FRAME_W = 9.0
+SHORT_FRAME_H = 16.0
+
+# Fractions of the frame covered by the YouTube Shorts UI (title/search bar on
+# top, channel name + description at the bottom, like/comment rail on the
+# right). Text and the hero must stay inside; backgrounds may bleed through.
+SHORT_SAFE_TOP = 0.12
+SHORT_SAFE_BOTTOM = 0.20
+SHORT_SAFE_RIGHT = 0.12
+SHORT_SAFE_LEFT = 0.06   # ~65 px gutter; safe-zone guides put 60 px on the left
+
+# Readable on a phone means text at least ~1/20 of frame height (96 px).
+# Scales are for Text(font=S.FONT) at default font_size, measured at 1920 px:
+#   caption 1.8 -> capital letters 104 px, full line (with descenders) 135 px
+#   label   1.3 -> capital letters  75 px, full line  98 px (the floor)
+SHORT_CAPTION_SCALE = 1.3   # ~72 px caps (top of the 48-70 px guidance); 3-word captions fit one line
+SHORT_LABEL_SCALE = 1.3     # labels next to the thing they name
+SHORT_CODE_FONT_SIZE = 30   # code_block() in a short: ~27 monospace columns fit the safe width
+DOT_SHORT = 0.22            # data dot radius in a short (~50 px across)
 
 # Reproducibility default.
 SEED = 7

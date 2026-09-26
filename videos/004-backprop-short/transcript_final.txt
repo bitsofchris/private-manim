@@ -1,0 +1,49 @@
+00:00.670-00:04.090
+A neural network is just a function with a lot of parameters.
+
+00:04.090-00:08.270
+Each neuron has its own weight per input and a special term called a bias.
+
+00:08.270-00:11.390
+The parameters of your network are initialized randomly.
+
+00:11.390-00:15.670
+The forward pass is when you take the current training sample, feed it to the model, and
+
+00:15.670-00:17.040
+get the model's output.
+
+00:17.040-00:20.480
+This comparison allows us to compute the loss.
+
+00:20.480-00:25.070
+Now the derivative is a mathematical way to say here's the direction you move a parameter
+
+00:25.070-00:29.440
+to increase the output of a function, but we will actually move in the opposite direction
+
+00:29.440-00:31.220
+to make the loss go down.
+
+00:31.220-00:35.420
+The back prop is when we start at the loss, set the gradient there equal to 1, we then
+
+00:35.420-00:39.380
+walk the computational graph backwards, and then a rule from calculus called the chain
+
+00:39.380-00:43.860
+rule is what allows us to take these local derivatives, getting the partial derivatives
+
+00:43.860-00:49.710
+of the loss, gives us what's called the gradient, which is just a list of changes to all the
+
+00:49.710-00:53.490
+parameters in the network that tell us which direction to nudge them all.
+
+00:53.490-00:56.880
+We use the learning rate to take a tiny step in that direction, and we repeat this over
+
+00:56.880-00:59.230
+and over, and hopefully by the end we train a good model.
+
+

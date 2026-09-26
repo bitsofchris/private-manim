@@ -1,0 +1,121 @@
+00:01.730-00:03.490
+A neural network is just a function
+
+00:03.490-00:05.340
+with a lot of parameters.
+
+00:05.340-00:07.690
+Each neuron has its own weight per input
+
+00:07.690-00:09.950
+and a special term called a bias.
+
+00:09.950-00:14.730
+The parameters of your network are initialized randomly.
+
+00:14.730-00:17.120
+When we begin training, the forward pass
+
+00:17.120-00:20.160
+is when you take the current training sample,
+
+00:20.160-00:22.820
+feed it to the model and get the model's output.
+
+00:22.820-00:26.450
+With this output, we then can compare it to the target.
+
+00:26.450-00:34.000
+This comparison allows us to compute the loss.
+
+00:34.000-00:36.320
+Now, the derivative is a mathematical way to say,
+
+00:36.320-00:38.860
+here's the direction you move a parameter
+
+00:38.860-00:41.330
+to increase the output of a function.
+
+00:41.330-00:46.030
+In this case, we use that against our loss.
+
+00:46.030-00:47.550
+And what this tells us is the direction
+
+00:47.550-00:51.010
+we need to move our weight to make the loss go up.
+
+00:51.010-00:52.730
+But we will actually move in the opposite direction
+
+00:52.730-00:56.570
+to make the loss go down.
+
+00:56.570-00:59.950
+And back prop is when we start at the loss,
+
+00:59.950-01:01.390
+set the gradient there equal to one
+
+01:01.390-01:05.820
+'cause that's the thing we want to take the derivative from.
+
+01:05.820-01:09.000
+We then walk the computational graph backwards
+
+01:09.000-01:14.420
+to the beginning where we have our input.
+
+01:14.420-01:16.420
+And then a rule from calculus called the chain rule
+
+01:16.420-01:18.460
+is what allows us to take these local derivatives
+
+01:18.460-01:20.800
+for each node in this computational graph,
+
+01:20.800-01:23.620
+getting the partial derivatives of the loss
+
+01:23.620-01:30.290
+with respect to these individual parameters.
+
+01:30.290-01:32.160
+And together across our whole network,
+
+01:32.160-01:33.640
+that gives us what's called the gradient,
+
+01:33.640-01:37.320
+which is just a list of terrain,
+
+01:37.320-01:39.290
+which is just a list of changes
+
+01:39.290-01:41.380
+to all the parameters in our network
+
+01:41.380-01:44.610
+that tells us which direction to nudge them all
+
+01:44.610-01:47.590
+to try to make our loss go down.
+
+01:47.590-01:49.350
+We use the learning rate to take a tiny step
+
+01:49.350-01:52.100
+in that direction because these derivatives
+
+01:52.100-01:54.690
+are only accurate at the current values for each weight.
+
+01:54.690-01:56.350
+And we repeat this over and over
+
+01:56.350-01:57.950
+and hopefully by the end, we train a good model.
+
+
