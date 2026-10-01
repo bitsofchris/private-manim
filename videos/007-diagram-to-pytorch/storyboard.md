@@ -74,7 +74,10 @@ capped (0.25 s / 0.4 s at boundaries), a stray blip at 44.9–45.3 and the
 tail after "code" removed. Known flaw: the "X" after "a sublayer of"
 (~27.1–27.7 final) was spoken very softly and does not transcribe even
 boosted; the code card shows it, so the eye gets what the ear misses.
-Chris: listen there; if it bothers you, re-record that one sentence.
+Chris heard it as static (room hiss at -46 dB where every other pause is
+digital silence), so 26.9-28.5 s is muted in `vo_final.wav`
+(`vo_final_v1.wav` is the pre-mute take). The sentence now ends on
+"a sublayer of" and the code card shows the x.
 
 | # | Beat | Start | Length | Scene | VO |
 |---|------|------:|-------:|-------|----|
@@ -84,7 +87,7 @@ Chris: listen there; if it bothers you, re-record that one sentence.
 | 4 | Skip | 18.96 | 9.95 | `04_skip.py` `Skip` | The arrow that bypasses a box is the x that keeps getting reassigned. Add and norm is x equals x plus a sublayer of x. |
 | 5 | Repeat | 28.91 | 5.91 | `05_repeat.py` `Repeat` | A bracket with N× is a for loop. For block in blocks, x equals block of x. |
 | 6 | Inset | 34.82 | 5.07 | `06_inset.py` `Inset` | A zoomed-in box is a submodule's own forward function. The block is its own class. |
-| 7 | Close | 39.89 | 2.78 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. |
+| 7 | Close | 39.89 | 7.00 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. (2.78 s of VO + 4.22 s padded silence so the code stays up 5 s) |
 
 Captions: `captions.json` holds beats 1 and 7 only; beats 2–6 draw a code
 card in the band via `_code.py`.

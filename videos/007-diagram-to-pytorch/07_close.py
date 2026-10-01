@@ -24,7 +24,7 @@ from videos._shared.base import BocShortScene
 from videos._shared.mobjects import code_block
 from _ghost import ghostify
 
-BEAT_SECONDS = 2.783  # exact VO window of this beat (master 39.89-42.673)
+BEAT_SECONDS = 7.0      # 2.783 s of VO + 4.217 s padded silence so the code stays up 5 s
 T_READ = 0.0          # VO: "read the diagram" (0.50-1.40); a HOLD-long fade from frame 0 lands on it
 T_CODE = 1.70         # VO: "understanding the code" (1.55-2.25)
 
