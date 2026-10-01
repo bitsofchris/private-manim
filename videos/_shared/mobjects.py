@@ -263,8 +263,12 @@ def _cell_style(v: float, color: str | None = None) -> tuple[str, float]:
     return color, S.TOKEN_CELL_OP_MIN + (S.TOKEN_CELL_OP_MAX - S.TOKEN_CELL_OP_MIN) * mag
 
 
+def _fmt(v: float) -> str:
+    return f"{round(float(v), 1) + 0.0:+.1f}"  # + 0.0 turns -0.0 into +0.0
+
+
 def _cell_text(v: float) -> Text:
-    return Text(f"{v:+.1f}", font=S.FONT, weight="MEDIUM").scale(S.SHORT_LABEL_SCALE).set_color(S.FG)
+    return Text(_fmt(v), font=S.FONT, weight="MEDIUM").scale(S.SHORT_LABEL_SCALE).set_color(S.FG)
 
 
 class TokenColumn(VGroup):
@@ -309,7 +313,7 @@ class TokenColumn(VGroup):
             cell.set_fill(color, opacity=op)
         for num, v in zip(self.nums, self.values):
             num.become(_cell_text(v).move_to(num))
-            num.text = f"{v:+.1f}"  # become() copies glyphs, not the attribute
+            num.text = _fmt(v)  # become() copies glyphs, not the attribute
         return self
 
 

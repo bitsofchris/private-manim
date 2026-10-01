@@ -31,6 +31,12 @@ class CellStyle(unittest.TestCase):
         self.assertAlmostEqual(_cell_style(1.0)[1], S.TOKEN_CELL_OP_MAX)
         self.assertAlmostEqual(_cell_style(3.0)[1], S.TOKEN_CELL_OP_MAX)  # clamped
 
+    def test_negative_zero_prints_as_plus_zero(self):
+        from videos._shared.mobjects import _fmt
+        self.assertEqual(_fmt(-0.04), "+0.0")
+        self.assertEqual(_fmt(-0.0), "+0.0")
+        self.assertEqual(_fmt(-0.06), "-0.1")
+
     def test_tint_overrides_sign_color(self):
         self.assertEqual(_cell_style(-0.5, S.STRUCTURE)[0], S.STRUCTURE)
 
