@@ -41,7 +41,7 @@ DOT_BUFF = 0.15       # gap between the dot and the bottom of Embed
 
 class Arrow(BocShortScene):
     def construct(self):
-        d = transformer.build_block(self.stage)
+        d = transformer.build_block(self.stage, bleed=0)  # the band top holds the code card
         self.add(d)  # frame 0: the whole diagram, dim, teal flow
 
         # "arrow": the main-line arrows are this beat's hero.

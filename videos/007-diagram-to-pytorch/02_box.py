@@ -39,7 +39,7 @@ BAR_PULSE_OP = 0.6    # bar fill opacity at the top of the "construct once" puls
 
 class Box(BocShortScene):
     def construct(self):
-        d = build_block(self.stage)
+        d = build_block(self.stage, bleed=0)  # the band top holds the code card
         self.add(d)  # frame 0: the complete dim diagram
 
         # "box": the four box outlines are the hero (restroke keeps labels on top).

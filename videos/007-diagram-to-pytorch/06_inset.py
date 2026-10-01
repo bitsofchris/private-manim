@@ -48,7 +48,7 @@ def inset_frame(block: VGroup) -> RoundedRectangle:
 
 class Inset(BocShortScene):
     def construct(self):
-        d = transformer.build_block(self.stage)
+        d = transformer.build_block(self.stage, bleed=0)  # the band top holds the code card
         self.add(d)  # frame 0: the complete dim diagram
 
         # "zoomed-in": the repeated block is the hero, as one group (strokes,

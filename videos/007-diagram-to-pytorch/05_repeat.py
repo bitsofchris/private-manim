@@ -40,7 +40,7 @@ GHOST_STEP = 0.45     # units each ghost copy is stamped up: half a box peeks ou
 
 class Repeat(BocShortScene):
     def construct(self):
-        d = transformer.build_block(self.stage)
+        d = transformer.build_block(self.stage, bleed=0)  # the band top holds the code card
         # Ghost copies start exactly under the live block (invisible) and are
         # added first so they stay behind it: 0.18.1 hides a negative z_index
         # while it animates, so layer by add() order.

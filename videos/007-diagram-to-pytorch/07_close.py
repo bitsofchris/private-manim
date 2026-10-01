@@ -41,7 +41,7 @@ def full_code(area: Mobject) -> Code:
 
 class Close(BocShortScene):
     def construct(self):
-        d = transformer.build_block(self.stage)
+        d = transformer.build_block(self.stage, bleed=0)  # the band top holds the code card
         self.add(d)  # frame 0: the complete dim diagram
 
         # "read the diagram": the diagram leaves entirely so nothing shows

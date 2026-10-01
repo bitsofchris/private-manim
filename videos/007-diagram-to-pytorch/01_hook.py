@@ -29,7 +29,7 @@ PULSE_SCALE = 1.03    # whole-diagram pulse; small so the top stays near the saf
 
 class Hook(BocShortScene):
     def construct(self):
-        d = build_block(self.stage)
+        d = build_block(self.stage, bleed=0)  # the band top holds the code card
         self.add(d)  # frame 0: the complete dim diagram
 
         # "Every mark": one scale pulse of the whole diagram, no color change.
