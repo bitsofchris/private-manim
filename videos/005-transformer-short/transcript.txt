@@ -1,0 +1,136 @@
+00:00.030-00:02.590
+A transformer takes a sequence of tokens
+
+00:02.590-00:08.580
+and produces updated representations of those tokens.
+
+00:08.580-00:11.680
+Each token is a vector of D numbers
+
+00:11.680-00:16.230
+and a sequence of L tokens is then an L by D matrix.
+
+00:16.230-00:21.330
+Every block in the transformer stack keeps that shape.
+
+00:21.330-00:25.720
+Attention is what combines information across the tokens.
+
+00:25.720-00:27.390
+Each token asks a query,
+
+00:27.390-00:29.060
+which is what am I looking for?
+
+00:29.060-00:31.950
+Every token then offers a key saying what do I have?
+
+00:31.950-00:33.520
+And when those match up,
+
+00:33.520-00:37.000
+we then weight the value of that attention higher.
+
+00:37.000-00:39.500
+So each token collects a weighted sum of these values
+
+00:39.500-00:49.450
+that match the key and query.
+
+00:49.450-00:51.690
+Key query and value are learnable matrices
+
+00:51.690-00:56.650
+in part of each attention block.
+
+00:56.650-00:59.130
+Now, a residual connection just adds the update
+
+00:59.130-01:04.320
+to the existing representation instead of replacing it.
+
+01:04.320-01:06.820
+You can think of residuals as constantly refining
+
+01:06.820-01:15.890
+the existing representation.
+
+01:15.890-01:19.090
+A feed forward network then works on each token alone.
+
+01:19.090-01:21.210
+It learns which combinations of features matter,
+
+01:21.210-01:22.770
+amplifying the ones that do,
+
+01:22.770-01:24.890
+and then adds a non-linearity on top
+
+01:24.890-01:29.980
+that lets the choice depend on the input.
+
+01:29.980-01:31.820
+My attention has collected the information.
+
+01:31.820-01:34.640
+The feed forward network is then what processes it
+
+01:34.640-01:36.520
+one token at a time, combining features
+
+01:36.520-01:44.820
+and applying a non-linearity to the update.
+
+01:44.820-01:47.980
+A feed forward network then works on each token in isolation.
+
+01:47.980-01:50.540
+It learns which combinations of features matter,
+
+01:50.540-01:51.740
+amplifying the ones that do,
+
+01:51.740-01:53.650
+and adding a non-linearity on top.
+
+01:53.650-02:05.920
+So each output depends on the combination of inputs.
+
+02:05.920-02:08.460
+Now each block receives the previous block's output
+
+02:08.460-02:18.030
+and continues to refine it further.
+
+02:18.030-02:19.310
+And the final representations
+
+02:19.310-02:20.790
+are not always next token predictions,
+
+02:20.790-02:23.940
+but a task output layer specific to what you're training for
+
+02:23.940-02:25.900
+will turn these output representations
+
+02:25.900-02:29.680
+into whatever the training objective is looking for.
+
+02:29.680-02:31.000
+Now the final representations
+
+02:31.000-02:32.690
+are not necessarily predictions,
+
+02:32.690-02:34.820
+but a task specific output layer
+
+02:34.820-02:36.260
+will turn these representations
+
+02:36.260-02:38.590
+into whatever the training objective is asking for.
+
+

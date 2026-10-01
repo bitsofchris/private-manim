@@ -1,0 +1,9 @@
+{"beats": [
+ {"clip": "media/videos/01_hook/1920p30/Hook.mp4",            "end": 6.20},
+ {"clip": "media/videos/02_matrix/1920p30/Matrix.mp4",        "end": 9.08},
+ {"clip": "media/videos/03_attention/1920p30/Attention.mp4",  "end": 13.82},
+ {"clip": "media/videos/04_residual/1920p30/Residual.mp4",    "end": 5.40},
+ {"clip": "media/videos/05_ffn/1920p30/FeedForward.mp4",      "end": 11.45},
+ {"clip": "media/videos/06_stack/1920p30/Stack.mp4",          "end": 4.49},
+ {"clip": "media/videos/07_head/1920p30/Head.mp4",            "end": 8.83}
+]}

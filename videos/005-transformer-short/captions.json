@@ -1,0 +1,352 @@
+[
+ {
+  "start": 0.32,
+  "end": 1.471,
+  "text": "A transformer takes"
+ },
+ {
+  "start": 1.531,
+  "end": 2.164,
+  "text": "a sequence"
+ },
+ {
+  "start": 2.224,
+  "end": 2.8,
+  "text": "of tokens"
+ },
+ {
+  "start": 2.8,
+  "end": 4.107,
+  "text": "and produces updated"
+ },
+ {
+  "start": 4.167,
+  "end": 5.349,
+  "text": "representations of"
+ },
+ {
+  "start": 5.409,
+  "end": 6.28,
+  "text": "those tokens."
+ },
+ {
+  "start": 6.28,
+  "end": 7.237,
+  "text": "Each token is"
+ },
+ {
+  "start": 7.297,
+  "end": 8.118,
+  "text": "a vector of"
+ },
+ {
+  "start": 8.178,
+  "end": 8.93,
+  "text": "D numbers"
+ },
+ {
+  "start": 8.93,
+  "end": 9.906,
+  "text": "and a sequence"
+ },
+ {
+  "start": 9.966,
+  "end": 10.748,
+  "text": "of L tokens"
+ },
+ {
+  "start": 10.808,
+  "end": 11.524,
+  "text": "is then an"
+ },
+ {
+  "start": 11.584,
+  "end": 11.909,
+  "text": "L by"
+ },
+ {
+  "start": 11.969,
+  "end": 12.62,
+  "text": "D matrix."
+ },
+ {
+  "start": 12.62,
+  "end": 13.326,
+  "text": "Every block in"
+ },
+ {
+  "start": 13.386,
+  "end": 14.422,
+  "text": "the transformer stack"
+ },
+ {
+  "start": 14.482,
+  "end": 15.33,
+  "text": "keeps that shape."
+ },
+ {
+  "start": 15.33,
+  "end": 16.32,
+  "text": "Attention is what"
+ },
+ {
+  "start": 16.38,
+  "end": 17.92,
+  "text": "combines information across"
+ },
+ {
+  "start": 17.98,
+  "end": 18.64,
+  "text": "the tokens."
+ },
+ {
+  "start": 18.64,
+  "end": 19.429,
+  "text": "Each token asks"
+ },
+ {
+  "start": 19.489,
+  "end": 20.228,
+  "text": "a query, which"
+ },
+ {
+  "start": 20.288,
+  "end": 20.831,
+  "text": "is what am"
+ },
+ {
+  "start": 20.891,
+  "end": 21.63,
+  "text": "I looking for."
+ },
+ {
+  "start": 21.63,
+  "end": 22.562,
+  "text": "Every token then"
+ },
+ {
+  "start": 22.622,
+  "end": 23.389,
+  "text": "offers a key"
+ },
+ {
+  "start": 23.449,
+  "end": 24.271,
+  "text": "saying what do"
+ },
+ {
+  "start": 24.331,
+  "end": 24.77,
+  "text": "I have?"
+ },
+ {
+  "start": 24.77,
+  "end": 25.351,
+  "text": "So each token"
+ },
+ {
+  "start": 25.411,
+  "end": 26.24,
+  "text": "collects a weighted"
+ },
+ {
+  "start": 26.3,
+  "end": 26.591,
+  "text": "sum of"
+ },
+ {
+  "start": 26.651,
+  "end": 27.19,
+  "text": "these values"
+ },
+ {
+  "start": 27.19,
+  "end": 28.135,
+  "text": "that match the"
+ },
+ {
+  "start": 28.195,
+  "end": 29.14,
+  "text": "key and query."
+ },
+ {
+  "start": 29.14,
+  "end": 29.868,
+  "text": "Now a residual"
+ },
+ {
+  "start": 29.928,
+  "end": 30.946,
+  "text": "connection just adds"
+ },
+ {
+  "start": 31.006,
+  "end": 31.54,
+  "text": "the update"
+ },
+ {
+  "start": 31.54,
+  "end": 32.36,
+  "text": "to the existing"
+ },
+ {
+  "start": 32.42,
+  "end": 33.753,
+  "text": "representation instead of"
+ },
+ {
+  "start": 33.812,
+  "end": 34.53,
+  "text": "replacing it."
+ },
+ {
+  "start": 34.53,
+  "end": 35.335,
+  "text": "A feed forward"
+ },
+ {
+  "start": 35.395,
+  "end": 36.414,
+  "text": "network then works"
+ },
+ {
+  "start": 36.474,
+  "end": 36.903,
+  "text": "on each"
+ },
+ {
+  "start": 36.963,
+  "end": 37.66,
+  "text": "token alone."
+ },
+ {
+  "start": 37.66,
+  "end": 38.287,
+  "text": "It learns which"
+ },
+ {
+  "start": 38.347,
+  "end": 38.974,
+  "text": "combinations of"
+ },
+ {
+  "start": 39.034,
+  "end": 39.7,
+  "text": "features matter"
+ },
+ {
+  "start": 39.7,
+  "end": 40.707,
+  "text": "amplifying the ones"
+ },
+ {
+  "start": 40.767,
+  "end": 41.22,
+  "text": "that do"
+ },
+ {
+  "start": 41.22,
+  "end": 41.943,
+  "text": "and then adds"
+ },
+ {
+  "start": 42.003,
+  "end": 42.829,
+  "text": "a non-linearity"
+ },
+ {
+  "start": 42.889,
+  "end": 43.25,
+  "text": "on top"
+ },
+ {
+  "start": 43.25,
+  "end": 44.097,
+  "text": "that lets the"
+ },
+ {
+  "start": 44.157,
+  "end": 45.185,
+  "text": "choice depend on"
+ },
+ {
+  "start": 45.245,
+  "end": 45.91,
+  "text": "the input."
+ },
+ {
+  "start": 45.91,
+  "end": 46.608,
+  "text": "Now each block"
+ },
+ {
+  "start": 46.668,
+  "end": 47.692,
+  "text": "receives the previous"
+ },
+ {
+  "start": 47.752,
+  "end": 48.45,
+  "text": "block's output"
+ },
+ {
+  "start": 48.45,
+  "end": 49.376,
+  "text": "and continues to"
+ },
+ {
+  "start": 49.436,
+  "end": 50.47,
+  "text": "refine it further."
+ },
+ {
+  "start": 50.47,
+  "end": 51.088,
+  "text": "Now the final"
+ },
+ {
+  "start": 51.148,
+  "end": 52.207,
+  "text": "representations are not"
+ },
+ {
+  "start": 52.267,
+  "end": 53.37,
+  "text": "necessarily predictions"
+ },
+ {
+  "start": 53.37,
+  "end": 54.04,
+  "text": "but a task"
+ },
+ {
+  "start": 54.1,
+  "end": 55.44,
+  "text": "specific output layer"
+ },
+ {
+  "start": 55.44,
+  "end": 55.859,
+  "text": "will turn"
+ },
+ {
+  "start": 55.919,
+  "end": 56.84,
+  "text": "these representations"
+ },
+ {
+  "start": 56.84,
+  "end": 57.591,
+  "text": "into whatever the"
+ },
+ {
+  "start": 57.651,
+  "end": 58.569,
+  "text": "training objective is"
+ },
+ {
+  "start": 58.629,
+  "end": 59.13,
+  "text": "asking for."
+ }
+]

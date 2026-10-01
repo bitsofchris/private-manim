@@ -1,0 +1,70 @@
+00:00.320-00:02.800
+A transformer takes a sequence of tokens
+
+00:02.800-00:06.280
+and produces updated representations of those tokens.
+
+00:06.280-00:08.930
+Each token is a vector of D numbers,
+
+00:08.930-00:12.620
+and a sequence of L tokens is then an L by D matrix.
+
+00:12.620-00:15.330
+Every block in the transformer stack keeps that shape.
+
+00:15.330-00:18.640
+Attention is what combines information across the tokens.
+
+00:18.640-00:21.630
+Each token asks a query, which is what am I looking for.
+
+00:21.630-00:24.770
+Every token then offers a key, saying what do I have?
+
+00:24.770-00:27.190
+So each token collects a weighted sum of these values
+
+00:27.190-00:29.140
+that match the key and query.
+
+00:29.140-00:31.540
+Now a residual connection just adds the update
+
+00:31.540-00:34.530
+to the existing representation instead of replacing it.
+
+00:34.530-00:37.660
+A feed forward network then works on each token alone.
+
+00:37.660-00:39.700
+It learns which combinations of features matter,
+
+00:39.700-00:41.220
+amplifying the ones that do,
+
+00:41.220-00:43.250
+and then adds a non-linearity on top
+
+00:43.250-00:45.910
+that lets the choice depend on the input.
+
+00:45.910-00:48.450
+Now each block receives the previous block's output
+
+00:48.450-00:50.470
+and continues to refine it further.
+
+00:50.470-00:53.370
+Now the final representations are not necessarily predictions,
+
+00:53.370-00:55.440
+but a task specific output layer
+
+00:55.440-00:56.840
+will turn these representations
+
+00:56.840-00:59.130
+into whatever the training objective is asking for.
+
+
