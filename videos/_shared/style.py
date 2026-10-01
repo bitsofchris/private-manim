@@ -108,3 +108,17 @@ CONTENT_OTHER = "#FB923C"    # orange - "other-food" cluster
 CONTENT_PIRATE = "#A16207"   # warm brown - pirate steering vector
 CONTENT_GOLD = "#E0B040"     # gold - "Golden Gate" callback
 CONTENT_RUST = "#C2410C"     # rust - tertiary categorical accent
+
+# --- Token matrices (transformer shorts) -------------------------------------
+# A token is a column of cells; a sequence is columns side by side under one
+# bracket. Sizes are for a 9-unit-wide Short frame: 3 signed one-decimal
+# values ("+0.4" is 1.65 units at SHORT_LABEL_SCALE) fit the safe width.
+TOKEN_CELL_W = 1.85
+TOKEN_CELL_H = 0.62
+TOKEN_COL_GAP = 0.35
+TOKEN_D_SHOWN = 3          # values drawn per column; a "⋮" row implies the rest
+TOKEN_CELL_OP_MIN = 0.12   # cell fill opacity at |value| = 0
+TOKEN_CELL_OP_MAX = 0.85   # cell fill opacity at |value| = 1
+TOKEN_BRACKET_LIP = 0.22
+ATTN_ARC_MIN = 2.0         # stroke width of a near-zero attention weight
+ATTN_ARC_MAX = 14.0        # stroke width of a weight of 1

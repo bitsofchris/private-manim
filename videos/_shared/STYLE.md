@@ -36,6 +36,10 @@ Subclass `BocShortScene` (1080x1920 @ 30 fps, frame 9 x 16 units, 1 unit = 120 p
 | Point at a line of code | `self.play(highlight_lines(code, 3), run_time=S.BEAT)` | magenta bar behind the line(s); same bar slides on later calls |
 | A transformer block diagram | `transformer.build_block(self.stage)` | Embed → [Attention → (+) → FFN → (+)] N× → Linear; teal flow, marks FG_DIM; recolor `d.boxes` / `d.flow` / `d.skips` / `d.adds` / `d.bracket` for the hero. `GPT_SOURCE` + `MARK_LINES` is the matching code |
 | Match the VO line length | `self.hold_until(BEAT_SECONDS)` at the end; `hold_until(t)` to land a change on a word | warns if the scene overran |
+| A token's vector | `TokenColumn(values, digits=True)` | teal cells (+) / indigo (−), opacity = magnitude, `⋮` row; `col.animate.set_values(v)` ticks it in place |
+| An L × d token matrix | `TokenMatrix(values)` | 3 signed one-decimal columns fit the safe width; one shared bracket pair |
+| An update to a token | `TokenColumn(values, color=S.STRUCTURE, dots=False)` | the magenta thing that gets added |
+| Attention between tokens | `attention_arcs(sources, target, weights)` | magenta arcs into one target, width = weight |
 | Check layout | `self.show_guides()` while iterating, then `tools/review_frames.sh <mp4>` | delete the guides call before the final render |
 | Fill the frame | backgrounds / panels may bleed past `safe` to the frame edge | text and the magenta hero never do |
 
