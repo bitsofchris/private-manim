@@ -49,7 +49,8 @@ class Diagram(unittest.TestCase):
         b = safe_bounds()
         self.assertGreaterEqual(self.d.get_left()[0], b.left - 1e-6)
         self.assertLessEqual(self.d.get_right()[0], b.right + 1e-6)
-        self.assertGreaterEqual(self.d.get_bottom()[1], b.bottom - 1e-6)
+        stage = stage_bounds(b)
+        self.assertGreaterEqual(self.d.get_bottom()[1], stage.bottom - T.BOTTOM_BLEED - 1e-6)
         self.assertLessEqual(self.d.get_top()[1], b.top + 1e-6)
 
     def test_labels_meet_the_phone_floor(self):
@@ -62,6 +63,14 @@ class Diagram(unittest.TestCase):
             self.assertEqual(a.get_color().to_hex().upper(), S.DATA.upper())
         for box in self.d.boxes:
             self.assertEqual(box.box.get_stroke_color().to_hex().upper(), S.FG_DIM.upper())
+
+
+class Air(unittest.TestCase):
+    def test_row_gaps_are_not_squished(self):
+        d = T.build_block(_rect(stage_bounds(safe_bounds())))
+        ys = [d.rows[r] for r in T.ROWS]
+        gaps = [b.get_bottom()[1] - a.get_top()[1] for a, b in zip(ys, ys[1:])]
+        self.assertGreaterEqual(min(gaps), 0.6)
 
 
 class CodeContract(unittest.TestCase):
