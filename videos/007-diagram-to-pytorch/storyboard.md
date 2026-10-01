@@ -66,3 +66,25 @@ Total ≈ 57 s before tightening. Hero per beat: 1 none, 2 boxes, 3 arrows,
    and 007 in the same sitting keeps the voice matched.
 2. Claude: clean → transcribe → cut list → scenes with real timings →
    assemble with partial `captions.json` → contact sheets.
+
+## Final beats (VO recorded 2026-10-01, Descript Studio Sound; loudnorm only)
+
+`vo_raw.m4a` 69.2 s → `vo_final.wav` 42.67 s with no phrase cuts: pauses
+capped (0.25 s / 0.4 s at boundaries), a stray blip at 44.9–45.3 and the
+tail after "code" removed. Known flaw: the "X" after "a sublayer of"
+(~27.1–27.7 final) was spoken very softly and does not transcribe even
+boosted; the code card shows it, so the eye gets what the ear misses.
+Chris: listen there; if it bothers you, re-record that one sentence.
+
+| # | Beat | Start | Length | Scene | VO |
+|---|------|------:|-------:|-------|----|
+| 1 | Hook | 0.00 | 3.13 | `01_hook.py` `Hook` | Every mark on this diagram is a line of PyTorch. |
+| 2 | Box | 3.13 | 5.83 | `02_box.py` `Box` | A box is one nn.Module. Linear, attention, feed forward: each one of these is an object you construct once. |
+| 3 | Arrow | 8.96 | 10.00 | `03_arrow.py` `Arrow` | An arrow represents a tensor moving to the next operation. In code, it's the order of calls in the forward function. Top to bottom of forward is bottom to top of this diagram. |
+| 4 | Skip | 18.96 | 9.95 | `04_skip.py` `Skip` | The arrow that bypasses a box is the x that keeps getting reassigned. Add and norm is x equals x plus a sublayer of x. |
+| 5 | Repeat | 28.91 | 5.91 | `05_repeat.py` `Repeat` | A bracket with N× is a for loop. For block in blocks, x equals block of x. |
+| 6 | Inset | 34.82 | 5.07 | `06_inset.py` `Inset` | A zoomed-in box is a submodule's own forward function. The block is its own class. |
+| 7 | Close | 39.89 | 2.78 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. |
+
+Captions: `captions.json` holds beats 1 and 7 only; beats 2–6 draw a code
+card in the band via `_code.py`.

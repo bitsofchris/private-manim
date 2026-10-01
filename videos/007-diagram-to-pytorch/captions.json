@@ -1,0 +1,42 @@
+[
+ {
+  "start": 0.35,
+  "end": 1.087,
+  "text": "Every mark on"
+ },
+ {
+  "start": 1.147,
+  "end": 1.99,
+  "text": "this diagram is"
+ },
+ {
+  "start": 2.05,
+  "end": 2.418,
+  "text": "a line"
+ },
+ {
+  "start": 2.478,
+  "end": 3.11,
+  "text": "of PyTorch."
+ },
+ {
+  "start": 39.88,
+  "end": 40.274,
+  "text": "If you can"
+ },
+ {
+  "start": 40.334,
+  "end": 40.979,
+  "text": "read the diagram"
+ },
+ {
+  "start": 41.039,
+  "end": 41.792,
+  "text": "you're understanding"
+ },
+ {
+  "start": 41.852,
+  "end": 42.21,
+  "text": "the code."
+ }
+]

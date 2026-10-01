@@ -1,0 +1,317 @@
+[
+ {
+  "start": 0.35,
+  "end": 1.037,
+  "text": "Here's how you"
+ },
+ {
+  "start": 1.097,
+  "end": 1.922,
+  "text": "can understand AI"
+ },
+ {
+  "start": 1.982,
+  "end": 2.99,
+  "text": "architecture diagrams"
+ },
+ {
+  "start": 2.99,
+  "end": 4.02,
+  "text": "like a pro."
+ },
+ {
+  "start": 4.02,
+  "end": 4.77,
+  "text": "Now there's no"
+ },
+ {
+  "start": 4.83,
+  "end": 5.68,
+  "text": "formal standard"
+ },
+ {
+  "start": 5.68,
+  "end": 6.311,
+  "text": "but there is"
+ },
+ {
+  "start": 6.37,
+  "end": 6.904,
+  "text": "a de facto"
+ },
+ {
+  "start": 6.964,
+  "end": 7.74,
+  "text": "visual grammar."
+ },
+ {
+  "start": 7.74,
+  "end": 8.669,
+  "text": "Almost every paper"
+ },
+ {
+  "start": 8.729,
+  "end": 9.658,
+  "text": "figure inherits it"
+ },
+ {
+  "start": 9.718,
+  "end": 10.5,
+  "text": "from figure one"
+ },
+ {
+  "start": 10.5,
+  "end": 11.465,
+  "text": "and attention is"
+ },
+ {
+  "start": 11.525,
+  "end": 12.32,
+  "text": "all you need."
+ },
+ {
+  "start": 12.32,
+  "end": 13.035,
+  "text": "A box is"
+ },
+ {
+  "start": 13.095,
+  "end": 14.365,
+  "text": "an operation or"
+ },
+ {
+  "start": 14.425,
+  "end": 15.14,
+  "text": "a layer."
+ },
+ {
+  "start": 15.14,
+  "end": 16.575,
+  "text": "Linear, attention, feed"
+ },
+ {
+  "start": 16.635,
+  "end": 17.83,
+  "text": "forward, et cetera."
+ },
+ {
+  "start": 17.83,
+  "end": 18.637,
+  "text": "An arrow is"
+ },
+ {
+  "start": 18.697,
+  "end": 19.773,
+  "text": "a tensor moving"
+ },
+ {
+  "start": 19.833,
+  "end": 20.304,
+  "text": "to the"
+ },
+ {
+  "start": 20.364,
+  "end": 21.44,
+  "text": "next operation."
+ },
+ {
+  "start": 21.44,
+  "end": 22.42,
+  "text": "Flow is always"
+ },
+ {
+  "start": 22.48,
+  "end": 23.46,
+  "text": "bottom to top"
+ },
+ {
+  "start": 23.46,
+  "end": 24.323,
+  "text": "where input tokens"
+ },
+ {
+  "start": 24.383,
+  "end": 24.701,
+  "text": "are at"
+ },
+ {
+  "start": 24.761,
+  "end": 25.26,
+  "text": "the bottom"
+ },
+ {
+  "start": 25.26,
+  "end": 26.104,
+  "text": "and logits are"
+ },
+ {
+  "start": 26.164,
+  "end": 26.84,
+  "text": "at the top."
+ },
+ {
+  "start": 26.84,
+  "end": 27.727,
+  "text": "An arrow that"
+ },
+ {
+  "start": 27.787,
+  "end": 28.737,
+  "text": "bypasses a box"
+ },
+ {
+  "start": 28.797,
+  "end": 29.24,
+  "text": "is the"
+ },
+ {
+  "start": 29.3,
+  "end": 30.25,
+  "text": "residual path."
+ },
+ {
+  "start": 30.25,
+  "end": 31.157,
+  "text": "The circle with"
+ },
+ {
+  "start": 31.217,
+  "end": 31.897,
+  "text": "the plus is"
+ },
+ {
+  "start": 31.957,
+  "end": 32.75,
+  "text": "where it adds"
+ },
+ {
+  "start": 32.75,
+  "end": 33.81,
+  "text": "its new updated"
+ },
+ {
+  "start": 33.87,
+  "end": 34.93,
+  "text": "vector back in."
+ },
+ {
+  "start": 34.93,
+  "end": 36.211,
+  "text": "That vertical highway"
+ },
+ {
+  "start": 36.271,
+  "end": 36.678,
+  "text": "is the"
+ },
+ {
+  "start": 36.738,
+  "end": 37.67,
+  "text": "residual stream"
+ },
+ {
+  "start": 37.67,
+  "end": 38.524,
+  "text": "and everything reads"
+ },
+ {
+  "start": 38.584,
+  "end": 38.95,
+  "text": "from it"
+ },
+ {
+  "start": 38.95,
+  "end": 39.99,
+  "text": "adding information back"
+ },
+ {
+  "start": 40.05,
+  "end": 40.31,
+  "text": "to it"
+ },
+ {
+  "start": 40.31,
+  "end": 41.125,
+  "text": "as we refine"
+ },
+ {
+  "start": 41.185,
+  "end": 42.878,
+  "text": "our representation through"
+ },
+ {
+  "start": 42.938,
+  "end": 43.69,
+  "text": "the layers."
+ },
+ {
+  "start": 43.69,
+  "end": 44.703,
+  "text": "A bracket with"
+ },
+ {
+  "start": 44.762,
+  "end": 45.707,
+  "text": "NX means this"
+ },
+ {
+  "start": 45.767,
+  "end": 46.712,
+  "text": "block repeats"
+ },
+ {
+  "start": 46.773,
+  "end": 47.38,
+  "text": "N times."
+ },
+ {
+  "start": 47.38,
+  "end": 47.89,
+  "text": "So now try"
+ },
+ {
+  "start": 47.95,
+  "end": 48.553,
+  "text": "to trace the"
+ },
+ {
+  "start": 48.613,
+  "end": 49.17,
+  "text": "shape along"
+ },
+ {
+  "start": 49.23,
+  "end": 49.74,
+  "text": "the arrows"
+ },
+ {
+  "start": 49.74,
+  "end": 50.254,
+  "text": "and if you"
+ },
+ {
+  "start": 50.314,
+  "end": 50.922,
+  "text": "can say that"
+ },
+ {
+  "start": 50.982,
+  "end": 51.402,
+  "text": "shape at"
+ },
+ {
+  "start": 51.462,
+  "end": 52.07,
+  "text": "every arrow"
+ },
+ {
+  "start": 52.07,
+  "end": 52.755,
+  "text": "you've understood"
+ },
+ {
+  "start": 52.815,
+  "end": 53.31,
+  "text": "the diagram."
+ }
+]

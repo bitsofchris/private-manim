@@ -1,0 +1,70 @@
+00:03.650-00:06.290
+Here's how you can understand AI architecture diagrams
+
+00:06.290-00:08.920
+like a pro.
+
+00:08.920-00:10.550
+Now there's no formal standard,
+
+00:10.550-00:13.190
+but there is a de facto visual grammar.
+
+00:13.190-00:15.950
+Almost every paper figure inherits it from figure one
+
+00:15.950-00:19.340
+and attention is all you need.
+
+00:19.340-00:22.470
+A box is an operation or a layer.
+
+00:22.470-00:25.850
+Linear attention, feed forward, et cetera.
+
+00:25.850-00:29.630
+An arrow is a tensor moving to the next operation.
+
+00:29.630-00:31.780
+Flow is always bottom to top,
+
+00:31.780-00:33.620
+where input tokens are at the bottom
+
+00:33.620-00:37.150
+and logits are at the top.
+
+00:37.150-00:41.080
+An arrow that bypasses a box is the residual path.
+
+00:41.080-00:43.550
+The circle with a plus is where it adds
+
+00:43.550-00:46.070
+its new updated vector back in.
+
+00:46.070-00:48.810
+That vertical highway is the residual stream
+
+00:48.810-00:50.090
+and everything reads from it,
+
+00:50.090-00:51.450
+adding information back to it
+
+00:51.450-00:56.590
+as we refine our representation through the layers.
+
+00:56.590-01:05.500
+A bracket with NX means this block repeats N times.
+
+01:05.500-01:07.860
+So now try to trace the shape along the arrows
+
+01:07.860-01:10.180
+and if you can say that shape at every arrow,
+
+01:10.180-01:11.450
+you've understood the diagram.
+
+

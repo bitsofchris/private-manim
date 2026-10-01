@@ -67,3 +67,20 @@ this one performs. Beat 7's shape-tracing is the seed of a third short
    between beats).
 2. Claude: clean → transcribe → cut list (Chris approves) → one scene per
    beat with the real timings → assemble → contact sheets.
+
+## Final beats (VO recorded 2026-10-01, Descript Studio Sound; loudnorm only)
+
+`vo_raw.m4a` 74.8 s → `vo_final.wav` 53.76 s with no phrase cuts: pauses
+capped at 0.25 s inside beats, 0.4 s at beat boundaries
+(`tools/tighten_vo.py`, map in `timemap_final.json`). Boundaries sit at
+the end of each 0.4 s pause. Times below are from `transcript_final.txt`.
+
+| # | Beat | Start | Length | Scene | VO |
+|---|------|------:|-------:|-------|----|
+| 1 | Hook | 0.00 | 3.99 | `01_hook.py` `Hook` | Here's how you can understand AI architecture diagrams like a pro. |
+| 2 | Grammar | 3.99 | 8.27 | `02_grammar.py` `Grammar` | Now there's no formal standard, but there is a de facto visual grammar. Almost every paper figure inherits it from Figure 1 in Attention Is All You Need. |
+| 3 | Box | 12.26 | 5.53 | `03_box.py` `Box` | A box is an operation or a layer. Linear, attention, feed forward, et cetera. |
+| 4 | Arrow | 17.79 | 9.02 | `04_arrow.py` `Arrow` | An arrow is a tensor moving to the next operation. Flow is always bottom to top, where input tokens are at the bottom and logits are at the top. |
+| 5 | Residual | 26.81 | 16.84 | `05_residual.py` `Residual` | An arrow that bypasses a box is the residual path. The circle with the plus is where it adds its new updated vector back in. That vertical highway is the residual stream, and everything reads from it, adding information back to it as we refine our representation through the layers. |
+| 6 | Repeat | 43.65 | 3.70 | `06_repeat.py` `Repeat` | A bracket with N× means this block repeats N times. |
+| 7 | Shape | 47.35 | 6.41 | `07_shape.py` `Shape` | So now try to trace the shape along the arrows, and if you can say that shape at every arrow, you've understood the diagram. |

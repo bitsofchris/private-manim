@@ -1,0 +1,46 @@
+00:00.070-00:03.090
+Every mark on this diagram is a line of PyTorch.
+
+00:03.090-00:05.770
+A box is one NN module.
+
+00:05.770-00:07.130
+Linear attention feed forward,
+
+00:07.130-00:10.220
+each one of these is an object you construct once.
+
+00:10.220-00:14.090
+An arrow represents a tensor moving to the next operation.
+
+00:14.090-00:18.020
+In code, it's the order of calls in the forward function.
+
+00:18.020-00:23.150
+Top to bottom of forward is bottom to top of this diagram.
+
+00:23.150-00:25.970
+The arrow nut bypasses a box as the X
+
+00:25.970-00:28.840
+that keeps getting reassigned.
+
+00:28.840-00:37.600
+Add in norm is X equals X plus a sublayer of X.
+
+00:37.600-00:40.150
+A bracket with NX is a for loop.
+
+00:40.150-00:46.460
+For block and blocks, X equals block of X.
+
+00:46.460-00:50.580
+A zoomed in box is a submodule's own forward function.
+
+00:50.580-00:59.730
+The block is its own class.
+
+00:59.730-01:02.010
+If you can read the diagram, you're understanding the code.
+
+
