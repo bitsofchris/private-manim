@@ -54,6 +54,11 @@ Rules that are specific to Shorts:
 - A negative `set_z_index` hides a mobject while it is being animated. Layer by `self.add()` order instead.
 - `LaggedStart(*[Create(c) for c in group])` over the children of a VGroup that is already in the scene renders nothing. Use `Create(group, lag_ratio=...)` on the group.
 - No LaTeX on this machine: `Text` only, never `MathTex` / `Tex` / `DecimalNumber`.
+- Wrapping already-added mobjects in a new `VGroup(...)` and calling `.animate` on it re-adds that group at the top of the scene, so an opaque box panel covers its own label for the rest of the beat. Animate the existing parts in place (`*[b.box.animate... for b in d.boxes]`) or a group that is already in the scene family.
+- The partial-movie cache can round a re-render one frame short of `hold_until`. Final renders use `--disable_caching`.
+- Parallel `manim` runs in the same video folder race on `media/texts/` (half-written SVG -> `ParseError`) and the partial-movie cache. Render one scene at a time per folder.
+- `FadeOut(VGroup(a, b))` on a *fresh* VGroup re-adds it on top of the scene, so a fading opaque panel dims whatever it covered. Fade already-added mobjects one `FadeOut` each.
+- `mobject.become(other)` copies points, not attributes: a `Text` keeps its old `.text`. Set it yourself if code reads it (see `TokenColumn.set_values`).
 
 ## Two-hero rule
 

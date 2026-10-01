@@ -37,8 +37,17 @@ routing (note marks 7–9).
 - `videos/006-diagram-grammar/_preview.py` renders the diagram with guides
   for layout checks.
 
+## Status (2026-10-01)
+
+Both shorts assembled: `videos/006-diagram-grammar/media/short.mp4`
+(53.8 s) and `videos/007-diagram-to-pytorch/media/short.mp4` (42.7 s).
+Contact sheets reviewed; ghost copies lost their labels so they don't smear
+the real diagram. Known flaw: 007's soft "x" after "a sublayer of".
+
 ## Next
 
-1. Chris records `vo_raw.m4a` for 006 and 007 (same sitting).
-2. Runbook steps 3–8 per short.
-3. Promote `_preview.py` into the first beat once timings exist; delete it.
+1. Chris: watch both on a phone, with sound then muted. Decide on the soft
+   "x" in 007 (keep, or re-record that sentence).
+2. Publish per `publish.md` in each folder; link the two as parts 1 and 2.
+3. Candidates for `videos/_shared/`: `_ghost.ghostify`, `_marks.restroke`,
+   `_code.code_card` from 007 (each solved a trap every future short will hit).

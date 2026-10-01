@@ -14,6 +14,10 @@ the transcript. Below, in order.
 
 Proven on `videos/004-backprop-short/` (2026-09-26): 120 s raw take →
 59.8 s finished Short in one session, no re-record.
+Repeated on `videos/006-diagram-grammar/` + `007-diagram-to-pytorch/`
+(2026-10-01): two takes recorded in Descript with Studio Sound (so step 3
+is loudnorm only), 74.8 s → 53.8 s and 69.2 s → 42.7 s with no phrase
+cuts, 14 beats built by 7 parallel agents off one shared diagram module.
 
 ---
 
@@ -92,6 +96,13 @@ High-pass 80 Hz → FFT denoise → de-ess → 3:1 compressor → loudnorm to
 −14 LUFS / −1.5 dBTP (YouTube's target). Covers ~90 % of what Descript's
 Studio Sound does; it will not remove reverb or a barking dog.
 
+If the take already went through Descript Studio Sound, skip the chain
+and only normalize (a second denoise/compress pass dulls it):
+
+```
+ffmpeg -i vo_raw.m4a -af "loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1 vo_clean.wav
+```
+
 ## 4. Transcribe (Claude, 30 s)
 
 MacWhisper ships a CLI. No install needed:
@@ -147,8 +158,11 @@ length, scene file, VO. Beat lengths are the contract for step 6.
   onto one agent with a local `_bowl.py` / `_graph.py` module.
 - Agents should place cues from the audio itself (silencedetect + energy
   envelope), not only from the brief; that beat the estimates every time.
-- Render: `cd videos/NNN-slug && uv run --no-sync manim -qh 0N_beat.py Class`.
-  Output: `media/videos/0N_beat/1920p30/Class.mp4`.
+- Render: `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching 0N_beat.py Class`.
+  Output: `media/videos/0N_beat/1920p30/Class.mp4`. Agents may render while
+  iterating, but the final pass is one sequential run per folder with
+  `--disable_caching` (parallel runs race on `media/texts/`, the cache can
+  drop a frame).
 
 Known Manim 0.18.1 traps (details in `videos/_shared/STYLE.md`): negative
 `z_index` hides a mobject while it animates; `LaggedStart` over `Create`
