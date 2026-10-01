@@ -250,6 +250,16 @@ Run everything: `uv run --no-sync python -m unittest discover -s tests`.
 
 ## Do these before the next one
 
+- **Frame-align `hold_until`.** `hold_remaining` drops any remainder under
+  one frame, so every beat renders one frame short and a 7-beat Short loses
+  ~0.2 s of video under the VO tail (005: video 59.07 s, audio 59.27 s). Round
+  the final wait up to the next frame instead, or have `assemble.py` pad
+  each clip to its `end` with `tpad=stop_mode=clone`.
+- **Different word = different label.** `Transform` between two `Text`s
+  morphs glyphs into soup mid-flight (005 beat 7, caught on a frame pull).
+  Fade-swap labels whose meaning changes; `Transform` only what keeps its
+  identity. Worth a line in ANIMATION_RULES rule 8.
+
 - **Word-level timestamps.** Verify and install `whisper-cpp` from Homebrew
   (the engine MacWhisper already uses; `brew install whisper-cpp`, no
   Python). Then add `tools/word_timings.py` that reads its JSON and feeds
