@@ -113,6 +113,17 @@ class Layout005(unittest.TestCase):
         free = m.get_bottom()[1] - stage.get_bottom()[1]
         self.assertGreater(free, S.TOKEN_D_SHOWN * S.TOKEN_CELL_H + 0.5)
 
+    def test_word_labels_share_a_baseline(self):
+        import _tokens as T
+        stage = _rect(stage_bounds(safe_bounds()))
+        words = T.word_labels(T.build_matrix(stage))
+        bottoms = {w: t.get_bottom()[1] for w, t in zip(T.TOKENS, words)}
+        # "name" and "is" have no descender: their bottoms are the baseline;
+        # "my" hangs one descent below it.
+        self.assertAlmostEqual(bottoms["name"], bottoms["is"], places=3)
+        self.assertAlmostEqual(bottoms["name"] - bottoms["my"], T.descent(), places=3)
+        self.assertGreater(T.descent(), 0.05)
+
     def test_value_stages_are_seeded_and_distinct(self):
         import _tokens as T
         self.assertEqual(len(T.VALUES), 4)

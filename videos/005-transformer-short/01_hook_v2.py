@@ -70,7 +70,7 @@ def opening_state(stage: Mobject) -> tuple[T.BlockDiagram, TokenMatrix, VGroup]:
     return d, tiny, tiny_words
 
 
-class Hook(BocShortScene):
+class HookV2(BocShortScene):
     def construct(self):
         d, tiny, tiny_words = opening_state(self.stage)
         embed = d.rows["embed"]

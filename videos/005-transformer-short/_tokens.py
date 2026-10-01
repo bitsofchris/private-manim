@@ -53,9 +53,29 @@ def build_matrix(stage: Mobject, values=None, digits: bool = False,
     return m
 
 
+DESCENDERS = set("gjpqy")
+
+
+def descent() -> float:
+    """How far a descender hangs below the baseline at label scale (Pango
+    gives no baseline, so measure: "y" is "x" plus its tail)."""
+    return label("y").height - label("x").height
+
+
 def word_labels(m: TokenMatrix) -> VGroup:
-    """Token words above their columns, in FG."""
-    return VGroup(*[label(w).next_to(c, UP, buff=WORD_BUFF) for w, c in zip(TOKENS, m.columns)])
+    """Token words above their columns, in FG, baselines aligned.
+
+    next_to(UP) aligns bounding-box bottoms, so a word with a descender
+    ("my") would sit higher than its neighbours. Words with descenders are
+    lowered by the descent so every baseline sits WORD_BUFF above the cells."""
+    d = descent()
+    out = VGroup()
+    for w, c in zip(TOKENS, m.columns):
+        t = label(w).next_to(c, UP, buff=WORD_BUFF)
+        if DESCENDERS & set(w):
+            t.shift(DOWN * d)
+        out.add(t)
+    return out
 
 
 def tokens(m: TokenMatrix, words: VGroup) -> list[VGroup]:

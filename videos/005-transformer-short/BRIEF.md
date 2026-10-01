@@ -55,52 +55,59 @@ from videos._shared.mobjects import TokenMatrix, TokenColumn, attention_arcs, br
 
 ## Beats (lengths are exact; VO times are scene-local seconds, from the final transcript)
 
-### 1 `01_hook.py` `Hook` — 6.20 s  (v2: bird's-eye opener)
+### 1 `01_hook.py` `Hook` — 6.20 s  (v3: bird's-eye opener, X in / X′ out)
 VO: "A transformer takes a sequence of tokens" 0.3-2.8 ("tokens" ~2.3);
 "and produces updated representations of those tokens" 2.8-6.2
 ("updated representations" ~3.9-5.2).
 Uses the shared block diagram `videos/_shared/transformer.py`
 (`build_block(stage)` -> `BlockDiagram` with `.boxes` Embed/Attention/FFN/Linear,
 `.adds` (two ⊕), `.flow` arrows, `.skips`, `.bracket` N×, `.block`; read the
-module docstring and `videos/006-diagram-grammar/01_hook.py` for how 006 draws it).
-Frame 0: the whole diagram on screen, all marks FG_DIM / teal arrows as
-`build_block` gives them, filling the stage. The sentence "my name is" (three
-`label()` words, `TOKENS`, in a row) sits just below / at the Embed box. The
-diagram may need `scale_to_fit_height` so the words fit under it inside the stage.
-"takes a sequence of tokens" (0.3-2.8): the words move into Embed and a teal
-pulse (`ShowPassingFlash` on HIGHLIGHT copies of the flow arrows, or a small
-teal dot travelling the path) climbs the column through Attention, ⊕, FFN, ⊕
-(the N× block), one HOLD-scale play, finishing around "tokens".
-"produces updated representations" (3.9-5.2): the pulse stops at the top of
-the N× block (below Linear; Linear stays dim) and a *tiny* `TokenMatrix(VALUES[0],
-digits=False, bracketed=False)` scaled to fit there (about the width of a box)
-pops in (FadeIn/GrowFromCenter, HOLD) with the three words `Transform`ed into
-tiny word labels above the tiny columns (same word mobjects, keep identity).
-"of those tokens" (5.2-6.2): still.
-Hero: the climbing pulse is HIGHLIGHT (transient); nothing is magenta.
-Ends: dim diagram + tiny matrix (with tiny words) sitting above the N× block.
-Expose the end-state builder as a function in `01_hook.py` (e.g.
-`opening_state(stage) -> (diagram, tiny_matrix, tiny_words)`) so beat 2 imports
-it and opens on exactly the same frame.
+module docstring and `videos/006-diagram-grammar/01_hook.py`).
+Frame 0: the whole diagram on screen, marks as `build_block` gives them,
+filling the stage with **generous row gaps** (Chris: v2 at 0.8 scale read
+squished). Build on the tallest rect that leaves room for a small input matrix
+under Embed and the output above the N× block; keep scale 1.0 so box labels
+are at `SHORT_LABEL_SCALE`. If `build_block` can't open the gaps enough, say so
+and build on a taller rect + `scale_to_fit_height`, never below ~0.9.
+Below Embed: a small input matrix `TokenMatrix(VALUES[0], digits=False,
+bracketed=True)` scaled to about 1.0-1.3 box widths, with a teal "X"
+(`label("X", S.DATA)`) beside it. No sentence anywhere in this beat.
+"takes a sequence of tokens" (0.3-2.8): X is absorbed into Embed (shrink +
+fade in one `animate` play; `FadeOut(target_position=...)` restores state in
+0.18.1), then a HIGHLIGHT pulse (`ShowPassingFlash` on copies of the flow
+arrows / a travelling dot) climbs through Attention, ⊕, FFN, ⊕, stopping at
+the top of the N× block around "tokens".
+"updated representations" (3.9-5.2): the pulse ends; the output matrix pops
+out above the N× block: same size as the input, `VALUES[1]`, bracketed, with a
+teal "X′" label (use "X'" if the prime glyph is missing in the fallback font;
+check a frame). Linear stays dim above it.
+"of those tokens" (5.2-6.2): still. Nothing magenta in this beat.
+Ends: dim diagram + output matrix + "X′" above the N× block.
+Expose the end state as `opening_state(stage) -> (diagram, out_matrix, out_label)`
+in `01_hook.py` so beat 2 imports it (importlib; module name starts with a digit).
 
-### 2 `02_matrix.py` `Matrix` — 9.08 s  (v2: zoom in, then as before)
+### 2 `02_matrix.py` `Matrix` — 9.08 s  (v3: zoom in, then as before)
 VO: "Each token is a vector of D numbers" 0.1-2.7 ("D numbers" ~1.9);
 "and a sequence of L tokens is then an L by D matrix" 2.8-6.4 ("L by D matrix" ~5.0-6.4);
 "Every block in the transformer stack keeps that shape" 6.5-9.1 ("keeps that shape" ~8.0).
-Opens: beat 1's end (import `opening_state` from `01_hook.py`). "Each token"
-(0.1-1.3): the zoom. The diagram fades out while the tiny matrix + tiny words
-`Transform` into the canonical `build_matrix(self.stage, VALUES[0], digits=True,
-bracketed=False)` columns + `word_labels` (one HOLD; the columns/words keep
-identity: transform the tiny ones into the full ones, then swap to the real
-`build_matrix` objects only if you must, invisibly). "vector of D numbers"
-(~1.9): indicate one column, a small magenta "d" tag beside it (brace along the
-column height; the current file places the "d" below the brace to stay in
-safe). "L tokens": an "L" tag along the top across the three words. "L by D
-matrix": the shared bracket pair draws in (`m.brackets`, Create). "keeps that
-shape": the bracket outline pulses (`Indicate` on brackets, HIGHLIGHT) and the
-d / L tags fade. Hero: the d/L tags then the bracket.
-Ends: words + bracketed matrix (`VALUES[0]`, digits), no tags: byte-identical
-layout to the state beat 3 opens on (`build_matrix` + `word_labels`).
+Opens: beat 1's end (`opening_state`). "Each token" (0.1-1.3): the zoom. The
+diagram and "X′" fade while the small output matrix `Transform`s into the
+canonical `build_matrix(self.stage, VALUES[0], digits=True, bracketed=True)`
+(transform a digit-less bracketed twin, then swap the real objects in
+invisibly: a `Transform` onto a target with `nums` floats digits mid-flight),
+and the word labels `word_labels(m)` + digits FadeIn as the zoom lands. The
+cell colours ticking VALUES[1] -> VALUES[0] during the zoom is acceptable.
+`word_labels` is now baseline-aligned ("my" is lowered by its descent); use
+its output as is.
+"vector of D numbers" (~1.9): indicate the first column, magenta brace along
+it with "d" below (v1 placement). "L tokens": magenta brace across the three
+words with "L" above. "L by D matrix": the brackets are already there from the
+zoom, so `Indicate`/re-`Create` them (your call; keep the timing). "keeps that
+shape": tags fade (one FadeOut each), brackets `Indicate` (HIGHLIGHT).
+Ends: words + bracketed matrix (`VALUES[0]`, digits), no tags: identical to
+what `03_attention.py` adds at frame 0 (compare against
+`media/videos/03_attention/1920p30/Attention.mp4`, re-rendered with the
+aligned words).
 
 ### 3 `03_attention.py` `Attention` — 13.82 s
 VO: "Attention is what combines information across the tokens" 0.05-3.4;

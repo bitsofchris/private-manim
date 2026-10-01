@@ -30,7 +30,7 @@ from videos._shared import style as S
 from videos._shared.base import BocShortScene
 from _tokens import VALUES, build_matrix, word_labels, label
 from importlib import import_module
-opening_state = import_module("01_hook").opening_state
+opening_state = import_module("01_hook_v2").opening_state
 
 BEAT_SECONDS = 9.08
 T_INDICATE = 1.2      # the zoom lands; digits resolve and the first column lights up for "is a vector"
@@ -45,7 +45,7 @@ TAG_BUFF = 0.1
 INDICATE_SCALE = 1.08
 
 
-class Matrix(BocShortScene):
+class MatrixV2(BocShortScene):
     def construct(self):
         # Beat 1's final frame.
         diagram, tiny, tiny_words = opening_state(self.stage)
