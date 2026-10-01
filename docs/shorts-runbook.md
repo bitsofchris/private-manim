@@ -184,6 +184,11 @@ captions) and overlaid with ffmpeg, because Homebrew ffmpeg lacks libass
 and drawtext. One caption source per Short: burned from the VO, never
 also drawn in scenes.
 
+Read the generated `captions.json` once: Whisper writes "NX" for N× and
+"NN module" for nn.Module; fix the text, the times are fine. If a scene
+element needs the band too (a code card), put it at the band top and pass
+`--captions-anchor bottom`.
+
 ## 8. Review (Claude, then Chris)
 
 - `tools/review_frames.sh media/short.mp4` for contact sheets; or three

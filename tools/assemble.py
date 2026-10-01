@@ -185,7 +185,7 @@ def probe_duration(path: Path) -> float:
     return float(r.stdout.strip())
 
 
-def render_caption_pngs(captions: list[Caption], out_dir: Path) -> list[Path]:
+def render_caption_pngs(captions: list[Caption], out_dir: Path, anchor: str = "center") -> list[Path]:
     """Rasterize each caption to a transparent full-frame PNG via Manim/Pango."""
     sys.path.insert(0, str(REPO))
     from manim import Camera, config, logger  # noqa: PLC0415 - heavy, only when rendering
@@ -200,7 +200,7 @@ def render_caption_pngs(captions: list[Caption], out_dir: Path) -> list[Path]:
     paths = []
     for k, c in enumerate(captions):
         cam = Camera(background_opacity=0)
-        cam.capture_mobject(short_caption(c.text))
+        cam.capture_mobject(short_caption(c.text, anchor=anchor))
         p = out_dir / f"caption_{k:03d}.png"
         cam.get_image().save(p)
         paths.append(p)
@@ -213,6 +213,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--vo", type=Path, help="voice-over audio file")
     ap.add_argument("--captions", type=Path, help="captions.json")
     ap.add_argument("-o", "--out", type=Path, required=True, help="output .mp4")
+    ap.add_argument("--captions-anchor", choices=("center", "bottom"), default="center",
+                    help="where in the band captions sit; bottom leaves the top of the "
+                         "band for a scene element (007's code cards)")
     ap.add_argument("--dry-run", action="store_true", help="print the ffmpeg command only")
     args = ap.parse_args(argv)
 
@@ -235,7 +238,7 @@ def main(argv: list[str] | None = None) -> int:
         print(shlex.join(cmd))
         return 0
     if captions:
-        render_caption_pngs(captions, png_dir)
+        render_caption_pngs(captions, png_dir, anchor=args.captions_anchor)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(cmd, check=True)
     print(f"{args.out}  ({total:.2f}s, {len(beats)} beats, {len(captions)} captions)")

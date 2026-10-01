@@ -1,41 +1,336 @@
 [
  {
   "start": 0.35,
-  "end": 1.087,
-  "text": "Every mark on"
+  "end": 0.916,
+  "text": "Every mark"
  },
  {
-  "start": 1.147,
-  "end": 1.99,
-  "text": "this diagram is"
+  "start": 0.976,
+  "end": 1.387,
+  "text": "on this"
  },
  {
-  "start": 2.05,
-  "end": 2.418,
+  "start": 1.447,
+  "end": 2.013,
+  "text": "diagram is"
+ },
+ {
+  "start": 2.073,
+  "end": 2.433,
   "text": "a line"
  },
  {
-  "start": 2.478,
+  "start": 2.493,
   "end": 3.11,
   "text": "of PyTorch."
  },
  {
+  "start": 3.11,
+  "end": 3.575,
+  "text": "A box"
+ },
+ {
+  "start": 3.635,
+  "end": 4.178,
+  "text": "is one"
+ },
+ {
+  "start": 4.237,
+  "end": 5.09,
+  "text": "nn.Module."
+ },
+ {
+  "start": 5.09,
+  "end": 5.803,
+  "text": "Linear attention"
+ },
+ {
+  "start": 5.863,
+  "end": 6.45,
+  "text": "feed forward"
+ },
+ {
+  "start": 6.45,
+  "end": 6.845,
+  "text": "each one"
+ },
+ {
+  "start": 6.905,
+  "end": 7.301,
+  "text": "of these"
+ },
+ {
+  "start": 7.361,
+  "end": 7.624,
+  "text": "is an"
+ },
+ {
+  "start": 7.684,
+  "end": 8.167,
+  "text": "object you"
+ },
+ {
+  "start": 8.227,
+  "end": 8.93,
+  "text": "construct once."
+ },
+ {
+  "start": 8.93,
+  "end": 9.38,
+  "text": "An arrow"
+ },
+ {
+  "start": 9.44,
+  "end": 10.09,
+  "text": "represents a"
+ },
+ {
+  "start": 10.15,
+  "end": 10.85,
+  "text": "tensor moving"
+ },
+ {
+  "start": 10.91,
+  "end": 11.26,
+  "text": "to the"
+ },
+ {
+  "start": 11.32,
+  "end": 12.12,
+  "text": "next operation."
+ },
+ {
+  "start": 12.12,
+  "end": 12.582,
+  "text": "In code"
+ },
+ {
+  "start": 12.642,
+  "end": 13.105,
+  "text": "it's the"
+ },
+ {
+  "start": 13.165,
+  "end": 13.627,
+  "text": "order of"
+ },
+ {
+  "start": 13.687,
+  "end": 14.15,
+  "text": "calls in"
+ },
+ {
+  "start": 14.21,
+  "end": 14.826,
+  "text": "the forward"
+ },
+ {
+  "start": 14.886,
+  "end": 15.4,
+  "text": "function."
+ },
+ {
+  "start": 15.4,
+  "end": 15.784,
+  "text": "Top to"
+ },
+ {
+  "start": 15.844,
+  "end": 16.394,
+  "text": "bottom of"
+ },
+ {
+  "start": 16.454,
+  "end": 17.058,
+  "text": "forward is"
+ },
+ {
+  "start": 17.118,
+  "end": 17.667,
+  "text": "bottom to"
+ },
+ {
+  "start": 17.727,
+  "end": 18.111,
+  "text": "top of"
+ },
+ {
+  "start": 18.171,
+  "end": 18.94,
+  "text": "this diagram."
+ },
+ {
+  "start": 18.94,
+  "end": 19.577,
+  "text": "The arrow"
+ },
+ {
+  "start": 19.637,
+  "end": 20.465,
+  "text": "nut bypasses"
+ },
+ {
+  "start": 20.525,
+  "end": 20.907,
+  "text": "a box"
+ },
+ {
+  "start": 20.967,
+  "end": 21.413,
+  "text": "as the"
+ },
+ {
+  "start": 21.473,
+  "end": 21.6,
+  "text": "X"
+ },
+ {
+  "start": 21.6,
+  "end": 22.182,
+  "text": "that keeps"
+ },
+ {
+  "start": 22.242,
+  "end": 23.3,
+  "text": "getting reassigned."
+ },
+ {
+  "start": 23.3,
+  "end": 24.073,
+  "text": "Add and"
+ },
+ {
+  "start": 24.133,
+  "end": 25.016,
+  "text": "norm is"
+ },
+ {
+  "start": 25.076,
+  "end": 26.07,
+  "text": "X equals"
+ },
+ {
+  "start": 26.13,
+  "end": 26.903,
+  "text": "X plus"
+ },
+ {
+  "start": 26.963,
+  "end": 28.177,
+  "text": "a sublayer"
+ },
+ {
+  "start": 28.237,
+  "end": 28.9,
+  "text": "of X."
+ },
+ {
+  "start": 28.9,
+  "end": 29.524,
+  "text": "A bracket"
+ },
+ {
+  "start": 29.584,
+  "end": 30.084,
+  "text": "with N×"
+ },
+ {
+  "start": 30.144,
+  "end": 30.456,
+  "text": "is a"
+ },
+ {
+  "start": 30.516,
+  "end": 31.14,
+  "text": "for loop."
+ },
+ {
+  "start": 31.14,
+  "end": 31.945,
+  "text": "For block"
+ },
+ {
+  "start": 32.005,
+  "end": 32.97,
+  "text": "and blocks"
+ },
+ {
+  "start": 33.03,
+  "end": 33.754,
+  "text": "X equals"
+ },
+ {
+  "start": 33.814,
+  "end": 34.539,
+  "text": "block of"
+ },
+ {
+  "start": 34.599,
+  "end": 34.84,
+  "text": "X."
+ },
+ {
+  "start": 34.84,
+  "end": 35.301,
+  "text": "A zoomed"
+ },
+ {
+  "start": 35.361,
+  "end": 35.72,
+  "text": "in box"
+ },
+ {
+  "start": 35.78,
+  "end": 36.037,
+  "text": "is a"
+ },
+ {
+  "start": 36.097,
+  "end": 36.917,
+  "text": "submodule's own"
+ },
+ {
+  "start": 36.977,
+  "end": 37.9,
+  "text": "forward function."
+ },
+ {
+  "start": 37.9,
+  "end": 38.564,
+  "text": "The block"
+ },
+ {
+  "start": 38.624,
+  "end": 39.089,
+  "text": "is its"
+ },
+ {
+  "start": 39.149,
+  "end": 39.88,
+  "text": "own class."
+ },
+ {
   "start": 39.88,
-  "end": 40.274,
-  "text": "If you can"
+  "end": 40.124,
+  "text": "If you"
  },
  {
-  "start": 40.334,
-  "end": 40.979,
-  "text": "read the diagram"
+  "start": 40.184,
+  "end": 40.497,
+  "text": "can read"
  },
  {
-  "start": 41.039,
-  "end": 41.792,
+  "start": 40.557,
+  "end": 41.01,
+  "text": "the diagram"
+ },
+ {
+  "start": 41.07,
+  "end": 41.802,
   "text": "you're understanding"
  },
  {
-  "start": 41.852,
+  "start": 41.862,
   "end": 42.21,
   "text": "the code."
  }

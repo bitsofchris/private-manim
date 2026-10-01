@@ -13,7 +13,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from videos._shared import style as S  # noqa: E402
 from videos._shared.base import (  # noqa: E402
-    caption_band, hold_remaining, safe_bounds, split_caption, stage_bounds,
+    CAPTION_BOTTOM_MARGIN, caption_band, hold_remaining, safe_bounds, short_caption,
+    split_caption, stage_bounds,
 )
 from videos._shared.mobjects import line_span  # noqa: E402
 
@@ -71,3 +72,20 @@ class LineSpan(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CaptionAnchor(unittest.TestCase):
+    def test_center_sits_at_band_centre(self):
+        band = caption_band(safe_bounds())
+        t = short_caption("two words")
+        self.assertAlmostEqual(t.get_center()[1], band.center[1], places=3)
+
+    def test_bottom_leaves_the_top_of_the_band_free(self):
+        band = caption_band(safe_bounds())
+        t = short_caption("two words", anchor="bottom")
+        self.assertAlmostEqual(t.get_bottom()[1], band.bottom + CAPTION_BOTTOM_MARGIN, places=3)
+        self.assertLess(t.get_top()[1], band.center[1])
+
+    def test_rejects_unknown_anchor(self):
+        with self.assertRaises(ValueError):
+            short_caption("x", anchor="top")

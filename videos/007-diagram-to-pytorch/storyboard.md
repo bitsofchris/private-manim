@@ -87,7 +87,9 @@ digital silence), so 26.9-28.5 s is muted in `vo_final.wav`
 | 4 | Skip | 18.96 | 9.95 | `04_skip.py` `Skip` | The arrow that bypasses a box is the x that keeps getting reassigned. Add and norm is x equals x plus a sublayer of x. |
 | 5 | Repeat | 28.91 | 5.91 | `05_repeat.py` `Repeat` | A bracket with N× is a for loop. For block in blocks, x equals block of x. |
 | 6 | Inset | 34.82 | 5.07 | `06_inset.py` `Inset` | A zoomed-in box is a submodule's own forward function. The block is its own class. |
-| 7 | Close | 39.89 | 7.00 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. (2.78 s of VO + 4.22 s padded silence so the code stays up 5 s) |
+| 7 | Close | 39.89 | 8.00 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. (2.78 s of VO + 5.22 s padded silence; code grows into the band once the captions end) |
 
-Captions: `captions.json` holds beats 1 and 7 only; beats 2–6 draw a code
-card in the band via `_code.py`.
+Captions: every beat has word captions (2 words each), burned at the bottom
+of the band (`assemble.py --captions-anchor bottom`); beats 2–6 draw their
+code card at the top of the band via `_code.py`. Beat 7 is 8.0 s: 2.78 s of
+VO plus padded silence while the full model code fills the safe area.

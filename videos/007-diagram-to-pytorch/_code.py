@@ -1,8 +1,7 @@
 """Code card in the caption band, shared by beats 2-6 of 007.
 
-The band is where burned-in VO captions would go; these beats draw the
-matching PyTorch lines there instead (one caption source per beat), so
-`captions.json` holds only the hook and the close.
+The card sits at the top of the band; the burned-in VO captions sit at the
+bottom (`assemble.py --captions-anchor bottom`), so a beat has both.
 
     card = code_card(self.band, [7, 8])          # lines of transformer.GPT_SOURCE
     self.play(FadeIn(card), run_time=S.BEAT)
@@ -10,7 +9,7 @@ matching PyTorch lines there instead (one caption source per beat), so
 """
 from __future__ import annotations
 
-from manim import Code, Mobject
+from manim import DOWN, UP, Code, Mobject
 
 from videos._shared import style as S
 from videos._shared.mobjects import code_block
@@ -18,6 +17,7 @@ from videos._shared.transformer import GPT_SOURCE
 
 LINES = GPT_SOURCE.splitlines()
 CARD_W_FRAC = 0.96   # of the band width
+CARD_TOP_MARGIN = 0.1   # below the band top (the stage edge)
 
 
 def card_source(line_numbers: list[int]) -> str:
@@ -32,4 +32,6 @@ def code_card(band: Mobject, line_numbers: list[int], highlight=None) -> Code:
     card = code_block(card_source(line_numbers), highlight=highlight)
     if card.width > band.width * CARD_W_FRAC:
         card.scale_to_fit_width(band.width * CARD_W_FRAC)
-    return card.move_to(band)
+    # Top of the band: the burned-in VO captions sit at the bottom
+    # (assemble.py --captions-anchor bottom), so both fit.
+    return card.move_to(band).align_to(band, UP).shift(DOWN * CARD_TOP_MARGIN)

@@ -45,14 +45,16 @@ WIDEST_LABEL = "Attention"   # every box is sized to this so the column is unifo
 REPEAT_LABEL = "N×"
 BLOCK_ROWS = ("attn", "add1", "ffn", "add2")   # what the N× bracket spans
 
-BOX_PAD = 0.12            # label-to-border padding inside a box
+BOX_PAD = 0.08            # label-to-border padding inside a box (tight: air goes to the gaps)
 BOX_PAD_W = 0.3           # horizontal padding around the widest label
-ADD_RADIUS = 0.34
+ADD_RADIUS = 0.26
 SKIP_OFFSET = 0.7         # how far right of the column the skip path runs
 BRACKET_BUFF = 0.15       # brace-to-block and label-to-brace spacing
 EDGE_WIDTH = S.STROKE_AXIS * 3
 ARROW_TIP = 0.28
 MIN_GAP = 0.3             # smallest row gap we accept before the layout is too tall
+BOTTOM_BLEED = 0.45       # how far below the stage (into the band) Embed may sit: a
+                          # two-line caption's top is ~0.65 below the band top
 
 
 def stack_rows(heights: list[float], bottom: float, top: float) -> list[float]:
@@ -130,14 +132,15 @@ class BlockDiagram(VGroup):
     """
 
 
-def build_block(stage: Mobject) -> BlockDiagram:
-    """Lay the diagram out to fill `stage` (an invisible layout Rectangle)."""
+def build_block(stage: Mobject, bleed: float = BOTTOM_BLEED) -> BlockDiagram:
+    """Lay the diagram out to fill `stage` (an invisible layout Rectangle),
+    plus `bleed` units below it so the rows get more air."""
     ref = label(WIDEST_LABEL)
     width, height = ref.width + 2 * BOX_PAD_W, ref.height + 2 * BOX_PAD
     rows: dict[str, VGroup] = {}
     for r in ROWS:
         rows[r] = add_node() if r.startswith("add") else op_box(BOX_LABEL[r], width, height)
-    ys = stack_rows([rows[r].height for r in ROWS], stage.get_bottom()[1], stage.get_top()[1])
+    ys = stack_rows([rows[r].height for r in ROWS], stage.get_bottom()[1] - bleed, stage.get_top()[1])
     # Bracket on the left, skip path on the right; centre the whole width.
     bracket_w = BRACKET_BUFF * 2 + 0.25 + label(REPEAT_LABEL).width
     cx = stage.get_center()[0] + (bracket_w - SKIP_OFFSET) / 2
@@ -173,12 +176,12 @@ def _mid(a, b):
 
 # --- The matching PyTorch (video 007) -----------------------------------------
 # Norms left out on purpose: the diagram shows (+), and every line here is a
-# mark on the figure. ~21 lines, <= 40 columns.
+# mark on the figure. ~21 lines, <= 36 columns (FFN / V keep the closing card big).
 GPT_SOURCE = dedent("""
     class Block(nn.Module):
         def __init__(self, d):
             self.attn = Attention(d)
-            self.ffn = FeedForward(d)
+            self.ffn = FFN(d)
 
         def forward(self, x):
             x = x + self.attn(x)
@@ -189,7 +192,7 @@ GPT_SOURCE = dedent("""
         def __init__(self, d, n):
             self.embed = Embedding(d)
             self.blocks = [Block(d)] * n
-            self.head = Linear(d, vocab)
+            self.head = Linear(d, V)
 
         def forward(self, ids):
             x = self.embed(ids)

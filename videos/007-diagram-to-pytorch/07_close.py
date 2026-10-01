@@ -22,21 +22,21 @@ from videos._shared import style as S
 from videos._shared import transformer
 from videos._shared.base import BocShortScene
 from videos._shared.mobjects import code_block
-from _ghost import ghostify
 
-BEAT_SECONDS = 7.0      # 2.783 s of VO + 4.217 s padded silence so the code stays up 5 s
+BEAT_SECONDS = 8.0      # 2.783 s of VO + 5.217 s padded silence: big code holds ~4.7 s
 T_READ = 0.0          # VO: "read the diagram" (0.50-1.40); a HOLD-long fade from frame 0 lands on it
 T_CODE = 1.70         # VO: "understanding the code" (1.55-2.25)
+T_GROW = 2.80         # VO over, last caption gone: code takes the whole safe area
 
 
-def full_code(stage: Mobject) -> Code:
-    """GPT_SOURCE scaled to fit the stage (width binds at 40 columns)."""
+def full_code(area: Mobject) -> Code:
+    """GPT_SOURCE scaled to fit `area` (whichever of width / height binds)."""
     code = code_block(transformer.GPT_SOURCE)
-    if code.width / stage.width > code.height / stage.height:
-        code.scale_to_fit_width(stage.width)
+    if code.width / area.width > code.height / area.height:
+        code.scale_to_fit_width(area.width)
     else:
-        code.scale_to_fit_height(stage.height)
-    return code.move_to(stage)
+        code.scale_to_fit_height(area.height)
+    return code.move_to(area)
 
 
 class Close(BocShortScene):
@@ -44,11 +44,19 @@ class Close(BocShortScene):
         d = transformer.build_block(self.stage)
         self.add(d)  # frame 0: the complete dim diagram
 
-        # "read the diagram": the diagram recedes to a ghost.
+        # "read the diagram": the diagram leaves entirely so nothing shows
+        # behind the code.
         self.hold_until(T_READ)
-        self.play(Transform(d, ghostify(d.copy())), run_time=S.HOLD)
+        self.play(FadeOut(d), run_time=S.HOLD)
 
-        # "understanding the code": the whole model's code fills the stage.
+        # "understanding the code": the whole model's code fills the stage
+        # (the band still carries the VO captions).
         self.hold_until(T_CODE)
-        self.play(FadeIn(full_code(self.stage)), run_time=S.BEAT)
+        code = full_code(self.stage)
+        self.play(FadeIn(code), run_time=S.BEAT)
+
+        # Captions are over: the code grows into the band too and holds
+        # there for the padded silence, big enough to read.
+        self.hold_until(T_GROW)
+        self.play(Transform(code, full_code(self.safe)), run_time=S.BEAT)
         self.hold_until(BEAT_SECONDS)

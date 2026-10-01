@@ -164,7 +164,10 @@ def _rect(b: SafeBounds) -> Rectangle:
     return r.move_to([*b.center, 0])
 
 
-def short_caption(text: str) -> VGroup:
+CAPTION_BOTTOM_MARGIN = 0.25   # scene units above the safe bottom when anchored "bottom"
+
+
+def short_caption(text: str, anchor: str = "center") -> VGroup:
     """Caption mobject for a Short, already placed in the caption band.
 
     2 to 4 words. Too wide for the safe area -> two balanced lines; still too
@@ -172,7 +175,13 @@ def short_caption(text: str) -> VGroup:
     glyphs keeps it legible over busy frames. Shared by BocShortScene.caption
     and tools/assemble.py (burned-in VO captions), so both land in the same
     place at the same size.
+
+    anchor="center" (default) centres it in the band. anchor="bottom" sits it
+    just above the safe bottom, leaving the top of the band free for a scene
+    element that shares it (a code card, 007).
     """
+    if anchor not in ("center", "bottom"):
+        raise ValueError(f"anchor must be center or bottom, not {anchor!r}")
     band = caption_band(safe_bounds())
     t = VGroup(_caption_text(text, scale=S.SHORT_CAPTION_SCALE))
     if t.width > band.width:
@@ -182,7 +191,10 @@ def short_caption(text: str) -> VGroup:
     if t.width > band.width:
         t.scale_to_fit_width(band.width)
     t.set_stroke(S.BG_DEEP, width=10, background=True)
-    return t.move_to([*band.center, 0])
+    t.move_to([*band.center, 0])
+    if anchor == "bottom":
+        t.align_to([0, band.bottom + CAPTION_BOTTOM_MARGIN, 0], DOWN)
+    return t
 
 
 class BocShortScene(BocScene):
