@@ -42,8 +42,8 @@ Beat boundaries sit at the end of a 0.4 s pause so each beat cuts on its first w
 
 | # | Beat | Master start | Length | Scene | VO (author's words) |
 |---|------|-------------:|-------:|-------|---------------------|
-| 1 | Hook | 0.00 | 6.20 | `01_hook.py` `Hook` | A transformer takes a sequence of tokens and produces updated representations of those tokens. |
-| 2 | Matrix | 6.20 | 9.08 | `02_matrix.py` `Matrix` | Each token is a vector of D numbers, and a sequence of L tokens is then an L by D matrix. Every block in the transformer stack keeps that shape. |
+| 1 | Hook | 0.00 | 6.20 | `01_hook.py` `Hook` | A transformer takes a sequence of tokens and produces updated representations of those tokens. (v2: the shared block diagram fills the frame, "my name is" is absorbed by Embed, a pulse climbs the N× block, a tiny matrix pops out above it) |
+| 2 | Matrix | 6.20 | 9.08 | `02_matrix.py` `Matrix` | (v2 opens by zooming the tiny matrix into the canonical one) Each token is a vector of D numbers, and a sequence of L tokens is then an L by D matrix. Every block in the transformer stack keeps that shape. |
 | 3 | Attention | 15.28 | 13.82 | `03_attention.py` `Attention` | Attention is what combines information across the tokens. Each token asks a query, which is what am I looking for. Every token then offers a key, saying what do I have? So each token collects a weighted sum of these values that match the key and query. |
 | 4 | Residual | 29.10 | 5.40 | `04_residual.py` `Residual` | Now a residual connection just adds the update to the existing representation instead of replacing it. |
 | 5 | Feed-forward | 34.50 | 11.45 | `05_ffn.py` `FeedForward` | A feed forward network then works on each token alone. It learns which combinations of features matter, amplifying the ones that do, and then adds a non-linearity on top that lets the choice depend on the input. |
@@ -64,8 +64,12 @@ beat are in `BRIEF.md` (the contract the scene agents built to).
 
 ## Visual design
 
-The matrix never leaves its spot. Words above three teal columns (`the cat
-sat`), one shared bracket. The lower third of the stage is where updates
+v2 opens on the bird's-eye view: the shared block diagram from
+`videos/_shared/transformer.py` (the one 006 teaches), then zooms into the
+tokens. From there the matrix never leaves its spot. Words above three teal
+columns (`my name is`), one shared bracket. The head predicts `Chris`.
+v1 (`the cat sat`, sentence-first opener) is kept as `01_hook_v1.py` /
+`02_matrix_v1.py` and `media/transformer_short_v1_catsat.mp4`. The lower third of the stage is where updates
 arrive: the magenta attention update column (beat 3) slides up onto its token
 (beat 4); the per-token feed-forward nets sit there (beat 5); the block slabs
 and the output head's bars use it (beats 6, 7). Shared mobjects:

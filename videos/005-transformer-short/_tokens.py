@@ -19,10 +19,10 @@ from manim import DOWN, UP, Mobject, Text, VGroup
 from videos._shared import style as S
 from videos._shared.mobjects import TokenMatrix
 
-TOKENS = ["the", "cat", "sat"]
-TARGET = 2                      # the token that attends in beat 3 ("sat")
-ATTN_WEIGHTS = [0.55, 0.3, 0.15]  # arcs from the, cat, sat(self) into "sat"
-NEXT_TOKENS = [("on", 0.58), ("down", 0.27), ("still", 0.09)]  # head bars, beat 7
+TOKENS = ["my", "name", "is"]
+TARGET = 2                      # the token that attends in beat 3 ("is")
+ATTN_WEIGHTS = [0.3, 0.55, 0.15]  # arcs from my, name, is(self) into "is"
+NEXT_TOKENS = [("Chris", 0.58), ("Sam", 0.27), ("not", 0.09)]  # head bars, beat 7
 
 MATRIX_TOP_GAP = 1.85   # stage top -> matrix top: room for the word labels and the attention arcs above them
 WORD_BUFF = 0.18        # word label above its column
