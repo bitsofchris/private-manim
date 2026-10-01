@@ -5,7 +5,7 @@ Import order of preference:
     from videos._shared.base import BocScene, Boc3DScene
     from videos._shared.mobjects import data_dot, hero_arrow, residual, BocAxes
 """
-from videos._shared import style
+from videos._shared import style, transformer
 from videos._shared.base import BocScene, Boc3DScene
 from videos._shared.mobjects import (
     BocAxes,
@@ -20,6 +20,7 @@ from videos._shared.mobjects import (
 
 __all__ = [
     "style",
+    "transformer",
     "BocScene",
     "Boc3DScene",
     "BocAxes",
