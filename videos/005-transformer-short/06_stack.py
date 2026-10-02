@@ -90,7 +90,7 @@ class Stack(BocShortScene):
 
         line = always_redraw(flow)
         self.add(line)
-        self.play(sweep.animate.set_value(1), m.animate.set_values(VALUES[3]), run_time=S.HOLD)
+        self.play(sweep.animate.set_value(1), m.count_to(VALUES[3]), run_time=S.HOLD)
         self.remove(line)
 
         # Panels fade: beat 7 opens on words + matrix alone. One FadeOut per

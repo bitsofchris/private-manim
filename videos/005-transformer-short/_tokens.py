@@ -24,17 +24,22 @@ TARGET = 2                      # the token that attends in beat 3 ("is")
 ATTN_WEIGHTS = [0.3, 0.55, 0.15]  # arcs from my, name, is(self) into "is"
 NEXT_TOKENS = [("Chris", 0.58), ("Sam", 0.27), ("not", 0.09)]  # head bars, beat 7
 
-MATRIX_TOP_GAP = 1.85   # stage top -> matrix top: room for the word labels and the attention arcs above them
+MATRIX_TOP_GAP = 1.60   # stage top -> matrix top: room for the word labels and the attention arcs above them
 WORD_BUFF = 0.18        # word label above its column
+
+
+MIN_STEP, MAX_STEP = 0.3, 0.7   # every cell moves visibly at every stage
 
 
 def _stages() -> list[np.ndarray]:
     rng = np.random.default_rng(S.SEED)
-    v = rng.uniform(-0.9, 0.9, size=(len(TOKENS), S.TOKEN_D_SHOWN))
-    out = [v.round(1)]
+    v = rng.uniform(-0.9, 0.9, size=(len(TOKENS), S.TOKEN_D_SHOWN)).round(1)
+    out = [v]
     for _ in range(3):
-        v = np.clip(v + rng.normal(0, 0.35, v.shape), -0.95, 0.95)
-        out.append(v.round(1))
+        step = rng.uniform(MIN_STEP, MAX_STEP, v.shape) * rng.choice([-1, 1], v.shape)
+        step = np.where(np.abs(v + step) > 0.9, -step, step)  # bounce off the edge
+        v = np.clip(v + step, -0.9, 0.9).round(1)
+        out.append(v)
     return out
 
 
@@ -60,6 +65,12 @@ def descent() -> float:
     """How far a descender hangs below the baseline at label scale (Pango
     gives no baseline, so measure: "y" is "x" plus its tail)."""
     return label("y").height - label("x").height
+
+
+def place_update(update: Mobject, stage: Mobject, column: Mobject) -> Mobject:
+    """The magenta update column: under its token, at the stage bottom, dipping
+    TOKEN_UPDATE_BLEED into the band (captions sit lower than that)."""
+    return update.align_to(stage, DOWN).shift(DOWN * S.TOKEN_UPDATE_BLEED).set_x(column.get_x())
 
 
 def word_labels(m: TokenMatrix) -> VGroup:

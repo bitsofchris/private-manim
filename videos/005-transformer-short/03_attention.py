@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root for vi
 sys.path.insert(0, str(Path(__file__).resolve().parent))      # _tokens
 
 from manim import *
-from _tokens import TOKENS, TARGET, ATTN_WEIGHTS, VALUES, build_matrix, word_labels, tokens, label
+from _tokens import place_update, TOKENS, TARGET, ATTN_WEIGHTS, VALUES, build_matrix, word_labels, tokens, label
 from videos._shared import style as S
 from videos._shared.base import BocShortScene
 from videos._shared.mobjects import TokenMatrix, attention_arcs
@@ -64,7 +64,7 @@ class Attention(BocShortScene):
         # "sat", bottom cell first, taking the query's place.
         update = TokenMatrix(VALUES[1][TARGET:TARGET + 1], bracketed=False, dots=False,
                              color=S.STRUCTURE)
-        update.align_to(self.stage, DOWN).set_x(m.columns[TARGET].get_x())
+        place_update(update, self.stage, m.columns[TARGET])
         ucol = update.columns[0]
         cells = [VGroup(c, n) for c, n in zip(ucol.cells, ucol.nums)][::-1]
         flash = arcs.copy().set_stroke(S.HIGHLIGHT, width=S.ATTN_ARC_MAX)

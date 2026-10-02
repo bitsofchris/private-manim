@@ -113,12 +113,13 @@ CONTENT_RUST = "#C2410C"     # rust - tertiary categorical accent
 # A token is a column of cells; a sequence is columns side by side under one
 # bracket. Sizes are for a 9-unit-wide Short frame: 3 signed one-decimal
 # values ("+0.4" is 1.65 units at SHORT_LABEL_SCALE) fit the safe width.
-TOKEN_CELL_W = 1.85
-TOKEN_CELL_H = 0.62
-TOKEN_COL_GAP = 0.35
+TOKEN_CELL_W = 1.92
+TOKEN_CELL_H = 0.76   # a 0.62-tall digit gets 0.07 of air top and bottom
+TOKEN_COL_GAP = 0.30
 TOKEN_D_SHOWN = 3          # values drawn per column; a "⋮" row implies the rest
 TOKEN_CELL_OP_MIN = 0.12   # cell fill opacity at |value| = 0
 TOKEN_CELL_OP_MAX = 0.85   # cell fill opacity at |value| = 1
 TOKEN_BRACKET_LIP = 0.22
+TOKEN_UPDATE_BLEED = 0.4   # an update column may dip this far into the caption band (a caption's top is ~0.65 below it)
 ATTN_ARC_MIN = 2.0         # stroke width of a near-zero attention weight
 ATTN_ARC_MAX = 14.0        # stroke width of a weight of 1

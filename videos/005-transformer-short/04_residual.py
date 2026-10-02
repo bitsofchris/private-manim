@@ -23,7 +23,7 @@ from manim import *
 from videos._shared import style as S
 from videos._shared.base import BocShortScene
 from videos._shared.mobjects import TokenMatrix
-from _tokens import TARGET, VALUES, VALUES_AFTER_ATTN, build_matrix, word_labels, label
+from _tokens import place_update, TARGET, VALUES, VALUES_AFTER_ATTN, build_matrix, word_labels, label
 
 BEAT_SECONDS = 5.40   # exact VO window of this beat
 T_PLUS = 1.3          # "+" fades in so it is there on "adds" (~1.9)
@@ -41,7 +41,7 @@ class Residual(BocShortScene):
         sat = m.columns[TARGET]
         update = TokenMatrix(VALUES[1][TARGET:TARGET + 1], bracketed=False, dots=False,
                              color=S.STRUCTURE)
-        update.align_to(self.stage, DOWN).set_x(sat.get_x())
+        place_update(update, self.stage, sat)
         self.add(m, words, update)  # frame 0: beat 3's last frame
 
         # "a residual connection": signal the thing about to move (rule 11).
@@ -61,7 +61,7 @@ class Residual(BocShortScene):
         # as the update merges into it (rule 8: one mobject throughout).
         self.hold_until(T_EXISTING)
         old = sat.copy()  # the pre-update column, for the "replacing" ghost
-        self.play(sat.animate.set_values(VALUES[1][TARGET]), FadeOut(update), run_time=S.HOLD)
+        self.play(sat.count_to(VALUES[1][TARGET]), FadeOut(update), run_time=S.HOLD)
 
         # "instead of replacing it": what replacing would have thrown away slides
         # off behind the column and fades. One brief play (BEAT: HOLD would overrun).

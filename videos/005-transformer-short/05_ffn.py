@@ -115,7 +115,7 @@ class FeedForward(BocShortScene):
             Line(e.get_end(), e.get_start(), color=S.HIGHLIGHT, stroke_width=S.STROKE_STRUCTURE)
             for net, _ in nets for e in net[0]
         ])
-        self.play(ShowPassingFlash(flash, time_width=0.4), m.animate.set_values(VALUES[2]),
+        self.play(ShowPassingFlash(flash, time_width=0.4), m.count_to(VALUES[2]),
                   run_time=S.HOLD)
         self.play(FadeOut(VGroup(*[net for net, _ in nets]), kink), run_time=S.HOLD)
         self.hold_until(BEAT_SECONDS)

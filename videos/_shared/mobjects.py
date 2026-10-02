@@ -6,8 +6,11 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
+import numpy as np
 from manim import (
     LEFT,
+    AnimationGroup,
+    UpdateFromAlphaFunc,
     PI,
     RIGHT,
     TAU,
@@ -306,6 +309,14 @@ class TokenColumn(VGroup):
                           .move_to([0, -len(self.values) * cell_h, 0]))
         self.add(self.cells, self.nums, self.dots)
 
+    def count_to(self, values) -> UpdateFromAlphaFunc:
+        """Animation: the digits count from the current values to `values`
+        (rounded each frame), cells recolouring along the way. Reads as the
+        numbers changing, where `animate.set_values` morphs glyphs into soup."""
+        start = np.array(self.values, dtype=float)
+        end = np.array(list(values)[: S.TOKEN_D_SHOWN], dtype=float)
+        return UpdateFromAlphaFunc(self, lambda mob, a: mob.set_values(start + (end - start) * a))
+
     def set_values(self, values) -> "TokenColumn":
         self.values = list(values)[: S.TOKEN_D_SHOWN]
         for cell, v in zip(self.cells, self.values):
@@ -347,6 +358,10 @@ class TokenMatrix(VGroup):
                               bracket(top, bottom, self.columns.get_right()[0] + 0.25, RIGHT))
         self.add(self.brackets, self.columns)
 
+    def count_to(self, values) -> AnimationGroup:
+        """Animation: every column counts to its new row (see TokenColumn.count_to)."""
+        return AnimationGroup(*[c.count_to(r) for c, r in zip(self.columns, values)])
+
     def set_values(self, values) -> "TokenMatrix":
         for col, row in zip(self.columns, values):
             col.set_values(row)
@@ -354,7 +369,7 @@ class TokenMatrix(VGroup):
 
 
 def attention_arcs(sources, target, weights, color: str = S.STRUCTURE,
-                   angle: float = -TAU / 4) -> VGroup:
+                   angle: float = -TAU / 6) -> VGroup:
     """Arcs from the top of each source column into the top of the target.
 
     Stroke width scales with the weight (ATTN_ARC_MIN..ATTN_ARC_MAX). The

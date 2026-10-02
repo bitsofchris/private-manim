@@ -60,6 +60,14 @@ class Column(unittest.TestCase):
         self.assertEqual([t.text for t in c.nums], ["-0.9", "+0.0", "+0.5"])
         self.assertAlmostEqual(c.cells[1].get_fill_opacity(), S.TOKEN_CELL_OP_MIN)
 
+    def test_count_to_lands_on_the_target_and_passes_through_the_middle(self):
+        c = TokenColumn([0.0, 0.0, 0.0], digits=True)
+        anim = c.count_to([0.8, -0.4, 0.2])
+        anim.interpolate(0.5)
+        self.assertEqual([t.text for t in c.nums], ["+0.4", "-0.2", "+0.1"])
+        anim.interpolate(1.0)
+        self.assertEqual([t.text for t in c.nums], ["+0.8", "-0.4", "+0.2"])
+
     def test_update_column_is_all_magenta(self):
         c = TokenColumn([-0.4, 0.4, 0.0], color=S.STRUCTURE)
         for cell in c.cells:
@@ -109,9 +117,12 @@ class Layout005(unittest.TestCase):
         self.assertLessEqual(words.get_top()[1], stage.get_top()[1])
         self.assertGreaterEqual(m.get_left()[0], stage.get_left()[0])
         self.assertLessEqual(m.get_right()[0], stage.get_right()[0])
-        # an update column (no dots) fits under the matrix without touching it
-        free = m.get_bottom()[1] - stage.get_bottom()[1]
-        self.assertGreater(free, S.TOKEN_D_SHOWN * S.TOKEN_CELL_H + 0.5)
+        # an update column (no dots), placed by place_update, clears the matrix
+        # by at least a "+" sign's height and never reaches a caption's top
+        upd = TokenColumn(T.VALUES[1][T.TARGET], dots=False, color=S.STRUCTURE)
+        T.place_update(upd, stage, m.columns[T.TARGET])
+        self.assertGreater(m.get_bottom()[1] - upd.get_top()[1], 0.5)
+        self.assertGreater(upd.get_bottom()[1], stage.get_bottom()[1] - 0.65)
 
     def test_word_labels_share_a_baseline(self):
         import _tokens as T
@@ -127,6 +138,9 @@ class Layout005(unittest.TestCase):
     def test_value_stages_are_seeded_and_distinct(self):
         import _tokens as T
         self.assertEqual(len(T.VALUES), 4)
+        for a, b in zip(T.VALUES, T.VALUES[1:]):  # every cell visibly moves
+            self.assertGreaterEqual(np.abs(b - a).min(), T.MIN_STEP - 0.11)
+            self.assertLessEqual(np.abs(b).max(), 0.9)
         self.assertFalse(np.array_equal(T.VALUES[0], T.VALUES[1]))
         self.assertTrue(np.array_equal(T.VALUES_AFTER_ATTN[T.TARGET], T.VALUES[1][T.TARGET]))
         self.assertTrue(np.array_equal(T.VALUES_AFTER_ATTN[0], T.VALUES[0][0]))

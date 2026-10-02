@@ -41,7 +41,7 @@ from videos._shared import transformer as T
 from _tokens import VALUES, label
 
 BEAT_SECONDS = 6.20
-T_PULSE = 1.2          # pulse leaves Embed as X finishes going in; at the N× top on "tokens" (~2.3)
+T_PULSE = 2.4          # pulse leaves Embed as X finishes going in (slow absorb); at the N× top by ~3.6
 T_UPDATED = 3.9        # VO: "updated representations": X′ pops out
 MATRIX_WIDTH_FRAC = 0.46  # X / X′ width as a fraction of a box width (what fits beside Embed)
 SLOT_BELOW = 0.12      # (+) top -> X′ bottom
@@ -98,7 +98,7 @@ class Hook(BocShortScene):
         # "takes a sequence of tokens": Embed takes X in. Animated in place (a
         # FadeOut's clean-up would restore the mobject).
         self.play(*[m.animate.move_to(embed).scale(ABSORB_SCALE).set_opacity(0)
-                    for m in (inp, inp_label)], run_time=S.HOLD)
+                    for m in (inp, inp_label)], run_time=S.HOLD * 2)
 
         # ... and a pulse climbs the N× block: Attention, (+), FFN, (+).
         self.hold_until(T_PULSE)
