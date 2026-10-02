@@ -9,13 +9,14 @@ each choice in one pass, and it matters because an LLM makes the same
 decision by generating tokens one at a time, which is slow and expensive
 for the thousands of small decisions an agent has to make.
 
-**One idea:** a decision is a classification, not a generation. Jev is the
-product that made people notice.
+**One idea:** a decision is a classification, not a generation. The catch
+is calibration, and the fix is letting the expensive model label the hard
+cases once.
 
 Source: Chris's arc (2026-10-02 session), the two @llmsresearch Substack
 notes, TypeSafe's launch post, and the independent numbers listed under
 Sources. VO is drafted from Chris's own phrasing; rewrite before recording.
-~135 words.
+~150 words. Read-aloud script below the table.
 
 ## Beats
 
@@ -25,18 +26,45 @@ Sources. VO is drafted from Chris's own phrasing; rewrite before recording.
 | 2 | What it is | 10 | A state card (short JSON) and a question card "Is this urgent?" with chips `yes` `no` `later`. One arrow through a box labelled "decision model". Out the right: three probability bars that fill to 0.91 / 0.06 / 0.03 on "probabilities". Hero: the bars. No prose appears anywhere. | Jev is a decision model. You give it some input and a fixed set of choices, and it gives you back a probability for each choice. Structured output, no text. |
 | 3 | Why excited: one pass vs many | 14 | Split stage, same question on both halves. Top, "LLM": a token stream types `{"urgent": tr…` one token at a time; each token lights the whole network once (a pass counter climbs: 1, 2, 3 … 40+) and a timer runs. Bottom, "decision model": the input and the three choices go through the network once; pass counter reads 1; the three bars fill together. Small print under the split: "171 ms vs 1.7 s, same accuracy (OpenRouter, HaluEval)". Hero: the single pass. | People are excited because this is different from what an LLM does. An LLM decides by generating, token by token. Every token is another pass through the whole model. Jev takes the input and all the choices in one pass, so it's fast and cheap. |
 | 4 | Agents make lots of decisions | 10 | An agent loop drawn as a circle. Decision diamonds appear around it on each phrase: `which tool?` `is this safe?` `am I done?` `route to?`. Each diamond is a tiny copy of beat 2's bars. On "a lot" they multiply around the loop (a tag: "~22 tool calls per task, MCP-Bench"). Hero: the diamonds. | And agents make a lot of these decisions. Which tool, is this safe, am I done. Each one is a choice from a fixed set, and that's a classifier's job, not a writer's. |
-| 5 | The real point | 10 | The decision-model box from beat 2 opens: inside, a frozen stack of transformer blocks (reuse `transformer.build_block`, dim) with a small magenta "decision head" on top. Badges tick in beside it: Jev, plus open ones (Laya, CLM-8B). Hero: the head. | Jev is one company's version. The bigger idea is decision models in general: a classifier on top of the rich representations we've gotten really good at building. That's why it works, and that's why there are open ones too. |
-| 6 | Close | 6 | Back to beat 2's bars, held. One caveat chip lands under them: "a probability is not permission". Last frame still. | So: a decision is a classification. Jev just made everyone notice. |
+| 5 | The real point | 11 | The decision-model box from beat 2 opens: inside, a frozen stack of transformer blocks (reuse `transformer.build_block`, dim) with a small magenta "decision head" on top. On "anyone can train one" badges tick in beside it: Jev, Laya, CLM-8B. Hero: the head. | Jev is one company's version. The bigger idea is that we've gotten really good at building rich representations, and a decision model is just a classifier on top of them. Anyone can train one. |
+| 6 | The hard part | 12 | Beat 2's bars return; on "calibration" a dial under them reads 0.92 while a coin flips 50/50 beside it (the fair-coin test), then fades. On "your own labels" a slow frontier-LLM block and a person icon stamp a few labels onto hard examples; the labels flow into the small decision head; on "quick" the head fires over a fast stream of states, bars flicking. Last frame still: LLM slow on the left, decision head fast on the right. Hero: the labels, then the head. | The hard part is calibration. The probabilities only mean something on data like your own, so you need your own labels. Let a frontier model, or a person, make the expensive hard calls once. Train the decision model on those. Then the decisions are quick. |
 
-Total ≈ 55 s before tightening. Hero per beat: 1 none, 2 bars, 3 the single
-pass, 4 the diamonds, 5 the decision head, 6 none.
+Total ≈ 62 s before tightening (the cut step will take ~5 s of pauses).
+Hero per beat: 1 none, 2 bars, 3 the single pass, 4 the diamonds, 5 the
+decision head, 6 the labels then the head. No closing hook on purpose.
+
+## Read-aloud script
+
+What is Jev, and why is everyone so excited about it?
+
+Jev is a decision model. You give it some input and a fixed set of
+choices, and it gives you back a probability for each choice. Structured
+output. No text.
+
+People are excited because this is different from what an LLM does. An
+LLM decides by generating, token by token, and every token is another
+pass through the whole model. Jev scores all the choices in one pass. So
+it's fast and cheap.
+
+That matters because agents make a lot of these decisions. Which tool, is
+this safe, am I done. Each one is a choice from a fixed set. That's a
+classifier's job.
+
+Jev is one company's version. The bigger idea is that we've gotten really
+good at building rich representations, and a decision model is just a
+classifier on top of them. Anyone can train one.
+
+The hard part is calibration. The probabilities only mean something on
+data like your own, so you need your own labels. Let a frontier model, or
+a person, make the expensive hard calls once. Train the decision model on
+those. Then the decisions are quick.
 
 ## Not in this Short (on purpose)
 
 The classifier → zero-shot classifier → decision model ladder, the three
 answer types (Choice / Score / Null), the reliability plot, thresholds,
-the System 1 / System 2 training recipe, RLCD. All true, none needed to
-answer the question. "Calibrated" is deliberately not said on screen or
+RLCD. All true, none needed to answer the question. The System 2 trains
+System 1 pattern survives as beat 6, in plain words. "Calibrated" is deliberately not said on screen or
 in the VO: independent tests show Jev's probabilities don't transfer to
 new distributions (see Sources), so the Short says "a probability".
 
