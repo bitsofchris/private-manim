@@ -86,10 +86,13 @@ digital silence), so 26.9-28.5 s is muted in `vo_final.wav`
 | 3 | Arrow | 8.96 | 10.00 | `03_arrow.py` `Arrow` | An arrow represents a tensor moving to the next operation. In code, it's the order of calls in the forward function. Top to bottom of forward is bottom to top of this diagram. |
 | 4 | Skip | 18.96 | 9.95 | `04_skip.py` `Skip` | The arrow that bypasses a box is the x that keeps getting reassigned. Add and norm is x equals x plus a sublayer of x. |
 | 5 | Repeat | 28.91 | 5.91 | `05_repeat.py` `Repeat` | A bracket with N× is a for loop. For block in blocks, x equals block of x. |
-| 6 | Inset | 34.82 | 5.07 | `06_inset.py` `Inset` | A zoomed-in box is a submodule's own forward function. The block is its own class. |
-| 7 | Close | 39.89 | 8.00 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. (2.78 s of VO + 5.22 s padded silence; code grows into the band once the captions end) |
+| 7 | Close | 34.82 | 8.00 | `07_close.py` `Close` | If you can read the diagram, you're understanding the code. (2.78 s of VO + 5.22 s padded silence; code grows into the band once the captions end) |
 
 Captions: every beat has word captions (2 words each), burned at the bottom
 of the band (`assemble.py --captions-anchor bottom`); beats 2–6 draw their
 code card at the top of the band via `_code.py`. Beat 7 is 8.0 s: 2.78 s of
 VO plus padded silence while the full model code fills the safe area.
+
+Cut 2026-10-01: beat 6 (inset → class) removed. It explained a mark (the
+zoomed-in inset) that our redrawn diagram does not show. Audio 34.82–39.89
+dropped from the VO; scene kept as `_cut_06_inset.py` for reference.

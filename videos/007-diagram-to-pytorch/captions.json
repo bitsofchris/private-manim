@@ -232,7 +232,7 @@
  {
   "start": 29.584,
   "end": 30.084,
-  "text": "with N×"
+  "text": "with N\u00d7"
  },
  {
   "start": 30.144,
@@ -266,72 +266,32 @@
  },
  {
   "start": 34.599,
-  "end": 34.84,
+  "end": 34.78,
   "text": "X."
  },
  {
-  "start": 34.84,
-  "end": 35.301,
-  "text": "A zoomed"
- },
- {
-  "start": 35.361,
-  "end": 35.72,
-  "text": "in box"
- },
- {
-  "start": 35.78,
-  "end": 36.037,
-  "text": "is a"
- },
- {
-  "start": 36.097,
-  "end": 36.917,
-  "text": "submodule's own"
- },
- {
-  "start": 36.977,
-  "end": 37.9,
-  "text": "forward function."
- },
- {
-  "start": 37.9,
-  "end": 38.564,
-  "text": "The block"
- },
- {
-  "start": 38.624,
-  "end": 39.089,
-  "text": "is its"
- },
- {
-  "start": 39.149,
-  "end": 39.88,
-  "text": "own class."
- },
- {
-  "start": 39.88,
-  "end": 40.124,
+  "start": 34.81,
+  "end": 35.054,
   "text": "If you"
  },
  {
-  "start": 40.184,
-  "end": 40.497,
+  "start": 35.114,
+  "end": 35.427,
   "text": "can read"
  },
  {
-  "start": 40.557,
-  "end": 41.01,
+  "start": 35.487,
+  "end": 35.94,
   "text": "the diagram"
  },
  {
-  "start": 41.07,
-  "end": 41.802,
+  "start": 36.0,
+  "end": 36.732,
   "text": "you're understanding"
  },
  {
-  "start": 41.862,
-  "end": 42.21,
+  "start": 36.792,
+  "end": 37.14,
   "text": "the code."
  }
 ]

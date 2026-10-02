@@ -1,9 +1,28 @@
-{"beats": [
- {"clip": "media/videos/01_hook/1920p30/Hook.mp4",       "end": 3.13},
- {"clip": "media/videos/02_box/1920p30/Box.mp4",         "end": 5.83},
- {"clip": "media/videos/03_arrow/1920p30/Arrow.mp4",     "end": 10.00},
- {"clip": "media/videos/04_skip/1920p30/Skip.mp4",       "end": 9.95},
- {"clip": "media/videos/05_repeat/1920p30/Repeat.mp4",   "end": 5.91},
- {"clip": "media/videos/06_inset/1920p30/Inset.mp4",     "end": 5.07},
- {"clip": "media/videos/07_close/1920p30/Close.mp4",     "end": 8.0}
-]}
+{
+ "beats": [
+  {
+   "clip": "media/videos/01_hook/1920p30/Hook.mp4",
+   "end": 3.13
+  },
+  {
+   "clip": "media/videos/02_box/1920p30/Box.mp4",
+   "end": 5.83
+  },
+  {
+   "clip": "media/videos/03_arrow/1920p30/Arrow.mp4",
+   "end": 10.0
+  },
+  {
+   "clip": "media/videos/04_skip/1920p30/Skip.mp4",
+   "end": 9.95
+  },
+  {
+   "clip": "media/videos/05_repeat/1920p30/Repeat.mp4",
+   "end": 5.91
+  },
+  {
+   "clip": "media/videos/07_close/1920p30/Close.mp4",
+   "end": 8.0
+  }
+ ]
+}
