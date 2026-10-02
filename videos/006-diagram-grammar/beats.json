@@ -1,9 +1,28 @@
-{"beats": [
- {"clip": "media/videos/01_hook/1920p30/Hook.mp4",         "end": 3.99},
- {"clip": "media/videos/02_grammar/1920p30/Grammar.mp4",   "end": 8.27},
- {"clip": "media/videos/03_box/1920p30/Box.mp4",           "end": 5.53},
- {"clip": "media/videos/04_arrow/1920p30/Arrow.mp4",       "end": 9.02},
- {"clip": "media/videos/05_residual/1920p30/Residual.mp4", "end": 16.84},
- {"clip": "media/videos/06_repeat/1920p30/Repeat.mp4",     "end": 3.70},
- {"clip": "media/videos/07_shape/1920p30/Shape.mp4",       "end": 6.41}
-]}
+{
+ "beats": [
+  {
+   "clip": "media/videos/01_hook/1920p30/Hook.mp4",
+   "end": 3.99
+  },
+  {
+   "clip": "media/videos/02_grammar/1920p30/Grammar.mp4",
+   "end": 8.27
+  },
+  {
+   "clip": "media/videos/03_box/1920p30/Box.mp4",
+   "end": 5.53
+  },
+  {
+   "clip": "media/videos/04_arrow/1920p30/Arrow.mp4",
+   "end": 9.02
+  },
+  {
+   "clip": "media/videos/05_residual/1920p30/Residual.mp4",
+   "end": 16.84
+  },
+  {
+   "clip": "media/videos/06_repeat/1920p30/Repeat.mp4",
+   "end": 4.7
+  }
+ ]
+}

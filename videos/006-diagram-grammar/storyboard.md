@@ -82,5 +82,11 @@ the end of each 0.4 s pause. Times below are from `transcript_final.txt`.
 | 3 | Box | 12.26 | 5.53 | `03_box.py` `Box` | A box is an operation or a layer. Linear, attention, feed forward, et cetera. |
 | 4 | Arrow | 17.79 | 9.02 | `04_arrow.py` `Arrow` | An arrow is a tensor moving to the next operation. Flow is always bottom to top, where input tokens are at the bottom and logits are at the top. |
 | 5 | Residual | 26.81 | 16.84 | `05_residual.py` `Residual` | An arrow that bypasses a box is the residual path. The circle with the plus is where it adds its new updated vector back in. That vertical highway is the residual stream, and everything reads from it, adding information back to it as we refine our representation through the layers. |
-| 6 | Repeat | 43.65 | 3.70 | `06_repeat.py` `Repeat` | A bracket with N× means this block repeats N times. |
-| 7 | Shape | 47.35 | 6.41 | `07_shape.py` `Shape` | So now try to trace the shape along the arrows, and if you can say that shape at every arrow, you've understood the diagram. |
+| 6 | Repeat | 43.65 | 4.70 | `06_repeat.py` `Repeat` | A bracket with N× means this block repeats N times. |
+| ~~7~~ | ~~Shape~~ | — | cut | `07_shape.py` (kept, unused) | So now try to trace the shape along the arrows, and if you can say that shape at every arrow, you've understood the diagram. |
+
+Beat 7 cut (2026-10-02): "say the shape at every arrow" introduces tensor
+shapes in six seconds to a viewer who was just taught what an arrow is.
+The idea is the seed of a third short ("follow the shape"). VO trimmed to
+47.35 s + 1.0 s silence (`vo_final_v1.wav` is the untrimmed cut); beat 6
+holds its last frame for that second.

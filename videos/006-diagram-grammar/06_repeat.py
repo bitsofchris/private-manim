@@ -19,7 +19,7 @@ from videos._shared import style as S
 from videos._shared.base import BocShortScene
 from videos._shared import transformer
 
-BEAT_SECONDS = 3.70   # exact VO window of this beat
+BEAT_SECONDS = 4.70   # 3.70 s of VO + 1.0 s padded silence: the Short ends here, diagram held
 T_BRACKET = 0.10      # VO: "bracket"
 T_REPEATS = 2.30      # VO: "repeats"
 GHOST_STEP = np.array([0.25, 0.5, 0])   # each card sits up and slightly right of the last
