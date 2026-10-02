@@ -1,16 +1,20 @@
-# Publish: Transformer short
+# Publish: Transformer short (v4, 59.27 s)
+
+Rule (runbook step 9): say the concept in plain words a beginner would type,
+then promise it's simple. Keyword in the first 30–40 characters, title ≤ 50,
+first 100 characters of the description carry the takeaway, 3–5 hashtags last.
 
 ## Title (pick one; first is recommended)
 
-1. Transformers Made Simple (Beginner Friendly)
-2. How a Transformer Works: Attention, FFN, Residuals Made Simple
-3. What a Transformer Actually Does to Your Tokens
+1. Transformers Made Simple (Beginner Friendly)            — 44 chars
+2. How a Transformer Works: Made Simple                     — 38 chars
+3. What a Transformer Does to Your Tokens (Beginner Friendly) — 56 chars, over
 
 ## Description
 
-What a transformer does in 60 seconds: tokens become vectors, attention mixes them, the feed-forward net refines each one, residuals add it all up.
+What a transformer actually does in 60 seconds: attention, feed-forward, residuals, one matrix refined over and over.
 
-Three tokens become an L × d matrix. Attention lets each token collect a weighted sum from the others. A residual connection adds that update instead of replacing the token. A feed-forward network works on each token alone. Every block repeats this on the same matrix. The final representation is only turned into a prediction by a task-specific output layer.
+We start from the block diagram, then zoom into three tokens as an L × d matrix. Attention lets one token collect a weighted sum from the others. A residual connection adds that update instead of replacing the token. A feed-forward network works on each token alone. Every block repeats this on the same matrix. The final representation only becomes a prediction through a task-specific output layer.
 
 Full write-up:
 [POST LINK]
