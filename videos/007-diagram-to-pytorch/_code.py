@@ -35,3 +35,14 @@ def code_card(band: Mobject, line_numbers: list[int], highlight=None) -> Code:
     # Top of the band: the burned-in VO captions sit at the bottom
     # (assemble.py --captions-anchor bottom), so both fit.
     return card.move_to(band).align_to(band, UP).shift(DOWN * CARD_TOP_MARGIN)
+
+
+def full_code(area: Mobject) -> Code:
+    """The whole GPT_SOURCE scaled to fit `area` (whichever of width / height
+    binds), centred on it. Hook (frame 0) and Close (the recap) share it."""
+    code = code_block(GPT_SOURCE)
+    if code.width / area.width > code.height / area.height:
+        code.scale_to_fit_width(area.width)
+    else:
+        code.scale_to_fit_height(area.height)
+    return code.move_to(area)

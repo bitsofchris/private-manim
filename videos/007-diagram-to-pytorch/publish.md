@@ -1,19 +1,20 @@
-# Publish: Architecture diagram to PyTorch
+# Publish: Architecture diagram to PyTorch (part 2 of 2)
 
 ## Title (pick one; first is recommended)
 
-1. Transformer Diagram to PyTorch Code Made Simple
-2. AI Diagram to PyTorch Made Simple (Beginner Friendly)
-3. How a Transformer Diagram Becomes PyTorch Code
+1. Transformer in 20 Lines of PyTorch Made Simple
+2. How a Transformer Diagram Becomes PyTorch Code
+3. AI Diagram to PyTorch Made Simple (Beginner Friendly)
 
 ## Description
 
-Every mark on a transformer architecture diagram is a line of PyTorch. Here is the mapping, in 45 seconds.
+The transformer block is about 20 lines of PyTorch, and each line is a box or arrow on the paper's diagram.
 
-A box is an nn.Module you construct in init. An arrow is the order of calls in forward. The arrow that bypasses a box is the x that keeps getting reassigned: x = x + attn(x). N× is a for loop over the blocks. A zoomed-in box is a submodule's own forward.
+Boxes are modules you build in init. Arrows are the order of calls in forward. The arrow that goes around a box is x = x + f(x), the residual. N× is a for loop over the blocks. The code shown is the skeleton of a GPT (same shape as nanoGPT's Block and GPT classes), simplified to match the figure: the LayerNorms and the Attention/FFN internals are left out.
 
-Part 1 (how to read the diagram itself): [PART 1 LINK]
-Full write-up with the complete ~20-line model: [POST LINK]
+Part 1, how to read the diagram itself: [PART 1 LINK]
+See the real thing: nanoGPT's model.py (Karpathy): https://github.com/karpathy/nanoGPT/blob/master/model.py
+Full write-up: [POST LINK]
 
 Level up human.
 
@@ -23,4 +24,8 @@ Level up human.
 
 Part 1 teaches the diagram grammar this one maps to code: [PART 1 LINK]
 
-The whole model is about 20 lines. Which line surprised you?
+Next step: open nanoGPT's model.py and find the two `x = x + ...` lines. Which part of the diagram did you spot first?
+
+## What it helps someone do
+
+Open a real transformer implementation and know what each part is, or sketch one from a paper figure. The four rules (box = module in init, arrow = call order in forward, bypass = x + f(x), N× = for loop) transfer to any model file.

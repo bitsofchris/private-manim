@@ -96,3 +96,10 @@ VO plus padded silence while the full model code fills the safe area.
 Cut 2026-10-01: beat 6 (inset → class) removed. It explained a mark (the
 zoomed-in inset) that our redrawn diagram does not show. Audio 34.82–39.89
 dropped from the VO; scene kept as `_cut_06_inset.py` for reference.
+
+Reframe 2026-10-01 (no re-record): the hook now opens on the whole 20-line
+model (frame 0), and the diagram fades in over it on "this diagram"; the
+close holds the big code and, in the padded silence, walks the magenta bar
+through it in diagram order (init lines, forward lines, embed, loop, head)
+as a recap. The viewer sees the program first, decodes it, then re-sees the
+mapping on the real code.

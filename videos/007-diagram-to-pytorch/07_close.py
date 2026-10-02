@@ -21,22 +21,17 @@ from manim import *
 from videos._shared import style as S
 from videos._shared import transformer
 from videos._shared.base import BocShortScene
-from videos._shared.mobjects import code_block
+from videos._shared.mobjects import highlight_lines
+from _code import full_code
 
 BEAT_SECONDS = 8.0      # 2.783 s of VO + 5.217 s padded silence: big code holds ~4.7 s
 T_READ = 0.0          # VO: "read the diagram" (0.50-1.40); a HOLD-long fade from frame 0 lands on it
 T_CODE = 1.70         # VO: "understanding the code" (1.55-2.25)
 T_GROW = 2.80         # VO over, last caption gone: code takes the whole safe area
-
-
-def full_code(area: Mobject) -> Code:
-    """GPT_SOURCE scaled to fit `area` (whichever of width / height binds)."""
-    code = code_block(transformer.GPT_SOURCE)
-    if code.width / area.width > code.height / area.height:
-        code.scale_to_fit_width(area.width)
-    else:
-        code.scale_to_fit_height(area.height)
-    return code.move_to(area)
+T_RECAP = 3.50        # silence: the bar walks the code in diagram order
+# Recap order = diagram order, bottom to top: the modules you build, the forward
+# calls, then the outer model: embed, the N× loop, the head.
+RECAP = [[3, 4], [7], [8], [13, 14, 15], [18], [19, 20], [21]]
 
 
 class Close(BocShortScene):
@@ -58,5 +53,14 @@ class Close(BocShortScene):
         # Captions are over: the code grows into the band too and holds
         # there for the padded silence, big enough to read.
         self.hold_until(T_GROW)
-        self.play(Transform(code, full_code(self.safe)), run_time=S.BEAT)
+        big = full_code(self.safe)
+        self.play(Transform(code, big), run_time=S.BEAT)
+        self.remove(code)
+        self.add(big)   # same pixels; a fresh Code so highlight_lines has clean geometry
+
+        # Recap, in silence: the bar walks the code in diagram order, one
+        # group of lines per BEAT. The viewer re-sees the mapping on the real code.
+        self.hold_until(T_RECAP)
+        for lines in RECAP:
+            self.play(highlight_lines(big, lines), run_time=S.BEAT)
         self.hold_until(BEAT_SECONDS)
