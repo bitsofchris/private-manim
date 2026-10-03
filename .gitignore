@@ -45,3 +45,9 @@ videos/**/media/
 # uv
 .python-version
 
+
+# Node (prototypes)
+node_modules/
+prototypes/**/renders/
+prototypes/**/out/
+prototypes/**/*.mp4

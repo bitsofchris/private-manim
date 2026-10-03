@@ -23,7 +23,7 @@ clean").
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
-| Evidence behind the rules | `agents/research/` | digests with sources |
+| Evidence behind the rules | `agents/research/` | digests with sources: shorts craft and hooks; what other LLM-to-Manim pipelines learned |
 | Plans in flight / done | `agents/plans/` / `agents/archive/` | |
 | A finished video | `videos/NNN-slug/` | storyboard, VO, scenes, `publish.md`, `media/` (gitignored) |
 | Retired code | `videos/_graveyard/` | kept for reference, never imported |

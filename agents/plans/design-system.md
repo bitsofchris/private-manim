@@ -94,6 +94,17 @@ tools/lint_short.py             runs check_layout on a scene's last frame withou
 `agents/style.md` contradictions resolved; runbook steps 0 and 11. Phase 1
 (rules as code) and Phase 2 (promotion) are the next work.
 
+## Borrowed from other pipelines (2026-10-03)
+
+From `agents/research/2026-10-03-llm-to-manim-pipelines.md`: add a named
+grid to Phase 1 (`place_at(cell)` / `place_in(a, b)` on `BocShortScene`,
+cells assigned in the storyboard) alongside `check_layout()`; the beat
+brief points agents at two or three passing beats as worked examples; the
+traps list becomes trigger / cause / fix / bad-example entries added only
+after a fix worked; reviews fix line, then block, then beat, in at most
+two rounds; the storyboard carries a ledger of fixed names and example
+values.
+
 ## Order of work
 
 Phase 1 items 1 and 4 first (they would have caught every 008 fix and
