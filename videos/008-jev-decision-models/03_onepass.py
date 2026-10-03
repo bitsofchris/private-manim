@@ -40,7 +40,7 @@ NET_W, NET_BOX_H, NET_GAP = 1.6, 0.36, 0.22   # the tiny 3-box network
 COL_GAP = 0.5                                 # net column -> output column
 LABEL_GAP = 0.08                              # half label -> content row
 TAG_H = 1.44                                  # two label lines + air, at the stage floor
-BARS_W, BARS_SCALE = 5.0, 0.9                 # ProbBars fits the bottom-right area at 0.9
+BARS_W, BARS_SCALE = 4.3, 0.9                 # ProbBars (no values) clears the "passes" counter
 
 
 def net_glyph() -> VGroup:
