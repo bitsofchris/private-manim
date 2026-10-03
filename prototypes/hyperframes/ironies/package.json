@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.8.115 preview",
-    "check": "npx --yes hyperframes@0.8.115 check",
-    "render": "npx --yes hyperframes@0.8.115 render",
+    "dev": "HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1 npx --yes --prefer-offline hyperframes@0.8.115 preview",
+    "check": "HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1 npx --yes --prefer-offline hyperframes@0.8.115 check",
+    "render": "HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1 npx --yes --prefer-offline hyperframes@0.8.115 render -o out/ironies.mp4",
     "publish": "npx --yes hyperframes@0.8.115 publish"
   }
 }
