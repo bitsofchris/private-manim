@@ -16,9 +16,10 @@ contact sheet, report. You never edit `videos/_shared/`.
    traps), `agents/animation-rules.md`.
 2. `agents/parts.md`, then the parts the brief names (shared, or
    the video's local `_parts.py`). Reuse before building.
-3. The latest finished beat in `videos/` as the worked example of shape:
-   docstring with takeaway, VO and render line; cue constants with the VO
-   word; `hold_until(BEAT_SECONDS)` at the end.
+3. The finished beats the orchestrator names as worked examples (if none
+   are named, the latest finished beat in `videos/`): docstring with
+   takeaway, VO and render line; cue constants with the VO word;
+   `hold_until(BEAT_SECONDS)` at the end. Copy their shape.
 4. The video's `storyboard.md`: the "Final beats" table is the contract
    (start, length, file, class, VO); the beats table above it is the
    visual brief.
@@ -65,8 +66,13 @@ ffprobe -v error -show_entries format=duration -of csv=p=0 media/videos/FILE/192
 
 Open the contact sheet with the Read tool and look: text legible at phone
 size, nothing in the dead zones or the band, one hero, frame 0 populated,
-last frame still, duration within 1/30 s of `BEAT_SECONDS`. Fix and
-re-render until it passes.
+last frame still, duration within 1/30 s of `BEAT_SECONDS`.
+
+Fix the smallest thing first: the line, then the block, then the beat.
+Two review rounds. If the same kind of problem is still there after the
+second, stop and report it with the object and line; do not keep nudging.
+Names, example values and choices come from the storyboard's ledger,
+never invented in the beat.
 
 ## Report (the orchestrator reads only this)
 

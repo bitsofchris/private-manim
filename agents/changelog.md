@@ -5,6 +5,10 @@ that forced it. Newest first.
 
 ## 2026-10-03
 
+- Janitor: runbook steps renumbered cleanly (one step 0, step 11 in order, tools last); its "next one, in practice" removed (README owns Chris's side) and its backlog moved to `agents/plans/design-system.md`; dead path to the archived pipeline plan fixed; style guide's Shorts caption row aligned with hard rule 6. (janitor)
+- From the pipelines research: storyboard ledger and "if time" last line (runbook 1); worked examples named per agent (runbook 6, beat brief); smallest repair first and two review rounds (runbook 8, beat brief); traps recorded as trigger / cause / fix once the fix worked (runbook 11). (research)
+- HyperFrames prototypes under `prototypes/hyperframes/`; not yet a path in the process. (experiment)
+
 - Everything agents maintain moved under `agents/` (runbook, beat brief, style, animation rules, parts, changelog, research, plans, archive). Code stays in `videos/_shared/` and `tools/`. (janitor)
 - No retro files: the update pass (runbook step 11) mines the session and writes straight into the rules, parts and changelog. (Chris)
 - Repo entry point: `AGENTS.md` is the map and the rules; `CLAUDE.md` points at it; `README.md` is for humans. (janitor)

@@ -21,10 +21,10 @@ cuts, 14 beats built by 7 parallel agents off one shared diagram module.
 
 ---
 
-## 0. Why this shape (the research)
+## Why this shape (the research)
 
 Two inputs decided the format. Both are written up in more detail in
-`agents/animation-rules.md` and `agents/plans/shorts-pipeline.md`.
+`agents/animation-rules.md`, `agents/research/` and `agents/archive/shorts-pipeline.md`.
 
 **The channel's own data.** Comparing the 84K-view Short (PyTorch Neural
 Networks Made Simple) with a 2K-view Short on the same topic:
@@ -88,9 +88,17 @@ one-sentence takeaway over the final visual, no outro, no call to action.
   per Short.
 - Write `videos/NNN-slug/storyboard.md`: a table `beat | VO | visual`.
 - **VO uses the author's own sentences.** Cut and reorder; never reword.
-  Target 130–150 spoken words for ~55 s.
-- The visual column maps each beat to a reusable element (neuron, tiny
-  net, loss bowl, computational graph, code block). Reuse across posts.
+  Target 130–150 spoken words for ~55 s. Mark the last line "if time":
+  takes run long and the tail is what gets dropped.
+- The visual column names parts from `agents/parts.md` to reuse, the one
+  magenta hero, and where things sit (top / middle / bottom of the stage,
+  and a rough row count, so the layout is decided before any code).
+- **Ledger.** One short list at the top of the storyboard of everything
+  that must be identical across beats: the example ("I can't log in"),
+  the choices ("bug / query / spam"), names, numbers. Parallel agents copy
+  from it; nothing is invented per beat.
+- The example must be a real instance of the idea (a decision someone
+  would make, a figure from the actual paper), not a placeholder.
 
 ## 2. Record once (Chris, 3 min)
 
@@ -170,6 +178,9 @@ length, scene file, VO. Beat lengths are the contract for step 6.
   master times, the visual brief, the hero. Group beats that share a
   visual onto one agent; write any local part (`_parts.py`) before
   spawning so every agent imports the same one. Check `agents/parts.md` first.
+- Name two or three finished beats that resemble each agent's brief as
+  worked examples (same part, same kind of motion). Examples from our own
+  passing scenes do more than rule lists.
 - Agents should place cues from the audio itself (silencedetect + energy
   envelope), not only from the brief; that beat the estimates every time.
 - Render: `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching 0N_beat.py Class`.
@@ -218,6 +229,10 @@ element needs the band too (a code card), put it at the band top and pass
   the four zones at 25 % red. If text touches red, fix the constant.
 - Chris: watch it on a phone with sound, then muted. Listen once at the
   splice points.
+- Fixing what a sheet shows: name the object and the line, fix the line,
+  then the block, and only then rebuild the beat. Two review rounds per
+  beat; if the same kind of problem comes back, stop and rethink the
+  layout rather than nudging it again.
 
 ## 9. Publish (Chris, 2 min)
 
@@ -255,7 +270,25 @@ The last message of the session is a paste-ready pack, nothing else:
 Everything is committed before the pack is sent, and anything the
 description claims is "on screen" is checked against the final cut.
 
----
+## 11. Update pass (Claude, when Chris says go)
+
+After the hand-off pack, ask once: "Ready for the update pass?" On yes:
+
+1. **Mine the session.** List every change Chris asked for and every
+   workaround or wish an agent reported. For each, decide: rule
+   (`agents/style.md`, `agents/animation-rules.md`, `agents/beat-brief.md`,
+   this runbook), token (`videos/_shared/style.py`), part (`agents/parts.md`
+   and code), tool (`tools/`), or nothing. Make the edits in their one home.
+   A new trap is written as trigger, cause, fix, and what the wrong
+   version looked like, and only once the fix has actually worked.
+2. **Janitor.** `agents/parts.md` use counts, promote at two; finished plans
+   to `agents/archive/`; retired scene files to `videos/_graveyard/`;
+   `_preview.py` files deleted; `AGENTS.md` and `agents/` re-read for
+   anything stale or contradictory (one home per topic, no duplicates).
+3. **Changelog.** One line per change in `agents/changelog.md`, with the
+   video that forced it.
+4. **Commit** the system changes separately from the video, and tell Chris
+   what changed in three lines.
 
 ## Tools (all under `tools/`, tests under `tests/`)
 
@@ -269,68 +302,3 @@ description claims is "on screen" is checked against the final cut.
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |
 
 Run everything: `uv run --no-sync python -m unittest discover -s tests`.
-
-## The next one, in practice
-
-1. Paste the post and say "make a short from this". Claude storyboards 5–8
-   beats from your sentences and hands back a ~140-word read-aloud script.
-2. Record it in QuickTime, one pass, pause between paragraphs, save as
-   `vo_raw.m4a` in the new `videos/NNN-slug/` folder.
-3. Give Claude the path. It cleans, transcribes, and proposes a cut list
-   with per-beat seconds. You approve the cuts. That is the one decision.
-4. Claude cuts the audio (verified by re-transcription), spawns one agent
-   per one or two beats with the VO timings, assembles with captions,
-   reviews frame by frame, and hands back the mp4 with a critique.
-5. Watch it once with sound and once muted. Say what's off. Claude fixes
-   and re-muxes.
-6. Title and description follow step 9; they land in `publish.md`.
-
-## Do these before the next one
-
-- **Frame-align `hold_until`.** `hold_remaining` drops any remainder under
-  one frame, so every beat renders one frame short and a 7-beat Short loses
-  ~0.2 s of video under the VO tail (005: video 59.07 s, audio 59.27 s). Round
-  the final wait up to the next frame instead, or have `assemble.py` pad
-  each clip to its `end` with `tpad=stop_mode=clone`.
-- **Different word = different label.** `Transform` between two `Text`s
-  morphs glyphs into soup mid-flight (005 beat 7, caught on a frame pull).
-  Fade-swap labels whose meaning changes; `Transform` only what keeps its
-  identity. Worth a line in animation-rules rule 8.
-
-- **Word-level timestamps.** Verify and install `whisper-cpp` from Homebrew
-  (the engine MacWhisper already uses; `brew install whisper-cpp`, no
-  Python). Then add `tools/word_timings.py` that reads its JSON and feeds
-  both `captions_from_transcript.py` (captions break at phrase boundaries
-  instead of every 3 words) and `tighten_vo.py` (cut boundaries land on
-  words, so no more nudge-and-retranscribe rounds). Alternatives if
-  whisper.cpp's attention timing is sloppy: `mlx-whisper` via `uvx`, or
-  WhisperX for forced alignment.
-- **Promote the beat scenes into a library.** The 004 folder holds the
-  neuron, tiny net, loss bowl (`_bowl.py`) and computational graph
-  (`_graph.py`) as one-offs, each redefining phone-size stroke widths and
-  arrow tips locally. Move them into `videos/_shared/` with those sizes as
-  named constants so the next short starts from polished parts. This is
-  where "the animations could be a little cleaner" gets fixed once.
-- Install Inter (`brew install --cask font-inter`); Pango is falling back.
-- Consider `S.BEAT` = 0.9 s for Shorts (research says ~1 s for tracked
-  motion; 0.6 s reads as a flicker at phone size).
-- A hook beat that also states the title on screen over the moving visual
-  is the one thing the 84K Short does that ours doesn't yet.
-
-## 11. Update pass (Claude, when Chris says go)
-
-After the hand-off pack, ask once: "Ready for the update pass?" On yes:
-
-1. **Mine the session.** List every change Chris asked for and every
-   workaround or wish an agent reported. For each, decide: rule
-   (`agents/style.md`, `agents/animation-rules.md`, `agents/beat-brief.md`,
-   this runbook), token (`videos/_shared/style.py`), part (`agents/parts.md`
-   and code), tool (`tools/`), or nothing. Make the edits in their one home.
-2. **Janitor.** `agents/parts.md` use counts, promote at two; finished plans
-   to `agents/archive/`; retired scene files to `videos/_graveyard/`;
-   `_preview.py` files deleted; `AGENTS.md` and `agents/` re-read for
-   anything stale or contradictory (one home per topic, no duplicates).
-3. **Changelog.** One line per change in `agents/changelog.md`, with the
-   video that forced it.
-4. **Commit** the system changes separately from the video, and tell Chris
-   what changed in three lines.

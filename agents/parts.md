@@ -38,6 +38,8 @@ add a test under `tests/`, update this table. Retired parts go to
 
 ## Local, candidates for promotion (second use promotes)
 
+Paths in this table are relative to `videos/`.
+
 | Part | Where | What | Used by | Uses |
 |---|---|---|---|---|
 | `ProbBars`, `text_card`, `chip_text`, `mono` | `008-jev-decision-models/_parts.py` | probability bars that refill in place, mono card, option chip | 008 | 1 |

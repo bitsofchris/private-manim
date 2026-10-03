@@ -26,20 +26,19 @@ the next one. Evidence in `agents/research/2026-10-03-shorts-craft.md`.
 ## Target shape
 
 ```
-ARCHITECTURE.md                 map of everything below
-agents/runbook.md          process (+ step 0 hook rule, step 11 update pass)
-agents/research/                  digests with sources
+AGENTS.md                       entry point: map, rules, session flow, janitor (done)
+agents/runbook.md               process, steps 0–11 (done)
+agents/beat-brief.md            the beat contract (done)
+agents/style.md                 want/use tables + layout budgets + do/don't frames
+agents/animation-rules.md       + morph over cut, caption hold, motion roles
+agents/parts.md                 inventory, promote at two uses (done)
+agents/changelog.md             what changed and why (done)
 videos/_shared/
   style.py                      tokens (adds: easings per role, opacity hierarchy, caption cps)
-  tokens.yaml                   same tokens as data, generated from style.py, for agents and lint
-  STYLE.md                      principles (5 lines) · want/use tables · layout budgets · do/don't frames
-  ANIMATION_RULES.md            + morph over cut, caption hold, motion roles
-  base.py                       + check_layout(), on-screen title for frame 0
-  parts/                        one module per component, each with a test and a reference frame
+  base.py                       + named grid cells, check_layout(), frame-0 question text
+  parts/                        promoted components, each with a test and a reference frame
   gallery.py                    renders every part to one contact sheet
-  graveyard/                    retired parts (3b1b's once_useful_constructs)
-  CHANGELOG.md                  what changed in the system and why (which video forced it)
-  CANDIDATES.md                 one-off helpers seen in videos, with a use count; promote at 2
+videos/_graveyard/              retired scenes (done)
 tools/lint_short.py             runs check_layout on a scene's last frame without a full render
 ```
 
@@ -84,7 +83,7 @@ tools/lint_short.py             runs check_layout on a scene's last frame withou
    process, symbol sense, generalize) and the hook rule (frame 0 = the
    finished visual moving + the question on screen; question spoken in
    the first second; last line a takeaway, no outro).
-10. `ARCHITECTURE.md` and a trimmed `CLAUDE.md` that points at it.
+10. Entry point: done as `AGENTS.md` with `CLAUDE.md` pointing at it.
 
 ## Done 2026-10-03 (the entry-point pass)
 
@@ -118,3 +117,19 @@ then 8 so the next video runs the loop, then the rest.
   later, not now.
 - A YAML-first design system: `style.py` stays the source, YAML is a
   generated mirror.
+
+## Backlog carried over from the runbook (2026-10-03)
+
+- **Frame-align `hold_until`.** Every beat renders one frame short, so a
+  7-beat Short loses ~0.2 s under the VO tail. Round the final wait up, or
+  have `assemble.py` pad each clip to its `end` with `tpad=stop_mode=clone`.
+- **Word-level timestamps.** `whisper-cpp` from Homebrew, then
+  `tools/word_timings.py` feeding captions (phrase boundaries) and
+  `tighten_vo.py` (cuts land on words). Alternatives: `mlx-whisper`, WhisperX.
+- **Different word = different label.** `Transform` between two `Text`s
+  morphs glyphs into soup; fade-swap labels whose meaning changes. Add to
+  animation rule 8.
+- Install Inter (`brew install --cask font-inter`); Pango is falling back.
+- Consider `S.BEAT` = 0.9 s for Shorts (0.6 s reads as a flicker at phone size).
+- HyperFrames as a second renderer for character and abstract beats: see
+  `prototypes/hyperframes/README.md`; waiting on Chris's go.
