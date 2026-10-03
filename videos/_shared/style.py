@@ -92,6 +92,9 @@ SHORT_SAFE_LEFT = 0.06   # ~65 px gutter; safe-zone guides put 60 px on the left
 #   caption 1.8 -> capital letters 104 px, full line (with descenders) 135 px
 #   label   1.3 -> capital letters  75 px, full line  98 px (the floor)
 SHORT_CAPTION_SCALE = 1.3   # ~72 px caps (top of the 48-70 px guidance); 3-word captions fit one line
+SHORT_CAPTION_WEIGHT = "BOLD"   # captions are bold; diagram labels are MEDIUM, so the two never read alike
+CAPTION_PILL_OPACITY = 0.85     # dark rounded pill behind burned-in captions, over any frame
+CAPTION_PILL_PAD = 0.22         # pill padding around the caption text, scene units
 SHORT_LABEL_SCALE = 1.3     # labels next to the thing they name
 SHORT_CODE_FONT_SIZE = 30   # code_block() in a short: ~27 monospace columns fit the safe width
 DOT_SHORT = 0.22            # data dot radius in a short (~50 px across)

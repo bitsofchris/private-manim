@@ -1,8 +1,24 @@
-{"beats": [
- {"clip": "media/videos/01_hook/1920p30/Hook.mp4",         "end": 3.27},
- {"clip": "media/videos/02_what/1920p30/What.mp4",         "end": 6.87},
- {"clip": "media/videos/03_onepass/1920p30/OnePass.mp4",   "end": 13.11},
- {"clip": "media/videos/04_agents/1920p30/Agents.mp4",     "end": 10.53},
- {"clip": "media/videos/05_head/1920p30/Head.mp4",         "end": 13.69},
- {"clip": "media/videos/06_labels/1920p30/Labels.mp4",     "end": 7.682}
-]}
+{
+ "beats": [
+  {
+   "clip": "media/videos/01_hook/1920p30/Hook.mp4",
+   "end": 10.14
+  },
+  {
+   "clip": "media/videos/03_onepass/1920p30/OnePass.mp4",
+   "end": 13.11
+  },
+  {
+   "clip": "media/videos/04_agents/1920p30/Agents.mp4",
+   "end": 10.53
+  },
+  {
+   "clip": "media/videos/05_head/1920p30/Head.mp4",
+   "end": 13.69
+  },
+  {
+   "clip": "media/videos/06_labels/1920p30/Labels.mp4",
+   "end": 7.682
+  }
+ ]
+}

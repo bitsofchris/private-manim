@@ -137,8 +137,7 @@ each 0.4 s pause; times from `transcript_final.txt`.
 
 | # | Beat | Start | Length | Scene | VO |
 |---|------|------:|-------:|-------|----|
-| 1 | Hook | 0.00 | 3.27 | `01_hook.py` `Hook` | What is Jev and why is everyone so excited about it? |
-| 2 | What it is | 3.27 | 6.87 | `02_what.py` `What` | Jev is a decision model. You give it some input and a fixed set of choices, and it gives you back a probability for each choice. |
+| 1+2 | Hook + what it is | 0.00 | 10.14 | `01_hook.py` `Hook` | What is Jev and why is everyone so excited about it? Jev is a decision model. You give it some input and a fixed set of choices, and it gives you back a probability for each choice. |
 | 3 | One pass | 10.14 | 13.11 | `03_onepass.py` `OnePass` | This is exciting 'cause this is much more efficient than what an LLM does. An LLM decides by generating token by token, and every token is another pass through the whole model. Jev scores all the choices in one single pass, so it's fast and cheap. |
 | 4 | Agents | 23.25 | 10.53 | `04_agents.py` `Agents` | Now that matters because agents make a lot of decisions. Which tool should I use? Is this action allowed? Am I done yet? Each one is a choice from a fixed set of options, and that's what a classifier does. |
 | 5 | Decision head | 33.78 | 13.69 | `05_head.py` `Head` | Jev is one company's version, a specific implementation of this decision model as a classifier. But the bigger idea is that we've gotten really good at building rich representations with language models, and a decision model is just a classifier on top of them. Anyone can train one. |
@@ -149,3 +148,10 @@ Beat 6 visual (revised for the recorded ending): beat 2's bars return; on
 it lands 50/50 (the fair-coin test), both fade; on "data like your own" a
 small cloud of teal data dots appears under the bars; on "your own labels"
 a magenta label tag stamps onto each dot. Last frame still.
+
+Beats 1 and 2 merged (2026-10-03): the word-cloud hook and the stacked
+input/question/box/bars layout both read as clutter. The opener is now the
+machine itself from frame 0: a magenta Jev box, inputs dropping in, bars
+refilling under the question; "decision model" joins Jev inside the box;
+one input stops above it, the three chips line up, the bars fill for good.
+`_old_02_what.py` is the retired beat, kept for reference, unused.

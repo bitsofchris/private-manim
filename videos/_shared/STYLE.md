@@ -29,7 +29,7 @@ Subclass `BocShortScene` (1080x1920 @ 30 fps, frame 9 x 16 units, 1 unit = 120 p
 |---|---|---|
 | Where text / the hero may go | `self.safe` | YouTube UI covers top 12%, bottom 20%, right 12%; 4% left gutter |
 | Where the visual goes | `self.stage` | upper two thirds of `safe`; `.move_to(self.stage)`, `scale_to_fit_width(self.stage.width)` |
-| Caption | `self.show_caption("2-4 words")` | lower third of `safe` (`self.band`), `S.SHORT_CAPTION_SCALE`; too wide -> two lines |
+| Caption | `self.show_caption("2-4 words")` | lower third of `safe` (`self.band`), `S.SHORT_CAPTION_SCALE`, bold on a dark pill (`S.CAPTION_PILL_*`) so it never reads as a diagram label; too wide -> two lines |
 | Share the band with a scene element | element at the band top, `assemble.py --captions-anchor bottom` | burned captions sit just above the safe bottom (007 code cards) |
 | Label next to a thing | `Text(...).scale(S.SHORT_LABEL_SCALE)` | the floor: ~98 px line height |
 | Data dot | `data_dot(p, radius=S.DOT_SHORT)` | ~50 px across |

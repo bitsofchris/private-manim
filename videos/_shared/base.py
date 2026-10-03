@@ -10,6 +10,7 @@ from manim import (
     FadeOut,
     Line,
     Rectangle,
+    RoundedRectangle,
     Scene,
     Text,
     ThreeDScene,
@@ -21,8 +22,8 @@ from manim import (
 from videos._shared import style as S
 
 
-def _caption_text(text: str, scale: float = S.CAPTION_SCALE) -> Text:
-    t = Text(text, font=S.FONT, weight="MEDIUM").scale(scale)
+def _caption_text(text: str, scale: float = S.CAPTION_SCALE, weight: str = "MEDIUM") -> Text:
+    t = Text(text, font=S.FONT, weight=weight).scale(scale)
     t.set_color(S.FG)
     return t
 
@@ -167,14 +168,16 @@ def _rect(b: SafeBounds) -> Rectangle:
 CAPTION_BOTTOM_MARGIN = 0.25   # scene units above the safe bottom when anchored "bottom"
 
 
-def short_caption(text: str, anchor: str = "center") -> VGroup:
+def short_caption(text: str, anchor: str = "center", pill: bool = True) -> VGroup:
     """Caption mobject for a Short, already placed in the caption band.
 
-    2 to 4 words. Too wide for the safe area -> two balanced lines; still too
-    wide (one long word) -> shrinks to fit. A BG_DEEP stroke behind the
-    glyphs keeps it legible over busy frames. Shared by BocShortScene.caption
-    and tools/assemble.py (burned-in VO captions), so both land in the same
-    place at the same size.
+    2 to 4 words, bold (diagram labels are medium, so captions never read as
+    part of the diagram). Too wide for the safe area -> two balanced lines;
+    still too wide (one long word) -> shrinks to fit. A dark rounded pill
+    (`pill=True`, the default) sits behind the text so it is legible over
+    any frame; `.pill` and `.text` name the parts. Shared by
+    BocShortScene.caption and tools/assemble.py (burned-in VO captions), so
+    both land in the same place at the same size.
 
     anchor="center" (default) centres it in the band. anchor="bottom" sits it
     just above the safe bottom, leaving the top of the band free for a scene
@@ -183,18 +186,30 @@ def short_caption(text: str, anchor: str = "center") -> VGroup:
     if anchor not in ("center", "bottom"):
         raise ValueError(f"anchor must be center or bottom, not {anchor!r}")
     band = caption_band(safe_bounds())
-    t = VGroup(_caption_text(text, scale=S.SHORT_CAPTION_SCALE))
-    if t.width > band.width:
+    w = S.SHORT_CAPTION_WEIGHT
+    t = VGroup(_caption_text(text, scale=S.SHORT_CAPTION_SCALE, weight=w))
+    if t.width > band.width - 2 * S.CAPTION_PILL_PAD:
         t = VGroup(*[
-            _caption_text(line, scale=S.SHORT_CAPTION_SCALE) for line in split_caption(text)
+            _caption_text(line, scale=S.SHORT_CAPTION_SCALE, weight=w) for line in split_caption(text)
         ]).arrange(DOWN, buff=0.25)
-    if t.width > band.width:
-        t.scale_to_fit_width(band.width)
+    if t.width > band.width - 2 * S.CAPTION_PILL_PAD:
+        t.scale_to_fit_width(band.width - 2 * S.CAPTION_PILL_PAD)
     t.set_stroke(S.BG_DEEP, width=10, background=True)
-    t.move_to([*band.center, 0])
+    g = VGroup()
+    if pill:
+        box = RoundedRectangle(
+            corner_radius=0.3, width=t.width + 2 * S.CAPTION_PILL_PAD,
+            height=t.height + 2 * S.CAPTION_PILL_PAD, fill_color=S.BG_DEEP,
+            fill_opacity=S.CAPTION_PILL_OPACITY, stroke_width=0,
+        ).move_to(t)
+        g.add(box)
+        g.pill = box
+    g.add(t)
+    g.text = t
+    g.move_to([*band.center, 0])
     if anchor == "bottom":
-        t.align_to([0, band.bottom + CAPTION_BOTTOM_MARGIN, 0], DOWN)
-    return t
+        g.align_to([0, band.bottom + CAPTION_BOTTOM_MARGIN, 0], DOWN)
+    return g
 
 
 class BocShortScene(BocScene):

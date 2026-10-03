@@ -86,6 +86,16 @@ class CaptionAnchor(unittest.TestCase):
         self.assertAlmostEqual(t.get_bottom()[1], band.bottom + CAPTION_BOTTOM_MARGIN, places=3)
         self.assertLess(t.get_top()[1], band.center[1])
 
+    def test_pill_encloses_the_text_and_stays_in_the_band(self):
+        band = caption_band(safe_bounds())
+        t = short_caption("lots of parameters")
+        self.assertGreater(t.pill.width, t.text.width)
+        self.assertGreater(t.pill.height, t.text.height)
+        self.assertLessEqual(t.pill.width, band.width + 1e-6)
+
+    def test_pill_can_be_turned_off(self):
+        self.assertFalse(hasattr(short_caption("x", pill=False), "pill"))
+
     def test_rejects_unknown_anchor(self):
         with self.assertRaises(ValueError):
             short_caption("x", anchor="top")

@@ -181,7 +181,10 @@ tools/assemble.py beats.json --vo vo_final.wav --captions captions.json \
 
 Captions are rasterized by Manim (same font, size and band as in-scene
 captions) and overlaid with ffmpeg, because Homebrew ffmpeg lacks libass
-and drawtext. One caption source per Short: burned from the VO, never
+and drawtext. Captions are bold on a dark rounded pill
+(`short_caption(pill=True)`, the default since 008): diagram labels are
+medium weight with no pill, so the two kinds of text never collide even
+when a caption sits under white diagram text. One caption source per Short: burned from the VO, never
 also drawn in scenes.
 
 Read the generated `captions.json` once: Whisper writes "NX" for N× and

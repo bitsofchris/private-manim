@@ -1,14 +1,17 @@
-"""Beat 1 (3.27 s): the word everyone is talking about, and the noise around it.
+"""Beats 1+2 (10.14 s): what Jev is, shown as the machine itself from frame 0.
 
-VO (0.00-3.27 s): "What is Jev and why is everyone so excited about it?"
-Frame 0 is "Jev" big in the centre of the stage with six feed-style chips
-already drifting in from the stage edges. They drift at a constant rate into
-a loose ring around the word and stop on "why"; on "excited" the word pulses
-once. No magenta hero in this beat. No scene captions (VO word captions are
-burned in over self.band later).
+VO (0-10.14 s): "What is Jev and why is everyone so excited about it? Jev is
+a decision model. You give it some input and a fixed set of choices, and it
+gives you back a probability for each choice."
+Frame 0: a magenta "Jev" box mid-stage (the hero), empty bars under it, and
+an input card already dropping into the box; the bars refill with each
+input. Two cycles run under the question. On "decision model" the box
+widens and the words join "Jev" inside it. "some input" stops a card above the box; "fixed set of choices"
+lines three chips up between the card and the box; "a probability for each
+choice" fills the bars one last time. No scene captions.
 
 Render:
-    cd videos/008-jev-decision-models && uv run --no-sync manim -qh 01_hook.py Hook
+    cd videos/008-jev-decision-models && uv run --no-sync manim -qh --disable_caching 01_hook.py Hook
     # -> media/videos/01_hook/1920p30/Hook.mp4
 """
 from __future__ import annotations
@@ -19,48 +22,89 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root for vi
 from manim import *
 from videos._shared import style as S
 from videos._shared.base import BocShortScene
-from videos._shared.transformer import label
-from _parts import chip_text
+from videos._shared.transformer import label, EDGE_WIDTH
+from _parts import ProbBars, chip_text
 
-BEAT_SECONDS = 3.27   # exact VO window of this beat
-T_WHY = 1.0           # VO: "why" (0.95-1.10); the drift is one S.HOLD from frame 0, so it settles at 1.2
-T_EXCITED = 1.9       # VO: "excited" (1.90-2.30)
-JEV_SCALE = 2.5       # the word, relative to a normal label
-DRIFT = 2.2           # how far outside its ring slot each chip starts
+BEAT_SECONDS = 10.14  # exact VO window (beats 1 and 2 merged)
+T_DECISION = 3.87     # VO: "decision" (model)
+T_INPUT = 5.32        # VO: "input"
+T_CHOICES = 6.02      # VO: "choices"
+T_PROB = 7.37         # VO: "probability"; the final fill lands on "each choice"
 
-# Ring slots: (text, y relative to the stage centre, which stage edge the chip
-# hugs, drift direction it comes from). Zig-zag so the wide chips clear each
-# other and the word; every chip ends inside the stage.
-RING = [
-    ("agents",         +3.05, RIGHT, UP + RIGHT),
-    ("System One",     +2.50, LEFT,  UP + LEFT),
-    ("100x faster?",   +1.40, RIGHT, RIGHT),
-    ("calibrated?",    -1.35, LEFT,  LEFT),
-    ("Jev vs LLMs",    -2.30, RIGHT, DOWN + RIGHT),
-    ("decision model", -3.13, LEFT,  DOWN + LEFT),
-]
+CHOICES = ["yes", "no", "later"]
+FINAL = [0.91, 0.06, 0.03]
+CYCLE_INPUTS = ["refund request", "lunch menu"]   # what drops in under the question
+FINAL_INPUT = "server is down"
+JEV_SCALE = 1.6       # the box label: bigger than a label, it names the machine
+BOX_PAD = 0.3
+BARS_SCALE = 0.9      # bars shrink a touch so card + chips + box + bars fit the stage
+GAP = 0.35
+
+
+def input_card(text: str) -> VGroup:
+    """One line of input in a panel, at full label size (readable, not JSON)."""
+    t = label(text, S.FG)
+    box = RoundedRectangle(corner_radius=0.2, width=t.width + 2 * BOX_PAD, height=t.height + 2 * BOX_PAD,
+                           fill_color=S.BG_PANEL, fill_opacity=1, stroke_color=S.DATA,
+                           stroke_width=EDGE_WIDTH)
+    return VGroup(box, t.move_to(box))
 
 
 class Hook(BocShortScene):
     def construct(self):
-        cy = self.stage.get_center()[1]
-        jev = label("Jev", S.FG).scale(JEV_SCALE).move_to(self.stage)
-        self.add(jev)
+        rng = np.random.default_rng(S.SEED)
+        # The machine: Jev box (hero, magenta) over the bars.
+        jev = label("Jev", S.FG).scale(JEV_SCALE)
+        box = RoundedRectangle(corner_radius=0.25, width=jev.width + 2 * BOX_PAD * 1.5,
+                               height=jev.height + 2 * BOX_PAD, fill_color=S.BG_PANEL,
+                               fill_opacity=1, stroke_color=S.STRUCTURE, stroke_width=S.STROKE_STRUCTURE)
+        machine = VGroup(box, jev.move_to(box))
+        bars = ProbBars(CHOICES, width=self.stage.width).scale(BARS_SCALE)
+        bars.max_width *= BARS_SCALE
+        # Layout: card slot, chip row, box, bars, top to bottom, inside the stage.
+        card_slot = Rectangle(width=1, height=input_card("x").height, stroke_opacity=0, fill_opacity=0)
+        chip_row = VGroup(*[chip_text(c) for c in CHOICES]).arrange(RIGHT, buff=0.25)
+        VGroup(card_slot, chip_row, machine, bars).arrange(DOWN, buff=GAP).move_to(self.stage)
+        chip_row.set_opacity(0)
+        self.add(machine, bars)   # frame 0: the machine and empty bars
 
-        chips, slides = VGroup(), []
-        for text, dy, edge, frm in RING:
-            chip = chip_text(text)
-            chip.move_to([0, cy + dy, 0]).align_to(self.stage, edge)
-            chip.shift(normalize(frm) * DRIFT)   # frame 0: part way in from the edge
-            chips.add(chip)
-            slides.append(chip.animate.shift(-normalize(frm) * DRIFT))
-        self.add(chips)
+        # Under the question: inputs drop into Jev and the bars refill each time.
+        for text in CYCLE_INPUTS:
+            card = input_card(text).move_to(card_slot).shift(UP * 1.5)
+            self.add(card)
+            self.play(card.animate.move_to(card_slot), run_time=S.BEAT)
+            self.play(card.animate.move_to(box).scale(0.2).set_opacity(0),
+                      bars.fill_to(list(rng.dirichlet([1, 1, 1]))), run_time=S.BEAT)
+            self.remove(card)
 
-        # Drift in at a constant rate and stop on "why".
-        self.play(*slides, run_time=S.HOLD, rate_func=linear)
+        # "decision model": the box widens and the words join Jev inside it
+        # (the box keeps its identity; nothing new is added outside it).
+        sub = VGroup(label("decision", S.FG_DIM), label("model", S.FG_DIM)).arrange(
+            DOWN, buff=0.05, aligned_edge=LEFT)   # two lines: one line is ~6 units wide
+        pair = VGroup(jev.copy(), sub).arrange(RIGHT, buff=0.3).move_to(box)
+        wide = box.copy().stretch_to_fit_width(pair.width + 2 * BOX_PAD * 1.5)
+        wide.stretch_to_fit_height(pair.height + 2 * BOX_PAD * 0.7)
+        sub.move_to(pair[1])
+        self.hold_until(T_DECISION)
+        self.play(box.animate.become(wide), jev.animate.move_to(pair[0]), FadeIn(sub),
+                  run_time=S.BEAT)
+        machine.add(sub)
 
-        # "excited": the word pulses once.
-        self.hold_until(T_EXCITED)
-        self.play(jev.animate.scale(1.15), run_time=S.BEAT, rate_func=there_and_back)
+        # "some input": one card drops and stops above the box.
+        card = input_card(FINAL_INPUT).move_to(card_slot).shift(UP * 1.5)
+        self.hold_until(T_INPUT - S.BEAT)
+        self.add(card)
+        self.play(card.animate.move_to(card_slot), run_time=S.BEAT)
+
+        # "fixed set of choices": the three chips line up between card and box.
+        self.hold_until(T_CHOICES)
+        chip_row.set_opacity(1)
+        self.play(FadeIn(chip_row, lag_ratio=0.2), run_time=S.BEAT)
+
+        # "a probability for each choice": the card is consumed where it is
+        # (not dragged through the chips) and the bars fill for good.
+        self.hold_until(T_PROB)
+        self.play(card.animate.scale(0.8).set_opacity(0), run_time=S.BEAT)
+        self.play(bars.fill_to(FINAL), run_time=S.HOLD)
 
         self.hold_until(BEAT_SECONDS)
