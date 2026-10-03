@@ -125,3 +125,27 @@ confidence, 19% accuracy), hence "a probability is not permission" and
    `vo_raw.m4a` into this folder (one pass, ~1 s between beats).
 2. Claude: runbook from step 3 (clean → transcribe → cut list → scenes →
    assemble → contact sheets).
+
+## Final beats (VO recorded 2026-10-02, Descript Studio Sound; loudnorm only)
+
+`vo_raw.m4a` 61.9 s → `vo_final.wav` 55.15 s, no phrase cuts (pauses
+capped 0.25 s / 0.4 s at boundaries; `timemap_final.json`). The take ends
+at "so you need your own labels": the frontier-model-labels-the-hard-cases
+line was not recorded, so beat 6 ends on calibration and your own labels,
+and the labeling recipe goes in the description. Boundaries at the end of
+each 0.4 s pause; times from `transcript_final.txt`.
+
+| # | Beat | Start | Length | Scene | VO |
+|---|------|------:|-------:|-------|----|
+| 1 | Hook | 0.00 | 3.27 | `01_hook.py` `Hook` | What is Jev and why is everyone so excited about it? |
+| 2 | What it is | 3.27 | 6.87 | `02_what.py` `What` | Jev is a decision model. You give it some input and a fixed set of choices, and it gives you back a probability for each choice. |
+| 3 | One pass | 10.14 | 13.11 | `03_onepass.py` `OnePass` | This is exciting 'cause this is much more efficient than what an LLM does. An LLM decides by generating token by token, and every token is another pass through the whole model. Jev scores all the choices in one single pass, so it's fast and cheap. |
+| 4 | Agents | 23.25 | 10.53 | `04_agents.py` `Agents` | Now that matters because agents make a lot of decisions. Which tool should I use? Is this action allowed? Am I done yet? Each one is a choice from a fixed set of options, and that's what a classifier does. |
+| 5 | Decision head | 33.78 | 13.69 | `05_head.py` `Head` | Jev is one company's version, a specific implementation of this decision model as a classifier. But the bigger idea is that we've gotten really good at building rich representations with language models, and a decision model is just a classifier on top of them. Anyone can train one. |
+| 6 | Your own labels | 47.47 | 7.68 | `06_labels.py` `Labels` | The hard part is calibration. The probabilities only mean something on data like your own, so you need your own labels. |
+
+Beat 6 visual (revised for the recorded ending): beat 2's bars return; on
+"calibration" a confidence dial under them reads 0.92 while a coin beside
+it lands 50/50 (the fair-coin test), both fade; on "data like your own" a
+small cloud of teal data dots appears under the bars; on "your own labels"
+a magenta label tag stamps onto each dot. Last frame still.

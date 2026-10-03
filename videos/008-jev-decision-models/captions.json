@@ -1,0 +1,372 @@
+[
+ {
+  "start": 0.35,
+  "end": 0.966,
+  "text": "What is JEV"
+ },
+ {
+  "start": 1.026,
+  "end": 1.59,
+  "text": "and why is"
+ },
+ {
+  "start": 1.65,
+  "end": 2.677,
+  "text": "everyone so excited"
+ },
+ {
+  "start": 2.737,
+  "end": 3.25,
+  "text": "about it?"
+ },
+ {
+  "start": 3.25,
+  "end": 3.79,
+  "text": "JEV is a"
+ },
+ {
+  "start": 3.85,
+  "end": 4.81,
+  "text": "decision model."
+ },
+ {
+  "start": 4.81,
+  "end": 5.388,
+  "text": "You give it"
+ },
+ {
+  "start": 5.448,
+  "end": 6.122,
+  "text": "some input in"
+ },
+ {
+  "start": 6.182,
+  "end": 6.76,
+  "text": "a fixed set"
+ },
+ {
+  "start": 6.82,
+  "end": 7.35,
+  "text": "of choices"
+ },
+ {
+  "start": 7.35,
+  "end": 7.988,
+  "text": "and it gives"
+ },
+ {
+  "start": 8.048,
+  "end": 8.587,
+  "text": "you back a"
+ },
+ {
+  "start": 8.647,
+  "end": 9.432,
+  "text": "probability for"
+ },
+ {
+  "start": 9.492,
+  "end": 10.13,
+  "text": "each choice."
+ },
+ {
+  "start": 10.13,
+  "end": 10.882,
+  "text": "This is exciting"
+ },
+ {
+  "start": 10.942,
+  "end": 11.605,
+  "text": "'cause this is"
+ },
+ {
+  "start": 11.665,
+  "end": 12.55,
+  "text": "much more efficient"
+ },
+ {
+  "start": 12.55,
+  "end": 13.24,
+  "text": "than what an"
+ },
+ {
+  "start": 13.3,
+  "end": 13.83,
+  "text": "LLM does."
+ },
+ {
+  "start": 13.83,
+  "end": 14.771,
+  "text": "An LLM decides"
+ },
+ {
+  "start": 14.831,
+  "end": 16.085,
+  "text": "by generating token"
+ },
+ {
+  "start": 16.145,
+  "end": 16.71,
+  "text": "by token"
+ },
+ {
+  "start": 16.71,
+  "end": 17.403,
+  "text": "and every token"
+ },
+ {
+  "start": 17.463,
+  "end": 18.157,
+  "text": "is another pass"
+ },
+ {
+  "start": 18.217,
+  "end": 18.737,
+  "text": "through the"
+ },
+ {
+  "start": 18.797,
+  "end": 19.36,
+  "text": "whole model."
+ },
+ {
+  "start": 19.36,
+  "end": 20.117,
+  "text": "JEV scores all"
+ },
+ {
+  "start": 20.177,
+  "end": 20.933,
+  "text": "the choices in"
+ },
+ {
+  "start": 20.993,
+  "end": 21.8,
+  "text": "one single pass"
+ },
+ {
+  "start": 21.8,
+  "end": 22.537,
+  "text": "so it's fast"
+ },
+ {
+  "start": 22.597,
+  "end": 23.22,
+  "text": "and cheap."
+ },
+ {
+  "start": 23.22,
+  "end": 24.061,
+  "text": "Now that matters"
+ },
+ {
+  "start": 24.121,
+  "end": 25.111,
+  "text": "because agents make"
+ },
+ {
+  "start": 25.171,
+  "end": 25.467,
+  "text": "a lot"
+ },
+ {
+  "start": 25.527,
+  "end": 26.22,
+  "text": "of decisions."
+ },
+ {
+  "start": 26.22,
+  "end": 26.897,
+  "text": "Which tool should"
+ },
+ {
+  "start": 26.957,
+  "end": 27.22,
+  "text": "I use?"
+ },
+ {
+  "start": 27.22,
+  "end": 27.553,
+  "text": "Is this"
+ },
+ {
+  "start": 27.613,
+  "end": 28.28,
+  "text": "action allowed?"
+ },
+ {
+  "start": 28.28,
+  "end": 28.603,
+  "text": "Am I"
+ },
+ {
+  "start": 28.663,
+  "end": 29.31,
+  "text": "done yet?"
+ },
+ {
+  "start": 29.31,
+  "end": 29.854,
+  "text": "Each one is"
+ },
+ {
+  "start": 29.914,
+  "end": 30.548,
+  "text": "a choice from"
+ },
+ {
+  "start": 30.608,
+  "end": 31.152,
+  "text": "a fixed set"
+ },
+ {
+  "start": 31.212,
+  "end": 31.71,
+  "text": "of options"
+ },
+ {
+  "start": 31.71,
+  "end": 32.62,
+  "text": "and that's what"
+ },
+ {
+  "start": 32.68,
+  "end": 33.76,
+  "text": "a classifier does."
+ },
+ {
+  "start": 33.76,
+  "end": 34.239,
+  "text": "JEV is one"
+ },
+ {
+  "start": 34.299,
+  "end": 35.214,
+  "text": "company's version of"
+ },
+ {
+  "start": 35.274,
+  "end": 36.32,
+  "text": "specific implementation"
+ },
+ {
+  "start": 36.32,
+  "end": 37.135,
+  "text": "of this decision"
+ },
+ {
+  "start": 37.195,
+  "end": 37.627,
+  "text": "model as"
+ },
+ {
+  "start": 37.687,
+  "end": 38.31,
+  "text": "a classifier"
+ },
+ {
+  "start": 38.31,
+  "end": 38.814,
+  "text": "but the bigger"
+ },
+ {
+  "start": 38.874,
+  "end": 39.31,
+  "text": "idea is that"
+ },
+ {
+  "start": 39.37,
+  "end": 39.807,
+  "text": "we've gotten"
+ },
+ {
+  "start": 39.867,
+  "end": 40.27,
+  "text": "really good"
+ },
+ {
+  "start": 40.27,
+  "end": 41.032,
+  "text": "at building rich"
+ },
+ {
+  "start": 41.092,
+  "end": 42.033,
+  "text": "representations with"
+ },
+ {
+  "start": 42.093,
+  "end": 42.81,
+  "text": "language models"
+ },
+ {
+  "start": 42.81,
+  "end": 43.573,
+  "text": "and a decision"
+ },
+ {
+  "start": 43.633,
+  "end": 44.345,
+  "text": "model is just"
+ },
+ {
+  "start": 44.405,
+  "end": 45.219,
+  "text": "a classifier on"
+ },
+ {
+  "start": 45.279,
+  "end": 45.94,
+  "text": "top of them."
+ },
+ {
+  "start": 45.94,
+  "end": 46.67,
+  "text": "Anyone can"
+ },
+ {
+  "start": 46.73,
+  "end": 47.46,
+  "text": "train one."
+ },
+ {
+  "start": 47.46,
+  "end": 48.225,
+  "text": "The hard part"
+ },
+ {
+  "start": 48.285,
+  "end": 49.16,
+  "text": "is calibration."
+ },
+ {
+  "start": 49.16,
+  "end": 50.548,
+  "text": "The probabilities only"
+ },
+ {
+  "start": 50.608,
+  "end": 51.694,
+  "text": "mean something on"
+ },
+ {
+  "start": 51.754,
+  "end": 52.357,
+  "text": "data like"
+ },
+ {
+  "start": 52.417,
+  "end": 52.96,
+  "text": "your own"
+ },
+ {
+  "start": 52.96,
+  "end": 53.543,
+  "text": "so you need"
+ },
+ {
+  "start": 53.603,
+  "end": 54.43,
+  "text": "your own labels."
+ }
+]

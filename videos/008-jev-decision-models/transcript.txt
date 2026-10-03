@@ -1,0 +1,76 @@
+00:02.080-00:05.960
+What is JEV and why is everyone so excited about it?
+
+00:05.960-00:07.590
+JEV is a decision model.
+
+00:07.590-00:10.110
+You give it some input in a fixed set of choices
+
+00:10.110-00:13.020
+and it gives you back a probability for each choice.
+
+00:13.020-00:15.420
+This is exciting 'cause this is much more efficient
+
+00:15.420-00:16.880
+than what an LLM does.
+
+00:16.880-00:19.760
+An LLM decides by generating token by token
+
+00:19.760-00:22.640
+and every token is another pass through the whole model.
+
+00:22.640-00:25.080
+JEV scores all the choices in one single pass
+
+00:25.080-00:28.070
+so it's fast and cheap.
+
+00:28.070-00:31.400
+Now that matters because agents make a lot of decisions.
+
+00:31.400-00:32.400
+Which tool should I use?
+
+00:32.400-00:33.440
+Is this action allowed?
+
+00:33.440-00:34.910
+Am I done yet?
+
+00:34.910-00:37.310
+Each one is a choice from a fixed set of options
+
+00:37.310-00:39.680
+and that's what a classifier does.
+
+00:39.680-00:42.240
+JEV is one company's version of specific implementation
+
+00:42.240-00:44.960
+of this decision model as a classifier
+
+00:44.960-00:46.920
+but the bigger idea is that we've gotten really good
+
+00:46.920-00:49.460
+at building rich representations with language models
+
+00:49.460-00:52.690
+and a decision model is just a classifier on top of them.
+
+00:52.690-00:54.600
+Anyone can train one.
+
+00:54.600-00:56.260
+The hard part is calibration.
+
+00:56.260-01:00.110
+The probabilities only mean something on data like your own
+
+01:00.110-01:01.660
+so you need your own labels.
+
+
