@@ -52,6 +52,7 @@ SKIP_OFFSET = 0.7         # how far right of the column the skip path runs
 BRACKET_BUFF = 0.15       # brace-to-block and label-to-brace spacing
 EDGE_WIDTH = S.STROKE_AXIS * 3
 ARROW_TIP = 0.28
+ARROW_GAP = 0.06          # arrows start/end this far outside a box stroke, so tips and tails show whole
 MIN_GAP = 0.3             # smallest row gap we accept before the layout is too tall
 BOTTOM_BLEED = 0.45       # how far below the stage (into the band) Embed may sit: a
                           # two-line caption's top is ~0.65 below the band top
@@ -148,7 +149,8 @@ def build_block(stage: Mobject, bleed: float = BOTTOM_BLEED) -> BlockDiagram:
         rows[r].move_to([cx, y, 0])
 
     flow = VGroup(*[
-        flow_arrow(rows[a].get_top(), rows[b].get_bottom()) for a, b in zip(ROWS, ROWS[1:])
+        flow_arrow(rows[a].get_top() + UP * ARROW_GAP, rows[b].get_bottom() + DOWN * ARROW_GAP)
+        for a, b in zip(ROWS, ROWS[1:])
     ])
     x_out = cx + width / 2 + SKIP_OFFSET
     skips = VGroup(

@@ -29,7 +29,7 @@ from videos._shared.transformer import label
 
 BAR_H = 0.5              # bar height; label height is ~0.64 so rows pitch at ~0.95
 ROW_BUFF = 0.3
-LABEL_W = 2.4            # column for the choice names
+LABEL_GAP = 0.3          # between the longest choice name and the bars
 VALUE_W = 1.5            # column for the "0.91" text
 VALUE_GAP = 0.2          # between the longest possible bar and the value
 MONO_SCALE = S.SHORT_LABEL_SCALE * 0.6   # Menlo is wide; this is ~the code-card size
@@ -58,11 +58,13 @@ class ProbBars(VGroup):
     each bar from its left edge and updates the value text in place.
     """
 
-    def __init__(self, choices: list[str], width: float, color: str = S.DATA):
+    def __init__(self, choices: list[str], width: float, color: str = S.DATA, values: bool = True):
         super().__init__()
         self.choices = choices
-        self.max_width = width - LABEL_W - VALUE_GAP - VALUE_W
+        self.show_values = values   # False: no "0.91" column, the bar gets the room
         self.names = VGroup(*[label(c, S.FG) for c in choices])
+        label_w = max(n.width for n in self.names) + LABEL_GAP
+        self.max_width = width - label_w - ((VALUE_GAP + VALUE_W) if values else 0)
         self.bars = VGroup(*[
             Rectangle(width=MIN_BAR, height=BAR_H, fill_color=color, fill_opacity=S.OP_DATA,
                       stroke_width=0)
@@ -76,8 +78,10 @@ class ProbBars(VGroup):
                              stroke_opacity=0, fill_opacity=0)
             x0 = slot.get_left()[0]
             name.move_to(slot).align_to(slot, LEFT)
-            bar.move_to(slot).align_to([x0 + LABEL_W, 0, 0], LEFT)
-            value.move_to(slot).align_to([x0 + LABEL_W + self.max_width + VALUE_GAP, 0, 0], LEFT)
+            bar.move_to(slot).align_to([x0 + label_w, 0, 0], LEFT)
+            value.move_to(slot).align_to([x0 + label_w + self.max_width + VALUE_GAP, 0, 0], LEFT)
+            if not values:
+                value.set_opacity(0)
             rows.add(VGroup(slot, name, bar, value))
         rows.arrange(DOWN, buff=ROW_BUFF)
         self.add(rows)
@@ -90,6 +94,8 @@ class ProbBars(VGroup):
             target = bar.copy().stretch_to_fit_width(w).align_to(bar, LEFT)
             new_value = mono(f"{p:.2f}", S.FG if p == max(probs) else S.FG_DIM)
             new_value.move_to(value).align_to(value, LEFT)
+            if not self.show_values:
+                new_value.set_opacity(0)
             anims.append(bar.animate.become(target))
             anims.append(value.animate.become(new_value))
         return AnimationGroup(*anims)

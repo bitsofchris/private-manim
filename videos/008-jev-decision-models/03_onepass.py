@@ -32,7 +32,7 @@ T_JEV = 9.24           # VO: "Jev" (silence ends 9.236); the card rides into the
 T_PASS = 11.36         # VO: "pass" ends; the bars are full here
 T_FAST = 11.7          # VO: "fast"; the latency tag appears
 
-STREAM = ['{"urgent": "yes",', '"reason": "ceo"}']   # the LLM's token stream, 2 lines
+STREAM = ['{"type": "bug",', '"reason": "login"}']   # the LLM's token stream, 2 lines
 N_TOKENS = int(T_JEV // S.QUICK)                      # one glyph per QUICK until "Jev"
 PROBS = [0.91, 0.06, 0.03]
 
@@ -97,8 +97,8 @@ class OnePass(BocShortScene):
         lines.align_to(llm["out"], UL)
         glyphs = [g for line in lines for g in line]
 
-        card = P.text_card(["urgent?", "yes/no/later"]).move_to(jev["out"]).align_to(jev["out"], RIGHT)
-        bars = P.ProbBars(["yes", "no", "later"], width=BARS_W).scale(BARS_SCALE)
+        card = P.text_card(["login broken", "bug/query/spam"]).move_to(jev["out"]).align_to(jev["out"], RIGHT)
+        bars = P.ProbBars(["bug", "query", "spam"], width=BARS_W, values=False).scale(BARS_SCALE)
         bars.move_to(jev["out"]).align_to(jev["out"], RIGHT)
 
         for h in (llm, jev):

@@ -31,7 +31,7 @@ T_CLEAR = 3.70         # pause after "something"; the coin test leaves before "d
 T_DATA = 4.00          # VO: "data" (like your own)
 T_LABELS = 6.20        # VO: "your own labels"; the stamps run through "labels"
 
-CHOICES = ["yes", "no", "later"]
+CHOICES = ["bug", "query", "spam"]
 PROBS = [0.91, 0.06, 0.03]
 READOUT_SCALE = 1.5    # _parts.mono is the code-card size; the hero reads at label size
 COIN_PAD = 0.3

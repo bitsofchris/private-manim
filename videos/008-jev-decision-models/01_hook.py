@@ -31,10 +31,10 @@ T_INPUT = 5.32        # VO: "input"
 T_CHOICES = 6.02      # VO: "choices"
 T_PROB = 7.37         # VO: "probability"; the final fill lands on "each choice"
 
-CHOICES = ["yes", "no", "later"]
+CHOICES = ["bug", "query", "spam"]   # a support ticket, routed
 FINAL = [0.91, 0.06, 0.03]
-CYCLE_INPUTS = ["refund request", "lunch menu"]   # what drops in under the question
-FINAL_INPUT = "server is down"
+CYCLE_INPUTS = ["order status?", "cheap pills!!"]   # tickets that drop in under the question
+FINAL_INPUT = "login is broken"
 JEV_SCALE = 1.6       # the box label: bigger than a label, it names the machine
 BOX_PAD = 0.3
 BARS_SCALE = 0.9      # bars shrink a touch so card + chips + box + bars fit the stage
