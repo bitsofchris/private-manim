@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0b14;
+        --panel: #14142b;
+        --text: #ecebe4;
+        --dim: #8a8fb0;
+        --teal: #2dd4bf;
+        --magenta: #c084fc;
+        --muted: #4a5070;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative; width: 1080px; height: 1920px; background: var(--bg);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+      }
+      #stage { position: absolute; left: 0; top: 0; }
+      svg text { font-family: inherit; font-weight: 800; }
+      .ln { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      /* Caption component: lower third of the Shorts safe area (x 65..950). */
+      .caption {
+        position: absolute; left: 65px; width: 885px; top: 1170px; height: 240px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .caption span {
+        display: inline-block; max-width: 860px; padding: 26px 44px; border-radius: 36px;
+        background: rgba(11, 11, 20, 0.85); color: var(--text);
+        font-size: 76px; font-weight: 800; line-height: 1.12; letter-spacing: -0.02em;
+        text-align: center;
+      }
+      /* Safe-area guides: add ?guides to the URL or set SHOW_GUIDES in the script. */
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1080" data-height="1920">
+      <svg id="stage" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Hand-drawn wobble. Seed is stepped by render(t) for a line "boil". -->
+          <filter id="sketch" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="1" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <clipPath id="screenClip"><rect x="578" y="440" width="354" height="282" /></clipPath>
+        </defs>
+
+        <!-- floor lines bleed to the frame edge (background only) -->
+        <g class="ln" stroke="#4a5070" stroke-width="5" opacity="0.45">
+          <path d="M0 1130H1080M0 1240H1080M0 1400H1080M0 1620H1080M0 1900H1080" />
+        </g>
+
+        <g id="scene" filter="url(#sketch)">
+          <!-- floor, desk, chair -->
+          <g class="ln" stroke="#4a5070" stroke-width="9">
+            <path d="M0 1060H1080" />
+            <path d="M372 800H1080M1010 800V1060M600 740V800M910 740V800" />
+            <path d="M120 900H290M135 900V690M140 900V1060M275 900V1060" />
+          </g>
+
+          <!-- SKILL meter -->
+          <text id="skillLabel" x="88" y="332" font-size="64" fill="#8a8fb0">SKILL</text>
+          <rect id="skillFill" x="96" y="362" width="308" height="34" rx="12" fill="#2dd4bf" />
+          <rect class="ln" x="90" y="356" width="320" height="46" rx="18" stroke="#8a8fb0" stroke-width="7" />
+
+          <!-- year label -->
+          <g id="y83"><text x="755" y="318" font-size="80" text-anchor="middle" fill="#8a8fb0">1983</text></g>
+          <g id="y26"><text id="y26t" x="755" y="318" font-size="80" text-anchor="middle" fill="#c084fc">2026</text></g>
+
+          <!-- machine panel -->
+          <rect x="560" y="345" width="390" height="395" rx="26" fill="#14142b" stroke="#8a8fb0" stroke-width="9" />
+          <g id="p83">
+            <text id="auto" x="755" y="432" font-size="66" text-anchor="middle" fill="#4a5070">AUTO</text>
+            <g class="ln" stroke="#8a8fb0" stroke-width="8">
+              <circle cx="662" cy="560" r="66" /><circle cx="848" cy="560" r="66" />
+              <path id="needle1" d="M662 560L662 505" stroke="#ecebe4" />
+              <path id="needle2" d="M848 560L848 505" stroke="#ecebe4" />
+            </g>
+            <g id="lamps" fill="#8a8fb0">
+              <circle cx="640" cy="680" r="15" /><circle cx="700" cy="680" r="15" /><circle cx="760" cy="680" r="15" />
+              <circle cx="820" cy="680" r="15" /><circle cx="880" cy="680" r="15" />
+            </g>
+          </g>
+          <g id="p26">
+            <g fill="#4a5070"><circle cx="596" cy="382" r="9" /><circle cx="626" cy="382" r="9" /><circle cx="656" cy="382" r="9" /></g>
+            <path class="ln" d="M570 412H940" stroke="#4a5070" stroke-width="6" />
+            <g id="chat" clip-path="url(#screenClip)"><g id="lines"></g></g>
+            <path id="tick" class="ln" d="M-34 4L-8 30L38 -30" stroke="#2dd4bf" stroke-width="16" />
+            <text id="qmark" x="0" y="0" font-size="300" text-anchor="middle" fill="#c084fc"
+                  stroke="#14142b" stroke-width="26" paint-order="stroke">?</text>
+            <g id="turn" font-size="86" text-anchor="middle" fill="#c084fc">
+              <text x="755" y="545">YOUR</text><text x="755" y="640">TURN</text>
+            </g>
+          </g>
+
+          <!-- levers (the human's work) + piston (the automation) -->
+          <g id="rig">
+            <g id="pistonG" class="ln" stroke="#c084fc" stroke-width="13">
+              <path id="housing" d="M560 628H534V682H560" />
+              <path id="piston" d="M560 655H560" /><path id="tie" d="M0 0" />
+            </g>
+            <g class="ln" stroke="#2dd4bf" stroke-width="13">
+              <path id="lever1" d="M0 0" /><path id="lever2" d="M0 0" />
+            </g>
+            <g fill="#2dd4bf"><circle id="knob1" r="17" /><circle id="knob2" r="17" /></g>
+          </g>
+
+          <!-- sight-line -->
+          <path id="gaze" class="ln" d="M0 0" stroke="#c084fc" stroke-width="9" stroke-dasharray="2 24" />
+
+          <!-- the operator -->
+          <g id="fig" class="ln" stroke="#ecebe4" stroke-width="12">
+            <path d="M200 885L358 893L366 1052L410 1054" />
+            <path id="torso" d="M0 0" />
+            <circle id="head" r="60" fill="#0b0b14" />
+            <path id="mouth" d="M0 0" stroke-width="8" />
+          </g>
+          <g fill="#ecebe4"><ellipse id="eye1" rx="8" ry="8" /><ellipse id="eye2" rx="8" ry="8" /></g>
+
+          <!-- the leftover hard part -->
+          <g id="knot"><g id="knotSpin"><path id="knotPath" class="ln" d="M0 0" stroke="#c084fc" stroke-width="8" /></g></g>
+
+          <g class="ln" stroke="#ecebe4" stroke-width="12">
+            <path id="arm1" d="M0 0" /><path id="arm2" d="M0 0" />
+          </g>
+        </g>
+      </svg>
+
+      <!-- Captions: HyperFrames clips, one per beat. -->
+      <div id="caption-1" class="clip caption" data-start="0" data-duration="4.5" data-track-index="1"><span>1983. Automate the easy part.</span></div>
+      <div id="caption-2" class="clip caption" data-start="4.5" data-duration="4.5" data-track-index="1"><span>You keep the hard part.</span></div>
+      <div id="caption-3" class="clip caption" data-start="9" data-duration="4" data-track-index="1"><span>And you watch the machine.</span></div>
+      <div id="caption-4" class="clip caption" data-start="13" data-duration="4" data-track-index="1"><span>Swap “operator” for “AI user.”</span></div>
+      <div id="caption-5" class="clip caption" data-start="17" data-duration="4.5" data-track-index="1"><span>Looks fine. Is it right?</span></div>
+      <div id="caption-6" class="clip caption" data-start="21.5" data-duration="4.5" data-track-index="1"><span>Only watching, skills fade.</span></div>
+      <div id="caption-7" class="clip caption" data-start="26" data-duration="5" data-track-index="1"><span>Your turn. Use it or lose it.</span></div>
+
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+// Ironies of Automation — everything on screen is a pure function of time.
+//
+// Two layers:
+//   1. A paused GSAP timeline (registered on window.__timelines) for simple
+//      tweens: fades, colour swaps, pops, the knot's flight.
+//   2. render(t): procedural drawing (stick-figure IK, levers, dials, chat
+//      stream, line boil). It is driven by a GSAP tween on an object whose `t`
+//      property is a setter, so it re-runs on every seek — no onUpdate
+//      callbacks (which seeks may suppress), no clocks, no Math.random.
+(function () {
+  const DUR = 31;
+  const HOLD_FROM = 29.8; // everything is frozen after this
+  const C = { text: "#ecebe4", dim: "#8a8fb0", teal: "#2dd4bf", magenta: "#c084fc", muted: "#4a5070" };
+  const $ = (id) => document.getElementById(id);
+  const SVGNS = "http://www.w3.org/2000/svg";
+
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+
+  // ---------- helpers ----------
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const ramp = (t, a, b) => { const k = clamp((t - a) / (b - a), 0, 1); return k * k * (3 - 2 * k); };
+  const mix = (p, q, k) => [lerp(p[0], q[0], k), lerp(p[1], q[1], k)];
+  const f = (n) => n.toFixed(1);
+  // deterministic hash noise in [0,1)
+  const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+  // ---------- static geometry built once ----------
+  // knot: a deterministic tangle around (0,0)
+  (function () {
+    let d = "";
+    for (let i = 0; i <= 150; i++) {
+      const a = (i / 150) * Math.PI * 2;
+      const x = 58 * Math.sin(3 * a + 0.4) * Math.cos(5 * a) + 14 * Math.sin(11 * a);
+      const y = 50 * Math.sin(4 * a) * Math.cos(2 * a + 1.1) + 14 * Math.cos(7 * a);
+      d += (i ? "L" : "M") + f(x) + " " + f(y);
+    }
+    $("knotPath").setAttribute("d", d + "Z");
+  })();
+
+  // chat output lines
+  const LINE_T0 = 17.3, LINE_DT = 0.2, LINE_GAP = 40, N_LINES = 48, N_SEED = 3;
+  const lines = [];
+  for (let i = 0; i < N_LINES; i++) {
+    const r = document.createElementNS(SVGNS, "rect");
+    const w = 150 + Math.round(hash(i + 3) * 180);
+    r.setAttribute("x", 594); r.setAttribute("y", 452 + i * LINE_GAP);
+    r.setAttribute("height", 18); r.setAttribute("rx", 9); r.setAttribute("fill", C.dim);
+    $("lines").appendChild(r);
+    lines.push({ el: r, w });
+  }
+
+  // ---------- figure ----------
+  const HIP = [200, 885], TORSO = 195, SHOULDER = 158, HEAD_R = 60, ARM = 176;
+  const LEVERS = [[430, 800], [500, 800]], LEVER_LEN = 150;
+  const KNOT_HOME = [318, 832];
+
+  function leverPhase(t) { // manual pumping, then the piston drives it faster
+    const t1 = 1.9;
+    return t < t1 ? 0.75 * t : 0.75 * t1 + 1.35 * (t - t1);
+  }
+  function ik(s, h, len, el, bendDown) {
+    let dx = h[0] - s[0], dy = h[1] - s[1];
+    let dist = Math.hypot(dx, dy);
+    const max = 2 * len - 1;
+    if (dist > max) { dx *= max / dist; dy *= max / dist; dist = max; h = [s[0] + dx, s[1] + dy]; }
+    const hgt = Math.sqrt(len * len - (dist * dist) / 4);
+    const mx = s[0] + dx / 2, my = s[1] + dy / 2;
+    const nx = -dy / dist, ny = dx / dist; // perpendicular
+    const sgn = (ny > 0) === bendDown ? 1 : -1;
+    const e = [mx + nx * hgt * sgn, my + ny * hgt * sgn];
+    el.setAttribute("d", `M${f(s[0])} ${f(s[1])}L${f(e[0])} ${f(e[1])}L${f(h[0])} ${f(h[1])}`);
+  }
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM); // nothing moves during the final hold
+
+    // line boil: 4 seeds per second
+    $("turb").setAttribute("seed", 1 + (Math.floor(t * 4) % 6));
+
+    // --- levers and piston ---
+    const rigOut = ramp(t, 13.2, 14.6);               // levers sink into desk in 2026
+    const amp = 20 * (1 - rigOut);
+    const ang = (amp * Math.sin(leverPhase(t) * Math.PI * 2) * Math.PI) / 180;
+    const len = LEVER_LEN * (1 - rigOut);
+    const tips = LEVERS.map((p) => [p[0] + Math.sin(ang) * len, p[1] - Math.cos(ang) * len]);
+    LEVERS.forEach((p, i) => {
+      $("lever" + (i + 1)).setAttribute("d", `M${p[0]} ${p[1]}L${f(tips[i][0])} ${f(tips[i][1])}`);
+      $("knob" + (i + 1)).setAttribute("cx", f(tips[i][0]));
+      $("knob" + (i + 1)).setAttribute("cy", f(tips[i][1]));
+    });
+    const reach = ramp(t, 1.3, 1.8);
+    const pEnd = mix([560, 655], tips[1], reach);
+    $("piston").setAttribute("d", `M560 655L${f(pEnd[0])} ${f(pEnd[1])}`);
+    const tieK = ramp(t, 1.7, 1.95);
+    const tEnd = mix(tips[1], tips[0], tieK);
+    $("tie").setAttribute("d", `M${f(tips[1][0])} ${f(tips[1][1])}L${f(tEnd[0])} ${f(tEnd[1])}`);
+
+    // --- 1983 panel: dials and lamps ---
+    [1, 2].forEach((k) => {
+      const cx = k === 1 ? 662 : 848;
+      const a = (Math.sin(t * 2.1 * k + k) * 35 + Math.sin(t * 5.3 + k * 2) * 12) * Math.PI / 180;
+      $("needle" + k).setAttribute("d", `M${cx} 560L${f(cx + Math.sin(a) * 52)} ${f(560 - Math.cos(a) * 52)}`);
+    });
+    Array.from($("lamps").children).forEach((c, i) => {
+      const on = hash(Math.floor(t * 3) * 7 + i * 13) > 0.5;
+      c.setAttribute("fill", on ? C.text : C.muted);
+    });
+
+    // --- 2026 panel: chat stream ---
+    const shown = t < LINE_T0 ? N_SEED : Math.min(N_SEED + (Math.min(t, 26) - LINE_T0) / LINE_DT, N_LINES);
+    lines.forEach((l, i) => {
+      const k = clamp(shown - i, 0, 1);
+      l.el.setAttribute("width", f(l.w * k));
+      l.el.setAttribute("opacity", k > 0 ? 1 : 0);
+    });
+    $("lines").setAttribute("transform", `translate(0 ${f(-Math.max(0, shown - 6.5) * LINE_GAP)})`);
+
+    // --- skill meter ---
+    const skill = lerp(1, 0.06, ramp(t, 21.9, 25.6));
+    $("skillFill").setAttribute("width", f(308 * skill));
+
+    // --- operator pose ---
+    const work = 1 - ramp(t, 1.7, 2.4);               // hands on the levers
+    const fiddle = ramp(t, 5.7, 6.2) * (1 - ramp(t, 17.0, 17.8)); // picking at the knot
+    const slump = ramp(t, 22.0, 25.5) * (1 - ramp(t, 26.1, 26.45));
+    const jolt = ramp(t, 26.1, 26.45);
+    const shake = jolt * (1 - ramp(t, 28.8, HOLD_FROM));
+    let lean = 8 * work + 3 * (1 - work) + 2 * work * Math.sin(leverPhase(t) * Math.PI * 2);
+    lean += 1.2 * Math.sin(t * 1.3) * (1 - work) * (1 - slump) * (1 - jolt); // breathing
+    lean += -15 * slump + 9 * jolt;
+    lean += 4 * ramp(t, 17.7, 17.95) * (1 - ramp(t, 18.0, 18.4));          // the "looks fine" nod
+    const la = (lean * Math.PI) / 180;
+    const dir = [Math.sin(la), -Math.cos(la)];
+    const neck = [HIP[0] + dir[0] * TORSO, HIP[1] + dir[1] * TORSO];
+    const sh = [HIP[0] + dir[0] * SHOULDER, HIP[1] + dir[1] * SHOULDER];
+    const droop = 16 * slump;
+    const head = [neck[0] + dir[0] * HEAD_R + 6 + droop * 0.3, neck[1] + dir[1] * HEAD_R + droop];
+    $("torso").setAttribute("d", `M${HIP[0]} ${HIP[1]}L${f(neck[0])} ${f(neck[1])}`);
+    $("head").setAttribute("cx", f(head[0])); $("head").setAttribute("cy", f(head[1]));
+
+    // eyes: where they look, how open
+    const atKnot = ramp(t, 4.9, 5.4) * (1 - ramp(t, 9.0, 9.5)) + jolt;
+    const atPanel = ramp(t, 9.0, 9.5) * (1 - jolt);
+    const look = [4 + 4 * atPanel - 1 * atKnot, 2 - 5 * atPanel + 9 * atKnot];
+    const open = 8 * (1 - 0.72 * slump) + 3 * jolt;
+    const blink = ((t + 1.5) % 3.1) < 0.12 && jolt < 0.5 ? 0.15 : 1;
+    [["eye1", 10], ["eye2", 38]].forEach(([id, ox]) => {
+      $(id).setAttribute("cx", f(head[0] + ox + look[0]));
+      $(id).setAttribute("cy", f(head[1] - 10 + look[1]));
+      $(id).setAttribute("ry", f(Math.max(1.6, open * blink)));
+      $(id).setAttribute("rx", f(8 + 2 * jolt));
+    });
+    const eye = [head[0] + 50, head[1] - 14];
+    // mouth: + smile, - frown
+    const curve = 9 * work + 2 * (1 - work) - 12 * slump - 9 * jolt - 5 * ramp(t, 4.9, 5.4);
+    const m0 = [head[0] + 12, head[1] + 28], m1 = [head[0] + 44, head[1] + 26];
+    $("mouth").setAttribute("d",
+      `M${f(m0[0])} ${f(m0[1])}Q${f((m0[0] + m1[0]) / 2)} ${f((m0[1] + m1[1]) / 2 + curve)} ${f(m1[0])} ${f(m1[1])}`);
+
+    // sight-line from eye to machine
+    $("gaze").setAttribute("d", `M${f(eye[0] + 22)} ${f(eye[1])}L548 548`);
+    $("gaze").setAttribute("stroke-dashoffset", f(-t * 34));
+
+    // hands
+    const kr = 6 * fiddle;
+    const lap = [
+      [268 + kr * Math.sin(t * 5.1), 838 + kr * Math.cos(t * 4.3)],
+      [372 + kr * Math.sin(t * 4.7 + 2), 842 + kr * Math.cos(t * 5.9 + 1)],
+    ];
+    const hover = [
+      [430 + 7 * shake * Math.sin(t * 31), 600 + 6 * shake * Math.sin(t * 37 + 1)],
+      [490 + 7 * shake * Math.sin(t * 29 + 2), 652 + 6 * shake * Math.sin(t * 41)],
+    ];
+    const drop = ramp(t, 22.0, 24.0) * (1 - jolt);     // hands slide off the knot
+    [0, 1].forEach((i) => {
+      let h = mix(lap[i], tips[i], work);
+      h = mix(h, [lap[i][0] - 14 + 26 * i, lap[i][1] + 34], drop);
+      h = mix(h, hover[i], jolt);
+      ik([sh[0] + 4 * i, sh[1]], h, ARM, $("arm" + (i + 1)), true);
+    });
+    $("knotSpin").setAttribute("transform", `rotate(${f(9 * fiddle * Math.sin(t * 2.3))})`);
+  }
+
+  // ---------- GSAP timeline ----------
+  const tl = gsap.timeline({ paused: true });
+  const driver = { _t: 0, get t() { return this._t; }, set t(v) { this._t = v; render(v); } };
+  tl.fromTo(driver, { t: 0 }, { t: DUR, duration: DUR, ease: "none" }, 0);
+
+  // initial states
+  gsap.set("#p26", { opacity: 0 });
+  gsap.set("#y26", { scaleY: 0, svgOrigin: "755 290" });
+  gsap.set("#y83", { svgOrigin: "755 290" });
+  gsap.set("#gaze", { opacity: 0 });
+  gsap.set("#housing", { opacity: 0 });
+  gsap.set("#piston", { opacity: 0 });
+  gsap.set("#tie", { opacity: 0 });
+  gsap.set("#knot", { x: 580, y: 600, scale: 0, opacity: 0 });
+  gsap.set("#tick", { x: 640, y: 672, scale: 0 });
+  gsap.set("#qmark", { x: 770, y: 690, scale: 0, transformOrigin: "50% 60%" });
+  gsap.set("#turn", { opacity: 0, scale: 0.6, svgOrigin: "755 580" });
+
+  // caption pop-in (visibility itself is the runtime's job via data-start)
+  [0, 4.5, 9, 13, 17, 21.5, 26].forEach((s, i) => {
+    const span = document.querySelectorAll(".caption span")[i];
+    if (s === 0) return; // frame 0 already shows its caption
+    tl.fromTo(span, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power2.out" }, s);
+  });
+
+  // beat 1: AUTO takes the levers (magenta hero: AUTO + piston)
+  tl.to("#auto", { fill: C.magenta, duration: 0.25 }, 1.3);
+  tl.to("#housing", { opacity: 1, duration: 0.2 }, 1.2);
+  tl.to("#piston", { opacity: 1, duration: 0.1 }, 1.3);
+  tl.to("#tie", { opacity: 1, duration: 0.1 }, 1.7);
+  // beat 2: the knot is ejected into the lap (hero: knot); AUTO retires to muted
+  tl.to("#auto", { fill: C.dim, duration: 0.3 }, 4.5);
+  tl.to("#pistonG", { stroke: C.muted, duration: 0.3 }, 4.5);
+  tl.to("#knot", { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 4.6);
+  tl.to("#knot", { x: 318, duration: 0.9, ease: "power1.out" }, 4.75);
+  tl.to("#knot", { y: 832, duration: 0.9, ease: "bounce.out" }, 4.75);
+  // beat 3: knot is theirs now (teal); hero: the sight-line
+  tl.to("#knotPath", { stroke: C.teal, duration: 0.3 }, 9.0);
+  tl.to("#gaze", { opacity: 1, duration: 0.4 }, 9.3);
+  // beat 4: 1983 -> 2026 (hero: the year)
+  tl.to("#gaze", { stroke: C.muted, duration: 0.3 }, 13.0);
+  tl.to("#y83", { scaleY: 0, duration: 0.25, ease: "power2.in" }, 13.1);
+  tl.to("#y26", { scaleY: 1, duration: 0.35, ease: "back.out(2.5)" }, 13.35);
+  tl.to("#p83", { opacity: 0, duration: 0.5 }, 13.3);
+  tl.to("#p26", { opacity: 1, duration: 0.6 }, 13.7);
+  tl.to("#rig", { opacity: 0, duration: 0.4 }, 14.3);
+  // beat 5: looks fine / is it right (hero: ?)
+  tl.to("#y26t", { fill: C.dim, duration: 0.3 }, 17.0);
+  tl.to("#tick", { scale: 1, duration: 0.3, ease: "back.out(3)" }, 17.7);
+  tl.to("#qmark", { scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 19.0);
+  tl.to("#qmark", { rotation: 7, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 3 }, 19.4);
+  // beat 6: skills fade (hero: SKILL label)
+  tl.to("#qmark", { opacity: 0, scale: 0.6, duration: 0.3 }, 21.5);
+  tl.to("#tick", { opacity: 0, duration: 0.3 }, 21.5);
+  tl.to("#skillLabel", { fill: C.magenta, duration: 0.3 }, 21.5);
+  // beat 7: your turn (hero: YOUR TURN)
+  tl.to("#skillLabel", { fill: C.dim, duration: 0.3 }, 26.0);
+  tl.to("#gaze", { opacity: 0, duration: 0.3 }, 26.0);
+  tl.to("#chat", { opacity: 0.22, duration: 0.3 }, 26.0);
+  tl.to("#turn", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.4)" }, 26.15);
+  tl.to("#knot", { scale: 1.22, duration: 0.22, ease: "sine.inOut", yoyo: true, repeat: 3 }, 26.8);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

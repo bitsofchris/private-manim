@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* House palette (mirrors videos/_shared/style.py) */
+      :root {
+        --bg: #0b0b14;
+        --panel: #14142b;
+        --text: #ecebe4;
+        --dim: #8a8fb0;
+        --data: #2dd4bf; /* teal: what you can see / what was kept */
+        --hero: #c084fc; /* magenta: the one idea being pointed at */
+        --muted: #4a5070; /* construction lines */
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative; width: 1080px; height: 1920px; background: var(--bg);
+        font-family: Inter, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+      }
+      #art { position: absolute; left: 0; top: 0; }
+      svg text { font-family: inherit; font-weight: 800; }
+      .ink { fill: none; stroke: var(--text); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+      .con { fill: none; stroke: var(--muted); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .teal { fill: var(--data); }
+      /* Caption: lower third of the Shorts safe area (x 65-950, y 1100-1500) */
+      .caption {
+        position: absolute; left: 65px; width: 885px; top: 1255px; height: 230px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .caption span {
+        display: inline-block; max-width: 860px; padding: 22px 44px; border-radius: 40px;
+        background: rgba(11, 11, 20, 0.85); border: 3px solid var(--panel);
+        color: var(--text); font-size: 74px; font-weight: 800; line-height: 1.12;
+        letter-spacing: -0.01em; text-align: center; text-wrap: balance;
+      }
+      /* Debug safe-area guide: add ?guides to the URL in preview */
+      #guides { position: absolute; left: 65px; top: 230px; width: 885px; height: 1306px;
+        border: 2px dashed #f43f5e; display: none; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="34" data-fps="30"
+         data-width="1080" data-height="1920">
+      <svg id="art" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Hand-drawn wobble; three seeds cycled at 4 fps for a "boil" -->
+          <filter id="w0" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="3" />
+            <feDisplacementMap in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <filter id="w1" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="11" />
+            <feDisplacementMap in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <filter id="w2" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="23" />
+            <feDisplacementMap in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <clipPath id="bucketClip"><path d="M506 560 L894 560 L856 936 L544 936 Z" /></clipPath>
+        </defs>
+
+        <g id="sketch" filter="url(#w0)">
+          <g transform="translate(0 80)">
+          <!-- ground + crate -->
+          <path class="con" d="M70 1050 L945 1050" />
+          <rect x="610" y="944" width="180" height="104" rx="8" fill="#14142b" stroke="#4a5070" stroke-width="6" />
+          <!-- puddles -->
+          <ellipse id="pudA" class="teal" cx="520" cy="1052" rx="46" ry="9" opacity="0.8" />
+          <ellipse id="pudB" class="teal" cx="566" cy="1052" rx="40" ry="8" opacity="0.8" />
+          <ellipse id="pudC" class="teal" cx="842" cy="1052" rx="52" ry="9" opacity="0.8" />
+
+          <!-- B1 lecture screen pouring into the bucket -->
+          <g id="screen">
+            <rect id="stream" class="teal" x="689" y="450" width="22" height="480" rx="11" />
+            <rect x="560" y="270" width="280" height="190" rx="22" fill="#14142b" stroke="#ecebe4" stroke-width="8" />
+            <path d="M672 318 L672 392 L738 355 Z" fill="#ecebe4" />
+            <rect x="590" y="420" width="220" height="14" rx="7" fill="#4a5070" />
+            <rect id="progress" class="teal" x="590" y="420" width="220" height="14" rx="7" />
+          </g>
+
+          <!-- water (clipped to the bucket) -->
+          <g clip-path="url(#bucketClip)">
+            <g id="level"><path id="wave" class="teal" d="" opacity="0.92" /></g>
+          </g>
+          <!-- "felt full" line + real reading -->
+          <path id="feltLine" class="con" d="M520 574 L880 574" stroke-dasharray="22 20" />
+          <text id="score" x="700" y="740" font-size="128" text-anchor="middle" fill="#c084fc">7/20</text>
+          <!-- bucket -->
+          <path class="ink" d="M500 548 L540 940 L860 940 L900 548" />
+          <path class="ink" d="M484 548 L916 548" />
+          <!-- holes -->
+          <g id="holes" fill="#0b0b14" stroke="#ecebe4" stroke-width="5">
+            <circle cx="524" cy="790" r="11" /><circle cx="566" cy="922" r="11" /><circle cx="842" cy="916" r="11" />
+          </g>
+          <g id="drops"></g>
+          <!-- rings: "it shows the leaks" -->
+          <g id="rings" fill="none" stroke="#c084fc" stroke-width="9">
+            <circle class="ring" cx="524" cy="790" r="34" /><circle class="ring" cx="566" cy="922" r="34" /><circle class="ring" cx="842" cy="916" r="34" />
+          </g>
+          <!-- patches -->
+          <g id="patches" stroke="#ecebe4" stroke-width="16" stroke-linecap="round">
+            <g class="patch"><path d="M504 770 L544 810 M544 770 L504 810" /></g>
+            <g class="patch"><path d="M546 902 L586 942 M586 902 L546 942" /></g>
+            <g class="patch"><path d="M822 896 L862 936 M862 896 L822 936" /></g>
+          </g>
+
+          <!-- B3 moon + stars -->
+          <g id="night">
+            <path d="M800 290 A85 85 0 1 0 850 440 A70 70 0 1 1 800 290 Z" fill="#ecebe4" />
+            <g fill="#8a8fb0"><circle cx="600" cy="320" r="7" /><circle cx="680" cy="440" r="6" /><circle cx="900" cy="300" r="6" /><circle cx="560" cy="470" r="5" /></g>
+          </g>
+          <text class="zz" x="150" y="520" font-size="64" fill="#8a8fb0">z</text>
+          <text class="zz" x="105" y="445" font-size="80" fill="#8a8fb0">z</text>
+
+          <!-- B4 quiz sheet -->
+          <g transform="translate(0 -45)"><g id="quiz">
+            <rect x="590" y="262" width="290" height="262" rx="18" fill="#14142b" stroke="#ecebe4" stroke-width="7" />
+            <text x="735" y="336" font-size="60" text-anchor="middle" fill="#ecebe4">QUIZ</text>
+            <g class="qrow"><path class="con" d="M622 372 L650 400 M650 372 L622 400" /><path class="con" d="M680 386 L846 386" /></g>
+            <g class="qrow"><path d="M620 436 L634 452 L656 420" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" /><path class="con" d="M680 436 L846 436" /></g>
+            <g class="qrow"><path class="con" d="M622 470 L650 498 M650 470 L622 498" /><path class="con" d="M680 484 L846 484" /></g>
+          </g></g>
+
+          <!-- B6 review calendar -->
+          <g id="cal">
+            <path class="con" d="M100 478 L920 478" />
+            <g class="chip"><rect x="80" y="290" width="270" height="140" rx="26" fill="#14142b" stroke="#4a5070" stroke-width="7" /><text x="215" y="382" font-size="64" text-anchor="middle" fill="#8a8fb0">day 1</text><circle cx="215" cy="478" r="14" fill="#4a5070" /></g>
+            <g class="chip"><rect x="372" y="290" width="270" height="140" rx="26" fill="#14142b" stroke="#4a5070" stroke-width="7" /><text x="507" y="382" font-size="64" text-anchor="middle" fill="#8a8fb0">day 4</text><circle cx="507" cy="478" r="14" fill="#4a5070" /></g>
+            <g class="chip"><rect x="664" y="290" width="270" height="140" rx="26" fill="#14142b" stroke="#4a5070" stroke-width="7" /><text x="799" y="382" font-size="64" text-anchor="middle" fill="#8a8fb0">week 2</text><circle cx="799" cy="478" r="14" fill="#4a5070" /></g>
+          </g>
+
+          <!-- B2 thought bubble (magenta hero) -->
+          <g id="bubble">
+            <rect x="80" y="262" width="380" height="150" rx="75" fill="#14142b" stroke="#c084fc" stroke-width="8" />
+            <circle cx="300" cy="452" r="18" fill="#14142b" stroke="#c084fc" stroke-width="7" />
+            <circle cx="282" cy="500" r="11" fill="#14142b" stroke="#c084fc" stroke-width="6" />
+            <text x="270" y="362" font-size="72" text-anchor="middle" fill="#c084fc">I get it</text>
+          </g>
+
+          <!-- stick figure; hips at (260,880), shoulders at (260,705) -->
+          <g id="fig">
+            <path class="ink" d="M260 880 L212 1046" /><path class="ink" d="M260 880 L308 1046" />
+            <g id="upper">
+              <path class="ink" d="M260 880 L260 668" />
+              <path id="armL" class="ink" d="M260 705 L260 860" />
+              <path id="armR" class="ink" d="M260 705 L260 860" />
+              <g id="head">
+                <circle cx="260" cy="604" r="64" fill="#0b0b14" stroke="#ecebe4" stroke-width="9" />
+                <g id="eyesOpen" fill="#ecebe4"><circle cx="270" cy="594" r="8" /><circle cx="300" cy="594" r="8" /></g>
+                <g id="eyesShut" class="ink" style="stroke-width:7"><path d="M260 596 L280 596" /><path d="M290 596 L310 596" /></g>
+                <path id="smile" class="ink" style="stroke-width:7" d="M266 624 Q286 646 306 624" />
+                <path id="frown" class="ink" style="stroke-width:7" d="M268 638 Q286 620 304 638" />
+                <path id="flat" class="ink" style="stroke-width:7" d="M270 630 L302 630" />
+              </g>
+            </g>
+          </g>
+          </g>
+        </g>
+      </svg>
+
+      <div id="cap-1" class="clip caption" data-start="0" data-duration="4" data-track-index="1"><span>Finished the lecture.</span></div>
+      <div id="cap-2" class="clip caption" data-start="4" data-duration="4" data-track-index="1"><span>Feels like I know it.</span></div>
+      <div id="cap-3" class="clip caption" data-start="8" data-duration="5" data-track-index="1"><span>Overnight, it leaks.</span></div>
+      <div id="cap-4" class="clip caption" data-start="13" data-duration="4.5" data-track-index="1"><span>Cold quiz: 7 out of 20.</span></div>
+      <div id="cap-5" class="clip caption" data-start="17.5" data-duration="2.5" data-track-index="1"><span>Low score isn't failure.</span></div>
+      <div id="cap-6" class="clip caption" data-start="20" data-duration="3" data-track-index="1"><span>It shows the leaks.</span></div>
+      <div id="cap-7" class="clip caption" data-start="23" data-duration="2.5" data-track-index="1"><span>Review after 1 day.</span></div>
+      <div id="cap-8" class="clip caption" data-start="25.5" data-duration="2.5" data-track-index="1"><span>Again at 4 days.</span></div>
+      <div id="cap-9" class="clip caption" data-start="28" data-duration="2.5" data-track-index="1"><span>Again at 2 weeks.</span></div>
+      <div id="cap-10" class="clip caption" data-start="30.5" data-duration="3.5" data-track-index="1"><span>Boring schedule. It holds.</span></div>
+      <div id="guides"></div>
+    </div>
+    <script>
+// Leaky-bucket quiz short. Everything is a GSAP tween/set on one paused root
+// timeline, so any frame is a pure function of time (no rAF, no randomness).
+(function () {
+  const T = { b1: 0, b2: 4, b3: 8, b4: 13, b5a: 17.5, b5b: 20, b6a: 23, b6b: 25.5, b6c: 28, b7: 30.5, still: 33, end: 34 };
+  const C = { text: "#ecebe4", dim: "#8a8fb0", data: "#2dd4bf", hero: "#c084fc", muted: "#4a5070" };
+  const GROUND = 1050, BOTTOM = 936, BRIM = 566;
+  const levelY = (frac) => BOTTOM - frac * (BOTTOM - BRIM);
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+  if (location.search.includes("guides")) $("#guides").style.display = "block";
+
+  // Wave path: a wide strip with a sine-ish top so it can drift sideways all video.
+  (function buildWave() {
+    const period = 90, amp = 7, x0 = 440, n = 26;
+    let d = `M${x0} 0`;
+    for (let i = 0; i < n; i++) d += ` q${period / 4} ${-amp} ${period / 2} 0 q${period / 4} ${amp} ${period / 2} 0`;
+    d += ` V460 H${x0} Z`;
+    $("#wave").setAttribute("d", d);
+  })();
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+  const shoulder = "260 705", hip = "260 880";
+  const hide = (sel) => gsap.set(sel, { opacity: 0 });
+  const show = (sel, t, d = 0.35) => tl.to(sel, { opacity: 1, duration: d }, t);
+  const gone = (sel, t, d = 0.3) => tl.to(sel, { opacity: 0, duration: d }, t);
+  const pop = (sel, t, origin) => tl.fromTo(sel, { opacity: 0, scale: 0.6, svgOrigin: origin },
+    { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)", svgOrigin: origin }, t);
+  const arms = (l, r, t, d = 0.45) => {
+    tl.to("#armL", { rotation: l, svgOrigin: shoulder, duration: d }, t);
+    tl.to("#armR", { rotation: r, svgOrigin: shoulder, duration: d }, t);
+  };
+  const face = (mouth, eyes, t) => {
+    ["#smile", "#frown", "#flat"].forEach((m) => tl.set(m, { opacity: m === mouth ? 1 : 0 }, t));
+    ["#eyesOpen", "#eyesShut"].forEach((e) => tl.set(e, { opacity: e === eyes ? 1 : 0 }, t));
+  };
+
+  // ---- initial state (frame 0) ----
+  ["#bubble", "#night", ".zz", "#quiz", "#cal", "#score", "#feltLine", ".ring", ".patch", "#pudA", "#pudB", "#pudC",
+    "#frown", "#flat", "#eyesShut"].forEach(hide);
+  gsap.set("#level", { y: levelY(0.3) });
+  gsap.set("#armL", { rotation: 12, svgOrigin: shoulder });
+  gsap.set("#armR", { rotation: -62, svgOrigin: shoulder });
+  gsap.set("#progress", { scaleX: 0.25, svgOrigin: "590 427" });
+
+  // ---- always-on: line boil (4 fps) and water drift, both stop at T.still ----
+  for (let i = 1; i * 0.25 <= T.still; i++) tl.set("#sketch", { attr: { filter: `url(#w${i % 3})` } }, i * 0.25);
+  tl.fromTo("#wave", { x: 0 }, { x: -90 * 7, duration: T.still, ease: "none" }, 0);
+
+  // ---- B1: the lecture pours in ----
+  tl.to("#level", { y: levelY(1), duration: 3.3, ease: "power1.inOut" }, 0);
+  tl.to("#progress", { scaleX: 1, svgOrigin: "590 427", duration: 3.2, ease: "none" }, 0);
+  tl.to("#stream", { scaleY: 0, svgOrigin: "700 930", duration: 0.4, ease: "power1.in" }, 3.2);
+  tl.to("#upper", { rotation: 3, svgOrigin: hip, duration: 0.5, ease: "sine.inOut", repeat: 5, yoyo: true }, 0);
+
+  // ---- B2: feels like I know it ----
+  gone("#screen", T.b2, 0.25);
+  pop("#bubble", T.b2 + 0.1, "290 480");
+  arms(138, -138, T.b2);
+  tl.to("#fig", { y: -34, duration: 0.22, ease: "power2.out", repeat: 5, yoyo: true }, T.b2 + 0.1);
+  tl.to("#upper", { rotation: -3, svgOrigin: hip, duration: 0.6, ease: "sine.inOut", repeat: 3, yoyo: true }, T.b2 + 1.5);
+
+  // ---- B3: overnight it leaks ----
+  gone("#bubble", T.b3, 0.25);
+  show("#night", T.b3, 0.5);
+  tl.fromTo("#night", { y: 60 }, { y: 0, duration: 4.6, ease: "none" }, T.b3);
+  arms(8, -8, T.b3, 0.6);
+  face("#flat", "#eyesShut", T.b3 + 0.3);
+  tl.to("#upper", { rotation: -7, svgOrigin: hip, duration: 0.8 }, T.b3);
+  tl.to("#head", { y: 8, duration: 1.1, ease: "sine.inOut", repeat: 3, yoyo: true }, T.b3 + 0.6);
+  $$(".zz").forEach((z, i) => {
+    tl.fromTo(z, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6 }, T.b3 + 0.8 + i * 0.7);
+    tl.to(z, { y: -18, duration: 1.2, ease: "sine.inOut", repeat: 1, yoyo: true }, T.b3 + 1.6 + i * 0.7);
+  });
+  tl.to("#level", { y: levelY(0.35), duration: 4.0, ease: "power1.inOut" }, T.b3 + 0.5);
+  [["#pudA", "520 1052"], ["#pudB", "566 1052"], ["#pudC", "842 1052"]].forEach(([p, o]) =>
+    tl.fromTo(p, { opacity: 0.8, scaleX: 0.05, svgOrigin: o }, { scaleX: 1, svgOrigin: o, duration: 4, ease: "none" }, T.b3 + 0.9));
+
+  // drips: one element per drop, fully scheduled up front
+  const holes = [
+    { x: 524, y: 790, from: T.b3 + 0.5, to: T.b3 + 4.2, every: 0.42 },   // A: stops when the level passes it
+    { x: 566, y: 922, from: T.b3 + 0.6, to: T.b4, every: 0.36 },
+    { x: 842, y: 916, from: T.b3 + 0.7, to: T.b4, every: 0.4 },
+    { x: 566, y: 922, from: T.b4 + 0.2, to: T.b6b + 0.2, every: 0.9 },   // B: slow drip until patched at 6b
+    { x: 842, y: 916, from: T.b4 + 0.5, to: T.b6c + 0.2, every: 0.9 },   // C: until patched at 6c
+  ];
+  holes.forEach((h) => {
+    for (let t = h.from; t < h.to; t += h.every) {
+      const c = document.createElementNS(SVGNS, "path");
+      c.setAttribute("d", `M${h.x} ${h.y - 4} q10 18 0 26 q-10 -8 0 -26 Z`);
+      c.setAttribute("fill", C.data);
+      c.setAttribute("opacity", "0");
+      $("#drops").appendChild(c);
+      const dist = GROUND - h.y - 22;
+      tl.set(c, { opacity: 1 }, t);
+      tl.fromTo(c, { y: 0 }, { y: dist, duration: 0.22 + dist / 520, ease: "power1.in" }, t);
+      tl.set(c, { opacity: 0 }, t + 0.22 + dist / 520);
+    }
+  });
+
+  // ---- B4: cold quiz, 7 out of 20 ----
+  gone("#night", T.b4, 0.25); gone(".zz", T.b4, 0.2);
+  pop("#quiz", T.b4 + 0.05, "735 393");
+  tl.fromTo(".qrow", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.3 }, T.b4 + 0.5);
+  face("#frown", "#eyesOpen", T.b4);
+  tl.to("#head", { y: 0, duration: 0.2 }, T.b4);
+  tl.to("#upper", { rotation: 13, svgOrigin: hip, duration: 0.7, ease: "power2.inOut" }, T.b4 + 0.2);
+  arms(-10, -22, T.b4 + 0.2, 0.7);
+  show("#feltLine", T.b4 + 0.6, 0.4);
+  pop("#score", T.b4 + 1.5, "700 700");
+  tl.to("#score", { scale: 1.08, svgOrigin: "700 700", duration: 0.5, ease: "sine.inOut", repeat: 3, yoyo: true }, T.b4 + 2.1);
+
+  // ---- B5a: low score isn't failure ----
+  tl.to("#upper", { rotation: 0, svgOrigin: hip, duration: 0.7, ease: "back.out(1.6)" }, T.b5a);
+  arms(10, -10, T.b5a, 0.6);
+  face("#flat", "#eyesOpen", T.b5a + 0.2);
+  tl.to("#head", { rotation: 7, svgOrigin: "260 668", duration: 0.5, ease: "sine.inOut", repeat: 1, yoyo: true }, T.b5a + 0.9);
+
+  // ---- B5b: it shows the leaks ----
+  tl.to("#score", { fill: C.text, duration: 0.3 }, T.b5b);
+  tl.fromTo(".ring", { opacity: 0, scale: 2.2, transformOrigin: "50% 50%" },
+    { opacity: 1, scale: 1, duration: 0.45, stagger: 0.3, transformOrigin: "50% 50%" }, T.b5b + 0.1);
+  tl.to(".ring", { scale: 1.25, transformOrigin: "50% 50%", duration: 0.4, ease: "sine.inOut", repeat: 3, yoyo: true }, T.b5b + 1.2);
+  arms(10, -58, T.b5b + 0.1);
+  face("#smile", "#eyesOpen", T.b5b + 0.4);
+
+  // ---- B6: day 1 / day 4 / week 2 ----
+  gone("#quiz", T.b6a, 0.25); gone("#score", T.b6a, 0.25); gone("#feltLine", T.b6a, 0.25); gone(".ring", T.b6a, 0.25);
+  show("#cal", T.b6a, 0.3);
+  const chips = $$(".chip"), patches = $$(".patch");
+  const centers = ["524 790", "566 922", "842 916"], chipC = ["215 360", "507 360", "799 360"];
+  const lit = (chip, color, t) => {
+    tl.to(chip.querySelector("rect"), { stroke: color, duration: 0.25 }, t);
+    tl.to(chip.querySelector("text"), { fill: color, duration: 0.25 }, t);
+    tl.to(chip.querySelector("circle"), { fill: color, duration: 0.25 }, t);
+  };
+  [[T.b6a, 0.55], [T.b6b, 0.72], [T.b6c, 0.85]].forEach(([t, frac], i) => {
+    if (i > 0) lit(chips[i - 1], C.data, t);
+    lit(chips[i], C.hero, t + 0.05);
+    tl.fromTo(chips[i], { scale: 1, svgOrigin: chipC[i] }, { scale: 1.1, svgOrigin: chipC[i], duration: 0.22, repeat: 1, yoyo: true }, t + 0.05);
+    pop(patches[i], t + 0.35, centers[i]);
+    tl.to("#level", { y: levelY(frac), duration: 1.3, ease: "power1.inOut" }, t + 0.6);
+    arms(10, -120, t + 0.1, 0.25); arms(10, -58, t + 0.6, 0.4);
+  });
+
+  // ---- B7: boring schedule, it holds ----
+  lit(chips[2], C.data, T.b7);
+  arms(138, -138, T.b7 + 0.1);
+  tl.to("#fig", { y: -26, duration: 0.22, repeat: 3, yoyo: true }, T.b7 + 0.2);
+  tl.to("#upper", { rotation: 3, svgOrigin: hip, duration: 0.45, ease: "sine.inOut", repeat: 1, yoyo: true }, T.b7 + 1.3);
+
+  // captions: clip visibility is the runtime's job (data-start); we add a small pop
+  $$(".caption").forEach((c) => {
+    const t = parseFloat(c.dataset.start);
+    if (t === 0) return; // frame 0 shows the first caption at full size
+    tl.fromTo(c.querySelector("span"), { scale: 0.9, y: 14 }, { scale: 1, y: 0, duration: 0.25, ease: "back.out(2)" }, t);
+  });
+
+  tl.set({}, {}, T.end); // pad the timeline to the full duration
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+    </script>
+  </body>
+</html>
