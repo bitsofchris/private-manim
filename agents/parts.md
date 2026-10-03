@@ -6,7 +6,7 @@ to one video, with where it lives and which videos used it. Read before
 storyboarding a beat so the visual brief says "reuse X" instead of
 describing X from scratch.
 **When to use:** storyboarding (step 1), briefing beat agents (step 6),
-the retro (step 11, update the use counts).
+the update pass (step 11, update the use counts).
 **How it works:** shared parts live in `videos/_shared/*.py` and are
 imported by any video. Local parts live in a video's `_parts.py` (or
 `_<thing>.py`) and are imported only by that video's scenes. A local part
