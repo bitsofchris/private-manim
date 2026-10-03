@@ -181,3 +181,10 @@ Per beat: the cue constants with their VO word, the mp4 path and its
 measured duration, the `check` summary (errors / warnings), anything
 changed from the brief and why, and anything you wished existed (a part
 to copy, a rule, a vendored weight). Do not commit.
+
+## More of the toolbox
+
+`agents/research/2026-10-03-hyperframes-ecosystem.md` lists the built-in
+commands worth using (`inspect`, `snapshot`, `compare`, `keyframes`,
+transparent WebM output, variables), the docs worth reading, and what to
+leave alone (skills, publish, cloud, tts).

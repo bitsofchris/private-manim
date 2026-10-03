@@ -5,6 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-03
 
+- HyperFrames ecosystem map in `agents/research/`, linked from the HyperFrames beat brief. (research)
 - HyperFrames is a second engine for Short beats, chosen at storyboard time: `ENGINE:` line at the top of `storyboard.md`; Manim for diagrams, math, code, data; HyperFrames for characters, props, UI mock-ups, abstract ideas (`AGENTS.md` "Which engine", runbook steps 1 and 6). No house template yet. (Chris)
 - `agents/beat-brief-hyperframes.md`: the beat contract for HyperFrames (folder `NN_beat/index.html` + `vendor` symlink, render to `media/hf/NN_beat.mp4`, palette from `style.py`, safe area in px, band empty with VO). `agents/beat-brief.md` now says it is the Manim brief. (Chris)
 - HyperFrames renders offline: GSAP 3.14.2 and Inter 4.1 ExtraBold vendored in `videos/_shared/web/vendor/` with sha256; the prototypes load them through a `vendor` symlink (HyperFrames rejects `../` paths) and a local `@font-face` (no Google Fonts fetch); npm scripts use `--prefer-offline` and turn off telemetry. Verified by rendering both prototypes with outbound network denied. Guard: `tests/test_hyperframes_offline.py`. (Chris)
