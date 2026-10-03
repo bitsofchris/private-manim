@@ -103,7 +103,7 @@ class OnePass(BocShortScene):
         lines.align_to(llm["out"], UL)
         glyphs = [g for line in lines for g in line]
 
-        card = P.text_card(["login broken", "bug/query/spam"]).move_to(jev["out"]).align_to(jev["out"], RIGHT)
+        card = P.text_card(["I can't log in", "bug/query/spam"]).move_to(jev["out"]).align_to(jev["out"], RIGHT)
         bars = P.ProbBars(["bug", "query", "spam"], width=BARS_W, values=False).scale(BARS_SCALE)
         bars.move_to(jev["out"]).align_to(jev["out"], RIGHT)
 
