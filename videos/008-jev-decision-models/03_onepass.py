@@ -32,7 +32,7 @@ T_JEV = 9.24           # VO: "Jev" (silence ends 9.236); the card rides into the
 T_PASS = 11.36         # VO: "pass" ends; the bars are full here
 T_FAST = 11.7          # VO: "fast"; the latency tag appears
 
-STREAM = ['{"type": "bug",', '"reason": "login"}']   # the LLM's token stream, 2 lines
+STREAM = ['{"type": "bug",', '"why": "login"}']   # 30 glyphs, short enough to sit large   # the LLM's token stream, 2 lines
 N_TOKENS = int(T_JEV // S.QUICK)                      # one glyph per QUICK until "Jev"
 PROBS = [0.91, 0.06, 0.03]
 
@@ -40,6 +40,9 @@ NET_W, NET_BOX_H, NET_GAP = 1.6, 0.3, 0.14    # the tiny 3-box network (short en
 COL_GAP = 0.5                                 # net column -> output column
 LABEL_GAP = 0.08                              # half label -> content row
 TAG_H = 1.44                                  # two label lines + air, at the stage floor
+LLM_FRAC = 0.56                               # the LLM half is taller: its token stream needs air
+STREAM_BUFF, STREAM_TOP = 0.3, 0.2            # line spacing and top margin of the token stream
+STREAM_SCALE = 1.25                           # the stream is the LLM half's whole point: bigger than card text
 BARS_W, BARS_SCALE = 4.3, 0.9                 # ProbBars (no values) clears the "passes" counter
 
 
@@ -91,16 +94,18 @@ class OnePass(BocShortScene):
 
     def construct(self):
         top, bottom = self.stage.get_top()[1], self.stage.get_bottom()[1]
-        half_h = (top - bottom - TAG_H) / 2
-        llm = self.half("LLM", top, top - half_h)
-        jev = self.half("decision model", top - half_h, top - 2 * half_h)
+        avail = top - bottom - TAG_H
+        llm_h, jev_h = avail * LLM_FRAC, avail * (1 - LLM_FRAC)
+        llm = self.half("LLM", top, top - llm_h)
+        jev = self.half("decision model", top - llm_h, top - llm_h - jev_h)
         divider = Line(self.stage.get_left(), self.stage.get_right(), color=S.FG_DIM,
                        stroke_width=S.STROKE_AXIS).set_stroke(opacity=S.OP_AXIS)
-        divider.move_to([self.stage.get_center()[0], top - half_h, 0])
+        divider.move_to([self.stage.get_center()[0], top - llm_h, 0])
 
         # The LLM's token stream: two mono lines laid out now, revealed glyph by glyph.
-        lines = VGroup(*[P.mono(l) for l in STREAM]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        lines.align_to(llm["out"], UL)
+        lines = VGroup(*[P.mono(l).scale(STREAM_SCALE) for l in STREAM]).arrange(
+            DOWN, aligned_edge=LEFT, buff=STREAM_BUFF)
+        lines.align_to(llm["out"], UL).shift(DOWN * STREAM_TOP)
         glyphs = [g for line in lines for g in line]
 
         card = P.text_card(["I can't log in", "bug/query/spam"]).move_to(jev["out"]).align_to(jev["out"], RIGHT)
@@ -112,7 +117,7 @@ class OnePass(BocShortScene):
         self.add(divider, card)
 
         # "token by token ... every token is another pass": one glyph, one pass.
-        for i in range(N_TOKENS):
+        for i in range(min(N_TOKENS, len(glyphs))):   # spaces are not glyphs
             self.tick(llm, i + 1)
             self.play(FadeIn(glyphs[i]), pulse(llm["net"], S.HIGHLIGHT), run_time=S.QUICK)
 

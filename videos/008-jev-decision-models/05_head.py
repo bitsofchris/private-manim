@@ -4,9 +4,10 @@ VO (33.78-47.47 s): "Jev is one company's version, a specific implementation of
 this decision model as a classifier. But the bigger idea is that we've gotten
 really good at building rich representations with language models, and a
 decision model is just a classifier on top of them. Anyone can train one."
-Frame 0: the "decision model" box from beat 2 with a Jev badge on its corner;
-the badge pulses on "Jev". On "bigger idea" the box opens into the dim
-transformer stack. On "rich representations" the teal flow pulses. On
+Frame 0: a small tree: a "decision model" box with a connector down to a
+magenta "Jev" chip, its child; Jev pulses on "Jev" and the connector lights
+on "implementation". On "bigger idea" the parent box opens into the dim
+transformer stack and Jev slides up to a badge row. On "rich representations" the teal flow pulses. On
 "classifier" the magenta decision head drops onto the stack in place of the
 LM head (Linear), the teal arrow from the stack feeding it. On "Anyone" two
 more badges join Jev. Hero: the decision head.
@@ -27,6 +28,7 @@ from videos._shared.transformer import build_block, op_box, label
 from _parts import chip_text
 
 BEAT_SECONDS = 13.69   # exact VO window of this beat
+T_IMPL = 2.75          # VO: "implementation"; the parent->child connector lights
 T_BIGGER = 4.95        # VO: "bigger" (idea)
 T_RICH = 7.10          # VO: "rich" (representations)
 T_CLASSIFIER = 10.60   # VO: "classifier"; the head lands on "on top" (~11.2)
@@ -36,24 +38,29 @@ BOX_PAD_W = 0.3        # match transformer.op_box proportions for the beat-2 box
 BOX_PAD_H = 0.08
 STACK_FRAC = 0.75      # the diagram fills the lower 75% of the stage; badges live above
 CHIP_BUFF = 0.15       # three chips just fit the safe width at this spacing
-BOX_NUDGE = 0.3        # box shifts left so the corner badge stays inside safe
-BADGE_OVERLAP = 0.06   # badge sits on the box's top stroke, clear of the label
+TREE_DROP = 0.9        # connector length from the parent box to the Jev child
 MODELS = ["Laya", "CLM-8B"]
 
 
 class Head(BocShortScene):
     def construct(self):
-        # Frame 0: beat 2's "decision model" box with a Jev badge on its top-right corner.
+        # Frame 0: a tree. The category on top, Jev hanging off it as one child.
         ref = label("decision model")
         box = op_box("decision model", ref.width + 2 * BOX_PAD_W, ref.height + 2 * BOX_PAD_H)
-        box.move_to(self.stage).shift(LEFT * BOX_NUDGE)   # room for the badge inside safe
+        box.move_to(self.stage).shift(UP * TREE_DROP)
         jev = chip_text("Jev")
         jev.box.set_stroke(S.STRUCTURE)
-        jev.next_to(box.box.get_corner(UR), UP, buff=-BADGE_OVERLAP)   # perched on the corner
-        self.add(box, jev)
+        jev.next_to(box, DOWN, buff=TREE_DROP)
+        link = Line(box.get_bottom(), jev.get_top(), color=S.FG_DIM, stroke_width=S.STROKE_AXIS * 3)
+        self.add(box, link, jev)
 
-        # "Jev": the badge pulses.
+        # "Jev": the child pulses.
         self.play(jev.animate(rate_func=there_and_back).scale(1.15), run_time=S.BEAT)
+
+        # "specific implementation": the parent -> child link lights up once.
+        self.hold_until(T_IMPL)
+        self.play(link.animate(rate_func=there_and_back).set_stroke(S.STRUCTURE, width=S.STROKE_STRUCTURE),
+                  run_time=S.BEAT)
 
         # Layout for the open box: the stack in the lower part of the stage, badges above.
         stack_rect = Rectangle(width=self.stage.width, height=self.stage.height * STACK_FRAC,
@@ -68,7 +75,8 @@ class Head(BocShortScene):
 
         # "bigger idea": the box opens into the transformer stack; the badge moves aside.
         self.hold_until(T_BIGGER)
-        self.play(ReplacementTransform(box, d), jev.animate.move_to(jev_slot), run_time=S.HOLD)
+        self.play(ReplacementTransform(box, d), jev.animate.move_to(jev_slot), FadeOut(link),
+                  run_time=S.HOLD)
 
         # "rich representations": the teal flow through the stack pulses once.
         self.hold_until(T_RICH)
