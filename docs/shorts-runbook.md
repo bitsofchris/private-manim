@@ -223,8 +223,23 @@ is the hook.
 - Description: line 1 is the one-sentence takeaway (≤ 100 chars). Then
   2–3 lines saying what's shown, in order. Then the post link. Then the
   channel sign-off. Then 3–5 hashtags.
-- Pinned comment: the post link plus one question that invites a reply.
+- No pinned comment (Chris doesn't do them).
 - Per-video copy lives in `videos/NNN-slug/publish.md`.
+
+## 10. Hand-off (Claude, when Chris says "done")
+
+The last message of the session is a paste-ready pack, nothing else:
+
+1. **The file**, as a full absolute path (`media/` is gitignored, so the
+   folder on disk is the only copy). Upload the mp4 natively to Substack
+   Notes; the YouTube link goes in the first reply, not the note.
+2. **Title**, the recommended one, in a code block.
+3. **Description**, in a code block, exactly as in `publish.md`.
+4. **Substack note**, in a code block: the reader's problem in their words,
+   the one takeaway, the length in seconds. No links in the note.
+
+Everything is committed before the pack is sent, and anything the
+description claims is "on screen" is checked against the final cut.
 
 ---
 

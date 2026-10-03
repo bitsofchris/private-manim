@@ -19,13 +19,3 @@ Full write-up: [POST LINK]
 Level up human.
 
 #pytorch #transformers #deeplearning #machinelearning #Shorts
-
-## Pinned comment
-
-Part 1 teaches the diagram grammar this one maps to code: [PART 1 LINK]
-
-Next step: open nanoGPT's model.py and find the two `x = x + ...` lines. Which part of the diagram did you spot first?
-
-## What it helps someone do
-
-Open a real transformer implementation and know what each part is, or sketch one from a paper figure. The four rules (box = module in init, arrow = call order in forward, bypass = x + f(x), N× = for loop) transfer to any model file.

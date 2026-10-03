@@ -20,9 +20,3 @@ Sources: TypeSafe launch post · OpenRouter, Jev vs LLM-as-a-judge · arXiv 2602
 Level up human.
 
 #jev #decisionmodels #llm #aiagents #Shorts
-
-## Pinned comment
-
-Full sources and the labeling recipe in the post: [POST LINK]
-
-What decision in your agent would you hand to a classifier first: tool choice, safety check, or "am I done"?

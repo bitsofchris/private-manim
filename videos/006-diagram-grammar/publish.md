@@ -18,9 +18,3 @@ Full write-up: [POST LINK]
 Level up human.
 
 #transformers #deeplearning #machinelearning #aiarchitecture #Shorts
-
-## Pinned comment
-
-Part 2 (the same diagram, mark by mark, as PyTorch code): [PART 2 LINK]
-
-Which mark tripped you up the first time you read a paper figure: the arrow that goes around a box, or the N×?
