@@ -131,5 +131,9 @@ then 8 so the next video runs the loop, then the rest.
   animation rule 8.
 - Install Inter (`brew install --cask font-inter`); Pango is falling back.
 - Consider `S.BEAT` = 0.9 s for Shorts (0.6 s reads as a flicker at phone size).
-- HyperFrames as a second renderer for character and abstract beats: see
-  `prototypes/hyperframes/README.md`; waiting on Chris's go.
+- ~~HyperFrames as a second renderer for character and abstract beats.~~
+  Done 2026-10-03 on Chris's go: engine chosen at storyboard time
+  (`AGENTS.md` "Which engine"), `agents/beat-brief-hyperframes.md`,
+  renders offline from `videos/_shared/web/vendor/`. Still open by
+  decision: no HyperFrames house template until a real video needs a
+  piece twice (`agents/parts.md`).

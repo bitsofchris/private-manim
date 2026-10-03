@@ -54,6 +54,23 @@ Paths in this table are relative to `videos/`.
 | decision loop + diamonds | `008-jev-decision-models/04_agents.py` | agent loop ring with labelled decision diamonds | 008 | 1 |
 | paper-figure cross-fade + zoom | `006-diagram-grammar/02_grammar.py` | real figure in, zoom to a region, our diagram over it | 006 | 1 |
 
+## HyperFrames prototypes (copy, do not import)
+
+HyperFrames beats have no shared code: an agent copies a piece from a
+prototype into its beat's `index.html`. Nothing here becomes a template
+until a real video needs it twice (the same promotion rule as Manim parts).
+Paths are under `prototypes/hyperframes/`.
+
+| Piece | Where | What |
+|---|---|---|
+| stick figure, pose by tweens | `quiz/index.html`: `#fig` group, `arms()`, `face()` | standing figure; arm rotations about the shoulder, mouth/eye swaps, hops |
+| stick figure, pose by function of `t` | `ironies/index.html`: `#fig`, `ik()`, the pose block in `render(t)` | seated figure; two-bone arm IK to any hand target, lean, slump, gaze |
+| sketch / boil filter | `quiz`: filters `#w0`–`#w2` cycled by `tl.set` at 4 fps; `ironies`: one `#sketch` filter whose seed `render(t)` steps | hand-drawn wobble on everything inside the filtered group |
+| caption pill | `.caption` CSS + the `.clip caption` divs in either file | VO-less clips only; with VO the band stays empty |
+| `?guides` safe-area overlay | `ironies`: `#guides` (four shaded dead zones); `quiz`: `#guides` (dashed safe rectangle) | preview with `?guides` to check layout |
+| `render(t)` driver | `ironies/index.html`: `driver` object + `hash()` | procedural drawing as a pure function of time, re-run on every seek; deterministic noise |
+| vendored GSAP + Inter | `videos/_shared/web/vendor/`, linked as `vendor/` | the offline `<script>` and `@font-face`; see its README |
+
 ## Naming
 
 - Local helper modules: `_parts.py` for a video's general parts, `_<thing>.py`

@@ -1,8 +1,9 @@
 # private-manim: start here
 
 Explainer Shorts (9:16, 45–60 s) and 16:9 explainer scenes in Manim
-Community 0.18.1, in the Bits of Chris house style. Chris records the voice;
-agents build every visual. This file is the single entry point: the map,
+Community 0.18.1, with HyperFrames (HTML/SVG rendered by headless Chrome)
+as a second engine for Short beats, in the Bits of Chris house style.
+Chris records the voice; agents build every visual. This file is the single entry point: the map,
 the rules of precedence, how a session runs, and how the repo stays clean.
 Everything agents maintain lives in `agents/`; code lives in `videos/_shared/`
 and `tools/`; videos live in `videos/NNN-slug/`. If something here
@@ -14,12 +15,14 @@ clean").
 | You want | Go to | Owns |
 |---|---|---|
 | The process for a Short, start to hand-off | `agents/runbook.md` | steps 0–11, tools, what to hand Chris |
-| The brief a beat-building subagent gets | `agents/beat-brief.md` | the contract every beat scene must meet |
+| The brief a beat-building subagent gets | `agents/beat-brief.md` (Manim) / `agents/beat-brief-hyperframes.md` (HyperFrames) | the contract every beat must meet |
 | Tokens: colors, type, durations, strokes, safe areas | `videos/_shared/style.py` | the only place a constant lives |
 | How to use the tokens; what to use for X; Manim traps | `agents/style.md` | the "want X, use Y" tables |
 | When and how things move | `agents/animation-rules.md` | 15 sourced rules |
 | What already exists to reuse | `agents/parts.md` | inventory of shared and per-video parts, naming, promotion |
 | Shared code | `videos/_shared/*.py` | scene bases, mobjects, the transformer diagram |
+| Vendored web assets (GSAP, Inter) | `videos/_shared/web/vendor/` | offline HyperFrames renders; versions, licenses, sha256 in its README |
+| HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes |
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
@@ -28,7 +31,25 @@ clean").
 | A finished video | `videos/NNN-slug/` | storyboard, VO, scenes, `publish.md`, `media/` (gitignored) |
 | Retired code | `videos/_graveyard/` | kept for reference, never imported |
 
+## Which engine
+
+Chosen per Short at storyboard time (runbook step 1) and written as the
+first line of `storyboard.md`: `ENGINE: manim` or `ENGINE: hyperframes`.
+A Short may mix engines (`ENGINE: mixed`); then each beat row names its
+engine.
+
+- **Manim** for diagrams, math, code, data: anything with axes, arrows
+  between named parts, or a shared part in `videos/_shared/`.
+- **HyperFrames** for characters, props, UI mock-ups, abstract ideas.
+
+Both engines share the house style (palette, safe area, one magenta hero,
+captions burned in by `tools/assemble.py`) and the whole process; only
+step 6 (the beat brief and the render command) differs.
+
 ## Hard rules (the ones that break the repo or the signature)
+
+Rules 1, 3–5, 7 and 8 are Manim's; a HyperFrames beat follows
+`agents/beat-brief-hyperframes.md`, which carries 1, 2 and 6 over.
 
 1. **Constants come from `videos._shared.style`.** Never hardcode a color,
    font, duration, stroke width, or safe-area number in a scene. Missing
@@ -62,10 +83,10 @@ orchestrator does the judgment work and farms out the parallel work:
 
 | Step | Who | What |
 |---|---|---|
-| Preflight + storyboard | orchestrator | `content-preflight` (the question, who asks, the one-sentence answer), then `storyboard.md` from the runbook step 1. Chris edits the VO in his words. |
+| Preflight + storyboard | orchestrator | `content-preflight` (the question, who asks, the one-sentence answer), then `storyboard.md` from the runbook step 1, starting with the `ENGINE:` line. Chris edits the VO in his words. |
 | Record | Chris | one take, `vo_raw.m4a` into the video folder |
 | Clean, transcribe, cut | orchestrator | runbook steps 3–5; Chris approves the cut list |
-| Build beats | subagents (one per 1–2 beats) | each gets `agents/beat-brief.md` + its beat's VO and visual brief; renders and reviews its own contact sheet |
+| Build beats | subagents (one per 1–2 beats) | each gets the brief for its beat's engine + its beat's VO and visual brief; renders and reviews its own contact sheet |
 | Assemble + review | orchestrator | sequential clean re-render, assemble, contact sheets, fix what the sheets show |
 | Iterate | Chris + orchestrator | Chris watches on a phone and says what's off; every change request is material for the update pass |
 | Hand-off | orchestrator | runbook step 10: file path, title, description, Substack note |

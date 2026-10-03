@@ -1,5 +1,7 @@
 # Beat-agent brief
 
+This is the Manim brief. HyperFrames beats get `agents/beat-brief-hyperframes.md`.
+
 **Name:** beat-agent-brief
 **Description:** The contract a subagent gets when it builds one or two
 beat scenes of a Short. The orchestrator pastes this file's path plus the

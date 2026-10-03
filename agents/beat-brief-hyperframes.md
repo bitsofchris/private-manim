@@ -1,0 +1,183 @@
+# Beat-agent brief: HyperFrames
+
+**Name:** beat-agent-brief-hyperframes
+**Description:** The contract a subagent gets when it builds one or two
+beats of a Short in HyperFrames (HTML/CSS/SVG + GSAP, rendered to MP4 by
+headless Chrome via `npx hyperframes@0.8.115`). The orchestrator pastes
+this file's path plus the beat-specific brief (beat number, folder name,
+`BEAT_SECONDS`, VO with master times, the visual brief, the hero).
+Manim beats get `agents/beat-brief.md` instead.
+**When to use:** runbook step 6, for every beat whose storyboard row says
+`hyperframes` (characters, props, UI mock-ups, abstract ideas).
+**How it works:** one folder per beat holding one `index.html`; build it
+from a prototype, check, render to the path `beats.json` lists, review
+your own contact sheet, report. You never edit `videos/_shared/` (that
+includes `videos/_shared/web/vendor/`).
+
+## Read first, in this order
+
+1. `AGENTS.md` (two heroes, captions rule 6; the Manim-only rules do not
+   apply), `agents/animation-rules.md`, the Shorts rules in
+   `agents/style.md` (they hold for both engines).
+2. The worked examples: `prototypes/hyperframes/quiz/` and
+   `prototypes/hyperframes/ironies/` (`concept.md`, then `index.html`).
+   `agents/parts.md` ("HyperFrames prototypes") says which piece of which
+   file to copy. Copy, do not rewrite.
+3. The video's `storyboard.md`: the "Final beats" table is the contract
+   (start, length, folder, VO); the beats table and the ledger above it
+   are the visual brief. Names, example values and choices come from the
+   ledger, never invented in the beat.
+
+## Where a beat lives
+
+```
+videos/NNN-slug/
+  NN_beat/                    one HyperFrames beat (name as in the storyboard)
+    index.html                the composition: the only file you write
+    vendor -> ../../_shared/web/vendor     symlink: GSAP + Inter, offline
+  media/hf/NN_beat.mp4        the render (gitignored); beats.json points here
+```
+
+Set it up from the video folder:
+
+```
+cd videos/NNN-slug
+mkdir NN_beat && ln -s ../../_shared/web/vendor NN_beat/vendor
+cp ../../prototypes/hyperframes/ironies/index.html NN_beat/index.html   # or quiz/
+```
+
+`index.html` plus `vendor/` is a complete HyperFrames project; no
+`package.json`, `hyperframes.json` or `node_modules`. Do **not** run
+`hyperframes init`. If one ever has to run, use `HYPERFRAMES_SKIP_SKILLS=1`,
+delete the `CLAUDE.md` / `AGENTS.md` it writes, and replace its jsDelivr
+`<script>` with `vendor/gsap.min.js`.
+
+Never: `npx skills add`, `hyperframes skills`, `add` / `catalog` (registry
+downloads), `publish` / `cloud` / `lambda` (uploads), `tts` / `transcribe`
+/ `models` (model downloads), or installing any npm package. HyperFrames
+lints `../` paths above the project root as errors, which is why vendored
+files come in through the `vendor` symlink, not a relative path.
+
+## Commands (from the beat folder)
+
+```
+cd videos/NNN-slug/NN_beat
+export HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1
+npx --yes --prefer-offline hyperframes@0.8.115 check
+npx --yes --prefer-offline hyperframes@0.8.115 render -o ../media/hf/NN_beat.mp4
+cd .. && ../../tools/review_frames.sh media/hf/NN_beat.mp4 4
+ffprobe -v error -show_entries format=duration:stream=width,height -of csv=p=0 media/hf/NN_beat.mp4
+```
+
+`--prefer-offline` stops npx from asking the registry every run (without
+it, an offline run stalls ~70 s). The env vars turn off HyperFrames'
+telemetry and update check. Renders take 10–20 s, so render freely. While
+iterating,
+`npx --yes --prefer-offline hyperframes@0.8.115 preview` and add `?guides`
+to the URL for the safe-area overlay (both prototypes have one).
+
+The `beats.json` row for the beat: `{"clip": "media/hf/NN_beat.mp4", "end": BEAT_SECONDS}`.
+
+## Rules of the beat
+
+**Composition.**
+- Root `<div id="root" data-composition-id="main" data-start="0"
+  data-duration="BEAT_SECONDS" data-fps="30" data-width="1080"
+  data-height="1920">`; `html, body, #root` are 1080 × 1920 with
+  `overflow: hidden` and the house background.
+- Elements that appear and disappear on a schedule are `class="clip"` with
+  `data-start` / `data-duration` (and a `data-track-index`); everything
+  else is always present and animated by the timeline.
+- One paused GSAP timeline, built inline in a `<script>` at the end of
+  `<body>`, registered as `window.__timelines["main"] = tl`, padded to the
+  full length with `tl.set({}, {}, BEAT_SECONDS)`. The renderer seeks it
+  per frame.
+- Every frame is a pure function of time: a tween, a `tl.set`, or a
+  function of `t` driven by a tween (the `render(t)` driver in `ironies`).
+  No `Date.now`, `performance.now`, `Math.random` (use a hash of an index,
+  as `ironies` does), `requestAnimationFrame`, `setTimeout`, CSS
+  animations or transitions, `fetch`, or any network load. No remote
+  `<script>`, `<link>`, `url()` or `@import`:
+  `tests/test_hyperframes_offline.py` fails on them.
+- GSAP comes from `<script src="vendor/gsap.min.js"></script>` (3.14.2).
+  Inter comes from a local `@font-face`, and the stack names no other font
+  family, only the generic `sans-serif`: HyperFrames tries Google Fonts
+  for any named family without a local face (`-apple-system`,
+  `"Helvetica Neue"`, ...):
+  ```
+  @font-face { font-family: "Inter"; font-style: normal; font-weight: 800;
+    font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+  #root { font-family: "Inter", sans-serif; }
+  ```
+  Only weight 800 is vendored. Need another weight: say so in the report.
+
+**Format and time.**
+- 1080 × 1920 at 30 fps. `data-duration` is `BEAT_SECONDS` to the
+  millisecond; the render rounds up to whole frames (4.37 s → 132 frames
+  = 4.40 s) and `assemble.py` trims to `end`.
+- Frame 0 has the beat's content on screen and something already moving.
+  The last frame is still: every motion, including the line boil and any
+  drift, stops before the end (both prototypes freeze at a `HOLD_FROM` /
+  `T.still` constant).
+- Land each change on the word that names it. Cue times come from the
+  audio, not the brief: extract your window from `vo_final.wav` and run
+  silencedetect or a 50 ms RMS envelope (as in `agents/beat-brief.md`).
+  Beat-local = master − start. Cues are named constants at the top of the
+  script with the word in a comment: `const CUE = { auto: 1.30 /* "automate" */ };`.
+- A move the viewer must track gets ≥ 0.6 s (`S.BEAT`); pops and
+  colour swaps may be quicker.
+
+**Palette.** Copied into CSS variables at the top of `<style>`.
+`videos/_shared/style.py` is the source of truth for these hex values;
+if it changes, so does every beat.
+
+| CSS variable | `style.py` | Hex | Role |
+|---|---|---|---|
+| `--bg` | `BG_DEEP` | `#0B0B14` | background, always |
+| `--panel` | `BG_PANEL` | `#14142B` | cards, panels, screens |
+| `--text` | `FG` | `#ECEBE4` | ink, labels |
+| `--dim` | `FG_DIM` | `#8A8FB0` | secondary labels |
+| `--data` | `DATA` (`HERO_TEAL`) | `#2DD4BF` | what you can see / keep |
+| `--hero` | `STRUCTURE` (`HERO_MAGENTA`) | `#C084FC` | the one hero per beat |
+| `--muted` | `MUTED` | `#4A5070` | construction lines, retired heroes |
+
+One magenta hero per beat, the one the brief names; when the beat moves
+on, the old hero goes teal, `--dim` or `--muted`. `ACCENT_CYAN` /
+`ACCENT_PINK` only for one-frame pulses.
+
+**Layout, in pixels** (from the `SHORT_SAFE_*` fractions in `style.py`).
+- Safe area: x 65–950, y 230–1536 (dead zones: top 230, bottom 384,
+  right 130, left 65). Text and the hero stay inside; backgrounds and
+  floor lines may bleed to the frame edge.
+- Stage (the visual): y 230–1100. Caption band: y 1100–1536.
+- With VO: the band stays empty. `tools/assemble.py` burns the word
+  captions there; a beat draws no captions.
+- Without VO (a silent clip): one caption at a time, 2–4 words, in the
+  band, ≥ 64 px, weight 800, on a dark pill (`rgba(11,11,20,0.85)`, the
+  `CAPTION_PILL_OPACITY` of `--bg`). Copy the `.caption` clip from a
+  prototype.
+- Text floor: every label ≥ 60 px `font-size`, weight 800. Count widths
+  before building: at 64 px, Inter ExtraBold runs ~38 px a character, so
+  the safe width holds ~23 characters.
+
+## Review
+
+`check` must report 0 errors (the "file too large" warning and
+`container_overflow` infos on a full-frame filtered SVG are expected).
+Then open the contact sheet with the Read tool and look: text legible at
+phone size, nothing in the dead zones, the band empty when there is VO,
+one magenta hero, frame 0 populated, last frame still, duration within
+1/30 s above `BEAT_SECONDS`, and the text in Inter (a fallback sans looks
+narrower and lighter).
+
+Fix the smallest thing first: the attribute, then the element, then the
+beat. Two review rounds. If the same kind of problem is still there after
+the second, stop and report it with the element id and the line; do not
+keep nudging.
+
+## Report (the orchestrator reads only this)
+
+Per beat: the cue constants with their VO word, the mp4 path and its
+measured duration, the `check` summary (errors / warnings), anything
+changed from the brief and why, and anything you wished existed (a part
+to copy, a rule, a vendored weight). Do not commit.

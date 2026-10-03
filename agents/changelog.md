@@ -5,6 +5,10 @@ that forced it. Newest first.
 
 ## 2026-10-03
 
+- HyperFrames is a second engine for Short beats, chosen at storyboard time: `ENGINE:` line at the top of `storyboard.md`; Manim for diagrams, math, code, data; HyperFrames for characters, props, UI mock-ups, abstract ideas (`AGENTS.md` "Which engine", runbook steps 1 and 6). No house template yet. (Chris)
+- `agents/beat-brief-hyperframes.md`: the beat contract for HyperFrames (folder `NN_beat/index.html` + `vendor` symlink, render to `media/hf/NN_beat.mp4`, palette from `style.py`, safe area in px, band empty with VO). `agents/beat-brief.md` now says it is the Manim brief. (Chris)
+- HyperFrames renders offline: GSAP 3.14.2 and Inter 4.1 ExtraBold vendored in `videos/_shared/web/vendor/` with sha256; the prototypes load them through a `vendor` symlink (HyperFrames rejects `../` paths) and a local `@font-face` (no Google Fonts fetch); npm scripts use `--prefer-offline` and turn off telemetry. Verified by rendering both prototypes with outbound network denied. Guard: `tests/test_hyperframes_offline.py`. (Chris)
+- `agents/parts.md`: what to copy from the two HyperFrames prototypes. (Chris)
 - Janitor: runbook steps renumbered cleanly (one step 0, step 11 in order, tools last); its "next one, in practice" removed (README owns Chris's side) and its backlog moved to `agents/plans/design-system.md`; dead path to the archived pipeline plan fixed; style guide's Shorts caption row aligned with hard rule 6. (janitor)
 - From the pipelines research: storyboard ledger and "if time" last line (runbook 1); worked examples named per agent (runbook 6, beat brief); smallest repair first and two review rounds (runbook 8, beat brief); traps recorded as trigger / cause / fix once the fix worked (runbook 11). (research)
 - HyperFrames prototypes under `prototypes/hyperframes/`; not yet a path in the process. (experiment)

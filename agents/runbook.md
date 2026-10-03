@@ -3,7 +3,8 @@
 **Name:** shorts-runbook
 **Description:** The end-to-end process for turning a written post into a
 sub-60-second 9:16 YouTube Short where Chris records the voice once and
-Claude generates every visual in Manim. Covers the research the standards
+Claude generates every visual, in Manim or HyperFrames (`AGENTS.md`,
+"Which engine"). Covers the research the standards
 came from, the tools, the step order, and the checks that catch problems
 before a human has to.
 **When to use:** any time a post or lecture note is done and you want a
@@ -86,6 +87,11 @@ one-sentence takeaway over the final visual, no outro, no call to action.
 
 - Pick the 5–8 concepts the post already animates in your head. One idea
   per Short.
+- **Pick the engine** by the rule in `AGENTS.md` ("Which engine") and make
+  it the first line of `storyboard.md`: `ENGINE: manim`, `ENGINE:
+  hyperframes`, or `ENGINE: mixed` with an engine column in the beat
+  table. Decide now: it changes which parts the visual column can name
+  and which brief the beat agents get.
 - Write `videos/NNN-slug/storyboard.md`: a table `beat | VO | visual`.
 - **VO uses the author's own sentences.** Cut and reorder; never reword.
   Target 130–150 spoken words for ~55 s. Mark the last line "if time":
@@ -171,10 +177,13 @@ length, scene file, VO. Beat lengths are the contract for step 6.
 
 ## 6. Generate the beats (Claude, parallel agents, ~10 min)
 
-- One scene file per beat, `BocShortScene`, ending in
+- Manim beat: one scene file per beat, `BocShortScene`, ending in
   `self.hold_until(DURATION)` so the render is exactly the VO window.
-- Give each agent the path to `agents/beat-brief.md` (the general
-  contract) plus its beat's lines: file and class, `BEAT_SECONDS`, VO with
+  HyperFrames beat: one folder per beat, `NN_beat/index.html`, whose
+  composition lasts exactly `BEAT_SECONDS`.
+- Give each agent the brief for its engine, `agents/beat-brief.md`
+  (Manim) or `agents/beat-brief-hyperframes.md` (HyperFrames), plus its
+  beat's lines: file and class (or folder), `BEAT_SECONDS`, VO with
   master times, the visual brief, the hero. Group beats that share a
   visual onto one agent; write any local part (`_parts.py`) before
   spawning so every agent imports the same one. Check `agents/parts.md` first.
@@ -183,11 +192,20 @@ length, scene file, VO. Beat lengths are the contract for step 6.
   passing scenes do more than rule lists.
 - Agents should place cues from the audio itself (silencedetect + energy
   envelope), not only from the brief; that beat the estimates every time.
-- Render: `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching 0N_beat.py Class`.
+- Render (Manim): `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching 0N_beat.py Class`.
   Output: `media/videos/0N_beat/1920p30/Class.mp4`. Agents may render while
   iterating, but the final pass is one sequential run per folder with
   `--disable_caching` (parallel runs race on `media/texts/`, the cache can
   drop a frame).
+- Render (HyperFrames): from `videos/NNN-slug/0N_beat/`,
+  `npx --yes --prefer-offline hyperframes@0.8.115 render -o ../media/hf/0N_beat.mp4`
+  with the env vars in the brief. Output: `media/hf/0N_beat.mp4`. Offline
+  (GSAP and Inter come from `videos/_shared/web/vendor/`), 10–20 s a beat.
+  A HyperFrames beat with VO draws no captions; `assemble.py` burns them
+  and muxes the VO exactly as for Manim beats.
+- Only this step differs by engine. Every other step (VO first, tighten,
+  captions, assemble, contact-sheet review, hand-off, update pass) is the
+  same for both.
 
 Known Manim 0.18.1 traps (details in `agents/style.md`): negative
 `z_index` hides a mobject while it animates; `LaggedStart` over `Create`
@@ -200,6 +218,7 @@ stroke-only VMobject fills it. No LaTeX on this machine: `Text` only.
 ```
 tools/captions_from_transcript.py transcript_final.txt captions.json   # ≤3 words each
 # beats.json: ordered {clip, end} per beat; ends must sum to the VO length
+#   clip is media/videos/<file>/1920p30/<Class>.mp4 (Manim) or media/hf/<beat>.mp4 (HyperFrames)
 tools/assemble.py beats.json --vo vo_final.wav --captions captions.json \
     -o media/short.mp4
 ```

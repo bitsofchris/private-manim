@@ -19,7 +19,8 @@ agent to `AGENTS.md`. Your part is five messages:
 
 1. **Start.** "New short: <the idea, or a path to your note>." You get back
    the preflight (the question, who's asking, the one-sentence answer) and
-   a storyboard with a read-aloud script. Edit the script into your words.
+   a storyboard with a read-aloud script, whose first line says the engine
+   (Manim or HyperFrames). Edit the script into your words.
 2. **Record.** One take in Descript with Studio Sound, pause ~1 s between
    paragraphs. Say "recorded, here's the file and transcript" with the
    `.m4a` path. Everything from cleaning to the first assembled cut
