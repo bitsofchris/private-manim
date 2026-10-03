@@ -7,7 +7,7 @@ on contact sheets, and that gets better after every video.
 **When to use:** the status page for this work. Move to `agents/archive/`
 when the loop has run for three videos.
 **How it works:** rules become code where they can (tokens, layout check,
-tests), prose keeps the why, and every video ends with a retro that feeds
+tests), prose keeps the why, and every video ends with an update pass that feeds
 the next one. Evidence in `agents/research/2026-10-03-shorts-craft.md`.
 
 ## Where we are (2026-10-03, after 004–008)
@@ -20,14 +20,14 @@ the next one. Evidence in `agents/research/2026-10-03-shorts-craft.md`.
 | Library (`_shared/`) | scene bases, dots, arrows, axes, code block, transformer diagram. |
 | One-offs waiting for promotion | 004 neuron / tiny net / loss bowl / computational graph; 005 token matrix; 007 code card / ghostify / restroke; 008 prob bars / cards / chips / net glyph / token stream. |
 | Enforcement | a human on a contact sheet. Every layout bug in 008 (label wider than the stage, tag under bars, counter under names, box off the edge) was checkable before rendering. |
-| Process (`agents/runbook.md`) | 10 steps, works. No retro, no changelog, no promotion rule. |
+| Process (`agents/runbook.md`) | 10 steps, works. No update pass, no changelog, no promotion rule. (Both added 2026-10-03.) |
 | Entry point for a fresh agent | `CLAUDE.md` + `AGENTS.md`. No `ARCHITECTURE.md`. |
 
 ## Target shape
 
 ```
 ARCHITECTURE.md                 map of everything below
-agents/runbook.md          process (+ step 0 hook rule, step 11 retro)
+agents/runbook.md          process (+ step 0 hook rule, step 11 update pass)
 agents/research/                  digests with sources
 videos/_shared/
   style.py                      tokens (adds: easings per role, opacity hierarchy, caption cps)
