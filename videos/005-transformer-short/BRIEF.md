@@ -1,7 +1,7 @@
 # Beat brief: 005-transformer-short
 
-Read first: `/Users/chris/repos/private-manim/CLAUDE.md`, `videos/_shared/STYLE.md`
-("Shorts (9:16)" section and the 0.18.1 gotchas), `videos/_shared/ANIMATION_RULES.md`.
+Read first: `/Users/chris/repos/private-manim/CLAUDE.md`, `agents/style.md`
+("Shorts (9:16)" section and the 0.18.1 gotchas), `agents/animation-rules.md`.
 Model scenes: `videos/004-backprop-short/02_neuron.py` and `06_gradient.py`.
 
 ## Hard rules

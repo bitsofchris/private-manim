@@ -2,7 +2,7 @@
 
 **What:** 15 checkable rules for making explainer animations clear and useful, drawn from 3Blue1Brown, animation research, and classic animation principles.
 **When to use:** Before scripting a video, and as a checklist in code review of any scene file.
-**How it works:** Each rule is one imperative sentence, followed by a one-line *why* with its source. `STYLE.md` covers *which* constants and mobjects to use. This file covers *when and how* to move them.
+**How it works:** Each rule is one imperative sentence, followed by a one-line *why* with its source. `agents/style.md` covers *which* constants and mobjects to use. This file covers *when and how* to move them.
 
 ## Rules
 

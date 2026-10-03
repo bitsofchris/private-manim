@@ -6,9 +6,9 @@ Architecture Diagram: Is There a Standard?* (2026-09-28). 006 teaches the
 implicit grammar of transformer figures, one mark per beat. 007 maps each
 mark to a line of PyTorch. Both draw the same diagram from
 `videos/_shared/transformer.py`, and 007 opens on 006's last frame.
-**When to use:** the status page for this pair; move to `docs/archive/`
+**When to use:** the status page for this pair; move to `agents/archive/`
 when both are published.
-**How it works:** the shorts runbook (`docs/shorts-runbook.md`), audio
+**How it works:** the shorts runbook (`agents/runbook.md`), audio
 first. The shared diagram was built and reviewed before any VO exists so
 the storyboards describe a visual that is known to fit the phone frame.
 

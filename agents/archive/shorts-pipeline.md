@@ -1,6 +1,6 @@
 # Plan: co-generated Shorts pipeline
 
-Status: complete (2026-09-26). Pilot shipped: videos/004-backprop-short/media/backprop_short.mp4. Process documented in docs/shorts-runbook.md.
+Status: complete (2026-09-26). Pilot shipped: videos/004-backprop-short/media/backprop_short.mp4. Process documented in agents/runbook.md.
 
 ## Evidence
 

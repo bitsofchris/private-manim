@@ -4,11 +4,11 @@
 **Description:** Turn the house style, the shared library and the runbook
 into something agents can follow without a human catching layout mistakes
 on contact sheets, and that gets better after every video.
-**When to use:** the status page for this work. Move to `docs/archive/`
+**When to use:** the status page for this work. Move to `agents/archive/`
 when the loop has run for three videos.
 **How it works:** rules become code where they can (tokens, layout check,
 tests), prose keeps the why, and every video ends with a retro that feeds
-the next one. Evidence in `docs/research/2026-10-03-shorts-craft.md`.
+the next one. Evidence in `agents/research/2026-10-03-shorts-craft.md`.
 
 ## Where we are (2026-10-03, after 004–008)
 
@@ -20,16 +20,15 @@ the next one. Evidence in `docs/research/2026-10-03-shorts-craft.md`.
 | Library (`_shared/`) | scene bases, dots, arrows, axes, code block, transformer diagram. |
 | One-offs waiting for promotion | 004 neuron / tiny net / loss bowl / computational graph; 005 token matrix; 007 code card / ghostify / restroke; 008 prob bars / cards / chips / net glyph / token stream. |
 | Enforcement | a human on a contact sheet. Every layout bug in 008 (label wider than the stage, tag under bars, counter under names, box off the edge) was checkable before rendering. |
-| Process (`docs/shorts-runbook.md`) | 10 steps, works. No retro, no changelog, no promotion rule. |
+| Process (`agents/runbook.md`) | 10 steps, works. No retro, no changelog, no promotion rule. |
 | Entry point for a fresh agent | `CLAUDE.md` + `AGENTS.md`. No `ARCHITECTURE.md`. |
 
 ## Target shape
 
 ```
 ARCHITECTURE.md                 map of everything below
-docs/shorts-runbook.md          process (+ step 0 hook rule, step 11 retro)
-docs/retros/NNN-slug.md         one per video: what Chris changed, which rule was missing, where it went
-docs/research/                  digests with sources
+agents/runbook.md          process (+ step 0 hook rule, step 11 retro)
+agents/research/                  digests with sources
 videos/_shared/
   style.py                      tokens (adds: easings per role, opacity hierarchy, caption cps)
   tokens.yaml                   same tokens as data, generated from style.py, for agents and lint
@@ -78,11 +77,9 @@ tools/lint_short.py             runs check_layout on a scene's last frame withou
 
 ### Phase 3: the loop
 
-8. Runbook step 11, retro: at hand-off the agent writes
-   `docs/retros/NNN.md` from a template: Chris's change requests verbatim,
-   the rule or part that was missing, where it went (rule / token / part /
-   tool / test), and a candidates update. `CHANGELOG.md` gets a line per
-   system change.
+8. Runbook step 11, the update pass: when Chris says go, mine the
+   session for change requests and agent workarounds, write each into its
+   one home, janitor the docs, changelog, commit. (Done 2026-10-03.)
 9. Storyboard step gains the motion-role tag per beat (connect, co-vary,
    process, symbol sense, generalize) and the hook rule (frame 0 = the
    finished visual moving + the question on screen; question spoken in
@@ -92,9 +89,9 @@ tools/lint_short.py             runs check_layout on a scene's last frame withou
 ## Done 2026-10-03 (the entry-point pass)
 
 `AGENTS.md` map + rules + session flow + janitor; `CLAUDE.md` and
-`README.md` reduced to pointers; `docs/beat-agent-brief.md`; `PARTS.md`;
-`docs/retros/` with the 008 retro; `CHANGELOG.md`; `videos/_graveyard/`;
-`STYLE.md` contradictions resolved; runbook steps 0 and 11. Phase 1
+`README.md` reduced to pointers; `agents/beat-brief.md`; `agents/parts.md`;
+`update pass in place of retros; `agents/changelog.md`; `videos/_graveyard/`;
+`agents/style.md` contradictions resolved; runbook steps 0 and 11. Phase 1
 (rules as code) and Phase 2 (promotion) are the next work.
 
 ## Order of work

@@ -242,7 +242,7 @@ def highlight_lines(code: Code, lines: int | Iterable[int]) -> Transform:
     """Animation that puts the translucent magenta bar behind `lines` (1-based).
 
     First use fades the bar in on those lines; later calls slide/resize it
-    (same mobject, so it keeps its identity, ANIMATION_RULES rule 8).
+    (same mobject, so it keeps its identity, animation-rules rule 8).
     Only works on a Code built by code_block(). Pass run_time to
     self.play: self.play(highlight_lines(code, 3), run_time=S.BEAT).
     """

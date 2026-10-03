@@ -97,7 +97,7 @@ class Neuron(BocShortScene):
 
         # "weight per input": the magenta weights wire each input to the neuron.
         # Lines go in under the neuron so they tuck behind its filled disc
-        # (add order, not z_index: see STYLE.md gotchas).
+        # (add order, not z_index: see agents/style.md gotchas).
         self.hold_until(T_WEIGHT)
         self.add(lines)
         self.bring_to_front(neuron)

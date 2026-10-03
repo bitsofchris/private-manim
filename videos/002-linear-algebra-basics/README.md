@@ -53,7 +53,7 @@ Likely visual territory for upcoming videos:
 ## Repo Instructions To Follow
 
 This repo has hard Manim conventions in `/Users/chris/repos/private-manim/AGENTS.md`
-and `/Users/chris/repos/private-manim/videos/_shared/STYLE.md`.
+and `/Users/chris/repos/private-manim/agents/style.md`.
 
 Always use the repo style guide when writing or editing scenes. If a prompt asks
 for a visual treatment that conflicts with the guide, preserve the learning goal

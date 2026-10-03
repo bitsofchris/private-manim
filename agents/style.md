@@ -2,7 +2,7 @@
 
 The palette tells a story: **teal is what you can see, magenta is what you reach in for.** Data is teal. The discovered structure (PC1, manifold axis, steering vector, gender axis) is magenta. Don't break this — it is the visual signature.
 
-For *when and how* things should move (story, motion, frame, VO sync), see [`ANIMATION_RULES.md`](ANIMATION_RULES.md).
+For *when and how* things should move (story, motion, frame, VO sync), see [`animation-rules.md`](animation-rules.md).
 
 ## When you want X, use Y
 

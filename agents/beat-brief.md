@@ -12,9 +12,9 @@ contact sheet, report. You never edit `videos/_shared/`.
 
 ## Read first, in this order
 
-1. `AGENTS.md` (hard rules), `videos/_shared/STYLE.md` (Shorts table, Manim
-   traps), `videos/_shared/ANIMATION_RULES.md`.
-2. `videos/_shared/PARTS.md`, then the parts the brief names (shared, or
+1. `AGENTS.md` (hard rules), `agents/style.md` (Shorts table, Manim
+   traps), `agents/animation-rules.md`.
+2. `agents/parts.md`, then the parts the brief names (shared, or
    the video's local `_parts.py`). Reuse before building.
 3. The latest finished beat in `videos/` as the worked example of shape:
    docstring with takeaway, VO and render line; cue constants with the VO

@@ -6,9 +6,9 @@ craft, (2) opening and holding an educational Short, (3) how studios codify
 motion style and how a design system stays alive. Three agent reports from
 2026-10-03, condensed; every claim keeps its source. Marked **M** (measured)
 or **O** (opinion / practice).
-**When to use:** when changing `STYLE.md`, `ANIMATION_RULES.md`, the Shorts
+**When to use:** when changing `agents/style.md`, `agents/animation-rules.md`, the Shorts
 constants, the storyboard step, or the hook of a Short. The plan that acts on
-this is `docs/plans/design-system.md`.
+this is `agents/plans/design-system.md`.
 
 ## 1. What holds up (measured)
 
