@@ -16,8 +16,8 @@ For *when and how* things should move (story, motion, frame, VO sync), see [`ANI
 | Axes (2D) | `BocAxes(...)` | dim, recedes |
 | Grid plane | `BocNumberPlane(...)` | barely-there grid |
 | Axes (3D) | `BocThreeDAxes(...)` | dim, recedes |
-| Caption | `self.show_caption("...")` then `self.hide_caption(t)` | top-center, fades in/out |
-| Math label | `MathTex(...)` | LaTeX defaults, set_color(S.FG) if needed |
+| Caption (16:9 or VO-less clip) | `self.show_caption("...")` then `self.hide_caption(t)` | top-center, fades in/out. Shorts with VO: captions are burned in by `tools/assemble.py`, scenes draw none |
+| Math / symbols | `Text(..., font=S.FONT)` | no LaTeX on this machine: never `MathTex` / `Tex` / `DecimalNumber` |
 | Wait beat | `self.beat("QUICK"/"BEAT"/"HOLD")` | 0.3 / 0.6 / 1.2s |
 | Camera (3D) | already set in `Boc3DScene.setup()` | phi=70°, theta=-45° |
 
@@ -77,7 +77,6 @@ Exactly **one** mobject (or one tightly-related VGroup) is magenta per beat. If 
 
 - `Text(font=S.FONT, ...)` — Inter if installed, Pango falls back otherwise.
 - Three sizes only: `CAPTION_SIZE`, `LABEL_SIZE`, `MATH_SM/LG`. Or use `.scale(S.CAPTION_SCALE)` etc. on `Text`.
-- Math = LaTeX. Don't fight it.
 
 ## File layout
 
@@ -86,6 +85,8 @@ Exactly **one** mobject (or one tightly-related VGroup) is magenta per beat. If 
 
 ## Render
 
+Always from inside the video folder, one scene at a time (see `AGENTS.md`):
+
 ```
-uv run manim -pql videos/001-pca-best-shadow/shadow_3d.py BestShadow
+cd videos/001-pca-best-shadow && uv run --no-sync manim -qh --disable_caching shadow_3d.py BestShadow
 ```

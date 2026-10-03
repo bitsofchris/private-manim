@@ -69,6 +69,19 @@ zones shaded (see step 7).
 
 ---
 
+## 0. Start of a session
+
+Read `AGENTS.md`. Open (or create) `videos/NNN-slug/` with the next number.
+Run `content-preflight`: THE QUESTION in the viewer's words, WHO IS ASKING,
+THE ANSWER IN ONE SENTENCE. Put those three lines at the top of
+`storyboard.md`; every beat is checked against them.
+
+The hook, from the research in `docs/research/2026-10-03-shorts-craft.md`:
+frame 0 is the finished visual already working (not a title, not a word
+cloud, not a lead-in), with the question as 5–8 words of on-screen text in
+the band; the question is spoken in the first second; the last line is the
+one-sentence takeaway over the final visual, no outro, no call to action.
+
 ## 1. Storyboard from the post (Claude, 5 min)
 
 - Pick the 5–8 concepts the post already animates in your head. One idea
@@ -152,10 +165,11 @@ length, scene file, VO. Beat lengths are the contract for step 6.
 
 - One scene file per beat, `BocShortScene`, ending in
   `self.hold_until(DURATION)` so the render is exactly the VO window.
-- Give each agent: its beat's VO text with scene-local second cues, the
-  visual brief, the audio-first contract, and "no in-scene captions, no
-  edits under `_shared/`". Group beats that share a visual (bowl, graph)
-  onto one agent with a local `_bowl.py` / `_graph.py` module.
+- Give each agent the path to `docs/beat-agent-brief.md` (the general
+  contract) plus its beat's lines: file and class, `BEAT_SECONDS`, VO with
+  master times, the visual brief, the hero. Group beats that share a
+  visual onto one agent; write any local part (`_parts.py`) before
+  spawning so every agent imports the same one. Check `PARTS.md` first.
 - Agents should place cues from the audio itself (silencedetect + energy
   envelope), not only from the brief; that beat the estimates every time.
 - Render: `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching 0N_beat.py Class`.
@@ -302,3 +316,14 @@ Run everything: `uv run --no-sync python -m unittest discover -s tests`.
   motion; 0.6 s reads as a flicker at phone size).
 - A hook beat that also states the title on screen over the moving visual
   is the one thing the 84K Short does that ours doesn't yet.
+
+## 11. Retro and janitor (Claude, after the hand-off)
+
+Copy `docs/retros/TEMPLATE.md` to `docs/retros/NNN-slug.md` and fill it:
+Chris's change requests verbatim with the rule or part that was missing,
+what the agents wished existed, what changed in the system and where it
+went, parts new / reused / promoted, what is still open. Then the janitor
+pass from `AGENTS.md`: changelog lines, `PARTS.md` use counts (promote at
+two), plans to `docs/archive/`, retired files to `videos/_graveyard/`,
+`_preview.py` files deleted, `AGENTS.md` re-read for anything stale.
+Commit the retro and the system changes separately from the video.

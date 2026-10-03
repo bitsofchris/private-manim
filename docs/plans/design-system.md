@@ -89,6 +89,14 @@ tools/lint_short.py             runs check_layout on a scene's last frame withou
    the first second; last line a takeaway, no outro).
 10. `ARCHITECTURE.md` and a trimmed `CLAUDE.md` that points at it.
 
+## Done 2026-10-03 (the entry-point pass)
+
+`AGENTS.md` map + rules + session flow + janitor; `CLAUDE.md` and
+`README.md` reduced to pointers; `docs/beat-agent-brief.md`; `PARTS.md`;
+`docs/retros/` with the 008 retro; `CHANGELOG.md`; `videos/_graveyard/`;
+`STYLE.md` contradictions resolved; runbook steps 0 and 11. Phase 1
+(rules as code) and Phase 2 (promotion) are the next work.
+
 ## Order of work
 
 Phase 1 items 1 and 4 first (they would have caught every 008 fix and

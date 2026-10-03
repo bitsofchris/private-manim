@@ -1,83 +1,93 @@
-# private-manim
+# private-manim: start here
 
-3blue1brown-style explainer shorts in Manim Community 0.18.1. One folder per
-video under `videos/<video-name>/`. Each video folder owns its own `media/`
-subdirectory for rendered output.
+Explainer Shorts (9:16, 45–60 s) and 16:9 explainer scenes in Manim
+Community 0.18.1, in the Bits of Chris house style. Chris records the voice;
+agents build every visual. This file is the single entry point: the map,
+the rules of precedence, how a session runs, and how the repo stays clean.
+If something here disagrees with another file, fix it here first (see
+"Keeping the system clean").
 
-## House style — hard rules
+## The map
 
-1. **Always import from `videos._shared`.** Never hardcode colors, fonts, beat
-   durations, camera angles, or stroke widths in scene files. If a constant
-   is missing from `videos/_shared/style.py`, add it there first, then use it.
-2. **Two-hero rule.** Teal (`S.DATA`) is the data you can see. Magenta
-   (`S.STRUCTURE`) is the discovered direction (PC1, manifold axis, steering
-   vector). One magenta hero per beat. This is the visual signature.
-3. **Subclass `BocScene` (2D) or `Boc3DScene` (3D)** from `videos._shared.base`.
-4. **Use the preconfigured mobjects** (`data_dot`, `data_dot_3d`, `hero_arrow`,
-   `hero_arrow_3d`, `residual`, `BocAxes`, `BocNumberPlane`, `BocThreeDAxes`)
-   for those roles — never raw `Dot` / `Arrow` / `Axes`.
-5. **Three motion durations only:** `S.QUICK` / `S.BEAT` / `S.HOLD`. Call
-   `self.beat("QUICK"|"BEAT"|"HOLD")`, never `self.wait(0.45)`.
-6. **Captions** via `self.show_caption(...)` and `self.hide_caption(t)`.
+| You want | Go to | Owns |
+|---|---|---|
+| The process for a Short, start to hand-off | `docs/shorts-runbook.md` | steps 0–11, tools, what to hand Chris |
+| The brief a beat-building subagent gets | `docs/beat-agent-brief.md` | the contract every beat scene must meet |
+| Tokens: colors, type, durations, strokes, safe areas | `videos/_shared/style.py` | the only place a constant lives |
+| How to use the tokens; what to use for X; Manim traps | `videos/_shared/STYLE.md` | the "want X, use Y" tables |
+| When and how things move | `videos/_shared/ANIMATION_RULES.md` | 15 sourced rules |
+| What already exists to reuse | `videos/_shared/PARTS.md` | inventory of shared and per-video parts, naming, promotion |
+| Shared code | `videos/_shared/*.py` | scene bases, mobjects, the transformer diagram |
+| Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
+| Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
+| What was learned per video | `docs/retros/` | one retro per video, from `TEMPLATE.md` |
+| What changed in the system and why | `videos/_shared/CHANGELOG.md` | one line per rule, token, part, or tool change |
+| Evidence behind the rules | `docs/research/` | digests with sources |
+| Plans in flight / done | `docs/plans/` / `docs/archive/` | |
+| A finished video | `videos/NNN-slug/` | storyboard, VO, scenes, `publish.md`, `media/` (gitignored) |
+| Retired code | `videos/_graveyard/` | kept for reference, never imported |
 
-See `videos/_shared/STYLE.md` for the "when you want X, use Y" table.
+## Hard rules (the ones that break the repo or the signature)
 
-## Scene template
+1. **Constants come from `videos._shared.style`.** Never hardcode a color,
+   font, duration, stroke width, or safe-area number in a scene. Missing
+   constant: add it to `style.py` first.
+2. **Two heroes.** Teal (`S.DATA`) is data you can see; magenta
+   (`S.STRUCTURE`) is the discovered structure. One magenta hero per beat.
+3. **Subclass the house scenes:** `BocShortScene` for Shorts, `BocScene` /
+   `Boc3DScene` for 16:9. Use the preconfigured mobjects for their roles.
+4. **Three durations:** `S.QUICK` / `S.BEAT` / `S.HOLD` (multiples of HOLD
+   for long rides). Never `self.wait(0.45)`.
+5. **Render from inside the video folder**, one scene at a time, with
+   `--disable_caching` for finals:
+   `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching FILE.py Class`.
+   Never from the repo root (it scatters `media/`); never two renders in
+   one folder at once (they race on the text cache).
+6. **Captions:** in a Short with VO, word captions are burned in by
+   `tools/assemble.py` and scenes draw nothing in `self.band`. In-scene
+   `show_caption` is for 16:9 scenes and VO-less clips only.
+7. **No LaTeX on this machine.** `Text` only, never `MathTex` / `Tex`.
+8. **One Scene class per file, ~120 lines.** Shared helpers go in a local
+   `_parts.py` (see `PARTS.md`), never duplicated across files.
 
-```python
-"""One-sentence viewer takeaway.
+Precedence when files disagree: `style.py` (tokens) → this file (rules)
+→ `STYLE.md` / `ANIMATION_RULES.md` (how and when) → runbook (process)
+→ a video's storyboard (that video only).
 
-Render:
-    cd videos/<dir> && uv run manim -pql <file>.py <SceneClass>
-"""
-from __future__ import annotations
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root for videos._shared
+## How a session runs
 
-from manim import *
-from videos._shared import style as S
-from videos._shared.base import Boc3DScene
-from videos._shared.mobjects import data_dot_3d, hero_arrow_3d, BocThreeDAxes
+Chris opens a session with a big model (Fable) as the orchestrator. The
+orchestrator does the judgment work and farms out the parallel work:
 
-class MyScene(Boc3DScene):
-    def construct(self):
-        ...
-```
+| Step | Who | What |
+|---|---|---|
+| Preflight + storyboard | orchestrator | `content-preflight` (the question, who asks, the one-sentence answer), then `storyboard.md` from the runbook step 1. Chris edits the VO in his words. |
+| Record | Chris | one take, `vo_raw.m4a` into the video folder |
+| Clean, transcribe, cut | orchestrator | runbook steps 3–5; Chris approves the cut list |
+| Build beats | subagents (one per 1–2 beats) | each gets `docs/beat-agent-brief.md` + its beat's VO and visual brief; renders and reviews its own contact sheet |
+| Assemble + review | orchestrator | sequential clean re-render, assemble, contact sheets, fix what the sheets show |
+| Iterate | Chris + orchestrator | Chris watches on a phone and says what's off; every change request is recorded for the retro |
+| Hand-off | orchestrator | runbook step 10: file path, title, description, Substack note |
+| Retro + janitor | orchestrator | runbook step 11: `docs/retros/NNN-slug.md`, changelog, parts inventory, this file |
 
-The 3-line `sys.path` shim is required because we render from inside each
-video folder (see below) — without it, `videos._shared` is not importable.
+A subagent never edits `videos/_shared/`; it reports what it wished existed
+and the orchestrator decides whether it becomes a rule, a token, or a part.
 
-## Rendering
+## Keeping the system clean (janitor rules)
 
-ALWAYS `cd videos/<video-name>/` before running `manim`. Manim writes output
-to `./media/` relative to cwd; running from the repo root scatters renders
-into a top-level `/media/` and breaks the one-folder-per-video rule.
+One home per topic, from the map above. When you learn something:
 
-Correct:
-    cd videos/pickle-pirate-gemma
-    uv run manim -pql blog07_composition.py BlogComposition
-
-Wrong (creates /media/ at repo root):
-    uv run manim -pql videos/pickle-pirate-gemma/blog07_composition.py ...
-
-## Re-renders overwrite
-
-Manim's output path is `media/videos/<source_file>/<quality>/<ClassName>.mp4`.
-Re-rendering the same scene overwrites the previous file. To keep an old take,
-rename the Python class (or copy the file out） before re-rendering.
-
-## Top-level /media/ is not used
-
-If you see `media/` at the repo root, it's from a render run with the wrong
-cwd — move its contents into the matching `videos/<video-name>/media/` and
-delete the root folder.
-
-## Other conventions
-
-- Data first: synthesize with `np.random.default_rng(S.SEED)`. Use
-  `sklearn.decomposition.PCA`, never hand-roll eigen.
-- Use `axes.c2p(...)` for every coordinate. Never hardcode scene coords.
-- Group related mobjects in `VGroup`s. Use `always_redraw` + `ValueTracker`
-  for sweeping parameters.
-- One Scene class per file. Keep files under ~120 lines.
+- A constant → `style.py`. A "use X for Y" → `STYLE.md`. A "move it this
+  way" → `ANIMATION_RULES.md`. A process step → the runbook. A reusable
+  thing → a part, listed in `PARTS.md`. Evidence → `docs/research/`.
+  Everything else → the retro.
+- Never state the same rule in two files. Link instead. If you find a
+  duplicate or a contradiction, resolve it toward the precedence order
+  and note it in `CHANGELOG.md`.
+- After every video (runbook step 11): write the retro; update
+  `PARTS.md` use counts and promote anything at two uses; move finished
+  plans to `docs/archive/`; move retired scene files to
+  `videos/_graveyard/`; delete `_preview.py` files once the beats exist;
+  re-read this file and fix anything stale.
+- Commit small and often: one concern per commit, scenes separate from
+  system changes.
