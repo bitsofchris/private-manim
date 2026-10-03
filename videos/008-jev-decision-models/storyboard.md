@@ -72,7 +72,7 @@ new distributions (see Sources), so the Short says "a probability".
 
 | Claim | Figure | Who | Use |
 |---|---|---|---|
-| Latency, decision model vs LLM judge | 171 ms vs 1,662 ms median (~10x) | OpenRouter, HaluEval, 88 items, independent | beat 3 small print |
+| Latency, decision model vs LLM judge | 171 ms vs 1,662 ms median (~10x) | OpenRouter, HaluEval, 88 items, independent | description (cut from beat 3) |
 | Cost, same test | $0.021 vs $0.114 per 1k judgments (~5x) | OpenRouter, independent | description |
 | Accuracy, same test | 95.5% vs 94.3% | OpenRouter, independent | beat 3 "same accuracy" |
 | Fine-tuned encoder vs prompted LLM, cost | 94x to 222x cheaper per 1M requests, F1 within 3 pts | arXiv 2602.06370, independent | description |

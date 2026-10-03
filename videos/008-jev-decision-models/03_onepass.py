@@ -10,7 +10,7 @@ tiny network and a pass counter. The LLM's output types one glyph per QUICK;
 every glyph pulses the LLM net cyan and ticks its counter (to 30). On "Jev" the
 input card rides into the bottom net once: one magenta flash, "passes 1" in
 magenta (the hero), and the three bars fill together by "pass". On "fast" the
-tag "171 ms vs 1.7 s / same accuracy" appears under the split.
+the numbers stay in the description (no tag on screen).
 
 Render:
     cd videos/008-jev-decision-models && uv run --no-sync manim -qh 03_onepass.py OnePass
@@ -30,7 +30,6 @@ import _parts as P
 BEAT_SECONDS = 13.11   # exact VO window of this beat
 T_JEV = 9.24           # VO: "Jev" (silence ends 9.236); the card rides into the net
 T_PASS = 11.36         # VO: "pass" ends; the bars are full here
-T_FAST = 11.7          # VO: "fast"; the latency tag appears
 
 STREAM = ['{"type": "bug",', '"why": "login"}']   # 30 glyphs, short enough to sit large   # the LLM's token stream, 2 lines
 N_TOKENS = int(T_JEV // S.QUICK)                      # one glyph per QUICK until "Jev"
@@ -39,17 +38,21 @@ PROBS = [0.91, 0.06, 0.03]
 NET_W, NET_BOX_H, NET_GAP = 1.6, 0.3, 0.14    # the tiny 3-box network (short enough to leave room for the counter)
 COL_GAP = 0.5                                 # net column -> output column
 LABEL_GAP = 0.08                              # half label -> content row
-TAG_H = 1.44                                  # two label lines + air, at the stage floor
-LLM_FRAC = 0.56                               # the LLM half is taller: its token stream needs air
-STREAM_BUFF, STREAM_TOP = 0.3, 0.2            # line spacing and top margin of the token stream
+TAG_H = 0.4                                   # air at the stage floor (the latency tag was cut)
+LLM_FRAC = 0.45                               # top: title + two stream lines (~2.6); bottom: title + bars (~3.0)
+STREAM_BUFF, STREAM_TOP = 0.25, 0.05            # line spacing and top margin of the token stream
 STREAM_SCALE = 1.25                           # the stream is the LLM half's whole point: bigger than card text
 BARS_W, BARS_SCALE = 4.3, 0.9                 # ProbBars (no values) clears the "passes" counter
 
 
 def counter_text(n: int, color: str) -> VGroup:
-    """'passes' over the number, two lines, so it stays inside the net column."""
-    return VGroup(P.mono("passes", color), P.mono(str(n), color)).arrange(
-        DOWN, aligned_edge=LEFT, buff=0.05)
+    """'passes N', one line; it lives at the right end of the half's title row."""
+    return VGroup(P.mono(f"passes {n}", color))
+
+
+def place_counter(counter: VGroup, title: Text, right: float) -> VGroup:
+    """Right end of the title row, same centre line as the title."""
+    return counter.move_to([0, title.get_center()[1], 0]).align_to([right, 0, 0], RIGHT)
 
 
 def net_glyph() -> VGroup:
@@ -80,24 +83,25 @@ class OnePass(BocShortScene):
         title = label(name, S.FG_DIM).align_to([left, top, 0], UL)
         content_top = title.get_bottom()[1] - LABEL_GAP
         net = net_glyph().align_to([left, content_top, 0], UL)
-        counter = VGroup(counter_text(0, S.FG_DIM))
-        counter.next_to(net, DOWN, buff=0.1).align_to(net, LEFT)
+        counter = counter_text(0, S.FG_DIM)
+        place_counter(counter, title, self.stage.get_right()[0])
         out = Rectangle(width=self.stage.get_right()[0] - (left + NET_W + COL_GAP),
                         height=content_top - bottom, stroke_opacity=0, fill_opacity=0)
         out.align_to([left + NET_W + COL_GAP, content_top, 0], UL)
         return dict(title=title, net=net, counter=counter, out=out)
 
     def tick(self, h: dict, n: int, color: str = S.FG_DIM) -> None:
-        new = counter_text(n, color).next_to(h["net"], DOWN, buff=0.1).align_to(h["net"], LEFT)
+        new = counter_text(n, color)
+        place_counter(new, h["title"], self.stage.get_right()[0])
         h["counter"].remove(*h["counter"].submobjects)
-        h["counter"].add(new)
+        h["counter"].add(*new.submobjects)
 
     def construct(self):
         top, bottom = self.stage.get_top()[1], self.stage.get_bottom()[1]
         avail = top - bottom - TAG_H
         llm_h, jev_h = avail * LLM_FRAC, avail * (1 - LLM_FRAC)
         llm = self.half("LLM", top, top - llm_h)
-        jev = self.half("decision model", top - llm_h, top - llm_h - jev_h)
+        jev = self.half("Jev", top - llm_h, top - llm_h - jev_h)   # short title: the counter shares the row
         divider = Line(self.stage.get_left(), self.stage.get_right(), color=S.FG_DIM,
                        stroke_width=S.STROKE_AXIS).set_stroke(opacity=S.OP_AXIS)
         divider.move_to([self.stage.get_center()[0], top - llm_h, 0])
@@ -131,10 +135,6 @@ class OnePass(BocShortScene):
         self.hold_until(T_PASS - S.HOLD)
         self.play(bars.fill_to(PROBS), run_time=S.HOLD)
 
-        # "fast and cheap": the measured tag at the stage floor.
-        self.hold_until(T_FAST)
-        tag = VGroup(label("171 ms vs 1.7 s", S.FG_DIM), label("same accuracy", S.FG_DIM))
-        tag.arrange(DOWN, buff=0.08).move_to(self.stage).align_to(self.stage, DOWN)
-        self.play(FadeIn(tag), run_time=S.BEAT)
+        # "fast and cheap": nothing new on screen; the numbers live in the description.
 
         self.hold_until(BEAT_SECONDS)
