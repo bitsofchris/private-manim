@@ -36,11 +36,17 @@ STREAM = ['{"type": "bug",', '"reason": "login"}']   # the LLM's token stream, 2
 N_TOKENS = int(T_JEV // S.QUICK)                      # one glyph per QUICK until "Jev"
 PROBS = [0.91, 0.06, 0.03]
 
-NET_W, NET_BOX_H, NET_GAP = 1.6, 0.36, 0.22   # the tiny 3-box network
+NET_W, NET_BOX_H, NET_GAP = 1.6, 0.3, 0.14    # the tiny 3-box network (short enough to leave room for the counter)
 COL_GAP = 0.5                                 # net column -> output column
 LABEL_GAP = 0.08                              # half label -> content row
 TAG_H = 1.44                                  # two label lines + air, at the stage floor
 BARS_W, BARS_SCALE = 4.3, 0.9                 # ProbBars (no values) clears the "passes" counter
+
+
+def counter_text(n: int, color: str) -> VGroup:
+    """'passes' over the number, two lines, so it stays inside the net column."""
+    return VGroup(P.mono("passes", color), P.mono(str(n), color)).arrange(
+        DOWN, aligned_edge=LEFT, buff=0.05)
 
 
 def net_glyph() -> VGroup:
@@ -71,7 +77,7 @@ class OnePass(BocShortScene):
         title = label(name, S.FG_DIM).align_to([left, top, 0], UL)
         content_top = title.get_bottom()[1] - LABEL_GAP
         net = net_glyph().align_to([left, content_top, 0], UL)
-        counter = VGroup(P.mono("passes 0", S.FG_DIM))
+        counter = VGroup(counter_text(0, S.FG_DIM))
         counter.next_to(net, DOWN, buff=0.1).align_to(net, LEFT)
         out = Rectangle(width=self.stage.get_right()[0] - (left + NET_W + COL_GAP),
                         height=content_top - bottom, stroke_opacity=0, fill_opacity=0)
@@ -79,7 +85,7 @@ class OnePass(BocShortScene):
         return dict(title=title, net=net, counter=counter, out=out)
 
     def tick(self, h: dict, n: int, color: str = S.FG_DIM) -> None:
-        new = P.mono(f"passes {n}", color).next_to(h["net"], DOWN, buff=0.1).align_to(h["net"], LEFT)
+        new = counter_text(n, color).next_to(h["net"], DOWN, buff=0.1).align_to(h["net"], LEFT)
         h["counter"].remove(*h["counter"].submobjects)
         h["counter"].add(new)
 
