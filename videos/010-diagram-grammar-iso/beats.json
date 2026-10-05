@@ -1,0 +1,8 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",     "end": 3.99},
+ {"clip": "media/hf/02_grammar.mp4",  "end": 8.27},
+ {"clip": "media/hf/03_box.mp4",      "end": 5.53},
+ {"clip": "media/hf/04_arrow.mp4",    "end": 9.02},
+ {"clip": "media/hf/05_residual.mp4", "end": 16.84},
+ {"clip": "media/hf/06_repeat.mp4",   "end": 4.70}
+]}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 3 Box: the four boxes are the hero, then Linear / Attention / FFN on their words. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="diagram/diagram.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.53" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 3 (master 12.26-17.79): "A box is an operation or a layer. Linear, attention, feed forward, et cetera."
+  // Opens and ends on CANON. Hero: the four boxes; then the named box alone, on its word.
+  const BEAT_SECONDS = 5.53;
+  const CUE = {
+    box: 0.20,       /* "box" (0.20-0.50): the ramp starts at frame 0 and lands here */
+    linear: 2.84,    /* "Linear" (2.84-3.24) */
+    attention: 3.44, /* "attention" (3.44-3.96) */
+    ffn: 4.04,       /* "feed forward" (4.04-4.60) */
+    etc: 4.62,       /* "et cetera" (4.62-4.94): everything eases back to rest */
+    still: 5.20,     /* CANON from here to the end */
+  };
+  const REST_OF = 0.22;     // hero level of the boxes that are not being named
+  const POP = 0.14;         // label scale pop on its word (Attention stays inside its box)
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const labels = DG.makeLabels(root);
+  ISO.guides(root);
+  const { seg, lerp } = ISO, E = ISO.E();
+  // VO order -> box. Each is the lone hero from its cue to the next one.
+  const NAMED = [["head", CUE.linear, CUE.attention], ["attn", CUE.attention, CUE.ffn], ["ffn", CUE.ffn, CUE.etc]];
+  const RAMP = 0.22;
+  function render(t) {
+    const all = E.out(seg(t, 0, CUE.box + 0.08));                 // "box": all four turn hero
+    const focus = E.io(seg(t, CUE.linear - 0.10, CUE.linear + 0.12)); // the list starts: one at a time
+    const out = 1 - E.io(seg(t, CUE.etc, CUE.still - 0.05));     // "et cetera": back to rest
+    const boxes = {}, pop = {};
+    DG.BOXES.forEach(([n]) => { boxes[n] = all * lerp(1, REST_OF, focus) * out; pop[n] = 0; });
+    NAMED.forEach(([n, a, b]) => {
+      const on = E.out(seg(t, a - 0.04, a + RAMP - 0.04)) * (1 - E.io(seg(t, b - 0.04, b + RAMP - 0.04)));
+      boxes[n] = all * lerp(lerp(1, REST_OF, focus), 1, on) * out;
+      // one pop per word: up fast, settle back while the word is still being said
+      pop[n] = Math.sin(Math.PI * E.out(seg(t, a - 0.02, a + 0.50)));
+    });
+    const st = { boxes };
+    ISO.ground(g, DG.BASE_Y + 8);
+    DG.draw(g, st);
+    DG.styleLabels(labels, st);
+    DG.BOXES.forEach(([n]) => { const s = 1 + POP * pop[n]; labels[n].style.transform = `matrix(${s.toFixed(4)}, ${(DG.SHEAR * s).toFixed(4)}, 0, ${s.toFixed(4)}, 0, 0)`; });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

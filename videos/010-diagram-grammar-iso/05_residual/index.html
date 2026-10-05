@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5, Residual: the skip paths and (+) are the residual path; a token splits around Attention and adds back; the main line is the residual stream. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="diagram/diagram.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16.84" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 5, Residual. Opens on CANON, ends on CANON.
+  const BEAT_SECONDS = 16.84;
+  // VO (beat-local = master - 26.81): "An arrow that bypasses a box is the residual path. / The circle with the
+  // plus is where it adds its new updated vector back in. / That vertical highway is the residual stream, / and
+  // everything reads from it, / adding information back to it / as we refine our representation through the layers."
+  const CUE = {
+    arrow: 0.03,     /* "An arrow that": a soft cue on the two skip paths */
+    bypass: 0.95,    /* "bypasses a box": the two skip paths turn magenta (hero) */
+    path: 2.40,      /* "residual path": a glint runs each skip, out, up and back in */
+    circle: 3.50,    /* "circle with the plus": the two (+) nodes join the hero */
+    adds: 5.15,      /* "where it adds": a token arrives at the branch point below Attention */
+    vector: 5.94,    /* "its new updated vector": it splits, one copy through the box, one around on the skip */
+    backIn: 7.35,    /* "back in": both copies arrive at the (+) and merge */
+    onward: 7.65,    /* (pause after "back in"): the one merged token continues up and fades */
+    that: 8.12,      /* "That vertical": skips and (+) return to rest */
+    highway: 8.25,   /* "vertical highway": the magenta band grows up the main line, bottom to top */
+    stream: 9.93,    /* "residual stream": the band pulses; a token enters at the bottom */
+    reads: 10.86,    /* "and everything reads from it": split at Attention, merge at its (+) */
+    reads2: 11.90,   /*   ... "from it": merged at (+) 1, moves up to the next branch point */
+    info: 12.20,     /* "adding information back": split at FFN */
+    toIt: 13.30,     /* "to it": merged at (+) 2 */
+    refine: 13.50,   /* "as we refine": a shimmer runs up the band */
+    layers: 13.90,   /* "our representation through the layers": the token rides up through Linear to the top */
+    out: 15.70,      /* (after "layers"): token and band fade, back to the figure at rest */
+    still: 16.45,    /* nothing moves after this */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const labels = DG.makeLabels(root);
+  const E = ISO.E(), seg = ISO.seg, lerp = ISO.lerp, COL = ISO.COL;
+  const bump = (u) => Math.sin(Math.PI * ISO.clamp01(u));
+  ISO.guides(root);
+
+  const BAND_HALF = 54, BAND_ALPHA = 0.36;       // the stream band: a little wider than the (+) and the arrows
+  const R0 = 15;                                 // token radius before any add
+  const BOXZ = [DG.Z.attn, DG.Z.ffn];            // the box each skip bypasses
+  // skip i, continued from where it meets the (+) rim to the centre of the (+)
+  const skipIn = (i) => DG.skipPath(i).concat([[0, DG.SKIPS[i].to]]);
+
+  // local helper: the residual stream, a translucent strip on the figure plane along the main line, from z = 0 up to z = zTop
+  function band(zTop, alpha, shimmerZ, shimmerA) {
+    if (zTop <= 0 || alpha <= 0) return;
+    const q = (x, z) => DG.pt(x, z);
+    ISO.poly(g, [q(-BAND_HALF, 0), q(BAND_HALF, 0), q(BAND_HALF, zTop), q(-BAND_HALF, zTop)], ISO.css(COL.hero, 1, alpha));
+    if (shimmerA > 0) {
+      const a = Math.max(0, shimmerZ - 70), b = Math.min(zTop, shimmerZ + 70);
+      if (b > a) ISO.poly(g, [q(-BAND_HALF, a), q(BAND_HALF, a), q(BAND_HALF, b), q(-BAND_HALF, b)], ISO.css(COL.hero, 1, shimmerA));
+    }
+    g.strokeStyle = ISO.css(COL.hero, 1, Math.min(1, alpha * 1.9)); g.lineWidth = 3; g.beginPath();
+    [-BAND_HALF, BAND_HALF].forEach((x) => { const a = q(x, 0), b = q(x, zTop); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); });
+    g.stroke();
+  }
+  // local helper: a ring opening at a screen point (the add landing), u in 0..1
+  function ring(p, u) {
+    if (u <= 0 || u >= 1) return;
+    g.strokeStyle = ISO.css(COL.data, 1, 1 - u); g.lineWidth = 5; g.beginPath(); g.arc(p[0], p[1], 22 + 44 * E.out(u), 0, Math.PI * 2); g.stroke();
+  }
+  // local helper: the split around box i. u in 0..1: both copies leave the branch point and arrive at the (+) together.
+  // The copy through the box rides the main line (it lightens as it comes out: the box's output);
+  // the copy on the skip goes out, up and back in, unchanged. While the copy is inside the box, the box's label
+  // swells a little (work[i]): the operation is being applied to that copy.
+  const work = [0, 0];
+  function split(i, u, r) {
+    const s = DG.SKIPS[i], e = E.io(u);
+    const z = lerp(s.from, s.to, e), k = seg(z, BOXZ[i] + 20, BOXZ[i] + DG.BOX_H);
+    const a = DG.along(skipIn(i), e);
+    work[i] = bump(seg(z, BOXZ[i], BOXZ[i] + DG.BOX_H));
+    DG.token(g, DG.pt(a[0], a[1]), r);
+    DG.token(g, DG.pt(0, z), r, ISO.mix(COL.data, [255, 255, 255], 0.55 * k));
+  }
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // ---- state of the figure ----
+    const off = 1 - E.io(seg(t, CUE.that, CUE.that + 0.5));
+    const hSkip = Math.max(0.45 * bump(seg(t, CUE.arrow - 0.03, CUE.arrow + 0.7)), E.io(seg(t, CUE.bypass, CUE.bypass + 0.45))) * off;
+    const hAdd = E.io(seg(t, CUE.circle, CUE.circle + 0.5)) * off;
+    const st = { skips: [hSkip, hSkip], adds: [hAdd, hAdd] };
+    // ---- the stream band ----
+    const grow = E.io(seg(t, CUE.highway, CUE.highway + 1.2));
+    const bandA = (BAND_ALPHA + 0.22 * bump(seg(t, CUE.stream, CUE.stream + 0.7))) * (1 - E.io(seg(t, CUE.out, CUE.out + 0.65)));
+    const sh = seg(t, CUE.refine, CUE.refine + 1.0);
+
+    work[0] = work[1] = 0;
+    ISO.ground(g, DG.BASE_Y + 8);
+    band(DG.TOP * grow, t >= CUE.highway ? bandA : 0, lerp(-70, DG.TOP + 70, sh), 0.3 * bump(sh));
+    DG.draw(g, st);
+
+    // ---- in front: glints and tokens (always moving forward along their paths) ----
+    const gl = seg(t, CUE.path, CUE.path + 0.95);
+    if (gl > 0 && gl < 1) [0, 1].forEach((i) => { const a = DG.along(DG.skipPath(i), E.io(gl)); DG.token(g, DG.pt(a[0], a[1]), 10, COL.hero, bump(gl) ** 0.5); });
+
+    // first pass: one token, split around Attention, merged at its (+)
+    if (t >= CUE.adds && t < CUE.that) {
+      const s = DG.SKIPS[0];
+      if (t < CUE.vector) {
+        const u = seg(t, CUE.adds, CUE.adds + 0.45);
+        DG.token(g, DG.pt(0, lerp(DG.Z.embed + DG.BOX_H, s.from, E.out(u))), R0, COL.data, u);
+      } else if (t < CUE.backIn) {
+        split(0, seg(t, CUE.vector, CUE.backIn), R0);
+      } else {
+        const m = seg(t, CUE.backIn, CUE.backIn + 0.25), up = E.inn(seg(t, CUE.onward, CUE.that));
+        ring(DG.addCenter(0), seg(t, CUE.backIn, CUE.backIn + 0.5));
+        DG.token(g, DG.pt(0, lerp(s.to, DG.SKIPS[1].from, up)), lerp(R0, R0 + 4, E.out(m)), COL.data, 1 - seg(t, CUE.onward + 0.2, CUE.that));
+      }
+    }
+    // second pass, on the stream: in at the bottom, split and add at each box, out at the top
+    if (t >= CUE.stream + 0.3 && t < CUE.out + 0.45) {
+      const s0 = DG.SKIPS[0], s1 = DG.SKIPS[1];
+      if (t < CUE.reads) {
+        const u = seg(t, CUE.stream + 0.3, CUE.reads);
+        DG.token(g, DG.pt(0, lerp(0, s0.from, E.io(u))), R0, COL.data, seg(u, 0, 0.4));
+      } else if (t < CUE.reads2) {
+        split(0, seg(t, CUE.reads, CUE.reads2), R0);
+      } else if (t < CUE.info) {
+        ring(DG.addCenter(0), seg(t, CUE.reads2, CUE.reads2 + 0.45));
+        DG.token(g, DG.pt(0, lerp(s0.to, s1.from, E.io(seg(t, CUE.reads2 + 0.05, CUE.info)))), R0 + 3);
+      } else if (t < CUE.toIt) {
+        ring(DG.addCenter(0), seg(t, CUE.reads2, CUE.reads2 + 0.45));
+        split(1, seg(t, CUE.info, CUE.toIt), R0 + 3);
+      } else {
+        ring(DG.addCenter(1), seg(t, CUE.toIt, CUE.toIt + 0.5));
+        const up = E.io(seg(t, CUE.layers, CUE.out));
+        DG.token(g, DG.pt(0, lerp(s1.to, DG.TOP, up)), lerp(R0 + 3, R0 + 6, E.out(seg(t, CUE.toIt, CUE.toIt + 0.25))), COL.data, 1 - seg(t, CUE.out - 0.05, CUE.out + 0.45));
+      }
+    }
+    DG.styleLabels(labels, st);
+    // same shear as DG.makeLabels, scaled about the label's centre
+    [labels.attn, labels.ffn].forEach((el, i) => { const k = 1 + 0.08 * work[i]; el.style.transform = `matrix(${k.toFixed(4)}, ${(DG.SHEAR * k).toFixed(4)}, 0, ${k.toFixed(4)}, 0, 0)`; });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

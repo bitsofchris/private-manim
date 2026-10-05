@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 4 Arrow: the main-line arrows are the hero; a teal token moves up them. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="diagram/diagram.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.02" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 4 (master 17.79-26.81): "An arrow is a tensor moving to the next operation. Flow is always
+  // bottom to top, where input tokens are at the bottom and logits are at the top."
+  // Opens and ends on CANON. Hero: the five main-line arrows. The token is teal (a tensor) and only ever moves up.
+  const BEAT_SECONDS = 9.02;
+  const CUE = {
+    arrow: 0.20,     /* "arrow" (0.20-0.70): the ramp starts at frame 0 and lands here */
+    tensor: 1.00,    /* "tensor": a token appears at the foot of the first arrow (top of Embed) */
+    moving: 1.50,    /* "moving to the": it travels up that arrow */
+    nextOp: 2.50,    /* "next operation" (2.50-3.14): it arrives at Attention and goes in */
+    flow: 3.62,      /* "Flow is always": a token appears at the bottom of Embed */
+    bottomTop: 4.56, /* "bottom to top" (4.56-5.18): it rides the whole main line */
+    rideEnd: 5.60,   /* top of Linear */
+    input: 5.62,     /* "where input tokens" : arrows back to rest; the bottom is marked */
+    atBottom: 6.56,  /* "are at the bottom" (6.56-7.20): second pulse at the bottom */
+    logits: 7.46,    /* "and logits are": the token rides up again */
+    atTop: 8.12,     /* "at the top" (8.12-8.48): it arrives; the top is marked */
+    still: 8.70,     /* CANON from here to the end */
+  };
+  const R = 20;         // token radius
+  const POP = 0.12;     // label pop of Embed / Linear when its end of the column is named
+  const IN_BOX = 0.38;  // token opacity while it is inside a box (passing through the operation)
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const labels = DG.makeLabels(root);
+  ISO.guides(root);
+  const { seg, lerp, clamp01 } = ISO, E = ISO.E();
+  // 1 on an arrow / (+), IN_BOX inside a box, with a soft edge at the box faces
+  function throughBoxes(z) {
+    let inside = 0;
+    DG.BOXES.forEach(([n]) => { const z0 = DG.Z[n], z1 = z0 + DG.BOX_H; inside = Math.max(inside, clamp01((z - z0 + 4) / 16) * clamp01((z1 + 4 - z) / 16)); });
+    return lerp(1, IN_BOX, inside);
+  }
+  // an expanding teal ring at a screen point: marks an end of the column. u 0..1
+  function ring(g, p, u) {
+    if (u <= 0 || u >= 1) return;
+    g.strokeStyle = ISO.css(ISO.COL.data, 1, 0.9 * (1 - u)); g.lineWidth = 7 * (1 - u) + 2;
+    g.beginPath(); g.arc(p[0], p[1], 20 + 52 * E.out(u), 0, Math.PI * 2); g.stroke();
+  }
+  const BOTTOM = DG.mainPoint(0), TOPP = DG.mainPoint(1);
+  function render(t) {
+    // "arrow": the five arrows are the hero; they return to teal when the VO moves on to the two ends
+    const arrows = E.out(seg(t, 0, CUE.arrow + 0.10)) * (1 - E.io(seg(t, CUE.input - 0.05, CUE.input + 0.55)));
+    const st = { arrows };
+    ISO.ground(g, DG.BASE_Y + 8);
+    DG.draw(g, st);
+
+    // 1. one hop: up the first arrow, Embed -> Attention, then on into the box
+    if (t >= CUE.tensor - 0.05 && t < CUE.flow) {
+      const [z0, z1] = DG.ARROWS[0];
+      const z = lerp(z0, z1, E.io(seg(t, CUE.moving, CUE.nextOp))) + (DG.BOX_H / 2) * E.io(seg(t, CUE.nextOp + 0.05, CUE.nextOp + 0.60));
+      const a = E.back(seg(t, CUE.tensor - 0.05, CUE.tensor + 0.25)) * (1 - E.io(seg(t, CUE.nextOp + 0.15, CUE.nextOp + 0.62)));
+      if (a > 0) DG.token(g, DG.pt(0, z), R * Math.min(1.15, 0.4 + 0.6 * a), ISO.COL.data, clamp01(a));
+    }
+    // 2. the whole main line, bottom of Embed to top of Linear
+    if (t >= CUE.flow && t < CUE.input + 0.40) {
+      const u = E.sine(seg(t, CUE.bottomTop, CUE.rideEnd));
+      const a = E.out(seg(t, CUE.flow, CUE.flow + 0.30)) * (1 - E.io(seg(t, CUE.rideEnd + 0.05, CUE.rideEnd + 0.40)));
+      const hold = lerp(1, throughBoxes(u * DG.TOP), seg(t, CUE.bottomTop, CUE.bottomTop + 0.10)); // full strength while it waits at the bottom
+      DG.token(g, DG.mainPoint(u), R, ISO.COL.data, a * hold);
+    }
+    // 3. the two ends: input tokens at the bottom, logits at the top (the token rides up between them)
+    if (t >= CUE.input + 0.10 && t < CUE.still) {
+      const u = E.sine(seg(t, CUE.logits, CUE.atTop));
+      const a = E.back(seg(t, CUE.input + 0.10, CUE.input + 0.40)) * (1 - E.io(seg(t, CUE.atTop + 0.22, CUE.still - 0.06)));
+      const hold = lerp(1, throughBoxes(u * DG.TOP), seg(t, CUE.logits, CUE.logits + 0.10) * (1 - seg(t, CUE.atTop - 0.10, CUE.atTop)));
+      ring(g, BOTTOM, seg(t, CUE.input + 0.15, CUE.input + 0.75));
+      ring(g, BOTTOM, seg(t, CUE.atBottom, CUE.atBottom + 0.60));
+      ring(g, TOPP, seg(t, CUE.atTop, CUE.atTop + 0.50));
+      if (a > 0) DG.token(g, DG.mainPoint(u), R * Math.min(1.15, a), ISO.COL.data, clamp01(a));
+    }
+    DG.styleLabels(labels, st);
+    // the box at each end answers its mark: Embed on "at the bottom", Linear on "at the top"
+    const pop = { embed: Math.sin(Math.PI * E.out(seg(t, CUE.atBottom, CUE.atBottom + 0.55))), head: Math.sin(Math.PI * E.out(seg(t, CUE.atTop, CUE.atTop + 0.50))) };
+    ["embed", "head"].forEach((n) => { const s = 1 + POP * pop[n]; labels[n].style.transform = `matrix(${s.toFixed(4)}, ${(DG.SHEAR * s).toFixed(4)}, 0, ${s.toFixed(4)}, 0, 0)`; });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
