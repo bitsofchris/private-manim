@@ -1,8 +1,9 @@
 # private-manim: start here
 
-Explainer Shorts (9:16, 45–60 s) and 16:9 explainer scenes in Manim
-Community 0.18.1, with HyperFrames (HTML/SVG rendered by headless Chrome)
-as a second engine for Short beats, in the Bits of Chris house style.
+Explainer Shorts (9:16, 45–60 s) in HyperFrames (HTML / SVG / canvas
+rendered by headless Chrome), the default engine since 2026-10-04, and in
+Manim Community 0.18.1, which also makes the 16:9 explainer scenes, all in
+the Bits of Chris house style.
 Chris records the voice; agents build every visual. This file is the single entry point: the map,
 the rules of precedence, how a session runs, and how the repo stays clean.
 Everything agents maintain lives in `agents/`; code lives in `videos/_shared/`
@@ -22,7 +23,8 @@ clean").
 | What already exists to reuse | `agents/parts.md` | inventory of shared and per-video parts, naming, promotion |
 | Shared code | `videos/_shared/*.py` | scene bases, mobjects, the transformer diagram |
 | Vendored web assets (GSAP, Inter) | `videos/_shared/web/vendor/` | offline HyperFrames renders; versions, licenses, sha256 in its README |
-| HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes |
+| HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes; `stack-styles/`, one beat in ten visual styles plus the house-style control |
+| A whole Short in HyperFrames, and its isometric kit | `videos/009-transformer-short-iso/` | `_iso/iso.js` (world, tray, card, slabs, palette), `00_layout/` (the canonical frame), `BRIEF.md` (the beat contract) |
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
@@ -38,9 +40,14 @@ first line of `storyboard.md`: `ENGINE: manim` or `ENGINE: hyperframes`.
 A Short may mix engines (`ENGINE: mixed`); then each beat row names its
 engine.
 
-- **Manim** for diagrams, math, code, data: anything with axes, arrows
-  between named parts, or a shared part in `videos/_shared/`.
-- **HyperFrames** for characters, props, UI mock-ups, abstract ideas.
+- **HyperFrames is the default** (Chris, 2026-10-04, after 009 rebuilt a
+  whole technical Short in it: matrices, a block diagram, attention arcs,
+  small networks). Renders take seconds, its `check` lints layout and
+  contrast, and the look is not tied to Manim's primitives.
+- **Manim** when the beat needs what it has and a canvas does not: real
+  axes and plotted data, 3D camera moves, an existing shared part in
+  `videos/_shared/` that would cost more to redraw than to reuse, and all
+  16:9 scenes. Nothing Manim is retired; the Manim rules below stand.
 
 Both engines share the house style (palette, safe area, one magenta hero,
 captions burned in by `tools/assemble.py`) and the whole process; only

@@ -3,6 +3,17 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-04
+
+- HyperFrames is the default engine for Shorts; Manim stays for axes and plotted data, 3D camera moves, existing shared parts and all 16:9 scenes (`AGENTS.md` "Which engine"). Nothing Manim is retired. (Chris, after 009)
+- `videos/009-transformer-short-iso/`: 005 rebuilt beat for beat in an isometric HyperFrames look over the same VO and captions; final at `media/transformer_short_hyperframe.mp4`. Its kit `_iso/iso.js` is the first shared HyperFrames script, linked into each beat by symlink; `00_layout/` is the canonical frame; `BRIEF.md` is the contract four parallel agents built to. (009)
+- Matrix tiles, words and digits are coloured by token column (my teal, name blue, is gold; a darker shade for a negative value), not by sign, so a column reads as belonging to its word. The blue `#60A5FA` is new and lives only in the kit until a second video needs it in `style.py`. (Chris, 009)
+- The head beat ends on the output: the whole tray sinks into the head and `Chris` comes out the other side; bars and label flips removed. (Chris, 009)
+- `agents/beat-brief-hyperframes.md`: "What `check` and the renderer trip on" (transform-only tweens, timeline registration in the beat file, canvas and blend-mode text unseen by the audit, the `data-layout-allow-*` waivers, generic `serif` fails, grain file size, the 60 px width budget) and "One driver, and a shared kit". (stack-styles, 009)
+- `prototypes/hyperframes/stack-styles/`: one five-second beat in ten styles plus the house-style control, with a scaffold and a builder brief. `agents/research/2026-10-04-hyperframes-styles.md` holds the style research behind it. (experiment)
+- Candidates for the kit when it is promoted (written locally in 009's beats): round-capped `line` / `dot`, `traveller`, `flashEdge`, world-space arcs with partial draw, a `clipZ` option on `ISO.tray` (the sinking tray), a slab with a well, `slabStack`, a glow colour option on slabs, an x offset for the view, a cross-fading label flip. (009)
+- Open: only Inter ExtraBold is vendored. A lighter weight or a condensed face would loosen every layout; a serif is needed for an editorial look. Adding one is a new asset and Chris's call.
+
 ## 2026-10-03
 
 - HyperFrames ecosystem map in `agents/research/`, linked from the HyperFrames beat brief. (research)

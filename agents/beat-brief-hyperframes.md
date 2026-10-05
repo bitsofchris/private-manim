@@ -8,7 +8,7 @@ this file's path plus the beat-specific brief (beat number, folder name,
 `BEAT_SECONDS`, VO with master times, the visual brief, the hero).
 Manim beats get `agents/beat-brief.md` instead.
 **When to use:** runbook step 6, for every beat whose storyboard row says
-`hyperframes` (characters, props, UI mock-ups, abstract ideas).
+`hyperframes` (the default engine; `AGENTS.md` "Which engine").
 **How it works:** one folder per beat holding one `index.html`; build it
 from a prototype, check, render to the path `beats.json` lists, review
 your own contact sheet, report. You never edit `videos/_shared/` (that
@@ -159,6 +159,55 @@ on, the old hero goes teal, `--dim` or `--muted`. `ACCENT_CYAN` /
 - Text floor: every label ≥ 60 px `font-size`, weight 800. Count widths
   before building: at 64 px, Inter ExtraBold runs ~38 px a character, so
   the safe width holds ~23 characters.
+
+## What `check` and the renderer trip on
+
+Trigger, then the fix. All found building `prototypes/hyperframes/stack-styles/`
+and `videos/009-transformer-short-iso/`.
+
+- **A tween on `top` / `left` / `width` / `height`** is a lint error
+  (`gsap_non_transform_motion`). Tween `x` / `y` / `scale` / `opacity`, or
+  set the value inside `render(t)`.
+- **`window.__timelines` registered inside a shared script** fails the
+  static lint (`missing_timeline_registry`). The literal
+  `window.__timelines["main"] = ...` must be in the beat's own `index.html`.
+- **Canvas text is invisible to `check`** (contrast reports 0/0). Text that
+  must be read is DOM text; if it has to be canvas, judge it on the sheet.
+- **A full-frame overlay** (scanlines, vignette, grain) makes every label
+  "occluded". Put it under the text, or mark it `data-layout-allow-occlusion`.
+- **Text clipped on purpose** (`overflow: hidden` masks, scrollback, an
+  odometer) is reported as overflow / occlusion / overlap. Waive only those
+  elements: `data-layout-allow-overflow`, `-occlusion`, `-overlap`. A
+  full-bleed canvas takes `data-layout-allow-overflow`.
+- **Text line boxes that touch** are `content_overlap` errors even when the
+  glyphs do not: keep the row pitch at or above the line height.
+- **`mix-blend-mode` text** is scored on its declared colour, not the
+  blended pixel; `data-layout-ignore` on that text is the only way through.
+  A GSAP transform isolates the blend group, so the blend mode goes on the
+  tweened wrapper, not its children.
+- **CSS applies `filter` before `clip-path`** on one element: clip a child,
+  filter its parent.
+- **Generic `serif`** renders as Inter with a synthesised italic. Generic
+  `monospace` works. Any other face has to be vendored first.
+- **Stepped full-frame grain** makes huge files (37 MB for 5 s): freeze or
+  slow it.
+- **Layout budget:** Inter ExtraBold at 60 px is about 140 px per `+0.4`.
+  Count rows and widths before drawing; nine numbers plus three words is
+  already a 546 x 258 px card.
+
+## One driver, and a shared kit when a video has one look
+
+Draw the whole beat in one `render(t)` and let the timeline be the clock
+(`ISO.start` in 009, the `driver` in `ironies`). It is a pure function of
+time by construction, seeks cleanly, and keeps cues as plain numbers.
+
+When every beat of a video shares a world, put the drawing code in one
+script in the video folder and link it into each beat as `vendor` is linked
+(`ln -s ../_iso NN_beat/iso`, then `<script src="iso/iso.js">`): 009's
+`_iso/iso.js`. The kit also defines the canonical frame each beat opens and
+ends on, which is what lets beats be built in parallel and still cut
+cleanly. Beat agents do not edit the kit; they write local helpers and name
+them in the report.
 
 ## Review
 

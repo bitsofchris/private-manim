@@ -56,10 +56,16 @@ Paths in this table are relative to `videos/`.
 
 ## HyperFrames prototypes (copy, do not import)
 
-HyperFrames beats have no shared code: an agent copies a piece from a
-prototype into its beat's `index.html`. Nothing here becomes a template
-until a real video needs it twice (the same promotion rule as Manim parts).
-Paths are under `prototypes/hyperframes/`.
+An agent copies a piece from a prototype into its beat's `index.html`.
+Nothing here becomes a template until a real video needs it twice (the same
+promotion rule as Manim parts). The one shared script so far is 009's
+isometric kit, `videos/009-transformer-short-iso/_iso/iso.js` (1 use): the
+projection `ISO.P`, `box`, `ground`, `shadow`, the `tray` of tiles coloured
+by token, ring slabs in two halves (`slabBack` / `slabFront`), the readout
+`makeCard`, `label`, `guides`, `start`. It moves to `videos/_shared/web/`
+when a second video uses it; the helpers its beats wrote locally and would
+move with it are listed in the changelog (2026-10-04).
+Paths below are under `prototypes/hyperframes/`.
 
 | Piece | Where | What |
 |---|---|---|
@@ -70,6 +76,9 @@ Paths are under `prototypes/hyperframes/`.
 | `?guides` safe-area overlay | `ironies`: `#guides` (four shaded dead zones); `quiz`: `#guides` (dashed safe rectangle) | preview with `?guides` to check layout |
 | `render(t)` driver | `ironies/index.html`: `driver` object + `hash()` | procedural drawing as a pure function of time, re-run on every seek; deterministic noise |
 | vendored GSAP + Inter | `videos/_shared/web/vendor/`, linked as `vendor/` | the offline `<script>` and `@font-face`; see its README |
+| house-style matrix + block panels | `stack-styles/00_house/index.html` | the Manim stack beat rebuilt as DOM: bracketed matrix, teal cells, panels, magenta flow line |
+| a starting file that passes `check` | `stack-styles/_scaffold/index.html` | root attributes, `DATA` / `CUE`, `render(t)`, guides, timeline registration |
+| ten other looks for one beat | `stack-styles/NN_slug/index.html` | riso, blueprint, oscilloscope, editorial, Swiss, isometric, paper collage, terminal, transit map, pixel art; see its README |
 
 ## Naming
 
