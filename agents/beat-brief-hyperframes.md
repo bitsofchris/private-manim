@@ -171,6 +171,10 @@ and `videos/009-transformer-short-iso/`.
 - **`window.__timelines` registered inside a shared script** fails the
   static lint (`missing_timeline_registry`). The literal
   `window.__timelines["main"] = ...` must be in the beat's own `index.html`.
+- **A beat drawn only on a canvas** fails with `sweep_static` ("Timeline
+  did not advance under seek"): the audit fingerprints DOM geometry and
+  opacity, not pixels. Give it one honest DOM change (a label that swells
+  when its part is named).
 - **Canvas text is invisible to `check`** (contrast reports 0/0). Text that
   must be read is DOM text; if it has to be canvas, judge it on the sheet.
 - **A full-frame overlay** (scanlines, vignette, grain) makes every label
