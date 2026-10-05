@@ -61,6 +61,36 @@ Rules that are specific to Shorts:
 - `FadeOut(VGroup(a, b))` on a *fresh* VGroup re-adds it on top of the scene, so a fading opaque panel dims whatever it covered. Fade already-added mobjects one `FadeOut` each.
 - `mobject.become(other)` copies points, not attributes: a `Text` keeps its old `.text`. Set it yourself if code reads it (see `TokenColumn.set_values`).
 
+## The isometric house look (HyperFrames Shorts)
+
+The default look for a HyperFrames Short since 2026-10-04, from 009, 010 and
+011. The code is `videos/009-transformer-short-iso/_iso/iso.js` (the world),
+`videos/010-diagram-grammar-iso/_diagram/diagram.js` (the transformer figure)
+and `videos/011-jev-decision-models-iso/_jev/jev.js` (pillars, slabs, cards).
+
+**The one question per element: is the viewer meant to see a thing, or read
+a value?** See: an isometric object. Read: a flat, upright card. One beat may
+hold both; the same information is never shown twice.
+
+| When you want | Use |
+|---|---|
+| the ground every frame stands on | the navy floor grid (`ISO.ground`), in every beat, so the Short is one place |
+| a model, a layer, a block, a head | a slab or ring with its name on the front face (`JV.slab`, `ISO.slabBack` / `slabFront`) |
+| data passing through an operation | the object moves through the slab or ring; the one at work glows magenta |
+| a quantity compared at a glance | height: a pillar or a tile (`JV.pillars`, `ISO.tray`) |
+| numbers someone will read (a matrix, probabilities with values) | flat, upright digits on a card standing in the world (`ISO.makeCard`); not tiles alone |
+| code, JSON, a token stream, a ticket, a chip, a counter | a flat card (`JV.card`, `mono` for code); never sheared |
+| a label for an object | flat and upright beside it; lay text on a front face only for the object's own name |
+| which column or choice something belongs to | one colour per token or choice, on the tile, the word and the digits alike (`ISO.COL.tokens`) |
+| a figure from a paper, when the beat is about reading it | the figure with its own marks and direction, unchanged (`DG.draw`); objects may come out of it afterwards |
+| the hero | one magenta mark per beat; it returns to its resting colour when the VO moves on |
+
+What it keeps from the Manim look, because that is where the clarity came
+from: one thing changes at a time, exact values are upright and large, and
+the subject has empty space around it. What to leave alone: do not extrude
+something only to make it isometric, and do not put a number on a slanted
+surface.
+
 ## Two-hero rule
 
 Exactly **one** mobject (or one tightly-related VGroup) is magenta per beat. If everything is hero, nothing is. The rest is teal (data), muted (construction), or FG_DIM (labels).

@@ -12,6 +12,9 @@ that forced it. Newest first.
 - `agents/beat-brief-hyperframes.md`: "What `check` and the renderer trip on" (transform-only tweens, timeline registration in the beat file, canvas and blend-mode text unseen by the audit, the `data-layout-allow-*` waivers, generic `serif` fails, grain file size, the 60 px width budget) and "One driver, and a shared kit". (stack-styles, 009)
 - `prototypes/hyperframes/stack-styles/`: one five-second beat in ten styles plus the house-style control, with a scaffold and a builder brief. `agents/research/2026-10-04-hyperframes-styles.md` holds the style research behind it. (experiment)
 - Candidates for the kit when it is promoted (written locally in 009's beats): round-capped `line` / `dot`, `traveller`, `flashEdge`, world-space arcs with partial draw, a `clipZ` option on `ISO.tray` (the sinking tray), a slab with a well, `slabStack`, a glow colour option on slabs, an x offset for the view, a cross-fading label flip. (009)
+- `agents/style.md`: "The isometric house look": objects are isometric, anything read exactly is a flat upright card; one colour per token or choice; the floor in every beat. (Chris, after 009-011)
+- 010 (006 rebuilt) and 011 (008 rebuilt) in the isometric look; `_diagram/diagram.js` is the transformer figure with its marks and bottom-to-top flow locked; `_jev/jev.js` holds probability pillars, labelled slabs and flat cards. (010, 011)
+- Open: the kit (`iso.js`) and the figure (`diagram.js`) each have two users and should move to `videos/_shared/web/iso/` with the beats relinked; the move was blocked by the session's permissions twice and is left for Chris. (janitor)
 - Open: only Inter ExtraBold is vendored. A lighter weight or a condensed face would loosen every layout; a serif is needed for an editorial look. Adding one is a new asset and Chris's call.
 
 ## 2026-10-03
