@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- House-palette variant of 06_iso (same geometry and timing). Style 06: isometric tower, "falling through three floors".
+         The tower is drawn on a canvas by render(t) with a painter's-algorithm
+         order (each slab = back half, [tray], front half). The readout card and
+         the block numerals are flat DOM text. Offline: GSAP and Inter vendored. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { /* house palette, videos/_shared/style.py */
+              --ground: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0; --data: #2dd4bf; --hero: #c084fc; --muted: #4a5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #card { position: absolute; left: 404px; top: 236px; width: 546px; height: 258px; border-radius: 20px;
+              background: var(--panel); border: 5px solid var(--dim); padding: 0 9px 0 9px; }
+      #card .r { display: flex; justify-content: space-between; height: 62px; }
+      #card .r div { width: 166px; text-align: center; font-size: 64px; line-height: 62px; letter-spacing: -1px; }
+      #card .r.w div { font-size: 60px; color: var(--text); }
+      .lab { position: absolute; left: 690px; top: 0; width: 90px; height: 90px; font-size: 88px; line-height: 90px;
+             text-align: center; color: var(--dim); }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920"></canvas>
+      <div id="card"><div class="r w"></div></div>
+      <div class="lab" id="l1">1</div>
+      <div class="lab" id="l2">2</div>
+      <div class="lab" id="l3">3</div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+  const seg = (t, a, b) => clamp01((t - a) / (b - a));
+  const round1 = (v) => { const r = Math.round(v * 10) / 10; return r === 0 ? 0 : r; };
+  const fmt = (v) => (v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
+  const E = { io: gsap.parseEase("power2.inOut"), out: gsap.parseEase("power2.out"), inn: gsap.parseEase("power2.in"),
+              back: gsap.parseEase("back.out(1.2)"), sine: gsap.parseEase("sine.inOut") };
+
+  // stage values: 0 = before, 3 = after, thirds in between, one decimal
+  const stageVal = (c, r, s) => round1(lerp(DATA.before[c][r], DATA.after[c][r], s / 3));
+
+  // ---- geometry (screen px; world x runs right-down, world y runs left-down) ----
+  const CX = 400, A = 0.866, B = 0.23;
+  const S2 = 150, H2 = 94, THICK = 32;         // slab half-side, hole half-side, thickness
+  const P2 = 80, TILE = 48, GAP = 6, PLATE = 5; // tray half-side, tile side, gap, plate thickness
+  const LEVEL = [603, 749, 895];                // screen y of each slab's top-face centre
+  const GROUND = 1055, HOVER = LEVEL[0] - 30, SEAT = 8;
+  // times
+  const T = { seat1: 0.8, rise: CUE.blocks, m1: CUE.refine, f2: 2.8, m2: 3.1, f3: 3.3, m3: 3.6, f4: 3.8, land: 4.2, rotEnd: 4.0 };
+  const MORPH = 0.2;
+  // house palette: slabs are panels, teal is data, magenta is the one hero (the block at work)
+  const COL = { top: [86, 88, 150], a: [60, 61, 112], b: [43, 44, 86], pos: [45, 212, 191], neg: [74, 80, 112],
+                ink: [20, 20, 43], glow: [192, 132, 252], text: [236, 235, 228], dim: [138, 143, 176], edge: [138, 143, 176] };
+  const mix = (p, q, u) => [lerp(p[0], q[0], u), lerp(p[1], q[1], u), lerp(p[2], q[2], u)];
+  const css = (c, k = 1) => `rgb(${Math.round(c[0] * k)},${Math.round(c[1] * k)},${Math.round(c[2] * k)})`;
+
+  const cv = $("scene"), g = cv.getContext("2d");
+  let cosT = 1, sinT = 0;
+  const P = (x, y, z, oy) => { const xr = x * cosT - y * sinT, yr = x * sinT + y * cosT; return [CX + (xr - yr) * A, oy + (xr + yr) * B - z]; };
+  function poly(pts, fill) {
+    g.beginPath(); pts.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath();
+    g.fillStyle = fill; g.fill(); g.strokeStyle = fill; g.lineWidth = 1; g.lineJoin = "round"; g.stroke(); // stroke hides seams
+  }
+  function box(x0, y0, x1, y1, zb, zt, oy, top, a, b) {
+    poly([P(x1, y0, zt, oy), P(x1, y1, zt, oy), P(x1, y1, zb, oy), P(x1, y0, zb, oy)], a);
+    poly([P(x0, y1, zt, oy), P(x1, y1, zt, oy), P(x1, y1, zb, oy), P(x0, y1, zb, oy)], b);
+    poly([P(x0, y0, zt, oy), P(x1, y0, zt, oy), P(x1, y1, zt, oy), P(x0, y1, zt, oy)], top);
+  }
+  function slabBack(oy, glow) {
+    const top = css(mix(COL.top, COL.glow, glow));
+    // top face ring
+    g.beginPath();
+    [[-S2, -S2], [S2, -S2], [S2, S2], [-S2, S2]].forEach(([x, y], i) => { const p = P(x, y, 0, oy); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); });
+    g.closePath();
+    [[-H2, -H2], [-H2, H2], [H2, H2], [H2, -H2]].forEach(([x, y], i) => { const p = P(x, y, 0, oy); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); });
+    g.closePath(); g.fillStyle = top; g.fill("evenodd");
+    // the two inner walls of the shaft that face the camera
+    poly([P(-H2, -H2, 0, oy), P(-H2, H2, 0, oy), P(-H2, H2, -THICK, oy), P(-H2, -H2, -THICK, oy)], css(COL.a, 0.8));
+    poly([P(-H2, -H2, 0, oy), P(H2, -H2, 0, oy), P(H2, -H2, -THICK, oy), P(-H2, -H2, -THICK, oy)], css(COL.b, 0.8));
+  }
+  function slabFront(oy, glow) {
+    const top = css(mix(COL.top, COL.glow, glow));
+    poly([P(S2, -S2, 0, oy), P(S2, S2, 0, oy), P(S2, S2, -THICK, oy), P(S2, -S2, -THICK, oy)], css(mix(COL.a, COL.glow, glow * 0.35)));
+    poly([P(-S2, S2, 0, oy), P(S2, S2, 0, oy), P(S2, S2, -THICK, oy), P(-S2, S2, -THICK, oy)], css(mix(COL.b, COL.glow, glow * 0.25)));
+    poly([P(H2, -S2, 0, oy), P(S2, -S2, 0, oy), P(S2, S2, 0, oy), P(-S2, S2, 0, oy), P(-S2, H2, 0, oy), P(H2, H2, 0, oy)], top);
+  }
+  function tray(oy, vals) {
+    box(-P2, -P2, P2, P2, 0, PLATE, oy, css(COL.ink), css(COL.ink, 0.55), css(COL.ink, 0.3));
+    const order = [];
+    for (let c = 0; c < 3; c++) for (let r = 0; r < 3; r++) order.push([c, r]);
+    order.sort((p, q) => (p[0] + p[1]) - (q[0] + q[1]));
+    order.forEach(([c, r]) => {
+      const v = vals[c][r], h = 6 + Math.abs(v) * 37;
+      const col = mix(COL.neg, COL.pos, clamp01(v / 0.12 * 0.5 + 0.5));
+      const x0 = -P2 + 2 + c * (TILE + GAP), y0 = -P2 + 2 + r * (TILE + GAP);
+      box(x0, y0, x0 + TILE, y0 + TILE, PLATE, PLATE + h, oy, css(col), css(col, 0.8), css(col, 0.62));
+    });
+  }
+  function grid() {
+    g.strokeStyle = "rgba(74, 80, 112, 0.28)"; g.lineWidth = 3; g.beginPath();
+    for (let k = -30; k <= 30; k++) {
+      let p = P(k * 120, -4000, 0, GROUND), q = P(k * 120, 4000, 0, GROUND); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
+      p = P(-4000, k * 120, 0, GROUND); q = P(4000, k * 120, 0, GROUND); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
+    }
+    g.stroke();
+  }
+
+  // ---- flat readout card ----
+  const card = $("card"), wrow = card.querySelector(".w"), digits = [];
+  DATA.tokens.forEach((w) => { const d = document.createElement("div"); d.textContent = w; wrow.appendChild(d); });
+  for (let r = 0; r < 3; r++) {
+    const row = document.createElement("div"); row.className = "r"; card.appendChild(row);
+    for (let c = 0; c < 3; c++) { const d = document.createElement("div"); row.appendChild(d); digits.push({ el: d, c, r }); }
+  }
+  const labs = [$("l1"), $("l2"), $("l3")];
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // scene rotation: a few degrees, settles before the still
+    const th = (-7 * (1 - E.sine(seg(t, 0, T.rotEnd)))) * Math.PI / 180;
+    cosT = Math.cos(th); sinT = Math.sin(th);
+
+    // slabs: 2 and 3 rise from below at CUE.blocks
+    const slabs = [0, 1, 2].map((i) => {
+      if (i === 0) return { y: LEVEL[0], on: true, u: 1 };
+      const u = seg(t, T.rise + (i - 1) * 0.2, T.rise + (i - 1) * 0.2 + 0.6);
+      return { y: LEVEL[i] + (1 - E.back(u)) * 300, on: u > 0, u };
+    });
+
+    // tray height: seat in block 1, then drop floor by floor from CUE.refine
+    const seat = LEVEL.map((y) => y + SEAT);
+    let ty = lerp(HOVER, seat[0], E.io(seg(t, 0, T.seat1)));
+    ty = lerp(ty, seat[1], E.io(seg(t, T.f2, T.m2)));
+    ty = lerp(ty, seat[2], E.io(seg(t, T.f3, T.m3)));
+    ty = lerp(ty, GROUND, E.inn(seg(t, T.f4, T.land - 0.1)));
+    // a small settle on landing
+    const lu = seg(t, T.land - 0.1, T.land); if (lu > 0 && lu < 1) ty -= Math.sin(lu * Math.PI) * 7;
+
+    // refinement: one third inside each block
+    const mu = [T.m1, T.m2, T.m3].map((m) => seg(t, m, m + MORPH));
+    const sCont = E.io(mu[0]) + E.io(mu[1]) + E.io(mu[2]);
+    const sInt = (mu[0] >= 0.5 ? 1 : 0) + (mu[1] >= 0.5 ? 1 : 0) + (mu[2] >= 0.5 ? 1 : 0);
+    const s0 = Math.min(2, Math.floor(sCont)), f = sCont - s0;
+    const vals = [0, 1, 2].map((c) => [0, 1, 2].map((r) => lerp(stageVal(c, r, s0), stageVal(c, r, s0 + 1), f)));
+    const glow = mu.map((u) => Math.sin(u * Math.PI));
+
+    // ---- draw ----
+    g.clearRect(0, 0, 1080, 1920);
+    g.fillStyle = "#0b0b14"; g.fillRect(0, 0, 1080, 1920);
+    grid();
+    // landing shadow
+    const sh = 0.10 + 0.14 * seg(t, T.f4, T.land);
+    poly([P(-P2 - 6, -P2 - 6, 0, GROUND + 5), P(P2 + 6, -P2 - 6, 0, GROUND + 5), P(P2 + 6, P2 + 6, 0, GROUND + 5), P(-P2 - 6, P2 + 6, 0, GROUND + 5)], `rgba(45,212,191,${(sh * 0.6).toFixed(3)})`);
+    let J = -1; // lowest slab whose top the tray is at or below
+    slabs.forEach((s, i) => { if (s.on && s.y <= ty + 0.01) J = i; });
+    for (let i = 2; i >= 0; i--) {
+      const s = slabs[i]; if (!s.on) continue;
+      const al = clamp01(s.u / 0.2);
+      g.globalAlpha = al;
+      slabBack(s.y, glow[i]);
+      if (J === i) { g.globalAlpha = 1; tray(ty, vals); g.globalAlpha = al; }
+      slabFront(s.y, glow[i]);
+    }
+    g.globalAlpha = 1;
+    if (J === -1) tray(ty, vals);
+
+    // ---- flat text ----
+    const flash = Math.max(...[T.m1, T.m2, T.m3].map((m) => (t >= m + MORPH / 2 ? 1 - seg(t, m + MORPH / 2, m + MORPH / 2 + 0.3) : 0)));
+    digits.forEach(({ el, c, r }) => {
+      const v = stageVal(c, r, sInt);
+      el.textContent = fmt(v);
+      el.style.color = css(mix(v < 0 ? COL.dim : COL.pos, COL.text, flash));
+    });
+    labs.forEach((el, i) => {
+      const s = slabs[i];
+      el.style.transform = `translate(0px, ${(s.y - 30).toFixed(2)}px) scale(${(1 + 0.18 * glow[i]).toFixed(3)})`;
+      el.style.opacity = s.on ? clamp01(s.u / 0.2).toFixed(3) : "0";
+      el.style.color = css(mix(COL.dim, COL.glow, glow[i]));
+    });
+  }
+
+  const clock = { p: 0 };
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to(clock, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0); // the driver: everything is drawn by render(t)
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

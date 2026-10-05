@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Scaffold for the stack-styles exploration: copy this file, keep the
+         contract (root attributes, DATA, CUE, timeline registration, guides),
+         replace everything visual. Offline: GSAP and Inter are vendored. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0; --data: #2dd4bf; --hero: #c084fc; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #matrix { position: absolute; left: 215px; top: 300px; width: 650px; }
+      .words, .row { display: flex; justify-content: space-between; }
+      .words div { width: 200px; text-align: center; font-size: 68px; }
+      .cell { width: 200px; height: 96px; margin-top: 12px; border-radius: 10px; background: var(--panel);
+              font-size: 68px; line-height: 96px; text-align: center; }
+      .block { position: absolute; left: 90px; width: 835px; height: 110px; border-radius: 22px;
+               background: var(--panel); border: 5px solid var(--dim); color: var(--dim);
+               font-size: 64px; line-height: 100px; padding-left: 36px; }
+      #flow { position: absolute; left: 90px; width: 835px; height: 10px; border-radius: 5px; background: var(--hero); }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <div id="matrix"><div class="words"></div></div>
+      <div class="block" id="b1" style="top: 760px">block 1</div>
+      <div class="block" id="b2" style="top: 890px">block 2</div>
+      <div class="block" id="b3" style="top: 1020px">block 3</div>
+      <div id="flow" style="top: 300px"></div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(1);
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+
+  // build the matrix
+  const m = $("matrix"), words = m.querySelector(".words"), cells = [];
+  DATA.tokens.forEach((w) => { const d = document.createElement("div"); d.textContent = w; words.appendChild(d); });
+  for (let r = 0; r < 3; r++) {
+    const row = document.createElement("div"); row.className = "row"; m.appendChild(row);
+    for (let c = 0; c < 3; c++) { const d = document.createElement("div"); d.className = "cell"; row.appendChild(d); cells.push({ el: d, c, r }); }
+  }
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    const u = clamp01((t - CUE.refine) / (CUE.still - CUE.refine - 0.4)); // 0..1 through the stack
+    cells.forEach(({ el, c, r }) => { el.textContent = fmt(lerp(DATA.before[c][r], DATA.after[c][r], u)); });
+  }
+
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.from(".block", { y: 60, opacity: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" }, 0.1);
+  tl.fromTo("#flow", { y: 0, opacity: 0 }, { y: 830, opacity: 1, duration: 1.3, ease: "power1.inOut" }, CUE.refine); // transforms only: check rejects tweens on top/left/width
+  tl.to("#flow", { opacity: 0, duration: 0.2 }, CUE.refine + 1.3);
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

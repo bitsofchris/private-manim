@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Style 05: Swiss typographic, "the numbers are the picture".
+         6-column grid (65 px margins, 15 px gutters, 135 px columns), three 266 px modules,
+         one red bar, no boxes. Offline: GSAP and Inter are vendored. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --white: #f5f3ee; --black: #111111; --red: #e3120b; --grey: #878782; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--white); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--white);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--black);
+              font-variant-numeric: tabular-nums; }
+      /* column heads and table share grid columns 3-6: x 365-950, three 195 px columns */
+      #heads, #table { position: absolute; left: 365px; width: 585px; display: grid; grid-template-columns: repeat(3, 195px); }
+      #heads { top: 222px; }
+      #heads div { font-size: 60px; line-height: 60px; text-align: right; letter-spacing: -1px; }
+      #table { top: 307px; grid-auto-rows: 76px; }
+      .cell { height: 76px; overflow: hidden; }
+      .cell { position: relative; }
+      .cell span { position: absolute; left: 0; top: 0; width: 195px; height: 76px; font-size: 72px; line-height: 76px; text-align: right; letter-spacing: -1px; }
+      .rule { position: absolute; left: 65px; width: 885px; height: 6px; background: var(--black); }
+      .mask { position: absolute; left: 51px; width: 299px; height: 242px; overflow: hidden; }
+      /* the box is the mask; line-height 278 puts the cap top 8 px below the rule above and lets the rule below crop the foot */
+      .num { position: absolute; left: 0; top: 0; width: 299px; height: 242px; font-size: 360px; line-height: 278px; letter-spacing: -8px; color: var(--grey); }
+      #bar { position: absolute; left: 65px; top: 542px; width: 885px; height: 24px; background: var(--red);
+             transform-origin: left center; }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <div id="heads"></div>
+      <div class="rule" style="top: 294px"></div>
+      <div class="mask" style="top: 300px"><div class="num" id="n1" data-layout-allow-overflow data-layout-allow-occlusion>1</div></div>
+      <div class="rule" style="top: 542px"></div>
+      <div class="mask" style="top: 566px"><div class="num" id="n2" data-layout-allow-overflow data-layout-allow-occlusion>2</div></div>
+      <div class="rule" style="top: 808px"></div>
+      <div class="mask" style="top: 832px"><div class="num" id="n3" data-layout-allow-overflow data-layout-allow-occlusion>3</div></div>
+      <div class="rule" style="top: 1074px"></div>
+      <!-- data-layout-* waivers: the clip masks and odometer overlaps are intentional; check cannot see overflow: hidden -->
+      <div id="bar" data-layout-allow-occlusion></div>
+      <div id="table"></div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  // a set table: no plus signs, a true minus, one decimal
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r < 0 ? "−" : "") + Math.abs(r).toFixed(1); };
+  const lerp = (a, b, u) => a + (b - a) * u;
+
+  const MODULE = 266, ROW = 76;
+
+  // ---- build: heads, and one odometer strip per cell holding the four states (in, after block 1, 2, 3) ----
+  DATA.tokens.forEach((w) => { const d = document.createElement("div"); d.textContent = w; $("heads").appendChild(d); });
+  const odo = [];
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+    const cell = document.createElement("div"); cell.className = "cell";
+    const cur = document.createElement("span"), nxt = document.createElement("span");
+    [cur, nxt].forEach((sp) => ["overflow", "occlusion", "overlap"].forEach((w) => sp.setAttribute("data-layout-allow-" + w, "")));
+    cell.appendChild(cur); cell.appendChild(nxt); $("table").appendChild(cell);
+    const vals = [0, 1, 2, 3].map((k) => fmt(lerp(DATA.before[c][r], DATA.after[c][r], k / 3)));
+    odo.push({ cur, nxt, vals, v: 0 }); // v = which state shows, fractional while rolling
+  }
+
+  // every frame is a pure function of the timeline state: old digit slides up and out, new one slides in
+  function render() {
+    odo.forEach(({ cur, nxt, vals, v }) => {
+      const k = Math.min(3, Math.floor(v + 1e-6)), f = Math.max(0, v - k);
+      cur.textContent = vals[k];
+      cur.style.transform = "translateY(" + (-f * ROW).toFixed(2) + "px)";
+      nxt.textContent = vals[Math.min(3, k + 1)];
+      nxt.style.transform = "translateY(" + ((1 - f) * ROW).toFixed(2) + "px)";
+      nxt.style.visibility = f > 0 ? "visible" : "hidden";
+    });
+  }
+
+  const tl = gsap.timeline({ paused: true, onUpdate: render });
+  const roll = (k, at) => tl.to(odo, { v: k, duration: 0.42, ease: "power4.inOut", stagger: 0.025 }, at);
+
+  // 0.0: "1" and the table are set; the red bar wipes in under "1" and the digits roll once (refinement 1)
+  tl.fromTo("#bar", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 0);
+  roll(1, 0.2);
+  // CUE.blocks: "2" and "3" rise out of their masks
+  tl.fromTo(["#n2", "#n3"], { yPercent: 100 }, { yPercent: 0, duration: 0.35, ease: "expo.out", stagger: 0.15 }, CUE.blocks);
+  // CUE.refine: bar jumps 1 -> 2, the table drops one module and rolls (refinement 2)
+  tl.to("#bar", { y: MODULE, duration: 0.12, ease: "power4.inOut" }, CUE.refine);
+  tl.to("#table", { y: MODULE, duration: 0.3, ease: "power4.inOut" }, CUE.refine);
+  roll(2, CUE.refine + 0.15);
+  // bar jumps 2 -> 3 (refinement 3)
+  tl.to("#bar", { y: MODULE * 2, duration: 0.12, ease: "power4.inOut" }, CUE.refine + 0.65);
+  tl.to("#table", { y: MODULE * 2, duration: 0.3, ease: "power4.inOut" }, CUE.refine + 0.65);
+  roll(3, CUE.refine + 0.8);
+  // the active numeral goes black; done by CUE.still
+  tl.to("#n3", { color: "#111111", duration: 0.3, ease: "expo.out" }, CUE.still - 0.4);
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render();
+})();
+    </script>
+  </body>
+</html>

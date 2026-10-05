@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Stack-styles 03: oscilloscope, "the signal gets cleaner".
+         Each token is a trace; each block is a gate that removes a third of
+         the noise. Canvas 2D redrawn from render(t); digits are DOM text. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --tube: #050805; --green: #7cff6b; --dim: #1f6b2a; --grat: #123016; --amber: #ffb000; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--tube); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+              background: radial-gradient(ellipse 900px 1100px at 50% 36%, #0a1a0b 0%, #050805 70%);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--green);
+              font-variant-numeric: tabular-nums; }
+      #scope { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #matrix { position: absolute; left: 132px; top: 262px; width: 750px; display: flex; }
+      .col { width: 250px; text-align: center; }
+      .word { font-size: 62px; line-height: 62px; height: 65px; border-bottom: 3px solid var(--dim);
+              text-shadow: 0 0 5px rgba(124, 255, 107, 0.7); }
+      .cell { font-size: 62px; line-height: 62px; height: 62px; color: var(--green);
+              text-shadow: 0 0 6px rgba(124, 255, 107, 0.75); }
+      .gate { position: absolute; top: 519px; width: 84px; height: 64px; font-size: 64px; line-height: 60px;
+              text-align: center; border: 3px solid var(--green); border-radius: 6px; background: var(--tube); }
+      #scan { position: absolute; inset: 0; pointer-events: none;
+              background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0px, rgba(0, 0, 0, 0.3) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 5px); }
+      #vig { position: absolute; inset: 0; pointer-events: none;
+             background: radial-gradient(ellipse 760px 1250px at 50% 45%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.75) 100%); }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scope" width="1080" height="1920"></canvas>
+      <div id="vig"></div>
+      <div id="matrix"></div>
+      <div class="gate" id="g1" style="left: 288px">1</div>
+      <div class="gate" id="g2" style="left: 518px">2</div>
+      <div class="gate" id="g3" style="left: 748px">3</div>
+      <div id="scan" data-layout-allow-occlusion></div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r >= 0 ? "+" : "−") + Math.abs(r).toFixed(1); };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+  // deterministic hashed noise in [0,1)
+  const hash = (i, k) => { const s = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return s - Math.floor(s); };
+
+  // ---- geometry (px) ----
+  const GR = { x0: 65, x1: 950, y0: 260, y1: 1080 };          // graticule
+  const GATE_X = [330, 560, 790];
+  const LANE_Y = [665, 830, 995], LANE_H = 78;                 // lane centre, half height
+  const GATE_TOP = 585, GATE_BOT = 1076;
+  const SAMPLE_PX = 885 / 18;                                  // 18 samples = the 3 values, 6 times over
+  const VAL_PX = 52, NOISE_PX = 24, STEP = 4;
+  const SWEEP_T = 1.3;                                         // green beam: two passes before the refine
+  const REFINE_T = 1.2;                                        // amber sweep 2.6 -> 3.8
+  const FREEZE = 4.3;                                          // jitter stops (scope goes to HOLD)
+  const GATE_ON = [0, CUE.blocks, CUE.blocks + 0.2];
+  const CROSS = GATE_X.map((gx) => CUE.refine + REFINE_T * (gx - GR.x0) / (GR.x1 - GR.x0));
+  const GREEN = "#7CFF6B", DIM = "#1F6B2A", GRAT = "#123016", AMBER = "#FFB000";
+
+  // ---- DOM matrix ----
+  const cells = [];
+  DATA.tokens.forEach((w, c) => {
+    const col = document.createElement("div"); col.className = "col";
+    const h = document.createElement("div"); h.className = "word"; h.textContent = w; col.appendChild(h);
+    for (let r = 0; r < 3; r++) { const d = document.createElement("div"); d.className = "cell"; col.appendChild(d); cells.push({ el: d, c, r }); }
+    $("matrix").appendChild(col);
+  });
+  const gateEls = [$("g1"), $("g2"), $("g3")];
+  const ctx = $("scope").getContext("2d");
+
+  function graticule(t) {
+    ctx.globalCompositeOperation = "source-over"; ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    ctx.strokeStyle = GRAT; ctx.lineWidth = 2; ctx.setLineDash([]);
+    const dx = (GR.x1 - GR.x0) / 10, dy = (GR.y1 - GR.y0) / 10;
+    ctx.beginPath();
+    for (let i = 0; i <= 10; i++) {
+      ctx.moveTo(GR.x0 + i * dx, GR.y0); ctx.lineTo(GR.x0 + i * dx, GR.y1);
+      ctx.moveTo(GR.x0, GR.y0 + i * dy); ctx.lineTo(GR.x1, GR.y0 + i * dy);
+    }
+    ctx.stroke();
+    // minor ticks on the centre axes and on each lane baseline
+    ctx.strokeStyle = DIM; ctx.lineWidth = 2; ctx.beginPath();
+    const cx = (GR.x0 + GR.x1) / 2;
+    for (let i = 0; i <= 50; i++) { const y = GR.y0 + i * dy / 5; ctx.moveTo(cx - 7, y); ctx.lineTo(cx + 7, y); }
+    LANE_Y.forEach((ly) => { for (let i = 0; i <= 50; i++) { const x = GR.x0 + i * dx / 5; ctx.moveTo(x, ly - 5); ctx.lineTo(x, ly + 5); } });
+    ctx.stroke();
+    ctx.strokeStyle = DIM; ctx.lineWidth = 3; ctx.strokeRect(GR.x0, GR.y0, GR.x1 - GR.x0, GR.y1 - GR.y0);
+    // instrument readouts (decorative, small on purpose)
+    ctx.font = '800 24px "Inter", sans-serif'; ctx.textBaseline = "alphabetic"; ctx.fillStyle = GREEN; ctx.globalAlpha = 0.85;
+    ctx.textAlign = "left"; ctx.fillText("CH1  CH2  CH3   0.5/DIV", GR.x0 + 4, 252);
+    ctx.textAlign = "right"; ctx.fillStyle = t >= FREEZE ? AMBER : GREEN; ctx.fillText(t >= FREEZE ? "TRIG'D  HOLD" : "TRIG'D  RUN", GR.x1 - 4, 252);
+    ctx.textAlign = "left"; ctx.fillStyle = GREEN; ctx.globalAlpha = 0.7;
+    LANE_Y.forEach((ly, c) => {
+      ctx.fillText("CH" + (c + 1), GR.x0 + 28, ly - LANE_H + 24);
+      ctx.beginPath(); ctx.moveTo(GR.x0 + 2, ly - 10); ctx.lineTo(GR.x0 + 20, ly); ctx.lineTo(GR.x0 + 2, ly + 10); ctx.closePath(); ctx.fill(); // ground marker
+    });
+    // trigger marker: level arrow on the right edge of CH1, position arrow on the top edge
+    ctx.fillStyle = AMBER; ctx.globalAlpha = 0.9;
+    const ty = LANE_Y[0] - 20;
+    ctx.beginPath(); ctx.moveTo(GR.x1 - 2, ty - 10); ctx.lineTo(GR.x1 - 20, ty); ctx.lineTo(GR.x1 - 2, ty + 10); ctx.closePath(); ctx.fill();
+    const tx = GR.x0 + dx;
+    ctx.beginPath(); ctx.moveTo(tx - 10, GATE_TOP - 62); ctx.lineTo(tx + 10, GATE_TOP - 62); ctx.lineTo(tx, GATE_TOP - 44); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    const k = Math.floor(Math.min(t, FREEZE) * 15 + 1e-6);                 // jitter stepped at 15 fps
+    const refining = t >= CUE.refine;
+    const ax = GR.x0 + (GR.x1 - GR.x0) * clamp01((t - CUE.refine) / REFINE_T); // amber sweep x
+    // how many gates the signal at x has been through (fractional across a gate, for a smooth join)
+    const stageAt = (x) => {
+      if (!refining || x > ax) return 0;
+      let s = 0; for (const gx of GATE_X) s += clamp01((x - gx + 14) / 28); return s;
+    };
+    const traceY = (c, x, withNoise) => {
+      const s = stageAt(x), u = s / 3;
+      const p = (x - GR.x0) / SAMPLE_PX, n = Math.floor(p), f = p - n, sm = f * f * (3 - 2 * f);
+      const va = lerp(DATA.before[c][n % 3], DATA.after[c][n % 3], u);
+      const vb = lerp(DATA.before[c][(n + 1) % 3], DATA.after[c][(n + 1) % 3], u);
+      let y = LANE_Y[c] - lerp(va, vb, sm) * VAL_PX;
+      if (withNoise) y += (hash(Math.round(x / STEP) + c * 1000, k) * 2 - 1) * NOISE_PX * (1 - u);
+      return y;
+    };
+    const path = (c) => {
+      ctx.beginPath();
+      for (let x = GR.x0; x <= GR.x1; x += STEP) { const y = traceY(c, x, true); if (x === GR.x0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+      ctx.lineTo(GR.x1, traceY(c, GR.x1, true));
+    };
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, 1080, 1920);
+    graticule(t);
+
+    // gates
+    ctx.globalCompositeOperation = "lighter"; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    GATE_X.forEach((gx, g) => {
+      const on = t >= GATE_ON[g];
+      const bloom = on && g > 0 ? clamp01(1 - (t - GATE_ON[g]) / 0.15) : 0;
+      const hit = t >= CROSS[g] ? clamp01(1 - (t - CROSS[g]) / 0.35) : 0;
+      ctx.beginPath(); ctx.moveTo(gx, GATE_TOP); ctx.lineTo(gx, GATE_BOT);
+      if (!on) { ctx.setLineDash([6, 12]); ctx.shadowBlur = 0; ctx.strokeStyle = DIM; ctx.globalAlpha = 0.7; ctx.lineWidth = 3; ctx.stroke(); ctx.setLineDash([]); }
+      else {
+        ctx.shadowColor = GREEN; ctx.shadowBlur = 12; ctx.strokeStyle = GREEN; ctx.globalAlpha = 0.75; ctx.lineWidth = 4; ctx.stroke();
+        ctx.shadowBlur = 0; ctx.strokeStyle = "#E4FFDF"; ctx.globalAlpha = 0.8; ctx.lineWidth = 1.5; ctx.stroke();
+        if (bloom > 0) { ctx.shadowColor = "#FFFFFF"; ctx.shadowBlur = 40; ctx.strokeStyle = "#FFFFFF"; ctx.globalAlpha = bloom; ctx.lineWidth = 4 + 14 * bloom; ctx.stroke(); }
+        if (hit > 0) { ctx.shadowColor = AMBER; ctx.shadowBlur = 30; ctx.strokeStyle = AMBER; ctx.globalAlpha = hit; ctx.lineWidth = 4 + 8 * hit; ctx.stroke(); }
+      }
+      const el = gateEls[g];
+      const col = hit > 0.05 ? AMBER : bloom > 0.05 ? "#FFFFFF" : GREEN;
+      el.style.opacity = on ? 1 : 0.22;
+      el.style.color = col; el.style.borderColor = col;
+      el.style.textShadow = `0 0 ${6 + 18 * Math.max(bloom, hit)}px ${col}`;
+      el.style.boxShadow = on ? `0 0 ${8 + 30 * Math.max(bloom, hit)}px ${hit > 0.05 ? "rgba(255,176,0,0.8)" : "rgba(124,255,107,0.6)"}` : "none";
+    });
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+
+    // traces: wide glow, then a sharp core on top
+    const beamX = GR.x0 + (GR.x1 - GR.x0) * ((t / SWEEP_T) % 1);
+    for (let c = 0; c < 3; c++) {
+      path(c);
+      ctx.shadowColor = GREEN; ctx.shadowBlur = 14; ctx.strokeStyle = GREEN; ctx.globalAlpha = 0.5; ctx.lineWidth = 5; ctx.stroke();
+      ctx.shadowBlur = 0; ctx.strokeStyle = "#D9FFD2"; ctx.globalAlpha = 0.85; ctx.lineWidth = 2; ctx.stroke();
+      if (!refining) {
+        // phosphor persistence: the stretch just behind the beam is brighter
+        const gr = ctx.createLinearGradient(beamX - 260, 0, beamX, 0);
+        gr.addColorStop(0, "rgba(124,255,107,0)"); gr.addColorStop(1, "rgba(235,255,230,1)");
+        ctx.save(); ctx.beginPath(); ctx.rect(GR.x0, LANE_Y[c] - LANE_H - 6, beamX - GR.x0, 2 * LANE_H + 12); ctx.clip();
+        path(c); ctx.shadowColor = GREEN; ctx.shadowBlur = 18; ctx.strokeStyle = gr; ctx.globalAlpha = 1; ctx.lineWidth = 5; ctx.stroke();
+        ctx.restore();
+        ctx.shadowColor = GREEN; ctx.shadowBlur = 22; ctx.fillStyle = "#F2FFEE"; ctx.globalAlpha = 1;
+        ctx.beginPath(); ctx.arc(beamX, traceY(c, beamX, true), 8, 0, Math.PI * 2); ctx.fill();
+      } else {
+        // amber sweep: trail on the trace, then the dot (it parks on the right edge as the output marker)
+        const trail = clamp01(1 - (t - CUE.refine - REFINE_T) / 0.4);
+        if (trail > 0) {
+          const gr = ctx.createLinearGradient(ax - 240, 0, ax, 0);
+          gr.addColorStop(0, "rgba(255,176,0,0)"); gr.addColorStop(1, "rgba(255,196,60,1)");
+          ctx.save(); ctx.beginPath(); ctx.rect(GR.x0, LANE_Y[c] - LANE_H - 6, ax - GR.x0, 2 * LANE_H + 12); ctx.clip();
+          path(c); ctx.shadowColor = AMBER; ctx.shadowBlur = 18; ctx.strokeStyle = gr; ctx.globalAlpha = trail; ctx.lineWidth = 6; ctx.stroke();
+          ctx.restore();
+        }
+        ctx.shadowColor = AMBER; ctx.shadowBlur = 22; ctx.fillStyle = "#FFD98A"; ctx.globalAlpha = 1;
+        ctx.beginPath(); ctx.arc(Math.min(ax, GR.x1 - 6), traceY(c, ax, true), 9, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    // the amber sweep line itself
+    if (refining) {
+      const a = clamp01(1 - (t - CUE.refine - REFINE_T) / 0.4);
+      if (a > 0) {
+        ctx.beginPath(); ctx.moveTo(ax, GATE_TOP); ctx.lineTo(ax, GATE_BOT);
+        ctx.shadowColor = AMBER; ctx.shadowBlur = 26; ctx.strokeStyle = AMBER; ctx.globalAlpha = 0.9 * a; ctx.lineWidth = 6; ctx.stroke();
+        ctx.shadowBlur = 0; ctx.strokeStyle = "#FFF0C8"; ctx.globalAlpha = a; ctx.lineWidth = 2; ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0; ctx.globalCompositeOperation = "source-over";
+
+    // digits: one refinement per gate crossed; a changed cell flashes amber
+    const st = CROSS.filter((tc) => t >= tc).length;
+    const flash = st > 0 && t - CROSS[st - 1] < 0.3;
+    cells.forEach(({ el, c, r }) => {
+      const now = fmt(lerp(DATA.before[c][r], DATA.after[c][r], st / 3));
+      const was = st > 0 ? fmt(lerp(DATA.before[c][r], DATA.after[c][r], (st - 1) / 3)) : now;
+      const hot = flash && now !== was;
+      if (el.textContent !== now) el.textContent = now;
+      el.style.color = hot ? AMBER : GREEN;
+      el.style.textShadow = hot ? "0 0 6px rgba(255,176,0,0.9)" : "0 0 6px rgba(124,255,107,0.75)";
+    });
+  }
+
+  const tl = gsap.timeline({ paused: true });
+  const driver = { _t: 0, get t() { return this._t; }, set t(v) { this._t = v; render(v); } };
+  tl.fromTo(driver, { t: 0 }, { t: BEAT_SECONDS, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

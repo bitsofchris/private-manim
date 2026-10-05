@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Stack-styles 01: two-ink Riso, "three passes through the press".
+         Pink = structure (the passes), teal = data (the digits); every ink layer
+         multiplies onto the paper. Offline: GSAP and Inter are vendored. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --paper: #f2eadb; --pink: #ff4f7b; --teal: #0e7c86; --teal-ink: #0b6a73; --black: #1e1b1a; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--black); }
+
+      /* a pass through the press: one pink band. The wrapper is the blend group
+         (a transformed element isolates its children), so multiply lives here. */
+      .band { position: absolute; left: 65px; width: 885px; height: 150px; mix-blend-mode: multiply; }
+      .band .ink { position: absolute; inset: 0; background: var(--pink); filter: url(#rough); }
+      .band .num { position: absolute; left: 16px; top: 0; width: 100px; height: 150px; text-align: center;
+                   font-size: 140px; line-height: 150px; color: var(--teal-ink); mix-blend-mode: multiply; }
+
+      /* the printed card */
+      #card { position: absolute; left: 185px; top: 250px; width: 700px; height: 344px; mix-blend-mode: multiply; }
+      #card .tint { position: absolute; inset: 0;
+                    background: radial-gradient(circle, rgba(14,124,134,0.42) 0 2px, rgba(14,124,134,0) 2.7px) 0 0 / 9px 9px; }
+      #card .frame { position: absolute; inset: 0; border: 6px solid var(--teal); mix-blend-mode: multiply; }
+      #card .frame.ghost { border-color: var(--pink); }
+      .words { position: absolute; left: 0; top: 8px; width: 700px; display: flex; }
+      .words div { width: 33.333%; text-align: center; font-size: 66px; line-height: 76px; color: var(--black); }
+      .grid { position: absolute; left: 0; top: 84px; width: 700px; mix-blend-mode: multiply; }
+      .grid .row { display: flex; }
+      .grid .cell { width: 33.333%; height: 84px; text-align: center; font-size: 76px; line-height: 84px;
+                    color: var(--teal-ink); letter-spacing: -0.01em; }
+      .grid.ghost .cell { color: var(--pink); }
+
+      /* where the sheet was fed in: a dashed pink keyline the card leaves behind */
+      #origin { position: absolute; left: 185px; top: 250px; width: 700px; height: 344px;
+                border: 5px dashed var(--pink); mix-blend-mode: multiply; opacity: 0.75; }
+      #marks, #grain { position: absolute; left: 0; top: 0; pointer-events: none; }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <!-- registration marks, printed in both inks, a few px out of register -->
+      <svg id="marks" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="rough" x="-3%" y="-10%" width="106%" height="120%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="1" seed="7" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <g id="reg" fill="none" stroke-width="5">
+            <circle r="22" /><path d="M-36 0H36M0 -36V36" />
+          </g>
+        </defs>
+        <use href="#reg" x="112" y="318" stroke="#ff4f7b" />
+        <use href="#reg" x="117" y="321" stroke="#0e7c86" style="mix-blend-mode: multiply" />
+        <use href="#reg" x="920" y="318" stroke="#ff4f7b" />
+        <use href="#reg" x="925" y="321" stroke="#0e7c86" style="mix-blend-mode: multiply" />
+      </svg>
+
+      <div id="origin"></div>
+      <div class="band" id="b1" style="top: 500px"><div class="ink"></div><div class="num" data-layout-ignore>1</div></div>
+      <div class="band" id="b2" style="top: 700px"><div class="ink"></div><div class="num" data-layout-ignore>2</div></div>
+      <div class="band" id="b3" style="top: 905px"><div class="ink"></div><div class="num" data-layout-ignore>3</div></div>
+
+      <div id="card">
+        <div class="tint"></div>
+        <div class="frame ghost" id="frameGhost"></div>
+        <div class="frame"></div>
+        <div class="words"></div>
+        <div class="grid ghost" id="gridGhost" data-layout-ignore></div>
+        <!-- data-layout-ignore on the multiply-blended text: check's contrast audit compares the
+             declared colour with the pixels behind it and cannot model mix-blend-mode, so teal-on-pink
+             (which prints as navy, about #0b213a, on #ff4f7b, about 5:1) reads as a false ~2.3:1. -->
+        <div class="grid" id="gridInk" data-layout-ignore></div>
+      </div>
+
+      <!-- paper grain: dark specks everywhere, paper-coloured specks that only show on ink -->
+      <svg id="grain" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <filter id="grainF" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="1" result="n" />
+          <feColorMatrix in="n" type="matrix" result="dark"
+            values="0 0 0 0 0.36  0 0 0 0 0.24  0 0 0 0 0.16  1.5 0 0 0 -0.68" />
+          <feColorMatrix in="n" type="matrix" result="light"
+            values="0 0 0 0 0.95  0 0 0 0 0.92  0 0 0 0 0.86  0 2.0 0 0 -0.92" />
+          <feMerge><feMergeNode in="dark" /><feMergeNode in="light" /></feMerge>
+        </filter>
+        <rect width="1080" height="1920" filter="url(#grainF)" />
+      </svg>
+
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:1100px;width:1080px;height:4px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => { const s = Math.abs(v).toFixed(1); return (v < -0.04 ? "−" : "+") + s; };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+  // ---- style constants ----
+  const STEP = 0.4;                     // one pass
+  const DROP = 164;                     // px the card drops per pass
+  const OFFSET = [10, 6, 3, 0];         // ghost misregistration after 0..3 passes (px)
+  const GRAIN_FPS = 8;
+
+  // build the card: words, plus the digits twice (pink ghost under teal ink)
+  const words = document.querySelector(".words");
+  DATA.tokens.forEach((w) => { const d = document.createElement("div"); d.textContent = w; words.appendChild(d); });
+  const cells = [];
+  ["gridGhost", "gridInk"].forEach((id) => {
+    for (let r = 0; r < 3; r++) {
+      const row = document.createElement("div"); row.className = "row"; $(id).appendChild(row);
+      for (let c = 0; c < 3; c++) { const d = document.createElement("div"); d.className = "cell"; row.appendChild(d); cells.push({ el: d, c, r }); }
+    }
+  });
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    const k8 = Math.floor(t * GRAIN_FPS + 1e-6);
+    $("turb").setAttribute("seed", 1 + (k8 % 11));
+
+    // passes completed: the card crosses a band at the middle of each drop
+    let k = 0;
+    for (let i = 0; i < 3; i++) if (t >= CUE.refine + STEP * i + STEP / 2) k++;
+    const off = OFFSET[k];
+    const wob = off / OFFSET[0];        // the wobble dies as registration closes
+    const gx = off + (hash(k8) - 0.5) * 4 * wob;
+    const gy = off * 0.5 + (hash(k8 + 40) - 0.5) * 4 * wob;
+    const tr = `translate(${gx.toFixed(2)}px, ${gy.toFixed(2)}px)`;
+    $("gridGhost").style.transform = tr;
+    $("frameGhost").style.transform = tr;
+
+    cells.forEach(({ el, c, r }) => { el.textContent = fmt(lerp(DATA.before[c][r], DATA.after[c][r], k / 3)); });
+  }
+
+  const tl = gsap.timeline({ paused: true });
+  const driver = { _t: 0, get t() { return this._t; }, set t(v) { this._t = v; render(v); } };
+  tl.fromTo(driver, { t: 0 }, { t: BEAT_SECONDS, duration: BEAT_SECONDS, ease: "none" }, 0);
+
+  // pass 1 slides in; passes 2 and 3 are stamped
+  tl.fromTo("#b1", { x: -420 }, { x: 0, duration: 0.6, ease: "power3.out" }, 0);
+  gsap.set(["#b2", "#b3"], { opacity: 0, scale: 1.06, transformOrigin: "50% 50%" });
+  tl.to("#b2", { opacity: 1, scale: 1, duration: 0.25, ease: "power2.out" }, CUE.blocks);
+  tl.to("#b3", { opacity: 1, scale: 1, duration: 0.25, ease: "power2.out" }, CUE.blocks + 0.2);
+  // the card drops through the three passes
+  for (let i = 0; i < 3; i++) {
+    tl.to("#card", { y: DROP * (i + 1), duration: STEP, ease: "power2.inOut" }, CUE.refine + STEP * i);
+  }
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

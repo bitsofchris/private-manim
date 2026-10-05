@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Stack-styles 12: pixel art, "three levels".
+         A 120 x 213 pixel world drawn at 9x with fillRect only (integer blocks,
+         so nothing is ever smoothed). PICO-8 palette, time quantised to 12 fps,
+         hand-written 5x7 glyph table. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #1d2b53; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #1d2b53;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #fff1e8; }
+      #px { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="px" width="1080" height="1920" data-layout-allow-overflow></canvas>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r >= 0 ? "+" : "-") + Math.abs(r).toFixed(1); };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+  const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+  // ---- PICO-8 ----
+  const P = { black: "#000000", navy: "#1D2B53", purple: "#7E2553", dgreen: "#008751", grey: "#5F574F", silver: "#C2C3C7",
+              white: "#FFF1E8", red: "#FF004D", orange: "#FFA300", yellow: "#FFEC27", green: "#00E436", blue: "#29ADFF", lav: "#83769C" };
+
+  // ---- the world: 120 x 213 pixels, one pixel = 9 x 9 on the frame ----
+  const S = 9, LW = 120, LH = 214;
+  const FPS = 12;
+  const COL_X = [8, 34, 60], TILE_W = 24, TILE_H = 9;        // three value columns; 5x7 glyph = 63 px tall on the frame
+  const WORD_Y = 26;                                          // HUD row: my / name / is
+  const ROOM_Y = 34, ROOM_H = 29;                             // room k: top = ROOM_Y + k * ROOM_H; floor is its last row
+  const STAGE_BOTTOM = 122;                                   // rows below this are the caption band (y 1100 on the frame)
+  const LABEL_X = 85, LABEL_W = 20;
+  const BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+  const DENSITY = [6, 4, 2, 0];                               // of 16: purple pixels in the tile dither at stage 0..3
+
+  // ticks (1/12 s): two hops, each a parabola sampled once per tick
+  const HOP = [{ from: 33, to: 38 }, { from: 40, to: 45 }];   // 2.75 -> 3.17 s, 3.33 -> 3.75 s
+  const UPGRADE = [CUE.refine, HOP[0].to / FPS, HOP[1].to / FPS]; // LV 1 in place, LV 2 and LV 3 on landing
+  const SCROLL = [null, { at: CUE.blocks, dur: 0.6 }, { at: CUE.blocks + 0.25, dur: 0.6 }];
+  const SCROLL_PX = 64;
+
+  // ---- glyph table, 7 rows each ----
+  const G = {
+    "0": [".###.", "#...#", "#..##", "#.#.#", "##..#", "#...#", ".###."],
+    "1": ["..#..", ".##..", "..#..", "..#..", "..#..", "..#..", ".###."],
+    "2": [".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####"],
+    "3": ["#####", "...#.", "..#..", "...#.", "....#", "#...#", ".###."],
+    "4": ["...#.", "..##.", ".#.#.", "#..#.", "#####", "...#.", "...#."],
+    "5": ["#####", "#....", "####.", "....#", "....#", "#...#", ".###."],
+    "6": ["..##.", ".#...", "#....", "####.", "#...#", "#...#", ".###."],
+    "7": ["#####", "....#", "...#.", "..#..", ".#...", ".#...", ".#..."],
+    "8": [".###.", "#...#", "#...#", ".###.", "#...#", "#...#", ".###."],
+    "9": [".###.", "#...#", "#...#", ".####", "....#", "...#.", ".##.."],
+    ".": ["..", "..", "..", "..", "..", "##", "##"],
+    "+": ["...", "...", ".#.", "###", ".#.", "...", "..."],
+    "-": ["...", "...", "...", "###", "...", "...", "..."],
+    "m": [".....", ".....", "##.#.", "#.#.#", "#.#.#", "#.#.#", "#.#.#"],
+    "y": [".....", ".....", "#...#", "#...#", ".####", "....#", ".###."],
+    "n": [".....", ".....", "#.##.", "##..#", "#...#", "#...#", "#...#"],
+    "a": [".....", ".....", ".###.", "....#", ".####", "#...#", ".####"],
+    "e": [".....", ".....", ".###.", "#...#", "#####", "#....", ".###."],
+    "i": [".#.", "...", "##.", ".#.", ".#.", ".#.", "###"],
+    "s": [".....", ".....", ".####", "#....", ".###.", "....#", "####."],
+    "L": ["#....", "#....", "#....", "#....", "#....", "#....", "#####"],
+    "V": ["#...#", "#...#", "#...#", "#...#", "#...#", ".#.#.", "..#.."],
+    " ": ["..", "..", "..", "..", "..", "..", ".."],
+  };
+  const COIN = [1, 2, 3, 3, 3, 2, 1];                          // half-widths of a 7x7 disc
+  const CHECK = ["......#", ".....##", "#...##.", "##.##..", ".###...", "..#....", "......."];
+
+  const ctx = $("px").getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  const px = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); };
+  const textW = (s) => { let w = 0; for (const ch of s) w += G[ch][0].length + 1; return w - 1; };
+  function text(s, x, y, c) {
+    ctx.fillStyle = c;
+    for (const ch of s) {
+      const g = G[ch];
+      for (let r = 0; r < 7; r++) for (let q = 0; q < g[r].length; q++) if (g[r][q] === "#") ctx.fillRect(x + q, y + r, 1, 1);
+      x += g[0].length + 1;
+    }
+  }
+  function sparkle(x, y, f, c) {                               // f: 0 dot, 1 plus, 2 big plus, 3 plus, 4 dot
+    const arm = [0, 1, 2, 1, 0][f];
+    px(x - arm, y, 2 * arm + 1, 1, c); px(x, y - arm, 1, 2 * arm + 1, c);
+    if (arm === 2) px(x, y, 1, 1, P.white);
+  }
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    const n = Math.floor(t * FPS + 1e-6);                      // the 12 fps tick everything moves on
+    ctx.setTransform(S, 0, 0, S, 0, 0);
+
+    // --- background to the frame edge: navy, stars, a dithered fade to black at the bottom ---
+    px(0, 0, LW, LH, P.navy);
+    for (let i = 0; i < 46; i++) {
+      const sx = Math.floor(hash(i * 3 + 1) * LW), sy = Math.floor(hash(i * 3 + 2) * LH);
+      const lit = i % 5 !== 0 || Math.floor(n / 4 + i) % 2 === 0; // every fifth star twinkles at 3 fps
+      if (lit) px(sx, sy, 1, 1, i % 3 === 0 ? P.lav : P.grey);
+    }
+    for (let y = 176; y < LH; y++) {
+      const d = Math.min(15, Math.floor((y - 176) / 2.4));
+      for (let x = 0; x < LW; x++) if (BAYER[y % 4][x % 4] < d) px(x, y, 1, 1, P.black);
+    }
+
+    // --- state ---
+    const stage = UPGRADE.filter((u) => t >= u).length;        // refinements applied so far: 0..3
+    const room = n >= HOP[1].to ? 2 : n >= HOP[0].to ? 1 : 0;  // the level the sprite stands on
+    let sy = ROOM_Y + 1;                                       // sprite top (27 rows; the floor is the 29th row of the room)
+    HOP.forEach((h, i) => {
+      if (n >= h.to) sy += ROOM_H;
+      else if (n > h.from) { const u = (n - h.from) / (h.to - h.from); sy += Math.round(47 * u * u - 18 * u); } // up 2, then down a room
+    });
+    if (t < CUE.refine - 0.1) sy -= Math.floor(n / 3) % 2;     // idle bob: 1 px at 4 fps
+
+    // --- HUD: the tokens over their columns ---
+    DATA.tokens.forEach((w, c) => text(w, COL_X[c] + Math.floor((TILE_W - textW(w)) / 2), WORD_Y, P.white));
+
+    // --- rooms (clipped to the stage so levels 2 and 3 rise out of the floor line) ---
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, LW, STAGE_BOTTOM); ctx.clip();
+    for (let k = 0; k < 3; k++) {
+      const sc = SCROLL[k];
+      if (sc && t < sc.at) continue;
+      let off = 0;
+      if (sc) { const u = clamp01((Math.floor((t - sc.at) * FPS + 1e-6) / FPS) / sc.dur); off = Math.round(SCROLL_PX * (1 - u) * (1 - u)); }
+      const top = ROOM_Y + k * ROOM_H + off, here = room === k, done = stage > k;
+      // floor: runs edge to edge, a brighter slab under the standing sprite
+      px(0, top + 28, LW, 1, here ? P.blue : P.lav);
+      for (let x = 2; x < LW; x += 6) px(x, top + 28, 1, 1, here ? P.white : P.grey);
+      // label
+      if (here) px(LABEL_X, top + 18, LABEL_W, 9, P.red);
+      const lc = here ? P.white : P.silver;
+      text("LV", LABEL_X + 1, top + 19, lc); text(String(k + 1), LABEL_X + 14, top + 19, lc);
+      // pickup above the label: a spinning coin until this level has done its work, then a tick
+      const cx = LABEL_X + 6, cy = top + 6;
+      if (!done) {
+        const f = [1, 0.7, 0.15, 0.7][Math.floor(n / 2) % 4];
+        for (let r = 0; r < 7; r++) {
+          const w = Math.max(1, Math.round((2 * COIN[r] + 1) * f)), x0 = cx + 3 - Math.floor(w / 2);
+          px(x0, cy + r, w, 1, P.yellow);
+          if (w > 2) px(x0 + w - 1, cy + r, 1, 1, P.orange);
+        }
+        if (f === 1) px(cx + 2, cy + 2, 1, 2, P.white);
+      } else {
+        for (let r = 0; r < 7; r++) for (let q = 0; q < 7; q++) if (CHECK[r][q] === "#") px(cx + q, cy + r, 1, 1, P.green);
+      }
+    }
+    ctx.restore();
+
+    // --- the sprite: 3 x 3 value tiles ---
+    const since = stage > 0 ? t - UPGRADE[stage - 1] : 9;      // seconds since the last upgrade
+    const dens = stage === 0 ? DENSITY[0] : DENSITY[stage] + Math.round(2 * (1 - clamp01(Math.floor(since * FPS + 1e-6) / 3)));
+    for (let c = 0; c < 3; c++) for (let r = 0; r < 3; r++) {
+      const x0 = COL_X[c], y0 = sy + r * TILE_H;
+      px(x0, y0, TILE_W, TILE_H, P.black);
+      for (let y = 0; y < TILE_H; y++) for (let x = 0; x < TILE_W; x++) if (BAYER[(y + r) % 4][x % 4] < dens) px(x0 + x, y0 + y, 1, 1, P.purple);
+      const now = fmt(lerp(DATA.before[c][r], DATA.after[c][r], stage / 3));
+      const was = stage > 0 ? fmt(lerp(DATA.before[c][r], DATA.after[c][r], (stage - 1) / 3)) : now;
+      const hot = since < 0.34 && now !== was;
+      text(now, x0 + Math.floor((TILE_W - textW(now)) / 2), y0 + 1, hot ? P.yellow : P.white);
+    }
+
+    // --- upgrade sparkles: five ticks around the sprite, in the gaps and on its right edge ---
+    if (stage > 0) {
+      const f = Math.floor(since * FPS + 1e-6);
+      for (let i = 0; i < 7; i++) {
+        const fi = f - (i % 3);                                // staggered by a tick or two
+        if (fi < 0 || fi > 4) continue;
+        const gx = [32, 58, 84, 33, 59, 84, 20][i];
+        const gy = sy + 1 + Math.floor(hash(i * 7 + stage * 31) * 24);
+        sparkle(gx, i === 6 ? sy - 1 + 0 * gy : gy, fi, i % 2 ? P.white : P.yellow);
+      }
+    }
+  }
+
+  const tl = gsap.timeline({ paused: true });
+  const driver = { _t: 0, get t() { return this._t; }, set t(v) { this._t = v; render(v); } };
+  tl.fromTo(driver, { t: 0 }, { t: BEAT_SECONDS, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

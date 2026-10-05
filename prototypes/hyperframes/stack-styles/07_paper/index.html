@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Stack-styles 07: paper collage on twos, "index card under three stencils".
+         Cut paper, torn edges, masking tape, soft shadows; every move lands on a
+         12 fps grid like stop motion. Offline: GSAP and Inter are vendored. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --kraft: #c9a27a; --cream: #fff8e7; --red: #e4572e; --blue: #2e5eaa; --yellow: #f2c14e; --pencil: #2b2b2b; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--kraft); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+              background: radial-gradient(ellipse 900px 1200px at 45% 38%, #d3ae87 0%, #c9a27a 55%, #b88f66 100%);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--pencil); }
+
+      /* word tabs: three scraps of card stuck to the desk above the columns */
+      .tab { position: absolute; top: 236px; width: 190px; height: 80px; }
+      .tab .scrap { position: absolute; inset: 0; background: var(--cream);
+                    filter: url(#torn) drop-shadow(0 6px 5px rgba(0,0,0,0.25)); }
+      .tab .w { position: absolute; inset: 0; text-align: center; font-size: 62px; line-height: 78px; }
+
+      /* the index card */
+      #card { position: absolute; left: 295px; top: 325px; width: 640px; height: 260px; }
+      #card .sheet { position: absolute; inset: 0; border-radius: 6px;
+                     background:
+                       linear-gradient(rgba(46,94,170,0.28), rgba(46,94,170,0.28)) 0 97px / 100% 3px no-repeat,
+                       linear-gradient(rgba(46,94,170,0.28), rgba(46,94,170,0.28)) 0 161px / 100% 3px no-repeat,
+                       var(--cream);
+                     filter: drop-shadow(0 8px 6px rgba(0,0,0,0.25)); }
+      .hl { position: absolute; left: 22px; width: 596px; height: 52px; border-radius: 5px 9px 7px 4px;
+            background: rgba(242,193,78,0.5); mix-blend-mode: multiply; }
+      .digit { position: absolute; width: 176px; height: 50px; text-align: center; font-size: 72px; line-height: 50px;
+               letter-spacing: -0.02em; color: var(--pencil); }
+
+      /* a block: a strip of coloured paper with a window cut out of it */
+      .strip { position: absolute; left: 78px; width: 860px; height: 220px; }
+      .strip .jit { position: absolute; inset: 0; }
+      .strip .shape { position: absolute; inset: 0; filter: url(#torn) drop-shadow(0 9px 7px rgba(0,0,0,0.38)); }
+      .strip .paper { position: absolute; inset: 0;
+        clip-path: polygon(evenodd, 0 0, 860px 0, 860px 220px, 0 220px, 0 0, 232px 12px, 232px 208px, 842px 208px, 842px 12px, 232px 12px); }
+      .strip.red .paper { background: var(--red); }
+      .strip.blue .paper { background: var(--blue); }
+      .strip .lab { position: absolute; left: 24px; top: 30px; width: 200px; font-size: 60px; line-height: 64px; color: var(--cream); }
+      .strip .n { position: absolute; left: 24px; top: 96px; width: 200px; font-size: 104px; line-height: 104px; color: var(--cream); }
+      .tape { position: absolute; left: -12px; top: -16px; width: 128px; height: 40px;
+              background: rgba(246,232,190,0.86); transform: rotate(-11deg);
+              clip-path: polygon(0 8%, 3% 0, 6% 10%, 9% 0, 100% 0, 97% 22%, 100% 44%, 97% 66%, 100% 88%, 98% 100%, 4% 100%, 0 80%, 3% 58%, 0 36%);
+              box-shadow: inset 0 0 0 1px rgba(120,90,40,0.18); }
+
+      #fibre { position: absolute; left: 0; top: 0; pointer-events: none; }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <svg width="0" height="0" style="position:absolute" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- torn paper edge: static seed, strip and scrap shapes only (never text) -->
+          <filter id="torn" x="-3%" y="-8%" width="106%" height="116%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div class="tab" style="left: 317px"><div class="scrap"></div><div class="w"></div></div>
+      <div class="tab" style="left: 520px"><div class="scrap"></div><div class="w"></div></div>
+      <div class="tab" style="left: 723px"><div class="scrap"></div><div class="w"></div></div>
+
+      <div id="card"><div class="sheet"></div></div>
+
+      <div class="strip red" id="s1" style="top: 345px"><div class="jit">
+        <div class="shape"><div class="paper"></div></div>
+        <div class="lab">block</div><div class="n">1</div><div class="tape"></div>
+      </div></div>
+      <div class="strip blue" id="s2" style="top: 585px"><div class="jit">
+        <div class="shape"><div class="paper"></div></div>
+        <div class="lab">block</div><div class="n">2</div><div class="tape"></div>
+      </div></div>
+      <div class="strip red" id="s3" style="top: 825px"><div class="jit">
+        <div class="shape"><div class="paper"></div></div>
+        <div class="lab">block</div><div class="n">3</div><div class="tape"></div>
+      </div></div>
+
+      <!-- paper fibre: one static full-frame layer over everything -->
+      <svg id="fibre" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <filter id="fibreF" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.55" numOctaves="3" seed="11" result="n" />
+          <feColorMatrix in="n" type="matrix" result="dark"
+            values="0 0 0 0 0.30  0 0 0 0 0.20  0 0 0 0 0.10  1.3 0 0 0 -0.60" />
+          <feColorMatrix in="n" type="matrix" result="light"
+            values="0 0 0 0 1  0 0 0 0 0.97  0 0 0 0 0.88  0 1.3 0 0 -0.64" />
+          <feMerge><feMergeNode in="dark" /><feMergeNode in="light" /></feMerge>
+        </filter>
+        <rect width="1080" height="1920" filter="url(#fibreF)" />
+      </svg>
+
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:1100px;width:1080px;height:4px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => { const s = Math.abs(v).toFixed(1); return (v < -0.04 ? "−" : "+") + s; };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+  // ---- style constants ----
+  const F = 1 / 12;                         // one stop-motion frame ("on twos")
+  const PITCH = 240;                        // strip to strip, and one pull of the card
+  const SWIPE = [CUE.refine, CUE.refine + 7 * F, CUE.refine + 14 * F];  // highlighter swipe k starts (2.60, 3.18, 3.77)
+  const SWIPE_STEPS = 4;
+  const PULL = [SWIPE[0] + 4 * F, SWIPE[1] + 4 * F];                    // card pulled to window 2, window 3
+  const REST = [0.6, 1.2, -1.2];            // strip resting rotations (deg)
+  const COL_X = [117, 320, 523], ROW_Y = [66, 130, 194];                // card-relative centres
+
+  // words on the tabs
+  document.querySelectorAll(".tab").forEach((tab, i) => {
+    tab.querySelector(".w").textContent = DATA.tokens[i];
+    tab.style.transform = `rotate(${((hash(i + 20) - 0.5) * 5).toFixed(2)}deg)`;
+  });
+
+  // the card: three coats of highlighter per row (under the digits), then hand-placed digits
+  const card = $("card"), coats = [], digits = [];
+  for (let k = 0; k < 3; k++) for (let r = 0; r < 3; r++) {
+    const d = document.createElement("div"); d.className = "hl";
+    d.style.top = (ROW_Y[r] - 26 + Math.round((hash(k * 3 + r + 50) - 0.5) * 10)) + "px";
+    d.style.transform = `rotate(${((hash(k * 3 + r + 70) - 0.5) * 1.6).toFixed(2)}deg)`;
+    card.appendChild(d); coats.push({ el: d, k, r });
+  }
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+    const d = document.createElement("div"); d.className = "digit";
+    const i = r * 3 + c;
+    d.style.left = (COL_X[c] - 88 + Math.round((hash(i + 5) - 0.5) * 8)) + "px";
+    d.style.top = (ROW_Y[r] - 25 + Math.round((hash(i + 9) - 0.5) * 4)) + "px";
+    d.setAttribute("data-layout-allow-occlusion", "");
+    d.setAttribute("data-layout-allow-overlap", "");     // 72 px line boxes on a 64 px pitch: the boxes touch, the glyphs do not   // the card is meant to slide under the stencils
+    d.style.transform = `rotate(${((hash(i) - 0.5) * 4).toFixed(2)}deg)`;   // plus or minus 2 degrees
+    card.appendChild(d); digits.push({ el: d, c, r });
+  }
+  const jits = Array.from(document.querySelectorAll(".strip .jit"));
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // swipe progress per coat, in 4 stepped moves
+    const prog = SWIPE.map((t0) => Math.max(0, Math.min(SWIPE_STEPS, Math.floor((t - t0) / F + 1e-6) + 1)) / SWIPE_STEPS);
+    coats.forEach(({ el, k, r }) => {
+      const p = t < SWIPE[k] ? 0 : prog[k];
+      el.style.clipPath = `inset(-6px ${(100 - p * 100).toFixed(1)}% -6px 0)`;
+      el.style.opacity = p > 0 ? 1 : 0;
+    });
+    // a digit changes when the swipe has crossed its column
+    digits.forEach(({ el, c, r }) => {
+      let n = 0;
+      for (let k = 0; k < 3; k++) if (t >= SWIPE[k] && prog[k] >= (c + 2) / SWIPE_STEPS) n++;
+      el.textContent = fmt(lerp(DATA.before[c][r], DATA.after[c][r], n / 3));
+    });
+    // stop-motion boil: each strip is re-laid a hair off, 6 times a second
+    const k6 = Math.floor(t * 6 + 1e-6);
+    jits.forEach((el, i) => {
+      const a = (hash(k6 * 7 + i * 13) - 0.5) * 0.5, x = (hash(k6 * 5 + i * 17 + 3) - 0.5) * 3, y = (hash(k6 * 3 + i * 11 + 8) - 0.5) * 3;
+      el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${a.toFixed(2)}deg)`;
+    });
+  }
+
+  const tl = gsap.timeline({ paused: true });
+  const driver = { _t: 0, get t() { return this._t; }, set t(v) { this._t = v; render(v); } };
+  tl.fromTo(driver, { t: 0 }, { t: BEAT_SECONDS, duration: BEAT_SECONDS, ease: "none" }, 0);
+
+  // the card is nudged into window 1 in four stepped moves
+  tl.fromTo("#card", { x: -24, y: -16, rotation: -2 }, { x: 0, y: 0, rotation: 0.4, duration: 8 * F, ease: "steps(4)" }, 0);
+  gsap.set("#s1", { rotation: REST[0] });
+  // strips 2 and 3 are dropped on from above: three frames down, overshoot, settle
+  ["#s2", "#s3"].forEach((id, i) => {
+    const t0 = CUE.blocks + i * 3 * F, r = REST[i + 1];
+    gsap.set(id, { opacity: 0, y: -150, rotation: r + 5, scale: 1.08 });
+    tl.set(id, { opacity: 1 }, t0);
+    tl.to(id, { y: 15, rotation: r - 1.6, scale: 1, duration: 3 * F, ease: "steps(3)" }, t0);
+    tl.to(id, { y: 0, rotation: r, duration: 2 * F, ease: "steps(2)" }, t0 + 3 * F);
+  });
+  // the card is pulled down under windows 2 and 3
+  tl.to("#card", { y: PITCH, rotation: -0.5, duration: 3 * F, ease: "steps(3)" }, PULL[0]);
+  tl.to("#card", { y: PITCH * 2, rotation: 0.3, duration: 3 * F, ease: "steps(3)" }, PULL[1]);
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

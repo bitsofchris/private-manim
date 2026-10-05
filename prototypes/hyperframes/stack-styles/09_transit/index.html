@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Stack-styles 09: Transit map, "three lines, three stations".
+         Three token lines run through three interchange stations; yellow
+         trains ride them and a departure board flips the vector at each stop.
+         Offline: GSAP and Inter are vendored. Every frame is a pure function
+         of t (render). -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #fbfaf5; --my: #e32017; --name: #0098d4; --is: #00782a; --ink: #1c1c1c; --grey: #5b5b5b; --train: #ffd300; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--ink); }
+      svg#map { position: absolute; left: 0; top: 0; }
+      .line { fill: none; stroke-width: 28; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; }
+      .slabel { position: absolute; left: 480px; height: 80px; line-height: 80px; font-size: 64px; color: var(--ink); white-space: nowrap; }
+      #board { position: absolute; left: 440px; top: 236px; width: 505px; height: 292px; background: #ffffff;
+               border: 8px solid var(--ink); border-radius: 30px; padding: 4px 6px 0 6px; display: flex; }
+      .col { width: 159px; }
+      .col .word { height: 64px; line-height: 62px; font-size: 60px; text-align: center; letter-spacing: -0.02em; }
+      .col .bar { height: 12px; width: 124px; margin: 0 auto 8px auto; border-radius: 6px; }
+      .col .cell { height: 62px; line-height: 62px; font-size: 60px; text-align: center; font-variant-numeric: tabular-nums;
+                   letter-spacing: -0.01em; border-radius: 8px; transform-origin: center; }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <svg id="map" width="1080" height="1920" viewBox="0 0 1080 1920">
+        <g id="lines"></g>
+        <g id="stations"></g>
+        <g id="trains"></g>
+      </svg>
+      <div id="labels"></div>
+      <div id="board"></div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r >= 0 ? "+" : "−") + Math.abs(r).toFixed(1); };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+  const inOut = (u) => (u < 0.5 ? 2 * u * u : 1 - 2 * (1 - u) * (1 - u));
+  const inOut3 = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+  const back = (u) => { const c = 2.2, v = u - 1; return 1 + (c + 1) * v * v * v + c * v * v; };
+  const prog = (t, start, dur) => clamp01((t - start) / dur);
+
+  // ---- geometry (px) ----
+  const COLORS = ["#e32017", "#0098d4", "#00782a"];
+  const LINE_X = [240, 320, 400];
+  const BEND_Y = [500, 467, 434];        // corner vertices sit on the bisector, so the bands stay parallel
+  const BEND_D = [29, 62, 95];           // tangent lengths of three concentric 45-degree bends
+  const STATION_Y = [620, 790, 960];
+  const END_Y = STATION_Y[2];
+  // line fronts: [start, duration, fromY, toY], each line i delayed by its stagger
+  const GROW = [
+    { s: -0.12, d: 0.5, a: 520, b: 690, stag: 0.06 },          // through station 1 (already under way at frame 0)
+    { s: CUE.blocks, d: 0.6, a: 690, b: 850, stag: 0.08 },     // to station 2
+    { s: CUE.blocks + 0.65, d: 0.6, a: 850, b: END_Y, stag: 0.08 }, // to station 3
+  ];
+  const POP = [-1, CUE.blocks + 0.35, CUE.blocks + 1.05];      // capsule pop-in times (station 1 is present)
+  // trains: appear at station 1, then two hops; the board flips on each stop
+  const TRAIN_IN = 2.25, HOP = 0.45, TSTAG = 0.04;
+  const DEPART = [CUE.refine + 0.1, CUE.refine + 0.7];
+  const FLIP = [CUE.refine, DEPART[0] + HOP, DEPART[1] + HOP]; // 2.60, 3.15, 3.75
+  const FLIP_D = 0.26;
+
+  // ---- build the map ----
+  const NS = "http://www.w3.org/2000/svg";
+  const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  const lines = LINE_X.map((x, i) => {
+    const b = BEND_Y[i], d = BEND_D[i], k = d / Math.SQRT2, s = x + 40; // start 40 px off the left edge
+    const path = svgEl("path", { class: "line", pathLength: "1", stroke: COLORS[i],
+      d: `M${x - s} ${b - s} L${(x - k).toFixed(2)} ${(b - k).toFixed(2)} Q${x} ${b} ${x} ${b + d} L${x} ${END_Y}` }, $("lines"));
+    return { path, len: path.getTotalLength() };
+  });
+  const stations = STATION_Y.map((y, k) => {
+    const g = svgEl("g", {}, $("stations"));
+    svgEl("rect", { x: -130, y: -40, width: 260, height: 80, rx: 40, fill: "#ffffff", stroke: "#1c1c1c", "stroke-width": 8 }, g);
+    const label = document.createElement("div"); label.className = "slabel"; label.style.top = (y - 40) + "px";
+    label.textContent = "Block " + (k + 1); $("labels").appendChild(label);
+    return { g, label, y };
+  });
+  const trains = LINE_X.map(() => svgEl("circle", { r: 20, fill: "#ffd300", stroke: "#1c1c1c", "stroke-width": 7 }, $("trains")));
+
+  // ---- build the board: one column per token, coloured like its line ----
+  const cells = [];
+  DATA.tokens.forEach((w, c) => {
+    const col = document.createElement("div"); col.className = "col"; col.style.color = COLORS[c]; $("board").appendChild(col);
+    const word = document.createElement("div"); word.className = "word"; word.textContent = w; col.appendChild(word);
+    const bar = document.createElement("div"); bar.className = "bar"; bar.style.background = COLORS[c]; col.appendChild(bar);
+    for (let r = 0; r < 3; r++) { const d = document.createElement("div"); d.className = "cell"; col.appendChild(d); cells.push({ el: d, c, r }); }
+  });
+
+  // ---- every frame is a pure function of t ----
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+
+    // lines draw on: the front's y is a function of t, the dash offset follows from it
+    lines.forEach((ln, i) => {
+      let y = GROW[0].a;
+      GROW.forEach((g) => { const u = inOut(prog(t, g.s + g.stag * i, g.d)); if (u > 0) y = lerp(g.a, g.b, u); });
+      const frac = (ln.len - (END_Y - y)) / ln.len;
+      ln.path.style.strokeDashoffset = (1 - frac).toFixed(5);
+    });
+
+    // trains: position from getPointAtLength, a pure function of progress
+    const arrive = [0, 0, 0]; // strongest "a train just pulled in" pulse per station
+    trains.forEach((tr, i) => {
+      const h1 = inOut3(prog(t, DEPART[0] + TSTAG * i, HOP)), h2 = inOut3(prog(t, DEPART[1] + TSTAG * i, HOP));
+      const y = STATION_Y[0] + (STATION_Y[1] - STATION_Y[0]) * h1 + (STATION_Y[2] - STATION_Y[1]) * h2;
+      const pt = lines[i].path.getPointAtLength(lines[i].len - (END_Y - y));
+      const pin = prog(t, TRAIN_IN + 0.05 * i, 0.2);
+      const s = pin <= 0 ? 0 : back(pin);
+      tr.setAttribute("transform", `translate(${pt.x.toFixed(2)} ${pt.y.toFixed(2)}) scale(${s.toFixed(3)})`);
+    });
+
+    // capsules: pop in, then a small pulse when the trains stop there
+    stations.forEach((st, k) => {
+      const pu = POP[k] < 0 ? 1 : prog(t, POP[k], 0.2);
+      const pop = pu <= 0 ? 0 : lerp(0.6, 1, back(pu));
+      const au = prog(t, FLIP[k], 0.3);
+      const pulse = 1 + 0.07 * Math.sin(Math.PI * au);
+      st.g.setAttribute("transform", `translate(320 ${st.y}) scale(${(pop * pulse).toFixed(4)})`);
+      st.g.style.opacity = pu > 0 ? 1 : 0;
+      const lu = POP[k] < 0 ? 1 : prog(t, POP[k] + 0.05, 0.2);
+      st.label.style.opacity = lu;
+      st.label.style.transform = `translateX(${(-18 * (1 - inOut(lu))).toFixed(2)}px)`;
+    });
+
+    // split-flap board: scaleY 1 -> 0 -> 1, value swapped at 0, yellow while the flap turns
+    cells.forEach(({ el, c, r }) => {
+      let stage = 0, sy = 1, glow = 0;
+      FLIP.forEach((f) => {
+        const start = f + 0.05 * c + 0.03 * r, u = prog(t, start, FLIP_D);
+        if (u >= 0.5) stage += 1;
+        if (u > 0 && u < 1) sy = Math.abs(1 - 2 * u);
+        if (u > 0) glow = Math.max(glow, 1 - prog(t, start + FLIP_D, 0.15));
+      });
+      el.textContent = fmt(lerp(DATA.before[c][r], DATA.after[c][r], stage / 3));
+      el.style.transform = `scaleY(${Math.max(sy, 0.02).toFixed(3)})`;
+      el.style.backgroundColor = `rgba(255, 211, 0, ${(0.9 * glow).toFixed(3)})`;
+      el.style.color = glow > 0.12 ? "#1c1c1c" : ""; // ink on yellow while the flap is lit
+    });
+  }
+
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

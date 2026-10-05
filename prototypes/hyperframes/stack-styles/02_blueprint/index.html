@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Stack-styles 02: Blueprint, "exploded assembly drawing".
+         White linework on blueprint blue; the matrix is a pencil-yellow sheet
+         that descends the centreline through three plates. Offline: GSAP and
+         Inter are vendored. Every frame is a pure function of t (render). -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #123a7a; --deep: #0d2c5e; --line: #f4f8ff; --dim: #8fb0e0; --red: #ff5a4e; --pencil: #ffd95a; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--line); }
+      /* grid: 60 px minor, 300 px major, to the frame edges */
+      #grid { position: absolute; inset: 0;
+              background-image:
+                repeating-linear-gradient(0deg, var(--deep) 0 6px, transparent 6px 300px),
+                repeating-linear-gradient(90deg, var(--deep) 0 6px, transparent 6px 300px),
+                repeating-linear-gradient(0deg, rgba(13, 44, 94, 0.9) 0 3px, transparent 3px 60px),
+                repeating-linear-gradient(90deg, rgba(13, 44, 94, 0.9) 0 3px, transparent 3px 60px);
+              background-position: 0 -3px, -3px 0, 0 -1px, -1px 0; }
+      #shade { position: absolute; inset: 0;
+               background: radial-gradient(ellipse 80% 60% at 45% 36%, rgba(40, 96, 180, 0.35), rgba(13, 44, 94, 0) 60%, rgba(8, 28, 64, 0.45) 100%); }
+      svg#draw { position: absolute; left: 0; top: 0; }
+      .plate { fill: none; stroke: var(--line); stroke-width: 9; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1 1; }
+      .face { fill: var(--deep); stroke: none; }
+      .leader { fill: none; stroke: var(--line); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1 1; }
+      .blabel { position: absolute; left: 684px; height: 92px; line-height: 92px; font-size: 60px; letter-spacing: 0.08em; color: var(--line); }
+      .stamp { position: absolute; left: 772px; height: 78px; line-height: 66px; padding: 0 9px; font-size: 60px; white-space: nowrap;
+               color: var(--red); border: 6px solid var(--red); border-radius: 8px; }
+      #rig { position: absolute; left: 95px; top: 236px; width: 590px; height: 252px; }
+      #sheet { position: absolute; left: 0; top: 0; width: 470px; height: 252px; background: var(--bg);
+               border: 6px solid var(--pencil); color: var(--pencil); padding: 0 1px; }
+      #sheet .words, #sheet .row { display: flex; }
+      #sheet .words div { width: 152px; height: 60px; line-height: 56px; font-size: 60px; text-align: center; color: var(--line); letter-spacing: -0.01em; }
+      #sheet .cell { width: 152px; height: 60px; line-height: 58px; font-size: 60px; text-align: center; font-variant-numeric: tabular-nums; }
+      #dim { position: absolute; left: 476px; top: 0; overflow: visible; }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <div id="grid"></div>
+      <div id="shade"></div>
+      <svg id="draw" width="1080" height="1920" viewBox="0 0 1080 1920">
+        <defs>
+          <!-- static pencil tremor: one turbulence field, never animated -->
+          <filter id="tremor" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+        <!-- drawing border, bleeds past the safe area as background -->
+        <rect x="24" y="24" width="1032" height="1872" fill="none" stroke="#8fb0e0" stroke-opacity="0.55" stroke-width="4" />
+        <rect x="38" y="38" width="1004" height="1844" fill="none" stroke="#8fb0e0" stroke-opacity="0.3" stroke-width="2" />
+        <g filter="url(#tremor)">
+          <rect id="ghost" x="99" y="240" width="462" height="244" fill="none" stroke="#8fb0e0" stroke-width="5" stroke-dasharray="22 14" opacity="0" />
+          <g id="plates"></g>
+          <line id="centre" x1="330" y1="250" x2="330" y2="488" stroke="#8fb0e0" stroke-width="6" stroke-dasharray="44 14 10 14" opacity="0" />
+          <g id="cross" stroke="#f4f8ff" stroke-width="5" fill="none">
+            <circle r="15" /><path d="M-34 0 H-8 M8 0 H34 M0 -34 V-8 M0 8 V34" />
+          </g>
+        </g>
+      </svg>
+      <div id="labels"></div>
+      <div id="rig">
+        <div id="sheet"><div class="words"></div></div>
+        <svg id="dim" width="110" height="252" viewBox="0 0 110 252">
+          <g stroke="#8fb0e0" stroke-width="6" fill="none" stroke-linecap="round">
+            <path d="M10 3 H44 M10 249 H44 M28 14 V238" />
+            <path d="M16 30 L28 8 L40 30 M16 222 L28 244 L40 222" stroke-linejoin="round" />
+          </g>
+          <text x="0" y="0" transform="translate(88 126) rotate(-90)" text-anchor="middle" font-size="60" font-weight="800"
+                font-family="Inter, sans-serif" fill="#8fb0e0">3 × d</text>
+        </svg>
+      </div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": the stack is established */
+    refine: 2.6,  /* "refine": the matrix passes through, numbers change */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r >= 0 ? "+" : "−") + Math.abs(r).toFixed(1); };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+  const inOut = (u) => (u < 0.5 ? 2 * u * u : 1 - 2 * (1 - u) * (1 - u));
+  const prog = (t, start, dur) => clamp01((t - start) / dur);
+
+  // ---- geometry (px) ----
+  const SHEET = { top: 236, h: 252 };
+  const PLATE_Y = [506, 622, 738], PLATE_H = 92;       // slab: 66 px top face + 26 px thickness
+  const REV = ["A", "B", "C"];
+  // plate k draws on from DRAW[k].s for DRAW[k].d seconds; its leader follows
+  const DRAW = [{ s: -0.1, d: 0.8 }, { s: CUE.blocks, d: 0.5 }, { s: CUE.blocks + 0.5, d: 0.5 }];
+  const LEAD = 0.25;
+  const CENTRE = { s: 2.1, d: 0.4 };
+  // sheet descent: Hermite keys (time, dy, velocity); the sheet centre crosses plate k at PASS[k]
+  const PASS = [CUE.refine + 0.35, CUE.refine + 0.7, CUE.refine + 1.05];
+  const KEYS = [
+    { t: CUE.refine, y: 0, v: 0 }, { t: PASS[0], y: 190, v: 400 }, { t: PASS[1], y: 306, v: 331 },
+    { t: PASS[2], y: 422, v: 400 }, { t: CUE.refine + 1.55, y: 608, v: 0 },
+  ];
+  function dyAt(t) {
+    if (t <= KEYS[0].t) return 0;
+    for (let i = 0; i < KEYS.length - 1; i++) {
+      const a = KEYS[i], b = KEYS[i + 1];
+      if (t <= b.t) {
+        const h = b.t - a.t, u = (t - a.t) / h, u2 = u * u, u3 = u2 * u;
+        return (2 * u3 - 3 * u2 + 1) * a.y + (u3 - 2 * u2 + u) * h * a.v + (-2 * u3 + 3 * u2) * b.y + (u3 - u2) * h * b.v;
+      }
+    }
+    return KEYS[KEYS.length - 1].y;
+  }
+  // when the sheet's top edge clears plate k (bisection on the monotone descent)
+  const CLEAR = PLATE_Y.map((py) => {
+    const target = py + PLATE_H - SHEET.top; let lo = KEYS[0].t, hi = KEYS[KEYS.length - 1].t;
+    for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (dyAt(mid) < target) lo = mid; else hi = mid; }
+    return hi;
+  });
+
+  // ---- build plates, leaders, labels, stamps ----
+  const NS = "http://www.w3.org/2000/svg";
+  const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  const plates = PLATE_Y.map((y, k) => {
+    const g = svgEl("g", {}, $("plates"));
+    const face = svgEl("path", { class: "face", d: `M67 ${y + 66} L120 ${y} L596 ${y} L596 ${y + 26} L543 ${y + 92} L67 ${y + 92} Z` }, g);
+    const path = svgEl("path", { class: "plate", pathLength: "1",
+      d: `M67 ${y + 66} L120 ${y} L596 ${y} L543 ${y + 66} Z M67 ${y + 66} L67 ${y + 92} L543 ${y + 92} L543 ${y + 66} M543 ${y + 92} L596 ${y + 26} L596 ${y}` }, g);
+    const leader = svgEl("path", { class: "leader", pathLength: "1", d: `M572 ${y + 46} L668 ${y + 46}` }, g);
+    const dot = svgEl("circle", { cx: 572, cy: y + 46, r: 10, fill: "#f4f8ff" }, g);
+    const label = document.createElement("div"); label.className = "blabel"; label.id = "lab" + (k + 1);
+    label.style.top = y + "px"; label.textContent = "B" + (k + 1); $("labels").appendChild(label);
+    const stamp = document.createElement("div"); stamp.className = "stamp"; stamp.id = "rev" + (k + 1);
+    stamp.style.top = (y + 7) + "px"; stamp.textContent = "rev " + REV[k]; $("labels").appendChild(stamp);
+    return { g, face, path, leader, dot, label, len: path.getTotalLength(), y };
+  });
+
+  // ---- build the sheet ----
+  const sheet = $("sheet"), words = sheet.querySelector(".words"), cells = [];
+  DATA.tokens.forEach((w) => { const d = document.createElement("div"); d.textContent = w; words.appendChild(d); });
+  for (let r = 0; r < 3; r++) {
+    const row = document.createElement("div"); row.className = "row"; sheet.appendChild(row);
+    for (let c = 0; c < 3; c++) { const d = document.createElement("div"); d.className = "cell"; row.appendChild(d); cells.push({ el: d, c, r }); }
+  }
+
+  // ---- every frame is a pure function of t ----
+  const TICK = 0.2;
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    let cx = 0, cy = 0, cursor = 0;
+    plates.forEach((p, k) => {
+      const u = inOut(prog(t, DRAW[k].s, DRAW[k].d));
+      const lu = inOut(prog(t, DRAW[k].s + DRAW[k].d, LEAD));
+      p.g.style.opacity = u > 0 ? 1 : 0;
+      p.path.style.strokeDashoffset = 1 - u;
+      p.face.style.opacity = 0.6 * u;
+      p.leader.style.strokeDashoffset = 1 - lu;
+      p.leader.style.opacity = lu > 0 ? 1 : 0;
+      p.dot.style.opacity = u >= 1 ? 1 : 0;
+      p.label.style.opacity = prog(t, DRAW[k].s + DRAW[k].d + LEAD * 0.6, 0.15);
+      if (u > 0 && u < 1) { const pt = p.path.getPointAtLength(u * p.len); cx = pt.x; cy = pt.y; cursor = 1; }
+      else if (u >= 1 && lu < 1) { cx = 572 + 96 * lu; cy = p.y + 46; cursor = 1; }
+      // redline: from the moment the sheet is centred on the plate until 0.2 s after it clears
+      const red = t >= PASS[k] && t < CLEAR[k] + 0.2;
+      p.path.style.stroke = red ? "#ff5a4e" : "#f4f8ff";
+      p.dot.setAttribute("fill", t >= PASS[k] ? "#ff5a4e" : "#f4f8ff");
+    });
+    const cross = $("cross");
+    cross.setAttribute("transform", `translate(${cx.toFixed(2)} ${cy.toFixed(2)})`);
+    cross.style.opacity = cursor;
+
+    const cu = inOut(prog(t, CENTRE.s, CENTRE.d));
+    $("centre").setAttribute("y2", lerp(488, 1086, cu).toFixed(1));
+    $("centre").style.opacity = cu > 0 ? 1 : 0;
+
+    const dy = dyAt(t);
+    $("rig").style.transform = `translateY(${dy.toFixed(2)}px)`;
+    $("ghost").style.opacity = 0.85 * clamp01(dy / 200);
+
+    let stage = 0, ticking = false;
+    PASS.forEach((p) => { const u = prog(t, p, TICK); stage += u; if (u > 0 && u < 1) ticking = true; });
+    cells.forEach(({ el, c, r }) => {
+      el.textContent = fmt(lerp(DATA.before[c][r], DATA.after[c][r], stage / 3));
+      el.style.color = ticking ? "#ff5a4e" : "#ffd95a";
+    });
+  }
+
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  gsap.set(".stamp", { rotation: -4, opacity: 0, transformOrigin: "50% 50%" });
+  PASS.forEach((p, k) => {
+    tl.fromTo("#rev" + (k + 1), { opacity: 0, scale: 1.45 }, { opacity: 1, scale: 1, duration: 0.16, ease: "power3.in" }, p + 0.04);
+  });
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>

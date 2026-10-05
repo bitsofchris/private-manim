@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Style 08: terminal session, "tensor printed by a REPL".
+         Every character is a fixed 36 x 72 px cell, so the layout does not
+         depend on which face the generic `monospace` resolves to. render(t)
+         decides which cells and lines are visible. Offline: GSAP vendored. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0c0c0c; --text: #e6e6e6; --green: #5af78e; --amber: #f3f99d; --mag: #ff6ac1; --grey: #6b7280; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: monospace; font-weight: 700; color: var(--text); }
+      #win { position: absolute; left: 65px; top: 250px; width: 885px; height: 840px; border-radius: 18px;
+             background: #121212; border: 3px solid #2e2e2e; overflow: hidden; }
+      #bar { position: absolute; left: 0; top: 0; width: 100%; height: 56px; background: #1e1e1e; border-bottom: 3px solid #2e2e2e; }
+      #bar i { position: absolute; top: 17px; width: 22px; height: 22px; border-radius: 11px; background: #3a3a3a; }
+      #view { position: absolute; left: 0; top: 82px; width: 100%; height: 648px; overflow: hidden; }
+      #scroll { position: absolute; left: 26px; top: 0; width: 828px; }
+      .ln { height: 72px; white-space: nowrap; }
+      .ln span, #status span { display: inline-block; width: 36px; height: 72px; font-size: 60px; line-height: 72px; text-align: center; vertical-align: top; }
+      .p { color: var(--green); } .m { color: var(--mag); } .d { color: var(--amber); } .c { color: var(--grey); }
+      #cursor { position: absolute; left: 0; top: 0; width: 36px; height: 64px; background: var(--green); }
+      #status { position: absolute; left: 0; bottom: 0; width: 100%; height: 80px; background: #1e1e1e; border-top: 3px solid #2e2e2e;
+                padding-left: 26px; white-space: nowrap; }
+      #status span { height: 77px; line-height: 77px; }
+      #status .tag { display: inline-block; height: 77px; background: var(--green); color: #0c0c0c; vertical-align: top; }
+      #status .n { color: var(--amber); }
+      #scan { position: absolute; inset: 0; pointer-events: none;
+              background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.028) 0px, rgba(255,255,255,0.028) 2px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 6px); }
+      #guides { position: absolute; inset: 0; display: none; pointer-events: none; }
+      #guides.on { display: block; }
+      #guides div { position: absolute; background: rgba(255, 60, 60, 0.18); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-fps="30" data-width="1080" data-height="1920">
+      <div id="win">
+        <div id="bar"><i style="left:24px"></i><i style="left:60px"></i><i style="left:96px"></i></div>
+        <div id="view"><div id="scroll"><div id="cursor"></div></div></div>
+        <div id="status"></div>
+      </div>
+      <div id="scan"></div>
+      <div id="guides">
+        <div style="left:0;top:0;width:1080px;height:230px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:950px;top:230px;width:130px;height:1306px"></div>
+        <div style="left:0;top:1536px;width:1080px;height:384px"></div>
+        <div style="left:0;top:230px;width:65px;height:1306px"></div>
+      </div>
+    </div>
+    <script>
+(() => {
+  // ---- the contract: same data and cues in every style ----
+  const BEAT_SECONDS = 5.0;
+  const DATA = {
+    tokens: ["my", "name", "is"],
+    // values[col][row]: before = what block 1 receives, after = what the stack hands on
+    before: [[0.4, 0.6, -0.4], [-0.6, -0.2, 0.8], [0.1, 0.4, -0.5]],
+    after:  [[0.0, 0.3, 0.2], [-0.2, -0.6, 0.1], [0.6, -0.2, 0.1]],
+  };
+  // VO: "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    blocks: 1.1,  /* "previous block's output": Enter on block2, its output prints */
+    refine: 2.6,  /* "refine": Enter on block3, the last refinement prints */
+    still: 4.4,   /* nothing moves after this */
+  };
+  const $ = (id) => document.getElementById(id);
+  if (/[?&]guides/.test(location.search)) $("guides").classList.add("on");
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const clamp01 = (u) => Math.max(0, Math.min(1, u));
+  const seg = (t, a, b) => clamp01((t - a) / (b - a));
+  const round1 = (v) => { const r = Math.round(v * 10) / 10; return r === 0 ? 0 : r; };
+  const stageVal = (c, r, s) => round1(lerp(DATA.before[c][r], DATA.after[c][r], s / 3));
+  const easeOut = gsap.parseEase("power2.out");
+
+  const CW = 36, LH = 72;
+  // ---- times ----
+  const TYPE2 = { t0: 0.0, dt: 0.07 };            // "x = block2(x)" typed in steps
+  const TYPE3 = { t0: 1.88, dt: 0.052 };          // "x = block3(x)"
+  const ROW = 0.12, SCROLL = 0.25;
+  const out2 = CUE.blocks + SCROLL, out3 = CUE.refine + SCROLL; // first printed line of each output
+  const DIFF_OFF = [null, null, 2.45, 4.0];       // when each output's amber diff column goes
+
+  // ---- build the 16 lines as cells ----
+  const scroll = $("scroll"), cursor = $("cursor");
+  const lines = []; // { el, at, cells: [{el, kind}], block }
+  function addLine(block, at, parts) {
+    const el = document.createElement("div"); el.className = "ln"; scroll.appendChild(el);
+    const cells = [];
+    parts.forEach(([text, cls]) => [...text].forEach((ch) => {
+      const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = ch === " " ? " " : ch;
+      el.appendChild(s); cells.push({ el: s, cls });
+    }));
+    const ln = { el, at, cells, block }; lines.push(ln); return ln;
+  }
+  const pad5 = (s) => " ".repeat(5 - s.length) + s;
+  const num = (v) => pad5((v < 0 ? "-" : "") + Math.abs(v).toFixed(1));
+  const header = [["#", "c"], ["  my name   is", ""]];
+  function addTensor(block, at0) {
+    addLine(block, at0, header);
+    for (let r = 0; r < 3; r++) {
+      const parts = []; let sum = 0;
+      for (let c = 0; c < 3; c++) {
+        const v = stageVal(c, r, block), prev = stageVal(c, r, block - 1);
+        sum += Math.abs(v - prev);
+        parts.push([num(v), block > 1 && v !== prev ? "m" : ""]);
+      }
+      if (block > 1) parts.push(["  ±" + (sum / 3).toFixed(2), "d"]); // mean |change| in this row
+      addLine(block, block === 1 ? 0 : at0 + (r + 1) * ROW, parts);
+    }
+  }
+  const call = (n) => [[">>> ", "p"], ["x = block" + n + "(x)", ""]];
+  addLine(1, 0, call(1));
+  addTensor(1, 0);
+  const L2 = addLine(2, 0, call(2));
+  addTensor(2, out2);
+  const L3 = addLine(3, out2 + 4 * ROW, call(3));
+  addTensor(3, out3);
+  addLine(4, out3 + 4 * ROW, [[">>> ", "p"]]);
+  const I2 = lines.indexOf(L2), I3 = lines.indexOf(L3), LAST = lines.length - 1;
+
+  // status line: x (3,3) and which block ran last
+  const status = $("status"); let blockCell = null;
+  [[" x (3,3) ", "tag"], ["  block ", ""], ["1", "n"], ["/3", ""]].forEach(([text, cls]) => {
+    let host = status;
+    if (cls === "tag") { host = document.createElement("div"); host.className = "tag"; status.appendChild(host); }
+    [...text].forEach((ch) => {
+      const s = document.createElement("span"); if (cls === "n") s.className = cls; s.textContent = ch === " " ? " " : ch;
+      host.appendChild(s); if (cls === "n") blockCell = s;
+    });
+  });
+
+  // every frame is a pure function of t
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    const n2 = Math.max(0, Math.min(13, Math.floor((t - TYPE2.t0) / TYPE2.dt)));
+    const n3 = Math.max(0, Math.min(13, Math.floor((t - TYPE3.t0) / TYPE3.dt)));
+    // scrollback: 2 lines up on the first Enter, 5 on the second
+    const sc = 2 * easeOut(seg(t, CUE.blocks, out2)) + 5 * easeOut(seg(t, CUE.refine, out3));
+    scroll.style.transform = `translate(0px, ${(-sc * LH).toFixed(2)}px)`;
+    const dim = [0, seg(t, CUE.blocks, out2), seg(t, CUE.refine, out3), 0, 0];
+
+    lines.forEach((ln, i) => {
+      const on = t >= ln.at && (i + 1 - sc) * LH > 0.5; // lines scrolled out of the window are off
+      ln.el.style.visibility = on ? "visible" : "hidden";
+      ln.el.style.opacity = lerp(1, 0.38, dim[ln.block]).toFixed(3);
+      const typed = i === I2 ? 4 + n2 : i === I3 ? 4 + n3 : 999;
+      const off = DIFF_OFF[ln.block];
+      ln.cells.forEach((cell, k) => {
+        let o = k < typed ? 1 : 0;
+        if (cell.cls === "d") o = 1 - seg(t, off, off + 0.2);
+        cell.el.style.opacity = o.toFixed(3);
+      });
+    });
+
+    // block cursor: at the typing position, or at the start of the line about to print
+    let li, col;
+    if (t < CUE.blocks) { li = I2; col = 4 + n2; }
+    else if (t < lines[I3].at) { li = I2 + 1; col = 0; for (let i = I2 + 1; i < I3; i++) if (t >= lines[i].at) li = i + 1; }
+    else if (t < CUE.refine) { li = I3; col = 4 + n3; }
+    else if (t < lines[LAST].at) { li = I3 + 1; col = 0; for (let i = I3 + 1; i < LAST; i++) if (t >= lines[i].at) li = i + 1; }
+    else { li = LAST; col = 4; }
+    cursor.style.transform = `translate(${col * CW}px, ${li * LH + 4}px)`;
+
+    blockCell.textContent = t < CUE.blocks ? "1" : t < CUE.refine ? "2" : "3";
+  }
+
+  const clock = { p: 0 };
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to(clock, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0); // the driver: everything is set by render(t)
+  tl.set({}, {}, BEAT_SECONDS);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+  render(0);
+})();
+    </script>
+  </body>
+</html>
