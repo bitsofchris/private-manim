@@ -13,9 +13,9 @@ review your own contact sheet against the VO, report.
 
 1. `agents/beat-brief-hyperframes.md` — the technical rules, including "What
    `check` and the renderer trip on". All of it applies.
-2. `videos/009-transformer-short-iso/_iso/iso.js` (linked into each beat as
+2. `videos/_shared/web/iso/iso.js` (linked into each beat as
    `iso/`) — the isometric kit: projection, palette, ground, `label`, `start`.
-3. `videos/010-diagram-grammar-iso/_diagram/diagram.js` (linked as
+3. `videos/_shared/web/iso/diagram.js` (linked as
    `diagram/`) — the figure: layout constants, `DG.draw(g, st)`, the path
    helpers, `DG.token`, `DG.makeLabels` / `DG.styleLabels`, `DG.canon`.
    Read all of it; its header comment states what the figure means.
@@ -129,10 +129,10 @@ magenta. This is the last frame of the Short.
 
 ## Rules specific to this video
 
-- **Do not edit `_diagram/diagram.js`, `00_layout/`, or the kit in 009.**
+- **Do not edit `videos/_shared/web/iso/diagram.js`, `00_layout/`, or the shared kit in `videos/_shared/web/iso/`.**
   Need something they lack: write a local function and name it in the report.
 - Set up a beat folder from the video folder:
-  `mkdir NN_name && cp 00_layout/index.html NN_name/index.html && ln -s ../../_shared/web/vendor NN_name/vendor && ln -s ../../009-transformer-short-iso/_iso NN_name/iso && ln -s ../_diagram NN_name/diagram`.
+  `mkdir NN_name && cp 00_layout/index.html NN_name/index.html && ln -s ../../_shared/web/vendor NN_name/vendor && ln -s ../../_shared/web/iso NN_name/iso && ln -s ../../_shared/web/iso NN_name/diagram`.
   Keep the three `<script src>` lines and the literal
   `window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);`. Set
   `data-duration` to your `BEAT_SECONDS`.

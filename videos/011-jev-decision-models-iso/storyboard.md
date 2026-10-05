@@ -16,7 +16,7 @@ and `../008-jev-decision-models/captions.json`.
 A model is a slab with its name on the front face; a probability is the
 height of a pillar; data falls down through a machine. The three choices keep
 their colours everywhere (bug teal, query blue, spam gold). Parts shared by
-the beats are in `_jev/jev.js`; the kit is 009's `_iso/iso.js`; beat 5 uses
+the beats are in `_jev/jev.js`; the kit is `videos/_shared/web/iso/iso.js`; beat 5 uses
 010's transformer figure; `BRIEF.md` is the contract the beat agents built
 to, including the accuracy rules.
 

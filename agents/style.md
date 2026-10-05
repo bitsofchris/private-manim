@@ -64,8 +64,8 @@ Rules that are specific to Shorts:
 ## The isometric house look (HyperFrames Shorts)
 
 The default look for a HyperFrames Short since 2026-10-04, from 009, 010 and
-011. The code is `videos/009-transformer-short-iso/_iso/iso.js` (the world),
-`videos/010-diagram-grammar-iso/_diagram/diagram.js` (the transformer figure)
+011. The code is `videos/_shared/web/iso/iso.js` (the world),
+`videos/_shared/web/iso/diagram.js` (the transformer figure)
 and `videos/011-jev-decision-models-iso/_jev/jev.js` (pillars, slabs, cards).
 
 **The one question per element: is the viewer meant to see a thing, or read

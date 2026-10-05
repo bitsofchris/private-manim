@@ -13,7 +13,7 @@ beat as a pure `render(t)` function with the kits, check, render to
 
 1. `agents/beat-brief-hyperframes.md` — the technical rules, including "What
    `check` and the renderer trip on". All of it applies.
-2. `videos/009-transformer-short-iso/_iso/iso.js` (linked into each beat as
+2. `videos/_shared/web/iso/iso.js` (linked into each beat as
    `iso/`) — the isometric kit: projection `ISO.P`, palette, `ground`, `box`,
    `poly`, ring slabs, `label`, `start`, easing.
 3. `videos/011-jev-decision-models-iso/_jev/jev.js` (linked as `jev/`) — this
@@ -61,7 +61,7 @@ Everything on screen comes from 008's ledger; invent nothing.
 - Beat 5: Jev is one company's implementation of a decision model; the open
   models named are `Laya` and `CLM-8B`. The decision head sits **on top of**
   the frozen stack, in place of the LM head (`Linear`). The stack is the
-  accurate transformer figure from 010 (`_diagram/diagram.js`, bottom to top;
+  accurate transformer figure (`videos/_shared/web/iso/diagram.js`, bottom to top;
   do not restyle its marks or reverse its flow).
 - Beat 6: the confident readout is `0.92` beside a coin that is really
   `50/50` (the fair-coin test from the sources).
@@ -126,8 +126,8 @@ onto each. Hero: the readout, then the tags.
 - **Do not edit `_jev/jev.js`, `00_layout/`, or the kits in 009 and 010.**
   Need something they lack: write a local function and name it in the report.
 - Set up a beat folder from the video folder:
-  `mkdir NN_name && cp 00_layout/index.html NN_name/index.html && ln -s ../../_shared/web/vendor NN_name/vendor && ln -s ../../009-transformer-short-iso/_iso NN_name/iso && ln -s ../_jev NN_name/jev`
-  (beat 5 also: `ln -s ../../010-diagram-grammar-iso/_diagram NN_name/diagram`
+  `mkdir NN_name && cp 00_layout/index.html NN_name/index.html && ln -s ../../_shared/web/vendor NN_name/vendor && ln -s ../../_shared/web/iso NN_name/iso && ln -s ../_jev NN_name/jev`
+  (beat 5 also: `ln -s ../../_shared/web/iso NN_name/diagram`
   and a `<script src="diagram/diagram.js">` after `iso.js`). Keep the script
   lines and the literal `window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);`.
   Set `data-duration` to your `BEAT_SECONDS`.

@@ -59,12 +59,13 @@ Paths in this table are relative to `videos/`.
 An agent copies a piece from a prototype into its beat's `index.html`.
 Nothing here becomes a template until a real video needs it twice (the same
 promotion rule as Manim parts). The one shared script so far is 009's
-isometric kit, `videos/009-transformer-short-iso/_iso/iso.js` (1 use): the
+isometric kit, `videos/_shared/web/iso/iso.js` (1 use): the
 projection `ISO.P`, `box`, `ground`, `shadow`, the `tray` of tiles coloured
 by token, ring slabs in two halves (`slabBack` / `slabFront`), the readout
-`makeCard`, `label`, `guides`, `start`. It moves to `videos/_shared/web/`
-when a second video uses it; the helpers its beats wrote locally and would
-move with it are listed in the changelog (2026-10-04).
+`makeCard`, `label`, `guides`, `start`. It was promoted to `videos/_shared/web/iso/`
+at its second use, with the transformer figure `diagram.js` beside it; the
+helpers beats wrote locally and that could join it are listed in the
+changelog (2026-10-04).
 Paths below are under `prototypes/hyperframes/`.
 
 | Piece | Where | What |

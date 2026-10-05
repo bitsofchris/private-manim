@@ -4,7 +4,7 @@
 **Description:** The contract for rebuilding `videos/005-transformer-short`
 (the 59.27 s transformer Short) in the isometric HyperFrames style, house
 palette, over the same voice-over, cut and captions. One `index.html` per
-beat, all drawing with the shared kit `_iso/iso.js`.
+beat, all drawing with the shared kit `videos/_shared/web/iso/iso.js`.
 **When to use:** you were handed this path plus one or two beat numbers.
 **How it works:** copy `00_layout/` (the canonical frame), build your beat as
 a pure `render(t)` function on the canvas plus flat DOM labels, check, render
@@ -15,7 +15,7 @@ to `media/hf/`, review your own contact sheet against the VO, report.
 1. `agents/beat-brief-hyperframes.md` — the technical rules (pure function of
    time, no network, no `Math.random`, no CSS animations, palette table, safe
    area, text floor, review loop). All of it applies.
-2. `videos/009-transformer-short-iso/_iso/iso.js` — the kit. Read all of it.
+2. `videos/_shared/web/iso/iso.js` — the kit. Read all of it.
 3. `videos/009-transformer-short-iso/00_layout/index.html` — the starting
    file: it draws the canonical frame.
 4. `videos/005-transformer-short/BRIEF.md` — the original Manim brief: your
@@ -119,10 +119,10 @@ comes out the other side, the one output, with a dim `next token` tag.
 
 ## Rules specific to this video
 
-- **Do not edit `_iso/iso.js` or `00_layout/`.** Need something the kit lacks:
+- **Do not edit `videos/_shared/web/iso/iso.js` or `00_layout/`.** Need something the kit lacks:
   write it as a local function in your beat and name it in your report.
 - Set up a beat folder from the video folder:
-  `mkdir NN_name && cp 00_layout/index.html NN_name/index.html && ln -s ../../_shared/web/vendor NN_name/vendor && ln -s ../_iso NN_name/iso`.
+  `mkdir NN_name && cp 00_layout/index.html NN_name/index.html && ln -s ../../_shared/web/vendor NN_name/vendor && ln -s ../../_shared/web/iso NN_name/iso`.
   Keep the two `<script src>` lines and the literal
   `window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);` (the static
   lint needs it). Set `data-duration` to your `BEAT_SECONDS`.

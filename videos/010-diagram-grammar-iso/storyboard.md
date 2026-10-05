@@ -18,7 +18,7 @@ nodes, skip paths and the N× bracket are drawn on the plane of the front
 faces. It is the same figure as `videos/_shared/transformer.py`, mark for
 mark, read bottom to top: the Short teaches the figure's symbols and
 direction, so they are never restyled or reversed. The figure lives in
-`_diagram/diagram.js`; the kit is 009's `_iso/iso.js`; `00_layout/` is the
+`videos/_shared/web/iso/diagram.js`; the kit is `videos/_shared/web/iso/iso.js`; `00_layout/` is the
 canonical frame; `BRIEF.md` is the contract the beat agents built to.
 
 ## Final beats

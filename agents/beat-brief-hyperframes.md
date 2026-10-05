@@ -207,8 +207,8 @@ time by construction, seeks cleanly, and keeps cues as plain numbers.
 
 When every beat of a video shares a world, put the drawing code in one
 script in the video folder and link it into each beat as `vendor` is linked
-(`ln -s ../_iso NN_beat/iso`, then `<script src="iso/iso.js">`): 009's
-`_iso/iso.js`. The kit also defines the canonical frame each beat opens and
+(`ln -s ../../_shared/web/iso NN_beat/iso`, then `<script src="iso/iso.js">`): 009's
+`videos/_shared/web/iso/iso.js`. The kit also defines the canonical frame each beat opens and
 ends on, which is what lets beats be built in parallel and still cut
 cleanly. Beat agents do not edit the kit; they write local helpers and name
 them in the report.

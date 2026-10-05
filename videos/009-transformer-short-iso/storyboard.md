@@ -18,7 +18,7 @@ An isometric world on the house navy with a faint floor grid. The matrix is a
 tray of 3 x 3 extruded tiles, coloured by token column (my teal, name blue,
 is gold; tall = large, a darker shade = negative); a flat readout card above
 it carries `my name is` and the nine numbers in the same three colours. Blocks are slabs and rings the tray passes through. Data flows down.
-One magenta hero per beat. The shared kit is `_iso/iso.js`; the canonical
+One magenta hero per beat. The shared kit is `videos/_shared/web/iso/iso.js`; the canonical
 frame is `00_layout/`; the contract the beat agents built to is `BRIEF.md`.
 
 ## Final beats
