@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 6, Stack: the tray stays put and three numbered ring slabs travel up past it, each refining the values by a third. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.49" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 6, Stack. Opens on CANON(afterFfn), ends on CANON(afterStack).
+  const BEAT_SECONDS = 4.49;
+  // VO (beat-local): "Now each block receives the previous block's output / and continues to refine it further."
+  const CUE = {
+    block: 0.6,     /* "block": slab 1 has closed around the tray */
+    previous: 0.9,  /* "receives the previous block's": slabs 2 and 3 stack up below */
+    output: 2.3,    /* "output": slab 1 lights up, it is the block at work */
+    refine1: 2.6,   /* "and continues": first third of the refinement, in slab 1 */
+    refine2: 3.1,   /* "refine": second third, in slab 2 */
+    refine3: 3.6,   /* "it further": last third, in slab 3 */
+    still: 4.2,     /* slabs gone, nothing moves after this */
+  };
+  const MORPH = 0.25, MOVE = 0.25;            // values tick, then the stack moves up one floor
+  const SLAB = { half: 230, hole: 188, thick: 40 };
+  const SEAT = ISO.TRAY_Y + 30;               // slab top-face oy when the tray sits in it
+  const FLOOR = 84;                           // screen distance between stacked slabs
+  const ENTER = [0.0, CUE.previous, CUE.previous + 0.4];
+
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const card = ISO.makeCard(root);
+  const E = ISO.E(), seg = ISO.seg;
+  const A = ISO.VALUES.afterFfn, B = ISO.VALUES.afterStack;
+  // numerals ride at each slab's right-hand corner (flat DOM, 72 px)
+  const corner = ISO.P(SLAB.half, -SLAB.half, -SLAB.thick / 2, 0);
+  const NUM_W = 60, NUM_X = Math.round(corner[0] + 28 - NUM_W / 2);
+  const nums = [1, 2, 3].map((n) => ISO.label(root, String(n), { left: NUM_X, top: 0, size: 72, width: NUM_W, color: ISO.css(ISO.COL.dim) }));
+  nums.forEach((el) => { el.style.transformOrigin = "50% 50%"; });
+  ISO.guides(root);
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // how many floors the stack has travelled up (the last move carries slab 3 out)
+    const shift = E.io(seg(t, CUE.refine1 + MORPH, CUE.refine2)) + E.io(seg(t, CUE.refine2 + MORPH, CUE.refine3)) +
+                  E.io(seg(t, CUE.refine3 + MORPH, CUE.still - 0.05));
+    const slabs = [0, 1, 2].map((i) => {
+      const u = seg(t, ENTER[i], ENTER[i] + 0.55);
+      const oy = SEAT + (i - shift) * FLOOR + (1 - E.out(u)) * 36;
+      const risen = SEAT - oy;                                   // > 0 once it has passed the tray
+      const alpha = ISO.clamp01(u / 0.4) * (1 - seg(risen, 12, 78));
+      const near = 1 - ISO.clamp01(Math.abs(risen) / 45);
+      const glow = near * (i === 0 ? E.io(seg(t, CUE.output - 0.35, CUE.output + 0.1)) : 1) * (u >= 1 ? 1 : 0);
+      return { oy, alpha, glow };
+    });
+    // refinement: one third inside each slab
+    const m = [CUE.refine1, CUE.refine2, CUE.refine3].map((c) => seg(t, c, c + MORPH));
+    const stage = (E.io(m[0]) + E.io(m[1]) + E.io(m[2])) / 3;
+    const vals = stage <= 0 ? A : stage >= 1 ? B : ISO.lerpVals(A, B, stage);
+    const flash = Math.max(...[CUE.refine1, CUE.refine2, CUE.refine3].map((c) => (t >= c + MORPH / 2 ? 1 - seg(t, c + MORPH / 2, c + MORPH / 2 + 0.3) : 0)));
+
+    // ---- canvas, back to front ----
+    ISO.ground(g);
+    ISO.shadow(g, ISO.P2);
+    let J = 0;                                 // the slab the tray is drawn inside: the lowest one at or above the seat
+    slabs.forEach((s, i) => { if (s.alpha > 0 && s.oy <= SEAT + 0.5) J = i; });   // (slab 1 while everything is still below)
+    const drawTray = () => { g.globalAlpha = 1; ISO.tray(g, vals); };
+    for (let i = 2; i >= 0; i--) {             // lowest slab first
+      const s = slabs[i], o = Object.assign({ glow: s.glow }, SLAB);
+      g.globalAlpha = s.alpha; if (s.alpha > 0) ISO.slabBack(g, s.oy, o);
+      if (i === J) drawTray();
+      g.globalAlpha = s.alpha; if (s.alpha > 0) ISO.slabFront(g, s.oy, o);
+    }
+    g.globalAlpha = 1;
+
+    // ---- flat text ----
+    card.set(vals, { flash });
+    nums.forEach((el, i) => {
+      const s = slabs[i];
+      el.style.transform = `translate(0px, ${(s.oy + corner[1] - 40).toFixed(2)}px) scale(${(1 + 0.1 * s.glow).toFixed(3)})`;
+      el.style.opacity = s.alpha.toFixed(3);
+      el.style.color = ISO.css(ISO.mix(ISO.COL.dim, ISO.COL.hero, s.glow));
+    });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

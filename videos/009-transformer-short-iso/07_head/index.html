@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 7, Head: the tray pulses, a magenta head slab rises under it, the whole tray sinks into the head, and `Chris` comes out of the bottom. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.83" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 7, Head. Opens on CANON(afterStack); its last frame is the last frame of the Short.
+  const BEAT_SECONDS = 8.83;
+  // VO (beat-local, measured on vo_final.wav from 50.44 s: speech 0.03-2.67, 2.97-4.73, 5.02-8.59):
+  // "Now the final representations are not necessarily predictions / but a task specific
+  // output layer / will turn these representations / into whatever the training objective is asking for."
+  const CUE = {
+    final: 0.0,       /* "Now the final representations": the whole tray pulses (twice, to 1.5) */
+    not: 2.0,         /* "not necessarily predictions": hold on the canonical frame */
+    head: 3.6,        /* "task specific": the head slab starts to rise from the floor ... */
+    outputLayer: 4.3, /* "output layer": ... and has landed under the tray; its label reads `head` */
+    turn: 5.0,        /* "will turn these representations": the whole tray sinks into the head ... */
+    swallowed: 6.4,   /* ... and is gone by the end of "representations" */
+    into: 6.45,       /* "into whatever the": the head lifts and `Chris` is extruded from under it */
+    objective: 7.5,   /* "training objective": `Chris` has settled; the `next token` tag arrives */
+    asking: 8.0,      /* "asking for": one soft pop on `Chris` */
+    still: 8.4,       /* nothing moves after this */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const card = ISO.makeCard(root);
+  const E = ISO.E(), seg = ISO.seg, COL = ISO.COL, css = ISO.css, mix = ISO.mix, P = ISO.P;
+  const V = ISO.VALUES.afterStack;
+
+  // ---- layout (screen y): card 236-494 | tray plate 603-805 | head | Chris | tag, all above 1100 ----
+  // The head is a solid slab with a tray-shaped well in its top. Footprint half 210 > tray half ISO.P2 (172).
+  const HEAD = { half: 210, well: ISO.P2 + 12, depth: 26, thick: 64 };
+  const HEAD_Y0 = ISO.TRAY_Y + 150;          // top-face centre when it has arrived: 150 px under the tray plate
+  const HEAD_Y1 = ISO.TRAY_Y;                // after the tray is inside, the head lifts to make room for the word
+  const RISE = 60;                           // it comes up from this far below (bottom corner stays above y 1100)
+  const SINK = (HEAD_Y0 - ISO.TRAY_Y) + HEAD.depth + ISO.PLATE + ISO.tileHeight(0.6) + 4;   // tray travel until all of it is under the well floor
+  const WORD = { size: 120, top: HEAD_Y1 + 178, from: -175 };   // caps land at y ~901-988
+  const TAG = { size: 60, top: HEAD_Y1 + 314 };                 // glyphs y ~1025-1069
+  const LABEL = { left: 796, width: 150, dy: -118 };           // `head`, above the slab's right corner, right edge x 946
+
+  const headLabel = ISO.label(root, "head", { left: LABEL.left, top: 0, size: 60, width: LABEL.width, align: "right" });
+  const mask = document.createElement("div");   // clips the word to the region below the head's bottom edge
+  mask.style.cssText = "position:absolute;left:0;top:0;width:1080px;height:1920px;";
+  root.appendChild(mask);
+  const word = ISO.label(mask, ISO.NEXT_TOKENS[0][0], { left: ISO.VIEW.cx - 250, top: WORD.top, size: WORD.size, width: 500 });
+  word.style.transformOrigin = "50% 70%";
+  const tag = ISO.label(root, "next token", { left: ISO.VIEW.cx - 250, top: TAG.top, size: TAG.size, width: 500, color: css(COL.dim) });
+  ISO.guides(root);
+
+  // local helper: the head slab, top-face centre at screen y `oy`. glow 0..1 lifts the body, well 0..1 lights the well floor.
+  function head(oy, glow, well) {
+    const H = HEAD.half, M = HEAD.well, dp = HEAD.depth;
+    const body = mix(COL.hero, COL.text, 0.3 * glow);
+    ISO.box(g, -H, -H, H, H, -HEAD.thick, 0, oy, body, { edge: css(mix(COL.hero, COL.text, 0.45 + 0.4 * glow)) });
+    g.save();
+    g.beginPath(); [[-M, -M], [M, -M], [M, M], [-M, M]].forEach(([x, y], i) => { const p = P(x, y, 0, oy); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); });
+    g.closePath(); g.clip();
+    ISO.poly(g, [P(-M, -M, 0, oy), P(-M, M, 0, oy), P(-M, M, -dp, oy), P(-M, -M, -dp, oy)], css(mix(COL.hero, COL.bg, 0.42)));
+    ISO.poly(g, [P(-M, -M, 0, oy), P(M, -M, 0, oy), P(M, -M, -dp, oy), P(-M, -M, -dp, oy)], css(mix(COL.hero, COL.bg, 0.56)));
+    ISO.poly(g, [P(-M, -M, -dp, oy), P(M, -M, -dp, oy), P(M, M, -dp, oy), P(-M, M, -dp, oy)], css(mix(mix(COL.hero, COL.bg, 0.7), COL.text, 0.85 * well)));
+    g.restore();
+  }
+  // local helper: the tray lowered by `d`, drawn only where it is still above the well floor (z = floorZ in tray
+  // coordinates) and not hidden by the well's front rim: it goes INTO the head, never behind it and never fading.
+  function sunkTray(d, floorZ, oyHead, tint) {
+    const M = HEAD.well, oy = ISO.TRAY_Y;
+    const l = P(-M, M, 0, oyHead), f = P(M, M, 0, oyHead), r = P(M, -M, 0, oyHead);
+    g.save();
+    g.beginPath(); g.moveTo(l[0], 0); g.lineTo(l[0], l[1]); g.lineTo(f[0], f[1]); g.lineTo(r[0], r[1]); g.lineTo(r[0], 0); g.closePath(); g.clip();
+    const part = (x0, y0, x1, y1, zb, zt, col, opts) => { if (zt - d > floorZ + 0.5) ISO.box(g, x0, y0, x1, y1, Math.max(zb - d, floorZ), zt - d, oy, col, opts); };
+    part(-ISO.P2, -ISO.P2, ISO.P2, ISO.P2, 0, ISO.PLATE, COL.plate, { shade: [1, 0.7, 0.5], edge: css(COL.muted) });
+    const order = [];
+    for (let c = 0; c < 3; c++) for (let r2 = 0; r2 < 3; r2++) order.push([c, r2]);
+    order.sort((p, q) => (p[0] + p[1]) - (q[0] + q[1]) || p[1] - q[1]);   // back to front, as ISO.tray
+    order.forEach(([c, r2]) => {
+      const v = V[c][r2], [x0, y0, x1, y1] = ISO.tileRect(c, r2);
+      part(x0, y0, x1, y1, ISO.PLATE, ISO.PLATE + ISO.tileHeight(v), mix(ISO.tileColor(v, c), COL.text, tint));
+    });
+    g.restore();
+  }
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // "final representations": two pulses over the whole tray
+    const pu2 = seg(t, CUE.final, 1.5) * 2;
+    const pulse = pu2 < 2 ? Math.abs(Math.sin(Math.PI * pu2)) * (pu2 < 1 ? 1 : 0.65) : 0;
+    // the head rises from the floor on "task specific", lands on "output layer"
+    const hu = seg(t, CUE.head, CUE.outputLayer), hAlpha = ISO.clamp01(hu / 0.4);
+    const lift = E.io(seg(t, CUE.into, CUE.into + 0.75));
+    const oyH = HEAD_Y0 + (1 - E.out(hu)) * RISE + (HEAD_Y1 - HEAD_Y0) * lift;
+    // the tray goes in on "will turn these representations"
+    const d = E.io(seg(t, CUE.turn + 0.05, CUE.swallowed - 0.05)) * SINK;
+    const inside = seg(d, HEAD_Y0 - ISO.TRAY_Y - 10, HEAD_Y0 - ISO.TRAY_Y + 40);      // 0..1 as it crosses the head's top
+    const glow = inside * (1 - 0.75 * seg(t, CUE.into + 0.6, CUE.objective + 0.3));   // the head lights as it swallows, then eases
+    const well = inside * (1 - seg(t, CUE.swallowed, CUE.into + 0.7));
+    // `Chris` is extruded from under the head, then settles
+    const wu = seg(t, CUE.into + 0.15, CUE.objective - 0.1), wy = (1 - E.back(wu)) * WORD.from;
+    const pop = Math.sin(Math.PI * seg(t, CUE.asking, CUE.still - 0.05));
+    const tu = E.out(seg(t, CUE.objective, CUE.objective + 0.35));
+
+    // ---- canvas, back to front ----
+    ISO.ground(g);
+    ISO.shadow(g, ISO.P2, ISO.GROUND_Y, 0.12 * (1 - seg(t, CUE.into, CUE.into + 0.5)));
+    if (hAlpha > 0) { g.globalAlpha = hAlpha; head(oyH, glow, well); g.globalAlpha = 1; }
+    if (d <= 0) ISO.tray(g, V, { color: (c, r, v) => (pulse > 0 ? mix(ISO.tileColor(v, c), COL.text, 0.5 * pulse) : null) });
+    else if (d < SINK) sunkTray(d, ISO.TRAY_Y - oyH - HEAD.depth, oyH, 0.35 * inside);
+
+    // ---- flat text ----
+    card.set(V, { flash: 0.8 * pulse });
+    const la = E.out(seg(t, CUE.outputLayer - 0.15, CUE.outputLayer + 0.2));
+    headLabel.style.opacity = la.toFixed(3);
+    headLabel.style.transform = `translate(0px, ${(oyH + LABEL.dy + (1 - la) * 16).toFixed(2)}px)`;
+    headLabel.style.color = css(mix(COL.text, COL.dim, seg(t, CUE.into + 0.4, CUE.objective)));
+    const H = HEAD.half, pt = (p) => `${p[0].toFixed(1)}px ${p[1].toFixed(1)}px`;
+    const lb = P(-H, H, -HEAD.thick, oyH), fb = P(H, H, -HEAD.thick, oyH), rb = P(H, -H, -HEAD.thick, oyH);
+    mask.style.clipPath = `polygon(${pt(lb)}, ${pt(fb)}, ${pt(rb)}, ${rb[0].toFixed(1)}px 1920px, ${lb[0].toFixed(1)}px 1920px)`;
+    word.style.opacity = wu > 0 ? "1" : "0";
+    word.style.transform = `translate(0px, ${wy.toFixed(2)}px) scale(${(1 + 0.06 * pop).toFixed(4)})`;
+    word.style.color = css(mix(COL.text, COL.data, 0.6 * (1 - seg(t, CUE.objective - 0.3, CUE.objective + 0.2))));
+    tag.style.opacity = tu.toFixed(3);
+    tag.style.transform = `translate(0px, ${((1 - tu) * 14).toFixed(2)}px)`;
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 2 Matrix: zoom from the tower into the output tray; d, L, the L x d outline. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.08" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.08;
+  // VO (beat-local = master - 6.20; vo_final.wav speech 0.09-2.42, 2.79-6.08, 6.45-8.59)
+  const CUE = {
+    zoom: 0.0,    /* "Each token is": the zoom into the output tray */
+    vector: 1.3,  /* "a vector of": one token's line turns magenta */
+    dNum: 1.95,   /* "D numbers": the d tag */
+    seq: 3.2,     /* "and a sequence": the hero retires */
+    lTok: 3.75,   /* "of L tokens": the three lines, the L tag */
+    lByD: 5.35,   /* "L by D matrix": the outline is drawn */
+    every: 6.5,   /* "Every block in the transformer stack": tags go */
+    keeps: 7.95,  /* "keeps that shape": the outline pulses once */
+    still: 8.72,  /* nothing moves after this */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { lerp, seg, lerpVals, clamp01, mix, css, COL, P2 } = ISO, E = ISO.E();
+  const card = ISO.makeCard(root);
+  ISO.guides(root);
+  // ==== TOWER: the bird's-eye model. This block is identical in 01_hook and 02_matrix ====
+  // (beat 2's first frame is beat 1's last frame: change one, change the other)
+  const TOWER = {
+    tx: -232,                       // the tower sits left of centre (canvas x shift), labels to its right
+    small: 0.5,                     // scale of the small tray
+    inY: 300, outY: 882,            // tray screen y: hovering above Embed / resting below the block
+    ring: { half: 125, hole: 96, thick: 30 },
+    rings: [{ name: "Embed", y: 430 }, { name: "Attention", y: 585 }, { name: "FFN", y: 720 }],
+    linearThick: 20,                // the dim Linear slab stands on the floor (ISO.GROUND_Y)
+    labelX: 505, tagX: 436, bracketX: 812,
+    outVals: ISO.VALUES.afterFfn,   // what the block hands on
+  };
+  const withTealGlow = (fn) => { const h = ISO.COL.hero; ISO.COL.hero = ISO.COL.data; fn(); ISO.COL.hero = h; }; // nothing magenta here
+  function makeTowerLabels(root) {
+    const dim = ISO.css(ISO.COL.dim), teal = ISO.css(ISO.COL.data);
+    const blockMid = (TOWER.rings[1].y + TOWER.rings[2].y) / 2 + 15;
+    return {
+      rings: TOWER.rings.map((r) => ISO.label(root, r.name, { left: TOWER.labelX, top: r.y - 22, size: 64 })),
+      linear: ISO.label(root, "Linear", { left: TOWER.labelX, top: ISO.GROUND_Y - TOWER.linearThick - 26, size: 64, color: dim }),
+      nx: ISO.label(root, "N×", { left: TOWER.bracketX + 34, top: blockMid - 35, size: 64, color: dim }),
+      xin: ISO.label(root, "X", { left: TOWER.tagX, top: 0, size: 76, color: teal }),
+      xout: ISO.label(root, "X′", { left: TOWER.tagX, top: TOWER.outY - 50, size: 76, color: teal }),
+    };
+  }
+  // the labels at rest (beat 1's last frame), all at opacity `alpha`
+  function towerLabelsRest(L, alpha) {
+    const a = alpha.toFixed(3);
+    L.rings.forEach((el) => { el.style.opacity = a; el.style.color = ISO.css(ISO.COL.text); el.style.transform = "none"; });
+    L.linear.style.opacity = a; L.nx.style.opacity = a;
+    L.xin.style.opacity = "0";
+    L.xout.style.opacity = a; L.xout.style.transform = "none";
+  }
+  const smallTray = (g, vals, oy) => ISO.tray(g, vals, { oy, scale: TOWER.small });
+  // s: { alpha, glow: [embed, attention, ffn] 0..1, ty: tray screen y or null, vals }
+  // The tray is painted in the right place of the stack: above everything,
+  // inside ring i (between its back and front halves), or under ring i.
+  function drawTower(g, s) {
+    const R = TOWER.ring, rings = TOWER.rings, a0 = g.globalAlpha;
+    let slot = -1;
+    if (s.ty != null) for (let i = rings.length - 1; i >= 0; i--) if (s.ty >= rings[i].y) { slot = s.ty > rings[i].y + R.thick + 40 ? 2 * i + 1 : 2 * i; break; }
+    const trayNow = () => { g.globalAlpha = a0; smallTray(g, s.vals, s.ty); g.globalAlpha = a0 * s.alpha; };
+    g.save(); g.translate(TOWER.tx, 0); g.globalAlpha = a0 * s.alpha;
+    ISO.box(g, -R.half, -R.half, R.half, R.half, 0, TOWER.linearThick, ISO.GROUND_Y, ISO.COL.slabB, { edge: ISO.css(ISO.COL.muted) });
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const o = { half: R.half, hole: R.hole, thick: R.thick, glow: s.glow[i] * 0.85 };
+      if (slot === 2 * i + 1) trayNow();
+      withTealGlow(() => ISO.slabBack(g, rings[i].y, o));
+      if (slot === 2 * i) trayNow();
+      withTealGlow(() => ISO.slabFront(g, rings[i].y, o));
+    }
+    if (slot === -1 && s.ty != null) trayNow();
+    g.restore();
+    // the N× bracket around Attention + FFN (flat, screen space)
+    g.globalAlpha = a0 * s.alpha;
+    const x = TOWER.bracketX, y1 = rings[1].y - 22, y2 = rings[2].y + 52;
+    g.strokeStyle = ISO.css(ISO.COL.dim); g.lineWidth = 6; g.lineJoin = "round"; g.lineCap = "round";
+    g.beginPath(); g.moveTo(x, y1); g.lineTo(x + 20, y1); g.lineTo(x + 20, y2); g.lineTo(x, y2); g.stroke();
+    g.globalAlpha = a0;
+  }
+  // ==== end TOWER ====
+  const L = makeTowerLabels(root);
+  const HERO_TOKEN = 0;               // "my": the token shown as a vector
+  const OFF = 40, TICK = 20;          // tag lines: distance from the tray, end ticks
+  const dTag = ISO.label(root, "d", { left: 258, top: 518, size: 76 });
+  const D_Z = 95;                     // the d bar floats above the hero token's tiles (on the floor the tiles hide it)
+  const lTag = ISO.label(root, "L", { left: 352, top: 806, size: 76, color: css(COL.data) });
+  const W = (x, y, z = 0) => ISO.P(x, y, z, ISO.TRAY_Y);
+  // a measuring line from world a to b ([x, y, z]) with end ticks (a world offset), drawn from its middle to fraction u
+  function tagLine(a, b, tick, col, alpha, u) {
+    if (alpha <= 0 || u <= 0) return;
+    const at = (f) => [0, 1, 2].map((k) => lerp(a[k], b[k], f));
+    const p = at(0.5 - u / 2), q = at(0.5 + u / 2), off = (w) => [w[0] + tick[0], w[1] + tick[1], w[2] + tick[2]];
+    g.save(); g.globalAlpha = alpha; g.strokeStyle = css(col); g.lineWidth = 7; g.lineCap = "round"; g.lineJoin = "round";
+    g.beginPath();
+    [off(p), p, q, off(q)].forEach((w, i) => { const s = W(w[0], w[1], w[2]); i ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); });
+    g.save(); g.strokeStyle = css(COL.bg); g.lineWidth = 17; g.stroke(); g.restore();   // dark underlay: the line reads over same-coloured tiles
+    g.stroke(); g.restore();
+  }
+  // the tray's outline: a square on the floor around the plate. Loop fraction
+  // 0..1 runs left corner -> back -> right -> front -> left; the back half is
+  // painted before the tray and the front half after it.
+  function outline(u0, u1, half, col, alpha, width) {
+    if (alpha <= 0 || u1 <= u0) return;
+    const C = [[-half, half], [-half, -half], [half, -half], [half, half], [-half, half]];
+    const at = (u) => { const k = Math.min(3, Math.floor(u * 4)), f = u * 4 - k; return W(lerp(C[k][0], C[k + 1][0], f), lerp(C[k][1], C[k + 1][1], f)); };
+    g.save(); g.globalAlpha = alpha; g.strokeStyle = css(col); g.lineWidth = width; g.lineCap = "round"; g.lineJoin = "round";
+    g.beginPath(); let p = at(u0); g.moveTo(p[0], p[1]);
+    for (let k = 1; k <= 3; k++) if (k / 4 > u0 && k / 4 < u1) { p = at(k / 4); g.lineTo(p[0], p[1]); }
+    p = at(u1); g.lineTo(p[0], p[1]); g.stroke(); g.restore();
+  }
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // ---- the zoom: the small output tray becomes the canonical tray ----
+    const z = E.io(seg(t, CUE.zoom, CUE.zoom + 1.1));
+    const towerA = 1 - seg(t, CUE.zoom, CUE.zoom + 0.5);
+    const vals = lerpVals(TOWER.outVals, ISO.VALUES.embed, z);
+    const cardU = E.out(seg(t, CUE.zoom + 0.55, CUE.zoom + 1.15));
+    // ---- the hero: one token's line of three tiles ----
+    const hero = seg(t, CUE.vector, CUE.vector + 0.4) * (1 - seg(t, CUE.seq, CUE.seq + 0.4));
+    const dIn = seg(t, CUE.dNum, CUE.dNum + 0.35), lIn = seg(t, CUE.lTok + 0.2, CUE.lTok + 0.55);
+    const tagsOut = 1 - seg(t, CUE.every, CUE.every + 0.5);
+    const hop = (c) => Math.sin(seg(t, CUE.lTok + 0.22 * c, CUE.lTok + 0.45 + 0.22 * c) * Math.PI);   // my, name, is in turn
+    const say = (a) => Math.sin(seg(t, a, a + 0.35) * Math.PI);                                        // a tag swells on its word
+    // ---- the outline ----
+    const drawn = E.io(seg(t, CUE.lByD, CUE.lByD + 0.65));
+    const pulse = Math.sin(seg(t, CUE.keeps, CUE.keeps + 0.5) * Math.PI);
+    const outA = 1 - seg(t, CUE.keeps + 0.4, CUE.keeps + 0.75);
+    const half = P2 + 16 + 14 * pulse, outCol = mix(COL.data, COL.text, 0.35 + 0.65 * pulse), outW = 7 + 6 * pulse;
+
+    ISO.ground(g);
+    if (towerA > 0) drawTower(g, { alpha: towerA, glow: [0, 0, 0], ty: null, vals });
+    ISO.shadow(g, P2, ISO.GROUND_Y, 0.12 * seg(t, CUE.zoom + 0.5, CUE.zoom + 1.1));
+    outline(0, Math.min(drawn, 0.5), half, outCol, outA, outW);
+    g.save(); g.translate(lerp(TOWER.tx, 0, z), 0);
+    ISO.tray(g, vals, {
+      oy: lerp(TOWER.outY, ISO.TRAY_Y, z), scale: lerp(TOWER.small, 1, z),
+      color: (c, r, v) => (c === HERO_TOKEN && hero > 0 ? mix(ISO.tileColor(v, c), COL.hero, hero) : null),
+      lift: (c) => 14 * hop(c),
+    });
+    g.restore();
+    outline(0.5, drawn, half, outCol, outA, outW);
+    const dCol = mix(COL.data, COL.hero, hero);
+    const hx = (ISO.tileRect(HERO_TOKEN, 0)[0] + ISO.tileRect(HERO_TOKEN, 0)[2]) / 2;
+    tagLine([hx, -P2 + 10, D_Z], [hx, P2 - 10, D_Z], [0, 0, -TICK], dCol, tagsOut, E.out(dIn));
+    tagLine([-P2 + 10, P2 + OFF, 0], [P2 - 10, P2 + OFF, 0], [0, -TICK, 0], COL.data, tagsOut, E.out(lIn));
+
+    // ---- flat text ----
+    towerLabelsRest(L, towerA);
+    card.el.style.opacity = cardU.toFixed(3);
+    card.el.style.transform = cardU < 1 ? `translate(0px, ${((1 - cardU) * -28).toFixed(2)}px)` : "none";
+    card.set(vals, { color: (c, r, v) => (c === HERO_TOKEN && hero > 0 ? css(mix(ISO.digitColor(v, c), COL.hero, hero)) : null) });
+    card.words.forEach((el, c) => {
+      const k = Math.max(c === HERO_TOKEN ? hero : 0, 0);
+      el.style.color = css(mix(mix(COL.tokens[c], COL.text, 0.6 * hop(c)), COL.hero, k));
+    });
+    dTag.style.opacity = (clamp01(dIn * 2) * tagsOut).toFixed(3);
+    dTag.style.color = css(dCol);
+    dTag.style.transform = `scale(${(0.7 + 0.3 * E.back(dIn) + 0.18 * say(CUE.lByD + 0.4)).toFixed(3)})`;
+    lTag.style.opacity = (clamp01(lIn * 2) * tagsOut).toFixed(3);
+    lTag.style.transform = `scale(${(0.7 + 0.3 * E.back(lIn) + 0.18 * say(CUE.lByD)).toFixed(3)})`;
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 1 Hook: the whole model as a tower, a small tray falls through it (X in, X′ out). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.20;
+  // VO (beat-local, checked against vo_final.wav 0.00-6.20: speech 0.35-3.48, 3.69-5.76)
+  const CUE = {
+    takes: 1.0,     /* "takes": the tray drops into Embed */
+    tokens: 2.3,    /* "tokens": the tray is inside Attention */
+    produces: 2.9,  /* "and produces": on into FFN */
+    updated: 3.75,  /* "updated": the tray comes out below the block */
+    reps: 4.2,      /* "representations": X′ */
+    still: 4.75,    /* "of those tokens": nothing moves after this */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { lerp, seg, lerpVals } = ISO, E = ISO.E();
+  ISO.guides(root);
+  // ==== TOWER: the bird's-eye model. This block is identical in 01_hook and 02_matrix ====
+  // (beat 2's first frame is beat 1's last frame: change one, change the other)
+  const TOWER = {
+    tx: -232,                       // the tower sits left of centre (canvas x shift), labels to its right
+    small: 0.5,                     // scale of the small tray
+    inY: 300, outY: 882,            // tray screen y: hovering above Embed / resting below the block
+    ring: { half: 125, hole: 96, thick: 30 },
+    rings: [{ name: "Embed", y: 430 }, { name: "Attention", y: 585 }, { name: "FFN", y: 720 }],
+    linearThick: 20,                // the dim Linear slab stands on the floor (ISO.GROUND_Y)
+    labelX: 505, tagX: 436, bracketX: 812,
+    outVals: ISO.VALUES.afterFfn,   // what the block hands on
+  };
+  const withTealGlow = (fn) => { const h = ISO.COL.hero; ISO.COL.hero = ISO.COL.data; fn(); ISO.COL.hero = h; }; // nothing magenta here
+  function makeTowerLabels(root) {
+    const dim = ISO.css(ISO.COL.dim), teal = ISO.css(ISO.COL.data);
+    const blockMid = (TOWER.rings[1].y + TOWER.rings[2].y) / 2 + 15;
+    return {
+      rings: TOWER.rings.map((r) => ISO.label(root, r.name, { left: TOWER.labelX, top: r.y - 22, size: 64 })),
+      linear: ISO.label(root, "Linear", { left: TOWER.labelX, top: ISO.GROUND_Y - TOWER.linearThick - 26, size: 64, color: dim }),
+      nx: ISO.label(root, "N×", { left: TOWER.bracketX + 34, top: blockMid - 35, size: 64, color: dim }),
+      xin: ISO.label(root, "X", { left: TOWER.tagX, top: 0, size: 76, color: teal }),
+      xout: ISO.label(root, "X′", { left: TOWER.tagX, top: TOWER.outY - 50, size: 76, color: teal }),
+    };
+  }
+  // the labels at rest (beat 1's last frame), all at opacity `alpha`
+  function towerLabelsRest(L, alpha) {
+    const a = alpha.toFixed(3);
+    L.rings.forEach((el) => { el.style.opacity = a; el.style.color = ISO.css(ISO.COL.text); el.style.transform = "none"; });
+    L.linear.style.opacity = a; L.nx.style.opacity = a;
+    L.xin.style.opacity = "0";
+    L.xout.style.opacity = a; L.xout.style.transform = "none";
+  }
+  const smallTray = (g, vals, oy) => ISO.tray(g, vals, { oy, scale: TOWER.small });
+  // s: { alpha, glow: [embed, attention, ffn] 0..1, ty: tray screen y or null, vals }
+  // The tray is painted in the right place of the stack: above everything,
+  // inside ring i (between its back and front halves), or under ring i.
+  function drawTower(g, s) {
+    const R = TOWER.ring, rings = TOWER.rings, a0 = g.globalAlpha;
+    let slot = -1;
+    if (s.ty != null) for (let i = rings.length - 1; i >= 0; i--) if (s.ty >= rings[i].y) { slot = s.ty > rings[i].y + R.thick + 40 ? 2 * i + 1 : 2 * i; break; }
+    const trayNow = () => { g.globalAlpha = a0; smallTray(g, s.vals, s.ty); g.globalAlpha = a0 * s.alpha; };
+    g.save(); g.translate(TOWER.tx, 0); g.globalAlpha = a0 * s.alpha;
+    ISO.box(g, -R.half, -R.half, R.half, R.half, 0, TOWER.linearThick, ISO.GROUND_Y, ISO.COL.slabB, { edge: ISO.css(ISO.COL.muted) });
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const o = { half: R.half, hole: R.hole, thick: R.thick, glow: s.glow[i] * 0.85 };
+      if (slot === 2 * i + 1) trayNow();
+      withTealGlow(() => ISO.slabBack(g, rings[i].y, o));
+      if (slot === 2 * i) trayNow();
+      withTealGlow(() => ISO.slabFront(g, rings[i].y, o));
+    }
+    if (slot === -1 && s.ty != null) trayNow();
+    g.restore();
+    // the N× bracket around Attention + FFN (flat, screen space)
+    g.globalAlpha = a0 * s.alpha;
+    const x = TOWER.bracketX, y1 = rings[1].y - 22, y2 = rings[2].y + 52;
+    g.strokeStyle = ISO.css(ISO.COL.dim); g.lineWidth = 6; g.lineJoin = "round"; g.lineCap = "round";
+    g.beginPath(); g.moveTo(x, y1); g.lineTo(x + 20, y1); g.lineTo(x + 20, y2); g.lineTo(x, y2); g.stroke();
+    g.globalAlpha = a0;
+  }
+  // ==== end TOWER ====
+  const L = makeTowerLabels(root);
+  const SEAT = TOWER.rings.map((r) => r.y + 10);   // the plate sits just under a ring's top face
+  const MORPH = 0.35;
+  function render(tRaw) {
+    const t = Math.min(tRaw, CUE.still);
+    // the tray: drifts down from frame 0, then drops ring by ring
+    let ty = lerp(TOWER.inY, TOWER.inY + 35, seg(t, 0, CUE.takes));
+    ty = lerp(ty, SEAT[0], E.io(seg(t, CUE.takes, CUE.takes + 0.5)));
+    ty = lerp(ty, SEAT[1], E.io(seg(t, CUE.tokens - 0.4, CUE.tokens + 0.1)));
+    ty = lerp(ty, SEAT[2], E.io(seg(t, CUE.produces, CUE.produces + 0.5)));
+    ty = lerp(ty, TOWER.outY, E.out(seg(t, CUE.updated, CUE.updated + 0.5)));
+    const lu = seg(t, CUE.updated + 0.5, CUE.updated + 0.8); if (lu > 0 && lu < 1) ty -= Math.sin(lu * Math.PI) * 6;
+    // the values change inside each ring of the block: embed -> afterAttn -> afterFfn
+    const m1 = E.io(seg(t, CUE.tokens + 0.1, CUE.tokens + 0.1 + MORPH)), m2 = E.io(seg(t, CUE.produces + 0.5, CUE.produces + 0.5 + MORPH));
+    let vals = lerpVals(ISO.VALUES.embed, ISO.VALUES.afterAttn, m1);
+    vals = lerpVals(vals, TOWER.outVals, m2);
+    const bump = (a, b) => Math.sin(seg(t, a, b) * Math.PI);
+    const glow = [bump(CUE.takes + 0.2, CUE.takes + 0.9), bump(CUE.tokens - 0.15, CUE.tokens + 0.6), bump(CUE.produces + 0.25, CUE.produces + 1.0)];
+
+    ISO.ground(g);
+    drawTower(g, { alpha: 1, glow, ty, vals });
+
+    towerLabelsRest(L, 1);
+    L.rings.forEach((el, i) => {
+      el.style.color = ISO.css(ISO.mix(ISO.COL.text, ISO.COL.data, glow[i]));
+      el.style.transform = `scale(${(1 + 0.06 * glow[i]).toFixed(3)})`;
+    });
+    L.xin.style.transform = `translate(0px, ${(ty - 50).toFixed(2)}px)`;
+    L.xin.style.opacity = (1 - seg(t, CUE.takes + 0.05, CUE.takes + 0.4)).toFixed(3);
+    const xo = seg(t, CUE.reps, CUE.reps + 0.4);
+    L.xout.style.opacity = ISO.clamp01(xo * 3).toFixed(3);
+    L.xout.style.transform = xo < 1 ? `scale(${(0.6 + 0.4 * E.back(xo)).toFixed(3)})` : "none";
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

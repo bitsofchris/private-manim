@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 4 Residual: the update column lands on the "is" tiles and merges into them. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.4" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.40;
+  // Cues, beat-local seconds (master 29.10 + t), from vo_final.wav silences + captions.json.
+  const CUE = {
+    path: 0.0,       // "Now a residual connection" 0.06-1.26: the route the update will take
+    adds: 1.5,       // "just adds" (1.49-1.85): the + pops, the column leaves
+    land: 2.7,       // "the update" done (2.44): the column is on top of the "is" tiles
+    existing: 2.9,   // "existing representation" (2.8-3.9): tiles + digits tick to afterAttn
+    merged: 3.7,
+    instead: 4.15,   // "instead of"
+    replacing: 4.5,  // "replacing it" (to 4.92): the strike
+    ghostOut: 4.82,
+    still: 5.08,     // nothing moves after this
+  };
+  const { P, COL, css, mix, lerp, seg, clamp01, TRAY_Y, PLATE, TARGET, VALUES } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const card = ISO.makeCard(root);
+  const E = ISO.E();
+  // ---- shared by 03_attention and 04_residual: keep the two copies identical ----
+  // The update column: three magenta tiles (ISO.VALUES.update) on the "is" line's
+  // footprint. Parked, it hovers at world z = UPD.parkZ under the tray (which is the
+  // lower region of the stage on screen) with a faint magenta patch on the floor.
+  const UPD = { parkZ: -250, shadowAlpha: 0.16, groundZ: ISO.TRAY_Y - ISO.GROUND_Y };
+  // o.grow[r] 0..1 height factor, o.base[r] world z of each tile's underside
+  // (default parkZ), o.dx world-x offset of the whole column, o.shadow 0..1.
+  function updateColumn(g, o = {}) {
+    const T = ISO.TARGET, dx = o.dx || 0, sh = o.shadow == null ? 1 : o.shadow;
+    if (sh > 0.001) {
+      const a = ISO.tileRect(T, 0), b = ISO.tileRect(T, 2), z = UPD.groundZ, oy = ISO.TRAY_Y;
+      ISO.poly(g, [ISO.P(a[0] + dx, a[1], z, oy), ISO.P(a[2] + dx, a[1], z, oy), ISO.P(a[2] + dx, b[3], z, oy), ISO.P(a[0] + dx, b[3], z, oy)],
+        ISO.css(ISO.COL.hero, 1, UPD.shadowAlpha * sh));
+    }
+    for (let r = 0; r < 3; r++) {
+      const h = ISO.tileHeight(ISO.VALUES.update[r]) * (o.grow ? o.grow[r] : 1);
+      if (h < 0.5) continue;
+      const [x0, y0, x1, y1] = ISO.tileRect(T, r), zb = o.base ? o.base[r] : UPD.parkZ;
+      ISO.box(g, x0 + dx, y0, x1 + dx, y1, zb, zb + h, ISO.TRAY_Y, ISO.COL.hero);
+    }
+  }
+  // The frame beat 3 ends on and beat 4 opens on.
+  function handoffFrame(g, card) {
+    ISO.ground(g); ISO.shadow(g, ISO.P2); ISO.tray(g, ISO.VALUES.embed); card.set(ISO.VALUES.embed);
+    updateColumn(g);
+  }
+  // ---- end shared ----
+  const plus = ISO.label(root, "+", { left: 572, top: 762, size: 104, width: 90, color: css(COL.hero) });
+  const ghost = ISO.label(root, "replace", { left: 357, top: 900, size: 62, width: 300, color: css(COL.dim) });
+  const strike = document.createElement("div");
+  strike.style.cssText = `position:absolute;left:18px;top:34px;width:264px;height:8px;border-radius:4px;background:${css(COL.text)};transform-origin:0 50%;`;
+  ghost.appendChild(strike);
+  ISO.guides(root);
+
+  const FLY = { out: 150, top: 130 };  // world-x swing clear of the tray, and the height it clears the tiles at
+  const landZ = (r) => PLATE + ISO.tileHeight(VALUES.embed[TARGET][r]);
+  // the column's flight, p 0..1: out to the right and up past the tray's edge, then in and down onto the "is" tiles
+  function flight(p) {
+    const up = E.io(seg(p, 0, 0.62)), down = E.io(seg(p, 0.62, 1));
+    const dx = FLY.out * (p < 0.62 ? E.out(seg(p, 0, 0.3)) : 1 - down);
+    const zc = lerp(UPD.parkZ, FLY.top, up);
+    return { dx, base: [0, 1, 2].map((r) => lerp(zc, landZ(r), down)) };
+  }
+  const flightPoint = (p) => { const f = flight(p), [x0, , x1] = ISO.tileRect(TARGET, 1);
+    return P((x0 + x1) / 2 + f.dx, 0, f.base[1] + 8, TRAY_Y); };
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    if (t <= 0) { handoffFrame(g, card); plus.style.opacity = 0; ghost.style.opacity = 0; return; }
+    const p = seg(t, CUE.adds + 0.1, CUE.land);               // flight
+    const m = E.io(seg(t, CUE.existing, CUE.merged));         // merge
+    const glow = 0.75 * seg(t, CUE.existing, CUE.existing + 0.25) * (1 - seg(t, CUE.merged, CUE.merged + 0.4));
+    const vals = ISO.lerpVals(VALUES.embed, VALUES.afterAttn, m);
+
+    ISO.ground(g); ISO.shadow(g, ISO.P2);
+    ISO.tray(g, vals, { color: (c, r, v) => (c === TARGET && glow > 0 ? mix(ISO.tileColor(v, c), COL.hero, glow) : null) });
+    card.set(vals, { color: (c, r, v) => (c === TARGET && glow > 0 ? css(mix(ISO.digitColor(v, c), COL.hero, glow)) : null) });
+
+    // the residual route: a dashed line along the flight, drawn ahead of the column, eaten as it flies
+    const drawn = E.io(seg(t, CUE.path, 1.3));
+    if (drawn > p && p < 1) {
+      g.beginPath();
+      const N = 60;
+      for (let i = 0; i <= N; i++) { const q = lerp(p, drawn, i / N), pt = flightPoint(q); i ? g.lineTo(pt[0], pt[1]) : g.moveTo(pt[0], pt[1]); }
+      g.strokeStyle = css(COL.hero, 1, 0.8); g.lineWidth = 7; g.lineCap = "round"; g.lineJoin = "round"; g.setLineDash([3, 19]); g.stroke(); g.setLineDash([]);
+    }
+
+    // the update column: parked -> flying -> sitting on the "is" tiles -> merging into them
+    if (m < 1) {
+      const f = flight(p);
+      updateColumn(g, {
+        dx: f.dx, shadow: 1 - seg(p, 0, 0.5),
+        base: m > 0 ? [0, 1, 2].map((r) => PLATE + ISO.tileHeight(vals[TARGET][r])) : f.base,
+        grow: [1 - m, 1 - m, 1 - m],
+      });
+    }
+
+    // flat tags
+    const uPlus = seg(t, CUE.adds, CUE.adds + 0.3) * (1 - seg(t, CUE.existing + 0.3, CUE.merged));
+    plus.style.opacity = clamp01(uPlus * 1.5).toFixed(3);
+    plus.style.transform = `scale(${lerp(0.5, 1, E.back(clamp01(uPlus))).toFixed(4)})`;
+    const uG = seg(t, CUE.instead, CUE.instead + 0.25) * (1 - seg(t, CUE.ghostOut, CUE.still - 0.03));
+    ghost.style.opacity = (0.95 * uG).toFixed(3);
+    ghost.style.transform = `translateY(${(lerp(14, 0, E.out(seg(t, CUE.instead, CUE.instead + 0.3)))).toFixed(2)}px)`;
+    strike.style.transform = `scaleX(${E.out(seg(t, CUE.replacing, CUE.replacing + 0.28)).toFixed(4)})`;
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

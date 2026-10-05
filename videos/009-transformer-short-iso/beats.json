@@ -1,0 +1,9 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",      "end": 6.20},
+ {"clip": "media/hf/02_matrix.mp4",    "end": 9.08},
+ {"clip": "media/hf/03_attention.mp4", "end": 13.82},
+ {"clip": "media/hf/04_residual.mp4",  "end": 5.40},
+ {"clip": "media/hf/05_ffn.mp4",       "end": 11.45},
+ {"clip": "media/hf/06_stack.mp4",     "end": 4.49},
+ {"clip": "media/hf/07_head.mp4",      "end": 8.83}
+]}

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 3 Attention: arcs into "is", query / key tags, the update column builds. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13.82" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 13.82;
+  // Cues, beat-local seconds (master 15.28 + t), from vo_final.wav silences + captions.json.
+  const CUE = {
+    arcs: 0.0,       // "Attention is what combines information across the tokens" 0.05-3.02
+    asks: 3.45,      // "Each token asks"
+    query: 4.25,     // "query"
+    looking: 5.05,   // "what am I looking for" (5.04-5.99)
+    offers: 6.4,     // "Every token then offers"
+    key: 7.45,       // "key"
+    have: 8.0,       // "what do I have?" (to 8.75)
+    collects: 9.55,  // "So each token collects"
+    weighted: 10.2,  // "weighted" (arcs take their weights, flash runs in)
+    sum: 10.8,       // "sum" (the update column builds)
+    match: 11.95,    // "that match the key and query" (to 13.35)
+    fade: 12.75,     // tags, then arcs, go
+    still: 13.5,     // nothing moves after this
+  };
+  const { P, COL, css, mix, lerp, seg, clamp01, TRAY_Y, PLATE, TARGET, VALUES, ATTN_WEIGHTS } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const card = ISO.makeCard(root);
+  const E = ISO.E();
+  // ---- shared by 03_attention and 04_residual: keep the two copies identical ----
+  // The update column: three magenta tiles (ISO.VALUES.update) on the "is" line's
+  // footprint. Parked, it hovers at world z = UPD.parkZ under the tray (which is the
+  // lower region of the stage on screen) with a faint magenta patch on the floor.
+  const UPD = { parkZ: -250, shadowAlpha: 0.16, groundZ: ISO.TRAY_Y - ISO.GROUND_Y };
+  // o.grow[r] 0..1 height factor, o.base[r] world z of each tile's underside
+  // (default parkZ), o.dx world-x offset of the whole column, o.shadow 0..1.
+  function updateColumn(g, o = {}) {
+    const T = ISO.TARGET, dx = o.dx || 0, sh = o.shadow == null ? 1 : o.shadow;
+    if (sh > 0.001) {
+      const a = ISO.tileRect(T, 0), b = ISO.tileRect(T, 2), z = UPD.groundZ, oy = ISO.TRAY_Y;
+      ISO.poly(g, [ISO.P(a[0] + dx, a[1], z, oy), ISO.P(a[2] + dx, a[1], z, oy), ISO.P(a[2] + dx, b[3], z, oy), ISO.P(a[0] + dx, b[3], z, oy)],
+        ISO.css(ISO.COL.hero, 1, UPD.shadowAlpha * sh));
+    }
+    for (let r = 0; r < 3; r++) {
+      const h = ISO.tileHeight(ISO.VALUES.update[r]) * (o.grow ? o.grow[r] : 1);
+      if (h < 0.5) continue;
+      const [x0, y0, x1, y1] = ISO.tileRect(T, r), zb = o.base ? o.base[r] : UPD.parkZ;
+      ISO.box(g, x0 + dx, y0, x1 + dx, y1, zb, zb + h, ISO.TRAY_Y, ISO.COL.hero);
+    }
+  }
+  // The frame beat 3 ends on and beat 4 opens on.
+  function handoffFrame(g, card) {
+    ISO.ground(g); ISO.shadow(g, ISO.P2); ISO.tray(g, ISO.VALUES.embed); card.set(ISO.VALUES.embed);
+    updateColumn(g);
+  }
+  // ---- end shared ----
+  const tagQ = ISO.label(root, "query?", { left: 716, top: 520, size: 62, width: 234, align: "right", color: css(COL.hero) });
+  const tagK = [ISO.label(root, "key", { left: 140, top: 796, size: 62, width: 130, color: css(COL.tokens[0]) }),
+                ISO.label(root, "key", { left: 340, top: 822, size: 62, width: 130, color: css(COL.tokens[1]) })];
+  ISO.guides(root);
+
+  const topZ = (c, r) => PLATE + ISO.tileHeight(VALUES.embed[c][r]);
+  const xMid = (c) => { const [x0, , x1] = ISO.tileRect(c, 1); return (x0 + x1) / 2; };
+  // a curve in world space from a to b ([x, y, z]), raised by h, pushed out in x by bulge
+  function arcPts(a, b, h, bulge = 0, n = 48) {
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const s = i / n;
+      pts.push(P(lerp(a[0], b[0], s) + bulge * Math.sin(Math.PI * s), lerp(a[1], b[1], s), lerp(a[2], b[2], s) + 4 * h * s * (1 - s), TRAY_Y));
+    }
+    return pts;
+  }
+  const at = (pts, s) => { const n = pts.length - 1, f = clamp01(s) * n, i = Math.min(n - 1, Math.floor(f)), u = f - i;
+    return [lerp(pts[i][0], pts[i + 1][0], u), lerp(pts[i][1], pts[i + 1][1], u)]; };
+  function strokeSeg(pts, s0, s1, width, style) {
+    if (s1 - s0 < 0.002) return;
+    const n = pts.length - 1, a = at(pts, s0), b = at(pts, s1);
+    g.beginPath(); g.moveTo(a[0], a[1]);
+    for (let i = Math.floor(s0 * n) + 1; i <= Math.ceil(s1 * n) - 1; i++) g.lineTo(pts[i][0], pts[i][1]);
+    g.lineTo(b[0], b[1]);
+    g.strokeStyle = style; g.lineWidth = width; g.lineCap = "round"; g.lineJoin = "round"; g.stroke();
+  }
+  function arrowHead(pts, s, width, style) {
+    const p = at(pts, s), q = at(pts, s - 0.05), d = Math.hypot(p[0] - q[0], p[1] - q[1]) || 1;
+    const ux = (p[0] - q[0]) / d, uy = (p[1] - q[1]) / d, L = width * 1.2 + 13, Wd = width * 0.9 + 8;
+    g.beginPath(); g.moveTo(p[0] + ux * L * 0.55, p[1] + uy * L * 0.55);
+    g.lineTo(p[0] - ux * L * 0.45 - uy * Wd, p[1] - uy * L * 0.45 + ux * Wd);
+    g.lineTo(p[0] - ux * L * 0.45 + uy * Wd, p[1] - uy * L * 0.45 - ux * Wd);
+    g.closePath(); g.fillStyle = style; g.fill();
+  }
+  const pop = (el, u, bump = 0) => { el.style.opacity = clamp01(u * 1.5).toFixed(3); el.style.transform = `scale(${(lerp(0.6, 1, E.back(clamp01(u))) + bump).toFixed(4)})`; };
+  const bumpAt = (t, t0, d = 0.5) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // tile lifts: "is" asks, then "my" and "name" offer
+    const lift = [12 * bumpAt(t, CUE.have, 0.55), 12 * bumpAt(t, CUE.have + 0.22, 0.55), 12 * bumpAt(t, CUE.asks, 0.6)];
+    const tintQ = 0.55 * seg(t, CUE.asks, CUE.asks + 0.45) * (1 - seg(t, 5.7, 6.3));
+    const tintK = 0.4 * seg(t, CUE.offers, CUE.offers + 0.5) * (1 - seg(t, 8.7, 9.3));
+
+    ISO.ground(g); ISO.shadow(g, ISO.P2);
+    ISO.tray(g, VALUES.embed, {
+      lift: (c) => lift[c],
+      color: (c, r, v) => c === TARGET ? (tintQ > 0 ? mix(ISO.tileColor(v, c), COL.hero, tintQ) : null)
+                                       : (tintK > 0 ? mix(ISO.tileColor(v, c), COL.text, tintK) : null),
+    });
+    card.set(VALUES.embed);
+
+    // ---- the update column (hero), built on "sum" ----
+    const grow = [0, 1, 2].map((r) => E.back(seg(t, CUE.sum + 0.05 + 0.22 * r, CUE.sum + 0.6 + 0.22 * r)));
+    const drop = seg(t, CUE.sum - 0.2, CUE.sum + 0.2), dropOut = 1 - seg(t, CUE.sum + 0.7, CUE.sum + 1.2);
+    if (drop > 0 && dropOut > 0) { // a streak falling from the "is" line to where the column builds
+      const a = P(xMid(TARGET), 0, -6, TRAY_Y), b = P(xMid(TARGET), 0, lerp(-6, UPD.parkZ + 30, E.out(drop)), TRAY_Y);
+      g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]);
+      g.strokeStyle = css(COL.hero, 1, 0.85 * dropOut); g.lineWidth = 8; g.lineCap = "round"; g.setLineDash([4, 20]); g.stroke(); g.setLineDash([]);
+    }
+    updateColumn(g, { grow, shadow: clamp01(grow[1]) });
+
+    // ---- arcs (hero): my -> is, name -> is, and the self loop ----
+    const aOut = 1 - E.io(seg(t, CUE.fade + 0.2, CUE.still - 0.03));
+    if (aOut > 0) {
+      const wU = E.io(seg(t, CUE.weighted, CUE.weighted + 0.6));           // even widths -> weights
+      const swell = 1 + 0.25 * bumpAt(t, CUE.collects, 0.6) + 0.2 * bumpAt(t, CUE.match, 0.6);
+      const zi = topZ(TARGET, 1) + lift[2];
+      const arcs = [
+        { pts: arcPts([xMid(0), 0, topZ(0, 1) + lift[0]], [xMid(2), -26, zi], 100), d: E.io(seg(t, CUE.arcs, 1.3)), w: ATTN_WEIGHTS[0], f0: 0 },
+        { pts: arcPts([xMid(1), 0, topZ(1, 1) + lift[1]], [xMid(2), 26, zi], 62), d: E.io(seg(t, 0.7, 1.95)), w: ATTN_WEIGHTS[1], f0: 0.1 },
+        { pts: arcPts([xMid(2), 150, topZ(2, 2) + lift[2]], [xMid(2), 96, topZ(2, 2) + lift[2]], 62, 70), d: E.io(seg(t, 1.75, 2.6)), w: ATTN_WEIGHTS[2], f0: 0.2 },
+      ];
+      arcs.forEach((a) => {
+        if (a.d <= 0) return;
+        const width = lerp(9, a.w * 40, wU) * swell, style = css(COL.hero, 1, 0.93 * aOut);
+        strokeSeg(a.pts, 0, a.d * 0.96, width, style);
+        arrowHead(a.pts, a.d * 0.96, width, style);
+        // "what am I looking for": a pulse runs out from "is" along each arc
+        const q = seg(t, CUE.looking + a.f0, CUE.looking + a.f0 + 0.85);
+        if (q > 0 && q < 1) strokeSeg(a.pts, clamp01(1 - q * 1.25), clamp01(1.25 - q * 1.25), width + 5, css(COL.text, 1, 0.85 * Math.sin(Math.PI * q)));
+        // "weighted sum": a flash runs along each arc into "is"
+        const f = seg(t, CUE.weighted + a.f0, CUE.weighted + a.f0 + 0.8);
+        if (f > 0 && f < 1) strokeSeg(a.pts, clamp01(f * 1.3 - 0.3), clamp01(f * 1.3), width + 7, css(COL.text, 1, 0.95 * Math.sin(Math.PI * f)));
+      });
+    }
+
+    // ---- tags (DOM) and their leaders ----
+    const tagOut = 1 - seg(t, CUE.fade, CUE.fade + 0.45);
+    const uQ = seg(t, CUE.query, CUE.query + 0.4) * tagOut;
+    pop(tagQ, uQ, 0.12 * bumpAt(t, CUE.match + 0.15, 0.5));
+    const leader = (from, to, col, a) => { if (a <= 0) return; g.beginPath(); g.moveTo(from[0], from[1]); g.lineTo(to[0], to[1]);
+      g.strokeStyle = css(col, 1, 0.8 * a); g.lineWidth = 5; g.lineCap = "round"; g.stroke(); };
+    leader([748, 598], ISO.tilePoint(TARGET, 0, topZ(TARGET, 0) + lift[2] + 2), COL.hero, uQ);
+    tagK.forEach((el, c) => {
+      const u = seg(t, CUE.key + 0.2 * c, CUE.key + 0.4 + 0.2 * c) * tagOut;
+      pop(el, u, 0.12 * bumpAt(t, CUE.have + 0.22 * c, 0.55) + 0.12 * bumpAt(t, CUE.match, 0.5));
+      const end = P(xMid(c), ISO.tileRect(c, 2)[3] + 8, PLATE + lift[c], TRAY_Y);
+      leader([c ? 405 : 222, c ? 824 : 800], [end[0], end[1] + 6], COL.tokens[c], u);
+    });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
