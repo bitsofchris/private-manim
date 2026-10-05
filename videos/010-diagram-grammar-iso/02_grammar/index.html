@@ -17,10 +17,9 @@
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
               font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
       #scene, #fig { position: absolute; left: 0; top: 0; }
-      /* the paper may not enter the caption band: clipped at y 1100, faded out just above it */
-      #paperclip { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden;
-                   -webkit-mask-image: linear-gradient(to bottom, #000 0px, #000 1050px, transparent 1100px);
-                   mask-image: linear-gradient(to bottom, #000 0px, #000 1050px, transparent 1100px); }
+      /* the whole sheet stays visible: the zoom is sized so its bottom edge lands above the caption band
+         (y 1100). The clip is only a guard; nothing reaches it. */
+      #paperclip { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden; }
       #paper { position: absolute; left: 0; top: 0; width: 739px; height: 1060px; background: #d9d8d0; border-radius: 14px;
                transform-origin: 0 0; opacity: 0; }
       #paper img { position: absolute; left: 30px; top: 30px; width: 679px; height: 1000px; mix-blend-mode: multiply; }
@@ -71,8 +70,15 @@
   const P_LINEAR = 0.1715, P_EMBED = 0.844, P_MAIN_X = 0.677;
   const ourSpan = DG.Z.head - DG.Z.embed;                  // our Embed centre to our Linear centre, screen px
   const FULL = { s: 0.66, ax: 0.5, ay: 0.5, dy: -30 };     // the whole sheet, inside the stage (y 270-1050)
-  // zoomed: the paper's Linear lies over our Linear, its Output Embedding over our Embed, main line on main line
-  const ZOOM = { s: ourSpan / ((P_EMBED - P_LINEAR) * IMG_H), ax: P_MAIN_X, ay: (P_LINEAR + P_EMBED) / 2 };
+  // zoomed: the paper's main line on ours and its Linear over our Linear, as large as the sheet can get
+  // with its bottom edge still above the caption band (Chris, 2026-10-04: the sheet must not be cut off).
+  // Matching Output Embedding to our Embed as well would need s = 0.916 and push the sheet's foot to y 1170.
+  const BOTTOM_MAX = 1090;                                 // lowest screen y the sheet's bottom-right corner may reach
+  const linearY = DG.pt(0, DG.Z.head + DG.BOX_H / 2)[1];   // our Linear's centre on screen
+  const rightOfMain = PAD + (1 - P_MAIN_X) * IMG_W;        // sheet px from the main line to its right edge
+  const ZOOM_S = Math.min(ourSpan / ((P_EMBED - P_LINEAR) * IMG_H),
+                          (BOTTOM_MAX - linearY) / ((1 - P_LINEAR) * IMG_H + PAD + DG.SHEAR * rightOfMain));
+  const ZOOM = { s: ZOOM_S, ax: P_MAIN_X, ay: P_LINEAR + (centre[1] - linearY) / (ZOOM_S * IMG_H) };
   function placePaper(u, opacity) {
     const s = lerp(FULL.s, ZOOM.s, u), ax = lerp(FULL.ax, ZOOM.ax, u), ay = lerp(FULL.ay, ZOOM.ay, u);
     const lx = PAD + ax * IMG_W, ly = PAD + ay * IMG_H;    // the anchor, in the sheet's own px
