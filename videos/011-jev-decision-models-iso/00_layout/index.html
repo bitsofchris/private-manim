@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- The shared parts at rest: the Jev machine, an input card, the three probability pillars.
+         Copy this file to start a beat. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="jev/jev.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.0;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const FLOOR = 1040;                                   // screen y of the floor under the pillars
+  const MACHINE = { oy: 640, z0: 0, h: 130, half: 190, depth: 60 };
+  const BARS = { oy: FLOOR };
+  const jevLabel = JV.planeLabel(root, "Jev", JV.slabFront(MACHINE), { size: 96 });
+  const ticket = JV.card(root, JV.TICKET, { border: ISO.css(ISO.COL.data) });
+  const bars = JV.makePillarLabels(root, BARS);
+  ISO.guides(root);
+  function render(t) {
+    const u = ISO.E().out(ISO.seg(t, 0.2, 1.4));
+    const probs = JV.FINAL_PROBS.map((p) => p * u);
+    ISO.ground(g, FLOOR);
+    JV.pillars(g, probs, BARS);
+    JV.slab(g, Object.assign({ hero: 1 }, MACHINE));
+    bars.set(probs);
+    ticket.style.transform = "translate(300px, 300px)";
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

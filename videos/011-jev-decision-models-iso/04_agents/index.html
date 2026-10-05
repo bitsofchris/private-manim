@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 4 Agents: an agent loop on the floor; three decision pads light in turn, show their
+         options, and the probability pillars rise in the middle on "classifier". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="jev/jev.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.53" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 10.53;
+  // Cues, beat-local seconds (master 23.25 + t), from 008's 04_agents.py, checked against a 50 ms RMS
+  // envelope of vo_final.wav (speech 0.95-2.7, 3.0-5.7, 6.05-8.35, 8.4-9.95).
+  const CUE = {
+    decisions: 2.1,    // "decisions" (2.1-2.7): the three decision pads rise on the ring
+    tool: 3.3,         // "tool" in "Which tool should I use?"
+    allowed: 4.6,      // "allowed"
+    done: 5.35,        // "done"
+    choice: 6.8,       // "choice" in "a choice from a fixed set of options": the option blocks
+    classifier: 9.0,   // "classifier": the pillars rise in the middle of the loop
+    stop: 10.2,        // pillars full, the token rests on the first pad; nothing moves after this
+  };
+  const { P, COL, css, mix, lerp, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E(), sineOut = gsap.parseEase("sine.out");
+
+  // ---- layout (budgeted: chips y 240-341, pillars up to y 375 between them, ring y 548-812, "done?" chip y 880-981) ----
+  const OY = 680;                       // screen y of the loop's centre on the floor
+  const R = 310, BAND = 15, RING_Z = 10; // the loop: radius, half-width and thickness of its band
+  const RAD = Math.PI / 180;
+  // World angles of the three decision pads. On screen: far left, far right, front centre,
+  // which is the order the token meets them (clockwise seen from the camera).
+  const POST_A = [185, 305, 425];
+  const QUESTIONS = ["which tool?", "allowed?", "done?"];
+  const OPTIONS = [3, 2, 2];            // search / code / ask, yes / no, yes / no
+  const PAD = { half: 42, h: 26 };
+  const OPT = { half: 20, h: 36, pitch: 56, inset: [96, 96, 74] };  // option blocks sit just inside the loop
+  const TOKEN = { half: 21, h: 38, z: RING_Z + PAD.h };
+  // "a probability per option": generic heights that sum to 1 (0.11 + 0.82 + 0.07), no names, no numbers.
+  const PROBS = [0.11, 0.82, 0.07];
+  const BARS = { oy: OY, x: -71, y: -154, pitch: 110, size: 70, H: 255 };
+  const CHIP_TOP = [240, 240, 880];
+
+  const w2 = (deg, r) => [r * Math.cos(deg * RAD), r * Math.sin(deg * RAD)];
+  const depth = (x, y) => { const p = P(x, y, 0, 0); return p[1]; };
+  const cube = (x, y, half, z0, z1, col, opts) => ISO.box(g, x - half, y - half, x + half, y + half, z0, z1, OY, col, opts);
+
+  const agent = ISO.label(root, "agent", { left: 357, top: 650, size: 60, width: 300, color: css(COL.dim) });
+  const chips = QUESTIONS.map((q) => JV.card(root, q, { size: 60 }));
+  ISO.guides(root);
+
+  // the loop: a flat band drawn from projected points
+  function band(z, r0, r1, fill) {
+    g.beginPath();
+    for (let i = 0; i <= 96; i++) { const [x, y] = w2(i * 3.75, r1), p = P(x, y, z, OY); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); }
+    g.closePath();
+    for (let i = 96; i >= 0; i--) { const [x, y] = w2(i * 3.75, r0), p = P(x, y, z, OY); i < 96 ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); }
+    g.closePath(); g.fillStyle = fill; g.fill("evenodd");
+  }
+  // the token's world angle: it reaches each pad as its question is spoken, then slows to rest on the first pad
+  const tokenAngle = (t) => {
+    if (t < CUE.tool) return lerp(149, 545, t / CUE.tool);
+    if (t < CUE.allowed) return lerp(545, 665, seg(t, CUE.tool, CUE.allowed));
+    if (t < CUE.done) return lerp(665, 785, seg(t, CUE.allowed, CUE.done));
+    return 785 + 480 * sineOut(seg(t, CUE.done, CUE.stop));   // 1265 = 185 + 3 turns: the first pad
+  };
+
+  function render(t) {
+    if (t >= CUE.stop) t = CUE.stop;
+    const asked = [CUE.tool, CUE.allowed, CUE.done];
+    ISO.ground(g, OY);
+    band(0, R - BAND, R + BAND, css(COL.slabB));
+    band(RING_Z, R - BAND, R + BAND, css(COL.slabEdge, 0.92));
+
+    const items = [];   // everything standing on the floor, painted back to front
+    POST_A.forEach((a, i) => {
+      const [x, y] = w2(a, R);
+      const grow = E.back(seg(t, CUE.decisions + i * 0.18, CUE.decisions + i * 0.18 + 0.45));
+      const lit = seg(t, asked[i], asked[i] + 0.3);
+      if (grow > 0.001) items.push({ d: depth(x, y), draw: () => cube(x, y, PAD.half * (0.6 + 0.4 * grow), RING_Z, RING_Z + PAD.h * grow, mix(COL.slabTop, COL.hero, lit), { edge: css(mix(COL.slabEdge, COL.hero, lit)) }) });
+      // its options: a row of small blocks just inside the loop, along the tangent
+      const [ix, iy] = w2(a, R - OPT.inset[i]), tx = -Math.sin(a * RAD), ty = Math.cos(a * RAD);
+      for (let k = 0; k < OPTIONS[i]; k++) {
+        const s = (k - (OPTIONS[i] - 1) / 2) * OPT.pitch, x2 = ix + tx * s, y2 = iy + ty * s;
+        const t0 = CUE.choice + i * 0.16 + k * 0.08, pop = E.back(seg(t, t0, t0 + 0.4));
+        if (pop > 0.001) items.push({ d: depth(x2, y2), draw: () => cube(x2, y2, OPT.half, 0, OPT.h * pop, COL.text, { shade: [0.95, 0.72, 0.55] }) });
+      }
+    });
+    const rise = E.out(seg(t, CUE.classifier, CUE.stop)), barAlpha = seg(t, CUE.classifier, CUE.classifier + 0.2);
+    if (barAlpha > 0) items.push({ d: depth(BARS.x, BARS.y), draw: () => JV.pillars(g, PROBS.map((p) => p * rise), BARS, { alpha: barAlpha, plate: false }) });
+    const [kx, ky] = w2(tokenAngle(t), R);
+    items.push({ d: depth(kx, ky) + 0.01, draw: () => cube(kx, ky, TOKEN.half, TOKEN.z, TOKEN.z + TOKEN.h, COL.data, { edge: css(COL.text, 1, 0.55) }) });
+    items.sort((p, q) => p.d - q.d).forEach((it) => it.draw());
+
+    // flat text: the loop's name, and one chip per question with a thin lead to its pad
+    agent.style.opacity = 1;
+    chips.forEach((el, i) => {
+      const [x, y] = w2(POST_A[i], R), pad = P(x, y, RING_Z + PAD.h, OY);
+      const a = seg(t, asked[i], asked[i] + 0.3), w = el.offsetWidth, h = el.offsetHeight;
+      const left = i === 0 ? ISO.SAFE.x0 : i === 1 ? ISO.SAFE.x1 - w : Math.round(pad[0] - w / 2);
+      const below = i === 2, slide = (1 - E.out(a)) * (below ? -16 : 16);
+      el.style.transform = `translate(${left}px, ${(CHIP_TOP[i] + slide).toFixed(1)}px)`;
+      el.style.opacity = a.toFixed(3);
+      el.style.borderColor = css(mix(COL.dim, COL.hero, a));
+      if (a > 0) {
+        const y0 = below ? pad[1] + 50 : CHIP_TOP[i] + h + slide, y1 = below ? CHIP_TOP[i] + slide : pad[1] - 26;
+        g.strokeStyle = css(COL.hero, 1, 0.8 * a); g.lineWidth = 5; g.lineCap = "round";
+        g.beginPath(); g.moveTo(pad[0], y0); g.lineTo(pad[0], y1); g.stroke();
+      }
+    });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

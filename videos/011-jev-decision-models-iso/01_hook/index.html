@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 1+2, Hook and what it is (10.14 s): tickets drop into the magenta Jev machine and the
+         three pillars answer; the machine becomes "Jev decision model"; the real ticket and the
+         three choices go in and the pillars fill to 0.91 / 0.06 / 0.03. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="jev/jev.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.14" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 10.14;
+  // Cues, beat-local seconds, from vo_final.wav 0-10.14 (speech 0.38-2.71, 3.28-4.40, 4.83-9.56).
+  const CUE = {
+    drop1: 0.50,      /* "What is Jev": first ticket goes in */
+    drop2: 2.20,      /* "so excited about it?": second ticket goes in */
+    decision: 3.87,   /* "decision model" */
+    input: 5.32,      /* "some input": the ticket has stopped above the machine */
+    fixedSet: 6.02,   /* "a fixed set of choices": chips line up, last one by "choices" (~6.9) */
+    gives: 7.37,      /* "and it gives you back": chips and ticket go in */
+    probability: 8.25,/* "a probability for each choice": pillars fill, done on "each choice" */
+    still: 9.30,      /* nothing moves after this */
+  };
+  const MOVE = 0.6;   // a move the viewer tracks
+  const { P, COL, css, seg, lerp, clamp01 } = ISO, E = ISO.E();
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+
+  // ---- layout budget (screen y): card 234-335, chips 349-450, machine ~470-730 (sheared),
+  //      tallest value 652, pillars to floor 945, names to 1092 ----
+  const FLOOR = 945;
+  const BARS = { oy: FLOOR, H: 145 };
+  const MACHINE = { oy: 650, z0: 0, h: 100, depth: 40 };
+  const HALF_NARROW = 190, HALF_WIDE = 370;
+  const KX = P(1, 0, 0, 0)[0] - P(0, 0, 0, 0)[0];       // screen px per world x along the front face
+  const CARD_Y = 285, CHIP_Y = 400, CX = ISO.VIEW.cx;
+  const MOUTH = P(0, 0, MACHINE.h, MACHINE.oy);         // centre of the machine's top face
+  const JEV_DX = -256, SUB_DX = 110;                    // label centres on the wide face, screen px from its centre
+
+  const face = JV.slabFront(Object.assign({ half: HALF_NARROW }, MACHINE));
+  const jevLabel = JV.planeLabel(root, "Jev", face, { size: 96, width: 260 });
+  const subLabel = JV.planeLabel(root, "decision model", face, { size: 60, width: 520 });
+  const mkCard = (text, o) => { const el = JV.card(root, text, o); el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", ""); return el; };
+  const cycleCards = JV.CYCLE_INPUTS.map((s) => mkCard(s, { border: css(COL.data) }));
+  const ticket = mkCard(JV.TICKET, { border: css(COL.data) });
+  const chips = JV.CHOICES.map((c, i) => mkCard(c, { color: css(JV.CHOICE_COL[i]), border: css(JV.CHOICE_COL[i]) }));
+  const bars = JV.makePillarLabels(root, BARS);
+  ISO.guides(root);
+
+  // local helpers
+  // place a flat card by its centre, with scale and opacity
+  const place = (el, x, y, s, a) => { el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${s.toFixed(3)})`; el.style.opacity = clamp01(a).toFixed(3); };
+  const onFace = (el, dx, s, a) => { el.style.transform = `matrix(${s.toFixed(3)}, ${(JV.SHEAR * s).toFixed(4)}, 0, ${s.toFixed(3)}, ${dx.toFixed(1)}, ${(dx * JV.SHEAR).toFixed(1)})`; el.style.opacity = clamp01(a).toFixed(3); };
+  // a card falling to rest at (x, y): arrives at t1
+  const fall = (el, t, t1, x, y) => { const u = E.out(seg(t, t1 - MOVE, t1)); place(el, x, y - 170 * (1 - u), 1, seg(t, t1 - MOVE, t1 - MOVE + 0.18)); };
+  // a card going into the machine's top face from (x, y), starting at t0: shrinks toward the mouth and is gone as it crosses the top plane
+  const enter = (el, t, t0, x, y) => { const u = E.inn(seg(t, t0, t0 + MOVE)); place(el, lerp(x, MOUTH[0], u), lerp(y, MOUTH[1], u), lerp(1, 0.28, u), 1 - seg(u, 0.72, 1)); };
+  // 0..1 flash that peaks just after t0 and dies over 0.5 s
+  const flash = (t, t0) => seg(t, t0 - 0.08, t0 + 0.06) * (1 - E.out(seg(t, t0 + 0.06, t0 + 0.56)));
+  // the machine lighting up as something enters: bright mouth on the top face and a lit rim
+  function machineGlow(k, half) {
+    if (k <= 0) return;
+    const m = MACHINE, q = (x, y, z) => P(x, y, z, m.oy), z1 = m.h, d = m.depth, w = Math.min(half - 20, 150);
+    ISO.poly(g, [q(-half, -d, z1), q(half, -d, z1), q(half, d, z1), q(-half, d, z1)], `rgba(255,255,255,${(0.30 * k).toFixed(3)})`);
+    ISO.poly(g, [q(-w, -d + 10, z1), q(w, -d + 10, z1), q(w, d - 10, z1), q(-w, d - 10, z1)], `rgba(255,255,255,${(0.55 * k).toFixed(3)})`);
+    ISO.poly(g, [q(-half, d, z1), q(half, d, z1), q(half, d, 0), q(-half, d, 0)], `rgba(255,255,255,${(0.14 * k).toFixed(3)})`);
+  }
+  const ENTER = [CUE.drop1, CUE.drop2];                 // when each cycle ticket starts into the machine
+  const CHIP_IN = (i) => CUE.gives + 0.03 + i * 0.09, TICKET_IN = CUE.gives + 0.26;
+  const HITS = [ENTER[0] + MOVE - 0.05, ENTER[1] + MOVE - 0.05, TICKET_IN + MOVE - 0.05]; // the moments something crosses the top face
+  const DRAIN = CUE.input - MOVE;                       // the old result clears as the real ticket arrives
+
+  function render(tt) {
+    const t = Math.min(tt, CUE.still);
+    // pillars: empty -> cycle 1 -> cycle 2 -> empty -> the final result
+    const u1 = E.out(seg(t, HITS[0], HITS[0] + MOVE)), u2 = E.io(seg(t, HITS[1], HITS[1] + MOVE));
+    const ud = E.io(seg(t, DRAIN, DRAIN + 0.5)), uf = E.out(seg(t, CUE.probability, CUE.still - 0.1));
+    const probs = [0, 1, 2].map((i) => {
+      let p = JV.CYCLE_PROBS[0][i] * u1;
+      p = lerp(p, JV.CYCLE_PROBS[1][i], u2);
+      p = lerp(p, 0, ud);
+      return lerp(p, JV.FINAL_PROBS[i], uf);
+    });
+    const valueAlpha = seg(t, HITS[0], HITS[0] + 0.25) * (1 - seg(t, DRAIN + 0.1, DRAIN + 0.45)) + seg(t, CUE.probability, CUE.probability + 0.25);
+    // machine: widens on "decision model"
+    const w = E.io(seg(t, CUE.decision - 0.05, CUE.decision - 0.05 + MOVE));
+    const half = lerp(HALF_NARROW, HALF_WIDE, w);
+    const glow = Math.max(flash(t, HITS[0]), flash(t, HITS[1]), flash(t, HITS[2]));
+
+    ISO.ground(g, FLOOR);
+    JV.pillars(g, probs, BARS);
+    JV.slab(g, Object.assign({ hero: 1, half }, MACHINE));
+    machineGlow(glow, half);
+
+    bars.set(probs, { valueAlpha });
+    onFace(jevLabel, JEV_DX * w, 1, 1);
+    onFace(subLabel, SUB_DX * w, lerp(0.8, 1, w), seg(w, 0.45, 1));
+
+    // the two tickets under the question
+    cycleCards.forEach((el, i) => {
+      if (t < ENTER[i]) fall(el, t, ENTER[i] - 0.2, CX, CARD_Y); else enter(el, t, ENTER[i], CX, CARD_Y);
+    });
+    // the real ticket, then the chips
+    if (t < TICKET_IN) fall(ticket, t, CUE.input, CX, CARD_Y); else enter(ticket, t, TICKET_IN, CX, CARD_Y);
+    const widths = chips.map((el) => el.offsetWidth), GAPX = 24;
+    let x = CX - (widths[0] + widths[1] + widths[2] + 2 * GAPX) / 2;
+    chips.forEach((el, i) => {
+      const cx = x + widths[i] / 2; x += widths[i] + GAPX;
+      if (t < CHIP_IN(i)) { const u = seg(t, CUE.fixedSet + i * 0.28, CUE.fixedSet + i * 0.28 + 0.35); place(el, cx, CHIP_Y + 26 * (1 - E.out(u)), lerp(0.7, 1, E.back(u)), u * 2.5); }
+      else enter(el, t, CHIP_IN(i), cx, CHIP_Y);
+    });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

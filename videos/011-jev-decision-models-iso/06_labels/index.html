@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 6 Your own labels: the pillars; a confident 0.92 beside a coin that reads 50/50;
+         data blocks land on the floor and a magenta tag stamps onto each. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="jev/jev.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.682" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.682;
+  // Cues, beat-local seconds (master 47.47 + t), from 008's 06_labels.py, checked against a 50 ms RMS
+  // envelope of vo_final.wav (speech 0-1.3, 1.65-3.65, 3.95-5.1, 5.45-6.95).
+  const CUE = {
+    calibration: 0.75, // "calibration" (0.75-1.3): the 0.92 readout, then the coin
+    flip: 1.15,        // the coin turns through "The probabilities only mean something"
+    settled: 2.8,      // ... and rests reading 50/50
+    clear: 3.70,       // pause after "something": the coin test leaves before "data"
+    data: 4.00,        // "data like your own" (3.95-5.1): the data blocks land
+    labels: 6.15,      // "your own labels" (6.13-6.95): a tag stamps onto each block
+    still: 7.0,        // nothing moves after this
+  };
+  const { P, COL, css, mix, lerp, seg, clamp01, hash } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+
+  // ---- layout (budgeted: values from y 241, pillars to y 665, names to y 745; lower half y 790-1085) ----
+  const FLOOR = 595;                                   // screen y of the floor under the pillars
+  const BARS = { oy: FLOOR, H: 260 };
+  const READOUT = { left: 150, top: 858, size: 130, width: 320 };   // "0.92", flat, the hero
+  const COIN = { cx: 705, cy: 932, r: 128, edge: 16 };
+  const N = 12, BLOCK = { half: 30, h: 38 }, TAG = { half: 25, h: 10 };
+  const LAND = { gap: 0.09, dur: 0.5, from: 80 }, STAMP = { gap: 0.055, dur: 0.2, from: 90 };
+
+  // screen point on the floor -> world (x, y); the inverse of ISO.P at z = 0
+  const O = P(0, 0, 0, FLOOR), UX = P(1, 0, 0, FLOOR), UY = P(0, 1, 0, FLOOR);
+  const ax = UX[0] - O[0], ay = UX[1] - O[1], bx = UY[0] - O[0], by = UY[1] - O[1], det = ax * by - bx * ay;
+  const unP = (sx, sy) => { const dx = sx - O[0], dy = sy - O[1]; return [(dx * by - bx * dy) / det, (ax * dy - ay * dx) / det]; };
+  // twelve data blocks: a staggered 4 x 3 grid in screen space, jittered by ISO.hash so it reads as a scatter
+  const blocks = [];
+  for (let i = 0; i < N; i++) {
+    const col = i % 4, row = Math.floor(i / 4);
+    const sx = 150 + col * 200 + (row % 2) * 100 + (hash(i * 3 + 1) - 0.5) * 70;   // odd rows sit between the columns
+    const sy = 885 + row * 82 + (hash(i * 3 + 2) - 0.5) * 36;
+    const [x, y] = unP(sx, sy);
+    blocks.push({ x, y, sy, land: CUE.data + ((i * 5) % N) * LAND.gap, stamp: CUE.labels + i * STAMP.gap });
+  }
+  const order = blocks.slice().sort((p, q) => p.sy - q.sy);   // back to front
+
+  const bars = JV.makePillarLabels(root, BARS);
+  const readout = ISO.label(root, "0.92", { left: READOUT.left, top: READOUT.top, size: READOUT.size, width: READOUT.width, color: css(COL.hero) });
+  const fifty = ISO.label(root, "50/50", { left: COIN.cx - 120, top: COIN.cy - 33, size: 60, width: 240 });
+  fifty.setAttribute("data-layout-allow-occlusion", "");   // it sits on the canvas-drawn coin on purpose
+  ISO.guides(root);
+
+  const cube = (x, y, half, z0, z1, col, opts) => ISO.box(g, x - half, y - half, x + half, y + half, z0, z1, FLOOR, col, opts);
+  const ellipse = (cx, rx, fill, stroke) => {
+    g.beginPath(); g.ellipse(cx, COIN.cy, Math.max(rx, 0.5), COIN.r, 0, 0, Math.PI * 2);
+    g.fillStyle = fill; g.fill(); if (stroke) { g.strokeStyle = stroke; g.lineWidth = 6; g.stroke(); }
+  };
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // the pillars: already filling at frame 0, full by 0.6
+    const u = lerp(0.35, 1, E.out(seg(t, 0, 0.6)));
+    const probs = JV.FINAL_PROBS.map((p) => p * u);
+    ISO.ground(g, FLOOR);
+    JV.pillars(g, probs, BARS);
+    bars.set(probs);
+    bars.values.forEach((el, i) => { el.textContent = JV.FINAL_PROBS[i].toFixed(2); });   // only ledger numbers on screen while they rise
+
+    // "calibration": a confident 0.92 beside a coin that is really 50/50
+    const gone = seg(t, CUE.clear, CUE.clear + 0.25);
+    const pop = seg(t, CUE.calibration, CUE.calibration + 0.4);
+    readout.style.opacity = (seg(t, CUE.calibration, CUE.calibration + 0.2) * (1 - gone)).toFixed(3);
+    readout.style.transform = `scale(${(0.7 + 0.3 * E.back(pop)).toFixed(4)})`;
+    const coinA = seg(t, CUE.calibration + 0.25, CUE.calibration + 0.5) * (1 - gone);
+    const turn = E.out(seg(t, CUE.flip, CUE.settled)), phi = turn * 5 * Math.PI;   // 2.5 turns, ends face-on
+    const c = Math.cos(phi), s = Math.abs(Math.sin(phi));
+    if (coinA > 0.001) {
+      const prev = g.globalAlpha; g.globalAlpha = prev * coinA;
+      const rx = COIN.r * Math.abs(c), off = COIN.edge * s;
+      ellipse(COIN.cx + off, rx, css(COL.slabB));                      // the rim, seen as the coin turns
+      ellipse(COIN.cx - off, rx, css(COL.slabA), css(COL.slabEdge));   // the face
+      g.globalAlpha = prev;
+    }
+    fifty.style.opacity = (coinA * seg(turn, 0.9, 1)).toFixed(3);
+    fifty.style.transform = `scale(${Math.max(Math.abs(c), 0.05).toFixed(4)}, 1)`;
+
+    // "data like your own": blocks land; "your own labels": a magenta tag stamps onto each
+    order.forEach((b) => {
+      const p = seg(t, b.land, b.land + LAND.dur);
+      if (p <= 0) return;
+      const z = LAND.from * (1 - E.inn(p)), a = seg(p, 0, 0.3);
+      const sh = 0.28 * p, h2 = BLOCK.half * (0.5 + 0.5 * p);
+      ISO.poly(g, [P(b.x - h2, b.y - h2, 0, FLOOR), P(b.x + h2, b.y - h2, 0, FLOOR), P(b.x + h2, b.y + h2, 0, FLOOR), P(b.x - h2, b.y + h2, 0, FLOOR)], css(COL.data, 1, sh));
+      cube(b.x, b.y, BLOCK.half, z, z + BLOCK.h, COL.data, { alpha: a });
+      const q = seg(t, b.stamp, b.stamp + STAMP.dur);
+      if (q > 0) {
+        const zt = BLOCK.h + STAMP.from * (1 - E.inn(q)), half = TAG.half * lerp(1.7, 1, q);
+        cube(b.x, b.y, half, zt, zt + TAG.h, COL.hero, { alpha: seg(q, 0, 0.4), edge: css(COL.text, 1, 0.6 * q) });
+      }
+    });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

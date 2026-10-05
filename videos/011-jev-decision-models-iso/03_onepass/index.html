@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 3, "One pass": an LLM takes one pass per token (30); Jev takes one pass. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="jev/jev.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13.11" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 3 (master 10.14-23.25): "This is exciting 'cause this is much more efficient than what an LLM does.
+  // An LLM decides by generating token by token, and every token is another pass through the whole model.
+  // Jev scores all the choices in one single pass, so it's fast and cheap."
+  // Upper half: the LLM types JV.STREAM one glyph per pass (30 passes). Lower half: Jev takes the ticket
+  // and the three choices once: one magenta pass, `passes 1` (the hero), three pillars.
+  const BEAT_SECONDS = 13.11;
+  const CUE = {
+    llm: 3.71,      /* "An LLM decides" (silence ends 3.706); the stream has been typing since frame 0 */
+    lastGlyph: 9.10,/* glyph 30 lands in the silence (8.83-9.24) before "Jev" */
+    jev: 9.24,      /* "Jev" (silence ends 9.236): the lower half wakes, the ticket goes in */
+    choices: 9.45,  /* "scores all the choices": the three chips follow the ticket */
+    pass: 10.24,    /* "in one single pass": the one magenta pass starts down the stack */
+    one: 10.74,     /* the pass is through: `passes 1`, the pillars start to rise */
+    full: 11.36,    /* "pass" ends: the pillars are full */
+    still: 11.70,   /* "so it's fast and cheap" (11.66-12.55): hold, nothing moves */
+  };
+  const N_GLYPHS = JV.STREAM.join("").length;                       // 30
+  const PULSE = 0.24;                                               // one pass down the LLM stack
+  const FIRST = -0.12;                                              // pass 1 is already half way down at frame 0
+  const STEP = (CUE.lastGlyph - PULSE - FIRST) / (N_GLYPHS - 1);    // ~0.31 s per glyph
+  const CYAN = [103, 232, 249];                                     // ACCENT_CYAN: the LLM's passes
+  const DIM = 0.5;                                                  // the Jev half before its turn
+
+  // ---- layout budget (screen px; stage y 230-1100, safe x 65-950) ----
+  // upper half  y 232-580: title 232 | stack 312-500 | counter 512     ; stream card right, y 320-490
+  // lower half  y 630-1085: title 630 | stack 712-900 | counter 912    ; inputs y 640-853, then pillars 666-1083
+  const N_SLABS = 4, SH = 22, SG = 14, HALF = 72, DEPTH = 40;       // a small stack: "the whole model"
+  const RIGHT = 948, DIVIDER_Y = 605;
+  const TITLE_SIZE = 64, COUNT_SIZE = 60, COUNT_GAP = 12;
+  const { P, COL, css, mix, seg, lerp, clamp01 } = ISO, E = ISO.E();
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const K1 = P(1, 0, 0, 0)[0] - P(0, 0, 0, 0)[0], K2 = P(1, 0, 0, 0)[1];
+  // world x and oy that put the world point (x, 0, 0) at screen (cx, cy)
+  const at = (cx, cy) => { const x = (cx - ISO.VIEW.cx) / K1; return { x, oy: cy - K2 * x }; };
+  const STACK_H = N_SLABS * SH + (N_SLABS - 1) * SG;
+  const LLM = Object.assign(at(172, 471), { titleTop: 232 });
+  const JEV = Object.assign(at(172, 871), { titleTop: 630 });
+  const slabOf = (st, k) => ({ x: st.x, y: 0, z0: (N_SLABS - 1 - k) * (SH + SG), h: SH, half: HALF, depth: DEPTH, oy: st.oy }); // k = 0 is the top slab
+  const entry = (st) => P(st.x, 0, STACK_H, st.oy);                 // where input goes in: the top of the stack
+  const baseY = (st) => P(st.x + HALF, DEPTH, 0, st.oy)[1];         // lowest screen y of the stack
+  const BARS = Object.assign(at(662, 950), { pitch: 165, size: 90, H: 150 });
+  const CARD_TOP = 320, TICKET_TOP = 640, CHIPS_TOP = 752, CHIP_GAP = 8;
+
+  // ---- flat parts ----
+  const mkLabel = (text, left, top, size) => { const el = ISO.label(root, text, { left, top, size }); el.style.fontVariantNumeric = "tabular-nums"; el.style.transformOrigin = "0% 50%"; return el; };
+  const llmTitle = mkLabel("LLM", 65, LLM.titleTop, TITLE_SIZE), jevTitle = mkLabel("Jev", 65, JEV.titleTop, TITLE_SIZE);
+  const llmCount = mkLabel("passes 0", 65, Math.round(baseY(LLM) + COUNT_GAP), COUNT_SIZE);
+  const jevCount = mkLabel("passes 0", 65, Math.round(baseY(JEV) + COUNT_GAP), COUNT_SIZE);
+  // the stream card: two fixed lines, one span per glyph, so nothing reflows as it types
+  const stream = JV.card(root, "", { mono: true });
+  const probe = document.createElement("span"); probe.textContent = "0000000000"; probe.style.cssText = "position:absolute;visibility:hidden;";
+  stream.appendChild(probe);
+  const glyphs = [];
+  JV.STREAM.forEach((line, li) => {
+    const row = document.createElement("div"); row.style.cssText = "height:69px;white-space:pre;";
+    [...line].forEach((ch, ci) => { const s = document.createElement("span"); s.textContent = ch; row.appendChild(s); glyphs.push({ el: s, li, ci }); });
+    stream.appendChild(row);
+  });
+  const cursor = document.createElement("div");
+  cursor.style.cssText = `position:absolute;left:0;top:0;width:8px;height:52px;border-radius:3px;background:${css(CYAN)};`;
+  stream.appendChild(cursor);
+  const LINE_LEN = Math.max(...JV.STREAM.map((l) => l.length));
+  // the inputs Jev takes once: the ticket and the three choices
+  const ticket = JV.card(root, JV.TICKET, { border: css(COL.data) });
+  const chips = JV.CHOICES.map((c, i) => JV.card(root, c, { color: css(JV.CHOICE_COL[i]), border: css(JV.CHOICE_COL[i]) }));
+  [ticket, ...chips].forEach((el) => { el.style.transformOrigin = "50% 50%"; });
+  const bars = JV.makePillarLabels(root, BARS);
+  ISO.guides(root);
+
+  // local: a colour wash over one JV.slab (the kit's slab only glows toward magenta)
+  function slabGlow(o, rgb, a) {
+    if (a <= 0.004) return;
+    const x = o.x, y = o.y || 0, z0 = o.z0, z1 = z0 + o.h, h = o.half, d = o.depth, q = (px, py, pz) => P(px, py, pz, o.oy);
+    ISO.poly(g, [q(x + h, y - d, z1), q(x + h, y + d, z1), q(x + h, y + d, z0), q(x + h, y - d, z0)], css(rgb, 0.7, a));
+    ISO.poly(g, [q(x - h, y - d, z1), q(x + h, y - d, z1), q(x + h, y + d, z1), q(x - h, y + d, z1)], css(rgb, 1, a));
+    ISO.poly(g, [q(x - h, y + d, z1), q(x + h, y + d, z1), q(x + h, y + d, z0), q(x - h, y + d, z0)], css(rgb, 0.55, a), css(rgb, 1, a));
+  }
+  // how lit slab k is when a pulse is u (0..1) of the way down the stack
+  const lit = (u, k) => (u <= 0 || u >= 1 ? 0 : clamp01(1 - Math.abs(u * N_SLABS - (k + 0.5)) / 0.95));
+  // a flat card flying from its seat (centre c0) into the top of the Jev stack
+  function fly(el, c0, u, alpha) {
+    const w = el.offsetWidth, h = el.offsetHeight, e = entry(JEV), m = E.io(u);
+    const cx = lerp(c0[0], e[0], m), cy = lerp(c0[1], e[1] - 6, m), s = lerp(1, 0.18, m);
+    el.style.transform = `translate(${(cx - w / 2).toFixed(1)}px, ${(cy - h / 2).toFixed(1)}px) scale(${s.toFixed(4)})`;
+    el.style.opacity = (alpha * (1 - seg(u, 0.72, 1))).toFixed(3);
+  }
+
+  function render(t) {
+    // ---- the LLM: pass i runs FIRST + i*STEP for PULSE seconds; its glyph and its tick land when it is through ----
+    const done = (i) => FIRST + i * STEP + PULSE;
+    let nTyped = 0; while (nTyped < N_GLYPHS && t >= done(nTyped)) nTyped++;
+    const u = nTyped < N_GLYPHS ? (t - (FIRST + nTyped * STEP)) / PULSE : 0;       // the pass in flight
+    const since = nTyped ? t - done(nTyped - 1) : 9;                               // seconds since the last tick
+    const tick = 1 - E.out(seg(since, 0, 0.26));
+    // ---- Jev ----
+    const wake = E.io(seg(t, CUE.jev - 0.14, CUE.jev + 0.10)), half = lerp(DIM, 1, wake);
+    const uPass = seg(t, CUE.pass, CUE.one), passed = t >= CUE.one;
+    const fill = E.out(seg(t, CUE.one, CUE.full));
+    const probs = JV.FINAL_PROBS.map((p) => p * fill);
+    const pop = 1 - E.out(seg(t, CUE.one, CUE.one + 0.45));
+
+    // ---- canvas, back to front ----
+    ISO.ground(g, 1000);
+    g.strokeStyle = css(COL.muted, 1, 0.8); g.lineWidth = 4; g.beginPath(); g.moveTo(65, DIVIDER_Y); g.lineTo(950, DIVIDER_Y); g.stroke();
+    for (let k = N_SLABS - 1; k >= 0; k--) {
+      const o = slabOf(LLM, k); JV.slab(g, o); slabGlow(o, CYAN, 0.85 * lit(u, k));
+    }
+    JV.pillars(g, probs, BARS, { alpha: half });
+    for (let k = N_SLABS - 1; k >= 0; k--) {
+      const o = slabOf(JEV, k); JV.slab(g, Object.assign({ hero: lit(uPass, k), alpha: half }, o)); slabGlow(o, COL.hero, 0.6 * lit(uPass, k));
+    }
+
+    // ---- flat text ----
+    llmCount.textContent = "passes " + nTyped;
+    llmCount.style.color = css(mix(COL.text, CYAN, tick));
+    llmCount.style.transform = `scale(${(1 + 0.10 * tick).toFixed(4)})`;
+    const cw = probe.offsetWidth / 10, sw = Math.ceil(LINE_LEN * cw) + 60;
+    stream.style.width = sw + "px";
+    stream.style.transform = `translate(${RIGHT - sw}px, ${CARD_TOP}px)`;
+    glyphs.forEach((gl, i) => {
+      gl.el.style.opacity = i < nTyped ? "1" : "0";
+      gl.el.style.color = css(mix(COL.text, CYAN, i === nTyped - 1 ? tick : 0));
+    });
+    const cur = nTyped < N_GLYPHS ? glyphs[nTyped] : null;
+    cursor.style.opacity = cur ? "1" : "0";
+    if (cur) cursor.style.transform = `translate(${(25 + cur.ci * cw).toFixed(1)}px, ${11 + cur.li * 69 + 9}px)`;
+
+    jevTitle.style.opacity = half.toFixed(3);
+    jevCount.textContent = "passes " + (passed ? 1 : 0);       // 0 until the one pass is through, then 1 for good
+    jevCount.style.color = passed ? css(COL.hero) : css(COL.text);
+    jevCount.style.opacity = half.toFixed(3);
+    jevCount.style.transform = `scale(${(1 + 0.16 * (passed ? pop : 0)).toFixed(4)})`;
+    bars.set(probs, { alpha: half, valueAlpha: seg(t, CUE.one, CUE.one + 0.15) });
+
+    // the inputs wait in the lower half, then go into the top of the Jev stack once
+    const tw = ticket.offsetWidth, th = ticket.offsetHeight;
+    fly(ticket, [RIGHT - tw / 2, TICKET_TOP + th / 2], seg(t, CUE.jev, CUE.jev + 0.62), half);
+    let x = RIGHT;
+    for (let i = 2; i >= 0; i--) {
+      const w = chips[i].offsetWidth, a = CUE.choices + 0.12 * i;
+      fly(chips[i], [x - w / 2, CHIPS_TOP + chips[i].offsetHeight / 2], seg(t, a, a + 0.55), half);
+      x -= w + CHIP_GAP;
+    }
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",    "end": 10.14},
+ {"clip": "media/hf/03_onepass.mp4", "end": 13.11},
+ {"clip": "media/hf/04_agents.mp4",  "end": 10.53},
+ {"clip": "media/hf/05_head.mp4",    "end": 13.69},
+ {"clip": "media/hf/06_labels.mp4",  "end": 7.682}
+]}

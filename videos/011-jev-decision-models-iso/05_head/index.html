@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5 Decision head: a decision model is a classifier head on top of a language model's stack. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="diagram/diagram.js"></script>
+    <script src="jev/jev.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13.69" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  // Beat 5 (master 33.78-47.47): "Jev is one company's version, a specific implementation of this
+  // decision model as a classifier. But the bigger idea is that we've gotten really good at building
+  // rich representations with language models, and a decision model is just a classifier on top of
+  // them. Anyone can train one."
+  // Frame 0: a tree, `decision model` with the magenta `Jev` chip as its child. The slab opens into the
+  // transformer figure from 010 (bottom to top, untouched); the decision head lands on TOP of the stack
+  // in place of `Linear`. Hero: Jev, then the decision head (Jev goes back to a resting border).
+  const BEAT_SECONDS = 13.69;
+  const CUE = {
+    jev: 0.00,        /* "Jev" (0.00-0.25): the child chip pulses from frame 0 */
+    impl: 2.25,       /* "implementation" (about 2.2-2.75): the parent-to-child connector lights, peak 2.70 */
+    bigger: 4.85,     /* "bigger idea" (4.85-5.50): the slab opens into the figure; Jev moves to the badge row */
+    rich: 7.05,       /* "rich representations" (7.05-8.10): teal tokens ride UP the main line */
+    settle: 9.00,     /* "and a decision model is just": the stack settles back, frozen */
+    classifier: 10.60,/* "classifier": the decision head starts down onto the stack; Linear goes */
+    onTop: 11.15,     /* "on top" (10.90-11.25): it lands */
+    ofThem: 11.30,    /* "of them" (11.30-11.70): the representations feed it (teal arrow, one token) */
+    anyone: 12.18,    /* "Anyone can" (12.15-12.50): the Laya badge joins Jev */
+    trainOne: 12.55,  /* "train one" (12.55-12.95): the CLM-8B badge joins */
+    still: 13.10,     /* nothing moves from here */
+  };
+  const { seg, lerp, clamp01, mix, css, COL } = ISO, E = ISO.E();
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+
+  // ---- layout ----
+  const CX = DG.pt(0, 0)[0];                          // screen x of the figure's main line (520)
+  // the tree's parent: a slab on the figure's own plane, where the figure will be
+  const TREE = { x: DG.X0, y: 0, z0: 470, h: 110, half: 230, depth: DG.DEPTH, oy: DG.BASE_Y };
+  // what the slab opens into: the outline of the whole figure
+  const OPEN = { z0: -12, h: DG.TOP + 24, half: DG.SKIP_X + 24 };
+  // the decision head: my own slab in front of DG's top box, same place, a little wider so that
+  // `decision head` (415 px at 60 px) has a margin on a face that is 422 px wide in DG.
+  const HEAD = { x: DG.X0, y: 0, z0: DG.Z.head, h: DG.BOX_H, half: 215, depth: DG.DEPTH, oy: DG.BASE_Y };
+  const HEAD_DROP = 90;                               // how far above its seat the head starts
+  const DIM = 0.6, FROZEN = 0.8;                      // figure opacity: on arrival, and under the head
+  // badge row above the figure (y 232-300). Compact chips: 60 px type, 4 px padding above and below.
+  const BADGE = { top: 232, h: 68, border: 4 };
+  const BADGES = [["Jev", 138, 148], ["Laya", 382, 180], ["CLM-8B", 660, 283]];   // text, left, width
+  const CHILD = { cx: CX, cy: 800, scale: 1.35 };     // where Jev hangs in the tree
+  const R = 15;                                       // token radius
+  const IN_BOX = 0.38;                                // token opacity inside a box
+
+  // ---- DOM ----
+  const labels = DG.makeLabels(root);
+  const treeLabel = JV.planeLabel(root, "decision model", JV.slabFront(TREE), { size: 60, width: 520 });
+  // local helper: a compact chip (JV.card is 101 px tall at 60 px type; the badge row has 68)
+  function badge(text, width) {
+    const el = document.createElement("div");
+    el.textContent = text;
+    el.style.cssText = `position:absolute;left:0;top:0;width:${width}px;height:${BADGE.h}px;border-radius:16px;` +
+      `background:${css(COL.panel)};border:${BADGE.border}px solid ${css(COL.dim)};font-size:60px;line-height:54px;` +
+      `padding-top:2px;text-align:center;white-space:nowrap;color:${css(COL.text)};transform-origin:50% 50%;`;
+    root.appendChild(el); return el;
+  }
+  const chips = BADGES.map(([text, , w]) => badge(text, w));
+  ISO.guides(root);
+
+  const slot = (i) => [BADGES[i][1] + BADGES[i][2] / 2, BADGE.top + BADGE.h / 2];
+  function placeChip(i, cx, cy, s, alpha, border) {
+    const el = chips[i], w = BADGES[i][2];
+    el.style.transform = `translate(${(cx - w / 2).toFixed(1)}px, ${(cy - BADGE.h / 2).toFixed(1)}px) scale(${s.toFixed(4)})`;
+    el.style.opacity = alpha.toFixed(3);
+    el.style.borderColor = css(border);
+  }
+  // 1 on an arrow / (+), IN_BOX inside a box, with a soft edge at the box faces (as in 010's 04_arrow)
+  function throughBoxes(z) {
+    let inside = 0;
+    DG.BOXES.forEach(([n]) => { const z0 = DG.Z[n], z1 = z0 + DG.BOX_H; inside = Math.max(inside, clamp01((z - z0 + 4) / 16) * clamp01((z1 + 4 - z) / 16)); });
+    return lerp(1, IN_BOX, inside);
+  }
+
+  function render(t) {
+    // ---- states ----
+    const open = seg(t, CUE.bigger, CUE.bigger + 0.80);                 // the slab opening
+    const fig = E.io(seg(t, CUE.bigger + 0.15, CUE.bigger + 0.95));     // the figure arriving
+    const lift = E.out(seg(t, CUE.rich, CUE.rich + 0.60));              // the stack at work
+    const frozen = E.io(seg(t, CUE.settle, CUE.settle + 0.60));
+    const alpha = fig * lerp(lerp(DIM, 1, lift), FROZEN, frozen);
+    const land = seg(t, CUE.classifier, CUE.onTop);                     // the head coming down
+    const headHero = E.io(land);
+    const st = { alpha, boxes: { head: headHero } };
+
+    ISO.ground(g, DG.BASE_Y + 8);
+
+    // ---- the tree: parent slab, connector, child (the slab opens behind the figure and fades) ----
+    if (open < 1) {
+      const o = E.io(open), a = 1 - open;
+      // connector, parent's bottom edge to the child chip; lights on "implementation"
+      const linkA = 1 - seg(t, CUE.bigger, CUE.bigger + 0.25);
+      if (linkA > 0) {
+        const p0 = DG.pt(0, TREE.z0), y1 = CHILD.cy - (BADGE.h / 2) * CHILD.scale;
+        const lit = Math.sin(Math.PI * seg(t, CUE.impl, CUE.impl + 0.90));
+        g.globalAlpha = linkA; g.lineCap = "round";
+        g.strokeStyle = css(mix(COL.dim, COL.hero, lit)); g.lineWidth = 8 + 5 * lit;
+        g.beginPath(); g.moveTo(p0[0], p0[1]); g.lineTo(CX, y1); g.stroke();
+        g.globalAlpha = 1;
+        const run = seg(t, CUE.impl, CUE.impl + 0.55);                  // parent -> child
+        if (run > 0 && run < 1) DG.token(g, [CX, lerp(p0[1], y1, E.io(run))], 13, COL.hero, Math.sin(Math.PI * run));
+      }
+      JV.slab(g, Object.assign({}, TREE, { z0: lerp(TREE.z0, OPEN.z0, o), h: lerp(TREE.h, OPEN.h, o), half: lerp(TREE.half, OPEN.half, o), alpha: a }));
+    }
+    treeLabel.style.opacity = (1 - seg(t, CUE.bigger, CUE.bigger + 0.30)).toFixed(3);
+
+    // ---- the figure (010), bottom to top ----
+    if (alpha > 0) DG.draw(g, st);
+
+    // ---- "rich representations": three teal tokens ride UP the main line, growing as they go ----
+    for (let k = 0; k < 3; k++) {
+      const t0 = CUE.rich + k * 0.22, raw = seg(t, t0, t0 + 1.00);
+      if (raw <= 0 || raw >= 1) continue;
+      const u = E.sine(raw), a = clamp01(raw / 0.12) * clamp01((1 - raw) / 0.12);
+      DG.token(g, DG.mainPoint(u), R * (0.8 + 0.6 * u), COL.data, a * throughBoxes(u * DG.TOP));
+    }
+
+    // ---- "classifier ... on top of them": the decision head, on top of the stack ----
+    if (land > 0) {
+      const zoff = HEAD_DROP * (1 - E.out(land));
+      JV.slab(g, Object.assign({}, HEAD, { z0: HEAD.z0 + zoff, hero: 1, alpha: E.out(seg(land, 0, 0.45)) }));
+      // the arrow from the stack into the head, at full strength and still teal: the representations feed it
+      const feed = E.out(seg(t, CUE.onTop, CUE.ofThem));
+      if (feed > 0) {
+        const [z0, z1] = DG.ARROWS[4];
+        g.globalAlpha = feed; DG.strokePath(g, [[0, z0 + 3], [0, z1 - 5]], css(COL.data), 6, 0, 15); g.globalAlpha = 1;
+        const run = seg(t, CUE.ofThem, CUE.ofThem + 0.45);
+        if (run > 0 && run < 1) DG.token(g, DG.pt(0, lerp(z0, z1, E.io(run))), R, COL.data, clamp01(run / 0.2) * clamp01((1 - run) / 0.2));
+      }
+    }
+
+    // ---- labels of the figure ----
+    DG.styleLabels(labels, st);
+    const swapped = land >= 0.4;                                         // Linear has faded by here
+    const want = swapped ? "decision head" : "Linear";
+    if (labels.head.textContent !== want) labels.head.textContent = want;
+    const headDy = swapped ? -HEAD_DROP * (1 - E.out(land)) : 0;
+    labels.head.style.opacity = (swapped ? E.out(seg(land, 0.4, 0.8)) : alpha * (1 - seg(land, 0, 0.36))).toFixed(3);
+    labels.head.style.transform = `matrix(1, ${DG.SHEAR.toFixed(4)}, 0, 1, 0, ${headDy.toFixed(1)})`;
+
+    // ---- badges ----
+    // Jev: the child in the tree (pulsing on "Jev"), then first in the badge row; magenta until the head is the hero
+    const pulse = 0.15 * Math.sin(Math.PI * seg(t, CUE.jev, CUE.jev + 0.60));
+    const mv = seg(t, CUE.bigger, CUE.bigger + 0.75), m = E.io(mv), [sx, sy] = slot(0);
+    placeChip(0, lerp(CHILD.cx, sx, m) - 50 * Math.sin(Math.PI * mv), lerp(CHILD.cy, sy, m), lerp(CHILD.scale, 1, m) * (1 + pulse), 1, mix(COL.hero, COL.dim, headHero));
+    // "Anyone can train one": the open models join
+    [CUE.anyone, CUE.trainOne].forEach((c, k) => {
+      const u = seg(t, c, c + 0.40), [bx, by] = slot(k + 1);
+      placeChip(k + 1, bx, by + 14 * (1 - E.out(u)), 0.7 + 0.3 * E.back(u), clamp01(u * 3), COL.dim);
+    });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
