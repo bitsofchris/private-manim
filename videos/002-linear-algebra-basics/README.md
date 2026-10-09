@@ -3,6 +3,11 @@
 Manim project folder for short explainer videos that support Chris's linear
 algebra study plan.
 
+Series home base: [`SERIES.md`](SERIES.md) has the "Linear Algebra for
+Engineers" arc and the per-episode checklist. The scenes below are 16:9
+drafts used as reference; finished Shorts live in their own
+`videos/NNN-slug/` folders.
+
 ## Source Plan
 
 Primary learning plan:

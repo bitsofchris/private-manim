@@ -81,8 +81,8 @@ tools/lint_short.py             runs check_layout on a scene's last frame withou
    one home, janitor the docs, changelog, commit. (Done 2026-10-03.)
 9. Storyboard step gains the motion-role tag per beat (connect, co-vary,
    process, symbol sense, generalize) and the hook rule (frame 0 = the
-   finished visual moving + the question on screen; question spoken in
-   the first second; last line a takeaway, no outro).
+   finished visual moving + the question on screen; first spoken line is
+   the answer, never the question; last line a takeaway, no outro).
 10. Entry point: done as `AGENTS.md` with `CLAUDE.md` pointing at it.
 
 ## Done 2026-10-03 (the entry-point pass)

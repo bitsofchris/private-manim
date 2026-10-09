@@ -3,6 +3,11 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-09
+
+- Hook rule: the first spoken line is the answer plus why it matters, never the question. Replaces "question spoken in the first second". Lives in runbook step 1 ("VO line 1"), where the script is written, with a check before hand-off; step 0 points to it. The question stays as on-screen text. (Chris, linear algebra scripts)
+- `videos/002-linear-algebra-basics/SERIES.md` and `SCRIPTS.md`: the Linear Algebra for Engineers arc, checklist, titles and VO scripts for 10 episodes plus a trailer. (002)
+
 ## 2026-10-04
 
 - HyperFrames is the default engine for Shorts; Manim stays for axes and plotted data, 3D camera moves, existing shared parts and all 16:9 scenes (`AGENTS.md` "Which engine"). Nothing Manim is retired. (Chris, after 009)

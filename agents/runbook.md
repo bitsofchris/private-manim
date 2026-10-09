@@ -80,8 +80,10 @@ THE ANSWER IN ONE SENTENCE. Put those three lines at the top of
 The hook, from the research in `agents/research/2026-10-03-shorts-craft.md`:
 frame 0 is the finished visual already working (not a title, not a word
 cloud, not a lead-in), with the question as 5–8 words of on-screen text in
-the band; the question is spoken in the first second; the last line is the
-one-sentence takeaway over the final visual, no outro, no call to action.
+the band. The first spoken line is the answer, never the question, so a
+viewer who leaves at two seconds still has it (how: step 1, "VO line 1").
+The last line is the one-sentence takeaway over the final visual, no
+outro, no call to action.
 
 ## 1. Storyboard from the post (Claude, 5 min)
 
@@ -93,6 +95,12 @@ one-sentence takeaway over the final visual, no outro, no call to action.
   table. Decide now: it changes which parts the visual column can name
   and which brief the beat agents get.
 - Write `videos/NNN-slug/storyboard.md`: a table `beat | VO | visual`.
+- **VO line 1 is THE ANSWER from the preflight, not THE QUESTION.** The
+  question lives in the on-screen band and is never spoken. Line 1 is the
+  answer in plain words plus why it matters: "A vector is just a list of
+  numbers, and it's the key to the math behind AI." Check before handing
+  the script to Chris: if line 1 ends in "?" or starts with What / How /
+  Why / Ever wondered, rewrite it.
 - **VO uses the author's own sentences.** Cut and reorder; never reword.
   Target 130–150 spoken words for ~55 s. Mark the last line "if time":
   takes run long and the tail is what gets dropped.
