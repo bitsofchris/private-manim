@@ -90,7 +90,7 @@ orchestrator does the judgment work and farms out the parallel work:
 
 | Step | Who | What |
 |---|---|---|
-| Preflight + storyboard | orchestrator | `content-preflight` (the question, who asks, the one-sentence answer), then `storyboard.md` from the runbook step 1, starting with the `ENGINE:` line. Chris edits the VO in his words. |
+| Preflight + storyboard | orchestrator | the preflight from runbook step 0 (the question, who asks, the one-sentence answer), then `storyboard.md` from the runbook step 1, starting with the `ENGINE:` line. Chris edits the VO in his words. |
 | Record | Chris | one take, `vo_raw.m4a` into the video folder |
 | Clean, transcribe, cut | orchestrator | runbook steps 3–5; Chris approves the cut list |
 | Build beats | subagents (one per 1–2 beats) | each gets the brief for its beat's engine + its beat's VO and visual brief; renders and reviews its own contact sheet |

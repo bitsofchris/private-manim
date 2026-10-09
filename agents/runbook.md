@@ -73,7 +73,7 @@ zones shaded (see step 7).
 ## 0. Start of a session
 
 Read `AGENTS.md`. Open (or create) `videos/NNN-slug/` with the next number.
-Run `content-preflight`: THE QUESTION in the viewer's words, WHO IS ASKING,
+Write the preflight: THE QUESTION in the viewer's words, WHO IS ASKING,
 THE ANSWER IN ONE SENTENCE. Put those three lines at the top of
 `storyboard.md`; every beat is checked against them.
 

@@ -3,9 +3,9 @@
 **Name:** linear-algebra-series
 **Description:** Home base for the "Linear Algebra for Engineers" Shorts.
 The arc, one row per episode, and a checklist of where each episode is.
-This folder keeps the source material (draft scenes, recap narration);
-each finished Short lives in its own `videos/NNN-slug/` like every other
-Short in the repo.
+This folder keeps the source material (draft scenes, recap narration)
+and one `epNN-slug/` subfolder per episode, laid out like any other
+Short's folder.
 **When to use:** start of any session on this series. Pick the next
 episode from the checklist, then run `agents/runbook.md` from step 0 in
 that episode's folder. Update the checklist in the same pass as the work.
@@ -42,24 +42,25 @@ examples but no visuals; nothing is wrong with them.
 ## Checklist
 
 Stages, in runbook order. Every episode is **ready for VO**: the scripts
-and final titles are in [`SCRIPTS.md`](SCRIPTS.md). Tick VO when
-`epNN_vo_raw.m4a` is saved in this folder; Storyboard when the episode's
-folder is opened and the take is cut into beats. Episode headings below
+and final titles are in [`SCRIPTS.md`](SCRIPTS.md). All 11 were recorded
+in one take (2026-10-09) and cut into one subfolder per episode here, each
+with `vo_raw.m4a` and `script.md` (what was actually said). Tick Storyboard
+when the take is cut into beats in that subfolder. Episode headings below
 keep the short working names; the table has the publish titles.
 
 | # | YouTube title | Folder | Draft visuals | Script | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | What Is a Vector? Linear Algebra for AI | – | x | x | | | | | |
-| 2 | Change of Basis Made Simple (Beginner Friendly) | – | x | x | | | | | |
-| 3 | What a Matrix Really Does (Linear Algebra for AI) | – | x | x | | | | | |
-| 4 | Matrix Multiplication Explained Visually (x @ W) | – | x | x | | | | | |
-| 5 | PyTorch nn.Linear Explained (Beginner Friendly) | – | x | x | | | | | |
-| 6 | Batch Matrix Multiplication Made Simple (PyTorch) | – | x | x | | | | | |
-| 7 | Why Neural Networks Need Activation Functions | – | | x | | | | | |
-| 8 | Dot Product Explained Visually (Beginner Friendly) | – | | x | | | | | |
-| 9 | Cosine Similarity vs Dot Product Made Simple | – | | x | | | | | |
-| 10 | Query, Key, Value Explained: Attention Scores | – | | x | | | | | |
-| T | Linear Algebra for AI Engineers Made Simple | – | x | x | | | | | |
+| 1 | What Is a Vector? Linear Algebra for AI | `ep01-what-is-a-vector` | x | x | x | | | | |
+| 2 | Change of Basis Made Simple (Beginner Friendly) | `ep02-change-of-basis` | x | x | x | | | | |
+| 3 | What a Matrix Really Does (Linear Algebra for AI) | `ep03-what-a-matrix-does` | x | x | x | | | | |
+| 4 | Matrix Multiplication Explained Visually (x @ W) | `ep04-matrix-multiplication` | x | x | x | | | | |
+| 5 | PyTorch nn.Linear Explained (Beginner Friendly) | `ep05-nn-linear-shape` | x | x | x | | | | |
+| 6 | Batch Matrix Multiplication Made Simple (PyTorch) | `ep06-batch-matmul` | x | x | x | | | | |
+| 7 | Why Neural Networks Need Activation Functions | `ep07-activation-functions` | | x | x | | | | |
+| 8 | Dot Product Explained Visually (Beginner Friendly) | `ep08-dot-product` | | x | x | | | | |
+| 9 | Cosine Similarity vs Dot Product Made Simple | `ep09-cosine-vs-dot` | | x | x | | | | |
+| 10 | Query, Key, Value Explained: Attention Scores | `ep10-attention-scores` | | x | x | | | | |
+| T | Linear Algebra for AI Engineers Made Simple | `epT-four-ideas` | x | x | x | | | | |
 
 Draft visuals = a 16:9 `BocScene` draft exists in this folder with
 narration in `UNIT_1_3_RECAP.md`. It is reference only: every beat is

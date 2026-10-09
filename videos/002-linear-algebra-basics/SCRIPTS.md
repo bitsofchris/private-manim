@@ -14,9 +14,8 @@ first line is the payoff, said plainly, so a viewer who leaves at two
 seconds still got it. If a line doesn't sound like you, say it your way: the
 transcript, not this file, becomes the captions.
 
-Save each take in this folder as `epNN_vo_raw.m4a` (`ep03_vo_raw.m4a`,
-`epT_vo_raw.m4a`). It moves into the episode's own folder when that
-episode is built.
+Recorded 2026-10-09 in one take; each episode's cut is
+`epNN-slug/vo_raw.m4a`, with what was actually said in `epNN-slug/script.md`.
 
 Titles follow the runbook rule (step 9): the words a beginner would type,
 in the first 30–40 characters, 50 characters max. Search phrases came
