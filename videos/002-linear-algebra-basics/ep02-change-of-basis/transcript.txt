@@ -1,0 +1,55 @@
+00:00.290-00:03.190
+The same vector could have completely different numbers.
+
+00:03.190-00:04.510
+The numbers are just an address,
+
+00:04.510-00:07.550
+and that address depends on the directions you pick.
+
+00:07.550-00:09.910
+Those directions are the basis.
+
+00:09.910-00:12.570
+A basis is a set of independent vectors
+
+00:12.570-00:14.560
+that span the whole space.
+
+00:14.560-00:17.440
+It's the coordinate system that you choose.
+
+00:17.440-00:21.540
+Here's the point 352 in the usual xyz.
+
+00:21.540-00:24.420
+Now swap the basis, but keep the point exactly where it is,
+
+00:24.420-00:26.460
+and let the grid change around it.
+
+00:26.460-00:30.770
+In this new basis, the same point is minus 232.
+
+00:30.770-00:33.430
+The arrow didn't move, but its address changed,
+
+00:33.430-00:36.190
+because coordinates are how much of each basis vector
+
+00:36.190-00:38.010
+you need to get there.
+
+00:38.010-00:40.320
+This matters for interpretability work.
+
+00:40.320-00:42.970
+1, 1 is a little x and a little y.
+
+00:42.970-00:46.070
+Pick a diagonal basis, and it's just 1, 0.
+
+00:46.070-00:48.480
+One clean feature instead of a mix of two.
+
+
