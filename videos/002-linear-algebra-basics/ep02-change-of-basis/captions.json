@@ -97,12 +97,17 @@
  {
   "start": 17.599,
   "end": 18.615,
-  "text": "3, 5, 2 in the"
+  "text": "3, 5, 2"
  },
  {
   "start": 18.675,
+  "end": 19.15,
+  "text": "in the usual"
+ },
+ {
+  "start": 19.15,
   "end": 19.69,
-  "text": "usual x, y, z."
+  "text": "x, y, z."
  },
  {
   "start": 19.69,
