@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5 "05_list": the floor dims, the card moves to the stage centre and becomes code
+         (v = [ −2, 2 ]), shuffles on "order matters", grows slot labels east / north (the hero),
+         then retypes to house = [ 1,800, 450,000 ] with "sq ft" / "price" slot by slot. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+      .code-name { position: absolute; left: 0; top: 0; white-space: pre; color: #8a8fb0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.79" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.79;
+  // Cues, beat-local seconds (master 25.49 + t), from a 50 ms RMS envelope + silencedetect (-40 dB) of
+  // vo_final.wav. Speech: 0.18-1.93 "In code, a vector is just a list", 2.04-3.01 "where order matters",
+  // 3.42-4.78 "Each position means something", 5.18-6.55 "If we're describing a house",
+  // 6.82-8.27 "one dimension might be square feet", 8.52-9.58 "the other one price".
+  const CUE = {
+    code: 0.20,     // "In code": the card heads to centre stage and turns into code
+    order: 2.25,    // "order" (2.04-3.01): the two numbers swap places ...
+    back: 2.70,     // "matters": ... and swap back
+    each: 3.45,     // "Each position" (3.42): "east" under slot 0
+    pos: 3.80,      // "position": "north" under slot 1
+    house: 5.45,    // "describing" (5.18-6.55): name retypes v -> house, card retypes to VEC.HOUSE
+    sqft: 7.85,     // "square feet" (7.85-8.27): "sq ft" under slot 0
+    price: 9.18,    // "price" (9.18-9.58): "price" under slot 1
+    still: 9.50,    // nothing moves after this
+  };
+  const SHUF = 0.35;                       // each way of the shuffle (>= 0.3 s)
+  const SAFE_W = ISO.SAFE.x1 - ISO.SAFE.x0;  // 885
+  const MID_X = (ISO.SAFE.x0 + ISO.SAFE.x1) / 2;
+  const GROUP_MID = 600;                   // centre of the name line + card on the stage (y 230-1100)
+  const { COL, css, mix, lerp, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+
+  // ---- the cards ----
+  // card0: beat 4's last picture, Inter [ −2, 2 ] at the top, slot 1 lit
+  const card0 = VEC.vecCard(root, VEC.V);
+  card0.border(COL.data);   // beat 4 leaves the card with a teal border (orchestrator fix)
+  const nw0 = VEC.label(root, "NW", { color: css(COL.dim), width: 160 });   // beat 4's dim NW label, leaving
+  // one code size for both code cards so the retype reads as the same card: the largest (<= 96 px,
+  // >= 60 px) at which the house card fits the safe width. The name sits on its own line above.
+  function fitSize() {
+    for (let s = 96; s > 60; s -= 2) {
+      const probe = VEC.vecCard(root, VEC.HOUSE.vals, { mono: true, size: s, labels: VEC.HOUSE.labels });
+      const wd = probe.el.offsetWidth; probe.el.remove();
+      if (wd <= SAFE_W - 10) return s;
+    }
+    return 60;
+  }
+  const S = fitSize();
+  const vCard = VEC.vecCard(root, VEC.V, { mono: true, size: S, labels: ["east", "north"] });
+  const hCard = VEC.vecCard(root, VEC.HOUSE.vals, { mono: true, size: S, labels: VEC.HOUSE.labels });
+  [vCard, hCard].forEach((c) => c.labels.forEach((l) => { l.style.color = css(COL.hero); l.style.opacity = "0"; }));
+  // the cross-fades layer one card over another on purpose
+  [card0, vCard, hCard].forEach((c) => [c.el, ...c.el.querySelectorAll("*")].forEach((n) => {
+    n.setAttribute("data-layout-allow-overlap", ""); n.setAttribute("data-layout-allow-occlusion", "");
+  }));
+  const nameEl = document.createElement("div"); nameEl.className = "code-name";
+  nameEl.style.fontFamily = "monospace"; nameEl.style.fontWeight = "700"; nameEl.style.fontSize = S + "px"; nameEl.style.lineHeight = Math.round(S * 1.15) + "px";
+  root.appendChild(nameEl);
+
+  // geometry (all cards at rest, untransformed, when measured)
+  const dims = (c) => ({ w: c.el.offsetWidth, h: c.el.offsetHeight });
+  const D0 = dims(card0), DV = dims(vCard), DH = dims(hCard);
+  const NAME_H = Math.round(S * 1.15), NAME_GAP = 10;
+  const CARD_TOP = Math.round(GROUP_MID - (NAME_H + NAME_GAP + DV.h) / 2) + NAME_H + NAME_GAP;
+  const NAME_TOP = CARD_TOP - NAME_GAP - NAME_H;
+  const C0 = [MID_X, VEC.CARD_TOP + D0.h / 2];          // card0 centre at the start
+  const CV = [MID_X, CARD_TOP + DV.h / 2];              // code-card centre
+  const leftV = MID_X - DV.w / 2, leftH = MID_X - DH.w / 2;
+  // shuffle distance: slot centres of the v card
+  const cx = (el) => { const r = el.getBoundingClientRect(); return r.left + r.width / 2; };
+  const SWAP_DX = cx(vCard.slots[1]) - cx(vCard.slots[0]);
+
+  // compass letters as beat 4 left them: E and N teal, W and S dim
+  const lab = {};
+  ["E", "N", "W", "S"].forEach((k) => { lab[k] = VEC.label(root, k, { color: css(k === "E" || k === "N" ? COL.data : COL.dim), width: 120 }); });
+  ISO.guides(root);
+
+  // local helpers
+  // place a card by its centre; sx/sy scale about the centre (sx alone: uniform)
+  const centreAt = (c, d, centre, sx, alpha, sy = sx) => {
+    c.el.style.transform = `translate(${(centre[0] - d.w / 2).toFixed(1)}px, ${(centre[1] - d.h / 2).toFixed(1)}px) scale(${sx.toFixed(4)}, ${sy.toFixed(4)})`;
+    c.el.style.opacity = alpha.toFixed(3);
+    c.el.style.visibility = alpha < 0.001 ? "hidden" : "visible";
+  };
+  // a slot label popping in: fade + rise + slight overshoot
+  const popLabel = (el, t0, t) => {
+    const p = seg(t, t0, t0 + 0.3);
+    el.style.opacity = seg(p, 0, 0.6).toFixed(3);
+    el.style.transform = `translateY(${(24 * (1 - E.out(p))).toFixed(1)}px) scale(${(0.8 + 0.2 * E.back(p)).toFixed(4)})`;
+  };
+  // the typed name line: "v =" erased, then "house =" typed, one character at a time
+  const typed = (t) => {
+    const ERASE = 0.06, TYPE = 0.05, a = "v =", b = "house =";
+    if (t < CUE.house) return a;
+    const k = Math.floor((t - CUE.house) / ERASE);
+    if (k < a.length) return a.slice(0, a.length - k);
+    const j = Math.floor((t - CUE.house - a.length * ERASE) / TYPE) + 1;
+    return b.slice(0, Math.min(b.length, j));
+  };
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // the floor dims (already moving at frame 0)
+    const dim = E.out(seg(t, 0, 0.9));
+    const fa = lerp(1, 0.25, dim);
+    VEC.floor(g, { alpha: lerp(0.30, 0.12, dim) });
+    ["E", "N", "W", "S"].forEach((k) => {
+      const c = VEC.COMPASS[k], teal = k === "E" || k === "N";
+      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: teal ? COL.data : COL.muted, width: 26, head: 66, alpha: fa });
+      VEC.place(lab[k], c.e, c.n, { dy: c.dy, alpha: fa });
+    });
+    VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data, alpha: fa });
+    VEC.arrow(g, [-2, 0], [-2, 2], { col: COL.data, alpha: fa });
+    VEC.arrow(g, [0, 0], [-2, 2], { col: COL.data, width: 52, alpha: 0.7 * fa });   // beat 4 ends it at 70 %
+    VEC.puck(g, 0, 0, { alpha: fa });
+    // beat 4's step ticks and NW label leave in the first 0.5 s (orchestrator fix)
+    const go = 1 - E.out(seg(t, 0, 0.5));
+    [[-1, 0], [-2, 0], [-2, 1], [-2, 2]].forEach(([e, n]) => { if (go > 0.001) VEC.puck(g, e, n, { half: 11, z: 10, alpha: go }); });
+    VEC.place(nw0, -2, 2, { dy: -80, alpha: go });
+
+    // "In code": the card travels to centre stage (moving from frame 0) and becomes code
+    const mv = E.out(seg(t, 0, 1.0));
+    const centre = [lerp(C0[0], CV[0], mv), lerp(C0[1], CV[1], mv)];
+    const x = seg(t, CUE.code, CUE.code + 0.45);              // cross-fade Inter -> monospace
+    const sc0 = lerp(1, DV.w / D0.w, x), scV = lerp(D0.w / DV.w, 1, x);
+    card0.light(1, 1 - seg(t, 0, 0.5));                        // slot highlight clears
+    centreAt(card0, D0, centre, sc0, 1 - x);
+
+    // "describing a house": the same card retypes (cross-fade in place, same size, same top)
+    const r = seg(t, CUE.house + 0.1, CUE.house + 0.5);
+    const rw = E.io(r);                                        // the box widens horizontally only
+    centreAt(vCard, DV, centre, scV * lerp(1, DH.w / DV.w, rw), x * (1 - r), scV);
+    centreAt(hCard, DH, [MID_X, CARD_TOP + DH.h / 2], lerp(DV.w / DH.w, 1, rw), r, 1);
+    nameEl.textContent = typed(t);
+    const nl = lerp(leftV, leftH, E.io(seg(t, CUE.house, CUE.house + 0.5)));
+    nameEl.style.transform = `translate(${nl.toFixed(1)}px, ${(NAME_TOP + (1 - mv) * (C0[1] - CV[1])).toFixed(1)}px)`;
+    nameEl.style.opacity = seg(t, CUE.code + 0.2, CUE.code + 0.5).toFixed(3);
+
+    // "order matters": the two numbers swap places and swap back, arcing past each other
+    const s1 = seg(t, CUE.order, CUE.order + SHUF), s2 = seg(t, CUE.back, CUE.back + SHUF);
+    const p = E.io(s1) - E.io(s2), arc = Math.sin(Math.PI * s1) + Math.sin(Math.PI * s2);
+    vCard.slots[0].style.transform = `translate(${(SWAP_DX * p).toFixed(1)}px, ${(-0.35 * S * arc).toFixed(1)}px)`;
+    vCard.slots[1].style.transform = `translate(${(-SWAP_DX * p).toFixed(1)}px, ${(0.35 * S * arc).toFixed(1)}px)`;
+
+    // "Each position means something": east / north (the hero); then sq ft / price, slot by slot
+    popLabel(vCard.labels[0], CUE.each, t);
+    popLabel(vCard.labels[1], CUE.pos, t);
+    popLabel(hCard.labels[0], CUE.sqft, t);
+    popLabel(hCard.labels[1], CUE.price, t);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

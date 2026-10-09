@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 3, a move: a puck rides the NW arrow, the card drops in, east and north brighten. Opens on beat 2's last frame. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.75" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.75;
+  // Cues, beat-local seconds (master 10.85 + t), from a 50 ms RMS envelope of vo_final.wav
+  // (speech 0.15-1.35, 1.70-2.80, pause 2.85-3.00, 3.05-4.55, 4.75-7.55).
+  const CUE = {
+    move: 1.70,    // "a move through space" (master 12.55): a puck rides the NW arrow to its tip
+    arrive: 2.75,  // ... "space" ends: the puck stops at the tip
+    recipe: 3.05,  // "Its numbers are the recipe" (master 13.90): the card drops in
+    agreed: 5.95,  // "directions we already agreed upon" (master 16.80): east and north brighten
+    still: 6.60,   // nothing moves after this
+  };
+  const { COL, css, seg, lerp, mix } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.vecCard(root, VEC.V);
+  const lab = {};
+  ["E", "N", "W", "S"].forEach((k) => { lab[k] = VEC.label(root, k, { color: css(COL.dim), width: 120 }); });
+  const nw = VEC.label(root, "NW", { color: css(COL.hero), width: 160 });
+  ISO.guides(root);
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.floor(g);
+    // "directions we already agreed upon": east, then north, muted -> teal; letters dim -> teal
+    const lit = { E: E.io(seg(t, CUE.agreed, CUE.agreed + 0.5)), N: E.io(seg(t, CUE.agreed + 0.15, CUE.agreed + 0.65)), W: 0, S: 0 };
+    ["E", "N", "W", "S"].forEach((k) => {
+      const c = VEC.COMPASS[k];
+      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: mix(COL.muted, COL.data, lit[k]), width: 26, head: 66 });
+      VEC.place(lab[k], c.e, c.n, { dy: c.dy, scale: 1 + 0.12 * Math.sin(Math.PI * lit[k]) });
+      lab[k].style.color = css(mix(COL.dim, COL.data, lit[k]));
+    });
+    VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data });
+    VEC.arrow(g, [-2, 0], [-2, 2], { col: COL.data });
+    // the hero breathes once from frame 0 (frame 0 matches beat 2's last frame exactly)
+    const breathe = 1 + 0.6 * Math.sin(Math.PI * seg(t, 0, 1.2));
+    VEC.arrow(g, [0, 0], [-2, 2], { col: COL.hero, glow: breathe, width: 52 });
+    VEC.puck(g, 0, 0);
+    // "a move through space": a white puck travels origin -> tip and stays
+    const m = E.io(seg(t, CUE.move, CUE.arrive));
+    if (t >= CUE.move) VEC.puck(g, -2 * m, 2 * m, { half: 20, z: 18 });
+    VEC.place(nw, -2, 2, { dy: -80 });
+    // "Its numbers are the recipe": the card drops in at the top, teal border
+    const d = seg(t, CUE.recipe, CUE.recipe + 0.6);
+    card.border(COL.data);
+    card.at(VEC.centreLeft(card.el), VEC.CARD_TOP - 120 * (1 - E.back(d)), { alpha: seg(d, 0, 0.4) });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

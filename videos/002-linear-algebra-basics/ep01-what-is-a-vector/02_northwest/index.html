@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 2, northwest: the card leaves, the compass grows, NW is named, drawn, then built from 2 west + 2 north. Ends on 00_layout minus the card. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.55" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.55;
+  // Cues, beat-local seconds (master 5.30 + t), from a 50 ms RMS envelope of vo_final.wav
+  // (speech 0.10-1.95, pause 1.95-2.25, 2.30-3.80, pause 3.85-4.00, 4.05-5.35).
+  const CUE = {
+    nw: 1.48,     // "northwest" (first, master 6.78): the magenta NW letters appear
+    draw: 2.95,   // "isn't a new direction" (master 8.25): the NW arrow draws from the origin
+    west: 4.15,   // "some west" (master 9.45): the west step draws, 2 squares
+    north: 4.72,  // "plus some north" (master 10.02): the north step draws tip-to-tail onto the NW tip
+    still: 5.35,  // nothing moves after this
+  };
+  const { COL, css, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.vecCard(root, VEC.V);
+  card.border(COL.data); card.light(0, 1); card.light(1, 1);   // as beat 1 leaves it: teal border, magenta numbers
+  const lab = {};
+  ["E", "N", "W", "S"].forEach((k) => { lab[k] = VEC.label(root, k, { color: css(COL.dim), width: 120 }); });
+  const nw = VEC.label(root, "NW", { color: css(COL.hero), width: 160 });
+  ISO.guides(root);
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.floor(g);
+    // the compass: four muted unit arrows, already growing at frame 0
+    const grow = lerp(0.3, 1, E.out(seg(t, 0, 0.8)));
+    ["E", "N", "W", "S"].forEach((k) => {
+      const c = VEC.COMPASS[k];
+      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: COL.muted, width: 26, head: 66, u: grow });
+      VEC.place(lab[k], c.e, c.n, { dy: c.dy, alpha: lerp(0.3, 1, seg(t, 0, 0.6)) });
+    });
+    // "some west" then "plus some north": the two teal steps, tip to tail
+    VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data, u: E.io(seg(t, CUE.west, CUE.west + 0.57)) });
+    VEC.arrow(g, [-2, 0], [-2, 2], { col: COL.data, u: E.io(seg(t, CUE.north, CUE.north + 0.6)) });
+    // "isn't a new direction": the hero draws up from the origin
+    // beat 1 ends on a teal NW arrow; it leaves with the card in the first 0.3 s (orchestrator fix)
+    VEC.arrow(g, [0, 0], [-2, 2], { col: COL.data, width: 52, alpha: 1 - E.out(seg(t, 0, 0.3)) });
+    VEC.arrow(g, [0, 0], [-2, 2], { col: COL.hero, u: E.io(seg(t, CUE.draw, CUE.draw + 0.8)), glow: 1, width: 52 });
+    VEC.puck(g, 0, 0);
+    // "northwest": the NW letters pop in above where the arrow will point
+    const p = seg(t, CUE.nw, CUE.nw + 0.4);
+    VEC.place(nw, -2, 2, { dy: -80, alpha: seg(p, 0, 0.5), scale: lerp(0.7, 1, E.back(p)) });
+    // the card from beat 1 leaves in the first 0.3 s
+    card.at(VEC.centreLeft(card.el), VEC.CARD_TOP, { alpha: 1 - E.out(seg(t, 0, 0.3)) });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

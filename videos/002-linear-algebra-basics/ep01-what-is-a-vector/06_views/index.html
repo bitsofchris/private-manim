@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 6, 06_views: "Linear algebra is moving between those two views. The arrow lets you see it.
+         The list lets you compute with it." Opens on 05_list's last picture (dimmed floor, the code card
+         house = [ 1,800, 450,000 ]); the house card leaves as the floor pans up and the NW arrow comes back.
+         Two views: arrow above, card [ −2, 2 ] below. A connector pulses between them; then the arrow is the
+         hero, then the card. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+      .code-name { position: absolute; left: 0; top: 0; white-space: pre; color: #8a8fb0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.52" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.52;
+  // Cues, beat-local seconds (master 35.28 + t), from a 50 ms RMS envelope of vo_final.wav.
+  // Speech: 0.15-2.55 "Linear algebra is moving between those two views", 2.65-4.05 "The arrow lets
+  // you see it", 4.45-6.35 "The list lets you compute with it".
+  const CUE = {
+    moving: 1.15,   // "moving between those two views" (1.15-2.55): the connector draws, then pulses
+    arrow: 2.85,    // "arrow" (2.85): the arrow magenta + glow, the card border teal
+    list: 4.55,     // "list" (4.55): the card magenta (border + numbers), the arrow back to teal
+    still: 5.20,    // nothing moves after this
+  };
+  const OY0 = VEC.FLOOR;   // 960: where 05_list leaves the floor
+  const OY = 600;          // the floor y for 06/07: the figure in the upper stage, the card under it
+  const { P, COL, css, mix, lerp, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  // ---- local helpers (identical in 06_views and 07_embed, so 06's last frame is 07's first) ----
+  // VEC.floor / VEC.arrow / VEC.puck draw at the kit's fixed VEC.FLOOR (960). These two beats need
+  // the figure higher (the card sits under it), so these are the same drawings with the floor y `oy`
+  // as an argument.
+  const atY = (e, n, oy, z = 0) => { const [x, y] = VEC.w(e, n); return P(x, y, z, oy); };
+  function floorAt(g, oy, alpha) {
+    g.clearRect(0, 0, ISO.W, ISO.H); g.fillStyle = css(COL.bg); g.fillRect(0, 0, ISO.W, ISO.H);
+    g.strokeStyle = `rgba(74, 80, 112, ${alpha})`; g.lineWidth = 3; g.beginPath();
+    for (let k = -30; k <= 30; k++) {
+      let p = P(k * VEC.STEP, -6000, 0, oy), q = P(k * VEC.STEP, 6000, 0, oy); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
+      p = P(-6000, k * VEC.STEP, 0, oy); q = P(6000, k * VEC.STEP, 0, oy); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
+    }
+    g.stroke();
+  }
+  function arrowAt(g, a, b, oy, o = {}) {
+    const u = o.u == null ? 1 : clamp01(o.u), a1 = o.alpha == null ? 1 : o.alpha;
+    if (u <= 0.001 || a1 <= 0.001) return;
+    const [x0, y0] = VEC.w(a[0], a[1]), [xb, yb] = VEC.w(b[0], b[1]);
+    const x1 = lerp(x0, xb, u), y1 = lerp(y0, yb, u);
+    const len = Math.hypot(x1 - x0, y1 - y0); if (len < 1) return;
+    const dx = (x1 - x0) / len, dy = (y1 - y0) / len, nx = -dy, ny = dx;
+    const hw = (o.width || 44) / 2, hl = Math.min(o.head || 90, len * 0.6), hh = hw * 2.6;
+    const sx = x1 - dx * hl, sy = y1 - dy * hl;
+    const q = (x, y) => P(x, y, 2, oy), col = o.col || COL.data;
+    if (o.glow > 0.001) {
+      [2.4, 1.7].forEach((k) => {
+        const gw = hw * k;
+        ISO.poly(g, [q(x0 + nx * gw, y0 + ny * gw), q(x1 + nx * gw, y1 + ny * gw), q(x1 - nx * gw, y1 - ny * gw), q(x0 - nx * gw, y0 - ny * gw)], css(col, 1, 0.09 * o.glow * a1));
+      });
+    }
+    ISO.poly(g, [q(x0 + nx * hw, y0 + ny * hw), q(sx + nx * hw, sy + ny * hw), q(sx - nx * hw, sy - ny * hw), q(x0 - nx * hw, y0 - ny * hw)], css(col, 1, a1));
+    ISO.poly(g, [q(sx + nx * hh, sy + ny * hh), q(x1, y1), q(sx - nx * hh, sy - ny * hh)], css(col, 1, a1));
+  }
+  function puckAt(g, e, n, oy, alpha = 1) {
+    const [x, y] = VEC.w(e, n), h = 16;
+    ISO.box(g, x - h, y - h, x + h, y + h, 0, 14, oy, COL.text, { alpha });
+  }
+  const show = (el, a) => { el.style.opacity = a.toFixed(3); el.style.visibility = a < 0.001 ? "hidden" : "visible"; };
+
+  // listCard: the vector card built token by token (absolutely placed spans on a panel), so 07 can
+  // regrow "[ −2, 2 ]" into a wrapped list. Base type is 96 px (the canonical card); 07 scales the
+  // tokens to 64 px. A slot = value span + its trailing comma (display:none until it is needed).
+  const LC = { top: 716, border: 6,
+               A: { padX: 38, padY: 19, line: 110 },                       // "[ −2, 2 ]" at 96 px
+               B: { scale: 64 / 96, padX: 30, padY: 14, pitch: 76, gap: 30, cols: 3 } };   // 07's grid
+  const MID_X = (ISO.SAFE.x0 + ISO.SAFE.x1) / 2;
+  function listCard(root, vals) {
+    const mk = (tag, css0) => { const d = document.createElement(tag); d.style.cssText = css0; return d; };
+    const wrap = mk("div", "position:absolute;left:0;top:0;");
+    const panel = mk("div", `position:absolute;left:0;top:0;box-sizing:border-box;background:${css(COL.panel)};` +
+      `border:${LC.border}px solid ${css(COL.dim)};border-radius:24px;`);
+    wrap.appendChild(panel);
+    const tok = (s, col) => {
+      const d = mk("div", `position:absolute;left:0;top:0;white-space:pre;font-size:96px;line-height:${LC.A.line}px;` +
+        `transform-origin:0 0;font-variant-numeric:tabular-nums;color:${col};`);
+      d.textContent = s; wrap.appendChild(d); return d;
+    };
+    const open = tok("[", css(COL.dim)), close = tok("]", css(COL.dim));
+    const sp = tok(" ", "transparent"); sp.style.visibility = "hidden";
+    const slots = vals.map((v, i) => {
+      const d = tok("", css(COL.text));
+      const val = document.createElement("span"); val.textContent = v; d.appendChild(val);
+      const com = document.createElement("span"); com.textContent = ","; com.style.color = css(COL.dim);
+      if (i < vals.length - 1) d.appendChild(com);
+      return { el: d, val, com };
+    });
+    root.appendChild(wrap);
+    return { wrap, panel, open, close, sp, slots };
+  }
+  // layout A: one row, 96 px, centred, top LC.top. Returns screen positions + the panel rect.
+  function layoutA(c) {
+    const ow = (el) => el.offsetWidth, sp = ow(c.sp);
+    const s0 = c.slots[0], s1 = c.slots[1];
+    let x = 0; const pos = { open: 0 };
+    x = ow(c.open) + sp; pos.s0 = x;
+    x += ow(s0.val) + ow(s0.com) + sp; pos.s1 = x;
+    x += ow(s1.val) + sp; pos.close = x;
+    x += ow(c.close);
+    const W = x + 2 * (LC.A.padX + LC.border), H = LC.A.line + 2 * (LC.A.padY + LC.border);
+    const left = MID_X - W / 2, ox = left + LC.border + LC.A.padX, oy = LC.top + LC.border + LC.A.padY;
+    return { rect: [left, LC.top, W, H], open: [ox, oy], slots: [[ox + pos.s0, oy], [ox + pos.s1, oy]], close: [ox + pos.close, oy] };
+  }
+  const placeTok = (el, p, s = 1) => { el.style.transform = `translate(${p[0].toFixed(1)}px, ${p[1].toFixed(1)}px) scale(${s.toFixed(4)})`; };
+  const placePanel = (c, r) => {
+    c.panel.style.transform = `translate(${r[0].toFixed(1)}px, ${r[1].toFixed(1)}px)`;
+    c.panel.style.width = r[2].toFixed(1) + "px"; c.panel.style.height = r[3].toFixed(1) + "px";
+  };
+  // the whole card swells about its centre by k (1 = rest)
+  const swell = (c, r, k) => {
+    const cx = r[0] + r[2] / 2, cy = r[1] + r[3] / 2;
+    c.wrap.style.transform = `translate(${(cx * (1 - k)).toFixed(1)}px, ${(cy * (1 - k)).toFixed(1)}px) scale(${k.toFixed(4)})`;
+  };
+  // colours: values toward `num`, border toward `edge` (RGB triples)
+  const tint = (c, num, edge) => {
+    c.slots.forEach((s) => { s.val.style.color = css(num); });
+    c.panel.style.borderColor = css(edge);
+  };
+
+  // ---- 05_list's last picture, rebuilt (same construction as 05_list/index.html) ----
+  const SAFE_W = ISO.SAFE.x1 - ISO.SAFE.x0, GROUP_MID = 600;
+  function fitSize() {
+    for (let s = 96; s > 60; s -= 2) {
+      const probe = VEC.vecCard(root, VEC.HOUSE.vals, { mono: true, size: s, labels: VEC.HOUSE.labels });
+      const wd = probe.el.offsetWidth; probe.el.remove();
+      if (wd <= SAFE_W - 10) return s;
+    }
+    return 60;
+  }
+  const S = fitSize();
+  const vProbe = VEC.vecCard(root, VEC.V, { mono: true, size: S, labels: ["east", "north"] });
+  const DVh = vProbe.el.offsetHeight; vProbe.el.remove();
+  const hCard = VEC.vecCard(root, VEC.HOUSE.vals, { mono: true, size: S, labels: VEC.HOUSE.labels });
+  hCard.labels.forEach((l) => { l.style.color = css(COL.hero); });
+  const nameEl = document.createElement("div"); nameEl.className = "code-name"; nameEl.textContent = "house =";
+  nameEl.style.fontFamily = "monospace"; nameEl.style.fontWeight = "700";   // inline, as 05 does (the class rule alone renders Inter)
+  nameEl.style.fontSize = S + "px"; nameEl.style.lineHeight = Math.round(S * 1.15) + "px";
+  root.appendChild(nameEl);
+  const NAME_H = Math.round(S * 1.15), NAME_GAP = 10;
+  const CARD_TOP5 = Math.round(GROUP_MID - (NAME_H + NAME_GAP + DVh) / 2) + NAME_H + NAME_GAP;
+  const NAME_TOP5 = CARD_TOP5 - NAME_GAP - NAME_H;
+  const lab = {};
+  ["E", "N", "W", "S"].forEach((k) => { lab[k] = VEC.label(root, k, { color: css(k === "E" || k === "N" ? COL.data : COL.dim), width: 120 }); });
+
+  // ---- this beat's card: [ −2, 2 ] in Inter ----
+  const card = listCard(root, VEC.V.map(VEC.fmtv));
+  ISO.guides(root);
+
+  // the connector: a thin curve from the arrow's right side to the card's top edge, heads at both ends
+  const CON = { p0: [560, 452], c: [800, 500], p1: [650, 704], w: 6 };
+  const bez = (s) => {
+    const a = (1 - s) * (1 - s), b = 2 * (1 - s) * s, d = s * s;
+    return [a * CON.p0[0] + b * CON.c[0] + d * CON.p1[0], a * CON.p0[1] + b * CON.c[1] + d * CON.p1[1]];
+  };
+  function connector(t) {
+    const grow = E.out(seg(t, CUE.moving, CUE.moving + 0.45));
+    const a = grow > 0 ? 1 - seg(t, CUE.arrow - 0.25, CUE.arrow + 0.1) : 0;
+    if (grow <= 0.001 || a <= 0.001) return;
+    const s0 = 0.5 - grow / 2, s1 = 0.5 + grow / 2, n = 40;
+    // the pulse: a bright bead runs arrow -> card -> arrow, the line brightens with it
+    const run = seg(t, CUE.moving + 0.45, CUE.arrow - 0.25);
+    const bead = run < 0.5 ? E.io(run * 2) : 1 - E.io(run * 2 - 1);
+    const lit = Math.sin(Math.PI * run);
+    g.lineCap = "round"; g.lineWidth = CON.w;
+    g.strokeStyle = css(mix(COL.dim, COL.text, 0.5 * lit), 1, a);
+    g.beginPath();
+    for (let i = 0; i <= n; i++) { const p = bez(lerp(s0, s1, i / n)); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); }
+    g.stroke();
+    const head = (s, back) => {   // a small arrowhead at curve parameter s, pointing away from `back`
+      const p = bez(s), q = bez(back), dx = p[0] - q[0], dy = p[1] - q[1], L = Math.hypot(dx, dy) || 1;
+      const ux = dx / L, uy = dy / L, hl = 26, hw = 14;
+      ISO.poly(g, [[p[0] + ux * 6, p[1] + uy * 6], [p[0] - ux * hl + uy * hw, p[1] - uy * hl - ux * hw], [p[0] - ux * hl - uy * hw, p[1] - uy * hl + ux * hw]],
+        css(mix(COL.dim, COL.text, 0.5 * lit), 1, a * seg(grow, 0.7, 1)));
+    };
+    head(s0, s0 + 0.04); head(s1, s1 - 0.04);
+    if (run > 0 && run < 1) {
+      const p = bez(lerp(0.06, 0.94, bead));
+      g.fillStyle = css(COL.text, 1, a * Math.min(1, lit * 3));
+      g.beginPath(); g.arc(p[0], p[1], 13, 0, Math.PI * 2); g.fill();
+    }
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // the floor pans up from 05's y to this beat's and brightens (moving from frame 0)
+    const pan = E.io(seg(t, 0, 1.1)), oy = lerp(OY0, OY, pan);
+    floorAt(g, oy, lerp(0.12, 0.30, E.out(seg(t, 0, 1.0))));
+    // 05's faint compass and steps leave; the NW arrow comes back to full
+    const fa = 0.25 * (1 - seg(t, 0, 0.5));
+    ["E", "N", "W", "S"].forEach((k) => {
+      const teal = k === "E" || k === "N", c = VEC.COMPASS[k];
+      arrowAt(g, [0, 0], VEC.DIRS[k], oy, { col: teal ? COL.data : COL.muted, width: 26, head: 66, alpha: fa });
+      const [sx, sy] = atY(c.e, c.n, oy);
+      lab[k].style.transform = `translate(${(sx - 60).toFixed(1)}px, ${(sy - 64 * 0.55 + c.dy).toFixed(1)}px)`;
+      show(lab[k], fa);
+    });
+    arrowAt(g, [0, 0], [-2, 0], oy, { col: COL.data, alpha: fa });
+    arrowAt(g, [-2, 0], [-2, 2], oy, { col: COL.data, alpha: fa });
+    const back = lerp(0.25, 1, E.out(seg(t, 0.1, 0.9)));
+    // hero: the arrow on "arrow", handed to the card on "list"
+    const ha = E.out(seg(t, CUE.arrow, CUE.arrow + 0.3)) * (1 - E.out(seg(t, CUE.list, CUE.list + 0.3)));
+    const hc = E.out(seg(t, CUE.list, CUE.list + 0.3));
+    arrowAt(g, [0, 0], [-2, 2], oy, { col: mix(COL.data, COL.hero, ha), width: 52, alpha: back, glow: ha });
+    puckAt(g, 0, 0, oy, back);
+    connector(t);
+
+    // the house card and its name leave (retype away: shrink + fade), done before the new card arrives
+    const out = seg(t, 0, 0.4), ha5 = 1 - out, k5 = lerp(1, 0.85, E.inn(out));
+    const hw = hCard.el.offsetWidth, hh = hCard.el.offsetHeight;
+    hCard.el.style.transform = `translate(${(MID_X - hw / 2).toFixed(1)}px, ${CARD_TOP5.toFixed(1)}px) scale(${k5.toFixed(4)})`;
+    show(hCard.el, ha5);
+    nameEl.style.transform = `translate(${(MID_X - hw / 2).toFixed(1)}px, ${(NAME_TOP5 + (1 - k5) * hh * 0.5).toFixed(1)}px)`;
+    show(nameEl, ha5);
+
+    // the card [ −2, 2 ] rises in under the figure
+    const L = layoutA(card), inn = E.out(seg(t, 0.45, 1.0)), dy = 40 * (1 - inn);
+    placePanel(card, [L.rect[0], L.rect[1] + dy, L.rect[2], L.rect[3]]);
+    placeTok(card.open, [L.open[0], L.open[1] + dy]);
+    card.slots.forEach((s, i) => placeTok(s.el, [L.slots[i][0], L.slots[i][1] + dy]));
+    placeTok(card.close, [L.close[0], L.close[1] + dy]);
+    card.wrap.style.opacity = inn.toFixed(3);
+    card.wrap.style.visibility = inn < 0.001 ? "hidden" : "visible";
+    const edgeTeal = E.out(seg(t, CUE.arrow, CUE.arrow + 0.3));
+    tint(card, mix(COL.text, COL.hero, hc), mix(mix(COL.dim, COL.data, edgeTeal), COL.hero, hc));
+    swell(card, L.rect, 1 + 0.06 * Math.sin(Math.PI * seg(t, CUE.list, CUE.list + 0.45)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

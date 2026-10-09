@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 4, 04_coords: "If the agreed directions are east and north, then minus two,
+         two means two steps opposite east and two steps north." The card slot being read is
+         the hero; the steps re-walk one grid square per hop. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.89" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.89;
+  // Cues from a 50 ms RMS envelope of vo_final.wav 18.60-25.49 (beat-local = master - 18.60).
+  const CUE = {
+    agreed: 0.35,    // "agreed"
+    east: 1.30,      // "east" (directions are east)
+    north: 1.60,     // "north" (and north)
+    minus: 2.80,     // "minus" (minus two): slot 0 lights
+    two2: 3.65,      // "two" (the second number): slot 1 is read
+    hopW1: 4.75,     // "steps" (two steps opposite east): first west hop lands
+    hopW2: 5.40,     // "east" (opposite east): second west hop lands
+    slot1: 5.62,     // "and two": slot 0 back to text, slot 1 lights
+    hopN1: 6.10,     // "steps" (two steps north): first north hop lands
+    hopN2: 6.55,     // "north": second north hop lands
+    still: 6.62,     // nothing moves after this
+  };
+  const { COL, css, seg, mix } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.vecCard(root, VEC.V);
+  const lab = {};
+  ["E", "N", "W", "S"].forEach((k) => { lab[k] = VEC.label(root, k, { color: css(COL.dim), width: 120 }); });
+  const nw = VEC.label(root, "NW", { color: css(COL.hero), width: 160 });
+  ISO.guides(root);
+
+  // local helpers
+  // a hop: 0 -> 1, eased, landing exactly at `land` after `dur` seconds
+  const hop = (t, land, dur) => E.io(seg(t, land - dur, land));
+  // a one-shot pulse 0 -> 1 -> 0 starting at a, lasting d
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));
+  // a step mark: a small puck that pops in at a square reached
+  const mark = (t, e, n, land) => {
+    const k = E.back(seg(t, land - 0.02, land + 0.16));
+    if (k > 0.001) VEC.puck(g, e, n, { half: 11 * k, z: 10, alpha: Math.min(1, k) });
+  };
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.floor(g);
+
+    // the compass: E and N teal, one brightening pulse each on their word
+    const pE = pulse(t, CUE.east - 0.1, 0.45), pN = pulse(t, CUE.north - 0.1, 0.45);
+    ["E", "N", "W", "S"].forEach((k) => {
+      const c = VEC.COMPASS[k];
+      const agreed = k === "E" || k === "N";
+      const p = k === "E" ? pE : k === "N" ? pN : 0;
+      const col = agreed ? mix(COL.data, COL.text, 0.55 * p) : COL.muted;
+      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col, width: 26 + 10 * p, head: 66 + 10 * p });
+      lab[k].style.color = css(agreed ? mix(COL.data, COL.text, 0.55 * p) : COL.dim);
+      VEC.place(lab[k], c.e, c.n, { dy: c.dy, scale: 1 + 0.22 * p });
+    });
+
+    // the NW arrow stops being the hero: magenta -> teal, glow off
+    const retire = E.io(seg(t, 0.0, 0.9));
+    VEC.arrow(g, [0, 0], [-2, 2], { col: mix(COL.hero, COL.data, retire), alpha: 1 - 0.3 * retire, glow: 1 - retire, width: 52 });
+    nw.style.color = css(mix(COL.hero, COL.dim, retire));
+    VEC.place(nw, -2, 2, { dy: -80 });
+
+    // the old steps fade to a faint ghost so they can be re-walked over it;
+    // the puck at the NW tip goes entirely
+    const fade = E.out(seg(t, 0.0, 0.8)), ghost = 1 - 0.84 * fade;
+    VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data, alpha: ghost });
+    VEC.arrow(g, [-2, 0], [-2, 2], { col: COL.data, alpha: ghost });
+    if (fade < 0.999) VEC.puck(g, -2, 2, { alpha: 1 - fade });
+
+    // the re-walk: one grid square per hop, the head rides the tip
+    const uW = 0.5 * hop(t, CUE.hopW1, 0.6) + 0.5 * hop(t, CUE.hopW2, 0.6);
+    const uN = 0.5 * hop(t, CUE.hopN1, 0.5) + 0.5 * hop(t, CUE.hopN2, 0.45);
+    VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data, u: uW });
+    VEC.arrow(g, [-2, 0], [-2, 2], { col: COL.data, u: uN });
+    mark(t, -1, 0, CUE.hopW1); mark(t, -2, 0, CUE.hopW2);
+    mark(t, -2, 1, CUE.hopN1); mark(t, -2, 2, CUE.hopN2);
+    VEC.puck(g, 0, 0);
+
+    // the card: teal border; the slot being read is magenta, one at a time
+    const s0 = E.out(seg(t, CUE.minus - 0.05, CUE.minus + 0.2)) * (1 - E.out(seg(t, CUE.slot1 - 0.05, CUE.slot1 + 0.2)));
+    const s1 = E.out(seg(t, CUE.slot1 - 0.05, CUE.slot1 + 0.2));
+    card.light(0, s0);
+    card.light(1, s1);
+    const sw0 = 1 + 0.14 * pulse(t, CUE.minus - 0.05, 0.4);
+    const sw1 = 1 + 0.12 * pulse(t, CUE.two2 - 0.05, 0.35) + 0.14 * pulse(t, CUE.slot1 - 0.05, 0.4);
+    card.slots[0].style.transform = `scale(${sw0.toFixed(4)})`;
+    card.slots[1].style.transform = `scale(${sw1.toFixed(4)})`;
+    card.border(COL.data, 1);
+    card.at(VEC.centreLeft(card.el), VEC.CARD_TOP);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

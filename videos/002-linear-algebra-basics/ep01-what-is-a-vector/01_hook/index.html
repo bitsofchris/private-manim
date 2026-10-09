@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 1, 01_hook: the NW vector draws up (teal), the card's two numbers
+         light magenta on "list of numbers", a quiet fan of thin arrows hints at every
+         vector a model holds on "the math behind AI", then settles. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.30" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.30;
+  // beat-local = master - 0.00; from a 50 ms RMS envelope of vo_final.wav 0.00-5.30
+  const CUE = {
+    vo: 0.55,      // "A vector..." (speech onset)
+    list: 1.40,    // "list of numbers"
+    math: 3.85,    // "the math behind AI"
+    voEnd: 5.10,   // "...AI" ends
+    still: 5.10,   // nothing moves after this
+  };
+  const { COL, css, seg, lerp, hash } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.vecCard(root, VEC.V);
+  card.border(COL.data);                      // the card at rest: teal border
+  card.slots.forEach((el) => { el.style.transformOrigin = "50% 60%"; el.setAttribute("data-layout-allow-overflow", ""); el.setAttribute("data-layout-allow-overlap", ""); });  // the swell is intentional
+  ISO.guides(root);
+
+  // Local helper: the fan. ~12 directions from ISO.hash, each length clipped so the tip
+  // stays on the stage (below the card, above the caption band y 1100).
+  const FAN_N = 12;
+  const tipOk = (e, n) => { const [x, y] = VEC.at(e, n); return x > 60 && x < 1020 && y > 470 && y < 1070; };
+  const fan = [];
+  for (let i = 0; i < FAN_N; i++) {
+    const ang = (2 * Math.PI * (i + 0.7 * hash(i + 3))) / FAN_N;
+    const de = Math.cos(ang), dn = Math.sin(ang);
+    let L = 3.4; while (L > 0.6 && !tipOk(de * L, dn * L)) L -= 0.05;
+    L *= 0.72 + 0.28 * hash(i + 41);
+    fan.push({ b: [de * L, dn * L], delay: 0.35 * hash(i + 77) });
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.floor(g);
+    // the fan: grows from the origin on "the math", fades out by CUE.still; under the NW arrow
+    const fadeOut = 1 - E.io(seg(t, CUE.math + 0.75, CUE.still));
+    fan.forEach((f) => {
+      const u = E.out(seg(t, CUE.math + f.delay, CUE.math + f.delay + 0.7));
+      VEC.arrow(g, [0, 0], f.b, { col: COL.data, alpha: 0.32 * fadeOut, u, width: 16, head: 48 });
+    });
+    // the NW vector: already part-drawn at frame 0, lands at 1.1 s; teal (not the hero)
+    const u = lerp(0.15, 1, E.out(seg(t, 0, 1.1)));
+    VEC.arrow(g, [0, 0], VEC.V, { col: COL.data, u, width: 52 });
+    VEC.puck(g, 0, 0);
+    // the hero: the card's two numbers turn magenta and swell once on "list of numbers"
+    const k = E.out(seg(t, CUE.list, CUE.list + 0.3));
+    const swell = 1 + 0.18 * Math.sin(Math.PI * seg(t, CUE.list, CUE.list + 0.6));
+    card.slots.forEach((el, i) => { card.light(i, k); el.style.transform = `scale(${swell.toFixed(4)})`; });
+    card.at(VEC.centreLeft(card.el), VEC.CARD_TOP);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
