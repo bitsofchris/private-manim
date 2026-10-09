@@ -71,4 +71,45 @@ address" was not recorded, so the Short ends on beat 7's still.
 
 ## Final beats
 
-Filled in after step 5.
+Cut approved 2026-10-09: no phrase removals, pauses capped at 0.25 s
+(`tighten_vo.py --max-gap 0.25`), 48.9 s → **45.41 s**. Re-transcription
+(`transcript_final.txt`) is clean and confirms "can have". Boundaries sit at
+the middle of the pause between beats. `beats.json` lists the same lengths.
+
+| # | Beat | Master start | Length | Folder | VO (as said) |
+|---|------|-------------:|-------:|--------|--------------|
+| 1 | Hook | 0.00 | 6.66 | `01_hook` | The same vector can have completely different numbers. The numbers are just an address, and that address depends on the directions you pick. |
+| 2 | Basis | 6.66 | 9.17 | `02_basis` | Those directions are the basis. A basis is a set of independent vectors that span the whole space. It's the coordinate system that you choose. |
+| 3 | The point | 15.83 | 3.69 | `03_point` | Here's the point three, five, two in the usual x, y, z. |
+| 4 | Swap | 19.52 | 4.87 | `04_swap` | Now swap the basis, but keep the point exactly where it is, and let the grid change around it. |
+| 5 | New address | 24.39 | 3.90 | `05_address` | In this new basis, the same point is minus two, three, two. |
+| 6 | Why | 28.29 | 6.74 | `06_why` | The arrow didn't move, but its address changed, because coordinates are how much of each basis vector you need to get there. |
+| 7 | Interpretability | 35.03 | 10.38 | `07_feature` | This matters for interpretability work. One, one is a little x and a little y. Pick a diagonal basis, and it's just one, zero. One clean feature instead of a mix of two. |
+
+Total 45.41 s.
+
+### Hand-over frames (what each beat ends on = what the next opens on)
+
+All 3D beats draw through `BK.world(g, t, u, opts)` after `BK.setMaster(start)`.
+
+| After beat | u | lattice | ghost | basis arrows + labels | hero (arrow + dot) | readout |
+|---|---|---|---|---|---|---|
+| 1 | 0 | 1 | 0 | 1, `x y z` | 1 | `(3, 5, 2)`, alpha 1 |
+| 2 | 0 | 1 | 0 | 1, `x y z` | 0 | none (alpha 0) |
+| 3 | 0 | 1 | 0 | 1, `x y z` | 1 | `(3, 5, 2)`, alpha 1 |
+| 4 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 | `(3, 5, 2)`, alpha 0.4 |
+| 5 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 | `(−2, 3, 2)`, alpha 1 |
+| 6 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 + the three legs | `(3, 5, 2)` dim above `(−2, 3, 2)` |
+| 7 | 2D, its own world | | | `d1 d2` | `u` on d1 | `(1, 0)` |
+
+## Render and assemble
+
+```
+cd videos/002-linear-algebra-basics/ep02-change-of-basis
+export HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1
+for b in 01_hook 02_basis 03_point 04_swap 05_address 06_why 07_feature; do
+  (cd $b && npx --yes --prefer-offline hyperframes@0.8.115 render -o ../media/hf/$b.mp4)
+done
+uv run --no-sync python ../../../tools/assemble.py beats.json --vo vo_final.wav \
+    --captions captions.json -o media/short.mp4
+```
