@@ -1,0 +1,262 @@
+[
+ {
+  "start": 0.58,
+  "end": 1.255,
+  "text": "The same vector"
+ },
+ {
+  "start": 1.315,
+  "end": 2.159,
+  "text": "can have completely"
+ },
+ {
+  "start": 2.219,
+  "end": 3.02,
+  "text": "different numbers."
+ },
+ {
+  "start": 3.02,
+  "end": 3.64,
+  "text": "The numbers are"
+ },
+ {
+  "start": 3.7,
+  "end": 4.32,
+  "text": "just an address"
+ },
+ {
+  "start": 4.32,
+  "end": 5.096,
+  "text": "and that address"
+ },
+ {
+  "start": 5.156,
+  "end": 5.841,
+  "text": "depends on the"
+ },
+ {
+  "start": 5.901,
+  "end": 6.86,
+  "text": "directions you pick."
+ },
+ {
+  "start": 6.86,
+  "end": 8.369,
+  "text": "Those directions are"
+ },
+ {
+  "start": 8.429,
+  "end": 9.22,
+  "text": "the basis."
+ },
+ {
+  "start": 9.22,
+  "end": 9.913,
+  "text": "A basis is"
+ },
+ {
+  "start": 9.973,
+  "end": 10.54,
+  "text": "a set of"
+ },
+ {
+  "start": 10.6,
+  "end": 11.86,
+  "text": "independent vectors"
+ },
+ {
+  "start": 11.86,
+  "end": 12.788,
+  "text": "that span the"
+ },
+ {
+  "start": 12.848,
+  "end": 13.71,
+  "text": "whole space."
+ },
+ {
+  "start": 13.71,
+  "end": 14.683,
+  "text": "It's the coordinate"
+ },
+ {
+  "start": 14.743,
+  "end": 15.326,
+  "text": "system that"
+ },
+ {
+  "start": 15.386,
+  "end": 15.97,
+  "text": "you choose."
+ },
+ {
+  "start": 15.97,
+  "end": 17.539,
+  "text": "Here's the point"
+ },
+ {
+  "start": 17.599,
+  "end": 18.615,
+  "text": "3, 5, 2 in the"
+ },
+ {
+  "start": 18.675,
+  "end": 19.69,
+  "text": "usual x, y, z."
+ },
+ {
+  "start": 19.69,
+  "end": 20.304,
+  "text": "Now swap the"
+ },
+ {
+  "start": 20.364,
+  "end": 21.073,
+  "text": "basis but keep"
+ },
+ {
+  "start": 21.133,
+  "end": 21.983,
+  "text": "the point exactly"
+ },
+ {
+  "start": 22.043,
+  "end": 22.61,
+  "text": "where it is"
+ },
+ {
+  "start": 22.61,
+  "end": 23.244,
+  "text": "and let the"
+ },
+ {
+  "start": 23.304,
+  "end": 23.939,
+  "text": "grid change"
+ },
+ {
+  "start": 23.999,
+  "end": 24.58,
+  "text": "around it."
+ },
+ {
+  "start": 24.58,
+  "end": 25.51,
+  "text": "In this new"
+ },
+ {
+  "start": 25.57,
+  "end": 26.81,
+  "text": "basis, the same"
+ },
+ {
+  "start": 26.87,
+  "end": 27.568,
+  "text": "point is"
+ },
+ {
+  "start": 27.628,
+  "end": 28.48,
+  "text": "−2, 3, 2."
+ },
+ {
+  "start": 28.48,
+  "end": 29.408,
+  "text": "The arrow didn't"
+ },
+ {
+  "start": 29.468,
+  "end": 30.177,
+  "text": "move but its"
+ },
+ {
+  "start": 30.237,
+  "end": 31.11,
+  "text": "address changed"
+ },
+ {
+  "start": 31.11,
+  "end": 32.279,
+  "text": "because coordinates are"
+ },
+ {
+  "start": 32.339,
+  "end": 32.923,
+  "text": "how much of"
+ },
+ {
+  "start": 32.983,
+  "end": 33.86,
+  "text": "each basis vector"
+ },
+ {
+  "start": 33.86,
+  "end": 34.538,
+  "text": "you need to"
+ },
+ {
+  "start": 34.598,
+  "end": 35.22,
+  "text": "get there."
+ },
+ {
+  "start": 35.22,
+  "end": 36.074,
+  "text": "This matters for"
+ },
+ {
+  "start": 36.134,
+  "end": 37.29,
+  "text": "interpretability work."
+ },
+ {
+  "start": 37.29,
+  "end": 37.904,
+  "text": "1, 1 is"
+ },
+ {
+  "start": 37.964,
+  "end": 38.577,
+  "text": "a little x"
+ },
+ {
+  "start": 38.637,
+  "end": 38.972,
+  "text": "and a"
+ },
+ {
+  "start": 39.032,
+  "end": 39.59,
+  "text": "little y."
+ },
+ {
+  "start": 39.59,
+  "end": 40.571,
+  "text": "Pick a diagonal"
+ },
+ {
+  "start": 40.631,
+  "end": 41.55,
+  "text": "basis and it's"
+ },
+ {
+  "start": 41.61,
+  "end": 42.53,
+  "text": "just 1, 0."
+ },
+ {
+  "start": 42.53,
+  "end": 43.497,
+  "text": "One clean feature"
+ },
+ {
+  "start": 43.557,
+  "end": 44.255,
+  "text": "instead of a"
+ },
+ {
+  "start": 44.315,
+  "end": 44.96,
+  "text": "mix of two."
+ }
+]
