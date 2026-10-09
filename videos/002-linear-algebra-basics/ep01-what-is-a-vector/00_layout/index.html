@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- The shared parts at rest: the floor (one square = one step), the four agreed
+         directions, the northwest vector built from 2 west + 2 north, and the vector card.
+         Copy this file to start a beat. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.0;
+  const { COL, css, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.vecCard(root, VEC.V);
+  const names = { E: "E", N: "N", W: "W", S: "S" };
+  const lab = {};
+  Object.keys(names).forEach((k) => { lab[k] = VEC.label(root, names[k], { color: css(COL.dim), width: 120 }); });
+  const nw = VEC.label(root, "NW", { color: css(COL.hero), width: 160 });
+  ISO.guides(root);
+  function render(t) {
+    const u = E.out(seg(t, 0.1, 1.2));
+    VEC.floor(g);
+    ["E", "N", "W", "S"].forEach((k) => {
+      const d = VEC.DIRS[k];
+      const c = VEC.COMPASS[k];
+      VEC.arrow(g, [0, 0], d, { col: COL.muted, width: 26, head: 66 });
+      VEC.place(lab[k], c.e, c.n, { dy: c.dy });
+    });
+    VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data, u });
+    VEC.arrow(g, [-2, 0], [-2, 2], { col: COL.data, u });
+    VEC.arrow(g, [0, 0], [-2, 2], { col: COL.hero, u, glow: 1, width: 52 });
+    VEC.puck(g, 0, 0);
+    VEC.place(nw, -2, 2, { dy: -80 });
+    card.at(VEC.centreLeft(card.el), VEC.CARD_TOP);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

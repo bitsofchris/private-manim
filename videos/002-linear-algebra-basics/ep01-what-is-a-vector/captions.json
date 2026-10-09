@@ -1,0 +1,302 @@
+[
+ {
+  "start": 0.55,
+  "end": 1.203,
+  "text": "A vector is"
+ },
+ {
+  "start": 1.263,
+  "end": 1.917,
+  "text": "just a list"
+ },
+ {
+  "start": 1.977,
+  "end": 2.63,
+  "text": "of numbers"
+ },
+ {
+  "start": 2.63,
+  "end": 3.249,
+  "text": "and it's the"
+ },
+ {
+  "start": 3.309,
+  "end": 4.308,
+  "text": "key to understanding"
+ },
+ {
+  "start": 4.368,
+  "end": 4.796,
+  "text": "the math"
+ },
+ {
+  "start": 4.856,
+  "end": 5.38,
+  "text": "behind AI."
+ },
+ {
+  "start": 5.38,
+  "end": 6.018,
+  "text": "My son asked"
+ },
+ {
+  "start": 6.078,
+  "end": 6.715,
+  "text": "me what does"
+ },
+ {
+  "start": 6.775,
+  "end": 7.56,
+  "text": "northwest mean?"
+ },
+ {
+  "start": 7.56,
+  "end": 8.488,
+  "text": "Now, northwest isn't"
+ },
+ {
+  "start": 8.548,
+  "end": 9.3,
+  "text": "a new direction"
+ },
+ {
+  "start": 9.3,
+  "end": 10.036,
+  "text": "it's some west"
+ },
+ {
+  "start": 10.096,
+  "end": 10.93,
+  "text": "plus some north."
+ },
+ {
+  "start": 10.93,
+  "end": 11.827,
+  "text": "That's just a"
+ },
+ {
+  "start": 11.887,
+  "end": 12.849,
+  "text": "vector, a move"
+ },
+ {
+  "start": 12.909,
+  "end": 13.87,
+  "text": "through space."
+ },
+ {
+  "start": 13.87,
+  "end": 14.697,
+  "text": "Its numbers are"
+ },
+ {
+  "start": 14.757,
+  "end": 15.486,
+  "text": "the recipe for"
+ },
+ {
+  "start": 15.546,
+  "end": 16.47,
+  "text": "building that move"
+ },
+ {
+  "start": 16.47,
+  "end": 17.387,
+  "text": "out of directions"
+ },
+ {
+  "start": 17.447,
+  "end": 18.008,
+  "text": "we already"
+ },
+ {
+  "start": 18.068,
+  "end": 18.73,
+  "text": "agreed upon."
+ },
+ {
+  "start": 18.73,
+  "end": 19.38,
+  "text": "If the agreed"
+ },
+ {
+  "start": 19.44,
+  "end": 20.369,
+  "text": "directions are east"
+ },
+ {
+  "start": 20.429,
+  "end": 20.94,
+  "text": "and north"
+ },
+ {
+  "start": 20.94,
+  "end": 21.907,
+  "text": "then minus two,"
+ },
+ {
+  "start": 21.967,
+  "end": 22.87,
+  "text": "two means two"
+ },
+ {
+  "start": 22.93,
+  "end": 24.22,
+  "text": "steps opposite east"
+ },
+ {
+  "start": 24.22,
+  "end": 24.738,
+  "text": "and two"
+ },
+ {
+  "start": 24.798,
+  "end": 25.64,
+  "text": "steps north."
+ },
+ {
+  "start": 25.64,
+  "end": 26.255,
+  "text": "In code, a"
+ },
+ {
+  "start": 26.315,
+  "end": 27.154,
+  "text": "vector is just"
+ },
+ {
+  "start": 27.214,
+  "end": 27.941,
+  "text": "a list where"
+ },
+ {
+  "start": 28.001,
+  "end": 28.84,
+  "text": "order matters."
+ },
+ {
+  "start": 28.84,
+  "end": 29.581,
+  "text": "Each position"
+ },
+ {
+  "start": 29.641,
+  "end": 30.54,
+  "text": "means something."
+ },
+ {
+  "start": 30.54,
+  "end": 31.692,
+  "text": "If we're describing"
+ },
+ {
+  "start": 31.752,
+  "end": 32.27,
+  "text": "a house"
+ },
+ {
+  "start": 32.27,
+  "end": 33.305,
+  "text": "one dimension might"
+ },
+ {
+  "start": 33.365,
+  "end": 34.193,
+  "text": "be square feet"
+ },
+ {
+  "start": 34.253,
+  "end": 34.771,
+  "text": "the other"
+ },
+ {
+  "start": 34.831,
+  "end": 35.4,
+  "text": "one price."
+ },
+ {
+  "start": 35.4,
+  "end": 36.257,
+  "text": "Linear algebra is"
+ },
+ {
+  "start": 36.317,
+  "end": 37.316,
+  "text": "moving between those"
+ },
+ {
+  "start": 37.376,
+  "end": 37.9,
+  "text": "two views."
+ },
+ {
+  "start": 37.9,
+  "end": 38.806,
+  "text": "The arrow lets"
+ },
+ {
+  "start": 38.866,
+  "end": 39.59,
+  "text": "you see it."
+ },
+ {
+  "start": 39.59,
+  "end": 40.462,
+  "text": "The list lets"
+ },
+ {
+  "start": 40.522,
+  "end": 41.269,
+  "text": "you compute"
+ },
+ {
+  "start": 41.329,
+  "end": 41.89,
+  "text": "with it."
+ },
+ {
+  "start": 41.89,
+  "end": 42.923,
+  "text": "Every embedding in"
+ },
+ {
+  "start": 42.983,
+  "end": 43.526,
+  "text": "AI is one"
+ },
+ {
+  "start": 43.586,
+  "end": 44.13,
+  "text": "of these"
+ },
+ {
+  "start": 44.13,
+  "end": 44.614,
+  "text": "a list of"
+ },
+ {
+  "start": 44.674,
+  "end": 45.497,
+  "text": "numbers we treat"
+ },
+ {
+  "start": 45.557,
+  "end": 46.234,
+  "text": "as directions"
+ },
+ {
+  "start": 46.294,
+  "end": 46.73,
+  "text": "in space"
+ },
+ {
+  "start": 46.73,
+  "end": 47.46,
+  "text": "with thousands"
+ },
+ {
+  "start": 47.52,
+  "end": 48.25,
+  "text": "of dimensions."
+ }
+]

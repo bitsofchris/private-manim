@@ -1,0 +1,9 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",      "end": 5.30},
+ {"clip": "media/hf/02_northwest.mp4", "end": 5.55},
+ {"clip": "media/hf/03_move.mp4",      "end": 7.75},
+ {"clip": "media/hf/04_coords.mp4",    "end": 6.89},
+ {"clip": "media/hf/05_list.mp4",      "end": 9.79},
+ {"clip": "media/hf/06_views.mp4",     "end": 6.52},
+ {"clip": "media/hf/07_embed.mp4",     "end": 6.908}
+]}

@@ -1,0 +1,64 @@
+00:00.550-00:02.630
+A vector is just a list of numbers,
+
+00:02.630-00:05.380
+and it's the key to understanding the math behind AI.
+
+00:05.380-00:07.560
+My son asked me what does northwest mean?
+
+00:07.560-00:09.300
+Now, northwest isn't a new direction,
+
+00:09.300-00:10.930
+it's some west plus some north.
+
+00:10.930-00:13.870
+That's just a vector, a move through space.
+
+00:13.870-00:16.470
+It's numbers are the recipe for building that move
+
+00:16.470-00:18.730
+out of directions we already agreed upon.
+
+00:18.730-00:20.940
+If the agreed directions are east and north,
+
+00:20.940-00:24.220
+then minus two two means two steps opposite east
+
+00:24.220-00:25.640
+and two steps north.
+
+00:25.640-00:28.840
+In code, a vector is just a list where order matters.
+
+00:28.840-00:30.540
+Each position means something.
+
+00:30.540-00:32.270
+If we're describing a house,
+
+00:32.270-00:35.400
+one dimension might be square feet, the other one price.
+
+00:35.400-00:37.900
+Linear algebra is moving between those two views.
+
+00:37.900-00:39.590
+The arrow lets you see it.
+
+00:39.590-00:41.890
+The list lets you compute with it.
+
+00:41.890-00:44.130
+Every embedding in AI is one of these,
+
+00:44.130-00:46.730
+a list of numbers we treat as directions in space
+
+00:46.730-00:48.250
+with thousands of dimensions.
+
+
