@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_point: "Here's the point three, five, two in the usual x, y, z." Master 15.83, 3.69 s. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/basis.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0;
+              --data: #2dd4bf; --hero: #c084fc; --muted: #4a5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.69" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.69, MASTER_START = 15.83;
+  // beat-local seconds (master - 15.83), from the vo_final.wav envelope + sub-clip transcription
+  const CUE = {
+    point: 0.54, /* "point"  (16.37) */
+    three: 1.02, /* "three"  (16.85) */
+    five:  1.34, /* "five"   (17.17) */
+    two:   1.72, /* "two"    (17.55) */
+    x:     2.94, /* "x"      (18.77) */
+    y:     3.08, /* "y"      (18.91) */
+    z:     3.18, /* "z"      (19.01) */
+  };
+  const HOLD_FROM = 3.42;   // everything, camera drift included, still from here
+  const PULSE = 0.24;       // x / y / z pulse length (three words in 0.25 s: a quick ripple)
+
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, bump, rgba, mixc, COL } = BK, E = BK.ease();
+  BK.setMaster(MASTER_START);
+  const readout = BK.makeReadout(root);
+  const labels = BK.makeBasisLabels(root);
+  BK.guides(root);
+  const WHITE = [255, 255, 255];
+  const numAt = [CUE.three, CUE.five, CUE.two];
+  const pulseAt = [CUE.x, CUE.y, CUE.z];
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM);
+    // the magenta hero draws from the origin to P on "point" (1.1 s); the dot lands at the tip
+    const draw = E.io(seg(t, CUE.point, CUE.point + 1.1));
+    const B = BK.world(g, t, 0, { hero: draw > 0 ? 1 : 0, heroDraw: draw });
+    // x / y / z: each basis arrow brightens and thickens once on its spoken letter
+    const pb = pulseAt.map((c) => bump(t, c, PULSE));
+    B.forEach((b, i) => {
+      if (pb[i] > 0) BK.arrow(g, [0, 0, 0], b, rgba(mixc(COL.slots[i], WHITE, 0.45)),
+                              { width: 12 + 8 * pb[i], head: 30 + 10 * pb[i], alpha: pb[i] });
+    });
+    labels.place(B, 0);
+    labels.ls.forEach((l, i) => { l.el.style.transform += ` scale(${1 + 0.3 * pb[i]})`; });
+    // readout: brackets + commas with "three", then one number per spoken word
+    const app = numAt.map((c) => seg(t, c, c + 0.18));
+    readout.set(BK.ADDR_E, { alpha: app[0] > 0 ? 1 : 0, pulse: app.map((a) => 0.6 + 0.4 * E.back(a)) });
+    readout.el.firstChild.style.opacity = app[0];
+    readout.el.childNodes.forEach((n) => { if (n.textContent === ", " || n.textContent === ")") n.style.opacity = app[0]; });
+    readout.nums.forEach((s, k) => { s.style.opacity = app[k]; });
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+})();
+    </script>
+  </body>
+</html>

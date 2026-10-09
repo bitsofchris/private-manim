@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_swap: "Now swap the basis, but keep the point exactly where it is, and let the grid change around it." Master 19.52, 4.87 s. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/basis.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0;
+              --data: #2dd4bf; --hero: #c084fc; --muted: #4a5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.87" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.87, MASTER_START = 19.52;
+  // beat-local seconds (master - 19.52), from the vo_final.wav envelope + sub-clip transcription
+  const CUE = {
+    swap:  0.32, /* "swap the basis"            (19.84) */
+    keep:  1.36, /* "keep"                      (20.88) */
+    point: 1.76, /* "the point exactly ..."     (21.28) */
+    let:   3.32, /* "let the grid"              (22.84) */
+    grid:  3.52, /* "grid"                      (23.04) */
+    change: 3.94, /* "change around it"         (23.46) */
+  };
+  const ARROWS = [CUE.swap, CUE.swap + 1.1];   // basis arrows e -> v (1.1 s)
+  // The shear needs >= 1.8 s and the beat must be still by HOLD_FROM, so it starts
+  // 0.56 s before "let"; with the in-out ease the visible motion lands on "let the grid"
+  // and is fastest on "grid" / "change".
+  const SHEAR = [2.76, 4.56];
+  const HOLD_FROM = 4.56;   // everything, camera drift included, still from here
+
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, bump, rgba, COL } = BK, E = BK.ease();
+  BK.setMaster(MASTER_START);
+  const readout = BK.makeReadout(root);
+  const labels = BK.makeBasisLabels(root);
+  BK.guides(root);
+
+  // Local helper (not in the kit): BK.world with separate morphs for the lattice (uL)
+  // and the basis arrows (uA). Same layers, widths and alphas as BK.world, so at
+  // uL = uA it draws the identical frame.
+  function worldSplit(t, uL, uA, ghost) {
+    BK.setTime(t); BK.clear(g);
+    if (ghost > 0) BK.lattice(g, BK.E, { alpha: 0.25 * ghost });
+    BK.lattice(g, BK.basisAt(uL), { alpha: 0.6 });
+    BK.arrow(g, [0, 0, 0], BK.P, rgba(COL.hero), { width: BK.ARROW_W.hero, head: 40 });
+    BK.dot(g, BK.P, 14, rgba(COL.hero));
+    const B = BK.basisAt(uA);
+    B.forEach((b, i) => BK.arrow(g, [0, 0, 0], b, rgba(COL.slots[i]), { width: BK.ARROW_W.basis, head: 30 }));
+    return B;
+  }
+  // P's pin ring: appears on "keep", one pulse, then sits still (carried into 05_address)
+  const RING_R = 34;
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM);
+    const uA = E.io(seg(t, ARROWS[0], ARROWS[1]));
+    const uL = E.io(seg(t, SHEAR[0], SHEAR[1]));
+    const B = worldSplit(t, uL, uA, uL);
+    const ringA = seg(t, CUE.keep, CUE.keep + 0.15);
+    if (ringA > 0) BK.ring(g, BK.P, RING_R + 16 * bump(t, CUE.keep, 0.5), rgba(COL.hero), ringA, 6);
+    labels.place(B, uA);
+    // the old address goes stale: dim to 0.4 on "the point exactly where it is"
+    readout.set(BK.ADDR_E, { alpha: 1 - 0.6 * E.io(seg(t, CUE.point, CUE.point + 0.6)) });
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+})();
+    </script>
+  </body>
+</html>

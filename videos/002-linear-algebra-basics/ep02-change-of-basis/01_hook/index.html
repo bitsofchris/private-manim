@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 01_hook: the lattice swings standard <-> new basis around a still magenta arrow; the readout ticks with it. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/basis.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.66" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.66, MASTER_START = 0.0;
+  // Beat-local cue times (master = local + 0.00), from vo_final.wav envelope + sub-clip transcription.
+  const CUE = {
+    address: 3.78,     /* "just an ADDRESS" */
+    directions: 5.58,  /* "the DIRECTIONS you pick" */
+  };
+  // The morph u (0 = x y z, 1 = v1 v2 v3): starts mid-swing, two swings, then settles on standard.
+  //   [time, u] keys; segment 0 eases out (already moving at frame 0), the rest ease in-out.
+  const KEYS = [[0, 0.5], [1.1, 1], [2.6, 0], [4.1, 1], [4.3, 1], [6.2, 0]];
+  const HOLD_FROM = 6.24;  // everything, camera drift included, still from here
+
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, bump, ADDR_E, ADDR_V } = BK, E = BK.ease();
+  BK.setMaster(MASTER_START);
+  const readout = BK.makeReadout(root);
+  const labels = BK.makeBasisLabels(root);
+  BK.guides(root);
+
+  function uAt(t) {
+    for (let i = 0; i < KEYS.length - 1; i++) {
+      const [t0, u0] = KEYS[i], [t1, u1] = KEYS[i + 1];
+      if (t <= t1) return lerp(u0, u1, (i === 0 ? E.out : E.sine)(seg(t, t0, t1)));
+    }
+    return KEYS[KEYS.length - 1][1];
+  }
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM);
+    const u = uAt(t);
+    const B = BK.world(g, t, u, { ghost: u });
+    // "directions you pick": the three basis arrows brighten (local overlay: wider, with a soft halo)
+    const b = bump(t, CUE.directions, 0.62);
+    if (b > 0) B.forEach((v, i) => {
+      BK.arrow(g, [0, 0, 0], v, BK.rgba(BK.COL.slots[i]), { width: 12 + 18 * b, head: 30 + 14 * b, alpha: 0.35 * b });
+      BK.arrow(g, [0, 0, 0], v, BK.rgba(BK.COL.slots[i]), { width: 12 + 4 * b, head: 30 + 6 * b });
+    });
+    labels.place(B, u);
+    labels.ls.forEach((l) => { l.el.style.transform += ` scale(${1 + 0.18 * b})`; });
+    // the readout ticks with u; "address": one swell of all three numbers
+    const p = 1 + 0.15 * bump(t, CUE.address - 0.08, 0.5);
+    readout.set([0, 1, 2].map((k) => lerp(ADDR_E[k], ADDR_V[k], u)), { pulse: [p, p, p] });
+  }
+
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+})();
+    </script>
+  </body>
+</html>

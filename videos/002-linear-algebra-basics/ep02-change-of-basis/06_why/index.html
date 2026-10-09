@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_why: same arrow, new address; the address is how much of each basis vector (tip-to-tail). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/basis.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.74" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.74;
+  // Beat-local seconds (master 28.29 + t), from vo_final.wav envelope + sub-clip transcription.
+  const CUE = {
+    didnt:   0.55, /* "didn't move" (move ~0.85-1.10) */
+    address: 1.65, /* "address changed" (address ~1.65, changed ~2.05) */
+    leg1:    3.70, /* "are how much" (starts in the pause before "are", 3.95) */
+    leg2:    4.50, /* "of each" -> "basis" (~4.95) */
+    leg3:    5.30, /* "vector you need" */
+    land:    6.10, /* "get there" (get ~6.05, there ~6.2) */
+  };
+  const LEG = 0.80;          // each tip-to-tail leg draws over 0.8 s
+  const HOLD_FROM = 6.36;    // everything (incl. camera drift) still from here
+
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, rgba, COL, V, P, ADDR_E, ADDR_V, bump, scale, add } = BK, E = BK.ease();
+  BK.setMaster(28.29);
+
+  // Old address (small, dim) above; new address slides down under it.
+  const OLD = { size: 68, top: 240, lift: 22 };   // 240..318
+  const NEW_SLIDE = 62;                           // new: 262..388 -> 324..450
+  const oldR = BK.makeReadout(root, { size: OLD.size, top: OLD.top });
+  const newR = BK.makeReadout(root);
+  const labels = BK.makeBasisLabels(root);
+  BK.guides(root);
+
+  // the tip-to-tail path in the new basis: -2 v1, then 3 v2, then 2 v3
+  const O = [0, 0, 0];
+  const A = scale(V[0], ADDR_V[0]);              // (-2, 0, 0)
+  const Bp = add(A, scale(V[1], ADDR_V[1]));     // (1, 3, 0)
+  const LEGS = [[O, A, CUE.leg1], [A, Bp, CUE.leg2], [Bp, P, CUE.leg3]];
+
+  function render(tIn) {
+    const t = Math.min(tIn, HOLD_FROM);
+    const B = BK.world(g, t, 1, { ghost: 1 });
+
+    // "didn't move": the hero brightens in place (a soft wide glow), no motion
+    const glow = bump(t, 0.0, 1.9);
+    if (glow > 0) {
+      BK.arrow(g, O, P, rgba(COL.hero), { width: 36, head: 66, alpha: 0.35 * glow });
+      BK.dot(g, P, 32, rgba(COL.hero), 0.35 * glow);
+    }
+
+    // tip-to-tail legs, each in its slot colour
+    LEGS.forEach(([a, b, t0], k) => {
+      const p = E.io(seg(t, t0, t0 + LEG));
+      if (p > 0) BK.arrow(g, a, b, rgba(COL.slots[k]), { width: 10, head: 32, progress: p });
+    });
+    // "get there": P's dot pulses once as the last leg lands
+    const land = bump(t, CUE.land, 0.26);
+    if (land > 0) BK.ring(g, P, 22 + 18 * land, rgba(COL.hero), 0.9 * land, 6);
+    BK.dot(g, P, 14, rgba(COL.hero));            // keep P's dot on top of the gold head
+
+    labels.place(B, 1);
+
+    // "address changed": new readout slides down, old (3, 5, 2) appears dim above
+    const slide = E.io(seg(t, CUE.address, CUE.address + 0.8));
+    newR.el.style.transform = `translateY(${(NEW_SLIDE * slide).toFixed(2)}px)`;
+    const oa = E.out(seg(t, CUE.address + 0.2, CUE.address + 0.9));
+    oldR.el.style.transform = `translateY(${(-OLD.lift * (1 - oa)).toFixed(2)}px)`;
+    oldR.set(ADDR_E, { alpha: 0.4 * oa });
+
+    // each leg lights its number (others dimmed); all lit again once P is reached
+    const inLegs = seg(t, CUE.leg1 - 0.2, CUE.leg1) * (1 - seg(t, CUE.land, CUE.land + 0.25));
+    const active = [0, 1, 2].map((k) => {
+      const t0 = LEGS[k][2];
+      return seg(t, t0 - 0.12, t0) * (1 - (k < 2 ? seg(t, t0 + LEG - 0.02, t0 + LEG + 0.1) : 0));
+    });
+    const lit = active.map((a) => lerp(1, lerp(0.25, 1, a), inLegs));
+    const pulse = [0, 1, 2].map((k) => 1 + 0.12 * bump(t, LEGS[k][2], 0.6));
+    newR.set(ADDR_V, { lit, pulse });
+  }
+
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+})();
+    </script>
+  </body>
+</html>

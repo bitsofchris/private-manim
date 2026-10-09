@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_address: "In this new basis, the same point is minus two, three, two." Master 24.39, 3.90 s. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/basis.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0;
+              --data: #2dd4bf; --hero: #c084fc; --muted: #4a5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.9" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.90, MASTER_START = 24.39;
+  // beat-local seconds (master - 24.39), from the vo_final.wav envelope + sub-clip transcription
+  const CUE = {
+    same:  1.44, /* "same point"  (25.83) */
+    minus: 2.12, /* "minus"       (26.51) */
+    two:   2.54, /* "two"         (26.93) */
+    three: 3.00, /* "three"       (27.39) */
+    two2:  3.44, /* "two" (last)  (27.83) */
+  };
+  // each tick lands on its number word; the gold 2 does not change, it pulses on "two"
+  const TICK1 = [CUE.minus, CUE.two + 0.04];    // teal 3 -> -2 ("minus two")
+  const TICK2 = [CUE.three - 0.28, CUE.three + 0.04]; // blue 5 -> 3 ("three")
+  const GOLD = [CUE.two2 - 0.08, 0.26];         // gold pulse, peak on the last "two"
+  const HOLD_FROM = 3.62;   // everything, camera drift included, still from here
+
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, bump, rgba, lerp, COL } = BK, E = BK.ease();
+  BK.setMaster(MASTER_START);
+  const readout = BK.makeReadout(root);
+  const labels = BK.makeBasisLabels(root);
+  BK.guides(root);
+  const RING_R = 34;   // the pin ring 04_swap left on P
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM);
+    const B = BK.world(g, t, 1, { ghost: 1 });
+    labels.place(B, 1);
+    // the pin ring pulses once on "same point", then fades (the canonical frame has no ring)
+    const ringA = 1 - E.io(seg(t, CUE.same + 0.5, CUE.same + 1.0));
+    if (ringA > 0) BK.ring(g, BK.P, RING_R + 16 * bump(t, CUE.same, 0.5), rgba(COL.hero), ringA, 6);
+    // the readout ticks number by number, back to full strength by the first number
+    const a = E.io(seg(t, TICK1[0], TICK1[0] + 0.3));
+    const v0 = lerp(BK.ADDR_E[0], BK.ADDR_V[0], E.io(seg(t, TICK1[0], TICK1[1])));
+    const v1 = lerp(BK.ADDR_E[1], BK.ADDR_V[1], E.io(seg(t, TICK2[0], TICK2[1])));
+    readout.set([v0, v1, 2], {
+      alpha: 0.4 + 0.6 * a,
+      pulse: [1 + 0.2 * bump(t, TICK1[1] - 0.06, 0.3), 1 + 0.2 * bump(t, TICK2[1] - 0.06, 0.3),
+              1 + 0.3 * bump(t, GOLD[0], GOLD[1])],
+    });
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+})();
+    </script>
+  </body>
+</html>
