@@ -42,6 +42,11 @@
   const card = VEC.vecCard(root, VEC.V);
   card.border(COL.data);                      // the card at rest: teal border
   card.slots.forEach((el) => { el.style.transformOrigin = "50% 60%"; el.setAttribute("data-layout-allow-overflow", ""); el.setAttribute("data-layout-allow-overlap", ""); });  // the swell is intentional
+  // the reference frame (orchestrator, after Chris: "the opening needs a unit basis or grid so the
+  // arrow clearly points to −2, 2"): E and N unit arrows, axes with ticks, and the two coordinates
+  const basis = { E: VEC.label(root, "E", { color: css(COL.dim), width: 120 }), N: VEC.label(root, "N", { color: css(COL.dim), width: 120 }) };
+  const cx = VEC.label(root, VEC.fmtv(VEC.V[0]), { color: css(COL.dim), width: 140 });   // "−2" on the east-west axis
+  const cy = VEC.label(root, VEC.fmtv(VEC.V[1]), { color: css(COL.dim), width: 100 });   // "2" on the north axis
   ISO.guides(root);
 
   // Local helper: the fan. ~12 directions from ISO.hash, each length clipped so the tip
@@ -60,6 +65,13 @@
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
     VEC.floor(g);
+    // the frame is there at frame 0: axes with ticks and the two agreed directions
+    VEC.axes(g);
+    ["E", "N"].forEach((k) => {
+      const c = VEC.COMPASS[k];
+      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: COL.muted, width: 26, head: 66 });
+      VEC.place(basis[k], c.e, c.n, { dy: c.dy });
+    });
     // the fan: grows from the origin on "the math", fades out by CUE.still; under the NW arrow
     const fadeOut = 1 - E.io(seg(t, CUE.math + 0.75, CUE.still));
     fan.forEach((f) => {
@@ -70,6 +82,14 @@
     const u = lerp(0.15, 1, E.out(seg(t, 0, 1.1)));
     VEC.arrow(g, [0, 0], VEC.V, { col: COL.data, u, width: 52 });
     VEC.puck(g, 0, 0);
+    // "list of numbers": dashed guides drop from the tip to −2 and 2 on the axes, and those two
+    // coordinates light with the card's numbers (one hero: the two numbers, on the card and the axes)
+    const gu = E.io(seg(t, CUE.list - 0.1, CUE.list + 0.5));
+    VEC.guides(g, VEC.V, { u: gu });
+    const kc = E.out(seg(t, CUE.list + 0.2, CUE.list + 0.5));
+    cx.style.color = css(ISO.mix(COL.dim, COL.hero, kc)); cy.style.color = css(ISO.mix(COL.dim, COL.hero, kc));
+    VEC.place(cx, VEC.V[0], 0, { dx: 44, dy: 62, alpha: lerp(0.35, 1, kc) });
+    VEC.place(cy, 0, VEC.V[1], { dx: 6, dy: -66, alpha: lerp(0.35, 1, kc) });
     // the hero: the card's two numbers turn magenta and swell once on "list of numbers"
     const k = E.out(seg(t, CUE.list, CUE.list + 0.3));
     const swell = 1 + 0.18 * Math.sin(Math.PI * seg(t, CUE.list, CUE.list + 0.6));

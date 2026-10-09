@@ -43,16 +43,25 @@
   const lab = {};
   ["E", "N", "W", "S"].forEach((k) => { lab[k] = VEC.label(root, k, { color: css(COL.dim), width: 120 }); });
   const nw = VEC.label(root, "NW", { color: css(COL.hero), width: 160 });
+  // beat 1's reference frame, leaving in the first 0.3 s (orchestrator fix)
+  const cx = VEC.label(root, VEC.fmtv(VEC.V[0]), { color: css(COL.hero), width: 140 });
+  const cy = VEC.label(root, VEC.fmtv(VEC.V[1]), { color: css(COL.hero), width: 100 });
   ISO.guides(root);
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
     VEC.floor(g);
     // the compass: four muted unit arrows, already growing at frame 0
+    // E and N are already there from beat 1; W and S grow in
     const grow = lerp(0.3, 1, E.out(seg(t, 0, 0.8)));
+    const go = 1 - E.out(seg(t, 0, 0.3));
+    VEC.axes(g, { alpha: go });
+    VEC.guides(g, VEC.V, { alpha: 0.9 * go });
+    VEC.place(cx, VEC.V[0], 0, { dx: 44, dy: 62, alpha: go });
+    VEC.place(cy, 0, VEC.V[1], { dx: 6, dy: -66, alpha: go });
     ["E", "N", "W", "S"].forEach((k) => {
-      const c = VEC.COMPASS[k];
-      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: COL.muted, width: 26, head: 66, u: grow });
-      VEC.place(lab[k], c.e, c.n, { dy: c.dy, alpha: lerp(0.3, 1, seg(t, 0, 0.6)) });
+      const c = VEC.COMPASS[k], kept = k === "E" || k === "N";
+      VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: COL.muted, width: 26, head: 66, u: kept ? 1 : grow });
+      VEC.place(lab[k], c.e, c.n, { dy: c.dy, alpha: kept ? 1 : lerp(0.3, 1, seg(t, 0, 0.6)) });
     });
     // "some west" then "plus some north": the two teal steps, tip to tail
     VEC.arrow(g, [0, 0], [-2, 0], { col: COL.data, u: E.io(seg(t, CUE.west, CUE.west + 0.57)) });

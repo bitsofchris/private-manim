@@ -69,6 +69,34 @@
     ISO.poly(g, head, css(col, 1, a1));
   }
 
+  // a straight line on the floor between grid points (o: col RGB, alpha, width px, dash [on, off], u progress)
+  function line(g, a, b, o = {}) {
+    const u = o.u == null ? 1 : clamp01(o.u), al = o.alpha == null ? 1 : o.alpha;
+    if (u <= 0.001 || al <= 0.001) return;
+    const p = at(a[0], a[1]), q = at(lerp(a[0], b[0], u), lerp(a[1], b[1], u));
+    g.save(); g.strokeStyle = css(o.col || COL.dim, 1, al); g.lineWidth = o.width || 4; g.lineCap = "round";
+    if (o.dash) g.setLineDash(o.dash);
+    g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); g.stroke(); g.restore();
+  }
+  // The reference frame: the east-west and north-south grid lines through the
+  // origin, brighter than the floor, with a tick at every step. o: alpha.
+  const AXES = { w: -2.7, e: 1.7, s: -1.5, n: 2.7 };
+  function axes(g, o = {}) {
+    const al = o.alpha == null ? 1 : o.alpha;
+    if (al <= 0.001) return;
+    line(g, [AXES.w, 0], [AXES.e, 0], { col: COL.dim, alpha: 0.55 * al, width: 5 });
+    line(g, [0, AXES.s], [0, AXES.n], { col: COL.dim, alpha: 0.55 * al, width: 5 });
+    const tk = 0.09;
+    [-2, -1, 1].forEach((e) => line(g, [e, -tk], [e, tk], { col: COL.dim, alpha: 0.9 * al, width: 5 }));
+    [-1, 1, 2].forEach((n) => line(g, [-tk, n], [tk, n], { col: COL.dim, alpha: 0.9 * al, width: 5 }));
+  }
+  // the dashed reading guides from the tip of v down to its two coordinates on the axes
+  function guides(g, v, o = {}) {
+    const d = { col: o.col || COL.dim, alpha: o.alpha == null ? 0.9 : o.alpha, width: 5, dash: [14, 12], u: o.u };
+    line(g, v, [v[0], 0], d);
+    line(g, v, [0, v[1]], d);
+  }
+
   // a small puck standing on a grid point (the origin, a step mark)
   function puck(g, e, n, o = {}) {
     const [x, y] = w(e, n), h = o.half || 16;
@@ -133,5 +161,5 @@
   // centre a card horizontally in the safe area at a given top
   const centreLeft = (el) => (ISO.SAFE.x0 + ISO.SAFE.x1) / 2 - el.offsetWidth / 2;
 
-  window.VEC = { V, HOUSE, EMBED, DIMS, fmtv, STEP, FLOOR, CARD_TOP, DIRS, COMPASS, w, at, floor, arrow, puck, label, place, vecCard, centreLeft };
+  window.VEC = { V, HOUSE, EMBED, DIMS, fmtv, STEP, FLOOR, CARD_TOP, DIRS, COMPASS, AXES, w, at, floor, line, axes, guides, arrow, puck, label, place, vecCard, centreLeft };
 })();
