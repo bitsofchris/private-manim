@@ -50,7 +50,7 @@ keep the short working names; the table has the publish titles.
 
 | # | YouTube title | Folder | Draft visuals | Script | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | What Is a Vector? Linear Algebra for AI | `ep01-what-is-a-vector` | x | x | x | | | | |
+| 1 | What Is a Vector? Linear Algebra for AI | `ep01-what-is-a-vector` | x | x | x | x | x | x | |
 | 2 | Change of Basis Made Simple (Beginner Friendly) | `ep02-change-of-basis` | x | x | x | | | | |
 | 3 | What a Matrix Really Does (Linear Algebra for AI) | `ep03-what-a-matrix-does` | x | x | x | | | | |
 | 4 | Matrix Multiplication Explained Visually (x @ W) | `ep04-matrix-multiplication` | x | x | x | | | | |
