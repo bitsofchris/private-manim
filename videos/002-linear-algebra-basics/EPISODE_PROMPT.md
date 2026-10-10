@@ -27,7 +27,7 @@ Do, in runbook order:
 2. Clean, transcribe, tighten (steps 3–5). Bring me the cut list and wait for my approval before building beats. Flag any flubbed or repeated phrase in the take.
 3. Build the beats (step 6) with parallel agents, each briefed with the matching beat brief. Each renders and reviews its own contact sheet.
 4. Captions, assembly, review (steps 7–8): sequential clean re-render, assemble, contact sheets, fix what the sheets show. Then tell me the media/short.mp4 path to watch on my phone, and iterate on what I say.
-5. Write FOLDER/publish.md (step 9) using the title from SERIES.md, and send the hand-off pack (step 10) when I say done.
+5. Write FOLDER/publish.md (step 9) with the title and the series description line from SERIES.md ("Series rules", publish copy), and send the hand-off pack (step 10) when I say done.
 
 Look and checks for this series:
 - Linear algebra uses the flat 2D number plane, not the isometric floor (agents/style.md "Linear algebra"). Copy ep01-what-is-a-vector/_vec/vec.js into FOLDER/_vec/ as the starting kit.

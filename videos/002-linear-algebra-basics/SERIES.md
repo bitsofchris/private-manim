@@ -1,4 +1,4 @@
-# Linear Algebra for Engineers: the series
+# Linear Algebra for AI Engineers: the series
 
 **Name:** linear-algebra-series
 **Description:** Home base for the "Linear Algebra for Engineers" Shorts.
@@ -50,17 +50,17 @@ keep the short working names; the table has the publish titles.
 
 | # | YouTube title | Folder | Draft visuals | Script | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | What Is a Vector? Linear Algebra for AI | `ep01-what-is-a-vector` | x | x | x | x | x | x | |
-| 2 | Change of Basis Made Simple (Beginner Friendly) | `ep02-change-of-basis` | x | x | x | x | x | x | |
-| 3 | What a Matrix Really Does (Linear Algebra for AI) | `ep03-what-a-matrix-does` | x | x | x | | | | |
-| 4 | Matrix Multiplication Explained Visually (x @ W) | `ep04-matrix-multiplication` | x | x | x | | | | |
-| 5 | PyTorch nn.Linear Explained (Beginner Friendly) | `ep05-nn-linear-shape` | x | x | x | | | | |
-| 6 | Batch Matrix Multiplication Made Simple (PyTorch) | `ep06-batch-matmul` | x | x | x | | | | |
-| 7 | Why Neural Networks Need Activation Functions | `ep07-activation-functions` | | x | x | | | | |
-| 8 | Dot Product Explained Visually (Beginner Friendly) | `ep08-dot-product` | | x | x | | | | |
-| 9 | Cosine Similarity vs Dot Product Made Simple | `ep09-cosine-vs-dot` | | x | x | | | | |
-| 10 | Query, Key, Value Explained: Attention Scores | `ep10-attention-scores` | | x | x | | | | |
-| T | Linear Algebra for AI Engineers Made Simple | `epT-four-ideas` | x | x | x | | | | |
+| 1 | What Is a Vector? \| Linear Algebra for AI Engineers | `ep01-what-is-a-vector` | x | x | x | x | x | x | |
+| 2 | Change of Basis \| Linear Algebra for AI Engineers | `ep02-change-of-basis` | x | x | x | x | x | x | |
+| 3 | What a Matrix Really Does \| Linear Algebra for AI Engineers | `ep03-what-a-matrix-does` | x | x | x | | | | |
+| 4 | Matrix Multiplication (x @ W) \| Linear Algebra for AI Engineers | `ep04-matrix-multiplication` | x | x | x | | | | |
+| 5 | PyTorch nn.Linear Explained \| Linear Algebra for AI Engineers | `ep05-nn-linear-shape` | x | x | x | | | | |
+| 6 | Batch Matrix Multiplication \| Linear Algebra for AI Engineers | `ep06-batch-matmul` | x | x | x | | | | |
+| 7 | Why Neural Nets Need Activations \| Linear Algebra for AI Engineers | `ep07-activation-functions` | | x | x | | | | |
+| 8 | Dot Product Explained Visually \| Linear Algebra for AI Engineers | `ep08-dot-product` | | x | x | | | | |
+| 9 | Cosine Similarity vs Dot Product \| Linear Algebra for AI Engineers | `ep09-cosine-vs-dot` | | x | x | | | | |
+| 10 | Query, Key and Attention Scores \| Linear Algebra for AI Engineers | `ep10-attention-scores` | | x | x | | | | |
+| T | How Much Linear Algebra for AI? \| Linear Algebra for AI Engineers | `epT-four-ideas` | x | x | x | | | | |
 
 Draft visuals = a 16:9 `BocScene` draft exists in this folder with
 narration in `UNIT_1_3_RECAP.md`. It is reference only: every beat is
@@ -180,6 +180,21 @@ one running example and one `_parts.py`.
   Front" and closing VO. Built last; doubles as the stitched intro.
 
 ## Series rules
+
+- **Publish copy (Chris, 2026-10-10):** the series is called *Linear Algebra
+  for AI Engineers*, and every episode says so the same way. This replaces
+  runbook step 9's title pattern and its 50-character cap for this series
+  only; the rest of step 9 stands.
+  - **Title:** `<Concept> | Linear Algebra for AI Engineers`. The concept
+    comes first, in the words a beginner would search, and should be at
+    most ~35 characters, because the feed may cut off the series suffix.
+    No "Made Simple (Beginner Friendly)": the suffix does that job. The
+    checklist above holds each episode's title (the `|` is escaped there as `\|` for the table).
+  - **Description:** the line after the what's-shown lines and before the
+    sign-off is, with the episode's number:
+    `Episode N of Linear Algebra for AI Engineers. The write-up it comes from, How Vectors Move Through Neural Networks: https://bitsofchris.com/p/how-vectors-move-through-neural-networks`
+    The trailer uses `The trailer for Linear Algebra for AI Engineers.`
+    followed by the same write-up sentence.
 
 - One question per episode, in the viewer's words. One sentence answers it.
 - **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. Copy `ep01-what-is-a-vector/_vec/vec.js` for the plane, arrows, dots and the vector card; the look's rules are in `agents/style.md` "Linear algebra".
