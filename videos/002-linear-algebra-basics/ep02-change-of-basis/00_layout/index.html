@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 00_layout: the canonical frame. Standard basis (t=0) morphing to the new basis (t=4). Not in the Short. -->
+    <!-- 00_layout: the canonical frame: floor grid, stalk, route. Standard basis (t=0) morphing to the new basis (t=4). Not in the Short. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/basis.js"></script>
     <style>
@@ -33,9 +33,10 @@
   BK.guides(root);
   function render(t) {
     const u = E.io(seg(t, 0.5, 4));
-    const B = BK.world(g, t, u, { ghost: u });
+    const c = BK.coordsAt(u);
+    const B = BK.world(g, t, u, { ghost: u, route: { c } });
     labels.place(B, u);
-    readout.set([lerp(3, -2, u), lerp(5, 3, u), 2]);
+    readout.set(c);
   }
   const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
   tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);

@@ -5,11 +5,14 @@
 // the address readout and the camera drift are identical from beat to beat
 // and each beat opens on the previous beat's last frame.
 //
-// World: x, y on the floor, z up (right-handed). The view is an orthographic
-// camera with a fixed elevation and a slow yaw drift that is a function of
-// MASTER time (BK.setMaster(start) once, then everything takes beat-local t),
-// so the drift is continuous across cuts. Everything is a pure function of
-// its arguments: no clocks, no randomness.
+// World: x, y on the floor, z up (right-handed). The picture is a floor (the
+// plane of the first two basis vectors, with ONE 2D grid on it), the point P
+// on a dashed stalk above the floor, and the address drawn as a route: legs
+// tip to tail, one per basis vector. Change of basis = the floor grid shears;
+// the third basis vector stays z, so the stalk never moves. (The first build
+// drew a full 3D lattice; it read as a mesh. Don't bring it back.)
+// The camera is fixed (drift 0) except where a beat moves VIEW itself.
+// Everything is a pure function of its arguments: no clocks, no randomness.
 (function () {
   const lerp = (a, b, u) => a + (b - a) * u;
   const clamp01 = (u) => Math.max(0, Math.min(1, u));
@@ -29,7 +32,7 @@
 
   // ---- the ledger (storyboard.md) ----
   const E = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
-  const V = [[1, 0, 0], [1, 1, 0], [1, 1, 1]];
+  const V = [[0, -1, 0], [1, 1, 0], [0, 0, 1]];  // -2*v1 + 3*v2 + 2*v3 = (3, 5, 2)
   const P = [3, 5, 2];
   const ADDR_E = [3, 5, 2];
   const ADDR_V = [-2, 3, 2];
@@ -41,19 +44,26 @@
   // basis part-way from standard (u=0) to new (u=1); each vector morphs to its partner
   const basisAt = (u) => [0, 1, 2].map((i) => lerp3(E[i], V[i], u));
   const combo = (B, c) => add(add(scale(B[0], c[0]), scale(B[1], c[1])), scale(B[2], c[2]));
+  // P's true coordinates in basisAt(u) (fractional mid-morph; z is always 2)
+  function coordsAt(u) {
+    const [a, b] = basisAt(u), det = a[0] * b[1] - a[1] * b[0];
+    return [(P[0] * b[1] - P[1] * b[0]) / det, (a[0] * P[1] - a[1] * P[0]) / det, P[2]];
+  }
+  const FOOT = [P[0], P[1], 0];  // where the stalk meets the floor, in every basis
 
   // ---- the view ----
   const W = 1080, H = 1920;
   const SAFE = { x0: 65, x1: 950, y0: 230, y1: 1536, stageBottom: 1100 };
-  const BOX = { lo: [-2.5, -0.5, 0], hi: [4.5, 5.5, 2.5] };     // the lattice lives in here
+  const FLOOR = { lo: [-2.5, -0.5], hi: [5, 6] };       // the floor rectangle (z = 0)
+  const BOX = { lo: [-2.5, -0.5, 0], hi: [5, 6, 0] };   // lattice() clips to this: the floor
   const VIEW = {
-    cx: 507, cy: 760,          // screen point of the box centre
-    centre: [1, 2.5, 1.25],
-    s: 92,                     // px per world unit
-    elev: 34 * Math.PI / 180,  // camera elevation
-    yaw0: -32 * Math.PI / 180, // yaw at master t = 0
-    drift: 7 * Math.PI / 180,  // +/- yaw drift amplitude
-    period: 30,                // seconds per drift cycle
+    cx: 507, cy: 750,          // screen point of VIEW.centre
+    centre: [1.2, 2.6, 0.6],
+    s: 118,                    // px per world unit
+    elev: 30 * Math.PI / 180,  // camera elevation
+    yaw0: -24 * Math.PI / 180, // yaw
+    drift: 0,                  // no drift: a still camera cuts cleanly
+    period: 30,
   };
   let master0 = 0, yaw = VIEW.yaw0;
   const setMaster = (start) => { master0 = start; };
@@ -137,37 +147,72 @@
     g.beginPath(); g.arc(q[0], q[1], r, 0, 2 * Math.PI); g.stroke(); g.globalAlpha = 1;
   }
   // the flat plane through two basis vectors (the "independent" check), as a filled parallelogram
-  function plane(g, b1, b2, color, alpha, ext = 2.2) {
-    const pts = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([i, j]) => S(add(scale(b1, i * ext), scale(b2, j * ext))));
+  function plane(g, b1, b2, color, alpha, lo = -0.6, hi = 1.8) {
+    const pts = [[lo, lo], [hi, lo], [hi, hi], [lo, hi]].map(([i, j]) => S(add(scale(b1, i), scale(b2, j))));
     g.globalAlpha = alpha; g.fillStyle = color;
     g.beginPath(); pts.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.fill();
     g.globalAlpha = 1;
   }
 
+  // ---- the floor world ----
+  function floorFill(g, alpha = 1) {
+    const c = [[FLOOR.lo[0], FLOOR.lo[1]], [FLOOR.hi[0], FLOOR.lo[1]], [FLOOR.hi[0], FLOOR.hi[1]], [FLOOR.lo[0], FLOOR.hi[1]]].map(([x, y]) => S([x, y, 0]));
+    g.fillStyle = rgba(COL.panel, 0.9 * alpha); g.beginPath();
+    c.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.fill();
+  }
+  // the 2D grid of the first two vectors of B on the floor. o.alpha, o.grow (0..1 from the origin)
+  function floorGrid(g, B, o = {}) {
+    lattice(g, B, { alpha: o.alpha == null ? 0.9 : o.alpha, families: [0, 1], width: 3, grow: o.grow });
+  }
+  function dashed(g, a, b, color, width = 5) {
+    const p = S(a), q = S(b); g.setLineDash([14, 12]); g.strokeStyle = color; g.lineWidth = width; g.lineCap = "butt";
+    g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); g.stroke(); g.setLineDash([]);
+  }
+  // The route: c[0]*B[0], then c[1]*B[1], then c[2]*B[2], tip to tail in slot colours.
+  // prog [p0, p1, p2] (0..1 each, default 1), o.alpha. Returns the leg end points.
+  const LEG_W = 10;
+  function route(g, B, c, prog = [1, 1, 1], o = {}) {
+    const a = o.alpha == null ? 1 : o.alpha, pts = [[0, 0, 0]];
+    for (let i = 0; i < 3; i++) pts.push(add(pts[i], scale(B[i], c[i])));
+    if (a > 0) for (let i = 0; i < 3; i++) arrow(g, pts[i], pts[i + 1], rgba(COL.slots[i]), { width: LEG_W, head: 30, progress: prog[i], alpha: a });
+    return pts;
+  }
+
   // ---- the canonical frame ----
   // The world every 3D beat opens and closes on, at basis morph u (0 = x y z,
-  // 1 = v1 v2 v3). o.lattice / o.basis / o.hero: alphas (default 1).
-  // o.ghost: alpha of the standard lattice drawn faint underneath (default 0).
-  const ARROW_W = { basis: 12, hero: 12 };
+  // 1 = v1 v2 v3). Options (alphas default 1 unless noted):
+  //   floor, grid, basis, hero, heroDraw (0..1), stalk (the dashed foot-to-P line)
+  //   ghost (default 0): the standard grid faint under the current one
+  //   grow: floor grid reveal 0..1;  uArrows: a separate morph for the basis arrows
+  //   emph [e0, e1, e2] (default 0): per-arrow emphasis (wider stroke + halo)
+  //   route: { c: [..], prog: [..], alpha, u } draws a route (in basisAt(route.u ?? u))
+  const ARROW_W = { basis: 14, hero: 13 };
   function world(g, t, u, o = {}) {
     setTime(t); clear(g);
     const B = basisAt(u), a = (k, d = 1) => (o[k] == null ? d : o[k]);
-    if (a("ghost", 0) > 0) lattice(g, E, { alpha: 0.25 * a("ghost", 0) });
-    lattice(g, B, { alpha: 0.6 * a("lattice"), grow: o.grow });
+    if (a("floor") > 0) floorFill(g, a("floor"));
+    if (a("ghost", 0) > 0) floorGrid(g, E, { alpha: 0.3 * a("ghost", 0) });
+    if (a("grid") > 0) floorGrid(g, B, { alpha: 0.9 * a("grid"), grow: o.grow });
+    if (a("stalk") > 0 && a("heroDraw") >= 1) { dashed(g, FOOT, P, rgba(COL.dim, 0.9 * a("stalk") * a("hero"))); dot(g, FOOT, 9, rgba(COL.dim), a("stalk") * a("hero")); }
+    if (o.route) { const r = o.route; route(g, basisAt(r.u == null ? u : r.u), r.c, r.prog, { alpha: r.alpha }); }
     if (a("hero") > 0) {
-      arrow(g, [0, 0, 0], P, rgba(COL.hero), { width: ARROW_W.hero, head: 40, alpha: a("hero"), progress: a("heroDraw") });
-      if (a("heroDraw") >= 1) dot(g, P, 14, rgba(COL.hero), a("hero"));
+      arrow(g, [0, 0, 0], P, rgba(COL.hero), { width: ARROW_W.hero, head: 42, alpha: a("hero"), progress: a("heroDraw") });
+      if (a("heroDraw") >= 1) dot(g, P, 15, rgba(COL.hero), a("hero"));
     }
-    // basis arrows over the hero: near the origin they share its first stretch
-    if (a("basis") > 0) B.forEach((b, i) => arrow(g, [0, 0, 0], b, rgba(COL.slots[i]), { width: ARROW_W.basis, head: 30, alpha: a("basis") }));
-    return B;
+    const BA = o.uArrows == null ? B : basisAt(o.uArrows), em = o.emph || [0, 0, 0];
+    if (a("basis") > 0) BA.forEach((b, i) => {
+      if (em[i] > 0) arrow(g, [0, 0, 0], b, rgba(COL.slots[i]), { width: ARROW_W.basis + 20 * em[i], head: 34 + 14 * em[i], alpha: 0.35 * em[i] * a("basis") });
+      arrow(g, [0, 0, 0], b, rgba(COL.slots[i]), { width: ARROW_W.basis + 4 * em[i], head: 34 + 6 * em[i], alpha: a("basis") });
+    });
+    return BA;
   }
 
   // ---- DOM parts (check audits DOM text) ----
   // The address readout: "(a, b, c)", each number in its slot colour.
   //   set(vals, o): vals may be fractional (they tick: shown rounded);
   //   o.alpha (whole readout), o.pulse [k0,k1,k2] (per-number scale 1..1.3),
-  //   o.lit [..] per-number 0..1 (1 = full colour, 0 = dim), o.colors override.
+  //   o.lit [..] per-number 0..1 (1 = full colour, 0 = dim), o.colors override,
+  //   o.visible [..] per-number opacity, o.dy vertical offset in px.
   const MINUS = "−";
   function makeReadout(root, o = {}) {
     const n = o.n || 3, size = o.size || 110, top = o.top == null ? 262 : o.top;
@@ -178,7 +223,8 @@
     const span = (txt) => { const s = document.createElement("span"); s.textContent = txt; el.appendChild(s); return s; };
     span("(");
     for (let k = 0; k < n; k++) {
-      const s = span("0"); s.style.display = "inline-block"; s.style.transformOrigin = "50% 60%"; nums.push(s);
+      const s = span("0"); s.style.display = "inline-block"; s.style.transformOrigin = "50% 60%";
+      s.setAttribute("data-layout-allow-overlap", ""); nums.push(s);  // a pulsing number may swell into its comma
       if (k < n - 1) span(", ");
     }
     span(")");
@@ -187,6 +233,7 @@
       el, nums,
       set(vals, so = {}) {
         el.style.opacity = so.alpha == null ? 1 : so.alpha;
+        el.style.transform = `translateY(${so.dy || 0}px)`;  // o.dy: slide the readout down (px)
         nums.forEach((s, k) => {
           const v = Math.round(vals[k]);
           s.textContent = (v < 0 ? MINUS : "") + Math.abs(v);
@@ -194,6 +241,7 @@
           const lit = so.lit ? so.lit[k] : 1;
           s.style.color = rgba(mixc(COL.dim, base, lit));
           s.style.transform = `scale(${so.pulse ? so.pulse[k] : 1})`;
+          s.style.opacity = so.visible ? so.visible[k] : 1;   // o.visible [..]: type numbers in one by one
         });
       },
     };
@@ -217,16 +265,17 @@
   }
   // The three basis labels at the arrow tips, offset outward. place(B, u, alpha)
   // re-texts x/y/z -> v1/v2/v3 when the morph passes u = 0.5.
-  const LABEL_OFF = [[14, 52], [58, 34], [-46, -14]]; // px offsets from each tip
+  const LABEL_OFF = [[[14, 52], [58, 34], [-46, -14]], [[-48, 30], [62, 18], [-46, -14]]]; // [standard, new] px offsets from each tip
   function makeBasisLabels(root) {
     const ls = [0, 1, 2].map((i) => makeLabel(root, NAMES_E[i], COL.slots[i]));
     return {
       ls,
-      place(B, u, alpha = 1) {
+      place(B, u, alpha = 1, scales = [1, 1, 1]) {
         ls.forEach((l, i) => {
           l.el.textContent = u < 0.5 ? NAMES_E[i] : NAMES_V[i];
           const tip = scale(B[i], 1.0);
-          l.place(tip, LABEL_OFF[i][0], LABEL_OFF[i][1], alpha);
+          l.place(tip, LABEL_OFF[u < 0.5 ? 0 : 1][i][0], LABEL_OFF[u < 0.5 ? 0 : 1][i][1], alpha);
+          if (scales[i] !== 1) l.el.style.transform += ` scale(${scales[i]})`;
         });
       },
     };
@@ -244,8 +293,9 @@
   // a 0 -> 1 -> 0 bump over [a, a + d] (for pulses)
   const bump = (t, a, d) => { const u = seg(t, a, a + d); return Math.sin(Math.PI * u); };
 
-  window.BK = { W, H, SAFE, BOX, VIEW, COL, E, V, P, ADDR_E, ADDR_V, NAMES_E, NAMES_V, U2, D2, ADDR_U_E, ADDR_U_D,
-                basisAt, combo, setMaster, setTime, yawAt, S, clear, line, lattice, arrow, dot, ring, plane, world, ARROW_W,
+  window.BK = { W, H, SAFE, BOX, FLOOR, VIEW, COL, E, V, P, FOOT, ADDR_E, ADDR_V, NAMES_E, NAMES_V, U2, D2, ADDR_U_E, ADDR_U_D,
+                basisAt, combo, coordsAt, setMaster, setTime, yawAt, S, clear, line, lattice, arrow, dot, ring, plane, world, ARROW_W,
+                floorFill, floorGrid, dashed, route, LEG_W,
                 makeReadout, makeLabel, makeBasisLabels, guides, ease, bump,
                 lerp, lerp3, clamp01, seg, add, scale, rgba, mixc };
 })();
