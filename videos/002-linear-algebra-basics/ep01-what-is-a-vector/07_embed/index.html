@@ -36,8 +36,7 @@
     every: 0.00,     // "Every embedding" (0.18): the card hands back its hero colour and starts to regrow
     fill: 0.60,      // "embedding in AI is one of these" (0.6-2.3): the slots fill one by one
     dots: 2.80,      // "numbers" (2.80, in "a list of numbers"): the "…" closes the list
-    dirs: 4.00,      // "directions in space" (4.03): the fan of arrows grows from the origin
-    dims: 5.20,      // "thousands" (5.18): "4,096 numbers" lands, the hero
+    dims: 5.20,      // "thousands" (5.18): "4,096 dimensions" lands, the hero; ~40 faint axes fill in
     still: 6.35,     // nothing moves after this (last 0.55 s still)
   };
   const OY = 600;    // the floor y for 06/07 (06_views pans up to it)
@@ -117,8 +116,8 @@
   const card = listCard(root, VALS);
   const FILL = VALS.map((_, k) => (k < 2 ? -1 : k < 8 ? CUE.fill + (k - 2) * 0.35 : CUE.dots));   // arrival of cell k
   const MOVE = 0.25;                                   // "]" steps aside over this, then the cell fades in
-  // the hero: "4,096 numbers" under the card
-  const dims = ISO.label(root, VEC.DIMS + " numbers", { size: 84, width: ISO.SAFE.x1 - ISO.SAFE.x0, left: ISO.SAFE.x0, align: "center", color: css(COL.hero) });
+  // the hero: "4,096 dimensions" under the card
+  const dims = ISO.label(root, VEC.DIMS + " dimensions", { size: 84, width: ISO.SAFE.x1 - ISO.SAFE.x0, left: ISO.SAFE.x0, align: "center", color: css(COL.hero) });
   dims.style.transformOrigin = "50% 50%";
   ISO.guides(root);
 
@@ -143,24 +142,30 @@
              ox: left + LC.border + LC.B.padX, oy: LC.top + LC.border + LC.B.padY };
   }
 
-  // the fan: thin teal arrows from the origin in many directions (ISO.hash, not Math.random).
-  // Kept on the stage: screen dx = 207.8 (e + n) within ±415 px of the origin, dy = 72 (e − n) at most
-  // 72 px below it (the card starts at y 716), and clear of the NW arrow's own direction.
-  const FAN = [];
-  for (let i = 0, N = 15; i < N; i++) {
-    const ang = (i + 0.7 * (hash(i + 3) - 0.5)) * 2 * Math.PI / N;
-    if (Math.abs(((ang - 0.75 * Math.PI + 3 * Math.PI) % (2 * Math.PI)) - Math.PI) < 0.22) continue;   // near NW
-    let L = 1.3 + 1.4 * hash(i + 41), e = L * Math.cos(ang), n = L * Math.sin(ang);
-    const k = Math.min(1, 2.0 / Math.max(1e-6, Math.abs(e + n)), (e - n) > 0 ? 1.0 / (e - n) : 1);
-    e *= k; n *= k;
-    FAN.push({ b: [e, n], t0: CUE.dirs + hash(i + 77) * 0.55 });
+  // The space gains directions, not vectors (Chris: "the bigger list shows a higher dimensional
+  // space, not that there are many"). One arrow stays alone; every number in the list is one more
+  // axis of the space: a full line through the origin, no arrowhead. Dims 1-2 are the plane's own
+  // axes (they brighten first); dims 3-8 arrive with their numbers; "thousands" fills in many more.
+  const AX_L = 2.25;                                   // half-length of an axis line, in steps
+  const GOLD = 0.6180339887;
+  const axisAng = (k) => ((k * GOLD) % 1) * Math.PI;    // spread over the half-turn, never repeating
+  const AXES = [];
+  AXES.push({ ang: 0, t0: CUE.every + 0.25, a: 0.6 }, { ang: Math.PI / 2, t0: CUE.every + 0.35, a: 0.6 });
+  for (let k = 2; k < 8; k++) AXES.push({ ang: axisAng(k + 1), t0: FILL[k], a: 0.6 });
+  AXES.push({ ang: axisAng(10), t0: CUE.dots, a: 0.6 });
+  for (let k = 0; k < 40; k++) AXES.push({ ang: axisAng(k + 20), t0: CUE.dims - 0.1 + 0.6 * hash(k + 7), a: 0.22 });
+  function axisLine(ax, t) {
+    const u = E.out(seg(t, ax.t0, ax.t0 + 0.45));
+    if (u <= 0.001) return;
+    const e = AX_L * Math.cos(ax.ang), n = AX_L * Math.sin(ax.ang);
+    VEC.line(g, [-e * u, -n * u], [e * u, n * u], { col: COL.dim, alpha: ax.a, width: 4, oy: OY });
   }
 
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
     floorAt(g, OY, 0.30);
-    // "directions in space": the fan grows under the NW arrow, which stays teal among them
-    FAN.forEach((f) => arrowAt(g, [0, 0], f.b, OY, { col: COL.data, width: 18, head: 50, alpha: 0.5, u: E.out(seg(t, f.t0, f.t0 + 0.6)) }));
+    // the space's axes, one per number, drawn under the one arrow
+    AXES.forEach((ax) => axisLine(ax, t));
     arrowAt(g, [0, 0], [-2, 2], OY, { col: COL.data, width: 52 });
     puckAt(g, 0, 0, OY);
 

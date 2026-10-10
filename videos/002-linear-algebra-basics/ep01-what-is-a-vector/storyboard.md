@@ -33,7 +33,7 @@ frame; `media/hf/00_layout.png` shows it.
 | Origin | the white dot at grid `[0, 0]`, screen (507, 780); one step = 165 px; axes ±2 in every direction |
 | Vector card | `VEC.vecCard`, top edge `VEC.CARD_TOP` = 250, centred (`VEC.centreLeft`) |
 | The house | `VEC.HOUSE`: `[ 1,800, 450,000 ]` with "sq ft" / "price" under the slots |
-| The embedding | `VEC.EMBED` (ten values) and `VEC.DIMS` = "4,096" |
+| The embedding | `VEC.EMBED` (ten values; six shown) and `VEC.DIMS` = "4,096", shown as "4,096 dimensions" |
 
 Colours: teal = the steps, data, the card at rest; magenta = the one hero
 per beat (below); muted = construction (compass unit arrows); dim = labels.
@@ -74,7 +74,7 @@ Stage y 230–1100, band y 1100–1536 stays empty (captions are burned in).
 | 4 | the card slot being read | "agreed directions are east and north": east and north unit arrows teal and labelled. "minus two": slot 0 (`−2`) magenta; the west step re-walks as two hops of one square each, a tick at each square; "two" (the second number): slot 0 back to text, slot 1 (`2`) magenta; the north step walks two hops. End: both steps drawn, NW arrow (teal now) between them, card with slot 1 lit. |
 | 5 | the slot labels | The floor dims (grid alpha down, arrows fade to 25 %). The card moves to the stage centre and becomes code: `v = [ −2, 2 ]` in monospace ("In code"). "order matters": the two numbers swap places and swap back (a quick shuffle). "Each position means something": labels "east" / "north" appear under the slots, magenta. "describing a house": the card retypes to `house = [ 1,800, 450,000 ]`, labels "sq ft" / "price" (magenta), slot by slot on "square feet" and "price". |
 | 6 | first the arrow, then the card | Two views at once: the floor and NW arrow come back (upper stage), the card `[ −2, 2 ]` (plain, not code) sits below the figure at stage bottom (above y 1100). "moving between those two views": a thin double-headed connector pulses between arrow and card. "The arrow lets you see it": the arrow magenta, card teal. "The list lets you compute with it": the card magenta, the arrow back to teal. |
-| 7 | the "4,096 numbers" count | The card grows: after `−2, 2` the slots fill with `VEC.EMBED` values wrapping onto more rows (keep ≥ 60 px), ending in "…". "directions in space": the fan of thin arrows from beat 1 returns on the floor, many directions. "thousands of dimensions": a label "4,096 numbers" (magenta) under the card. Last 0.5 s still. |
+| 7 | the "4,096 dimensions" count | One vector, a space that gains directions (after Chris: a fan of arrows read as *many vectors*). The card grows: after `−2, 2` the slots fill with `VEC.EMBED` values in a 3 × 3 grid, ending in "…". The plane's two axes brighten first (the dimensions of −2 and 2); each new number adds one more axis, a full dim line through the origin with no arrowhead, at its own angle; on "thousands" ~40 faint axes fill in and "4,096 dimensions" (magenta) lands under the card. The single arrow stays teal and alone. Last 0.5 s still. |
 
 ## Render and assemble
 

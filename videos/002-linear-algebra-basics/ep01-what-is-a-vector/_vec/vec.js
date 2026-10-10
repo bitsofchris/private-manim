@@ -48,7 +48,7 @@
   //   col  RGB triple (default teal)   alpha  0..1
   //   u    draw progress 0..1 (the tip travels from a to b; the head appears with it)
   //   width shaft width in world units (default 44)   head  head length (default 90)
-  //   glow 0..1 a soft halo under it (for the hero)
+  //   (no halo: the hero is marked by colour alone; Chris: "just the clean vector arrow")
   function arrow(g, a, b, o = {}) {
     const u = o.u == null ? 1 : clamp01(o.u);
     if (u <= 0.001) return;
@@ -60,12 +60,6 @@
     const sx = x1 - dx * hl, sy = y1 - dy * hl;
     const q = (x, y) => P2(x, y, o.oy);
     const col = o.col || COL.data, a1 = o.alpha == null ? 1 : o.alpha;
-    if (o.glow) {
-      [2.4, 1.7].forEach((k) => {   // two soft layers, not a hard box
-        const gw = hw * k;
-        ISO.poly(g, [q(x0 + nx * gw, y0 + ny * gw), q(x1 + nx * gw, y1 + ny * gw), q(x1 - nx * gw, y1 - ny * gw), q(x0 - nx * gw, y0 - ny * gw)], css(col, 1, 0.09 * o.glow * a1));
-      });
-    }
     const shaft = [q(x0 + nx * hw, y0 + ny * hw), q(sx + nx * hw, sy + ny * hw), q(sx - nx * hw, sy - ny * hw), q(x0 - nx * hw, y0 - ny * hw)];
     const head = [q(sx + nx * hh, sy + ny * hh), q(x1, y1), q(sx - nx * hh, sy - ny * hh)];
     ISO.poly(g, shaft, css(col, 1, a1));
