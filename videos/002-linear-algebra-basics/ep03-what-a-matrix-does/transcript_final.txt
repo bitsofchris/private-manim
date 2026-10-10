@@ -1,0 +1,61 @@
+00:00.580-00:03.400
+A matrix just records where each direction lands.
+
+00:03.400-00:05.000
+Every weight matrix in a neural network
+
+00:05.000-00:06.470
+is doing exactly this.
+
+00:06.470-00:07.910
+Here's E1 and E2.
+
+00:07.910-00:10.550
+This matrix sends E1 here and E2 here.
+
+00:10.550-00:13.830
+Now take a vector, three of E1 plus two of E2.
+
+00:13.830-00:15.430
+The vector is a recipe.
+
+00:15.430-00:17.450
+After the matrix, keep the same recipe
+
+00:17.450-00:19.110
+and use the move directions.
+
+00:19.110-00:23.300
+Three of where E1 landed, plus two of where E2 landed.
+
+00:23.300-00:25.230
+The vector supplies the amounts,
+
+00:25.230-00:27.800
+the matrix supplies the new directions.
+
+00:27.800-00:29.500
+That's why the table of numbers isn't random.
+
+00:29.500-00:31.330
+Each row is one landing spot.
+
+00:31.330-00:36.350
+In PyTorch, row IFW is where the input direction eye lands.
+
+00:36.350-00:39.370
+In a network, that map moves vectors
+
+00:39.370-00:41.020
+from one space to another,
+
+00:41.020-00:43.550
+amplifying some directions and collapsing others.
+
+00:43.550-00:45.270
+A matrix is just this stored map
+
+00:45.270-00:47.010
+where every input direction lands.
+
+
