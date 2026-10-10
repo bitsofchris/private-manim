@@ -1,0 +1,10 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",     "end": 6.33},
+ {"clip": "media/hf/02_sends.mp4",    "end": 4.04},
+ {"clip": "media/hf/03_recipe.mp4",   "end": 4.86},
+ {"clip": "media/hf/04_rebuild.mp4",  "end": 7.88},
+ {"clip": "media/hf/05_amounts.mp4",  "end": 4.50},
+ {"clip": "media/hf/06_table.mp4",    "end": 8.59},
+ {"clip": "media/hf/07_network.mp4",  "end": 7.14},
+ {"clip": "media/hf/08_stored.mp4",   "end": 4.147}
+]}
