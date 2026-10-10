@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- The canonical frame: the plane, e1 and e2 (muted ghosts), where W sends them
+         (teal, blue) with a magenta landing spot on each tip, and the matrix card W
+         whose rows are those landing spots. ?full=1 also draws the recipe state of
+         beats 4-5 (x = (3, 2), its legs, x @ W = (2, 4) and the x card) to check collisions.
+         Copy this file to start a beat. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.0;
+  const { COL, css, seg } = ISO;
+  const FULL = /[?&]full/.test(location.search);
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.matCard(root, VEC.W);
+  const xcard = VEC.vecCard(root, VEC.X, { name: "x =", cols: VEC.SLOT });
+  const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
+  const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  ISO.guides(root);
+  function render(t) {
+    const s = E.io(seg(t, 0.1, 1.4));                       // e1, e2 swing to where W sends them
+    const B = VEC.basis(s);
+    VEC.setView(FULL ? 1 : 0);
+    VEC.floor(g); VEC.axes(g);
+    VEC.arrow(g, [0, 0], VEC.E1, { col: COL.muted }); VEC.arrow(g, [0, 0], VEC.E2, { col: COL.muted });
+    if (FULL) {
+      VEC.lattice(g, B, { alpha: 0.35 });
+      const A = VEC.comb([3, 0], B), P = VEC.comb(VEC.X, B);
+      VEC.arrow(g, [0, 0], A, { col: VEC.SLOT[0], alpha: 0.9 });
+      VEC.arrow(g, A, P, { col: VEC.SLOT[1], alpha: 0.9 });
+      VEC.arrow(g, [0, 0], P, { col: COL.hero, width: 52 });
+      VEC.arrow(g, [0, 0], VEC.X, { col: COL.muted, alpha: 0.8 });
+    }
+    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    if (!FULL) { VEC.spot(g, B[0][0], B[0][1], { alpha: s }); VEC.spot(g, B[1][0], B[1][1], { alpha: s }); }
+    VEC.puck(g, 0, 0, { half: 14 });
+    const k = FULL ? 2 : 1;                                  // labels sit a fixed px from the tip in either view
+    VEC.place(l1, B[0][0] + 0.32 * k, B[0][1] - 0.16 * k);
+    VEC.place(l2, B[1][0] - 0.3 * k, B[1][1] + 0.12 * k);
+    card.at(VEC.cardLeft(card.el), VEC.CARD_TOP, { alpha: FULL ? 0 : 1 });
+    xcard.at(VEC.cardLeft(xcard.el), VEC.CARD_TOP, { alpha: FULL ? 1 : 0 });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
