@@ -1,15 +1,15 @@
 // vec.js — the shared parts for ep01 "What Is a Vector?" (linked into each
 // beat as `vec/`, after `iso/iso.js`).
 //
-// The world is the house isometric floor, seen square-on (ISO.setTheta(0)),
-// so east and north have the same screen length and northwest points
-// straight up. One grid square is one step. Grid coords (e, n): e = steps
-// east, n = steps north; the origin sits at screen (507, FLOOR).
-// Arrows lie flat on the floor (see a thing); numbers stand on flat upright
-// cards (read a value). Everything is a pure function of its arguments.
+// The world is a flat 2D number plane, not the isometric floor (Chris,
+// 2026-10-09: "the ISO view doesn't work for these linear algebra ones; we
+// need the typical 2D grid"). East is right, north is up, one grid square is
+// one step. Grid coords (e, n); the origin sits at screen (OX, FLOOR), or at
+// (OX, oy) for a beat that moves the plane (pass oy). Numbers stand on flat
+// cards. ISO is still the source of the palette, poly, label, start, easing.
+// Everything is a pure function of its arguments.
 (function () {
-  const { P, COL, css, mix, lerp, clamp01 } = ISO;
-  ISO.setTheta(0);
+  const { COL, css, mix, lerp, clamp01 } = ISO;
 
   // ---- the fixed example (the ledger in storyboard.md) ----
   const V = [-2, 2];                                    // northwest: 2 opposite east, 2 north
@@ -19,24 +19,26 @@
   const fmtv = (v) => (v < 0 ? "−" : "") + Math.abs(v);  // true minus sign
 
   // ---- the canonical frame ----
-  const STEP = 240;                                     // one grid square = one step
-  const FLOOR = 960;                                    // screen y of the origin
-  const w = (e, n) => [e * STEP, -n * STEP];            // grid -> world (y runs toward the viewer)
-  const at = (e, n, z = 0) => { const [x, y] = w(e, n); return P(x, y, z, FLOOR); };
+  const STEP = 150;                                     // one grid square = one step, in px
+  const OX = 560;                                       // screen x of the origin (room for 2 west)
+  const FLOOR = 830;                                    // screen y of the origin
+  const w = (e, n) => [e * STEP, -n * STEP];            // grid -> plane px (screen y runs down)
+  const P2 = (x, y, oy = FLOOR) => [OX + x, oy + y];    // plane px -> screen
+  const at = (e, n, z = 0, oy = FLOOR) => { const [x, y] = w(e, n); return P2(x, y, oy); };
   const DIRS = { E: [1, 0], N: [0, 1], W: [-1, 0], S: [0, -1], NW: [-1, 1] };
-  // where each compass letter sits: past the unit arrow's tip, W and E nudged
-  // below their axis so the 2-west step never runs through the "W"
-  const COMPASS = { E: { e: 1.45, n: 0, dy: 40 }, N: { e: 0, n: 1.45, dy: 0 }, W: { e: -1.3, n: 0, dy: 70 }, S: { e: 0, n: -1.45, dy: 0 } };
+  // where each compass letter sits: just past the unit arrow's tip and off its
+  // axis line, so the 2-west step never runs through the "W"
+  const COMPASS = { E: { e: 1.3, n: -0.32, dy: 0 }, N: { e: 0.3, n: 1.3, dy: 0 }, W: { e: -1.3, n: -0.32, dy: 0 }, S: { e: 0.3, n: -1.3, dy: 0 } };
   const CARD_TOP = 250;                                 // the vector card's top edge, every beat
 
-  // the navy floor, grid aligned to the steps (ISO.ground with pitch STEP)
+  // the navy background and the square grid, one line per step through the origin
   function floor(g, o = {}) {
-    const W = ISO.W, H = ISO.H;
+    const W = ISO.W, H = ISO.H, oy = o.oy == null ? FLOOR : o.oy;
     g.clearRect(0, 0, W, H); g.fillStyle = css(COL.bg); g.fillRect(0, 0, W, H);
-    g.strokeStyle = `rgba(74, 80, 112, ${o.alpha == null ? 0.30 : o.alpha})`; g.lineWidth = 3; g.beginPath();
+    g.strokeStyle = `rgba(74, 80, 112, ${o.alpha == null ? 0.42 : o.alpha})`; g.lineWidth = 3; g.beginPath();
     for (let k = -30; k <= 30; k++) {
-      let p = P(k * STEP, -6000, 0, FLOOR), q = P(k * STEP, 6000, 0, FLOOR); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
-      p = P(-6000, k * STEP, 0, FLOOR); q = P(6000, k * STEP, 0, FLOOR); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
+      const x = OX + k * STEP, y = oy + k * STEP;
+      g.moveTo(x, 0); g.lineTo(x, H); g.moveTo(0, y); g.lineTo(W, y);
     }
     g.stroke();
   }
@@ -54,8 +56,8 @@
     const len = Math.hypot(x1 - x0, y1 - y0); if (len < 1) return;
     const dx = (x1 - x0) / len, dy = (y1 - y0) / len, nx = -dy, ny = dx;
     const hw = (o.width || 44) / 2, hl = Math.min(o.head || 90, len * 0.6), hh = hw * 2.6;
-    const sx = x1 - dx * hl, sy = y1 - dy * hl, z = 2;
-    const q = (x, y) => P(x, y, z, FLOOR);
+    const sx = x1 - dx * hl, sy = y1 - dy * hl;
+    const q = (x, y) => P2(x, y, o.oy);
     const col = o.col || COL.data, a1 = o.alpha == null ? 1 : o.alpha;
     if (o.glow) {
       [2.4, 1.7].forEach((k) => {   // two soft layers, not a hard box
@@ -73,7 +75,7 @@
   function line(g, a, b, o = {}) {
     const u = o.u == null ? 1 : clamp01(o.u), al = o.alpha == null ? 1 : o.alpha;
     if (u <= 0.001 || al <= 0.001) return;
-    const p = at(a[0], a[1]), q = at(lerp(a[0], b[0], u), lerp(a[1], b[1], u));
+    const p = at(a[0], a[1], 0, o.oy), q = at(lerp(a[0], b[0], u), lerp(a[1], b[1], u), 0, o.oy);
     g.save(); g.strokeStyle = css(o.col || COL.dim, 1, al); g.lineWidth = o.width || 4; g.lineCap = "round";
     if (o.dash) g.setLineDash(o.dash);
     g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); g.stroke(); g.restore();
@@ -97,10 +99,13 @@
     line(g, v, [0, v[1]], d);
   }
 
-  // a small puck standing on a grid point (the origin, a step mark)
+  // a dot on a grid point (the origin, a step mark, the moving point). o: half (radius), col, alpha, oy
   function puck(g, e, n, o = {}) {
-    const [x, y] = w(e, n), h = o.half || 16;
-    ISO.box(g, x - h, y - h, x + h, y + h, 0, o.z || 14, FLOOR, o.col || COL.text, { alpha: o.alpha == null ? 1 : o.alpha });
+    const [x, y] = at(e, n, 0, o.oy), r = o.half || 16, al = o.alpha == null ? 1 : o.alpha;
+    if (al <= 0.001 || r <= 0.1) return;
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2);
+    g.fillStyle = css(o.col || COL.text, 1, al); g.fill();
+    g.strokeStyle = css(COL.bg, 1, al); g.lineWidth = 4; g.stroke();
   }
 
   // A flat upright label centred on the screen point above grid (e, n).
@@ -110,7 +115,7 @@
     return el;
   }
   function place(el, e, n, o = {}) {
-    const [sx, sy] = at(e, n, o.z || 0), wd = parseFloat(el.style.width) || 240, size = parseFloat(el.style.fontSize) || 64;
+    const [sx, sy] = at(e, n, 0, o.oy), wd = parseFloat(el.style.width) || 240, size = parseFloat(el.style.fontSize) || 64;
     const s = o.scale == null ? 1 : o.scale;
     el.style.transform = `translate(${(sx - wd / 2 + (o.dx || 0)).toFixed(1)}px, ${(sy - size * 0.55 + (o.dy || 0)).toFixed(1)}px) scale(${s.toFixed(4)})`;
     el.style.opacity = (o.alpha == null ? 1 : o.alpha).toFixed(3);
@@ -161,5 +166,5 @@
   // centre a card horizontally in the safe area at a given top
   const centreLeft = (el) => (ISO.SAFE.x0 + ISO.SAFE.x1) / 2 - el.offsetWidth / 2;
 
-  window.VEC = { V, HOUSE, EMBED, DIMS, fmtv, STEP, FLOOR, CARD_TOP, DIRS, COMPASS, AXES, w, at, floor, line, axes, guides, arrow, puck, label, place, vecCard, centreLeft };
+  window.VEC = { V, HOUSE, EMBED, DIMS, fmtv, STEP, OX, FLOOR, CARD_TOP, DIRS, COMPASS, AXES, w, P2, at, floor, line, axes, guides, arrow, puck, label, place, vecCard, centreLeft };
 })();

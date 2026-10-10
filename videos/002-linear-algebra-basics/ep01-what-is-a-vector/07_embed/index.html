@@ -41,46 +41,16 @@
     still: 6.35,     // nothing moves after this (last 0.55 s still)
   };
   const OY = 600;    // the floor y for 06/07 (06_views pans up to it)
-  const { P, COL, css, mix, lerp, seg, clamp01, hash } = ISO;
+  const { COL, css, mix, lerp, seg, clamp01, hash } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
-  // ---- local helpers (identical in 06_views and 07_embed, so 06's last frame is 07's first) ----
-  // VEC.floor / VEC.arrow / VEC.puck draw at the kit's fixed VEC.FLOOR (960). These two beats need
-  // the figure higher (the card sits under it), so these are the same drawings with the floor y `oy`
-  // as an argument.
-  const atY = (e, n, oy, z = 0) => { const [x, y] = VEC.w(e, n); return P(x, y, z, oy); };
-  function floorAt(g, oy, alpha) {
-    g.clearRect(0, 0, ISO.W, ISO.H); g.fillStyle = css(COL.bg); g.fillRect(0, 0, ISO.W, ISO.H);
-    g.strokeStyle = `rgba(74, 80, 112, ${alpha})`; g.lineWidth = 3; g.beginPath();
-    for (let k = -30; k <= 30; k++) {
-      let p = P(k * VEC.STEP, -6000, 0, oy), q = P(k * VEC.STEP, 6000, 0, oy); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
-      p = P(-6000, k * VEC.STEP, 0, oy); q = P(6000, k * VEC.STEP, 0, oy); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]);
-    }
-    g.stroke();
-  }
-  function arrowAt(g, a, b, oy, o = {}) {
-    const u = o.u == null ? 1 : clamp01(o.u), a1 = o.alpha == null ? 1 : o.alpha;
-    if (u <= 0.001 || a1 <= 0.001) return;
-    const [x0, y0] = VEC.w(a[0], a[1]), [xb, yb] = VEC.w(b[0], b[1]);
-    const x1 = lerp(x0, xb, u), y1 = lerp(y0, yb, u);
-    const len = Math.hypot(x1 - x0, y1 - y0); if (len < 1) return;
-    const dx = (x1 - x0) / len, dy = (y1 - y0) / len, nx = -dy, ny = dx;
-    const hw = (o.width || 44) / 2, hl = Math.min(o.head || 90, len * 0.6), hh = hw * 2.6;
-    const sx = x1 - dx * hl, sy = y1 - dy * hl;
-    const q = (x, y) => P(x, y, 2, oy), col = o.col || COL.data;
-    if (o.glow > 0.001) {
-      [2.4, 1.7].forEach((k) => {
-        const gw = hw * k;
-        ISO.poly(g, [q(x0 + nx * gw, y0 + ny * gw), q(x1 + nx * gw, y1 + ny * gw), q(x1 - nx * gw, y1 - ny * gw), q(x0 - nx * gw, y0 - ny * gw)], css(col, 1, 0.09 * o.glow * a1));
-      });
-    }
-    ISO.poly(g, [q(x0 + nx * hw, y0 + ny * hw), q(sx + nx * hw, sy + ny * hw), q(sx - nx * hw, sy - ny * hw), q(x0 - nx * hw, y0 - ny * hw)], css(col, 1, a1));
-    ISO.poly(g, [q(sx + nx * hh, sy + ny * hh), q(x1, y1), q(sx - nx * hh, sy - ny * hh)], css(col, 1, a1));
-  }
-  function puckAt(g, e, n, oy, alpha = 1) {
-    const [x, y] = VEC.w(e, n), h = 16;
-    ISO.box(g, x - h, y - h, x + h, y + h, 0, 14, oy, COL.text, { alpha });
-  }
+  // ---- floor-height wrappers over the kit (06 and 07 draw the plane higher, the card under it) ----
+  // The kit is a flat 2D plane now; these pass the origin's screen y through.
+  const atY = (e, n, oy) => VEC.at(e, n, 0, oy);
+  const floorAt = (g, oy, alpha) => VEC.floor(g, { oy, alpha: alpha * 1.4 });   // 0.30 here = the kit's 0.42
+  const arrowAt = (g, a, b, oy, o = {}) => VEC.arrow(g, a, b, Object.assign({ oy }, o));
+  const puckAt = (g, e, n, oy, alpha = 1) => VEC.puck(g, e, n, { oy, alpha });
+
   const show = (el, a) => { el.style.opacity = a.toFixed(3); el.style.visibility = a < 0.001 ? "hidden" : "visible"; };
 
   // listCard: the vector card built token by token (absolutely placed spans on a panel), so 07 can

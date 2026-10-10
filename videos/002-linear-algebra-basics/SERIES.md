@@ -178,6 +178,7 @@ one running example and one `_parts.py`.
 ## Series rules
 
 - One question per episode, in the viewer's words. One sentence answers it.
+- **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. Copy `ep01-what-is-a-vector/_vec/vec.js` for the plane, arrows, dots and the vector card.
 - Row-vector (PyTorch) convention everywhere: `x @ W`, `W` is `(in, out)`,
   rows of `W` are where input directions land.
 - Episodes 3–6 share the `(5, 3) @ (3, 2)` numbers already in the draft

@@ -88,8 +88,8 @@
     VEC.guides(g, VEC.V, { u: gu });
     const kc = E.out(seg(t, CUE.list + 0.2, CUE.list + 0.5));
     cx.style.color = css(ISO.mix(COL.dim, COL.hero, kc)); cy.style.color = css(ISO.mix(COL.dim, COL.hero, kc));
-    VEC.place(cx, VEC.V[0], 0, { dx: 44, dy: 62, alpha: lerp(0.35, 1, kc) });
-    VEC.place(cy, 0, VEC.V[1], { dx: 6, dy: -66, alpha: lerp(0.35, 1, kc) });
+    VEC.place(cx, VEC.V[0], 0, { dx: 0, dy: 50, alpha: lerp(0.35, 1, kc) });
+    VEC.place(cy, 0, VEC.V[1], { dx: -62, dy: 0, alpha: lerp(0.35, 1, kc) });
     // the hero: the card's two numbers turn magenta and swell once on "list of numbers"
     const k = E.out(seg(t, CUE.list, CUE.list + 0.3));
     const swell = 1 + 0.18 * Math.sin(Math.PI * seg(t, CUE.list, CUE.list + 0.6));
