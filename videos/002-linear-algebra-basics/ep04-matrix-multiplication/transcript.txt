@@ -1,0 +1,64 @@
+00:00.320-00:04.730
+x at w is just a weighted sum of w's rows.
+
+00:04.730-00:07.980
+It's the one operation inside every linear layer.
+
+00:07.980-00:10.860
+Take x equals one, two, minus one,
+
+00:10.860-00:16.180
+and w, a three by two matrix.
+
+00:16.180-00:18.500
+Three rows, one for each input direction,
+
+00:18.500-00:20.400
+each a 2D landing spot.
+
+00:20.400-00:23.430
+Now turn x sideways so it sits beside w.
+
+00:23.430-00:26.930
+Now each number in x is a weight for one row.
+
+00:26.930-00:28.970
+One times the first row, two times the second row,
+
+00:28.970-00:30.800
+minus one times the third row.
+
+00:30.800-00:33.540
+Now we have three weighted 2D vectors.
+
+00:33.540-00:36.670
+To add vectors, you add first coordinates together
+
+00:36.670-00:38.200
+and second coordinates together.
+
+00:38.200-00:39.970
+That's summing down the columns.
+
+00:39.970-00:44.740
+Four minus one, that's x at w.
+
+00:44.740-00:47.010
+Rows are where input directions land.
+
+00:47.010-00:51.600
+Columns are the totals in each output direction.
+
+00:51.600-00:53.200
+Add the bias and you have one row
+
+00:53.200-00:58.250
+of a linear layer's output, 4.1 minus 1.2.
+
+00:58.250-01:00.930
+Each number in x weights a row of w.
+
+01:00.930-01:02.080
+Add the rows and you're done.
+
+
