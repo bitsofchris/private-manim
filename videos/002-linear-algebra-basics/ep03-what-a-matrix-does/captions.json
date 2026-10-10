@@ -1,0 +1,272 @@
+[
+ {
+  "start": 0.58,
+  "end": 1.336,
+  "text": "A matrix just"
+ },
+ {
+  "start": 1.396,
+  "end": 2.422,
+  "text": "records where each"
+ },
+ {
+  "start": 2.482,
+  "end": 3.4,
+  "text": "direction lands."
+ },
+ {
+  "start": 3.4,
+  "end": 4.14,
+  "text": "Every weight matrix"
+ },
+ {
+  "start": 4.2,
+  "end": 4.385,
+  "text": "in a"
+ },
+ {
+  "start": 4.445,
+  "end": 5.0,
+  "text": "neural network"
+ },
+ {
+  "start": 5.0,
+  "end": 5.552,
+  "text": "is doing"
+ },
+ {
+  "start": 5.612,
+  "end": 6.47,
+  "text": "exactly this."
+ },
+ {
+  "start": 6.47,
+  "end": 7.237,
+  "text": "Here's e1"
+ },
+ {
+  "start": 7.297,
+  "end": 7.91,
+  "text": "and e2."
+ },
+ {
+  "start": 7.91,
+  "end": 9.073,
+  "text": "This matrix sends"
+ },
+ {
+  "start": 9.133,
+  "end": 9.908,
+  "text": "e1 here and"
+ },
+ {
+  "start": 9.968,
+  "end": 10.55,
+  "text": "e2 here."
+ },
+ {
+  "start": 10.55,
+  "end": 11.276,
+  "text": "Now take a"
+ },
+ {
+  "start": 11.336,
+  "end": 12.457,
+  "text": "vector, three of"
+ },
+ {
+  "start": 12.517,
+  "end": 13.308,
+  "text": "e1 plus two"
+ },
+ {
+  "start": 13.368,
+  "end": 13.83,
+  "text": "of e2."
+ },
+ {
+  "start": 13.83,
+  "end": 14.728,
+  "text": "The vector is"
+ },
+ {
+  "start": 14.788,
+  "end": 15.43,
+  "text": "a recipe."
+ },
+ {
+  "start": 15.43,
+  "end": 16.307,
+  "text": "After the matrix"
+ },
+ {
+  "start": 16.367,
+  "end": 16.805,
+  "text": "keep the"
+ },
+ {
+  "start": 16.865,
+  "end": 17.45,
+  "text": "same recipe"
+ },
+ {
+  "start": 17.45,
+  "end": 18.112,
+  "text": "and use the"
+ },
+ {
+  "start": 18.172,
+  "end": 19.11,
+  "text": "moved directions."
+ },
+ {
+  "start": 19.11,
+  "end": 20.204,
+  "text": "Three of where"
+ },
+ {
+  "start": 20.264,
+  "end": 21.43,
+  "text": "e1 landed, plus"
+ },
+ {
+  "start": 21.49,
+  "end": 22.438,
+  "text": "two of where"
+ },
+ {
+  "start": 22.498,
+  "end": 23.3,
+  "text": "e2 landed."
+ },
+ {
+  "start": 23.3,
+  "end": 24.433,
+  "text": "The vector supplies"
+ },
+ {
+  "start": 24.493,
+  "end": 25.23,
+  "text": "the amounts"
+ },
+ {
+  "start": 25.23,
+  "end": 26.485,
+  "text": "the matrix supplies"
+ },
+ {
+  "start": 26.545,
+  "end": 27.8,
+  "text": "the new directions."
+ },
+ {
+  "start": 27.8,
+  "end": 28.315,
+  "text": "That's why the"
+ },
+ {
+  "start": 28.375,
+  "end": 28.959,
+  "text": "table of numbers"
+ },
+ {
+  "start": 29.019,
+  "end": 29.5,
+  "text": "isn't random."
+ },
+ {
+  "start": 29.5,
+  "end": 30.208,
+  "text": "Each row is"
+ },
+ {
+  "start": 30.268,
+  "end": 31.33,
+  "text": "one landing spot."
+ },
+ {
+  "start": 31.33,
+  "end": 32.621,
+  "text": "In PyTorch, row"
+ },
+ {
+  "start": 32.681,
+  "end": 33.2,
+  "text": "i of W"
+ },
+ {
+  "start": 33.26,
+  "end": 33.729,
+  "text": "is where"
+ },
+ {
+  "start": 33.789,
+  "end": 35.403,
+  "text": "the input direction"
+ },
+ {
+  "start": 35.463,
+  "end": 36.35,
+  "text": "i lands."
+ },
+ {
+  "start": 36.35,
+  "end": 37.447,
+  "text": "In a network"
+ },
+ {
+  "start": 37.507,
+  "end": 38.213,
+  "text": "that map"
+ },
+ {
+  "start": 38.273,
+  "end": 39.37,
+  "text": "moves vectors"
+ },
+ {
+  "start": 39.37,
+  "end": 40.253,
+  "text": "from one space"
+ },
+ {
+  "start": 40.313,
+  "end": 41.02,
+  "text": "to another"
+ },
+ {
+  "start": 41.02,
+  "end": 42.354,
+  "text": "amplifying some directions"
+ },
+ {
+  "start": 42.414,
+  "end": 43.55,
+  "text": "and collapsing others."
+ },
+ {
+  "start": 43.55,
+  "end": 44.132,
+  "text": "A matrix is"
+ },
+ {
+  "start": 44.192,
+  "end": 44.677,
+  "text": "just this"
+ },
+ {
+  "start": 44.737,
+  "end": 45.27,
+  "text": "stored map"
+ },
+ {
+  "start": 45.27,
+  "end": 46.134,
+  "text": "where every input"
+ },
+ {
+  "start": 46.194,
+  "end": 47.01,
+  "text": "direction lands."
+ }
+]
