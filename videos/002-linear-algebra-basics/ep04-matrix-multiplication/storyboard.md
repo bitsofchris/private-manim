@@ -22,10 +22,12 @@ number grids plus a flat 2D plane; nothing needs Manim's axes or 3D camera.
 One stage, two halves, both always on (`00_layout/`, rendered to
 `media/hf/00_layout.png`):
 
-- **Matrix notation, not a table** (Chris, after the first layout): bare
-  numbers in a tight grid, as in 009's readout card, inside square brackets,
-  as in ep01's vector card. No box per number. A highlight is a box that
-  appears around an entry or a column and goes again.
+- **Notation:** the series default, `agents/style.md` "Vectors and
+  matrices as numbers" (Chris, ep04). Matrices are bare numbers in square
+  brackets, with no box per number. The result is a vector, `[ 4, −1 ]`,
+  so it has its comma. `W` carries its shape `(3, 2)`, and `x @ W` is
+  monospace because it is code. A highlight is a box that appears around
+  an entry or a column and then goes.
 - **Top, the numbers (y 236–632).** The header line (y 236) holds the
   labels `x` and `W`, or `x = [ 1, 2, −1 ]` written flat before it turns.
   Under it, left to right: `x` turned sideways as a column, `W` (3 × 2),
@@ -61,7 +63,7 @@ of `W` are where input directions land.
 | Tip to tail | (0, 0) → (2, −1) → (3, 1) → (4, −1) | `VEC.CHAIN` |
 | Bias b | `[ 0.1, −0.2 ]` | `VEC.B` |
 | x @ W + b | `[ 4.1, −1.2 ]` (row 1 of `Y`) | `VEC.Y` |
-| Labels | `x`, `W`, `x @ W`, `x @ W + b`, `b` (monospace not needed; Inter 800, 64 px) | `VEC.headers` |
+| Labels | `x`, `W (3, 2)` in Inter 800; `x @ W`, `x @ W + b` in monospace (code); all 64 px | `VEC.headers` |
 
 ## States (what each beat opens and ends on)
 

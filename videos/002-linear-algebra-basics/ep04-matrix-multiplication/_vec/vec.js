@@ -164,7 +164,11 @@
   const xColumn = (root) => X.map((v, r) => [cell(root, fmtv(v), { left: G.xLeft, top: rowTop(r), width: G.xW, col: ROWCOL[r] })]);
   const wGrid = (root) => grid(root, W, G.wLeft, G.top);
   const pGrid = (root) => grid(root, XW, G.pLeft, G.top);
-  const sumRow = (root, vals = SUM) => vals.map((v, c) => cell(root, fmtv(v), { left: G.pLeft + c * G.cellW, top: G.sumTop, col: COL.hero }));
+  // The result is a vector, so it gets its comma (agents/style.md "Vectors and
+  // matrices as numbers"): the first entry's text carries it, "4,". Retype with
+  // c.set(vtxt(v, i)) so the comma stays.
+  const vtxt = (v, i, n = 2) => fmtv(v) + (i < n - 1 ? "," : "");
+  const sumRow = (root, vals = SUM) => vals.map((v, c) => cell(root, vtxt(v, c, vals.length), { left: G.pLeft + c * G.cellW, top: G.sumTop, col: COL.hero }));
   // A pair of square brackets around a block of entries (left..right, top..top+h).
   // b.color(rgb, a), b.at(dx, dy, {alpha}) moves the pair; b.els = [left, right].
   function brackets(root, left, top, right, h, o = {}) {
@@ -188,12 +192,15 @@
   const pBr = (root) => brackets(root, G.pLeft, G.top, G.pLeft + 2 * G.cellW, H3);
   const sumBr = (root, col = COL.hero) => brackets(root, G.pLeft, G.sumTop, G.pLeft + 2 * G.cellW, G.rowH, { col });
   // header labels: "x" over the x column, "W" over W; "x @ W" left of the sum row
+  // literal code is monospace, set inline (a CSS class rendered in Inter, ep01)
+  const code = (el) => { el.style.fontFamily = "monospace"; el.style.fontWeight = "700"; return el; };
   function headers(root) {
     const mk = (t, left, width, top, align = "center") => ISO.label(root, t, { size: G.size, color: css(COL.dim), left, top, width, align });
     return {
       x: mk("x", G.xLeft, G.xW, G.header),
-      W: mk("W", G.wLeft, 2 * G.cellW, G.header),
-      out: mk("x @ W", G.wLeft, G.pLeft - G.brW - G.brPad - 24 - G.wLeft, G.sumTop + 2, "right"),
+      W: mk("W", G.wLeft + 4, 80, G.header, "left"),
+      shape: mk("(3, 2)", G.wLeft + 100, 200, G.header, "left"),     // as W.shape prints, right after the name
+      out: code(mk("x @ W", G.wLeft, G.pLeft - G.brW - G.brPad - 44 - G.wLeft, G.sumTop + 2, "right")),
     };
   }
   // "→" between W and the weighted rows, one per row
@@ -203,6 +210,6 @@
     X, W, XW, SUM, B, Y, CHAIN, ROWCOL, fmtv,
     G, rowTop, STEP, OX, FLOOR, PLANE_TOP, THIN, AXES, w, P2, at,
     floor, arrow, line, axes, guides, puck, label, place,
-    cell, grid, xColumn, wGrid, pGrid, sumRow, headers, arrows, brackets, xBr, wBr, pBr, sumBr,
+    code, vtxt, cell, grid, xColumn, wGrid, pGrid, sumRow, headers, arrows, brackets, xBr, wBr, pBr, sumBr,
   };
 })();
