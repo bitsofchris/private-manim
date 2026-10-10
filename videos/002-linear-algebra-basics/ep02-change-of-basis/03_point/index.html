@@ -37,38 +37,34 @@
     y:     3.08, /* "y"      (18.91) */
     z:     3.18, /* "z"      (19.01) */
   };
-  const HOLD_FROM = 3.42;   // everything, camera drift included, still from here
-  const PULSE = 0.24;       // x / y / z pulse length (three words in 0.25 s: a quick ripple)
+  // the hero draws on "point" (1.0 s, starting on its plosive); the stalk fades in once it lands
+  const HERO = [0.50, 1.50];
+  // route legs (3·x, 5·y, 2·z up the stalk): each starts just before its word and lands on it
+  const LEG = [[0.66, CUE.three + 0.04], [1.00, CUE.five + 0.04], [1.36, CUE.two + 0.04]];
+  const PULSE = 0.24;       // x / y / z emphasis (three words in 0.25 s: a quick ripple)
+  const HOLD_FROM = 3.42;   // everything still from here (the camera is fixed)
 
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
-  const { seg, bump, rgba, mixc, COL } = BK, E = BK.ease();
+  const { seg, bump } = BK, E = BK.ease();
   BK.setMaster(MASTER_START);
   const readout = BK.makeReadout(root);
   const labels = BK.makeBasisLabels(root);
   BK.guides(root);
-  const WHITE = [255, 255, 255];
-  const numAt = [CUE.three, CUE.five, CUE.two];
   const pulseAt = [CUE.x, CUE.y, CUE.z];
 
   function render(tRaw) {
     const t = Math.min(tRaw, HOLD_FROM);
-    // the magenta hero draws from the origin to P on "point" (1.1 s); the dot lands at the tip
-    const draw = E.io(seg(t, CUE.point, CUE.point + 1.1));
-    const B = BK.world(g, t, 0, { hero: draw > 0 ? 1 : 0, heroDraw: draw });
-    // x / y / z: each basis arrow brightens and thickens once on its spoken letter
-    const pb = pulseAt.map((c) => bump(t, c, PULSE));
-    B.forEach((b, i) => {
-      if (pb[i] > 0) BK.arrow(g, [0, 0, 0], b, rgba(mixc(COL.slots[i], WHITE, 0.45)),
-                              { width: 12 + 8 * pb[i], head: 30 + 10 * pb[i], alpha: pb[i] });
+    const draw = E.io(seg(t, HERO[0], HERO[1]));
+    const prog = LEG.map(([a, b]) => E.io(seg(t, a, b)));
+    const emph = pulseAt.map((c) => bump(t, c, PULSE));
+    const B = BK.world(g, t, 0, {
+      hero: draw > 0 ? 1 : 0, heroDraw: draw, stalk: seg(t, HERO[1], HERO[1] + 0.15),
+      route: { c: BK.ADDR_E, prog }, emph,
     });
-    labels.place(B, 0);
-    labels.ls.forEach((l, i) => { l.el.style.transform += ` scale(${1 + 0.3 * pb[i]})`; });
-    // readout: brackets + commas with "three", then one number per spoken word
-    const app = numAt.map((c) => seg(t, c, c + 0.18));
-    readout.set(BK.ADDR_E, { alpha: app[0] > 0 ? 1 : 0, pulse: app.map((a) => 0.6 + 0.4 * E.back(a)) });
-    readout.el.firstChild.style.opacity = app[0];
-    readout.el.childNodes.forEach((n) => { if (n.textContent === ", " || n.textContent === ")") n.style.opacity = app[0]; });
-    readout.nums.forEach((s, k) => { s.style.opacity = app[k]; });
+    labels.place(B, 0, 1, emph.map((e) => 1 + 0.3 * e));
+    // the readout types each number as its leg lands (brackets + commas with the first)
+    const app = LEG.map(([, b]) => seg(t, b - 0.04, b + 0.14));
+    readout.set(BK.ADDR_E, { alpha: app[0], visible: app, pulse: app.map((a) => 0.6 + 0.4 * E.back(a)) });
   }
   const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
   tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);

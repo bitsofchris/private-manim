@@ -67,7 +67,7 @@
   // the lattice of basis B (two families), clipped to BOX
   function lattice(B, alpha) {
     if (alpha <= 0) return;
-    g.strokeStyle = rgba(COL.grid, alpha); g.lineWidth = 2; g.lineCap = "round";
+    g.strokeStyle = rgba(COL.grid, alpha); g.lineWidth = 3; g.lineCap = "round";
     g.beginPath();
     [0, 1].forEach((a) => {
       const b = 1 - a;
@@ -132,8 +132,8 @@
     const B = [lerp2(X, D[0], s), lerp2(Y, D[1], s)];              // x -> d1, y -> d2 (rotate 45° + stretch)
 
     g.fillStyle = rgba(COL.bg); g.fillRect(0, 0, BK.W, BK.H);
-    lattice([X, Y], 0.25 * seg(tt, CUE.diag, CUE.diag + 0.4));    // the old square grid, left as a ghost
-    lattice(B, 0.6);                                               // the lattice of the current basis
+    lattice([X, Y], 0.14 * seg(tt, CUE.diag, CUE.diag + 0.4));    // the old square grid, left as a ghost
+    lattice(B, 0.9);                                               // the lattice of the current basis
 
     // legs: 1·x then 1·y, tip to tail; fade as the grid starts to turn
     const legA = 1 - seg(tt, CUE.diag, CUE.diag + 0.5);

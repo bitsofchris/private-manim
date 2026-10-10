@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 01_hook: the lattice swings standard <-> new basis around a still magenta arrow; the readout ticks with it. -->
+    <!-- 01_hook: the floor grid shears standard <-> new basis under a still magenta arrow; the route re-routes and the readout ticks with it. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/basis.js"></script>
     <style>
@@ -34,10 +34,10 @@
   // The morph u (0 = x y z, 1 = v1 v2 v3): starts mid-swing, two swings, then settles on standard.
   //   [time, u] keys; segment 0 eases out (already moving at frame 0), the rest ease in-out.
   const KEYS = [[0, 0.5], [1.1, 1], [2.6, 0], [4.1, 1], [4.3, 1], [6.2, 0]];
-  const HOLD_FROM = 6.24;  // everything, camera drift included, still from here
+  const HOLD_FROM = 6.24;  // everything still from here
 
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
-  const { seg, lerp, bump, ADDR_E, ADDR_V } = BK, E = BK.ease();
+  const { seg, lerp, bump } = BK, E = BK.ease();
   BK.setMaster(MASTER_START);
   const readout = BK.makeReadout(root);
   const labels = BK.makeBasisLabels(root);
@@ -53,19 +53,13 @@
 
   function render(tRaw) {
     const t = Math.min(tRaw, HOLD_FROM);
-    const u = uAt(t);
-    const B = BK.world(g, t, u, { ghost: u });
-    // "directions you pick": the three basis arrows brighten (local overlay: wider, with a soft halo)
-    const b = bump(t, CUE.directions, 0.62);
-    if (b > 0) B.forEach((v, i) => {
-      BK.arrow(g, [0, 0, 0], v, BK.rgba(BK.COL.slots[i]), { width: 12 + 18 * b, head: 30 + 14 * b, alpha: 0.35 * b });
-      BK.arrow(g, [0, 0, 0], v, BK.rgba(BK.COL.slots[i]), { width: 12 + 4 * b, head: 30 + 6 * b });
-    });
-    labels.place(B, u);
-    labels.ls.forEach((l) => { l.el.style.transform += ` scale(${1 + 0.18 * b})`; });
-    // the readout ticks with u; "address": one swell of all three numbers
+    const u = uAt(t), c = BK.coordsAt(u);   // P's true address mid-shear: the route always lands on the foot
+    const b = bump(t, CUE.directions, 0.62);  // "directions you pick": the three arrows brighten
+    const B = BK.world(g, t, u, { ghost: u, route: { c }, emph: [b, b, b] });
+    labels.place(B, u, 1, [1 + 0.18 * b, 1 + 0.18 * b, 1 + 0.18 * b]);
+    // the readout ticks with the route; "address": one swell of all three numbers
     const p = 1 + 0.15 * bump(t, CUE.address - 0.08, 0.5);
-    readout.set([0, 1, 2].map((k) => lerp(ADDR_E[k], ADDR_V[k], u)), { pulse: [p, p, p] });
+    readout.set(c, { pulse: [p, p, p] });
   }
 
   const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });

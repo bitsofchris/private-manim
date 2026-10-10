@@ -39,7 +39,7 @@
   const TICK1 = [CUE.minus, CUE.two + 0.04];    // teal 3 -> -2 ("minus two")
   const TICK2 = [CUE.three - 0.28, CUE.three + 0.04]; // blue 5 -> 3 ("three")
   const GOLD = [CUE.two2 - 0.08, 0.26];         // gold pulse, peak on the last "two"
-  const HOLD_FROM = 3.62;   // everything, camera drift included, still from here
+  const HOLD_FROM = 3.62;   // everything still from here (the camera is fixed)
 
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, bump, rgba, lerp, COL } = BK, E = BK.ease();

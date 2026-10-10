@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 02_basis: the point and readout leave; x y z are named the basis, each leaves the plane of the other two, the lattice grows out to span the space. -->
+    <!-- 02_basis: the point leaves; the camera pushes in on x y z, each leaves the plane of the other two; the floor grid grows out as the camera pulls back. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/basis.js"></script>
     <style>
@@ -28,76 +28,82 @@
   const BEAT_SECONDS = 9.17, MASTER_START = 6.66;
   // Beat-local cue times (master = local + 6.66), from vo_final.wav envelope + sub-clip transcription.
   const CUE = {
-    clear: 0.0,         /* "Those directions..." : hero + readout out, lattice dims */
+    clear: 0.0,         /* "Those directions..." : hero, stalk, route, readout out */
     basis: 1.80,        /* "are THE BASIS" */
     independent: 3.86,  /* "a set of INDEPENDENT vectors" */
     span: 5.62,         /* "that SPAN the whole space" */
     choose: 7.24,       /* "It's the COORDINATE system that you choose": hold */
   };
   const T = {
-    clearDur: 0.6,      // hero, readout out; lattice to 0.1
-    dimLattice: 0.1,
+    clearDur: 0.6,      // hero, stalk, route, readout out
+    push: [0.45, 1.8],  // camera pushes in on the origin
+    pullDur: 1.75,      // from CUE.span: grid grows out while the camera pulls back
     step: 0.7,          // one "independent" check per arrow
-    growDur: 1.7,       // lattice grows out from the origin
-    still: 8.62,        // everything, camera drift included, still from here
+    still: 8.62,        // everything still from here
   };
-  const VIEW0 = { s: BK.VIEW.s, centre: BK.VIEW.centre.slice() };
-  const ZOOM = { s: 230, centre: [0.45, 0.45, 0.55] };  // origin-centred close-up
-  const ORDER = [0, 1, 2];  // x pierces the yz plane, then y the xz, then z the floor
+  // the close-up: VIEW.s / VIEW.centre (canonical values restored by the end)
+  const CLOSE = { s: 280, centre: [0.4, 0.3, 0.5] };
+  const DIM = { floor: 0.35, grid: 0.15 };  // floor and grid during the close-up
+  const FADE = [960, 1100];  // y range of the soft stage-bottom fade during the close-up
+  const ORDER = [0, 1, 2];  // x leaves the yz plane, then y the xz, then z the floor
+  const PLANE = { lo: -0.3, hi: 1.4, alpha: 0.3 };  // small enough to stay out of the band in the close-up
 
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
-  const { seg, lerp, bump, rgba, COL, E: EB, ADDR_E } = BK, E = BK.ease();
+  const { seg, lerp, lerp3, bump, rgba, COL, ADDR_E } = BK, EB = BK.E, E = BK.ease();
+  const CANON = { s: BK.VIEW.s, centre: BK.VIEW.centre.slice() };
   BK.setMaster(MASTER_START);
   const readout = BK.makeReadout(root);
   const labels = BK.makeBasisLabels(root);
   BK.guides(root);
-
-  // local helper (BK.plane is symmetric, +/-ext): a plane patch from -0.6 to 1.8 along each vector,
-  // so the patch below the floor never reaches the caption band
-  function planeQ(b1, b2, alpha, lo = -0.6, hi = 1.8) {
-    const pts = [[lo, lo], [hi, lo], [hi, hi], [lo, hi]].map(([i, j]) => BK.S(BK.add(BK.scale(b1, i), BK.scale(b2, j))));
-    g.globalAlpha = alpha; g.fillStyle = rgba(COL.dim);
-    g.beginPath(); pts.forEach((p, k) => (k ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.fill();
-    g.globalAlpha = 1;
-  }
+  // the stage ends at y 1100: the zoomed floor must not spill into the caption band
+  g.beginPath(); g.rect(0, 0, BK.W, BK.SAFE.stageBottom); g.clip();
 
   function render(tRaw) {
     const t = Math.min(tRaw, T.still);
-    const c = E.io(seg(t, CUE.clear, CUE.clear + T.clearDur));
-    const gr = E.io(seg(t, CUE.span, CUE.span + T.growDur));   // 0..1
-    // the world (BK.world's draw order, split so a dim full lattice can sit under the growing one)
-    // camera: push in on the basis for "the basis" / "independent" (the unit arrows are ~80 px in the
-    // canonical view), pull back out as the lattice spans the space; z = 0 is the canonical view
-    const z = E.io(seg(t, 0.3, 1.7)) * (1 - E.io(seg(t, CUE.span, CUE.span + T.growDur)));
-    BK.VIEW.s = lerp(VIEW0.s, ZOOM.s, z);
-    BK.VIEW.centre = BK.lerp3(VIEW0.centre, ZOOM.centre, z);
-    BK.setTime(t); BK.clear(g);
-    const dim = lerp(1, T.dimLattice, c) * (1 - gr);
-    BK.lattice(g, EB, { alpha: 0.6 * dim });
-    // grow 0.7 already reaches every line in BOX, so the grown lattice equals the canonical one
-    if (gr > 0) BK.lattice(g, EB, { alpha: 0.6 * gr, grow: gr >= 1 ? 1 : 0.7 * gr });
+    const c = E.io(seg(t, CUE.clear, CUE.clear + T.clearDur));      // 0..1 fade out
+    const zin = E.io(seg(t, T.push[0], T.push[1]));                  // 0..1 push in
+    const gr = E.io(seg(t, CUE.span, CUE.span + T.pullDur));         // 0..1 grow + pull back
+    const z = zin * (1 - gr);                                        // closeness
+    BK.VIEW.s = lerp(CANON.s, CLOSE.s, z);
+    BK.VIEW.centre = lerp3(CANON.centre, CLOSE.centre, z);
+    const d = zin;  // floor and grid dim with the push
+    const floor = lerp(1, DIM.floor, d * (1 - gr)) ;
+    const gridDim = lerp(1, DIM.grid, d);
+    // grid: before "span" one full grid dimming; then a fresh grid grows from the origin while the dim
+    // full one (drawn as world's ghost: 0.3*ghost == 0.9*grid alpha) fades under it.
+    // grow 0.7 already reaches every line on the floor, so the grown grid equals the canonical one.
+    const opts = gr > 0
+      ? { grid: gr, grow: gr >= 1 ? 1 : 0.7 * gr, ghost: 3 * DIM.grid * (1 - gr) }
+      : { grid: gridDim };
     const hero = 1 - c;
-    if (hero > 0) {
-      BK.arrow(g, [0, 0, 0], BK.P, rgba(COL.hero), { width: BK.ARROW_W.hero, head: 40, alpha: hero });
-      BK.dot(g, BK.P, 14, rgba(COL.hero), hero);
+    BK.world(g, t, 0, Object.assign(opts, {
+      floor, hero, stalk: 1, basis: 0,
+      route: hero > 0 ? { c: ADDR_E, alpha: hero } : null,
+    }));
+    // in the close-up the zoomed floor is clipped at the stage bottom: soften that cut (scaled by closeness,
+    // so the canonical frame is untouched)
+    if (z > 0) {
+      const fb = g.createLinearGradient(0, FADE[0], 0, FADE[1]);
+      fb.addColorStop(0, rgba(COL.bg, 0)); fb.addColorStop(1, rgba(COL.bg, 1));
+      g.globalAlpha = z; g.fillStyle = fb; g.fillRect(0, FADE[0], BK.W, FADE[1] - FADE[0]); g.globalAlpha = 1;
     }
-    // "independent": for each arrow in turn, the faint plane through the other two, the arrow pulses through it
-    const w = [0, 0, 0];
+    // "independent": for each arrow in turn, the faint plane through the other two; the arrow pulses out of it
+    const em = [0, 0, 0];
     ORDER.forEach((i, n) => {
       const a = CUE.independent + n * T.step;
       const env = Math.min(seg(t, a, a + 0.15), 1 - seg(t, a + T.step - 0.15, a + T.step));
-      if (env > 0) planeQ(EB[(i + 1) % 3], EB[(i + 2) % 3], 0.28 * env);
-      w[i] = Math.max(w[i], bump(t, a + 0.08, T.step - 0.16));
+      if (env > 0) BK.plane(g, EB[(i + 1) % 3], EB[(i + 2) % 3], rgba(COL.dim), PLANE.alpha * env, PLANE.lo, PLANE.hi);
+      em[i] = Math.max(em[i], bump(t, a + 0.08, T.step - 0.16));
     });
     // "the basis": one pulse of all three
     const pb = bump(t, CUE.basis, 0.6);
-    EB.forEach((v, i) => {
-      const b = Math.max(pb, w[i]);
-      if (b > 0) BK.arrow(g, [0, 0, 0], v, rgba(COL.slots[i]), { width: 12 + 18 * b, head: 30 + 14 * b, alpha: 0.35 * b });
-      BK.arrow(g, [0, 0, 0], v, rgba(COL.slots[i]), { width: 12 + 4 * b, head: 30 + 6 * b });
+    for (let i = 0; i < 3; i++) em[i] = Math.max(em[i], pb);
+    // the basis arrows, over the planes (same strokes as BK.world's, emph included)
+    EB.forEach((b, i) => {
+      if (em[i] > 0) BK.arrow(g, [0, 0, 0], b, rgba(COL.slots[i]), { width: BK.ARROW_W.basis + 20 * em[i], head: 34 + 14 * em[i], alpha: 0.35 * em[i] });
+      BK.arrow(g, [0, 0, 0], b, rgba(COL.slots[i]), { width: BK.ARROW_W.basis + 4 * em[i], head: 34 + 6 * em[i] });
     });
-    labels.place(EB, 0);
-    labels.ls.forEach((l, i) => { l.el.style.transform += ` scale(${1 + 0.18 * Math.max(pb, w[i])})`; });
+    labels.place(EB, 0, 1, em.map((e) => 1 + 0.18 * e));
     readout.set(ADDR_E, { alpha: 1 - c });
   }
 
