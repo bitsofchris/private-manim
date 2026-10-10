@@ -57,7 +57,7 @@
     VEC.axes(g, { alpha: go });
     VEC.guides(g, VEC.V, { alpha: 0.9 * go });
     VEC.place(cx, VEC.V[0], 0, { dx: 0, dy: 50, alpha: go });
-    VEC.place(cy, 0, VEC.V[1], { dx: -62, dy: 0, alpha: go });
+    VEC.place(cy, 0, VEC.V[1], { dx: 52, dy: 0, alpha: go });
     ["E", "N", "W", "S"].forEach((k) => {
       const c = VEC.COMPASS[k], kept = k === "E" || k === "N";
       VEC.arrow(g, [0, 0], VEC.DIRS[k], { col: COL.muted, width: 26, head: 66, u: kept ? 1 : grow });

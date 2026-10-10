@@ -15,8 +15,8 @@ ENGINE: hyperframes
 
 ## The look
 
-The isometric house look (`agents/style.md`), floor seen square-on
-(`ISO.setTheta(0)`) so northwest points straight up. **Space is the floor**:
+A flat 2D number plane (after Chris's first watches: the isometric floor didn't
+read for linear algebra). East right, north up. **Space is the plane**:
 one grid square is one step, directions are flat arrows lying on it (see a
 thing). **Numbers stand on a flat upright card** (read a value). Parts:
 `_vec/vec.js` (linked into each beat as `vec/`), on top of the house kit
@@ -30,7 +30,7 @@ frame; `media/hf/00_layout.png` shows it.
 | The vector | `VEC.V = [-2, 2]` shown as `[ −2, 2 ]` (true minus sign): 2 opposite east, 2 north = northwest |
 | Agreed directions | east `[1, 0]`, north `[0, 1]`; compass letters E N W S at `VEC.COMPASS` |
 | Steps | west step `[0,0]→[-2,0]`, north step `[-2,0]→[-2,2]`, both teal; the NW vector `[0,0]→[-2,2]` |
-| Origin | the white puck at grid `[0, 0]`, screen (507, 960) |
+| Origin | the white dot at grid `[0, 0]`, screen (507, 780); one step = 165 px; axes ±2 in every direction |
 | Vector card | `VEC.vecCard`, top edge `VEC.CARD_TOP` = 250, centred (`VEC.centreLeft`) |
 | The house | `VEC.HOUSE`: `[ 1,800, 450,000 ]` with "sq ft" / "price" under the slots |
 | The embedding | `VEC.EMBED` (ten values) and `VEC.DIMS` = "4,096" |

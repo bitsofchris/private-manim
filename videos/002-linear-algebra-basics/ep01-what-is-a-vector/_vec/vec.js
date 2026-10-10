@@ -19,9 +19,10 @@
   const fmtv = (v) => (v < 0 ? "−" : "") + Math.abs(v);  // true minus sign
 
   // ---- the canonical frame ----
-  const STEP = 150;                                     // one grid square = one step, in px
-  const OX = 560;                                       // screen x of the origin (room for 2 west)
-  const FLOOR = 830;                                    // screen y of the origin
+  const STEP = 165;                                     // one grid square = one step, in px
+  const OX = 507;                                       // screen x of the origin: the safe area's centre
+  const FLOOR = 780;                                    // screen y of the origin: ±2 steps fit under the card
+  const THIN = 0.6;                                     // arrow weight (Chris: "the vectors feel a little too thick")
   const w = (e, n) => [e * STEP, -n * STEP];            // grid -> plane px (screen y runs down)
   const P2 = (x, y, oy = FLOOR) => [OX + x, oy + y];    // plane px -> screen
   const at = (e, n, z = 0, oy = FLOOR) => { const [x, y] = w(e, n); return P2(x, y, oy); };
@@ -55,7 +56,7 @@
     const x1 = lerp(x0, xb, u), y1 = lerp(y0, yb, u);
     const len = Math.hypot(x1 - x0, y1 - y0); if (len < 1) return;
     const dx = (x1 - x0) / len, dy = (y1 - y0) / len, nx = -dy, ny = dx;
-    const hw = (o.width || 44) / 2, hl = Math.min(o.head || 90, len * 0.6), hh = hw * 2.6;
+    const hw = (o.width || 44) / 2 * THIN, hl = Math.min((o.head || 90) * 0.8, len * 0.6), hh = Math.max(hw * 2.6, 14);
     const sx = x1 - dx * hl, sy = y1 - dy * hl;
     const q = (x, y) => P2(x, y, o.oy);
     const col = o.col || COL.data, a1 = o.alpha == null ? 1 : o.alpha;
@@ -82,15 +83,15 @@
   }
   // The reference frame: the east-west and north-south grid lines through the
   // origin, brighter than the floor, with a tick at every step. o: alpha.
-  const AXES = { w: -2.7, e: 1.7, s: -1.5, n: 2.7 };
+  const AXES = { w: -2.35, e: 2.35, s: -2.2, n: 2.35 };   // two steps in every direction
   function axes(g, o = {}) {
     const al = o.alpha == null ? 1 : o.alpha;
     if (al <= 0.001) return;
     line(g, [AXES.w, 0], [AXES.e, 0], { col: COL.dim, alpha: 0.55 * al, width: 5 });
     line(g, [0, AXES.s], [0, AXES.n], { col: COL.dim, alpha: 0.55 * al, width: 5 });
     const tk = 0.09;
-    [-2, -1, 1].forEach((e) => line(g, [e, -tk], [e, tk], { col: COL.dim, alpha: 0.9 * al, width: 5 }));
-    [-1, 1, 2].forEach((n) => line(g, [-tk, n], [tk, n], { col: COL.dim, alpha: 0.9 * al, width: 5 }));
+    [-2, -1, 1, 2].forEach((e) => line(g, [e, -tk], [e, tk], { col: COL.dim, alpha: 0.9 * al, width: 5 }));
+    [-2, -1, 1, 2].forEach((n) => line(g, [-tk, n], [tk, n], { col: COL.dim, alpha: 0.9 * al, width: 5 }));
   }
   // the dashed reading guides from the tip of v down to its two coordinates on the axes
   function guides(g, v, o = {}) {
@@ -166,5 +167,5 @@
   // centre a card horizontally in the safe area at a given top
   const centreLeft = (el) => (ISO.SAFE.x0 + ISO.SAFE.x1) / 2 - el.offsetWidth / 2;
 
-  window.VEC = { V, HOUSE, EMBED, DIMS, fmtv, STEP, OX, FLOOR, CARD_TOP, DIRS, COMPASS, AXES, w, P2, at, floor, line, axes, guides, arrow, puck, label, place, vecCard, centreLeft };
+  window.VEC = { V, HOUSE, EMBED, DIMS, fmtv, STEP, OX, FLOOR, THIN, CARD_TOP, DIRS, COMPASS, AXES, w, P2, at, floor, line, axes, guides, arrow, puck, label, place, vecCard, centreLeft };
 })();
