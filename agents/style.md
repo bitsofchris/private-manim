@@ -111,6 +111,29 @@ The code is `videos/002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js`
 | a 3D change-of-basis example | a basis whose third vector stays fixed, so the change is a floor shear (ep02: v1 = (0, −1, 0), v2 = (1, 1, 0), v3 = z) |
 | camera motion across beats | none: a drift frozen at each beat's hold jumps 0.1–0.8° at every cut; move inside a beat and return to the canonical view before the hold |
 
+### Vectors and matrices as numbers
+
+The default for every video that shows a tensor's numbers (Chris, ep04: the
+first layout boxed every number and "looks kind of like a table, and it
+loses that sort of matrix notation"). One notation, close to what PyTorch
+prints, so a frame reads like a tensor from a notebook. Deviate when it
+clearly helps that video, and say why in its storyboard. The code is
+`videos/002-linear-algebra-basics/ep04-matrix-multiplication/_vec/vec.js`
+(`VEC.grid`, `VEC.brackets`).
+
+| When you want | Use |
+|---|---|
+| a vector (1-D) | one horizontal row in square brackets with commas: `[ 1, 2, −1 ]`; the row-vector (PyTorch) convention |
+| a matrix (2-D) | bare numbers in a tight grid inside one tall pair of square brackets; no commas, no box per number (009's readout card, ep01's brackets) |
+| its name and shape | the name above in `--dim` (`W`), the shape beside or under it as PyTorch prints `.shape`: `(3, 2)`, never "3×2" |
+| code | monospace, set inline, only for literal code (`x @ W`, `nn.Linear(3, 2)`, `.T`); the math stays in Inter |
+| a number | a true minus sign (−1); decimals only where the value has them (0.5, 4.1), never `2.0` |
+| colour | digits carry the meaning: one categorical colour per row when rows matter (rows of `W`, rows of a batch `X`); brackets `--dim`; the one hero gets magenta digits and brackets |
+| to point at an entry, row or column | a highlight box that appears and goes again; at rest it is notation, not a table |
+| a vector used as a column | only as a visible move ("turn x sideways") and only for that step; the row is the default |
+| a big tensor (a batch, an embedding) | at most about 4 × 4 numbers, then `⋯`, with the shape saying the size |
+| a row and its geometry | the row's colour on its arrow from the origin on the plane, so "rows are where input directions land" is visible |
+
 ## Two-hero rule
 
 Exactly **one** mobject (or one tightly-related VGroup) is magenta per beat. If everything is hero, nothing is. The rest is teal (data), muted (construction), or FG_DIM (labels).

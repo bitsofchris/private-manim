@@ -5,6 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-10
 
+- `agents/style.md` "Vectors and matrices as numbers": the default notation for tensors on screen. Vectors are a bracketed row with commas, matrices are bare numbers in brackets with no cell boxes, shapes are written as `(3, 2)`, monospace only for code, and colour goes on digits per row. Deviate when it clearly helps a video. (Chris, ep04)
 - `agents/style.md` "Linear algebra": a flat 2D number plane, not the isometric floor, for vectors and coordinates; at least ±2 steps, ~165 px per step; a vector the viewer reads gets axes, ticks and guides to its coordinates; thin arrows (`VEC.THIN`); the hero by colour alone, no halo; more dimensions are more axes, never more arrows. (Chris, ep01)
 - `agents/style.md` "Linear algebra": 3D change of basis as floor + stalk + route, never a 3D lattice; ghost grid alpha ~0.14; a basis that keeps v3 fixed; no camera drift across cuts. (ep02)
 - Runbook step 0: no question text with VO; the band is the captions' (AGENTS.md rule 6 wins over the runbook, as the precedence order says). Both ep01 and ep02 had already dropped it. (ep02)
