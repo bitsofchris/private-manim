@@ -191,7 +191,7 @@
     setTime(t); clear(g);
     const B = basisAt(u), a = (k, d = 1) => (o[k] == null ? d : o[k]);
     if (a("floor") > 0) floorFill(g, a("floor"));
-    if (a("ghost", 0) > 0) floorGrid(g, E, { alpha: 0.3 * a("ghost", 0) });
+    if (a("ghost", 0) > 0) floorGrid(g, E, { alpha: 0.14 * a("ghost", 0) });
     if (a("grid") > 0) floorGrid(g, B, { alpha: 0.9 * a("grid"), grow: o.grow });
     if (a("stalk") > 0 && a("heroDraw") >= 1) { dashed(g, FOOT, P, rgba(COL.dim, 0.9 * a("stalk") * a("hero"))); dot(g, FOOT, 9, rgba(COL.dim), a("stalk") * a("hero")); }
     if (o.route) { const r = o.route; route(g, basisAt(r.u == null ? u : r.u), r.c, r.prog, { alpha: r.alpha }); }

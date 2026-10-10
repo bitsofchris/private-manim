@@ -36,7 +36,7 @@ new basis differs from theirs.
 | Basis colours | slot 1 teal `#2DD4BF` (`HERO_TEAL`), slot 2 blue `#60A5FA` (the iso kit's second token colour), slot 3 gold `#E0B040` (`CONTENT_GOLD`). e1 becomes v1, so slot colour is identity: the x arrow, v1, the first number of each address and its tip-to-tail leg are all teal. Same for 2 and 3. In the 2D beat d1 is teal, d2 blue |
 | The hero (magenta `#C084FC`) | the vector: the arrow from the origin to P, and P's dot. It never moves in beats 1–6. In beat 7 the hero is `u` |
 | Address readout | top of the stage, `(3, 5, 2)` style: parentheses and commas in `--text`, each number in its slot colour, minus sign U+2212. A readout ticks (number morph), never fade-swaps |
-| Floor and grid | a solid floor (`BG_PANEL` at 0.9) with one 2D grid of the first two basis vectors (`MUTED` at 0.9, 3 px); the old standard grid ghosts at 0.3 when the new one is up. No lines through the volume |
+| Floor and grid | a solid floor (`BG_PANEL` at 0.9) with one 2D grid of the first two basis vectors (`MUTED` at 0.9, 3 px); the old standard grid ghosts at 0.14 when the new one is up (0.3 read as a triangle mesh). No lines through the volume |
 | Stalk | dashed `FG_DIM` line from the foot (3, 5, 0) up to P, with a small dot at the foot; it is the depth cue and never moves |
 | Numbers on screen | only the two addresses and the 2D `(1, 1)` / `(1, 0)`; the route legs carry the coefficients visually. Nothing else |
 
