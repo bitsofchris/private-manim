@@ -22,6 +22,10 @@ number grids plus a flat 2D plane; nothing needs Manim's axes or 3D camera.
 One stage, two halves, both always on (`00_layout/`, rendered to
 `media/hf/00_layout.png`):
 
+- **Matrix notation, not a table** (Chris, after the first layout): bare
+  numbers in a tight grid, as in 009's readout card, inside square brackets,
+  as in ep01's vector card. No box per number. A highlight is a box that
+  appears around an entry or a column and goes again.
 - **Top, the numbers (y 236–632).** The header line (y 236) holds the
   labels `x` and `W`, or `x = [ 1, 2, −1 ]` written flat before it turns.
   Under it, left to right: `x` turned sideways as a column, `W` (3 × 2),

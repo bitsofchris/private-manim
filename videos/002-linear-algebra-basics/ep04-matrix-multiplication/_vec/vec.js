@@ -23,16 +23,19 @@
 
   // ---- the canonical frame ----
   // the numbers (all px, screen)
+  // Matrix notation, not a table: bare numbers in a tight grid (009's readout
+  // card) inside square brackets (ep01's vector card), no box per number.
   const G = {
     header: 236,          // top of the header line: the labels "x" and "W", or x written flat
     top: 316,             // top of the first grid row
     rowH: 76,             // one grid row
-    cellW: 150,           // one W / weighted cell
-    xLeft: 97, xW: 110,   // the x column (x turned sideways)
-    wLeft: 247,           // W, two cells
-    pLeft: 617,           // the weighted rows, two cells (the "products")
+    cellW: 125,           // one W / weighted entry
+    xLeft: 100, xW: 90,    // the x column (x turned sideways)
+    wLeft: 278,           // W, two entries
+    pLeft: 650,           // the weighted rows, two entries (the "products")
     sumTop: 556,          // the sum row, under the weighted rows
     size: 64,             // every number and label
+    brW: 18, brPad: 6,    // bracket: arm length, gap to the numbers
   };
   const rowTop = (r) => G.top + r * G.rowH;
 
@@ -131,7 +134,7 @@
     const wd = o.width || G.cellW, ht = o.height || G.rowH;
     el.style.cssText = `position:absolute;left:0;top:0;width:${wd}px;height:${ht}px;box-sizing:border-box;` +
       `display:flex;align-items:center;justify-content:center;border-radius:12px;transform-origin:50% 50%;` +
-      `background:${css(COL.panel)};border:4px solid ${css(COL.muted)};font-size:${G.size}px;line-height:${ht - 8}px;` +
+      `background:transparent;border:4px solid transparent;font-size:${G.size}px;line-height:${ht - 8}px;` +
       `font-variant-numeric:tabular-nums;white-space:nowrap;color:${css(o.col || COL.text)};`;
     el.textContent = text;
     root.appendChild(el);
@@ -139,7 +142,7 @@
       el, wd, ht,
       set(t) { if (el.textContent !== t) el.textContent = t; },
       color(rgb, a = 1) { el.style.color = css(rgb, 1, a); },
-      border(rgb, a = 1) { el.style.borderColor = css(rgb, 1, a); },
+      border(rgb, a = 1) { el.style.borderColor = css(rgb, 1, a); },   // a highlight box; transparent at rest
       at(left, top, o2 = {}) {
         const s = o2.scale == null ? 1 : o2.scale;
         el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px) scale(${s.toFixed(4)})`;
@@ -162,22 +165,44 @@
   const wGrid = (root) => grid(root, W, G.wLeft, G.top);
   const pGrid = (root) => grid(root, XW, G.pLeft, G.top);
   const sumRow = (root, vals = SUM) => vals.map((v, c) => cell(root, fmtv(v), { left: G.pLeft + c * G.cellW, top: G.sumTop, col: COL.hero }));
+  // A pair of square brackets around a block of entries (left..right, top..top+h).
+  // b.color(rgb, a), b.at(dx, dy, {alpha}) moves the pair; b.els = [left, right].
+  function brackets(root, left, top, right, h, o = {}) {
+    const mk = (side) => {
+      const el = document.createElement("div"), x = side === "l" ? left - G.brPad - G.brW : right + G.brPad;
+      el.style.cssText = `position:absolute;left:${x}px;top:${top + 4}px;width:${G.brW}px;height:${h - 8}px;box-sizing:border-box;` +
+        `border:6px solid ${css(o.col || COL.dim)};border-${side === "l" ? "right" : "left"}:none;border-radius:3px;`;
+      root.appendChild(el); return el;
+    };
+    const els = [mk("l"), mk("r")];
+    const b = {
+      els,
+      color(rgb, a = 1) { els.forEach((e) => { e.style.borderColor = css(rgb, 1, a); }); },
+      at(dx, dy, o2 = {}) { els.forEach((e) => { e.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`; e.style.opacity = (o2.alpha == null ? 1 : o2.alpha).toFixed(3); }); },
+    };
+    return b;
+  }
+  const H3 = 3 * G.rowH;
+  const xBr = (root) => brackets(root, G.xLeft, G.top, G.xLeft + G.xW, H3);
+  const wBr = (root) => brackets(root, G.wLeft, G.top, G.wLeft + 2 * G.cellW, H3);
+  const pBr = (root) => brackets(root, G.pLeft, G.top, G.pLeft + 2 * G.cellW, H3);
+  const sumBr = (root, col = COL.hero) => brackets(root, G.pLeft, G.sumTop, G.pLeft + 2 * G.cellW, G.rowH, { col });
   // header labels: "x" over the x column, "W" over W; "x @ W" left of the sum row
   function headers(root) {
     const mk = (t, left, width, top, align = "center") => ISO.label(root, t, { size: G.size, color: css(COL.dim), left, top, width, align });
     return {
       x: mk("x", G.xLeft, G.xW, G.header),
       W: mk("W", G.wLeft, 2 * G.cellW, G.header),
-      out: mk("x @ W", G.wLeft, 2 * G.cellW + 40, G.sumTop + 2, "right"),
+      out: mk("x @ W", G.wLeft, G.pLeft - G.brW - G.brPad - 24 - G.wLeft, G.sumTop + 2, "right"),
     };
   }
   // "→" between W and the weighted rows, one per row
-  const arrows = (root) => [0, 1, 2].map((r) => ISO.label(root, "→", { size: G.size, color: css(COL.dim), left: G.wLeft + 2 * G.cellW, top: rowTop(r) + 2, width: G.pLeft - G.wLeft - 2 * G.cellW, align: "center" }));
+  const arrows = (root) => [0, 1, 2].map((r) => ISO.label(root, "→", { size: G.size, color: css(COL.dim), left: G.wLeft + 2 * G.cellW + G.brPad + G.brW, top: rowTop(r) + 2, width: G.pLeft - G.wLeft - 2 * G.cellW - 2 * (G.brPad + G.brW), align: "center" }));
 
   window.VEC = {
     X, W, XW, SUM, B, Y, CHAIN, ROWCOL, fmtv,
     G, rowTop, STEP, OX, FLOOR, PLANE_TOP, THIN, AXES, w, P2, at,
     floor, arrow, line, axes, guides, puck, label, place,
-    cell, grid, xColumn, wGrid, pGrid, sumRow, headers, arrows,
+    cell, grid, xColumn, wGrid, pGrid, sumRow, headers, arrows, brackets, xBr, wBr, pBr, sumBr,
   };
 })();

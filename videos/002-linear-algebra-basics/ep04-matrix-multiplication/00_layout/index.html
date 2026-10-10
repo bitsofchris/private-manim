@@ -34,6 +34,8 @@
   VEC.headers(root); VEC.arrows(root);
   VEC.xColumn(root); VEC.wGrid(root); VEC.pGrid(root);
   const sum = VEC.sumRow(root);
+  VEC.xBr(root); VEC.wBr(root); VEC.pBr(root);
+  const sumB = VEC.sumBr(root, COL.dim);
   ISO.guides(root);
   function render(t) {
     const u = E.out(seg(t, 0.1, 1.2));
@@ -43,7 +45,7 @@
     VEC.arrow(g, [0, 0], VEC.SUM, { col: COL.hero, u, width: 40 });   // under the chain: the teal head stays readable
     for (let i = 0; i < 3; i++) VEC.arrow(g, C[i], C[i + 1], { col: VEC.ROWCOL[i], u });
     VEC.puck(g, 0, 0);
-    sum.forEach((c) => c.border(COL.hero, u));
+    sumB.color(ISO.mix(COL.dim, COL.hero, u));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
