@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 8 "A matrix is just this stored map": from beat 7's end (MID, dots flattened on the magenta
+         (2, 1) line, the muted circle) the dots and line fade, the camera returns to NEAR, e1 / e2 ghosts and
+         the landed arrows come back and the W card fades in; "where every input direction lands": the spots
+         ring onto both tips, row 1 then row 2 flash toward white and back. Ends on the canonical frame exactly
+         (00_layout at its end). Hero: the landing spots. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.147" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.147;
+  // Cues, beat-local seconds (master 43.34 + t), from a 50 ms RMS envelope of vo_final.wav and
+  // MacWhisper sub-clip transcriptions. Speech: 0.21-1.90 "A matrix is just this stored map",
+  // 1.91-3.61 "where every input direction lands" ("every" ~2.05, "direction" ~2.65, "lands" ~3.05).
+  const CUE = {
+    matrix: 0.00,    // "A matrix" (0.21): the dots, line and circle fade; the camera returns to NEAR
+    stored: 1.15,    // "stored map" (~1.16): the W card fades in, dropping into its slot
+    every: 2.05,     // "every input" (~2.05): spot 1 rings onto e1's landed tip, row 1 flashes
+    dir: 2.62,       // "direction" (~2.65): spot 2 rings onto e2's landed tip, row 2 flashes
+    still: 3.15,     // nothing moves after this: the canonical frame for the last ~1.0 s
+  };
+  const { COL, css, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.matCard(root, VEC.W);
+  const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
+  const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  ISO.guides(root);
+
+  // ---- local helpers: beat 7's end state (07_network/index.html; keep in step with it) ----
+  const R = 0.8, N = 16;
+  const RING = [...Array(N)].map((_, i) => [R * Math.cos(i * 2 * Math.PI / N), R * Math.sin(i * 2 * Math.PI / N)]);
+  const LINE = 0.74;
+  function circle(g, r, o = {}) {
+    const u = o.u == null ? 1 : clamp01(o.u), al = o.alpha == null ? 1 : o.alpha;
+    if (u <= 0.001 || al <= 0.001) return;
+    const [cx, cy] = VEC.at(0, 0), rp = Math.abs(VEC.at(r, 0)[0] - cx);
+    g.save(); g.strokeStyle = css(o.col || COL.muted, 1, al); g.lineWidth = o.width || 4;
+    g.beginPath(); g.arc(cx, cy, rp, 0, -u * Math.PI * 2, true); g.stroke(); g.restore();
+  }
+  const bump = (u) => Math.sin(Math.PI * clamp01(u));   // 0 -> 1 -> 0
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    const fade = 1 - E.io(seg(t, CUE.matrix, CUE.matrix + 0.7));        // beat 7's picture leaves
+    VEC.view(VEC.MID, VEC.NEAR, E.io(seg(t, CUE.matrix + 0.15, CUE.matrix + 1.35)));
+    VEC.floor(g); VEC.axes(g);
+    if (fade > 0) {
+      circle(g, R, { alpha: 0.7 * fade, width: 4 });
+      RING.forEach((p) => VEC.puck(g, p[0], p[1], { half: 11, col: COL.muted, alpha: 0.75 * fade }));
+      VEC.line(g, [0, 0], [2 * LINE, LINE], { col: COL.hero, width: 8, alpha: fade });
+      VEC.line(g, [0, 0], [-2 * LINE, -LINE], { col: COL.hero, width: 8, alpha: fade });
+    }
+    // e1, e2 (muted ghosts) and where W sends them grow back from the origin as the camera lands
+    const back = E.io(seg(t, 0.55, 1.4));
+    const o = { u: back, alpha: back };
+    VEC.arrow(g, [0, 0], VEC.E1, Object.assign({ col: COL.muted }, o)); VEC.arrow(g, [0, 0], VEC.E2, Object.assign({ col: COL.muted }, o));
+    const B = VEC.W;
+    VEC.arrow(g, [0, 0], B[0], Object.assign({ col: VEC.SLOT[0] }, o)); VEC.arrow(g, [0, 0], B[1], Object.assign({ col: VEC.SLOT[1] }, o));
+    // the landing spots ring on in turn (the hero), each row flashing toward white with its spot
+    const s1 = seg(t, CUE.every, CUE.every + 0.45), s2 = seg(t, CUE.dir, CUE.dir + 0.45);
+    VEC.spot(g, B[0][0], B[0][1], { alpha: clamp01(s1 * 4), k: 1 - E.out(s1) });
+    VEC.spot(g, B[1][0], B[1][1], { alpha: clamp01(s2 * 4), k: 1 - E.out(s2) });
+    VEC.puck(g, 0, 0, { half: 14 });
+    // beat 7's dots, flattened on the (2, 1) line by VEC.M, fade on top
+    if (fade > 0) RING.forEach((p) => { const q = VEC.comb(p, VEC.M); VEC.puck(g, q[0], q[1], { half: 15, col: COL.data, alpha: fade }); });
+
+    const lab = E.io(seg(t, 1.1, 1.6));
+    VEC.place(l1, B[0][0] + 0.32, B[0][1] - 0.16, { alpha: lab });
+    VEC.place(l2, B[1][0] - 0.3, B[1][1] + 0.12, { alpha: lab });
+    const c = E.out(seg(t, CUE.stored, CUE.stored + 0.6));
+    card.at(VEC.cardLeft(card.el), VEC.CARD_TOP - 24 * (1 - c), { alpha: c });
+    card.light(0, bump(seg(t, CUE.every, CUE.every + 0.5)), COL.text);
+    card.light(1, bump(seg(t, CUE.dir, CUE.dir + 0.5)), COL.text);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

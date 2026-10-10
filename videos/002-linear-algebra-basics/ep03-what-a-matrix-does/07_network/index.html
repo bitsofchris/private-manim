@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 7 "In a network": from the canonical frame the card, arrows and labels fade and the
+         camera moves to MID; a ring of 16 teal dots (vectors) rides W into a tilted ellipse, leaving
+         a muted copy; then the map morphs on to VEC.M (never shown as numbers): the dots stretch
+         along a magenta (2, 1) line and flatten onto it. Hero: the (2, 1) line. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.14" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.14;
+  // Cues, beat-local seconds (master 36.20 + t), from a 50 ms RMS envelope of vo_final.wav and
+  // MacWhisper sub-clip transcriptions. Speech: 0.20-0.75 "In a network", 1.20-2.70 "that map moves
+  // vectors", 3.15-4.40 "from one space to another", 4.80-6.95 "amplifying some directions and collapsing others".
+  const CUE = {
+    network: 0.00,   // "In a network" (0.20): the card, arrows, labels fade; the camera moves to MID
+    ring: 0.80,      // the 16 dots pop onto the circle as the camera settles
+    moves: 2.00,     // "moves" (2.03): every dot rides W (s 0 -> 1, 1.3 s)
+    space: 3.15,     // "from one space to another" (3.17): a muted circle traces through the ghost dots
+    amp: 4.80,       // "amplifying" (4.80): the map morphs W -> M1 (stretched along (2, 1)); the magenta line draws
+    collapse: 6.00,  // "and collapsing" ("and" 6.0, "collapsing" 6.13): M1 -> M, the dots flatten onto the line
+    still: 6.70,     // nothing moves after this (last 0.44 s still)
+  };
+  const { COL, css, lerp, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const card = VEC.matCard(root, VEC.W);
+  const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
+  const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  // The ring: 16 vectors of length R around the origin (grid units).
+  const R = 0.8, N = 16;
+  const RING = [...Array(N)].map((_, i) => [R * Math.cos(i * 2 * Math.PI / N), R * Math.sin(i * 2 * Math.PI / N)]);
+  // M1: VEC.M plus a width across the line, so "amplifying" (W -> M1) and "collapsing" (M1 -> M)
+  // are two moves. p @ M = (p · m) (2, 1) with m = (0.8, 0.1); M1 adds (p · a) q with a ⊥ m and q the
+  // unit (1, −2), so the ring's image under M1 is an ellipse with its long axis exactly on (2, 1) and
+  // a short semi-axis of WIDTH · R; M1 -> M shrinks only that short axis to zero.
+  const WIDTH = 0.55;
+  const Q = [1 / Math.sqrt(5), -2 / Math.sqrt(5)];
+  const MN = Math.hypot(-0.1, 0.8), A = [0.1 / MN * WIDTH, -0.8 / MN * WIDTH];   // this sign keeps det > 0 from W to M1 (the other folds the ring flat mid-morph)
+  const M = VEC.M, M1 = [[M[0][0] + A[0] * Q[0], M[0][1] + A[0] * Q[1]], [M[1][0] + A[1] * Q[0], M[1][1] + A[1] * Q[1]]];
+  const I = [[1, 0], [0, 1]];
+  // the map at time t: identity -> W -> M1 -> M
+  function mapAt(t) {
+    const s = E.io(seg(t, CUE.moves, CUE.moves + 1.3));
+    const a = E.io(seg(t, CUE.amp, CUE.amp + 1.1));
+    const c = E.io(seg(t, CUE.collapse, CUE.still));
+    if (c > 0) return VEC.basisTo(M1, M, c);
+    if (a > 0) return VEC.basisTo(VEC.W, M1, a);
+    return VEC.basisTo(I, VEC.W, s);
+  }
+  // a thin circle (grid centre, radius in steps), drawn u of the way round from angle 0
+  function circle(g, r, o = {}) {
+    const u = o.u == null ? 1 : clamp01(o.u), al = o.alpha == null ? 1 : o.alpha;
+    if (u <= 0.001 || al <= 0.001) return;
+    const [cx, cy] = VEC.at(0, 0), rp = Math.abs(VEC.at(r, 0)[0] - cx);
+    g.save(); g.strokeStyle = css(o.col || COL.muted, 1, al); g.lineWidth = o.width || 4;
+    g.beginPath(); g.arc(cx, cy, rp, 0, -u * Math.PI * 2, true); g.stroke(); g.restore();
+  }
+  const LINE = 0.74;                                   // the (2, 1) line runs ±LINE·(2, 1): x 93..921 px in MID
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // the canonical frame hands off: card, arrows, ghosts, spots, labels fade while the camera moves
+    const off = 1 - E.io(seg(t, CUE.network, CUE.network + 0.7));
+    VEC.view(VEC.NEAR, VEC.MID, E.io(seg(t, CUE.network + 0.1, CUE.network + 1.3)));
+    VEC.floor(g); VEC.axes(g);
+    const B0 = VEC.W;
+    if (off > 0) {
+      VEC.arrow(g, [0, 0], VEC.E1, { col: COL.muted, alpha: off }); VEC.arrow(g, [0, 0], VEC.E2, { col: COL.muted, alpha: off });
+      VEC.arrow(g, [0, 0], B0[0], { col: VEC.SLOT[0], alpha: off }); VEC.arrow(g, [0, 0], B0[1], { col: VEC.SLOT[1], alpha: off });
+      VEC.spot(g, B0[0][0], B0[0][1], { alpha: off }); VEC.spot(g, B0[1][0], B0[1][1], { alpha: off });
+    }
+    VEC.place(l1, B0[0][0] + 0.32, B0[0][1] - 0.16, { alpha: off });
+    VEC.place(l2, B0[1][0] - 0.3, B0[1][1] + 0.12, { alpha: off });
+    card.at(VEC.cardLeft(card.el), VEC.CARD_TOP, { alpha: off });
+
+    // the original circle stays behind, muted: ghost dots as the ring leaves, a traced outline on "space"
+    const ghost = 0.75 * seg(t, CUE.moves, CUE.moves + 0.5);
+    circle(g, R, { u: E.io(seg(t, CUE.space, CUE.space + 0.9)), alpha: 0.7, width: 4 });
+    RING.forEach((p) => VEC.puck(g, p[0], p[1], { half: 11, col: COL.muted, alpha: ghost }));
+
+    // the hero: the stretched direction, a magenta line through the origin along (2, 1)
+    const lu = E.io(seg(t, CUE.amp + 0.05, CUE.amp + 0.95));
+    VEC.line(g, [0, 0], [2 * LINE, LINE], { col: COL.hero, width: 8, u: lu });
+    VEC.line(g, [0, 0], [-2 * LINE, -LINE], { col: COL.hero, width: 8, u: lu });
+
+    VEC.puck(g, 0, 0, { half: 14 });
+    // the ring: 16 teal dots pop on in turn round the circle, then follow the map
+    const B = mapAt(t);
+    RING.forEach((p, i) => {
+      const k = E.back(seg(t, CUE.ring + i * 0.03, CUE.ring + i * 0.03 + 0.35));
+      const q = VEC.comb(p, B);
+      VEC.puck(g, q[0], q[1], { half: 15 * k, col: COL.data, alpha: clamp01(k * 3) });
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

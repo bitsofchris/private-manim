@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 4, 04_rebuild: "After the matrix, keep the same recipe and use the moved directions.
+         Three of where e1 landed, plus two of where e2 landed." Opens on 03_recipe's last frame.
+         e1, e2 swing to where W sends them, the moved lattice fades in, the old recipe goes muted;
+         the same recipe (3, 2) is walked with the moved directions; the output x @ W draws to (2, 4).
+         Hero: the output x @ W. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.88" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.88;
+  // Beat-local seconds (master = 15.23 + t), from a 50 ms RMS envelope of vo_final.wav
+  // 15.23-23.11 and MacWhisper sub-clip transcriptions.
+  const CUE = {
+    after:  0.20,  /* "After the matrix"      : e1, e2 swing to W (0.20-1.45), lattice in, grid dims, old recipe mutes */
+    keep:   1.15,  /* "keep the same recipe"  : the x card swells once (1.15-1.85) */
+    use:    2.05,  /* "and use"               */
+    moved:  2.55,  /* "the moved directions"  : landed arrows brighten 0.7 -> 1 (2.55-3.05) */
+    three:  4.00,  /* "Three"                 : slot "3" lights; teal hops of (1, 0.5) land 4.40, 4.80, 5.20 */
+    e1:     4.85,  /* "of where e1 landed"    */
+    plus:   5.63,  /* "plus"                  : slot "3" back, slot "2" lights */
+    two:    5.95,  /* "two"                   : blue hops of (-0.5, 1.25) land 6.25, 6.65 */
+    e2:     6.70,  /* "of where e2"           : output arrow draws 6.75-7.40, slot "2" back */
+    landed: 7.15,  /* "landed"                : output lands 7.40 */
+    still:  7.46,  /*  nothing moves after this (last 0.42 s still) */
+  };
+  const T = {
+    swing: [0.20, 1.45], mute: [0.20, 0.90], swell: [1.15, 1.85],
+    dim: [0.20, 0.80], bright: [2.55, 3.05],
+    slot0: [3.95, 4.15, 5.55, 5.80], slot1: [5.60, 5.80, 6.75, 7.00],
+    hopsE1: [[4.00, 4.40], [4.40, 4.80], [4.80, 5.20]],
+    hopsE2: [[5.85, 6.25], [6.25, 6.65]],
+    out: [6.75, 7.40],
+  };
+  const { COL, css, seg, lerp, mix } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const xcard = VEC.vecCard(root, VEC.X, { name: "x =", cols: VEC.SLOT });
+  // a swelling slot grows into its neighbours by design
+  xcard.slots.forEach((el) => { el.style.display = "inline-block"; el.style.transformOrigin = "50% 60%"; el.setAttribute("data-layout-allow-overlap", ""); });
+  const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
+  const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  ISO.guides(root);
+
+  // ---- local helpers (same in 04_rebuild) ----
+  const lerp2 = (p, q, u) => [lerp(p[0], q[0], u), lerp(p[1], q[1], u)];
+  // progress along a chain of hops: each [a, b] window adds one eased step
+  const hops = (t, wins) => wins.reduce((n, [a, b]) => n + E.io(seg(t, a, b)), 0);
+  // a hop tick: a short cross-bar over the leg where a hop lands (dir = the hop's grid
+  // direction), in the leg colour lifted toward off-white; it grows in as the hop lands.
+  // Only at intermediate landings: the leg's arrowhead marks the last one.
+  function tick(p, dir, land, t, col, alpha = 1) {
+    const k = E.back(seg(t, land - 0.02, land + 0.16));
+    if (k <= 0.001) return;
+    const n = Math.hypot(dir[0], dir[1]), h = 22 * k / VEC.w(1, 0)[0] / n;   // half-length 22 px, in grid units
+    const q = [-dir[1] * h, dir[0] * h];
+    VEC.line(g, [p[0] - q[0], p[1] - q[1]], [p[0] + q[0], p[1] + q[1]], { col: ISO.mix(col, COL.text, 0.45), alpha: Math.min(1, k) * alpha, width: 7 });
+  }
+  // e1 / e2 label offsets in screen px from the tip. Landed in NEAR = 00_layout's exact
+  // placement (0.32, -0.16 steps; -0.3, +0.12 steps). Landed in FAR: tucked so they stay
+  // out of the caption band and the left dead zone. At home (FAR): e1 above-right of its
+  // tip (below would sit in the band), e2 up-left as in 00_layout.
+  function labelOffsets(s, k) {
+    const near = [[0.32 * 300, 0.16 * 300], [-0.3 * 300, -0.12 * 300]];
+    const farLanded = [[102, 15], [-40, -75]];
+    const home = [[70, -62], [-93, -37]];
+    return [0, 1].map((i) => lerp2(home[i], lerp2(near[i], farLanded[i], k), s));
+  }
+
+  // a slot lit window [up0, up1, down0, down1] -> 0..1
+  const lit = (t, w) => E.out(seg(t, w[0], w[1])) * (1 - E.io(seg(t, w[2], w[3])));
+  const pulse = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    const s = E.io(seg(t, ...T.swing));                        // e1, e2 swing to where W sends them
+    const B = VEC.basis(s);
+    VEC.setView(1);                                            // FAR throughout
+    VEC.floor(g, { alpha: lerp(0.42, 0.14, s) });              // the standard grid dims under the moved one
+    VEC.lattice(g, B, { alpha: 0.35 * s });
+    VEC.axes(g);
+    // muted ghosts stay at (1, 0) and (0, 1)
+    VEC.arrow(g, [0, 0], VEC.E1, { col: COL.muted }); VEC.arrow(g, [0, 0], VEC.E2, { col: COL.muted });
+
+    // e1, e2 where they land: dim while they swing, brighten on "the moved directions".
+    // At s = 0 they sit under the old legs (as in 03_recipe, frame 0 matches); by s = 1 they
+    // sit over the old recipe: a cross-fade between an under copy and an over copy.
+    const a = 1 - 0.3 * E.io(seg(t, ...T.dim)) + 0.3 * E.io(seg(t, ...T.bright));
+    const landed = (al) => { VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0], alpha: al }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1], alpha: al }); };
+    landed(a * (1 - s));
+
+    // the old recipe goes muted: legs, their ticks, the x arrow
+    const m = E.io(seg(t, ...T.mute));
+    const legCol = (c) => mix(c, COL.muted, m);
+    VEC.arrow(g, [0, 0], [3, 0], { col: legCol(VEC.SLOT[0]), alpha: lerp(0.9, 0.6, m) });
+    VEC.arrow(g, [3, 0], [3, 2], { col: legCol(VEC.SLOT[1]), alpha: lerp(0.9, 0.6, m) });
+    [1, 2].forEach((i) => tick([i, 0], VEC.E1, -1, t, VEC.SLOT[0], 1 - m));
+    tick([3, 1], VEC.E2, -1, t, VEC.SLOT[1], 1 - m);
+    VEC.arrow(g, [0, 0], VEC.X, { col: mix(COL.hero, COL.muted, m), alpha: lerp(1, 0.8, m), width: 52 });
+
+    landed(a * s);
+
+    // the same recipe with the moved directions: 3 hops of (1, 0.5), then 2 of (-0.5, 1.25)
+    const W0 = VEC.W[0], W1 = VEC.W[1], C = VEC.comb([3, 0], VEC.W), P = VEC.XW;   // C = (3, 1.5), P = (2, 4)
+    const n1 = hops(t, T.hopsE1), n2 = hops(t, T.hopsE2);
+    VEC.arrow(g, [0, 0], C, { col: VEC.SLOT[0], alpha: 0.9, u: n1 / 3 });
+    VEC.arrow(g, C, P, { col: VEC.SLOT[1], alpha: 0.9, u: n2 / 2 });
+    [1, 2].forEach((i) => tick([W0[0] * i, W0[1] * i], W0, T.hopsE1[i - 1][1], t, VEC.SLOT[0]));
+    tick([C[0] + W1[0], C[1] + W1[1]], W1, T.hopsE2[0][1], t, VEC.SLOT[1]);
+    // the output x @ W, the hero
+    VEC.arrow(g, [0, 0], P, { col: COL.hero, width: 52, u: E.io(seg(t, ...T.out)) });
+    VEC.puck(g, 0, 0, { half: 14 });
+
+    const off = labelOffsets(s, 1);
+    VEC.place(l1, B[0][0], B[0][1], { dx: off[0][0], dy: off[0][1] });
+    VEC.place(l2, B[1][0], B[1][1], { dx: off[1][0], dy: off[1][1] });
+
+    // the card: swells once on "keep the same recipe"; the slot being used lights toward off-white
+    const k0 = lit(t, T.slot0), k1 = lit(t, T.slot1);
+    xcard.light(0, 0.55 * k0, COL.text); xcard.light(1, 0.55 * k1, COL.text);
+    xcard.slots[0].style.transform = `scale(${(1 + 0.18 * k0).toFixed(4)})`;
+    xcard.slots[1].style.transform = `scale(${(1 + 0.18 * k1).toFixed(4)})`;
+    xcard.at(VEC.cardLeft(xcard.el), VEC.CARD_TOP, { scale: 1 + 0.08 * pulse(t, ...T.swell) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

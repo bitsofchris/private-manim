@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5 "amounts": FAR view, the rebuilt recipe of beat 4. "The vector supplies the
+         amounts": the output goes off-white, the card's 3 and 2 turn magenta and swell, the hop
+         marks pulse. "the matrix supplies the new directions": the slots go back to teal / blue,
+         the landed e1, e2 brighten and magenta spots ring onto their tips. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.50" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.50;
+  // Cues, beat-local seconds (master 23.11 + t), from a 50 ms RMS envelope of vo_final.wav and a
+  // MacWhisper sub-clip (0.19-4.33 "The vector supplies the amounts, the matrix supplies the new directions").
+  // Speech: 0.20-0.68 "The vector", 0.75-1.20 "supplies", 1.20-1.78 "the amounts", 2.10-2.60 "the matrix",
+  // 2.60-3.05 "supplies", 3.10-3.40 "the new", 3.45-4.30 "directions".
+  const CUE = {
+    vector: 0.20,   // "The vector": the output hands off its magenta (to off-white)
+    amounts: 1.25,  // "amounts": slots 3 and 2 magenta + swell, hop marks pulse
+    matrix: 2.10,   // "the matrix": slots back to teal / blue
+    newdir: 3.10,   // "the new": the landed e1, e2 brighten
+    dirs: 3.45,     // "directions": magenta spots ring onto both landed tips
+    still: 4.05,    // nothing moves after this (last 0.45 s still)
+  };
+  const { COL, css, mix, lerp, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const xcard = VEC.vecCard(root, VEC.X, { name: "x =", cols: VEC.SLOT });
+  // a swelling slot grows into its neighbours by design (as in 04_rebuild)
+  xcard.slots.forEach((el) => { el.style.display = "inline-block"; el.style.transformOrigin = "50% 60%"; el.setAttribute("data-layout-allow-overlap", ""); });
+  const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
+  const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  ISO.guides(root);
+
+  // ---- local helpers (tick and labelOffsets copied from 04_rebuild; recipeState = its end state) ----
+  const lerp2 = (p, q, u) => [lerp(p[0], q[0], u), lerp(p[1], q[1], u)];
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));     // 0 -> 1 -> 0 from a, lasting d
+  // a hop tick: 04_rebuild's cross-bar, landed (k = 1); grow > 0 swells and lifts it (the pulse)
+  function tick(p, dir, col, grow = 0) {
+    const k = 1 + 0.6 * grow;
+    const n = Math.hypot(dir[0], dir[1]), h = 22 * k / VEC.w(1, 0)[0] / n;
+    const q = [-dir[1] * h, dir[0] * h];
+    VEC.line(g, [p[0] - q[0], p[1] - q[1]], [p[0] + q[0], p[1] + q[1]], { col: mix(col, COL.text, 0.45 + 0.4 * grow), width: 7 + 3 * grow });
+  }
+  // 04_rebuild's e1 / e2 label offsets (px from the tip); here s = 1, k = 1 (landed, FAR)
+  function labelOffsets(s, k) {
+    const near = [[0.32 * 300, 0.16 * 300], [-0.3 * 300, -0.12 * 300]];
+    const farLanded = [[102, 15], [-40, -75]];
+    const home = [[70, -62], [-93, -37]];
+    return [0, 1].map((i) => lerp2(home[i], lerp2(near[i], farLanded[i], k), s));
+  }
+  const B1 = VEC.basis(1), W0 = VEC.W[0], W1 = VEC.W[1];
+  const C = VEC.comb([3, 0], VEC.W), P = VEC.XW;                         // the corner (3, 1.5) and x @ W = (2, 4)
+  // recipeState: 04_rebuild's last frame (FAR): grid 0.14 under the moved lattice, the ghosts,
+  // the old recipe muted, the landed e1 e2, the new hops with their ticks, the output.
+  // o: out (output colour), mark (tick pulse 0..1), bright (landed arrows toward off-white 0..1).
+  function recipeState(g, o) {
+    VEC.setView(1);
+    VEC.floor(g, { alpha: 0.14 });
+    VEC.lattice(g, B1, { alpha: 0.35 });
+    VEC.axes(g);
+    VEC.arrow(g, [0, 0], VEC.E1, { col: COL.muted }); VEC.arrow(g, [0, 0], VEC.E2, { col: COL.muted });
+    VEC.arrow(g, [0, 0], [3, 0], { col: COL.muted, alpha: 0.6 });
+    VEC.arrow(g, [3, 0], [3, 2], { col: COL.muted, alpha: 0.6 });
+    VEC.arrow(g, [0, 0], VEC.X, { col: COL.muted, alpha: 0.8, width: 52 });
+    const b = o.bright || 0;
+    VEC.arrow(g, [0, 0], B1[0], { col: mix(VEC.SLOT[0], COL.text, 0.5 * b) });
+    VEC.arrow(g, [0, 0], B1[1], { col: mix(VEC.SLOT[1], COL.text, 0.5 * b) });
+    VEC.arrow(g, [0, 0], C, { col: VEC.SLOT[0], alpha: 0.9 });
+    VEC.arrow(g, C, P, { col: VEC.SLOT[1], alpha: 0.9 });
+    const m = o.mark || 0;
+    [1, 2].forEach((i) => tick([W0[0] * i, W0[1] * i], W0, VEC.SLOT[0], m));
+    tick([C[0] + W1[0], C[1] + W1[1]], W1, VEC.SLOT[1], m);
+    VEC.arrow(g, [0, 0], P, { col: o.out, width: 52 });
+    VEC.puck(g, 0, 0, { half: 14 });
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // the output hands its magenta over: hero -> off-white, moving from frame 0
+    const off = E.io(seg(t, 0, 0.7));
+    // the amounts: slots magenta + swell on "amounts", back to their colours on "the matrix"
+    const amt = E.out(seg(t, CUE.amounts - 0.1, CUE.amounts + 0.2)) * (1 - E.io(seg(t, CUE.matrix, CUE.matrix + 0.35)));
+    const sw = 1 + 0.2 * pulse(t, CUE.amounts - 0.1, 0.6);
+    const mk = pulse(t, CUE.amounts + 0.05, 0.6);
+    // the new directions: the landed arrows brighten (a pulse), the spots ring on (k 1 -> 0)
+    const br = pulse(t, CUE.newdir, 0.9);
+    const ring = E.out(seg(t, CUE.dirs, CUE.dirs + 0.45));
+    recipeState(g, { out: mix(COL.hero, COL.text, off), mark: mk, bright: br });
+    if (ring > 0.001) {
+      VEC.spot(g, B1[0][0], B1[0][1], { alpha: Math.min(1, ring * 2), k: 1 - ring });
+      VEC.spot(g, B1[1][0], B1[1][1], { alpha: Math.min(1, ring * 2), k: 1 - ring });
+    }
+    const of = labelOffsets(1, 1);
+    VEC.place(l1, B1[0][0], B1[0][1], { dx: of[0][0], dy: of[0][1] });
+    VEC.place(l2, B1[1][0], B1[1][1], { dx: of[1][0], dy: of[1][1] });
+    xcard.light(0, amt); xcard.light(1, amt);
+    xcard.slots.forEach((s) => { s.style.transform = `scale(${sw.toFixed(4)})`; });
+    xcard.at(VEC.cardLeft(xcard.el), VEC.CARD_TOP);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

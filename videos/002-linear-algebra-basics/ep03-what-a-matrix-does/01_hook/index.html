@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep03 beat 1, the hook: FAR view, W already swinging e1 and e2 (and x riding along)
+         to where they land; spots ring on "lands"; the move replays once. Started from 00_layout. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.33" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.33;
+  // Cues, beat-local seconds (master 0.00 + t), from a 50 ms RMS envelope of vo_final.wav
+  // and MacWhisper sub-clips (speech 0.60-3.04, pause 3.04-3.42, 3.42-6.13).
+  const CUE = {
+    swing0: -0.82, // the swing started before frame 0: s is ~0.3 at t = 0 (still moving)
+    landed: 1.30,  //  e1, e2 and x land; spots wait for "lands"
+    lands: 2.55,   // "lands" (master 2.55): magenta spots ring onto both landed tips
+    every: 3.40,   // "Every weight matrix" (master 3.40): everything eases back to s = 0
+    back: 4.62,    //  ... home (1.22 s), then lands again (1.22 s)
+    again: 5.84,   //  landed again, "exactly this" (master ~5.65)
+    ring: 5.60,    //  spots ring again as the tips arrive
+    still: 5.92,   // nothing moves after this (last 0.41 s)
+  };
+  const { COL, css, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  ISO.guides(root);
+  // local helper: the FAR picture at swing s (shared shape with 02_sends' opening)
+  //   floor dims 0.42 -> 0.14, moved lattice (0.35), e1/e2 ghosts, x ghost at (3, 2),
+  //   off-white x at map(X, s), the landed arrows, spots, origin.
+  function drawSwing(s, spotA, spotK) {
+    const B = VEC.basis(s);
+    VEC.floor(g, { alpha: lerp(0.42, 0.14, s) });
+    VEC.lattice(g, B, { alpha: 0.35 * Math.min(1, s / 0.3) });
+    VEC.axes(g);
+    VEC.arrow(g, [0, 0], VEC.E1, { col: COL.muted }); VEC.arrow(g, [0, 0], VEC.E2, { col: COL.muted });
+    VEC.arrow(g, [0, 0], VEC.X, { col: COL.muted, alpha: 0.8 });
+    VEC.arrow(g, [0, 0], VEC.map(VEC.X, s), { col: COL.text });
+    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    VEC.spot(g, B[0][0], B[0][1], { alpha: spotA, k: spotK }); VEC.spot(g, B[1][0], B[1][1], { alpha: spotA, k: spotK });
+    VEC.puck(g, 0, 0, { half: 14 });
+  }
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.setView(1);                                           // FAR throughout
+    let s = E.io(seg(t, CUE.swing0, CUE.landed));             // first swing, mid-flight at frame 0
+    s = lerp(s, 0, E.io(seg(t, CUE.every, CUE.back)));        // the replay: back home ...
+    s = lerp(s, 1, E.io(seg(t, CUE.back, CUE.again)));        // ... and landed again
+    // spots: pop on "lands", fade during the trip, ring again on landing
+    const pop1 = seg(t, CUE.lands, CUE.lands + 0.35), pop2 = seg(t, CUE.ring, CUE.still);
+    let spotA = seg(t, CUE.lands, CUE.lands + 0.12) * (1 - E.out(seg(t, CUE.every, CUE.every + 0.35)));
+    spotA = Math.max(spotA, seg(t, CUE.ring, CUE.ring + 0.12));
+    const spotK = t < CUE.ring ? (pop1 > 0 ? 1 - E.out(pop1) : 0) : 1 - E.out(pop2);
+    drawSwing(s, spotA, spotK);
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
