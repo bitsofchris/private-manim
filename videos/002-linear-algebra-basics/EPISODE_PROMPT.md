@@ -29,6 +29,11 @@ Do, in runbook order:
 4. Captions, assembly, review (steps 7–8): sequential clean re-render, assemble, contact sheets, fix what the sheets show. Then tell me the media/short.mp4 path to watch on my phone, and iterate on what I say.
 5. Write FOLDER/publish.md (step 9) using the title from SERIES.md, and send the hand-off pack (step 10) when I say done.
 
+Look and checks for this series:
+- Linear algebra uses the flat 2D number plane, not the isometric floor (agents/style.md "Linear algebra"). Copy ep01-what-is-a-vector/_vec/vec.js into FOLDER/_vec/ as the starting kit.
+- Before spawning beat agents, render FOLDER/00_layout (the canonical frame) and send it to me; build beats only after I OK the look.
+- After the parallel build, check every cut (last frame of beat N beside the first frame of beat N+1) before assembling.
+
 Traps in this series:
 - Episode folders are one level deeper than a normal videos/NNN-slug/. Every path relative to the repo gains a level. Manim scene shim: parents[3], not parents[2]. HyperFrames symlinks: ../../../_shared/web/vendor and ../../../_shared/web/iso. Render from inside FOLDER (or the beat folder, for HyperFrames), never from the repo root, never two renders at once in one folder.
 - Use the row-vector (PyTorch) convention throughout: x @ W, rows of W are where input directions land (SERIES.md "Series rules").

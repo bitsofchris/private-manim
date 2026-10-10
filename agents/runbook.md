@@ -79,7 +79,9 @@ THE ANSWER IN ONE SENTENCE. Put those three lines at the top of
 
 The hook, from the research in `agents/research/2026-10-03-shorts-craft.md`:
 frame 0 is the finished visual already working (not a title, not a word
-cloud, not a lead-in), with the question as 5–8 words of on-screen text in
+cloud, not a lead-in). With VO there is no question text: the band belongs
+to the burned-in captions (AGENTS.md rule 6), and the answer is spoken in
+the first second anyway. A VO-less clip may put the question, 5–8 words, in
 the band. The first spoken line is the answer, never the question, so a
 viewer who leaves at two seconds still has it (how: step 1, "VO line 1").
 The last line is the one-sentence takeaway over the final visual, no
@@ -195,6 +197,11 @@ length, scene file, VO. Beat lengths are the contract for step 6.
   master times, the visual brief, the hero. Group beats that share a
   visual onto one agent; write any local part (`_parts.py`) before
   spawning so every agent imports the same one. Check `agents/parts.md` first.
+- **Show Chris the canonical frame before spawning agents** when the look
+  is new to the repo: render `00_layout/` (the shared parts at rest) and
+  send it. ep01 and ep02 each built and assembled a whole Short in a look
+  Chris then rejected (the isometric floor; a 3D lattice); one frame
+  settles it in one exchange.
 - Name two or three finished beats that resemble each agent's brief as
   worked examples (same part, same kind of motion). Examples from our own
   passing scenes do more than rule lists.
@@ -254,12 +261,19 @@ element needs the band too (a code card), put it at the band top and pass
   never two lines for more than a beat.
 - Dead-zone proof: overlay a caption PNG on a real frame and `drawbox`
   the four zones at 25 % red. If text touches red, fix the constant.
+- **Check every cut:** the last frame of beat N beside the first frame of
+  beat N+1, at 360 px wide. Parallel agents rebuild a neighbour's end state
+  from the brief, not its render, and drift: ep01 had three cuts where a
+  border colour, an arrow's alpha or a label changed at the splice.
 - Chris: watch it on a phone with sound, then muted. Listen once at the
   splice points.
 - Fixing what a sheet shows: name the object and the line, fix the line,
   then the block, and only then rebuild the beat. Two review rounds per
   beat; if the same kind of problem comes back, stop and rethink the
   layout rather than nudging it again.
+- A rework of several beats: resume the same agents by name with a brief
+  that lists only what changed. It cost ep02 a third of a fresh spawn, and
+  the agents kept their audio-derived cue times.
 
 ## 9. Publish (Chris, 2 min)
 

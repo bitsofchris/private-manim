@@ -25,6 +25,7 @@ clean").
 | Vendored web assets (GSAP, Inter) | `videos/_shared/web/vendor/` | offline HyperFrames renders; versions, licenses, sha256 in its README |
 | HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes; `stack-styles/`, one beat in ten visual styles plus the house-style control |
 | A whole Short in HyperFrames, and its isometric kit | `videos/009-transformer-short-iso/` | `videos/_shared/web/iso/iso.js` (world, tray, card, slabs, palette), `00_layout/` (the canonical frame), `BRIEF.md` (the beat contract) |
+| The Linear Algebra for Engineers series (2D plane look) | `videos/002-linear-algebra-basics/` | `SERIES.md` (arc, checklist, series rules), `EPISODE_PROMPT.md` (one session per episode), `ep01-what-is-a-vector/_vec/vec.js` (the plane kit) |
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |

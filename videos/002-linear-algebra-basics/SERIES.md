@@ -51,7 +51,7 @@ keep the short working names; the table has the publish titles.
 | # | YouTube title | Folder | Draft visuals | Script | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | What Is a Vector? Linear Algebra for AI | `ep01-what-is-a-vector` | x | x | x | x | x | x | |
-| 2 | Change of Basis Made Simple (Beginner Friendly) | `ep02-change-of-basis` | x | x | x | | | | |
+| 2 | Change of Basis Made Simple (Beginner Friendly) | `ep02-change-of-basis` | x | x | x | x | x | x | |
 | 3 | What a Matrix Really Does (Linear Algebra for AI) | `ep03-what-a-matrix-does` | x | x | x | | | | |
 | 4 | Matrix Multiplication Explained Visually (x @ W) | `ep04-matrix-multiplication` | x | x | x | | | | |
 | 5 | PyTorch nn.Linear Explained (Beginner Friendly) | `ep05-nn-linear-shape` | x | x | x | | | | |
@@ -86,11 +86,15 @@ one running example and one `_parts.py`.
 - **Question:** How can the same vector have two different sets of numbers?
 - **Answer:** The numbers are an address in a chosen basis. Change the
   basis: same arrow, new address.
-- **Frame 0 / hero:** a fixed point, the grid deforming around it,
-  coordinates ticking from `(3, 5, 2)` to `(-2, 3, 2)`. Hero: the point
-  that does not move.
-- **Reuse:** `basis_transformation_3d.py`, `plane_many_bases.py`; recap
-  2–3; Unit 1's note that `(1, 1)` becomes `(1, 0)` in a diagonal basis.
+- **Frame 0 / hero (as built):** the point on its stalk, the floor grid
+  shearing, the route re-routing, the address ticking `(3, 5, 2)` ⇄
+  `(−2, 3, 2)`. Hero: the point that does not move.
+- **Reuse:** `plane_many_bases.py`; recap 2–3; Unit 1's note that `(1, 1)`
+  becomes `(1, 0)` in a diagonal basis. The basis differs from
+  `basis_transformation_3d.py`: v1 = (0, −1, 0), v2 = (1, 1, 0), v3 = z, so
+  the change is a floor shear (same spoken numbers).
+- **Ends on:** the 2D still, u = (1, 1) lying on d1 with the address
+  (1, 0). Episode 3 can open on two basis arrows.
 
 ### 3. What a matrix actually does
 - **Question:** What does a matrix actually do to a vector?
@@ -178,7 +182,8 @@ one running example and one `_parts.py`.
 ## Series rules
 
 - One question per episode, in the viewer's words. One sentence answers it.
-- **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. Copy `ep01-what-is-a-vector/_vec/vec.js` for the plane, arrows, dots and the vector card.
+- **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. Copy `ep01-what-is-a-vector/_vec/vec.js` for the plane, arrows, dots and the vector card; the look's rules are in `agents/style.md` "Linear algebra".
+- **Episode folders are one level deeper** than `videos/NNN-slug/`, so every repo-relative path gains a level: HyperFrames symlinks `../../../_shared/web/vendor` (and `iso`), tools at `../../../tools/`, the Manim shim `parents[3]`.
 - Row-vector (PyTorch) convention everywhere: `x @ W`, `W` is `(in, out)`,
   rows of `W` are where input directions land.
 - Episodes 3–6 share the `(5, 3) @ (3, 2)` numbers already in the draft

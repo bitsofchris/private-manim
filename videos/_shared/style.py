@@ -111,6 +111,7 @@ CONTENT_OTHER = "#FB923C"    # orange - "other-food" cluster
 CONTENT_PIRATE = "#A16207"   # warm brown - pirate steering vector
 CONTENT_GOLD = "#E0B040"     # gold - "Golden Gate" callback
 CONTENT_RUST = "#C2410C"     # rust - tertiary categorical accent
+CONTENT_BLUE = "#60A5FA"     # blue - the 2nd of three categorical slots (token, basis vector); 009-011, ep02
 
 # --- Token matrices (transformer shorts) -------------------------------------
 # A token is a column of cells; a sequence is columns side by side under one

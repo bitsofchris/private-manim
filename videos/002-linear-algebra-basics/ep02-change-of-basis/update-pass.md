@@ -8,6 +8,7 @@ sessions were editing `agents/` and `SERIES.md` in parallel, so the update
 pass runs once for the whole series.
 **When to use:** the series-wide update pass (runbook step 11), alongside the
 other episodes' notes.
+**Status:** applied in the series update pass of 2026-10-10 (see `agents/changelog.md`), except the two tool items (9, 10), which are still open.
 **How it works:** one section per home; each item says the trigger, the
 cause, the fix, and what the wrong version looked like. Apply, then add one
 `agents/changelog.md` line per item citing ep02.

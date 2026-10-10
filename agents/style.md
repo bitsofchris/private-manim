@@ -64,7 +64,7 @@ Rules that are specific to Shorts:
 ## The isometric house look (HyperFrames Shorts)
 
 The default look for a HyperFrames Short since 2026-10-04, from 009, 010 and
-011. The code is `videos/_shared/web/iso/iso.js` (the world),
+011, except linear algebra on a plane, which uses the flat 2D plane below. The code is `videos/_shared/web/iso/iso.js` (the world),
 `videos/_shared/web/iso/diagram.js` (the transformer figure)
 and `videos/011-jev-decision-models-iso/_jev/jev.js` (pillars, slabs, cards).
 
@@ -90,6 +90,26 @@ from: one thing changes at a time, exact values are upright and large, and
 the subject has empty space around it. What to leave alone: do not extrude
 something only to make it isometric, and do not put a number on a slanted
 surface.
+
+## Linear algebra (HyperFrames Shorts)
+
+From the Linear Algebra for Engineers series (`videos/002-linear-algebra-basics/`).
+Vectors, bases and coordinates read on a **flat 2D number plane, not the
+isometric floor** (Chris, ep01: "the ISO view doesn't work for these linear
+algebra ones"). East is right, north is up, one grid square is one step.
+The code is `videos/002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js`.
+
+| When you want | Use |
+|---|---|
+| the space | the plane: grid one line per step, origin at the safe area's centre, at least ±2 steps in every direction, about 165 px per step (`VEC.floor`); a cramped plane was the first complaint |
+| a vector the viewer should read as its numbers | the arrow from the origin plus the axes with a tick per step (`VEC.axes`) and dashed guides from the tip to its coordinates (`VEC.guides`); an arrow alone on a grid does not say "−2, 2" |
+| an arrow | thin: `VEC.arrow` scales every width by `VEC.THIN` (0.6), so the hero is about a 31 px shaft at 165 px per step; at full weight Chris called them "a little too thick" |
+| the hero arrow | colour alone; no halo or glow behind it (translucent rectangles along a diagonal read as "a fuzzy box") |
+| more dimensions | more axes through the origin (lines, no arrowheads) for the one vector, never more arrows: a fan of arrows says "many vectors" (ep01 beat 7) |
+| a 3D vector and a change of basis | a solid floor carrying one 2D grid (the first two basis vectors), a dashed stalk for height, the address as a route of legs tip to tail (`ep02-change-of-basis/_kit/basis.js`); never a full 3D lattice through the volume, which read as a mesh (ep02's first build, "way too confusing") |
+| the old grid under a sheared new one | ghost alpha about 0.14; at 0.3 the two grids read as a triangle mesh |
+| a 3D change-of-basis example | a basis whose third vector stays fixed, so the change is a floor shear (ep02: v1 = (0, −1, 0), v2 = (1, 1, 0), v3 = z) |
+| camera motion across beats | none: a drift frozen at each beat's hold jumps 0.1–0.8° at every cut; move inside a beat and return to the canonical view before the hold |
 
 ## Two-hero rule
 

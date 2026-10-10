@@ -3,6 +3,20 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-10
+
+- `agents/style.md` "Linear algebra": a flat 2D number plane, not the isometric floor, for vectors and coordinates; at least ±2 steps, ~165 px per step; a vector the viewer reads gets axes, ticks and guides to its coordinates; thin arrows (`VEC.THIN`); the hero by colour alone, no halo; more dimensions are more axes, never more arrows. (Chris, ep01)
+- `agents/style.md` "Linear algebra": 3D change of basis as floor + stalk + route, never a 3D lattice; ghost grid alpha ~0.14; a basis that keeps v3 fixed; no camera drift across cuts. (ep02)
+- Runbook step 0: no question text with VO; the band is the captions' (AGENTS.md rule 6 wins over the runbook, as the precedence order says). Both ep01 and ep02 had already dropped it. (ep02)
+- Runbook step 6: show Chris the canonical `00_layout` frame before spawning beat agents when the look is new; ep01 and ep02 each assembled a whole Short in a look that was then rejected. (ep01, ep02)
+- Runbook step 8: check every cut side by side; parallel agents rebuild a neighbour's end state from the brief and drift (three cuts in ep01). Beat brief: match the previous beat's rendered last frame when it exists. A rework resumes the same agents by name. (ep01, ep02)
+- Beat brief trap: monospace set by a CSS class rendered in Inter; set it inline. (ep01)
+- `style.py`: `CONTENT_BLUE = "#60A5FA"`, the second categorical slot, already used by 009–011 and ep02. (ep02)
+- `agents/parts.md`: ep01's 2D plane kit and ep02's 3D basis kit listed as local parts, with the helpers their agents wished for. (ep01, ep02)
+- `SERIES.md`: folder-depth note in the series rules; ep02 ticked and its section brought up to the build. `EPISODE_PROMPT.md`: the 2D look, the canonical-frame OK and the cut check. `AGENTS.md` map: the series row. (ep01, ep02)
+- Lesson: on these Studio Sound takes, loudnorm lands near −16.5 LUFS because the −1.5 dBTP ceiling caps it; 006–008 sit at −16.3 to −15.9, so it matches. (ep01)
+- Open: ep02's tool items, spoken-number captions in `captions_from_transcript.py` and a word-timing helper (`ep02-change-of-basis/update-pass.md` items 9–10).
+
 ## 2026-10-09
 
 - The preflight is a runbook step (step 0), not an outside skill: `AGENTS.md` and the runbook no longer name `content-preflight`. The repo process is self-contained. (Chris)

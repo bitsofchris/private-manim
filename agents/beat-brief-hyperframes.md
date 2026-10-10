@@ -195,6 +195,9 @@ and `videos/009-transformer-short-iso/`.
   `monospace` works. Any other face has to be vendored first.
 - **Stepped full-frame grain** makes huge files (37 MB for 5 s): freeze or
   slow it.
+- **Monospace set by a CSS class rendered in Inter**; the same
+  `font-family: monospace` set inline on the element worked (ep01 beats 5
+  and 6; cause not confirmed). Set the code font inline.
 - **Layout budget:** Inter ExtraBold at 60 px is about 140 px per `+0.4`.
   Count rows and widths before drawing; nine numbers plus three words is
   already a 546 x 258 px card.
@@ -222,6 +225,11 @@ phone size, nothing in the dead zones, the band empty when there is VO,
 one magenta hero, frame 0 populated, last frame still, duration within
 1/30 s above `BEAT_SECONDS`, and the text in Inter (a fallback sans looks
 narrower and lighter).
+
+Frame 0 must be the previous beat's last frame. If its render exists
+(`media/hf/<previous>.mp4`), grab the last frame and compare it with yours
+side by side; if it does not exist yet, build from the brief and say in the
+report which end state you assumed.
 
 Fix the smallest thing first: the attribute, then the element, then the
 beat. Two review rounds. If the same kind of problem is still there after

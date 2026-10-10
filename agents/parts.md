@@ -53,6 +53,8 @@ Paths in this table are relative to `videos/`.
 | token matrix | `005-transformer-short/_tokens.py` | L×d token columns, attention arcs | 005 | 1 |
 | decision loop + diamonds | `008-jev-decision-models/04_agents.py` | agent loop ring with labelled decision diamonds | 008 | 1 |
 | paper-figure cross-fade + zoom | `006-diagram-grammar/02_grammar.py` | real figure in, zoom to a region, our diagram over it | 006 | 1 |
+| 2D number plane kit (HyperFrames) | `002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js` | `VEC.floor` (grid), `arrow` (thin, flat), `puck` (dot), `axes` + `guides` (coordinates), `line`, `label`/`place`, `vecCard` (a `[ a, b ]` card with per-slot `light`), all taking `oy` to move the plane. Wished for: `compass()`, a card slot `swell`, a card that grows and wraps (ep01 beat 7 wrote `listCard`), a name line above the card and a fit-to-width size (beat 5 wrote `fitSize`) | ep01 | 1 |
+| 3D basis kit (HyperFrames) | `002-linear-algebra-basics/ep02-change-of-basis/_kit/basis.js` | floor-and-route world (`BK.world`, `route`, `floorGrid`, `coordsAt`), the address readout `makeReadout` (ticking numbers, one colour per basis vector), `makeBasisLabels` | ep02 | 1 |
 
 ## HyperFrames prototypes (copy, do not import)
 
