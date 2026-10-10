@@ -36,7 +36,7 @@
     every: 0.00,     // "Every embedding" (0.18): the card hands back its hero colour and starts to regrow
     fill: 0.60,      // "embedding in AI is one of these" (0.6-2.3): the slots fill one by one
     dots: 2.80,      // "numbers" (2.80, in "a list of numbers"): the "…" closes the list
-    dims: 5.20,      // "thousands" (5.18): "4,096 dimensions" lands, the hero; ~40 faint axes fill in
+    dims: 5.20,      // "thousands" (5.18): ~40 faint axes fill in (no count label: Chris cut it)
     still: 6.35,     // nothing moves after this (last 0.55 s still)
   };
   const OY = 600;    // the floor y for 06/07 (06_views pans up to it)
@@ -116,9 +116,6 @@
   const card = listCard(root, VALS);
   const FILL = VALS.map((_, k) => (k < 2 ? -1 : k < 8 ? CUE.fill + (k - 2) * 0.35 : CUE.dots));   // arrival of cell k
   const MOVE = 0.25;                                   // "]" steps aside over this, then the cell fades in
-  // the hero: "4,096 dimensions" under the card
-  const dims = ISO.label(root, VEC.DIMS + " dimensions", { size: 84, width: ISO.SAFE.x1 - ISO.SAFE.x0, left: ISO.SAFE.x0, align: "center", color: css(COL.hero) });
-  dims.style.transformOrigin = "50% 50%";
   ISO.guides(root);
 
   // layout B: the 3-column grid at 64 px, values right-aligned. Cell k at row k/3, column k%3; "[" before row 0; the "]"
@@ -205,11 +202,6 @@
     placePanel(card, [lerp(A.rect[0], rB[0], m), LC.top, lerp(A.rect[2], rB[2], m), lerp(A.rect[3], rB[3], m)]);
     card.wrap.style.transform = "none";
 
-    // "thousands of dimensions": the hero count lands under the card
-    const p = seg(t, CUE.dims, CUE.dims + 0.45);
-    const top = LC.top + B.H + 14;
-    dims.style.transform = `translateY(${(top + 24 * (1 - E.out(p))).toFixed(1)}px) scale(${(0.8 + 0.2 * E.back(p)).toFixed(4)})`;
-    show(dims, seg(p, 0, 0.5));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
