@@ -8,26 +8,37 @@ ENGINE: hyperframes
 - **WHO IS ASKING:** an engineer who writes `x @ W` and has watched 3Blue1Brown, and has seen "coordinates" and "basis" used as if they were the vector itself.
 - **THE ANSWER IN ONE SENTENCE:** The numbers are an address in a chosen basis. Change the basis: same arrow, new address.
 
-**Why HyperFrames** (`AGENTS.md`, "Which engine"): the default. The one 3D
-need is a fixed point inside a lattice that shears; that is a 3×3 projection
-drawn on a canvas, with a slow yaw drift as a function of `t` for depth. No
-plotted data, no Manim part that would cost less to reuse than to redraw.
-The 16:9 drafts (`../basis_transformation_3d.py`, `../plane_many_bases.py`)
-are reference for numbers and motion only.
+**Why HyperFrames** (`AGENTS.md`, "Which engine"): the default. No plotted
+data, no Manim part that would cost less to reuse than to redraw.
+
+**Rework (2026-10-09, after Chris's first watch):** the first build drew a
+full 3D lattice (three families of lines through the volume). On a phone it
+read as a confusing mesh and the fixed point got lost. The rebuild draws **a
+floor, a stalk and a route**: one 2D grid on a solid floor (the plane of the
+first two basis vectors), the point on a dashed stalk above it, and the
+address drawn as legs tip to tail. The new basis was changed (Chris chose
+option B) so its third vector stays `z`: the whole change of basis is a
+shear of the floor grid, the stalk never moves, and the third number stays
+2 because the height didn't change. Camera is fixed (no drift). Beat 7 was
+unaffected. The 16:9 drafts (`../basis_transformation_3d.py`,
+`../plane_many_bases.py`) remain reference for motion only; this episode's
+new basis differs from theirs.
 
 ## Ledger (identical in every beat)
 
 | Thing | Value |
 |---|---|
 | Standard basis | `e1 = (1, 0, 0)`, `e2 = (0, 1, 0)`, `e3 = (0, 0, 1)`; on-screen names `x`, `y`, `z` (the VO says "the usual x, y, z") |
-| New basis | `v1 = (1, 0, 0)`, `v2 = (1, 1, 0)`, `v3 = (1, 1, 1)`; on-screen names `v1`, `v2`, `v3` |
-| The point | `P = (3, 5, 2)` in x, y, z = `(−2, 3, 2)` in v1, v2, v3. Check: −2·(1,0,0) + 3·(1,1,0) + 2·(1,1,1) = (3, 5, 2) |
+| New basis | `v1 = (0, −1, 0)`, `v2 = (1, 1, 0)`, `v3 = (0, 0, 1)`; on-screen names `v1`, `v2`, `v3`. (Differs from the 16:9 draft's basis on purpose: v3 = z keeps the change on the floor.) |
+| The point | `P = (3, 5, 2)` in x, y, z = `(−2, 3, 2)` in v1, v2, v3. Check: −2·(0,−1,0) + 3·(1,1,0) + 2·(0,0,1) = (0,2,0) + (3,3,0) + (0,0,2) = (3, 5, 2) |
+| The routes | old: 3·x to (3,0,0), 5·y to (3,5,0), 2·z up to P. New: −2·v1 to (0,2,0) (backwards along v1), 3·v2 to (3,5,0), 2·v3 up to P. Both routes reach the same foot (3, 5, 0) and climb the same stalk |
 | The 2D example | `u = (1, 1)` in x, y. Diagonal basis `d1 = (1, 1)`, `d2 = (−1, 1)`, so `u = (1, 0)` in d1, d2 |
 | Basis colours | slot 1 teal `#2DD4BF` (`HERO_TEAL`), slot 2 blue `#60A5FA` (the iso kit's second token colour), slot 3 gold `#E0B040` (`CONTENT_GOLD`). e1 becomes v1, so slot colour is identity: the x arrow, v1, the first number of each address and its tip-to-tail leg are all teal. Same for 2 and 3. In the 2D beat d1 is teal, d2 blue |
 | The hero (magenta `#C084FC`) | the vector: the arrow from the origin to P, and P's dot. It never moves in beats 1–6. In beat 7 the hero is `u` |
 | Address readout | top of the stage, `(3, 5, 2)` style: parentheses and commas in `--text`, each number in its slot colour, minus sign U+2212. A readout ticks (number morph), never fade-swaps |
-| Grid | lattice lines in `GRID` `#1F2440` lifted to read on the navy (≈ `MUTED` `#4A5070` at 0.5); the old grid ghosts at `OP_GHOST` 0.25 when the new one is up |
-| Numbers on screen | only the two addresses, the coefficients `3·x 5·y 2·z` / `−2·v1 3·v2 2·v3`, and the 2D `(1, 1)` / `(1, 0)`. Nothing else |
+| Floor and grid | a solid floor (`BG_PANEL` at 0.9) with one 2D grid of the first two basis vectors (`MUTED` at 0.9, 3 px); the old standard grid ghosts at 0.3 when the new one is up. No lines through the volume |
+| Stalk | dashed `FG_DIM` line from the foot (3, 5, 0) up to P, with a small dot at the foot; it is the depth cue and never moves |
+| Numbers on screen | only the two addresses and the 2D `(1, 1)` / `(1, 0)`; the route legs carry the coefficients visually. Nothing else |
 
 Convention note: the series uses row vectors (`x @ W`). This episode has no
 matrix on screen; addresses are written as rows `(a, b, c)`, which matches.
@@ -36,19 +47,16 @@ matrix on screen; addresses are written as rows `(a, b, c)`, which matches.
 
 - Stage y 230–1100, safe x 65–950, band y 1100–1536 empty (captions burned
   by `assemble.py`).
-- **Readout slot:** y 250–400, centred on x 507, ~110 px Inter ExtraBold.
-  One address at a time, except beat 6, which stacks old (dim, 0.4) above
-  new.
-- **World:** a canvas over y 420–1090; origin projected near (380, 900);
-  the lattice spans `i ∈ [−2, 4]`, `j ∈ [−1, 6]`, `k ∈ [0, 3]` of the current
-  basis, clipped to the stage. A slow yaw drift (≈ ±6° over a beat) keeps it
-  reading as 3D; the drift is a function of master time so beats cut
-  cleanly.
+- **Readout slot:** y 262–400, centred on x 507, 110 px Inter ExtraBold.
+  One address at a time, except beat 6, which stacks old (dim) above new.
+- **World:** the floor spans y ≈ 540–1070 (it may bleed off the right
+  edge); P sits at about (900, 570); the origin and basis arrows at about
+  (250, 960). Fixed camera.
 - Arrow labels (`x y z`, `v1 v2 v3`) are DOM text ≥ 60 px next to the
   arrow tips, positioned by the projection each frame.
-- Local kit `_kit/basis.js` (written before the beats, linked into each beat
-  as `basis/`) owns the projection, lattice, arrows, readout and the
-  canonical frame; beats only drive it.
+- Local kit `_kit/basis.js` (linked into each beat as `kit/`) owns the
+  projection, floor, grid, stalk, route, arrows, readout and the canonical
+  frame (`BK.world`); `00_layout/` renders it. Beats only drive it.
 
 ## Beats (from `script.md`, the take)
 
@@ -57,12 +65,12 @@ re-transcription; the "Final beats" table below is the contract).
 
 | # | Beat | VO | Visual |
 |---|---|---|---|
-| 1 | Hook | The same vector can have completely different numbers. The numbers are just an address, and that address depends on the directions you pick. | **Frame 0 is the finished visual working:** the magenta arrow to P sits still while the lattice is mid-way between standard and new basis and swinging; the readout ticks `(3, 5, 2)` ⇄ `(−2, 3, 2)` in step with the grid. On "address" the readout swells once. On "directions you pick" the three basis arrows brighten (slot colours) while the grid settles on the standard basis. Ends on the canonical frame: standard lattice, x y z arrows, P and its arrow, readout `(3, 5, 2)` dim. |
-| 2 | Basis | Those directions are the basis. A basis is a set of independent vectors that span the whole space. It's the coordinate system that you choose. | Starts from the canonical frame with the lattice and P dimmed out (P ghosted, readout empty). "the basis": x y z arrows full strength, labels in. "independent": each arrow in turn shows it leaves the plane of the other two (a faint plane through two, the third pierces it), one quick pulse each. "span the whole space": the lattice grows out from the three arrows to fill the world. "coordinate system you choose": hold, still. Ends on the canonical frame without P. |
-| 3 | The point | Here's the point three, five, two in the usual x, y, z. | On "point": P's dot and magenta arrow draw from the origin (≥ 1 s). On "three, five, two": readout `(3, 5, 2)` types in, numbers in teal, blue, gold. Hold. Ends on the canonical frame. |
-| 4 | Swap | Now swap the basis, but keep the point exactly where it is, and let the grid change around it. | "swap the basis": x y z arrows morph into v1 v2 v3 (same colours; e1 = v1 stays put, e2 swings to (1,1,0), e3 to (1,1,1)), labels retext. "keep the point exactly where it is": P gets a still pin ring (one pulse, no motion). "let the grid change around it": the lattice shears from standard to new over ≥ 2 s, old lattice left as a ghost. The readout stays `(3, 5, 2)`, dimmed to 0.4: the old address, now stale. |
-| 5 | New address | In this new basis, the same point is minus two, three, two. | On "minus two, three, two": readout ticks from `(3, 5, 2)` to `(−2, 3, 2)`, number by number on each spoken number (teal −2, blue 3, gold 2), full strength. P's ring pulses once on "same point". Hold. |
-| 6 | Why | The arrow didn't move, but its address changed, because coordinates are how much of each basis vector you need to get there. | "didn't move": hold still, magenta arrow brightens. "address changed": `(3, 5, 2)` reappears dim above `(−2, 3, 2)` (old over new). "how much of each basis vector": tip-to-tail path, −2·v1 (teal, backwards), then 3·v2 (blue), then 2·v3 (gold), each leg ≥ 0.8 s, each lighting its number in the readout as it draws. "get there": the last leg lands on P. Still, final frame clean. |
+| 1 | Hook | The same vector can have completely different numbers. The numbers are just an address, and that address depends on the directions you pick. | **Frame 0 is the finished visual working:** P, its magenta arrow and the stalk sit still; the floor grid is mid-shear between standard and new basis and swinging; the route (three legs) re-routes with it, always landing on the foot (`BK.coordsAt(u)`), and the readout shows those coordinates ticking. On "address" the readout swells once. On "directions you pick" the three basis arrows brighten while the grid settles on the standard basis. Ends on row 1. |
+| 2 | Basis | Those directions are the basis. A basis is a set of independent vectors that span the whole space. It's the coordinate system that you choose. | P, arrow, stalk, route and readout fade out; the camera pushes in on the origin (the three arrows ~250 px). "the basis": the arrows pulse. "independent": each arrow in turn leaves a faint plane through the other two. "span the whole space": the floor grid grows out from the origin while the camera pulls back to the canonical view. "coordinate system you choose": hold. Ends on row 2. |
+| 3 | The point | Here's the point three, five, two in the usual x, y, z. | On "point": the magenta arrow draws to P, then the stalk appears. On "three, five, two": the route walks out leg by leg, each leg landing with its spoken number (3·x teal, 5·y blue, 2·z gold up the stalk), the readout typing the number as its leg lands. On "x, y, z": the basis arrows ripple. Ends on row 3. |
+| 4 | Swap | Now swap the basis, but keep the point exactly where it is, and let the grid change around it. | "swap the basis": the old route fades; the basis arrows swing to v1 v2 v3 (labels retext; v3 = z stays). "keep the point exactly where it is": a still pin ring on P, one pulse; the readout dims to 0.4 (the stale address). "let the grid change around it": the floor grid shears from standard to new (≥ 1.8 s), the old grid left as a ghost. Ends on row 4. |
+| 5 | New address | In this new basis, the same point is minus two, three, two. | On "same point": P's ring pulses and fades. On "minus two, three, two": the readout ticks number by number on each spoken number (3→−2 teal, 5→3 blue, 2 stays and pulses gold), back to full strength. Ends on row 5. |
+| 6 | Why | The arrow didn't move, but its address changed, because coordinates are how much of each basis vector you need to get there. | "didn't move": the magenta arrow glows; nothing moves. "address changed": the readout slides down and the old `(3, 5, 2)` appears dim above it. "how much of each basis vector": the new route walks out, ≥ 0.8 s a leg: −2·v1 (teal, backwards along v1), 3·v2 (blue) to the foot, 2·v3 (gold) up the stalk, each lighting its number. "get there": the last leg lands on P, P pulses. Still. Ends on row 6. |
 | 7 | Interpretability (if time) | This matters for interpretability work. One, one is a little x and a little y. Pick a diagonal basis, and it's just one, zero. One clean feature instead of a mix of two. | Cut to 2D, top-down: square grid, magenta arrow u = (1, 1), readout `(1, 1)`. "a little x and a little y": two legs, teal along x, blue up y, each pulses its number. "diagonal basis": the grid rotates 45° and stretches to the d1, d2 lattice (≥ 1.2 s), axes arrows retext to d1, d2; u does not move. "just one, zero": readout ticks to `(1, 0)`; u now lies on d1 exactly, a single teal leg. "one clean feature": the 0 dims, the 1 and u hold. Last frame still: u on d1, readout `(1, 0)`. |
 
 Last line is the take's last line ("One clean feature instead of a mix of
@@ -92,15 +100,15 @@ Total 45.41 s.
 
 All 3D beats draw through `BK.world(g, t, u, opts)` after `BK.setMaster(start)`.
 
-| After beat | u | lattice | ghost | basis arrows + labels | hero (arrow + dot) | readout |
-|---|---|---|---|---|---|---|
-| 1 | 0 | 1 | 0 | 1, `x y z` | 1 | `(3, 5, 2)`, alpha 1 |
-| 2 | 0 | 1 | 0 | 1, `x y z` | 0 | none (alpha 0) |
-| 3 | 0 | 1 | 0 | 1, `x y z` | 1 | `(3, 5, 2)`, alpha 1 |
-| 4 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 | `(3, 5, 2)`, alpha 0.4 |
-| 5 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 | `(−2, 3, 2)`, alpha 1 |
-| 6 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 + the three legs | `(3, 5, 2)` dim above `(−2, 3, 2)` |
-| 7 | 2D, its own world | | | `d1 d2` | `u` on d1 | `(1, 0)` |
+| After beat | u | floor + grid | ghost | basis arrows + labels | hero + stalk | route | readout |
+|---|---|---|---|---|---|---|---|
+| 1 | 0 | 1 | 0 | 1, `x y z` | 1 | old route (3, 5, 2), alpha 1 | `(3, 5, 2)`, alpha 1 |
+| 2 | 0 | 1 | 0 | 1, `x y z` | 0 | none | none (alpha 0) |
+| 3 | 0 | 1 | 0 | 1, `x y z` | 1 | old route, alpha 1 | `(3, 5, 2)`, alpha 1 |
+| 4 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 (+ pin ring) | none | `(3, 5, 2)`, alpha 0.4 |
+| 5 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 | none | `(−2, 3, 2)`, alpha 1 |
+| 6 | 1 | 1 | 1 | 1, `v1 v2 v3` | 1 | new route (−2, 3, 2), alpha 1 | `(3, 5, 2)` dim above `(−2, 3, 2)` |
+| 7 | 2D, its own world | | | `d1 d2` | `u` on d1 | | `(1, 0)` |
 
 ## Render and assemble
 
