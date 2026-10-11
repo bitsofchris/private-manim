@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 4, 04_scale: "One times the first row, two times the second row, minus one
+         times the third row." Opens SIDEWAYS, ends SCALED. Hero: the x weight being
+         applied (a magenta box on the x cell). Each weighted row appears and its arrow
+         scales on the plane: row 1 holds, row 2 doubles, row 3 flips through the origin. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.58" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.58;               // master 22.26 → 25.84 in vo_final.wav
+  const { COL, seg, mix, lerp } = ISO;
+  // beat-local = master − 22.26; from a 50 ms RMS envelope of the window
+  const CUE = {
+    one: 0.20,      /* "One" (0.20–0.38) */
+    times1: 0.45,   /* "times" (the first row) */
+    two: 1.30,      /* "two" (1.30–1.42) */
+    times2: 1.50,   /* "times" (the second row) */
+    minus: 2.20,    /* "minus" (2.20–2.47) */
+    times3: 2.75,   /* "times" (the third row) */
+    third: 3.05,    /* "third row" (3.05–3.35) */
+    still: 3.25,    /* SCALED from here to the end */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);               // every DOM part, once
+  ISO.guides(root);
+
+  // local helpers
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));            // 0 → 1 → 0
+  const lerpRect = (a, b, u) => a.map((v, i) => lerp(v, b[i], u));
+  const R = VEC.RECT;
+  // the box on x cell r: in on "One", slides to the next weight on its number word, out after "third"
+  function box(t) {
+    let r = R.xCell(0);
+    r = lerpRect(r, R.xCell(1), E.io(seg(t, CUE.two - 0.15, CUE.two + 0.10)));
+    r = lerpRect(r, R.xCell(2), E.io(seg(t, CUE.minus - 0.15, CUE.minus + 0.10)));
+    const a = E.out(seg(t, 0.0, CUE.one)) * (1 - E.io(seg(t, CUE.third - 0.10, CUE.third + 0.15)));
+    P.hl.rect(r, a);
+  }
+  // per row: when its weighted row appears and when its arrow scales (≥ 0.5 s, the VO is fast)
+  const ROW = [
+    { word: CUE.one,   show: CUE.times1,      s0: CUE.times1 - 0.05, s1: CUE.times1 + 0.50 },   // ×1: a pulse
+    { word: CUE.two,   show: CUE.times2,      s0: CUE.two + 0.10,    s1: CUE.two + 0.70 },      // ×2: doubles
+    { word: CUE.minus, show: CUE.minus + 0.4, s0: CUE.minus + 0.15,  s1: CUE.minus + 0.75 },    // ×−1: flips
+  ];
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, null);                    // DOM at CANON, then back to SIDEWAYS
+    P.h.out.style.opacity = "0";
+    P.sum.forEach((c) => c.home({ alpha: 0 })); P.sB.at(0, 0, { alpha: 0 });
+    // the weighted rows: each pops in from the → on its "times"; brackets with the first
+    const kb = E.out(seg(t, ROW[0].show - 0.05, ROW[0].show + 0.20));
+    P.pB.at(0, 0, { alpha: kb });
+    ROW.forEach((q, r) => {
+      const k = E.back(seg(t, q.show, q.show + 0.30)), a = seg(t, q.show, q.show + 0.15);
+      P.pc[r].forEach((c) => c.at(c.left0 - 40 * (1 - k), c.top0, { alpha: a, scale: 0.85 + 0.15 * k }));
+      // the weight swells once as it is applied
+      const sw = 1 + 0.16 * pulse(t, q.word - 0.05, 0.40);
+      P.xc[r][0].home({ scale: sw });
+    });
+    box(t);
+
+    // the plane: each row's arrow from the origin goes from W's row to x[r] × row
+    VEC.floor(g); VEC.axes(g);
+    ROW.forEach((q, r) => {
+      const u = E.io(seg(t, q.s0, q.s1)), wgt = lerp(1, VEC.X[r], u);
+      const tip = [VEC.W[r][0] * wgt, VEC.W[r][1] * wgt];
+      const p = r === 0 ? pulse(t, q.s0, q.s1 - q.s0) : 0;          // row 1 holds: one pulse
+      VEC.arrow(g, [0, 0], tip, { col: mix(VEC.ROWCOL[r], COL.text, 0.45 * p), width: 34 + 14 * p, head: 64 + 12 * p });
+    });
+    VEC.puck(g, 0, 0);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

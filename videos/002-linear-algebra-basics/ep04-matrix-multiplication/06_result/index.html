@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 6, 06_result: "Four minus one, that's x at W." Opens CHAINED (sum row empty,
+         dim brackets, no output arrow, no x @ W label); the digits drop in on their words,
+         the brackets turn magenta, the output arrow draws under the chain, the label
+         appears. Ends CANON (media/hf/00_layout.png). Hero: the sum row + output arrow. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.28" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.28;               // master 34.72 → 37.00 in vo_final.wav
+  const { COL, seg, mix, lerp } = ISO;
+  // beat-local = master − 34.72; from a 50 ms RMS envelope of the window
+  const CUE = {
+    four: 0.20,     /* "Four" (0.20–0.55) */
+    minus: 0.65,    /* "minus one" (0.65–0.95) */
+    that: 1.20,     /* "that's" */
+    xw: 1.42,       /* "x at W" (1.42–2.05) */
+    still: 1.95,    /* everything at CANON from here to the end */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);               // every DOM part, once
+  ISO.guides(root);
+  // a sum digit drops into its slot: from 46 px above, fading in
+  function drop(c, t0, t) {
+    const k = E.out(seg(t, t0, t0 + 0.3)), a = seg(t, t0, t0 + 0.18);
+    c.at(c.left0, c.top0 - 46 * (1 - k), { alpha: a });
+  }
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, null);                    // DOM at CANON; the plane is drawn below
+    // CHAINED → CANON, one change per word
+    drop(P.sum[0], 0.02, t);               // "4," lands inside "Four"
+    drop(P.sum[1], CUE.minus, t);          // "−1" on "minus one"
+    const kb = E.io(seg(t, CUE.minus + 0.25, CUE.minus + 0.55));   // brackets dim → magenta as "one" ends
+    P.sB.color(mix(COL.dim, COL.hero, kb));
+    const kl = E.out(seg(t, CUE.xw - 0.05, CUE.xw + 0.25));        // the label on "x at W"
+    P.h.out.style.opacity = kl.toFixed(3);
+    P.h.out.style.transform = `translateX(${(-24 * (1 - kl)).toFixed(1)}px)`;
+    // the plane: the output arrow draws under the chain from the origin to (4, −1)
+    VEC.floor(g); VEC.axes(g);
+    const ua = E.io(seg(t, CUE.minus + 0.3, CUE.minus + 0.9));
+    VEC.arrow(g, [0, 0], VEC.SUM, { col: COL.hero, width: 40, u: ua });
+    for (let i = 0; i < 3; i++) VEC.arrow(g, VEC.CHAIN[i], VEC.CHAIN[i + 1], { col: VEC.ROWCOL[i] });
+    VEC.puck(g, 0, 0);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

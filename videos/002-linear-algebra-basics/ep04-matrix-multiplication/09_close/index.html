@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 9: the close. CANON+b -> CANON+b. Each row (x cell, W row, weighted row, its arrow)
+         pulses in turn in its colour; then the chain pulses tip to tail and the output row and
+         arrow brighten once. The last 0.6 s is the Short's still final frame. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.491" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.491;
+  // Cues, beat-local seconds (master 48.83 + t), from a 50 ms RMS envelope of vo_final.wav.
+  // Speech: 0.20-0.70 "Each number", 0.80-1.25 "in x", 1.35-1.60 "weights", 1.65-2.45 "a row of W",
+  // 2.85-3.40 "Add the rows", 3.40-3.85 "and you're done"; silence after 3.90.
+  const CUE = {
+    row: [0.15, 0.85, 1.55],   // "Each number" / "in x weights" / "a row of W": rows 1, 2, 3 pulse in turn
+    chain: [2.85, 3.03, 3.21], // "Add the rows": the chain pulses tip to tail, teal -> blue -> gold
+    out: 3.36,                 // "and you're done": the output row and arrow brighten once
+    still: 3.85,               // nothing moves after this (>= 0.6 s of still CANON+b)
+  };
+  const ROW_D = 0.75, CHAIN_D = 0.42, OUT_D = 0.48;
+  const { COL, css, mix, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const P = VEC.parts(root);               // every DOM part, once
+
+  // ---- local helpers: CANON+b exactly as beat 8 (08_bias) leaves it ----
+  // (the kit's CANON+b sets the text only; "x @ W + b" and "−1.2" need the room beat 8 gives them)
+  const OUT0 = { left: parseFloat(P.h.out.style.left), width: parseFloat(P.h.out.style.width) };
+  const OUT_R = OUT0.left + OUT0.width;
+  const widen = (c, wd = 150) => { const d = (wd - c.wd) / 2; c.el.style.width = `${wd}px`; c.wd = wd; c.left0 -= d; return c; };
+  widen(P.sum[1]);
+  const SPREAD = 18, SHIFT = [-16, 4];
+  function canonB(scale = [1, 1]) {
+    VEC.canon(P, null, { bias: true });
+    P.h.out.style.left = `${OUT_R - 380}px`; P.h.out.style.width = "380px";
+    P.sB.els[0].style.transform = `translate(${-SPREAD}px, 0px)`;
+    P.sB.els[1].style.transform = `translate(${SPREAD}px, 0px)`;
+    P.sum.forEach((c, i) => c.at(c.left0 + SHIFT[i], c.top0, { scale: scale[i] }));
+  }
+  // a pulse: 0 -> 1 -> 0 over [t0, t0 + d]
+  const bump = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // a cell swells and brightens toward the ink colour
+  const swell = (c, b, col) => { c.home({ scale: 1 + 0.14 * b }); c.color(mix(col, COL.text, 0.45 * b)); };
+  ISO.guides(root);
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // "Each number in x weights a row of W": x cell, W row, weighted row and the row's arrow, together
+    const rb = CUE.row.map((c) => bump(t, c, ROW_D));
+    const cb = CUE.chain.map((c) => bump(t, c, CHAIN_D));
+    const ob = bump(t, CUE.out, OUT_D);
+    canonB([1 + 0.08 * ob, 1 + 0.08 * ob]);
+    for (let r = 0; r < 3; r++) {
+      if (rb[r] <= 0) continue;
+      const col = VEC.ROWCOL[r];
+      swell(P.xc[r][0], rb[r], col);
+      P.wc[r].forEach((c) => swell(c, rb[r], col));
+      P.pc[r].forEach((c) => swell(c, rb[r], col));
+    }
+    // "and you're done": the output row brightens once
+    const oc = mix(COL.hero, COL.text, 0.4 * ob);
+    P.sum.forEach((c) => c.color(oc)); P.sB.color(oc);
+
+    // the plane: CANON+b, with the pulsing arrows drawn wider and brighter
+    VEC.floor(g); VEC.axes(g);
+    VEC.arrow(g, [0, 0], VEC.Y, { col: oc, width: 40 * (1 + 0.3 * ob), head: 64 * (1 + 0.15 * ob) });
+    for (let i = 0; i < 3; i++) {
+      const b = Math.max(rb[i], cb[i]);
+      VEC.arrow(g, VEC.CHAIN[i], VEC.CHAIN[i + 1], { col: mix(VEC.ROWCOL[i], COL.text, 0.4 * b), width: 34 * (1 + 0.5 * b), head: 64 * (1 + 0.2 * b) });
+    }
+    VEC.puck(g, 0, 0);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

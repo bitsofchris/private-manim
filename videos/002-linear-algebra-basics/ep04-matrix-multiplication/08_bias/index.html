@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 8: the bias. CANON -> CANON+b. A row b = [ 0.1, −0.2 ] appears under the sum row,
+         slides up into it and is gone; the label becomes x @ W + b; the sum retypes to
+         [ 4.1, −1.2 ] and the output arrow tip nudges to (4.1, −1.2). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.80" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.80;
+  // Cues, beat-local seconds (master 43.03 + t), from a 50 ms RMS envelope of vo_final.wav.
+  // Speech: 0.20-3.10 "Add the bias and you have one row of a linear layer's output",
+  // 3.50-4.30 "4.1", 4.40-5.55 "minus 1.2".
+  const CUE = {
+    bias: 0.15,     // "Add the bias" (0.20): b = [ 0.1, −0.2 ] rises in under the sum row
+    row: 1.40,      // "one row" (1.35): b slides up into the sum row and is gone
+    label: 2.20,    // "linear layer's output" (1.85-3.05): the label becomes x @ W + b
+    y1: 3.52,       // "4.1" (3.50): first entry retypes 4.1,
+    y2: 4.42,       // "minus 1.2" (4.40): second entry retypes −1.2, the output tip nudges
+    still: 5.40,    // nothing moves after this (CANON+b)
+  };
+  const { COL, css, mix, lerp, seg } = ISO;
+  const G = VEC.G;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);               // every DOM part, once
+
+  // ---- local helpers ----
+  // The label left of the sum row. "x @ W + b" (9 monospace chars, ~346 px) is wider than the kit's
+  // 304 px box, which would overflow to the right into the bracket: keep the right edge (582) and widen left.
+  const OUT0 = { left: P.h.out.style.left, width: P.h.out.style.width };
+  const OUT_R = parseFloat(OUT0.left) + parseFloat(OUT0.width);
+  function outLabel(bias) {
+    P.h.out.textContent = bias ? "x @ W + b" : "x @ W";
+    P.h.out.style.left = bias ? `${OUT_R - 380}px` : OUT0.left;
+    P.h.out.style.width = bias ? "380px" : OUT0.width;
+  }
+  // A cell wide enough for a signed decimal ("−1.2" is ~141 px at 64 px; the kit's cell is 125),
+  // widened about its centre so the digits sit exactly where the kit puts them.
+  const widen = (c, wd = 150) => { const d = (wd - c.wd) / 2; c.el.style.width = `${wd}px`; c.wd = wd; c.left0 -= d; return c; };
+  widen(P.sum[1]);
+  // The decimal row needs more room than "4, −1": its brackets spread SPREAD px each way and the first
+  // entries move SHIFT px, so "4.1," and "−1.2" each keep a clear gap (k = 0 CANON, 1 CANON+b layout).
+  const SPREAD = 18, SHIFT = [-16, 4];
+  function spreadRow(cells, br, k, dy = 0, scale = [1, 1], alpha = 1) {
+    br.els[0].style.transform = `translate(${(-SPREAD * k).toFixed(1)}px, ${dy.toFixed(1)}px)`;
+    br.els[1].style.transform = `translate(${(SPREAD * k).toFixed(1)}px, ${dy.toFixed(1)}px)`;
+    cells.forEach((c, i) => c.at(c.left0 + SHIFT[i] * k, c.top0 + dy, { scale: scale[i], alpha }));
+  }
+  // the plane with the output tip at v (VEC.canon's drawing, with the tip free)
+  function plane(v, clear) {
+    VEC.floor(g);
+    if (clear > 0.001) {                   // the grid fades out behind the bias row
+      g.save(); g.fillStyle = css(COL.bg, 1, 0.9 * clear);
+      g.beginPath(); g.roundRect(BR.left, BR.top, BR.w, BR.h, 18); g.fill(); g.restore();
+    }
+    VEC.axes(g);
+    VEC.arrow(g, [0, 0], v, { col: COL.hero, width: 40 });
+    for (let i = 0; i < 3; i++) VEC.arrow(g, VEC.CHAIN[i], VEC.CHAIN[i + 1], { col: VEC.ROWCOL[i] });
+    VEC.puck(g, 0, 0);
+  }
+
+  // ---- the bias row: b [ 0.1, −0.2 ], entries under the sum's entries ----
+  const BT = 640;                          // its top: just under the sum row (556-632), on the plane's empty top edge
+  const DY = G.sumTop - BT;                // the slide into the sum row
+  const bCells = VEC.B.map((v, c) => widen(VEC.cell(root, VEC.vtxt(v, c), { left: G.pLeft + c * G.cellW, top: BT, col: COL.text })));
+  const bBr = VEC.brackets(root, G.pLeft, BT, G.pLeft + 2 * G.cellW, G.rowH);   // dim
+  const B_LAB_W = 70, B_LAB_L = G.pLeft - G.brW - G.brPad - SPREAD - 22 - B_LAB_W;
+  const bLab = ISO.label(root, "b", { size: G.size, color: css(COL.dim), left: B_LAB_L, top: BT + 2, width: B_LAB_W, align: "right" });
+  const BR = { left: B_LAB_L - 16, top: BT - 6, w: G.pLeft + 2 * G.cellW + G.brPad + G.brW + SPREAD + 20 - (B_LAB_L - 16), h: G.rowH + 12 };
+  // it slides into the sum row on purpose
+  [...bCells.map((c) => c.el), ...bBr.els, bLab].forEach((n) => {
+    n.setAttribute("data-layout-allow-overlap", ""); n.setAttribute("data-layout-allow-occlusion", "");
+  });
+  ISO.guides(root);
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, null);                    // CANON (DOM); the plane is drawn below with the tip free
+
+    // "Add the bias": b rises in; "one row": it slides up into the sum row and is gone
+    const a = E.out(seg(t, CUE.bias, CUE.bias + 0.5));
+    const s = E.io(seg(t, CUE.row, CUE.row + 0.7));
+    const dy = 18 * (1 - a) + DY * s, al = a * (1 - seg(s, 0.45, 1)), vis = al < 0.001 ? "hidden" : "visible";
+    spreadRow(bCells, bBr, 1, dy, [1, 1], al);
+    bBr.els.forEach((e) => { e.style.opacity = al.toFixed(3); });
+    [...bCells.map((c) => c.el), ...bBr.els, bLab].forEach((e) => { e.style.visibility = vis; });
+    bLab.style.transform = `translateY(${dy.toFixed(1)}px)`; bLab.style.opacity = al.toFixed(3);
+    // the sum row opens to make room as b arrives, swells as it takes b in, and pops on each retype
+    const take = Math.sin(Math.PI * seg(t, CUE.row + 0.45, CUE.row + 0.95));
+    const pop = (cue) => (t < cue ? 0 : 0.16 * (1 - E.out(seg(t, cue, cue + 0.35))));
+    if (t >= CUE.y1) P.sum[0].set(VEC.vtxt(VEC.Y[0], 0));   // "4.1": 4.1,
+    if (t >= CUE.y2) P.sum[1].set(VEC.vtxt(VEC.Y[1], 1));   // "minus 1.2": −1.2
+    spreadRow(P.sum, P.sB, a, 0, [1 + 0.06 * take + pop(CUE.y1), 1 + 0.06 * take + pop(CUE.y2)]);
+
+    // "linear layer's output": the label retypes (dip, swap, back)
+    const bias = t >= CUE.label;
+    outLabel(bias);
+    P.h.out.style.opacity = (bias ? seg(t, CUE.label, CUE.label + 0.3) : 1 - seg(t, CUE.label - 0.15, CUE.label)).toFixed(3);
+
+    // the output tip nudges (4, −1) -> (4.1, −1.2); the chain stays
+    const n = E.io(seg(t, CUE.y2, CUE.y2 + 0.8));
+    plane([lerp(VEC.SUM[0], VEC.Y[0], n), lerp(VEC.SUM[1], VEC.Y[1], n)], a * (1 - s));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

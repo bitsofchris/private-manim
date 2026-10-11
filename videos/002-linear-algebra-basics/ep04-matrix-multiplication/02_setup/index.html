@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 2, 02_setup: CANON -> START. The worked x @ W clears; x lifts and turns into
+         x = [ 1, 2, −1 ] on the header line; a magenta box draws around W (the hero); W's
+         rows pulse; each row's landing arrow draws from the origin in the row's colour. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.37" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.37;
+  // Cues, beat-local seconds (master 7.35 + t), from a 50 ms RMS envelope of vo_final.wav.
+  // Speech: 0.20-2.60 "Take x equals one, two, minus one", 3.00-3.65 "and W",
+  // 4.00-5.20 "a three by two matrix", 5.60-6.30 "Three rows", 6.60-7.85 "one for each input
+  // direction", 7.95-9.10 "each a 2D landing spot".
+  const CUE = {
+    one: 1.10,      // "one"
+    two: 1.45,      // "two"
+    minus: 1.95,    // "minus one"
+    box: 4.10,      // "three by two matrix": the magenta box draws around W, (3, 2) brightens
+    rows: 5.65,     // "Three rows": W's rows pulse in turn
+    dir: [6.60, 7.00, 7.40],   // "one" / "each input" / "direction": row k with x's k-th number
+    land: [7.95, 8.20, 8.45],  // "each a 2D landing spot": arrow k starts drawing (0.55 s each)
+    still: 9.25,    // nothing moves after this
+  };
+  const DRAW = 0.55;
+  const { COL, css, mix, lerp, seg } = ISO;
+  const G = VEC.G;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);
+
+  // ---- START (identical in 02_setup and 03_sideways) ----
+  // x written flat on the header line: "x = [ 1, 2, −1 ]"; "W (3, 2)" moved beside W
+  // (right of its bracket, on W's middle row) to make room; W's magenta box on.
+  const START = {
+    xLabelDx: -30,                          // P.h.x shifted left: box 70..160 on the header line
+    eqLeft: 140, eqW: 60,                   // "=" label box
+    cellLeft: (k) => 230 + 110 * k,         // flat x cells (90 wide), top 233
+    cellTop: G.header - 3,
+    wLabel: [314, 158],                     // P.h.W and P.h.shape translate: header -> beside W, row 2
+    // highlight boxes that enclose the brackets (VEC.RECT.W / .x run through them)
+    WBOX: [G.wLeft - G.brPad - G.brW - 10, G.top - 8, 2 * G.cellW + 2 * (G.brPad + G.brW + 10), 3 * G.rowH + 16],
+    XBOX: [G.xLeft - G.brPad - G.brW - 10, G.top - 8, G.xW + 2 * (G.brPad + G.brW + 10), 3 * G.rowH + 16],
+  };
+  const flatC = (k) => [START.cellLeft(k) + G.xW / 2, START.cellTop + G.rowH / 2];   // flat cell centre
+  const xBflat = VEC.brackets(root, START.cellLeft(0), START.cellTop, START.cellLeft(2) + G.xW, G.rowH);
+  const eq = ISO.label(root, "=", { size: G.size, color: css(COL.dim), left: START.eqLeft, top: G.header, width: START.eqW });
+  const commas = [0, 1].map((k) => ISO.label(root, ",", { size: G.size, color: css(VEC.ROWCOL[k]), left: flatC(k)[0] + 22, top: G.header, width: 20, align: "left" }));
+  // the x cells pass over W's left edge while they turn; the commas sit inside the cell boxes
+  [...P.xc.map((r) => r[0].el), ...commas].forEach((el) => { el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", ""); });
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d = 0.4) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // The turn between the flat row and the column (03_sideways runs it forwards).
+  // a: slide from the flat place to "cell 0 above the column, pitch 76" (0 flat, 1 slid);
+  // b: rotate clockwise a quarter turn about cell 0 while it drops to row 0 (0 row, 1 column).
+  function xTurnCentre(k, a, b) {
+    const f = flatC(k), s = [G.xLeft + G.xW / 2 + G.rowH * k, f[1]];
+    const th = b * Math.PI / 2, pv = [G.xLeft + G.xW / 2, lerp(f[1], VEC.rowTop(0) + G.rowH / 2, b)];
+    const r = [pv[0] + G.rowH * k * Math.cos(th), pv[1] + G.rowH * k * Math.sin(th)];
+    return [lerp(f[0], s[0], a) + r[0] - s[0], lerp(f[1], s[1], a) + r[1] - s[1]];
+  }
+  const placeX = (k, c, o = {}) => P.xc[k][0].at(c[0] - G.xW / 2, c[1] - G.rowH / 2, o);
+  // "W (3, 2)" between the header (u 0) and beside W (u 1): right along the header, then down
+  function wLabelAt(u) {
+    const [X, Y] = START.wLabel, q = 1 - u;
+    const dx = 2 * u * q * X + u * u * X, dy = u * u * Y;
+    [P.h.W, P.h.shape].forEach((el) => { el.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`; });
+  }
+  const scaleRow = (r, s, k) => P.wc[r].forEach((c) => { c.home({ scale: s }); c.color(mix(c.col0, COL.text, k)); });
+  // the plane in START: floor, axes, the three landing arrows (draw progress u[r]), the origin
+  function plane(u, fade) {
+    VEC.floor(g); VEC.axes(g);
+    if (fade > 0.001) {
+      VEC.arrow(g, [0, 0], VEC.SUM, { col: COL.hero, width: 40, alpha: fade });
+      for (let i = 0; i < 3; i++) VEC.arrow(g, VEC.CHAIN[i], VEC.CHAIN[i + 1], { col: VEC.ROWCOL[i], alpha: fade });
+    }
+    for (let r = 0; r < 3; r++) VEC.arrow(g, [0, 0], VEC.W[r], { col: VEC.ROWCOL[r], u: u[r] });
+    VEC.puck(g, 0, 0);
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, null);                      // CANON in the DOM; the plane is drawn below
+
+    // first 0.6 s: the worked product clears
+    const go = 1 - E.io(seg(t, 0, 0.6));
+    P.pc.forEach((row) => row.forEach((c) => c.home({ alpha: go })));
+    P.pB.at(0, 0, { alpha: go });
+    P.arr.forEach((el) => { el.style.opacity = go.toFixed(3); });
+    P.sum.forEach((c) => c.home({ alpha: go }));
+    P.sB.at(0, 0, { alpha: go });
+    P.h.out.style.opacity = go.toFixed(3);
+
+    // x lifts: the column turns up into a row on the header line, then spreads to its flat place
+    const b = 1 - E.io(seg(t, 0.0, 0.75)), a = 1 - E.io(seg(t, 0.40, 1.00));
+    const xs = [CUE.one, CUE.two, CUE.minus];
+    for (let k = 0; k < 3; k++) {
+      const pk = pulse(t, xs[k] - 0.05, 0.45) + pulse(t, CUE.dir[k] - 0.05, 0.45);
+      placeX(k, xTurnCentre(k, a, b), { scale: 1 + 0.22 * pk });
+      P.xc[k][0].color(mix(VEC.ROWCOL[k], COL.text, 0.45 * pk));
+    }
+    P.xB.at(0, 0, { alpha: 1 - seg(t, 0, 0.3) });           // the tall pair goes ...
+    const flat = E.out(seg(t, 0.75, 1.05));                 // ... the flat pair, "=", commas come
+    xBflat.at(0, 0, { alpha: flat });
+    eq.style.opacity = flat.toFixed(3);
+    commas.forEach((el) => { el.style.opacity = flat.toFixed(3); });
+    // the "x" header: out before cell 0 reaches the header line, back as "x =" on the left
+    if (t < 0.5) P.h.x.style.opacity = (1 - seg(t, 0, 0.22)).toFixed(3);     // at its canonical place
+    else { P.h.x.style.transform = `translateX(${START.xLabelDx}px)`; P.h.x.style.opacity = flat.toFixed(3); }
+
+    // "W (3, 2)" steps aside (clear of the header before the flat x spreads)
+    wLabelAt(E.io(seg(t, 0.0, 0.6)));
+    // "three by two matrix": the magenta box draws in around W; (3, 2) brightens and settles back
+    const bx = E.out(seg(t, CUE.box, CUE.box + 0.35)), grow = 26 * (1 - bx), R = START.WBOX;
+    P.hl.rect([R[0] - grow, R[1] - grow, R[2] + 2 * grow, R[3] + 2 * grow], bx);
+    const sh = seg(t, CUE.box + 0.05, CUE.box + 0.35) * (1 - seg(t, 5.2, 5.6));
+    P.h.shape.style.color = css(mix(COL.dim, COL.text, sh));
+
+    // W's rows: "Three rows" in turn; "one for each input direction" with x's number;
+    // "landing spot" as each arrow lands
+    const land = CUE.land.map((s) => s + DRAW);
+    for (let r = 0; r < 3; r++) {
+      const p = pulse(t, CUE.rows + 0.22 * r, 0.4) + pulse(t, CUE.dir[r] - 0.05, 0.45) + pulse(t, land[r] - 0.1, 0.35);
+      scaleRow(r, 1 + 0.15 * p, 0.45 * p);
+    }
+
+    plane(CUE.land.map((s) => E.out(seg(t, s, s + DRAW))), go);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

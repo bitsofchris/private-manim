@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5, 05_add: "Now we have three weighted 2D vectors. To add vectors, you add
+         first coordinates together and second coordinates together. That's summing down
+         the columns." Opens SCALED, ends CHAINED. Hero: the column being summed (a magenta
+         box on a weighted column). The plane lays the arrows tip to tail and lights each
+         leg's east step, then its north step, both from the leg's tail. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.88" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.88;               // master 25.84 → 34.72 in vo_final.wav
+  const { COL, seg, mix, lerp } = ISO;
+  // beat-local = master − 25.84; from a 50 ms RMS envelope of the window
+  const CUE = {
+    three: 0.75,    /* "three weighted" (0.70–1.30) */
+    to: 2.75,       /* "To add vectors" (2.75–3.45) */
+    first: 3.85,    /* "first" (3.85–4.10) */
+    coordE: 4.25,   /* "coordinates" (first; 4.25–4.80) */
+    second: 6.00,   /* "second" (6.00–6.45) */
+    summing: 7.35,  /* "That's summing" (7.35–7.70) */
+    columns: 7.85,  /* "down the columns" (7.85–8.45) */
+    still: 8.30,    /* CHAINED from here to the end */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);               // every DOM part, once
+  ISO.guides(root);
+
+  // local helpers
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));            // 0 → 1 → 0
+  const swell = (t, a, peak, b) => (t < peak ? E.io(seg(t, a, peak)) : 1 - E.io(seg(t, peak, b)));
+  const lerpRect = (a, b, u) => a.map((v, i) => lerp(v, b[i], u));
+  const R = VEC.RECT, CH = VEC.CHAIN, XW = VEC.XW;
+  // tip to tail: row r's arrow slides from the origin to start at CHAIN[r] (≥ 0.8 s each)
+  const SLIDE = [null, [CUE.to - 0.05, CUE.to + 0.75], [CUE.to + 0.70, CUE.to + 1.50]];
+  // each leg's two steps from its tail, under the chain: east a → (b.e, a.n) on "first",
+  // north a → (a.e, b.n) on "second" (their heads clear of the chain's heads)
+  const EAST = [CUE.coordE - 0.10, CUE.coordE + 0.05, CUE.coordE + 0.20];     // each draws in 0.3 s
+  const NORTH = [CUE.second + 0.05, CUE.second + 0.20, CUE.second + 0.35];
+  const STEP = { width: 22, head: 48 };
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, null);                    // DOM at CANON, then back to SCALED
+    P.h.out.style.opacity = "0";
+    P.sum.forEach((c) => c.home({ alpha: 0 }));
+
+    // "three weighted 2D vectors": the weighted rows and their arrows swell together
+    const sw = swell(t, 0.05, CUE.three + 0.10, CUE.three + 0.65);
+    // "down the columns": each column's cells nudge down once, column 1 then 2
+    const nudge = [0, 1].map((c) => pulse(t, CUE.columns - 0.10 + 0.20 * c, 0.35));
+    P.pc.forEach((row, r) => row.forEach((c, j) => {
+      c.at(c.left0, c.top0 + 14 * nudge[j], { scale: 1 + 0.12 * sw });
+      c.color(mix(c.col0, COL.text, 0.35 * sw));
+    }));
+    // the hero: the box on the column being summed
+    const kIn = E.out(seg(t, CUE.first - 0.05, CUE.first + 0.15));
+    const kMove = E.io(seg(t, CUE.second - 0.15, CUE.second + 0.15));
+    const kOut = E.io(seg(t, CUE.summing - 0.05, CUE.summing + 0.25));
+    P.hl.rect(lerpRect(R.pCol(0), R.pCol(1), kMove), kIn * (1 - kOut));
+    // the sum row's brackets arrive, dim and empty, dropping into place under the columns
+    const kS = E.out(seg(t, CUE.summing + 0.05, CUE.summing + 0.40));
+    P.sB.color(COL.dim); P.sB.at(0, -24 * (1 - kS), { alpha: kS });
+
+    // the plane
+    VEC.floor(g); VEC.axes(g);
+    const lightE = (1 - E.io(seg(t, CUE.second - 0.15, CUE.second + 0.15)));
+    const lightN = (1 - E.io(seg(t, CUE.summing - 0.05, CUE.summing + 0.30)));
+    for (let r = 0; r < 3; r++) {           // the staircase, under the chain
+      const a = CH[r], b = CH[r + 1], col = VEC.ROWCOL[r];
+      const ue = E.io(seg(t, EAST[r], EAST[r] + 0.30)), un = E.io(seg(t, NORTH[r], NORTH[r] + 0.30));
+      VEC.arrow(g, a, [b[0], a[1]], { col, alpha: 0.9 * lightE, u: ue, ...STEP });
+      VEC.arrow(g, a, [a[0], b[1]], { col, alpha: 0.9 * lightN, u: un, ...STEP });
+    }
+    for (let r = 0; r < 3; r++) {           // the weighted arrows: origin → chain
+      const u = r === 0 ? 0 : E.io(seg(t, SLIDE[r][0], SLIDE[r][1]));
+      const tail = [lerp(0, CH[r][0], u), lerp(0, CH[r][1], u)];
+      const tip = [tail[0] + XW[r][0], tail[1] + XW[r][1]];
+      VEC.arrow(g, tail, tip, { col: mix(VEC.ROWCOL[r], COL.text, 0.45 * sw), width: 34 + 14 * sw, head: 64 + 12 * sw });
+    }
+    VEC.puck(g, 0, 0);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

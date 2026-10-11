@@ -53,7 +53,7 @@
   function floor(g, o = {}) {
     const Wd = ISO.W, H = ISO.H, oy = o.oy == null ? FLOOR : o.oy, top = o.top == null ? PLANE_TOP : o.top;
     g.clearRect(0, 0, Wd, H); g.fillStyle = css(COL.bg); g.fillRect(0, 0, Wd, H);
-    g.save(); g.beginPath(); g.rect(0, top, Wd, ISO.SAFE.stageBottom + 10 - top); g.clip();
+    g.save(); g.beginPath(); g.rect(0, top, Wd, ISO.SAFE.stageBottom - top); g.clip();
     g.strokeStyle = `rgba(74, 80, 112, ${o.alpha == null ? 0.42 : o.alpha})`; g.lineWidth = 3; g.beginPath();
     for (let k = -12; k <= 12; k++) {
       const x = OX + k * STEP, y = oy + k * STEP;

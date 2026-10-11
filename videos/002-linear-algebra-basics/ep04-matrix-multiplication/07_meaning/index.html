@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 7, 07_meaning: "Rows are where input directions land. Columns are the totals
+         in each output direction." Opens and ends CANON. "Rows … land": W's rows boxed in
+         their colours, faint ghosts of the three landing arrows. "Columns are the totals":
+         a magenta box on each sum entry in turn with a dashed guide from (4, −1) to its
+         axis and the axis value. Hero: W's rows, then the sum row's columns. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.03" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.03;               // master 37.00 → 43.03 in vo_final.wav
+  const { COL, seg, mix, lerp, css } = ISO;
+  // beat-local = master − 37.00; from a 50 ms RMS envelope of the window
+  const CUE = {
+    rows: 0.20,     /* "Rows are where" (0.20–0.95) */
+    input: 1.00,    /* "input directions" (1.00–1.85) */
+    land: 1.85,     /* "land" (ends 2.10) */
+    cols: 2.45,     /* "Columns are" */
+    totals: 3.55,   /* "totals" (3.55–4.10) */
+    each: 4.45,     /* "in each output direction" (4.50–5.90) */
+    fade: 5.20,     /* guides, boxes and labels go (inside "direction") */
+    still: 5.53,    /* CANON, still, for the last 0.5 s */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);               // every DOM part, once
+  // three row boxes (row colours; magenta stays on the canonical hero) and the two axis values
+  const rowBox = [0, 1, 2].map(() => VEC.hbox(root));
+  const ax = [VEC.label(root, VEC.fmtv(VEC.SUM[0]), { width: 120 }), VEC.label(root, VEC.fmtv(VEC.SUM[1]), { width: 120 })];
+  ISO.guides(root);
+  const DASH = [14, 12];
+  // local helpers: tighter boxes than VEC.RECT so stacked row boxes do not overlap and the
+  // sum-cell box stays inside the sum row's brackets
+  const rowRect = (r) => { const q = VEC.RECT.wRow(r); return [q[0] + 8, q[1] + 12, q[2] - 16, q[3] - 24]; };
+  const sumRect = (c) => { const q = VEC.RECT.sumCell(c); return [q[0] + 14, q[1] + 4, q[2] - 28, q[3] - 8]; };
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, g);                       // CANON: DOM and plane
+    const out = 1 - E.io(seg(t, CUE.cols - 0.25, CUE.cols + 0.15));   // the rows act goes as "Columns" starts
+    // "Rows are …": each row of W boxed in its colour, one after another (row 1 starts at
+    // frame 0 so the beat opens moving, and is full on "Rows")
+    rowBox.forEach((b, r) => {
+      const t0 = CUE.rows - 0.2 + 0.25 * r, a = E.out(seg(t, t0, t0 + 0.3));
+      b.rect(rowRect(r), a * out, VEC.ROWCOL[r]);
+    });
+    // "… where input directions land": faint ghosts of the three landing arrows from the origin
+    for (let r = 0; r < 3; r++) {
+      const t0 = CUE.input - 0.1 + 0.25 * r, u = E.io(seg(t, t0, t0 + 0.6));
+      VEC.arrow(g, [0, 0], VEC.W[r], { col: VEC.ROWCOL[r], alpha: 0.35 * out, u });
+    }
+    // "Columns are the totals": the box on the first sum entry, a guide from the tip up to 4 on the east axis
+    const fin = 1 - E.io(seg(t, CUE.fade, CUE.still));                 // everything back to CANON
+    const k0 = E.out(seg(t, CUE.cols, CUE.cols + 0.3));
+    const mv = E.io(seg(t, CUE.each, CUE.each + 0.3));                 // the box moves to the second entry
+    const r0 = sumRect(0), r1 = sumRect(1);
+    P.hl.rect(r0.map((v, i) => lerp(v, r1[i], mv)), k0 * fin);
+    const u0 = E.io(seg(t, CUE.cols + 0.15, CUE.cols + 0.8));
+    const c0 = mix(COL.hero, COL.dim, mv);                             // first guide drops to dim when the second is the hero
+    VEC.line(g, VEC.SUM, [VEC.SUM[0], 0], { col: c0, alpha: fin, width: 7, dash: DASH, u: u0 });
+    const a0 = E.out(seg(t, CUE.cols + 0.6, CUE.cols + 0.9)) * fin;
+    VEC.puck(g, VEC.SUM[0], 0, { col: c0, half: 10, alpha: a0 });     // the value's spot on the east axis
+    ax[0].style.color = css(c0);
+    VEC.place(ax[0], VEC.SUM[0], 0.42, { alpha: a0 });
+    // "each output direction": a guide across to −1 on the north axis
+    const u1 = E.io(seg(t, CUE.each, CUE.each + 0.55));
+    VEC.line(g, VEC.SUM, [0, VEC.SUM[1]], { col: COL.hero, alpha: fin, width: 7, dash: DASH, u: u1 });
+    const a1 = E.out(seg(t, CUE.each + 0.35, CUE.each + 0.6)) * fin;
+    VEC.puck(g, 0, VEC.SUM[1], { col: COL.hero, half: 10, alpha: a1 }); // and on the north axis
+    ax[1].style.color = css(COL.hero);
+    VEC.place(ax[1], -0.5, VEC.SUM[1], { alpha: a1 });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 3, 03_sideways: START -> SIDEWAYS. The flat x turns a quarter turn down into
+         the column left of W; the magenta box moves from W to the x column (the hero);
+         each x number links to its row of W with a thin line in the row's colour; the
+         three arrows (→) appear. The landing arrows stay on the plane. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.54" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.54;
+  // Cues, beat-local seconds (master 16.72 + t), from a 50 ms RMS envelope of vo_final.wav.
+  // Speech: 0.20-2.50 "Now turn x sideways so it sits beside W", 2.85-5.30 "Now each number
+  // in x is a weight for one row".
+  const CUE = {
+    turn: 0.30,     // "turn" (0.35): the flat x slides left, then turns down into the column
+    box: 1.50,      // "so it sits": the magenta box moves from W to the x column
+    wHome: 1.80,    // "beside W": "W (3, 2)" goes back to the header line
+    link: [3.10, 3.55, 4.00],  // "each number" / "in x" / "weight": x cell k links to row k
+    boxOff: 4.50,   // "for": the box fades
+    arr: 4.70,      // "one row": the three → appear
+    still: 5.10,    // nothing moves after this
+  };
+  const { COL, css, mix, lerp, seg } = ISO;
+  const G = VEC.G;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);
+
+  // ---- START (identical in 02_setup and 03_sideways) ----
+  // x written flat on the header line: "x = [ 1, 2, −1 ]"; "W (3, 2)" moved beside W
+  // (right of its bracket, on W's middle row) to make room; W's magenta box on.
+  const START = {
+    xLabelDx: -30,                          // P.h.x shifted left: box 70..160 on the header line
+    eqLeft: 140, eqW: 60,                   // "=" label box
+    cellLeft: (k) => 230 + 110 * k,         // flat x cells (90 wide), top 233
+    cellTop: G.header - 3,
+    wLabel: [314, 158],                     // P.h.W and P.h.shape translate: header -> beside W, row 2
+    // highlight boxes that enclose the brackets (VEC.RECT.W / .x run through them)
+    WBOX: [G.wLeft - G.brPad - G.brW - 10, G.top - 8, 2 * G.cellW + 2 * (G.brPad + G.brW + 10), 3 * G.rowH + 16],
+    XBOX: [G.xLeft - G.brPad - G.brW - 10, G.top - 8, G.xW + 2 * (G.brPad + G.brW + 10), 3 * G.rowH + 16],
+  };
+  const flatC = (k) => [START.cellLeft(k) + G.xW / 2, START.cellTop + G.rowH / 2];   // flat cell centre
+  const xBflat = VEC.brackets(root, START.cellLeft(0), START.cellTop, START.cellLeft(2) + G.xW, G.rowH);
+  const eq = ISO.label(root, "=", { size: G.size, color: css(COL.dim), left: START.eqLeft, top: G.header, width: START.eqW });
+  const commas = [0, 1].map((k) => ISO.label(root, ",", { size: G.size, color: css(VEC.ROWCOL[k]), left: flatC(k)[0] + 22, top: G.header, width: 20, align: "left" }));
+  // the x cells pass over W's left edge while they turn; the commas sit inside the cell boxes
+  [...P.xc.map((r) => r[0].el), ...commas].forEach((el) => { el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", ""); });
+  ISO.guides(root);
+  // ---- local helpers ----
+  const pulse = (t, t0, d = 0.4) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // The turn between the flat row and the column (03_sideways runs it forwards).
+  // a: slide from the flat place to "cell 0 above the column, pitch 76" (0 flat, 1 slid);
+  // b: rotate clockwise a quarter turn about cell 0 while it drops to row 0 (0 row, 1 column).
+  function xTurnCentre(k, a, b) {
+    const f = flatC(k), s = [G.xLeft + G.xW / 2 + G.rowH * k, f[1]];
+    const th = b * Math.PI / 2, pv = [G.xLeft + G.xW / 2, lerp(f[1], VEC.rowTop(0) + G.rowH / 2, b)];
+    const r = [pv[0] + G.rowH * k * Math.cos(th), pv[1] + G.rowH * k * Math.sin(th)];
+    return [lerp(f[0], s[0], a) + r[0] - s[0], lerp(f[1], s[1], a) + r[1] - s[1]];
+  }
+  const placeX = (k, c, o = {}) => P.xc[k][0].at(c[0] - G.xW / 2, c[1] - G.rowH / 2, o);
+  // "W (3, 2)" between the header (u 0) and beside W (u 1): right along the header, then down
+  function wLabelAt(u) {
+    const [X, Y] = START.wLabel, q = 1 - u;
+    const dx = 2 * u * q * X + u * u * X, dy = u * u * Y;
+    [P.h.W, P.h.shape].forEach((el) => { el.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`; });
+  }
+  // the plane in START / SIDEWAYS: floor, axes, the three landing arrows, the origin; then
+  // the link lines (screen px, under the DOM digits): row r's colour along the bottom of
+  // row r, from the x cell's left edge to W's right edge. links[r] = [draw progress, alpha]
+  function plane(links) {
+    VEC.floor(g); VEC.axes(g);
+    for (let r = 0; r < 3; r++) VEC.arrow(g, [0, 0], VEC.W[r], { col: VEC.ROWCOL[r] });
+    VEC.puck(g, 0, 0);
+    links.forEach(([u, al], r) => {
+      if (u <= 0.001 || al <= 0.001) return;
+      const y = VEC.rowTop(r) + G.rowH - 4, x0 = G.xLeft, x1 = G.wLeft + 2 * G.cellW;
+      g.save(); g.strokeStyle = css(VEC.ROWCOL[r], 1, 0.85 * al); g.lineWidth = 5; g.lineCap = "round";
+      g.beginPath(); g.moveTo(x0, y); g.lineTo(lerp(x0, x1, u), y); g.stroke(); g.restore();
+    });
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    VEC.canon(P, null);
+    // START and SIDEWAYS have no weighted rows, sum or label
+    P.pc.forEach((row) => row.forEach((c) => c.home({ alpha: 0 })));
+    P.pB.at(0, 0, { alpha: 0 });
+    P.sum.forEach((c) => c.home({ alpha: 0 }));
+    P.sB.at(0, 0, { alpha: 0 });
+    P.h.out.style.opacity = "0";
+
+    // "turn x sideways": slide left (a), then a quarter turn down into the column (b)
+    const a = E.io(seg(t, CUE.turn, CUE.turn + 0.55)), b = E.io(seg(t, CUE.turn + 0.30, CUE.turn + 1.15));
+    const L = CUE.link.map((s) => [E.out(seg(t, s, s + 0.35)), 1 - seg(t, s + 0.70, s + 1.05)]);
+    for (let k = 0; k < 3; k++) {
+      const pk = pulse(t, CUE.link[k] - 0.05, 0.45);
+      placeX(k, xTurnCentre(k, a, b), { scale: 1 + 0.22 * pk });
+      P.xc[k][0].color(mix(VEC.ROWCOL[k], COL.text, 0.45 * pk));
+    }
+    const flat = 1 - seg(t, CUE.turn, CUE.turn + 0.25);    // "x =", the flat pair and the commas go ...
+    xBflat.at(0, 0, { alpha: flat });
+    eq.style.opacity = flat.toFixed(3);
+    commas.forEach((el) => { el.style.opacity = flat.toFixed(3); });
+    const tall = E.out(seg(t, 1.25, 1.60));                 // ... the tall pair and the "x" header come
+    P.xB.at(0, 0, { alpha: tall });
+    if (t < 1.0) { P.h.x.style.transform = `translateX(${START.xLabelDx}px)`; P.h.x.style.opacity = flat.toFixed(3); }
+    else P.h.x.style.opacity = tall.toFixed(3);
+
+    // the box: from W to the x column, then off
+    const m = E.io(seg(t, CUE.box, CUE.box + 0.6)), R = START.WBOX.map((v, i) => lerp(v, START.XBOX[i], m));
+    P.hl.rect(R, 1 - seg(t, CUE.boxOff, CUE.boxOff + 0.4));
+    // "W (3, 2)" home: up, then left along the header line
+    wLabelAt(1 - E.io(seg(t, CUE.wHome, CUE.wHome + 0.65)));
+
+    // "one row": the three → appear, top to bottom
+    P.arr.forEach((el, r) => {
+      const p = E.out(seg(t, CUE.arr + 0.1 * r, CUE.arr + 0.1 * r + 0.2));
+      el.style.opacity = p.toFixed(3); el.style.transform = `translateX(${(-14 * (1 - p)).toFixed(1)}px)`;
+    });
+
+    plane(L);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

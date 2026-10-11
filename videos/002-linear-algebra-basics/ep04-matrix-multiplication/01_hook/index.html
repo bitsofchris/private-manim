@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 1, the hook: x @ W already running. The weighted rows pop in row by row while
+         their arrows grow from the origin; on "weighted sum" they slide tip to tail; on
+         "W's rows" the sum [4, −1] lands with the magenta output arrow. Ends on CANON. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.35" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.35;
+  // Cues, beat-local = master − 0.00 (vo_final.wav, 50 ms RMS envelope + sibilant onsets)
+  const CUE = {
+    weighted: 1.77,   /* "weighted" */
+    sum: 2.30,        /* "sum" */
+    Ws: 3.12,         /* "W's" (rows) */
+    rows: 3.67,       /* "rows" */
+    every: 6.18,      /* "every" */
+    linear: 6.53,     /* "linear" (layer) */
+  };
+  const HOLD_FROM = 6.85;   // "layer": everything still, frame == CANON
+
+  const { COL, seg, mix, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = VEC.parts(root);               // every DOM part, once
+  ISO.guides(root);
+
+  // the weighted rows pop in row by row; row 1 is already mid-pop on frame 0
+  const POP = [-0.12, 0.30, 0.72];         // pop start per row (0.3 s each)
+  // the weighted arrows grow from the origin (≥ 0.6 s each), row 1 already growing on frame 0
+  const GROW = [[-0.2, 0.6], [0.30, 0.95], [0.72, 1.37]];
+  // tip to tail on "weighted sum": blue onto the teal tip, then gold onto the blue tip
+  const SLIDE = [null, [CUE.weighted - 0.07, CUE.weighted + 0.63], [CUE.sum - 0.05, CUE.sum + 0.65]];
+  const OUT_DRAW = [CUE.Ws + 0.13, CUE.Ws + 0.93];   // the output arrow draws under the chain
+  const pulse = (t, a, peak, b) => (t < peak ? E.out(seg(t, a, peak)) : 1 - E.io(seg(t, peak, b)));
+
+  // local helper: the plane as CANON draws it, with each arrow's progress exposed
+  function plane(t) {
+    VEC.floor(g); VEC.axes(g);
+    VEC.arrow(g, [0, 0], VEC.SUM, { col: COL.hero, width: 40, u: E.io(seg(t, OUT_DRAW[0], OUT_DRAW[1])) });
+    for (let i = 0; i < 3; i++) {
+      const s = SLIDE[i] ? E.io(seg(t, SLIDE[i][0], SLIDE[i][1])) : 1;
+      const tail = [lerp(0, VEC.CHAIN[i][0], s), lerp(0, VEC.CHAIN[i][1], s)];
+      const tip = [tail[0] + VEC.XW[i][0], tail[1] + VEC.XW[i][1]];
+      VEC.arrow(g, tail, tip, { col: VEC.ROWCOL[i], u: E.out(seg(t, GROW[i][0], GROW[i][1])) });
+    }
+    VEC.puck(g, 0, 0);
+  }
+
+  function render(t) {
+    VEC.canon(P, null);                    // DOM in CANON; the plane is drawn below
+    if (t >= HOLD_FROM) t = HOLD_FROM;     // the last 0.5 s is CANON, still
+
+    // weighted rows: pop (scale up from 0.6, fade in fast)
+    for (let r = 0; r < 3; r++) {
+      const u = seg(t, POP[r], POP[r] + 0.3);
+      P.pc[r].forEach((c) => c.home({ alpha: Math.min(1, u * 2.5), scale: lerp(0.6, 1, E.back(u)) }));
+    }
+
+    // the sum row: empty dim brackets on "sum", digits land on "W's rows", brackets go magenta
+    const br = seg(t, CUE.sum, CUE.sum + 0.3), land = E.out(seg(t, CUE.Ws, CUE.Ws + 0.35));
+    P.sB.at(0, 0, { alpha: br });
+    P.sB.color(mix(COL.dim, COL.hero, land));
+    [CUE.Ws, CUE.Ws + 0.2].forEach((t0, i) => {
+      const u = seg(t, t0, t0 + 0.3);
+      P.sum[i].home({ alpha: Math.min(1, u * 2.5), scale: lerp(0.6, 1, E.back(u)) });
+    });
+
+    // `x @ W` arrives with the sum (dim), brightens once on "linear layer"
+    P.h.out.style.opacity = E.out(seg(t, CUE.Ws, CUE.Ws + 0.4)).toFixed(3);
+    P.h.out.style.color = ISO.css(mix(COL.dim, COL.text, pulse(t, CUE.linear - 0.08, CUE.linear + 0.1, HOLD_FROM)));
+
+    plane(t);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
