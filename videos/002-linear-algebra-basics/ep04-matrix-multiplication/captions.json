@@ -1,0 +1,297 @@
+[
+ {
+  "start": 0.58,
+  "end": 1.207,
+  "text": "x @ W"
+ },
+ {
+  "start": 1.267,
+  "end": 2.162,
+  "text": "is just a"
+ },
+ {
+  "start": 2.222,
+  "end": 3.655,
+  "text": "weighted sum of"
+ },
+ {
+  "start": 3.715,
+  "end": 4.61,
+  "text": "W's rows."
+ },
+ {
+  "start": 4.61,
+  "end": 5.341,
+  "text": "It's the one"
+ },
+ {
+  "start": 5.401,
+  "end": 6.693,
+  "text": "operation inside every"
+ },
+ {
+  "start": 6.753,
+  "end": 7.54,
+  "text": "linear layer."
+ },
+ {
+  "start": 7.54,
+  "end": 8.624,
+  "text": "Take x ="
+ },
+ {
+  "start": 8.684,
+  "end": 9.458,
+  "text": "1, 2,"
+ },
+ {
+  "start": 9.518,
+  "end": 10.37,
+  "text": "−1"
+ },
+ {
+  "start": 10.37,
+  "end": 11.108,
+  "text": "and W, a"
+ },
+ {
+  "start": 11.168,
+  "end": 11.906,
+  "text": "3 by"
+ },
+ {
+  "start": 11.966,
+  "end": 12.95,
+  "text": "2 matrix."
+ },
+ {
+  "start": 12.95,
+  "end": 13.788,
+  "text": "Three rows, one"
+ },
+ {
+  "start": 13.848,
+  "end": 14.32,
+  "text": "for each"
+ },
+ {
+  "start": 14.38,
+  "end": 15.27,
+  "text": "input direction"
+ },
+ {
+  "start": 15.27,
+  "end": 15.933,
+  "text": "each a 2D"
+ },
+ {
+  "start": 15.992,
+  "end": 16.92,
+  "text": "landing spot."
+ },
+ {
+  "start": 16.92,
+  "end": 17.601,
+  "text": "Now turn x"
+ },
+ {
+  "start": 17.661,
+  "end": 18.591,
+  "text": "sideways so it"
+ },
+ {
+  "start": 18.651,
+  "end": 19.58,
+  "text": "sits beside W."
+ },
+ {
+  "start": 19.58,
+  "end": 20.516,
+  "text": "Now each number"
+ },
+ {
+  "start": 20.576,
+  "end": 21.043,
+  "text": "in x is"
+ },
+ {
+  "start": 21.103,
+  "end": 21.864,
+  "text": "a weight for"
+ },
+ {
+  "start": 21.924,
+  "end": 22.45,
+  "text": "one row."
+ },
+ {
+  "start": 22.45,
+  "end": 22.955,
+  "text": "One times the"
+ },
+ {
+  "start": 23.015,
+  "end": 23.556,
+  "text": "first row, two"
+ },
+ {
+  "start": 23.616,
+  "end": 23.977,
+  "text": "times the"
+ },
+ {
+  "start": 24.037,
+  "end": 24.47,
+  "text": "second row"
+ },
+ {
+  "start": 24.47,
+  "end": 25.244,
+  "text": "minus one times"
+ },
+ {
+  "start": 25.304,
+  "end": 26.03,
+  "text": "the third row."
+ },
+ {
+  "start": 26.03,
+  "end": 26.781,
+  "text": "Now we have"
+ },
+ {
+  "start": 26.841,
+  "end": 27.779,
+  "text": "three weighted"
+ },
+ {
+  "start": 27.839,
+  "end": 28.59,
+  "text": "2D vectors."
+ },
+ {
+  "start": 28.59,
+  "end": 29.497,
+  "text": "To add vectors"
+ },
+ {
+  "start": 29.557,
+  "end": 30.35,
+  "text": "you add first"
+ },
+ {
+  "start": 30.41,
+  "end": 31.6,
+  "text": "coordinates together"
+ },
+ {
+  "start": 31.6,
+  "end": 32.1,
+  "text": "and second"
+ },
+ {
+  "start": 32.16,
+  "end": 33.16,
+  "text": "coordinates together."
+ },
+ {
+  "start": 33.16,
+  "end": 34.178,
+  "text": "That's summing down"
+ },
+ {
+  "start": 34.238,
+  "end": 34.9,
+  "text": "the columns."
+ },
+ {
+  "start": 34.9,
+  "end": 35.67,
+  "text": "4, −1"
+ },
+ {
+  "start": 35.93,
+  "end": 37.2,
+  "text": "that's x @ W"
+ },
+ {
+  "start": 37.2,
+  "end": 38.072,
+  "text": "Rows are where"
+ },
+ {
+  "start": 38.132,
+  "end": 39.47,
+  "text": "input directions land."
+ },
+ {
+  "start": 39.47,
+  "end": 40.659,
+  "text": "Columns are the"
+ },
+ {
+  "start": 40.719,
+  "end": 41.833,
+  "text": "totals in each"
+ },
+ {
+  "start": 41.893,
+  "end": 43.23,
+  "text": "output direction."
+ },
+ {
+  "start": 43.23,
+  "end": 43.796,
+  "text": "Add the bias"
+ },
+ {
+  "start": 43.856,
+  "end": 44.422,
+  "text": "and you have"
+ },
+ {
+  "start": 44.482,
+  "end": 44.83,
+  "text": "one row"
+ },
+ {
+  "start": 44.83,
+  "end": 45.969,
+  "text": "of a linear"
+ },
+ {
+  "start": 46.029,
+  "end": 47.36,
+  "text": "layer's output"
+ },
+ {
+  "start": 47.47,
+  "end": 49.03,
+  "text": "4.1, −1.2"
+ },
+ {
+  "start": 49.03,
+  "end": 50.064,
+  "text": "Each number in"
+ },
+ {
+  "start": 50.124,
+  "end": 50.951,
+  "text": "x weights a"
+ },
+ {
+  "start": 51.011,
+  "end": 51.7,
+  "text": "row of W."
+ },
+ {
+  "start": 51.7,
+  "end": 52.164,
+  "text": "Add the rows"
+ },
+ {
+  "start": 52.224,
+  "end": 52.83,
+  "text": "and you're done."
+ }
+]
