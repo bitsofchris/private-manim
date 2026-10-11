@@ -15,7 +15,7 @@ clean").
 
 | You want | Go to | Owns |
 |---|---|---|
-| The process for a Short, start to hand-off | `agents/runbook.md` | steps 0–11, tools, what to hand Chris |
+| The process for a Short, start to hand-off | `agents/runbook.md` | steps 0–12, tools, what to hand Chris |
 | The brief a beat-building subagent gets | `agents/beat-brief.md` (Manim) / `agents/beat-brief-hyperframes.md` (HyperFrames) | the contract every beat must meet |
 | Tokens: colors, type, durations, strokes, safe areas | `videos/_shared/style.py` | the only place a constant lives |
 | How to use the tokens; what to use for X; Manim traps | `agents/style.md` | the "want X, use Y" tables |
@@ -30,6 +30,7 @@ clean").
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
 | Evidence behind the rules | `agents/research/` | digests with sources: shorts craft and hooks; what other LLM-to-Manim pipelines learned |
+| What is working on the channel | `~/repos/yt-stats` (`sync`, then `report`) | every Short's stats: search terms, traffic sources, retention, subs; read at runbook step 12 |
 | Plans in flight / done | `agents/plans/` / `agents/archive/` | |
 | A finished video | `videos/NNN-slug/` | storyboard, VO, scenes, `publish.md`, `media/` (gitignored) |
 | Retired code | `videos/_graveyard/` | kept for reference, never imported |

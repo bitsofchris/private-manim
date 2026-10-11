@@ -27,18 +27,28 @@ cuts, 14 beats built by 7 parallel agents off one shared diagram module.
 Two inputs decided the format. Both are written up in more detail in
 `agents/animation-rules.md`, `agents/research/` and `agents/archive/shorts-pipeline.md`.
 
-**The channel's own data.** Comparing the 84K-view Short (PyTorch Neural
-Networks Made Simple) with a 2K-view Short on the same topic:
+**The channel's own data** (`~/repos/yt-stats`, read 2026-10-11, all 28
+Shorts; the full read is the vault note "YouTube Shorts - What's Working -
+2026-10-11"):
 
-| | 84K | 2K |
-|---|---|---|
-| First frame | zoomed code, bright, moving | near-black, tiny floating window |
-| Captions | big, burned in, 2–3 words per beat | none |
-| Frame fill | edge to edge | ~45 % black |
-| Hook | weak spoken, strong visual | strong spoken, weak visual |
+- 62 % of Shorts views come from YouTube search, 13 % from the Shorts
+  feed. The 86K Short (PyTorch Neural Networks Made Simple) is 68 %
+  search, 6 % feed: under 1K views a month for six months, then ~5K a
+  month once search found it, and 289 of the 330 subscribers Shorts have
+  brought in. Its top terms: "pytorch", "neural network", "pytorch full
+  course".
+- Shorts titled with a phrase people type ("pytorch", "what is jev",
+  "zettelkasten") get 50–77 % of views from search and keep growing.
+  Clever advice titles get 72–88 % from the feed, ~0 % from search, and
+  stop at 300–600 views.
+- Code on screen holds people: the three best ML Shorts by retention and
+  subscribers show PyTorch code, and 007 (a transformer in 20 lines of
+  PyTorch) beats the pure-animation transformer Shorts (005, 009) on
+  every rate.
 
-Lesson: what is *visible* in frame 0 and readable while muted decides
-retention. Craft, with luck on top.
+Lesson: a Short here is found by search, so the title and VO line 1 are a
+query and its answer. The visual rules below decide whether the people
+who arrive stay.
 
 **Explanatory-animation research** (Tversky congruence/apprehension, Mayer's
 multimedia principles, Heer & Robertson on animated transitions, Grant
@@ -74,8 +84,20 @@ zones shaded (see step 7).
 
 Read `AGENTS.md`. Open (or create) `videos/NNN-slug/` with the next number.
 Write the preflight: THE QUESTION in the viewer's words, WHO IS ASKING,
-THE ANSWER IN ONE SENTENCE. Put those three lines at the top of
-`storyboard.md`; every beat is checked against them.
+THE ANSWER IN ONE SENTENCE, and THE SEARCH PHRASE: the 2–5 words that
+person types into YouTube ("pytorch neural network", "what is jev").
+Check the phrase in YouTube's search box before writing a beat:
+
+- autocomplete offers it or something close; if not, nobody types it, so
+  take the phrase autocomplete does offer;
+- the results are about your topic ("ai architecture" returns buildings,
+  and 006 drew those searchers);
+- when the Short is meant to grow the channel, it is what a learner
+  types: a news term brings views without subscribers (008: 1K views,
+  0 subs).
+
+Put those four lines at the top of `storyboard.md`; every beat is checked
+against them.
 
 The hook, from the research in `agents/research/2026-10-03-shorts-craft.md`:
 frame 0 is the finished visual already working (not a title, not a word
@@ -103,6 +125,13 @@ outro, no call to action.
   numbers, and it's the key to the math behind AI." Check before handing
   the script to Chris: if line 1 ends in "?" or starts with What / How /
   Why / Ever wondered, rewrite it.
+- **Line 1 is a reframe the viewer can see, not a definition.** Held
+  people: "Every mark on this diagram is a line of PyTorch" (007), "A
+  neural network is just a function" (004, and the 2024 Short that opens
+  the same way). Lost them: "A transformer takes a sequence of tokens and
+  produces updated representations of those tokens" (005, 009: the lowest
+  retention of the ML Shorts). If line 1 would fit in a glossary, rewrite
+  it. Say the search phrase in line 1 when it fits naturally.
 - **VO uses the author's own sentences.** Cut and reorder; never reword.
   Target 130–150 spoken words for ~55 s. Mark the last line "if time":
   takes run long and the tail is what gets dropped.
@@ -115,6 +144,10 @@ outro, no call to action.
   from it; nothing is invented per beat.
 - The example must be a real instance of the idea (a decision someone
   would make, a figure from the actual paper), not a placeholder.
+- **Show the code** when the idea has an implementation. At least one
+  beat puts the real lines on screen (`code_block` + `highlight_lines`,
+  or the HyperFrames code card), ideally the payoff beat. The channel's
+  best-retaining and best-converting Shorts all show code.
 
 ## 2. Record once (Chris, 3 min)
 
@@ -308,20 +341,23 @@ with a scene element".
 
 ## 9. Publish (Chris, 2 min)
 
-The channel's own evidence: the 84K Short is titled in plain words a
-beginner would search ("... Made Simple (Beginner Friendly)"); the 2K
-Short on the same topic led with a gimmick ("in 60 Seconds: The 5 Parts").
-General guidance agrees: keyword in the first 30–40 characters, title
+The channel's own evidence: 62 % of Shorts views come from search, and
+the Shorts that get found are titled with a phrase people type (step 0's
+search phrase). The "Made Simple" suffix is not what does it: on concept
+nouns it got 25–44 % of views from search (004, 005, 006), and "AI
+Architecture Diagrams" drew searches for buildings. General guidance agrees: keyword in the first 30–40 characters, title
 under ~50 so the feed doesn't truncate it, first 100 characters of the
 description carry the takeaway, 3–5 hashtags at the end, tags barely matter.
 
-**The rule:** *Say the concept in plain words a beginner would type, then
-promise it's simple.* One idea, no clever hook in the title; the visual
-is the hook.
+**The rule:** *The title starts with the search phrase from step 0, in
+those words, then promises it's simple.* One idea, no clever hook in the
+title; the visual is the hook.
 
-- Title: `<Concept> Made Simple (Beginner Friendly)` or
-  `How <thing> works: <Concept> Made Simple`. ≤ 50 characters.
-- Description: line 1 is the one-sentence takeaway (≤ 100 chars). Then
+- Title: `<search phrase> Made Simple (Beginner Friendly)`, or
+  `What is <X>? <the answer in ≤ 5 words>` for a new term. ≤ 50
+  characters.
+- Description: line 1 answers THE QUESTION in one sentence and contains
+  the search phrase (≤ 100 chars). Then
   2–3 lines saying what's shown, in order. Then the post link. Then the
   channel sign-off. Then 3–5 hashtags.
 - No pinned comment (Chris doesn't do them).
@@ -361,6 +397,28 @@ After the hand-off pack, ask once: "Ready for the update pass?" On yes:
    video that forced it.
 4. **Commit** the system changes separately from the video, and tell Chris
    what changed in three lines.
+
+## 12. Day-10 and day-30 read (Claude)
+
+Search takes time: the 86K Short got under 1K views a month for its first
+six months. A Short is judged at day 10 and again at day 30, never in its
+first week.
+
+```
+cd ~/repos/yt-stats && python3 -m yt_stats sync && python3 -m yt_stats report
+```
+
+If it says to log in, Chris runs `python3 -m yt_stats login` and clicks
+Allow. Copy this Short's numbers into `videos/NNN-slug/publish.md` under
+`## Day-10 read` (later `## Day-30 read`): search %, top search terms,
+stayed %, relative retention, at end, subs and shares per 1K. Then:
+
+- Compare the search terms with THE SEARCH PHRASE. If people typed
+  something else, the phrase rule in step 0 or the title rule in step 9
+  gets the fix.
+- Relative retention under 0.55, or at end under 0.25: look at VO line 1
+  and frame 0 first (step 0, and step 1 "Line 1 is a reframe").
+- A rule change gets a changelog line, as in step 11.
 
 ## Tools (all under `tools/`, tests under `tests/`)
 

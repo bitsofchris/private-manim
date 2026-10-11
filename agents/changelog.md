@@ -5,6 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-11
 
+- Runbook "Why this shape", steps 0, 1, 9 and a new step 12, from the channel's analytics (`~/repos/yt-stats`): Shorts here are found by search (62 % of views). Preflight adds THE SEARCH PHRASE, checked in YouTube search (autocomplete, other meanings, learner vs news term); VO line 1 is a visible reframe, not a definition; show the code when there is code; the title starts with the search phrase; every Short gets a day-10 and day-30 read. AGENTS.md map points at yt-stats. (analytics of 004–009)
 - `agents/style.md` "Vectors and matrices as numbers": a matrix acting on the plane is on screen when the VO says "this matrix", and the row doing the work lights while its direction moves; pointing at a row is magenta digits first, a box only if colour is not enough. (Chris, ep03)
 - `agents/style.md` "Linear algebra": named camera views in the kit for numbers that don't fit one scale (ep03 `VEC.view`). (ep03)
 - `agents/style.md` "Share the band": the element's bottom edge ≤ y 1330 and every caption on one line while it is up; a two-line caption grew into ep03's code card. Runbook step 7 now points there instead of restating it. (ep03)
