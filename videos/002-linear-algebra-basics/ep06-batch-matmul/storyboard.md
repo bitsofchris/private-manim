@@ -3,7 +3,8 @@ ENGINE: hyperframes
 # Ep 6. One matmul, whole batch — storyboard
 
 **Series:** Linear Algebra for AI Engineers, episode 6 (`../SERIES.md`).
-**Title:** Batch Matrix Multiplication | Linear Algebra for AI Engineers
+**Title:** PyTorch Matrix Multiplication | Linear Algebra for AI Engineers
+**Search phrase:** pytorch matrix multiplication (`../SERIES.md`, episode 6)
 
 Engine: HyperFrames (the default, `AGENTS.md` "Which engine"). Every beat is
 three matrices, a code card and a shape line; nothing needs Manim's axes or

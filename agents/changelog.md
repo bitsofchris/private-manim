@@ -5,6 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-11
 
+- Linear algebra series: titles 6, 7, 10 and the trailer changed after a YouTube autocomplete check (6 and 10 matched another meaning, 7 and T matched nothing); every episode section in `SERIES.md` now has a search phrase and a code beat, the episode prompt passes both on, and 1–4 get a day-10 read before 7–10 ship. (series 5–T, from the analytics)
 - Runbook "Why this shape", steps 0, 1, 9 and a new step 12, from the channel's analytics (`~/repos/yt-stats`): Shorts here are found by search (62 % of views). Preflight adds THE SEARCH PHRASE, checked in YouTube search (autocomplete, other meanings, learner vs news term); VO line 1 is a visible reframe, not a definition; show the code when there is code; the title starts with the search phrase; every Short gets a day-10 and day-30 read. AGENTS.md map points at yt-stats. (analytics of 004–009)
 - `agents/style.md` "Vectors and matrices as numbers": a matrix acting on the plane is on screen when the VO says "this matrix", and the row doing the work lights while its direction moves; pointing at a row is magenta digits first, a box only if colour is not enough. (Chris, ep03)
 - `agents/style.md` "Linear algebra": named camera views in the kit for numbers that don't fit one scale (ep03 `VEC.view`). (ep03)

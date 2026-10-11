@@ -19,7 +19,7 @@ Start by reading AGENTS.md (the entry point) and follow agents/runbook.md as the
 
 Where this episode stands:
 - The voice is recorded and cut: FOLDER/vo_raw.m4a. FOLDER/script.md is what I actually said. That transcript, not the planned script, is the VO.
-- Runbook steps 0–2 are done. The preflight lines (question, who is asking, one-sentence answer), the YouTube title, frame 0 and hero, and the parts to reuse are in this episode's section of videos/002-linear-algebra-basics/SERIES.md. The planned script is in SCRIPTS.md for reference only.
+- Runbook steps 0–2 are done. The preflight lines (question, who is asking, one-sentence answer, search phrase), the YouTube title, frame 0 and hero, the code beat, and the parts to reuse are in this episode's section of videos/002-linear-algebra-basics/SERIES.md. Carry the search phrase into the storyboard's preflight lines and build the code beat on the VO line it names. The planned script is in SCRIPTS.md for reference only.
 - The 16:9 draft scenes and UNIT_1_3_RECAP.md in the 002 folder are reference for layout, motion and numbers. Rebuild every beat as a 9:16 Short; don't port the old BocScene code.
 
 Do, in runbook order:
@@ -27,7 +27,7 @@ Do, in runbook order:
 2. Clean, transcribe, tighten (steps 3–5). Bring me the cut list and wait for my approval before building beats. Flag any flubbed or repeated phrase in the take.
 3. Build the beats (step 6) with parallel agents, each briefed with the matching beat brief. Each renders and reviews its own contact sheet.
 4. Captions, assembly, review (steps 7–8): sequential clean re-render, assemble, contact sheets, fix what the sheets show. Then tell me the media/short.mp4 path to watch on my phone, and iterate on what I say.
-5. Write FOLDER/publish.md (step 9) with the title and the series description line from SERIES.md ("Series rules", publish copy), and send the hand-off pack (step 10) when I say done.
+5. Write FOLDER/publish.md (step 9) with the title and the series description line from SERIES.md ("Series rules", publish copy); description line 1 contains the search phrase. Send the hand-off pack (step 10) when I say done.
 
 Look and checks for this series:
 - Linear algebra uses the flat 2D number plane, not the isometric floor (agents/style.md "Linear algebra"). The plane kit is shared: link ../../../_shared/web/vec into each beat as vec/ (next to vendor/ and iso/), keep only this episode's numbers and views in a local script, and start from prototypes/hyperframes/vec-plane/index.html. Don't copy or edit the shared kit; list what it lacks in the hand-off.

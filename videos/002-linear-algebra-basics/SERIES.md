@@ -41,8 +41,9 @@ examples but no visuals; nothing is wrong with them.
 
 ## Checklist
 
-Stages, in runbook order. Every episode is **ready for VO**: the scripts
-and final titles are in [`SCRIPTS.md`](SCRIPTS.md). All 11 were recorded
+Stages, in runbook order. Every episode is **ready for VO**: the planned
+scripts are in [`SCRIPTS.md`](SCRIPTS.md); the publish titles are the table
+below (`SCRIPTS.md`'s titles are superseded). All 11 were recorded
 in one take (2026-10-09) and cut into one subfolder per episode here, each
 with `vo_raw.m4a` and `script.md` (what was actually said). Tick Storyboard
 when the take is cut into beats in that subfolder. Episode headings below
@@ -55,17 +56,20 @@ keep the short working names; the table has the publish titles.
 | 3 | What a Matrix Really Does \| Linear Algebra for AI Engineers | `ep03-what-a-matrix-does` | x | x | x | x | x | x | |
 | 4 | Matrix Multiplication (x @ W) \| Linear Algebra for AI Engineers | `ep04-matrix-multiplication` | x | x | x | | | | |
 | 5 | PyTorch nn.Linear Explained \| Linear Algebra for AI Engineers | `ep05-nn-linear-shape` | x | x | x | | | | |
-| 6 | Batch Matrix Multiplication \| Linear Algebra for AI Engineers | `ep06-batch-matmul` | x | x | x | | | | |
-| 7 | Why Neural Nets Need Activations \| Linear Algebra for AI Engineers | `ep07-activation-functions` | | x | x | | | | |
+| 6 | PyTorch Matrix Multiplication \| Linear Algebra for AI Engineers | `ep06-batch-matmul` | x | x | x | | | | |
+| 7 | Activation Functions: Why You Need Them \| Linear Algebra for AI Engineers | `ep07-activation-functions` | | x | x | | | | |
 | 8 | Dot Product Explained Visually \| Linear Algebra for AI Engineers | `ep08-dot-product` | | x | x | | | | |
 | 9 | Cosine Similarity vs Dot Product \| Linear Algebra for AI Engineers | `ep09-cosine-vs-dot` | | x | x | | | | |
-| 10 | Query, Key and Attention Scores \| Linear Algebra for AI Engineers | `ep10-attention-scores` | | x | x | | | | |
-| T | How Much Linear Algebra for AI? \| Linear Algebra for AI Engineers | `epT-four-ideas` | x | x | x | | | | |
+| 10 | Attention Score Calculation \| Linear Algebra for AI Engineers | `ep10-attention-scores` | | x | x | | | | |
+| T | Linear Algebra for AI Engineers: The 4 Ideas | `epT-four-ideas` | x | x | x | | | | |
 
 Draft visuals = a 16:9 `BocScene` draft exists in this folder with
 narration in `UNIT_1_3_RECAP.md`. It is reference only: every beat is
 rebuilt as a Short. Folder numbers are assigned when an episode is built
 (the next free number at the time; 009–011 are taken).
+
+Before shipping 7–10: run the day-10 read (runbook step 12) on 1–4. Their
+search terms are the first test of the series titles.
 
 Ship order: **3 → 4 → 5**, then 1, 2, 6, then 7–10, trailer last.
 3–5 are the most PyTorch-specific, have the strongest drafts, and share
@@ -130,6 +134,10 @@ one running example and one `_parts.py`.
 - **Reuse:** `nn_linear_weight_structure.py`; recap 8; Unit 3 "where are
   the landing vectors stored, rows or columns?"; `code_block`.
 - **Note:** the only episode where the math (column) convention appears.
+- **Search phrase:** `pytorch nn.linear` (YouTube autocomplete offers
+  "nn.linear pytorch", checked 2026-10-11).
+- **Code beat:** built: `nn.Linear(3, 2)` and `x @ weight.T + bias` on
+  "In the forward pass, PyTorch flips it".
 
 ### 6. One matmul, whole batch
 - **Question:** How does a whole batch go through a layer in one line?
@@ -139,6 +147,12 @@ one running example and one `_parts.py`.
   shape line `(5, 3) @ (3, 2) → (5, 2)`.
 - **Reuse:** `batched_linear_map_tensors.py`, `ml_layer_5d_to_3d.py`; recap
   6 and 9; Unit 2 "data matrix vs weight matrix".
+- **Search phrase:** `pytorch matrix multiplication` (offered by
+  autocomplete). Not "batch matrix multiplication": autocomplete pairs it
+  with "using dp" / "dsa", the algorithms-course meaning.
+- **Code beat:** `y = X @ W  # (5, 3) @ (3, 2) → (5, 2)` on "five by three
+  at three by two gives five by two", then `+ b` on "the bias broadcasts
+  across every row".
 
 ### 7. Why layers need activations
 - **Question:** Why does a neural net need activation functions?
@@ -148,6 +162,12 @@ one running example and one `_parts.py`.
   collapsed matrix.
 - **Reuse:** Unit 3 notes and notebook; the post's "Stack the Moves"
   section; landing arrows from episode 3. No draft scene.
+- **Search phrase:** `activation functions` (offered: "activation
+  functions explained", "why do we need activation function in neural
+  network"). The title leads with it and keeps the why.
+- **Code beat:** `x @ W1 @ W2 == x @ (W1 @ W2)` on "that's the same as X
+  at W1 times W2"; then `nn.Linear → nn.ReLU() → nn.Linear` on "Put a ReLU
+  or a GELU between the layers".
 
 ### 8. The dot product measures alignment
 - **Question:** What does a dot product tell you?
@@ -158,6 +178,11 @@ one running example and one `_parts.py`.
 - **Reuse:** Unit 4 notes and notebook; `hero_arrow`;
   `pickle-pirate-gemma/blog02_king_queen.py` for the embedding payoff. No
   draft scene.
+- **Search phrase:** `dot product explained visually` (offered word for
+  word). The title promises "visually", so frame 0 is the arrow already
+  turning with the number ticking, under line 1.
+- **Code beat:** `torch.dot(a, b)  # 4 − 2 + 0 = 2` on the pairwise-sum
+  line ("one, two, three dot four, minus one, zero").
 
 ### 9. Dot, cosine, projection
 - **Question:** Dot product, cosine similarity, projection: which one do I
@@ -168,6 +193,10 @@ one running example and one `_parts.py`.
   readouts. Hero: the shadow.
 - **Reuse:** Unit 4 notes; `residual` mobject;
   `001-pca-best-shadow/shadow_3d.py`. No draft scene.
+- **Search phrase:** `cosine similarity vs dot product` (offered word for
+  word).
+- **Code beat:** `F.cosine_similarity(u, v, dim=0)` on "that's what you use
+  to compare embeddings".
 
 ### 10. Attention scores are dot products
 - **Question:** What is an attention score?
@@ -177,6 +206,12 @@ one running example and one `_parts.py`.
   score grid filling. Hero: the brightest cell.
 - **Reuse:** Unit 5 notes and notebook;
   `005-transformer-short/_tokens.py`. No draft scene.
+- **Search phrase:** `attention score calculation` (offered). Not "query
+  key": autocomplete completes it to "query key value…", and this episode
+  never covers Value, so those searchers would not get what they came for.
+- **Code beat:** `scores = Q @ K.T / d**0.5` on "Q at K transpose does
+  every pair at once"; then `.softmax(-1)` on "softmax turns each row into
+  weights".
 
 ### T. Trailer: the four ideas
 - **Question:** How much linear algebra do I need for AI?
@@ -185,6 +220,11 @@ one running example and one `_parts.py`.
 - **Frame 0 / hero:** montage of the hero frames from 1, 3, 4, 10.
 - **Reuse:** `ai_vectors_to_representations.py`; recap "Bottom Line Up
   Front" and closing VO. Built last; doubles as the stitched intro.
+- **Search phrase:** `linear algebra for ai engineer` (offered). It is the
+  series name, so the trailer's title drops the `| Linear Algebra for AI
+  Engineers` suffix.
+- **Code beat:** one `x @ W` card on "In PyTorch, x at w is just that"; the
+  rest is the hero-frame montage.
 
 ## Series rules
 
@@ -203,6 +243,11 @@ one running example and one `_parts.py`.
     The trailer uses `The trailer for Linear Algebra for AI Engineers.`
     followed by the same write-up sentence.
 
+- **Search phrase and code beat (2026-10-11, from the channel's analytics):**
+  each episode section carries its search phrase (runbook step 0), checked
+  against YouTube autocomplete, and its code beat (runbook step 1, "Show the
+  code"): the PyTorch line on screen on the VO line that names it. The
+  description's line 1 contains the search phrase (runbook step 9).
 - One question per episode, in the viewer's words. One sentence answers it.
 - **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. The plane, arrows, dots, cards and matrix notation are the shared kit `videos/_shared/web/vec/vec.js` (linked as `vec/`); start a beat from `prototypes/hyperframes/vec-plane/index.html`. Shipped episodes keep their own `_vec/` copies. The look's rules are in `agents/style.md` "Linear algebra".
 - **Episode folders are one level deeper** than `videos/NNN-slug/`, so every repo-relative path gains a level: HyperFrames symlinks `../../../_shared/web/vendor` (and `iso`, `vec`), tools at `../../../tools/`, the Manim shim `parents[3]`.
