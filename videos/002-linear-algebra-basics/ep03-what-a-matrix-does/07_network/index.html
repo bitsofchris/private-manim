@@ -25,6 +25,7 @@
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="7.14" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+      <div id="code" style="position:absolute;left:0;top:0;font-family: monospace;font-size:60px;font-weight:700;line-height:72px;white-space:pre;padding:14px 20px;background:#14142B;border:6px solid #8A8FB0;border-radius:22px;color:#ECEBE4;opacity:0;visibility:hidden;"><div>y = x @ W</div><div><span id="w0">W[0]</span><span style="color:#8A8FB0">   # where e1 lands</span></div></div>
     </div>
     <script>
 (() => {
@@ -47,6 +48,13 @@
   const card = VEC.matCard(root, VEC.W);
   const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
   const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  // beat 6's PyTorch code card (copied from 06_table/index.html): on at frame 0, fades out with the W card
+  const show = (el, a) => { el.style.opacity = a.toFixed(3); el.style.visibility = a < 0.001 ? "hidden" : "visible"; };
+  const code = document.getElementById("code"), w0 = document.getElementById("w0");
+  // monospace set from script, as 06_table does (a stylesheet or static style rule rendered in Inter)
+  [code, ...code.querySelectorAll("div, span")].forEach((el) => { el.style.fontFamily = "monospace"; el.style.fontWeight = "700"; });
+  w0.style.color = css(COL.text);                                      // beat 6 ends with W[0] back to ink
+  const CODE_TOP = 1115;                                               // top of the caption band (as in 06_table)
   ISO.guides(root);
 
   // ---- local helpers ----
@@ -96,6 +104,8 @@
     VEC.place(l1, B0[0][0] + 0.32, B0[0][1] - 0.16, { alpha: off });
     VEC.place(l2, B0[1][0] - 0.3, B0[1][1] + 0.12, { alpha: off });
     card.at(VEC.cardLeft(card.el), VEC.CARD_TOP, { alpha: off });
+    code.style.transform = `translate(${((ISO.SAFE.x0 + ISO.SAFE.x1) / 2 - code.offsetWidth / 2).toFixed(1)}px, ${(CODE_TOP + 20 * (1 - off)).toFixed(1)}px)`;
+    show(code, off);
 
     // the original circle stays behind, muted: ghost dots as the ring leaves, a traced outline on "space"
     const ghost = 0.75 * seg(t, CUE.moves, CUE.moves + 0.5);

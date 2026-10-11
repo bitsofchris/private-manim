@@ -201,8 +201,13 @@
  },
  {
   "start": 33.789,
+  "end": 34.6,
+  "text": "the input"
+ },
+ {
+  "start": 34.66,
   "end": 35.403,
-  "text": "the input direction"
+  "text": "direction"
  },
  {
   "start": 35.463,

@@ -28,6 +28,7 @@
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="8.59" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+      <div id="code" style="position:absolute;left:0;top:0;font-family: monospace;font-size:60px;font-weight:700;line-height:72px;white-space:pre;padding:14px 20px;background:#14142B;border:6px solid #8A8FB0;border-radius:22px;color:#ECEBE4;opacity:0;visibility:hidden;"><div>y = x @ W</div><div><span id="w0">W[0]</span><span style="color:#8A8FB0">   # where e1 lands</span></div></div>
     </div>
     <script>
 (() => {
@@ -44,6 +45,7 @@
     row2: 2.65,     // "is one landing spot": row 2 magenta + spot 2 pulses
     rowI: 4.75,     // "row" (row i of W): row 1 magenta again
     ofW: 4.95,      // "i of W": dashed guides from e1's landed tip to 1 and 0.5 on the axes
+    torch: 3.73,    // "In PyTorch": the code card fades in (0.4 s, 20 px rise) and stays to the end
     input: 6.75,    // "the input direction": the e1 ghost brightens, the card's "e1" tag lights
     arc: 7.05,      // "direction i lands": the teal arc traces (1, 0) -> the landed tip ...
     lands: 7.95,    // "lands": ... and arrives; then everything returns to the canonical frame
@@ -57,6 +59,10 @@
   const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
   const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
   const show = (el, a) => { el.style.opacity = a.toFixed(3); el.style.visibility = a < 0.001 ? "hidden" : "visible"; };
+  const code = document.getElementById("code"), w0 = document.getElementById("w0");
+  // monospace set from script, as ep01 05/06 do (a stylesheet or static style rule rendered in Inter)
+  [code, ...code.querySelectorAll("div, span")].forEach((el) => { el.style.fontFamily = "monospace"; el.style.fontWeight = "700"; });
+  const CODE_TOP = 1115;                                               // top of the caption band (captions anchored bottom)
   ISO.guides(root);
 
   // ---- local helpers ----
@@ -155,6 +161,11 @@
     const drop = E.out(seg(t, CUE.table, CUE.table + 0.7));
     card.at(VEC.cardLeft(card.el), VEC.CARD_TOP - 60 * (1 - drop), { alpha: drop }); show(card.el, drop);
     card.light(0, r1); card.light(1, r2);
+    // the PyTorch code card: in on "In PyTorch", W[0] magenta with row 1, stays on to the end
+    const ci = E.out(seg(t, CUE.torch, CUE.torch + 0.4));
+    code.style.transform = `translate(${((ISO.SAFE.x0 + ISO.SAFE.x1) / 2 - code.offsetWidth / 2).toFixed(1)}px, ${(CODE_TOP + 20 * (1 - ci)).toFixed(1)}px)`;
+    show(code, ci);
+    w0.style.color = css(mix(COL.text, COL.hero, r1b));
     card.tagEls[0].style.color = css(mix(VEC.SLOT[0], COL.hero, gl), 1, lerp(0.75, 1, gl));
   }
   window.__timelines = window.__timelines || {};

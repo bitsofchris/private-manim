@@ -106,6 +106,11 @@ in). Grid lines may bleed into it; arrows, dots and text may not.
 | 7 | NEAR → MID | the stretched direction (a magenta line through the origin along (2, 1)) | "In a network": the card fades, the arrows and ghosts fade; the camera moves to MID (≥ 1 s); 16 teal dots appear on a circle of radius 0.8 around the origin (they are vectors; dots, not arrows: a fan of arrows reads as clutter). "that map moves vectors": every dot rides W (`VEC.map`, s 0 → 1, ≥ 1.2 s): the circle becomes a slightly larger tilted ellipse. "from one space to another": a faint copy of the original circle stays (muted). "amplifying some directions": the map morphs on to `VEC.M` (`VEC.basisTo(W, M, u)`); a magenta line through the origin along (2, 1) draws as the dots stretch along it. "collapsing others": the dots flatten onto that line (the ellipse's other axis goes to zero). Ends still: dots on the magenta line, the muted circle behind. |
 | 8 | MID → NEAR | the landing spots | "A matrix is just this stored map": the dots and the line fade; the camera returns to NEAR (≥ 1 s); e1, e2 ghosts and the landed arrows return, the W card fades in top right. "where every input direction lands": the spots ring onto both landed tips, row 1 and row 2 flash their colours toward white and back, in turn. Last ~0.6 s still: **the canonical frame exactly** (00_layout at its end). |
 
+**Changes after Chris's watches** (the beat code is the record):
+- Beat 1 opens on the W card above the FAR view at rest; its rows light on "records", and the card fades as the swing starts ("show the matrix for the transformation we're about to show").
+- Beat 2 brings the W card back on "This matrix"; row 1 (and its "e1" tag) lights magenta while e1 swings, row 2 while e2 swings (rows, not columns: row-vector convention). Beat 2 now ends on the canonical frame with the card; beat 3 opens on it and fades the card with the spots.
+- Beat 6 adds a PyTorch code card on "In PyTorch": `y = x @ W` / `W[0]   # where e1 lands` at the band top (y 1115–1299), `W[0]` magenta with row 1. It stays through beat 6's still; beat 7 fades it with the W card. Captions are anchored to the band bottom for the whole Short (house pattern from 007), and "the input direction" is split into two captions so it never wraps into the card.
+
 Last line is the take's last line; no outro. The final still is the frame
 episode 4 can open on: W on its card, its rows drawn as landing arrows.
 
@@ -119,7 +124,7 @@ for b in 01_hook 02_sends 03_recipe 04_rebuild 05_amounts 06_table 07_network 08
 done
 uv run --no-sync python ../../../tools/captions_from_transcript.py transcript_final.txt captions.json
 uv run --no-sync python ../../../tools/assemble.py beats.json --vo vo_final.wav \
-    --captions captions.json -o media/short.mp4
+    --captions captions.json --captions-anchor bottom -o media/short.mp4
 ```
 
 ## Cut list (runbook step 5)
