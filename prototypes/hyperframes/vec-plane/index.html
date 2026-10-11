@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- The starting file for a beat on the shared 2D plane kit (videos/_shared/web/vec/vec.js).
+         It rebuilds ep03's canonical frame with the kit: a camera view, the plane and axes,
+         e1 and e2 swinging to where W sends them, magenta landing spots, W in the series'
+         matrix notation (bare numbers, one tall bracket pair, name and shape above), and a
+         code card at the band top. An episode keeps its numbers (the ledger) and its views
+         in its own script; copy this file and change only those. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.0;
+  const { COL, css, seg } = ISO;
+  // ---- the episode's ledger and views (ep03's numbers) ----
+  const W = [[1, 0.5], [-0.5, 1.25]];
+  const NEAR = { step: 300, ox: 432, oy: 1030, ax: { w: -1.35, e: 1.7, s: -0.45, n: 1.75 } };
+  // ---- DOM parts, created once ----
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const M = { left: 600, top: 316, cellW: 160, rowH: 76 };            // W, top right of the stage
+  const cells = VEC.grid(root, W, M.left, M.top, { cellW: M.cellW, rowH: M.rowH });
+  VEC.brackets(root, M.left, M.top, M.left + 2 * M.cellW, 2 * M.rowH);
+  const name = ISO.label(root, "W", { size: 64, color: css(COL.dim), left: M.left, top: 236, width: 80, align: "left" });
+  const shape = ISO.label(root, "(2, 2)", { size: 64, color: css(COL.dim), left: M.left + 80, top: 236, width: 200, align: "left" });
+  const card = VEC.codeCard(root, ["y = x @ W", [["W[0]", COL.text], ["   # where e1 lands", COL.dim]]]);
+  const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
+  const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  ISO.guides(root);
+  function render(t) {
+    const s = E.io(seg(t, 0.1, 1.4));                                 // e1, e2 swing to the rows of W
+    const B = VEC.basisTo(VEC.I2, W, s);
+    VEC.view(NEAR);
+    VEC.floor(g); VEC.axes(g);
+    VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted });
+    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    VEC.spot(g, B[0][0], B[0][1], { alpha: s }); VEC.spot(g, B[1][0], B[1][1], { alpha: s });
+    VEC.puck(g, 0, 0);
+    VEC.place(l1, B[0][0], B[0][1], { dx: 96, dy: 48 });
+    VEC.place(l2, B[1][0], B[1][1], { dx: -90, dy: -36 });
+    card.at(VEC.centreLeft(card.el), 1115);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
