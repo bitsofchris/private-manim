@@ -206,6 +206,10 @@
     window.__timelines = window.__timelines || {};
     window.__timelines["main"] = tl;
     tl.seek(0); render(0);
+    // Draw again once the fonts are in: a frame drawn before Inter loads measures
+    // DOM text in the fallback face (a snapshot at t = 0 showed cards ~66 px off).
+    // Renders seek every frame, so this only changes snapshots and previews.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
     return tl;
   }
   const E = () => ({ io: gsap.parseEase("power2.inOut"), out: gsap.parseEase("power2.out"), inn: gsap.parseEase("power2.in"),
