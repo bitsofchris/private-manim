@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 beat 8, 08_conventions (master 37.04, 7.72 s). Opens CANON, ends CANON.
+         VO: "In math, vectors are columns, and W times v uses the columns. In PyTorch,
+         vectors are rows, and x @ W uses the rows."
+         The plane gives way to two panels: math (v as a column, W v; weight's columns box
+         in turn) and PyTorch (x as a row, x @ W; weight.T's rows box in turn). The panels
+         fade and the plane returns before the hold. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+      .pnl { position: absolute; left: 0; top: 0; border-radius: 22px; background: #14142B; border: 6px solid #4A5070; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.72" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.72;
+  // beat-local cues (master − 37.04), from words.json checked on a 50 ms RMS envelope
+  const CUE = {
+    math: 0.43,      /* "math" */
+    vectors: 0.66,   /* "vectors (are columns)" */
+    columns: 1.29,   /* "columns" */
+    W: 1.92,         /* "W (times v)" */
+    uses: 2.78,      /* "uses (the columns)" */
+    py: 3.83,        /* "In (PyTorch)" — after the 3.40-3.78 pause */
+    vecRows: 4.65,   /* "vectors (are rows)" */
+    rows: 5.47,      /* "rows" */
+    xw: 5.95,        /* "x @ W" (envelope onset) */
+    usesR: 6.80,     /* "uses (the rows)" (envelope onset; words.json 6.39 is early) */
+  };
+  const T = { back: 7.22, still: 7.56 };   // panels out, plane back (0.34 s); still CANON from 7.56 (5 frames)
+  const { COL, seg, mix, css } = ISO;
+  const { SLOT, fmtv } = VEC;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  const hl3 = VEC.hbox(root);                                    // local: a third highlight box
+  ISO.guides(root);
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));   // 0 → 1 → 0
+
+  // ---- local parts: the two panels of the lower stage (y 770-1100, x 65-950) ----
+  const PANEL = { top: 778, h: 314, L: [62, 468], R: [488, 953] };   // panel backgrounds (may bleed 3 px)
+  const mkPanel = () => { const d = document.createElement("div"); d.className = "pnl"; root.appendChild(d); return d; };
+  const pnlL = mkPanel(), pnlR = mkPanel();
+  [[pnlL, PANEL.L], [pnlR, PANEL.R]].forEach(([d, [a, b]]) => { d.style.width = `${b - a}px`; d.style.height = `${PANEL.h}px`; });
+  const lab = (text, color) => ISO.label(root, text, { size: 60, color: css(color) });
+  const ttlL = lab("math", COL.dim), ttlR = lab("PyTorch", COL.dim);
+  // math: v = [1; 2; −1] as one column in one tall bracket pair, then "W v" (Inter)
+  const vEq = lab("v =", COL.text), Wv = lab("W v", COL.text);
+  const CV = { cw: 92, rh: 66, top: 868 };
+  const vCells = EP.X.map((v, i) => VEC.cell(root, fmtv(v), { width: CV.cw, height: CV.rh, size: 60, col: SLOT[i], alpha: 0 }));
+  const vB = VEC.brackets(root, 0, CV.top, CV.cw, 3 * CV.rh);
+  // PyTorch: x = [ 1, 2, −1 ] as a row, then "x @ W" (monospace, set from script)
+  const xRow = document.createElement("div");
+  xRow.style.cssText = "position:absolute;left:0;top:0;font-size:60px;line-height:66px;white-space:pre;font-variant-numeric:tabular-nums;color:" + css(COL.text);
+  const xs = (txt, col) => { const s = document.createElement("span"); s.textContent = txt; s.style.color = css(col); s.style.display = "inline-block"; s.setAttribute("data-layout-allow-overlap", ""); xRow.appendChild(s); return s; };
+  xs("x = ", COL.text); xs("[ ", COL.dim);
+  const xSlots = EP.X.map((v, i) => { const s = xs(fmtv(v), SLOT[i]); if (i < 2) xs(", ", COL.dim); return s; });
+  xs(" ]", COL.dim);
+  xRow.setAttribute("data-layout-allow-overlap", ""); root.appendChild(xRow);
+  const xW = VEC.code(lab("x @ W", COL.text));
+  // the W tags in the top half: "= W" beside weight (math), "W =" beside weight.T (PyTorch)
+  const tagW = document.createElement("div"), tagT = document.createElement("div");
+  [[tagW, [["= ", COL.dim], ["W", COL.text]]], [tagT, [["W", COL.text], [" =", COL.dim]]]].forEach(([d, parts]) => {
+    d.style.cssText = "position:absolute;left:0;top:0;font-size:60px;line-height:66px;white-space:pre;opacity:0;";
+    parts.forEach(([s, c]) => { const sp = document.createElement("span"); sp.textContent = s; sp.style.color = css(c); d.appendChild(sp); });
+    root.appendChild(d);
+  });
+  // where a label's glyphs sit (the name labels are 400 px boxes with centred text)
+  const textBox = (el) => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); };
+  const place = (el, left, top, a, s = 1) => {
+    el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px) scale(${s.toFixed(4)})`;
+    el.style.opacity = Math.max(0, Math.min(1, a)).toFixed(3);
+  };
+
+  function render(t) {
+    EP.state(P, g, "CANON");
+    hl3.rect(EP.RECT.tRow(2), 0);
+
+    // ---- the lower stage: plane out, panels in; at the end, panels out and plane back ----
+
+    EP.plane(g, { alpha: 1 - E.io(seg(t, 0.0, 0.4)) + E.io(seg(t, T.back, T.still)) });
+    const panIn = E.out(seg(t, 0.2, 0.6)) * (1 - E.io(seg(t, T.back, T.still)));
+    const focusR = E.io(seg(t, CUE.py, CUE.py + 0.4));                            // math → PyTorch
+    const aL = panIn * (1 - 0.55 * focusR), aR = panIn * (0.45 + 0.55 * focusR);
+    place(pnlL, PANEL.L[0], PANEL.top, aL);
+    place(pnlR, PANEL.R[0], PANEL.top, aR);
+    const cL = (PANEL.L[0] + PANEL.L[1]) / 2, cR = (PANEL.R[0] + PANEL.R[1]) / 2;
+    place(ttlL, cL - ttlL.offsetWidth / 2, 790, aL);
+    place(ttlR, cR - ttlR.offsetWidth / 2, 790, aR);
+
+    // math: v = column, then W v. Content row: [v =][ [col] ][gap][W v], centred in the left panel
+    const gap = 14, br = 24, wide = vEq.offsetWidth + gap + br + CV.cw + br + 30 + Wv.offsetWidth;
+    const x0 = cL - wide / 2, colL = x0 + vEq.offsetWidth + gap + br, midY = CV.top + 1.5 * CV.rh;
+    const kCol = E.out(seg(t, CUE.vectors - 0.05, CUE.vectors + 0.35));
+    place(vEq, x0, midY - 33, aL * kCol);
+    vB.at(colL, 0, { alpha: aL * kCol });
+    vCells.forEach((c, i) => {
+      const k = E.out(seg(t, CUE.vectors + 0.15 * i, CUE.vectors + 0.15 * i + 0.4));
+      const pu = pulse(t, CUE.uses + 0.24 * i - 0.04, 0.4);                       // its column of weight boxes
+      c.at(colL, CV.top + i * CV.rh + 24 * (1 - k), { alpha: aL * k, scale: 1 + 0.22 * pu });
+    });
+    const kWv = E.out(seg(t, CUE.W - 0.05, CUE.W + 0.3));
+    place(Wv, colL + CV.cw + br + 30, midY - 33, aL * kWv);
+
+    // "= W" beside weight on "W times v", gone on "In PyTorch"
+    const nW = textBox(P.names.w);
+    place(tagW, nW.right + 16, EP.NAME_TOP, kWv * (1 - E.io(seg(t, CUE.py, CUE.py + 0.35))));
+
+    // "uses the columns": weight's three columns box in turn (in their slot colours), then go
+    const boxes = [P.hl, P.hl2, hl3];
+    const colOff = E.io(seg(t, 3.55, 3.85));
+    boxes.forEach((b, i) => {
+      const a = CUE.uses - 0.04 + 0.24 * i;
+      if (t < 4) b.rect(EP.RECT.wCol(i), E.out(seg(t, a, a + 0.2)) * (1 - colOff), SLOT[i]);
+    });
+
+    // PyTorch: x = [ 1, 2, −1 ] as a row, then x @ W
+    const kRow = E.out(seg(t, CUE.vecRows - 0.05, CUE.vecRows + 0.35));
+    const rowTop = 872;
+    place(xRow, cR - xRow.offsetWidth / 2, rowTop + 16 * (1 - kRow), aR * kRow);
+    xSlots.forEach((s, i) => {
+      const k = E.out(seg(t, CUE.vecRows + 0.15 * i, CUE.vecRows + 0.15 * i + 0.4));
+      const pu = pulse(t, CUE.usesR + 0.16 * i - 0.04, 0.36);
+      s.style.opacity = k.toFixed(3);
+      s.style.transform = `scale(${(1 + 0.22 * pu).toFixed(4)})`;
+    });
+    const kXW = E.out(seg(t, CUE.xw - 0.05, CUE.xw + 0.3));
+    place(xW, cR - xW.offsetWidth / 2, 980, aR * kXW);
+
+    // "W =" beside weight.T on "x @ W", gone with the panels
+    const nT = textBox(P.names.t);
+    place(tagT, nT.left - 16 - tagT.offsetWidth, EP.NAME_TOP, kXW * (1 - E.io(seg(t, T.back, T.still))));
+
+    // "uses the rows": weight.T's three rows box in turn, held through "rows", then go
+    if (t >= 4) {
+      const rowOff = E.io(seg(t, T.back + 0.04, T.still - 0.02));   // held through "rows" (~7.3)
+      boxes.forEach((b, i) => {
+        const a = CUE.usesR + 0.16 * i - 0.04;   // 6.76, 6.92, 7.08: lands on "uses the rows"
+        b.rect(EP.RECT.tRow(i), E.out(seg(t, a, a + 0.2)) * (1 - rowOff), SLOT[i]);
+      });
+    }
+
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

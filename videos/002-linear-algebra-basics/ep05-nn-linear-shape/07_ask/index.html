@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 beat 7, 07_ask (master 30.88, 6.16 s). Opens and ends CANON.
+         "So don't ask which is in and which is out, ask where are the landing
+          vectors stored, in the rows or the columns?" -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.16" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.16;               // master 30.88 → 37.04 in vo_final.wav
+  const { COL, seg, mix, css } = ISO;
+  // beat-local = master − 30.88; words.json checked on a 30 ms RMS envelope
+  const CUE = {
+    so: 0.20,       /* "So don't ask" (0.17–0.60) */
+    in: 0.91,       /* "which is in" (0.68–1.20) */
+    out: 1.45,      /* "and which is out" (1.22–1.60) */
+    landing: 2.66,  /* "the landing vectors" (2.40–3.25) */
+    rows: 4.55,     /* "in the rows" (4.30–5.05; "rows" ~4.70) */
+    columns: 5.40,  /* "or the columns" (5.09–5.97; "columns" ~5.40–5.97) */
+    end: 5.97,      /* end of "columns" */
+    still: 6.00,    /* CANON from here to the end (final 5 frames still) */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));     // 0 → 1 → 0
+  const inOut = (t, a, b, c, d) => E.out(seg(t, a, b)) * (1 - E.io(seg(t, c, d)));
+  // six boxes: row i of weight.T and column i of weight, both in SLOT[i] (the kit has two hboxes)
+  const rowBox = [0, 1, 2].map(() => VEC.hbox(root));
+  const colBox = [0, 1, 2].map(() => VEC.hbox(root));
+  // the shape label's pulse: --dim → white and a small swell (not magenta: the .T is the hero at rest)
+  function shapePulse(el, k) {
+    el.style.color = css(mix(COL.dim, COL.text, k));
+    el.style.transform += ` scale(${(1 + 0.14 * k).toFixed(4)})`;
+  }
+  // the plane with the arrows swollen by k (EP.plane has no pulse)
+  function planePulse(k) {
+    VEC.view(EP.PLANE);
+    VEC.floor(g, { alpha: 0.42 });
+    VEC.axes(g);
+    EP.WT.forEach((row, i) => VEC.arrow(g, [0, 0], row, {
+      col: mix(VEC.SLOT[i], COL.text, 0.35 * k), width: 40 + 22 * k, head: 90 + 22 * k }));
+    VEC.puck(g, 0, 0);
+  }
+  // "in the rows": rows box one after another (fast); "or the columns": the columns in the
+  // same colours; the pairs stay boxed together until all six go before the hold
+  const ROW_IN = [CUE.rows - 0.25, CUE.rows - 0.10, CUE.rows + 0.05];   // 4.30, 4.45, 4.60
+  const COL_IN = [CUE.columns - 0.25, CUE.columns - 0.15, CUE.columns - 0.05];   // 5.15, 5.25, 5.35: all in by 5.50
+  const OUT = [CUE.end - 0.12, CUE.still];                              // pairs held to ~5.85, gone by 6.00
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "CANON");
+
+    // "which is in and which is out": (2, 3), then (3, 2) (moving from frame 0)
+    shapePulse(P.names.wShape, pulse(t, 0, 1.50));
+    shapePulse(P.names.tShape, pulse(t, CUE.out - 0.40, 0.80));
+
+    // "the landing vectors": the three arrows swell together
+    const kA = pulse(t, CUE.landing - 0.20, 0.90);
+    if (kA > 0) planePulse(kA);
+
+    // the boxes: row i of weight.T and column i of weight, the same colour
+    const kOut = 1 - E.io(seg(t, OUT[0], OUT[1]));
+    [0, 1, 2].forEach((i) => {
+      const kr = E.out(seg(t, ROW_IN[i], ROW_IN[i] + 0.15)) * kOut;
+      const kc = E.out(seg(t, COL_IN[i], COL_IN[i] + 0.15)) * kOut;
+      rowBox[i].rect(EP.RECT.tRow(i), kr, VEC.SLOT[i]);
+      colBox[i].rect(EP.RECT.wCol(i, EP.WL.LEFT), kc, VEC.SLOT[i]);
+      P.wt[i].forEach((c) => c.color(mix(c.col0, COL.text, 0.3 * kr)));
+      P.w.forEach((row) => row[i].color(mix(row[i].col0, COL.text, 0.3 * kc)));
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

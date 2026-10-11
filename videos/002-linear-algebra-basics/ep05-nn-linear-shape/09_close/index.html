@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 beat 9, 09_close (master 44.76, 6.581 s). Opens CANON, ends CANON (the
+         Short's final frame, still from 5.78 s). Hero: the .T.
+         VO: "It's the same idea, just transposed. nn.Linear stores neurons as rows and
+         transposes on the way through."
+         "same idea": the three arrows pulse once. "just transposed": the ".T →" swells and a
+         ghost of each column of weight slides to its row of weight.T and fades. "stores
+         neurons as rows": weight's rows box in turn (magenta; the .T steps down to --dim
+         meanwhile so one magenta hero is on screen). "transposes on the way through": the
+         card's .T and the ".T →" pulse magenta. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.581" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.581;
+  // beat-local cues (master − 44.76), from words.json checked on a 50 ms RMS envelope
+  const CUE = {
+    same: 0.56,       /* "same (idea)" */
+    transposed: 1.07, /* "just transposed" */
+    neurons: 3.16,    /* "neurons" */
+    rows: 3.98,       /* "rows" */
+    transposes: 4.52, /* "transposes (on the way through)" */
+  };
+  const T = { still: 5.78 };   // the last 0.8 s are still on CANON (every motion above ends by 5.2)
+  const { COL, seg, mix, css } = ISO;
+  const { SLOT, fmtv } = VEC;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));   // 0 → 1 → 0
+  // local: ghost copies of weight's six numbers, (r, c) of weight → (c, r) of weight.T
+  const ghosts = EP.WEIGHT.map((row, r) => row.map((v, c) => VEC.cell(root, fmtv(v), {
+    width: EP.CW, height: EP.RH, size: EP.SIZE, col: SLOT[c], alpha: 0 })));
+  ghosts.flat().forEach((gc) => gc.el.setAttribute("data-layout-allow-overlap", ""));   // they fly over numbers on purpose
+  // the card's ".T" span (spans of cardB line 0: x, @, weight, .T, + bias)
+  const cardT = P.cardB.spans[0][3];
+  P.tArrow.dot.setAttribute("data-layout-allow-overlap", "");   // it swells over the → on purpose
+
+  function render(t) {
+    EP.state(P, g, "CANON");
+
+    // "same idea": the three landing arrows pulse once (wider, toward white, and back)
+    const kA = pulse(t, 0.0, CUE.same + 0.5);
+    VEC.view(EP.PLANE);                                          // redraw the plane (EP.plane, with the pulse)
+    VEC.floor(g, { alpha: 0.42 }); VEC.axes(g);
+    EP.WT.forEach((row, i) => VEC.arrow(g, [0, 0], row, { col: mix(SLOT[i], COL.text, 0.35 * kA), width: 40 * (1 + 0.3 * kA) }));
+    VEC.puck(g, 0, 0);
+
+    // "just transposed": ghosts fly column c of weight → row c of weight.T, then fade
+    ghosts.forEach((row, r) => row.forEach((gc, c) => {
+      const a = CUE.transposed - 0.05 + 0.1 * c, u = seg(t, a, a + 0.75), k = E.io(u);
+      const x0 = EP.WL.LEFT + c * EP.CW, y0 = EP.MAT_TOP + r * EP.RH;
+      const x1 = EP.TL + r * EP.CW, y1 = EP.MAT_TOP + c * EP.RH;
+      const lift = -46 * Math.sin(Math.PI * k);                  // a small arc over the ".T →"
+      const al = u <= 0 || u >= 1 ? 0 : 0.8 * Math.min(1, u / 0.12) * (1 - E.inn(seg(u, 0.5, 0.95)));
+      gc.at(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k + lift, { alpha: al });
+    }));
+
+    // the .T hero: dim while weight's rows are boxed (one magenta at a time), then the pulse
+    const down = E.io(seg(t, 2.85, 3.1)) * (1 - E.io(seg(t, 4.3, 4.55)));
+    const kT = pulse(t, CUE.transposes - 0.05, 0.8);
+    const tCol = mix(mix(COL.hero, COL.dim, down), COL.text, 0.45 * kT);
+    cardT.style.color = css(tCol);
+    P.tArrow.dot.style.color = css(tCol);
+    const swell = pulse(t, CUE.transposed - 0.1, 0.9);           // "just transposed"
+    const sT = 1 + 0.35 * swell + 0.28 * kT;
+    const sArr = 1 + 0.3 * swell + 0.2 * kT;
+    EP.put(P.tArrow.dot, EP.ARROW.x - 60, EP.ARROW.y - 70);
+    P.tArrow.dot.style.transform += ` scale(${sT.toFixed(4)})`;
+    EP.put(P.tArrow.arr, EP.ARROW.x - 60, EP.ARROW.y);
+    P.tArrow.arr.style.transform += ` scale(${sArr.toFixed(4)})`;
+    P.tArrow.arr.style.color = css(mix(COL.dim, COL.text, 0.6 * swell));
+
+    // "stores neurons as rows": weight's two rows box in turn (magenta), then go
+    const off = E.io(seg(t, 4.15, 4.45));
+    P.hl.rect(EP.RECT.wRow(0), E.out(seg(t, CUE.neurons - 0.15, CUE.neurons + 0.1)) * (1 - off));
+    P.hl2.rect(EP.RECT.wRow(1), E.out(seg(t, CUE.rows - 0.4, CUE.rows - 0.15)) * (1 - off));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

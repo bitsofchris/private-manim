@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5, 05_flip: OUTPUTS -> FLIPPED. "In the forward pass": the network, input numbers
+         and outputs fade; the card nn.Linear(3, 2) cross-fades to x @ weight.T + bias; weight
+         slides from centre to the left. "flips it": a copy of each of weight's six numbers flies
+         from (r, c) to weight.T's (c, r), keeping its colour, staggered by column; weight.T's
+         brackets, name, shape and the ".T →" fade in with the flight. "x @ weight.T": the card's
+         .T pulses. "plus a bias": "+ bias" brightens once. Hero: the .T. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.18" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.18;
+  // Cues, beat-local seconds (master 18.40 + t), from a 30 ms RMS envelope of vo_final.wav
+  // (words.json's in-phrase times are interpolated; the envelope wins). Speech: 0.18-1.00
+  // "In the forward pass", 1.41-2.22 "PyTorch flips it", 2.67-3.66 "x @ weight.T",
+  // 3.81-4.80 "plus a bias".
+  const CUE = {
+    fade: 0.10,     // "In" (0.18): network, inputs, outputs fade; card cross-fades (0.6 s)
+    slide: 0.60,    // "forward" (0.69): weight slides centre -> left (0.85 s)
+    fly: 1.50,      // "PyTorch" (1.44): the six numbers start to fly, column by column; "flips" (1.95) mid-flight, all home by 3.1
+    dotT: 3.45,     // ".T" (3.51): the card's .T pulses
+    bias: 4.28,     // "bias" (4.32): "+ bias" brightens once
+    still: 4.68,    // nothing moves after this (last 0.5 s)
+  };
+  const FADE = 0.6, SLIDE = 0.85, FLY = 1.0, STAG = 0.3, LANE = [740, 830, 920];
+  const { COL, css, mix, lerp, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  const spT = P.cardB.spans[0][3], spBias = P.cardB.spans[0][4];
+  // the flying copies pass over the lower stage and the ".T →" while they travel
+  P.wt.flat().forEach((c) => { c.el.setAttribute("data-layout-allow-overlap", ""); c.el.setAttribute("data-layout-allow-occlusion", ""); });
+  // the two cards cross-fade in one place
+  [P.cardA.el, P.cardB.el].forEach((el) => [el, ...el.querySelectorAll("*")].forEach((e) => e.setAttribute("data-layout-allow-overlap", "")));
+  ISO.guides(root);
+  // local helper: a one-shot 0 -> 1 -> 0 pulse over d seconds from t0
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+
+  function render(t) {
+    if (t > CUE.still) t = CUE.still;
+    EP.state(P, g, "FLIPPED");
+
+    // "In the forward pass": the network goes, the card changes
+    const a = 1 - E.io(seg(t, CUE.fade, CUE.fade + FADE));
+    if (a > 0.001) {
+      g.save(); g.globalAlpha = a; EP.network(g, P, { x: true, out: [1, 1] }); g.restore();
+      [...P.net.ins, ...P.net.outs].forEach((el) => { el.style.opacity = (parseFloat(el.style.opacity) * a).toFixed(3); });
+    }
+    P.cardA.at(VEC.centreLeft(P.cardA.el), EP.CARD_TOP, { alpha: a });
+    P.cardB.at(VEC.centreLeft(P.cardB.el), EP.CARD_TOP, { alpha: 1 - a });
+
+    // weight slides to the left (it is what is stored; it stays there)
+    EP.placeW(P, lerp(EP.WL.STORED, EP.WL.LEFT, E.io(seg(t, CUE.slide, CUE.slide + SLIDE))));
+
+    // "flips it": weight.T's frame fades in with the flight ...
+    EP.placeT(P, E.out(seg(t, CUE.fly + 0.25, CUE.fly + 1.15)));
+    // ... and each column of weight flies as a pair to its row of weight.T, turning a quarter
+    // turn on the way (top number -> left). Column r drops into its own lane LANE[r] below the
+    // matrices (deeper for later columns, so the lanes never cross), slides right, rises home.
+    P.wt.forEach((row, r) => {
+      const v = seg(t, CUE.fly + STAG * r, CUE.fly + STAG * r + FLY);
+      const sx = EP.WL.LEFT + r * EP.CW + EP.CW / 2, sy = EP.MAT_TOP + EP.RH;            // column centre
+      const fx = EP.TL + EP.CW, fy = EP.MAT_TOP + r * EP.RH + EP.RH / 2;                 // row centre
+      const cx = lerp(sx, fx, E.io(seg(v, 0.25, 0.75)));
+      const cy = sy + (LANE[r] - sy) * E.io(seg(v, 0, 0.35)) + (fy - LANE[r]) * E.io(seg(v, 0.65, 1));
+      const k = E.io(seg(v, 0.3, 0.7)), th = k * Math.PI / 2, rho = lerp(EP.RH / 2, EP.CW / 2, k);
+      row.forEach((cl, c) => {
+        const sg = c === 0 ? -1 : 1;
+        cl.at(cx + sg * rho * Math.sin(th) - EP.CW / 2, cy + sg * rho * Math.cos(th) - EP.RH / 2,
+              { alpha: t >= CUE.fly + STAG * r ? 1 : 0 });
+      });
+    });
+
+    // "x @ weight.T": the card's .T pulses; "plus a bias": "+ bias" brightens once
+    const pT = pulse(t, CUE.dotT, 0.5), pB = pulse(t, CUE.bias, 0.38);
+    spT.style.color = css(mix(COL.hero, COL.text, 0.45 * pT));
+    spT.style.textShadow = pT > 0.001 ? `0 0 ${(28 * pT).toFixed(1)}px ${css(COL.hero, 1, pT)}` : "none";
+    spBias.style.color = css(mix(COL.text, [255, 255, 255], pB));
+    spBias.style.textShadow = pB > 0.001 ? `0 0 ${(24 * pB).toFixed(1)}px ${css(COL.text, 1, 0.9 * pB)}` : "none";
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 beat 6, 06_landing (master 23.58, 7.30 s). Opens FLIPPED, ends CANON.
+         "The flipped weight is three by two, exactly the W from the last video,
+          where each row is where an input direction lands." -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.30" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.30;               // master 23.58 → 30.88 in vo_final.wav
+  const { COL, seg, mix, css } = ISO;
+  // beat-local = master − 23.58; words.json checked on a 30 ms RMS envelope
+  const CUE = {
+    flipped: 0.42,  /* "The flipped weight" (0.18–1.05) */
+    three: 1.27,    /* "three by two" (1.14–1.85) */
+    two: 1.62,      /* "two" (1.60–1.85) */
+    W: 2.88,        /* "the W" (2.60–3.15) */
+    video: 3.75,    /* "last video" (3.75–4.02), then a pause to 4.40 */
+    where: 4.42,    /* "where" (4.42–4.60) */
+    row: 5.00,      /* "each row" (4.71–5.30) */
+    lands: 6.96,    /* "direction lands" (6.24–7.14) */
+    still: 7.00,    /* CANON from here to the end (0.30 s still) */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));     // 0 → 1 → 0
+  const inOut = (t, a, b, c, d) => E.out(seg(t, a, b)) * (1 - E.io(seg(t, c, d)));
+  // one box per row of weight.T, in the row's own colour (local: the kit has two hboxes)
+  const rowBox = [0, 1, 2].map(() => VEC.hbox(root));
+  const shapeBox = VEC.hbox(root);
+  // "= W": ep04's name for this matrix, under weight.T (Inter, --dim). The name row has
+  // no room beside "weight.T" inside x ≤ 950, and (3, 2) sits under the name, so it goes
+  // under the matrix, in the lower stage, gone before the plane fades in.
+  const tagW = ISO.label(root, "= W", { size: 60, color: css(COL.dim), width: 220, align: "center" });
+  // the plane with each arrow drawn on its own clock (EP.plane draws all three at once)
+  function planeEach(alpha, us) {
+    VEC.view(EP.PLANE);
+    VEC.floor(g, { alpha: 0.42 * alpha });
+    VEC.axes(g, { alpha });
+    EP.WT.forEach((row, i) => VEC.arrow(g, [0, 0], row, { col: VEC.SLOT[i], alpha, u: us[i], width: 40 }));
+    VEC.puck(g, 0, 0, { alpha });
+  }
+  // each row of weight.T: its box and its arrow, ≥ 0.6 s each, on "each row … lands"
+  const ROW = [CUE.row - 0.10, CUE.row + 0.60, CUE.row + 1.30];        // 4.90, 5.60, 6.30: the last lands on "lands"
+  const DRAW = 0.60;
+  const PLANE_IN = [CUE.where, CUE.where + 0.50];
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "FLIPPED");
+    const cardT = P.cardB.spans[0][3];
+
+    // "The flipped weight": weight.T's brackets brighten once (moving from frame 0)
+    const kf = pulse(t, 0, 1.05);
+    P.tB.color(mix(COL.dim, COL.text, kf));
+
+    // "three by two": (3, 2) is the hero, magenta with a box; the .T's step down to
+    // --dim meanwhile so only one thing is magenta, then come back to rest (CANON).
+    const kS = inOut(t, CUE.three - 0.15, CUE.three + 0.10, CUE.two + 0.55, CUE.two + 0.85);
+    const kT = inOut(t, CUE.three - 0.30, CUE.three - 0.10, CUE.two + 0.65, CUE.two + 0.95);
+    P.names.tShape.style.color = css(mix(COL.dim, COL.hero, kS));
+    shapeBox.rect(EP.RECT.shapeT(), kS, COL.hero);
+    const tCol = css(mix(COL.hero, COL.dim, kT));
+    P.tArrow.dot.style.color = tCol; cardT.style.color = tCol;
+
+    // "exactly the W from the last video": "= W" under weight.T, gone by the pause
+    const kW = inOut(t, CUE.W - 0.25, CUE.W + 0.05, CUE.video + 0.15, CUE.video + 0.45);
+    EP.put(tagW, EP.TL + EP.CW - 110, EP.MAT_TOP + 3 * EP.RH + 12 + 10 * (1 - kW), kW);
+
+    // "where each row is where an input direction lands": the plane, then each row of
+    // weight.T boxed in its colour while its arrow draws from the origin
+    const kP = E.io(seg(t, PLANE_IN[0], PLANE_IN[1]));
+    const us = ROW.map((a) => E.io(seg(t, a, a + DRAW)));
+    if (kP > 0.001) planeEach(kP, us);
+    ROW.forEach((a, i) => {
+      const kb = inOut(t, a - 0.05, a + 0.12, a + DRAW - 0.10, a + DRAW + 0.05);
+      rowBox[i].rect(EP.RECT.tRow(i), kb, VEC.SLOT[i]);
+      P.wt[i].forEach((c) => c.color(mix(c.col0, COL.text, 0.35 * kb)));
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

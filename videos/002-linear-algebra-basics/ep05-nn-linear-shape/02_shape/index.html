@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 beat 2, 02_shape (master 3.60, 5.24 s). VO: "So when you give nn.Linear three in
+         and two out, the weight will come back two by three."
+         Opens STORED. "three in": the input rings pulse in turn and the 3 in the card swells;
+         "two out": the neurons pulse and the 2 in the card swells. "the weight": weight's brackets
+         brighten once. "come back": the shape (2, 3) turns magenta with a box round it; "two": the
+         2 and both rows pulse; "three": the 3 and the three columns pulse. Box goes and the shape
+         is --dim again by the hold. Ends STORED, still. Hero: the shape (2, 3). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.24" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.24;
+  // Cues, beat-local = master - 3.60. From a 20 ms RMS envelope of vo_final.wav plus its >3 kHz
+  // share (the "th" of three and the "t" of two are the only high-frequency bursts):
+  // "So" 3.78, "nn.Linear" 5.08, "three" 5.58 (th) / 5.74 (vowel), "in" 5.88, "two" 6.14 (t),
+  // "out" 6.32, "the" 6.98, "weight" 7.10, "will" 7.44, "come" 7.60, "two" 7.90 (t),
+  // "by" 8.14, "three" 8.30 (th) - 8.70. (words.json has two 8.31 / by 8.73 / three 8.84, which
+  // fall in the silence after 8.72; the envelope wins.)
+  const CUE = {
+    threeIn: 1.98,  // "three in" (master 5.58): input rings pulse in turn, the card's 3 swells
+    twoOut: 2.54,   // "two out" (6.14): the neurons pulse, the card's 2 swells
+    weight: 3.46,   // "weight" (7.10, vowel 7.12): weight's brackets brighten once
+    back: 3.95,     // "come back" (7.55): the shape (2, 3) goes magenta, the box draws round it
+    two: 4.26,      // "two" (7.90): the 2 and the two rows pulse, row 1 then row 2
+    three: 4.70,    // "three" (8.30, th): the 3 and the three columns pulse in turn
+    off: 4.92,      // the box goes and the shape fades back to --dim
+    still: 5.09,    // nothing moves after this (last 0.15 s still on STORED)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const NET = EP.NET, SLOT = VEC.SLOT;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // split one text element into spans with the same text, used only while a digit swells:
+  // at rest the element gets its original single text node back (split spans lose the font's
+  // kerning, e.g. "(2", so a split label sits ~2 px off the STORED frame the cuts need).
+  // Digit spans are inline-block so they scale about their own centre; every span keeps
+  // white-space: pre (an inline-block run drops the space in ", ").
+  function split(host, parts, mono) {
+    const text = host.textContent;
+    const spans = parts.map((s) => {
+      const sp = document.createElement("span");
+      sp.textContent = s; sp.style.whiteSpace = "pre"; sp.style.transformOrigin = "50% 55%";
+      if (s.trim().length === 1 && /\d/.test(s)) sp.style.display = "inline-block";   // only the digits scale
+      sp.setAttribute("data-layout-allow-overlap", "");   // a swelling digit briefly overlaps its neighbours
+      if (mono) { sp.style.fontFamily = "monospace"; sp.style.fontWeight = "700"; }
+      return sp;
+    });
+    let isSplit = false;
+    return {
+      spans,
+      // k[i]: swell of span i (0 = rest); all zero -> the original text node
+      set(k, s = 0.35) {
+        const on = k.some((v) => v > 0.0005);
+        if (on !== isSplit) {
+          host.textContent = on ? "" : text;
+          if (on) spans.forEach((sp) => host.appendChild(sp));
+          isSplit = on;
+        }
+        spans.forEach((sp, i) => { sp.style.transform = k[i] > 0.0005 ? `scale(${(1 + s * k[i]).toFixed(4)})` : ""; });
+      },
+    };
+  }
+  // the card "nn.Linear(3, 2)" (cardA is one span): [nn.Linear(, 3, ", ", 2, )]
+  const cardS = split(P.cardA.spans[0][0], ["nn.Linear(", "3", ", ", "2", ")"], true);
+  // the shape "(2, 3)": [(, 2, ", ", 3, )]
+  const shapeS = split(P.names.wShape, ["(", "2", ", ", "3", ")"], false);
+  // the network's canvas part (EP.network without its DOM numbers), with ring pulses:
+  // inP[i], nP[n] in 0..1 swell the ring and fill it faintly in its own colour (inputs) or white (neurons)
+  function net(inP, nP) {
+    NET.nY.forEach((ny) => NET.inY.forEach((iy, i) => {
+      g.save(); g.strokeStyle = css(SLOT[i], 1, 0.35); g.lineWidth = 5;
+      g.beginPath(); g.moveTo(NET.inX + NET.r, iy); g.lineTo(NET.nX - NET.r, ny); g.stroke(); g.restore();
+    }));
+    const ring = (x, y, col, k) => {
+      EP.ring(g, x, y, col, 1);
+      if (k <= 0.001) return;
+      g.save(); g.beginPath(); g.arc(x, y, NET.r * (1 + 0.22 * k), 0, Math.PI * 2);
+      g.fillStyle = css(COL.panel); g.fill(); g.fillStyle = css(col, 1, 0.35 * k); g.fill();
+      g.strokeStyle = css(col); g.lineWidth = 6 + 4 * k; g.stroke(); g.restore();
+    };
+    NET.inY.forEach((iy, i) => ring(NET.inX, iy, SLOT[i], inP[i]));
+    NET.nY.forEach((ny, n) => ring(NET.nX, ny, mix(COL.dim, COL.text, nP[n]), nP[n]));
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "STORED");
+
+    // "three in" / "two out": rings pulse in turn, the card's 3 and 2 swell
+    const inP = [0, 1, 2].map((i) => pulse(t, CUE.threeIn - 0.05 + 0.14 * i, 0.40));
+    const nP = [0, 1].map((n) => pulse(t, CUE.twoOut - 0.05 + 0.14 * n, 0.40));
+    cardS.set([0, pulse(t, CUE.threeIn - 0.05, 0.60), 0, pulse(t, CUE.twoOut - 0.05, 0.60), 0]);
+    EP.bg(g);
+    net(inP, nP);
+
+    // "the weight": the brackets brighten once
+    P.wB.color(mix(COL.dim, COL.text, pulse(t, CUE.weight - 0.05, 0.50)));
+
+    // the hero: the shape (2, 3), magenta with a box, from "come back" to the hold
+    const kOn = E.out(seg(t, CUE.back, CUE.back + 0.25));
+    const kOff = E.io(seg(t, CUE.off, CUE.still));
+    const k = kOn * (1 - kOff);
+    P.names.wShape.style.color = css(mix(COL.dim, COL.hero, k));
+    const r = EP.RECT.shapeW(EP.WL.STORED), d = 10 * (1 - kOn);
+    P.hl.rect([r[0] - d, r[1] - d, r[2] + 2 * d, r[3] + 2 * d], k);
+    // "two": the 2 and both rows; "by three": the 3 and the three columns
+    const pRow = [0, 1].map((rr) => pulse(t, CUE.two + 0.10 * rr, 0.26));
+    const pCol = [0, 1, 2].map((cc) => pulse(t, CUE.three + 0.06 * cc, 0.22));
+    shapeS.set([0, pulse(t, CUE.two, 0.36), 0, pulse(t, CUE.three, 0.34), 0]);
+    P.w.forEach((row, rr) => row.forEach((c, cc) => {
+      c.at(EP.WL.STORED + cc * EP.CW, EP.MAT_TOP + rr * EP.RH, { scale: 1 + 0.2 * pRow[rr] + 0.2 * pCol[cc] });
+    }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

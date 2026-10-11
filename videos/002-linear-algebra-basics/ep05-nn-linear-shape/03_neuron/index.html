@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_neuron: "A neuron takes all three inputs, multiplies each by its own weight, sums them,
+         adds a bias, and outputs one number." Opens STORED; ends OUTPUTS without -1.2.
+         Hero: neuron 1 (its row of weight boxed + its ring). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.47" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.47;
+  // Cues, beat-local seconds (master 8.84 + t), from a 30 ms RMS envelope of vo_final.wav.
+  // Speech: 0.19-0.94 "A neuron", 1.06-2.00 "takes all three inputs", 2.23-3.80 "multiplies
+  // each by its own weight", 3.97-4.55 "sums them", 4.60-5.20 "adds a bias", 5.25-6.30
+  // "and outputs one number".
+  const CUE = {
+    neuron: 0.19,               // "A neuron": ring turns magenta, row 1 boxed
+    ins: [1.30, 1.48, 1.66],    // "all" / "three" / "inputs": 1, 2, −1 fade into the rings
+    mul: [2.25, 2.70, 3.15],    // "multiplies" / "each by" / "its own weight": 2, 0.5, −1 pulse with their wire
+    sum: 3.97,                  // "sums": 4 at the output spot
+    bias: 4.60,                 // "adds a bias": + 0.1 (dim) beside it
+    out: 5.55,                  // "outputs": 4 + 0.1 becomes 4.1; ring and box go back to rest
+    rest: 5.90,                 // "one number": ring, box and wires settle back to rest
+    still: 6.30,                // nothing moves after this ("number" ends 6.28; 0.20 s hold)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const { NET, WL, MAT_TOP, CW } = EP;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+
+  // local: the transitional output "4 + 0.1" (the 4 sits where EP's 4.1 sits; + 0.1 in --dim)
+  const sum = ISO.label(root, "", { size: EP.SIZE });
+  const sumN = document.createElement("span"); sumN.textContent = "4";
+  const sumB = document.createElement("span"); sumB.textContent = " + 0.1"; sumB.style.color = css(COL.dim); sumB.style.whiteSpace = "pre";
+  sum.append(sumN, sumB);
+  sum.style.fontVariantNumeric = "tabular-nums";
+  sum.setAttribute("data-layout-allow-overlap", "");   // crossfades into EP's 4.1 on "outputs"
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d = 0.45) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // a brighter, wider wire on top of EP.network's resting wire (input i -> neuron n), k 0..1
+  function wire(i, n, k) {
+    if (k <= 0.001) return;
+    g.save(); g.strokeStyle = css(ISO.mix(VEC.SLOT[i], COL.text, 0.25 * k), 1, 0.75 * k); g.lineWidth = 5 + 5 * k; g.lineCap = "round";
+    g.beginPath(); g.moveTo(NET.inX + NET.r, NET.inY[i]); g.lineTo(NET.nX - NET.r, NET.nY[n]); g.stroke(); g.restore();
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    // the base: STORED, redrawn with the network (no input numbers, no outputs)
+    EP.state(P, g, "STORED");
+    EP.bg(g);
+    EP.network(g, P, { x: false, out: [0, 0] });
+
+    // hero on: "A neuron" (from frame 0) ... back to rest on "outputs"
+    const hero = E.out(seg(t, 0.0, CUE.neuron + 0.35)) * (1 - E.io(seg(t, CUE.rest, CUE.still)));
+    // neuron 1's three wires brighten on "all three inputs" and settle with the hero
+    const wl = E.out(seg(t, CUE.ins[0], CUE.ins[2] + 0.35)) * (1 - E.io(seg(t, CUE.rest, CUE.still)));
+    for (let i = 0; i < 3; i++) wire(i, 0, Math.min(1, 0.6 * wl + 0.4 * pulse(t, CUE.mul[i], 0.5) * wl + 0.0));
+    if (hero > 0.001) EP.ring(g, NET.nX, NET.nY[0], mix(COL.dim, COL.hero, hero), 1);
+    P.hl.rect(EP.RECT.wRow(0, WL.STORED), hero);
+
+    // the inputs fade into their rings, in turn
+    P.net.ins.forEach((el, i) => EP.put(el, NET.inX - 80, NET.inY[i] - 33, E.out(seg(t, CUE.ins[i], CUE.ins[i] + 0.3)), VEC.SLOT[i]));
+
+    // "multiplies each by its own weight": row 1's numbers pulse with their wire, in turn
+    for (let i = 0; i < 3; i++) {
+      const p = pulse(t, CUE.mul[i], 0.5);
+      if (p > 0.001) {
+        P.w[0][i].at(WL.STORED + i * CW, MAT_TOP, { scale: 1 + 0.22 * p });
+        P.w[0][i].color(mix(P.w[0][i].col0, COL.text, 0.4 * p));
+      }
+    }
+
+    // the output spot: 4 -> 4 + 0.1 -> 4.1
+    const s4 = E.out(seg(t, CUE.sum, CUE.sum + 0.3)), sb = E.out(seg(t, CUE.bias, CUE.bias + 0.35));
+    // "outputs": + 0.1 slides into the 4 and goes, then the 4 becomes 4.1 (no overlap of the two)
+    const go = E.io(seg(t, CUE.out, CUE.out + 0.2)), m = E.io(seg(t, CUE.out + 0.15, CUE.out + 0.5));
+    const ox = NET.outX + 20, oy = NET.nY[0] - 33;
+    sum.style.transform = `translate(${ox}px, ${oy}px)`;
+    sum.style.opacity = (s4 * (1 - m)).toFixed(3);
+    sumB.style.opacity = (sb * (1 - go)).toFixed(3);
+    sumB.style.display = sb * (1 - go) > 0.001 ? "inline-block" : "none";
+    sumB.style.transform = `translateX(${(-40 * go).toFixed(1)}px)`;
+    EP.put(P.net.outs[0], ox, oy, m, COL.text);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

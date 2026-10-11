@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_two: "Two outputs, two neurons, two rows of three." Opens where 03_neuron ends
+         (OUTPUTS without -1.2); ends OUTPUTS. Hero: neuron 2, then both rows of weight. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.09" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.09;
+  // Cues, beat-local seconds (master 15.31 + t), from a 30 ms RMS envelope of vo_final.wav.
+  // Speech: 0.20-0.90 "Two outputs", 1.28-2.00 "two neurons", 2.21-2.93 "two rows of three".
+  const CUE = {
+    two: 0.20,      // "Two outputs": neuron 2's ring magenta, its wires flick, −1.2 appears
+    neurons: 1.28,  // "two neurons": both rings pulse (neuron 2's magenta hands over)
+    rows: 2.05,     // "two rows of three": one box round the whole of weight (in by "two" at 2.21)
+    boxOut: 2.80,   // the box goes at the end of "three" (2.72-2.93)
+    still: 2.94,    // nothing moves after this (last 5 frames, on OUTPUTS)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const { NET, WL, MAT_TOP, RH } = EP;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d = 0.45) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // a brighter, wider wire on top of EP.network's resting wire (input i -> neuron n), k 0..1
+  function wire(i, n, k) {
+    if (k <= 0.001) return;
+    g.save(); g.strokeStyle = css(mix(VEC.SLOT[i], COL.text, 0.25 * k), 1, 0.75 * k); g.lineWidth = 5 + 5 * k; g.lineCap = "round";
+    g.beginPath(); g.moveTo(NET.inX + NET.r, NET.inY[i]); g.lineTo(NET.nX - NET.r, NET.nY[n]); g.stroke(); g.restore();
+  }
+  // a neuron ring redrawn over EP's at the same radius: colour k (dim -> hero), stroke thickened by s
+  function ringAt(n, k, s) {
+    if (k <= 0.001 && s <= 0.001) return;
+    g.save(); g.beginPath(); g.arc(NET.nX, NET.nY[n], NET.r, 0, Math.PI * 2);
+    g.fillStyle = css(COL.panel); g.fill();
+    g.strokeStyle = css(mix(COL.dim, COL.hero, k)); g.lineWidth = 6 + 6 * s; g.stroke(); g.restore();
+  }
+  // one box round the whole of weight (both rows of three)
+  const BOX = [WL.STORED - 12, MAT_TOP - 10, EP.CW * 3 + 24, 2 * RH + 20];
+
+  function render(t) {
+    if (t >= CUE.still) { EP.state(P, g, "OUTPUTS"); return; }   // the hold: 05_flip opens on it
+    // the base: OUTPUTS without −1.2 (03_neuron's last frame)
+    EP.state(P, g, "STORED");
+    EP.bg(g);
+    EP.network(g, P, { x: true, out: [1, 0] });
+
+    // "Two outputs": neuron 2 is the hero (from frame 0), its wires flick bright and back, −1.2 in
+    const n2 = E.out(seg(t, 0.0, CUE.two + 0.3)) * (1 - E.io(seg(t, CUE.neurons, CUE.neurons + 0.4)));
+    for (let i = 0; i < 3; i++) wire(i, 1, pulse(t, CUE.two + 0.05 + 0.08 * i, 0.55));
+    EP.put(P.net.outs[1], NET.outX + 20, NET.nY[1] - 33, E.out(seg(t, CUE.two + 0.1, CUE.two + 0.45)), COL.text);
+
+    // "two neurons": both rings pulse together (magenta and a swell), neuron 2's own magenta hands over
+    const pb = pulse(t, CUE.neurons, 0.5);
+    ringAt(0, pb, pb);
+    ringAt(1, Math.max(n2, pb), pb);
+
+    // "two rows of three": one magenta box round both rows, then it goes
+    const bx = E.out(seg(t, CUE.rows, CUE.rows + 0.2)) * (1 - E.io(seg(t, CUE.boxOut, CUE.still)));
+    const grow = 20 * (1 - E.out(seg(t, CUE.rows, CUE.rows + 0.2)));
+    P.hl.rect([BOX[0] - grow, BOX[1] - grow, BOX[2] + 2 * grow, BOX[3] + 2 * grow], bx);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

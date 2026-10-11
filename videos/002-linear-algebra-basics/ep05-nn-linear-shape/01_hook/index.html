@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 beat 1, 01_hook (master 0.00, 3.60 s). VO: "PyTorch stores one output neuron per row."
+         Frame 0: STORED with the six wires already growing from the inputs to the neurons.
+         "one": neuron 1's ring goes magenta, its wires brighten, the magenta box draws round weight's row 1.
+         "per row": ring, wires and box pass to neuron 2 / row 2. Then both back to rest; ends STORED, still.
+         Hero: the active neuron's row (box + ring), one at a time. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep05.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.6" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.60;
+  // Cues, beat-local = master (start 0.00). From a 20 ms RMS envelope of vo_final.wav:
+  // "PyTorch" 0.60, "stores" 1.18, "one" 1.62, "output" 1.98, "neuron" 2.44, "per" 2.96, "row" 3.18-3.46.
+  const CUE = {
+    grow: 0.00,     // frame 0: the wires are already growing (done by ~0.6 s)
+    one: 1.62,      // "one": neuron 1 ring + wires + row-1 box
+    per: 2.96,      // "per": the hero passes to neuron 2 / row 2 (lands by "row" 3.18)
+    rest: 3.20,     // "row": ring, wires and box back to rest
+    still: 3.45,    // nothing moves after this (last 0.15 s still on STORED)
+  };
+  const { COL, css, mix, lerp, seg } = ISO;
+  const NET = EP.NET, SLOT = VEC.SLOT;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helper: the network's canvas part (EP.network without its DOM numbers),
+  // with wire growth gw[i] per input and a lit[n] that ramps the wire alpha continuously
+  // (EP.network steps from 0.35 to 0.5 as soon as lit > 0; the endpoints here are identical:
+  // lit 0 = alpha 0.35, width 5; lit 1 = alpha 0.8, width 8).
+  function net(gw, lit) {
+    const wa = 0.5;
+    NET.nY.forEach((ny, n) => NET.inY.forEach((iy, i) => {
+      const u = gw[i];
+      if (u <= 0.001) return;
+      const x0 = NET.inX + NET.r, x1 = NET.nX - NET.r;
+      g.save(); g.strokeStyle = css(SLOT[i], 1, wa * (0.7 + 0.3 * lit[n]) + 0.3 * lit[n]); g.lineWidth = 5 + 3 * lit[n];
+      g.beginPath(); g.moveTo(x0, iy); g.lineTo(lerp(x0, x1, u), lerp(iy, ny, u)); g.stroke(); g.restore();
+    }));
+    NET.inY.forEach((iy, i) => EP.ring(g, NET.inX, iy, SLOT[i], 1));
+    NET.nY.forEach((ny, n) => EP.ring(g, NET.nX, ny, mix(COL.dim, COL.hero, lit[n]), 1));
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "STORED");
+
+    // the wires grow from each input to both neurons, input 1 first (frame 0 already partway)
+    const gw = [0, 1, 2].map((i) => E.out(seg(t, CUE.grow - 0.12 + 0.08 * i, CUE.grow + 0.42 + 0.08 * i)));
+    // the hero: neuron 1 (ring + row 1), then neuron 2 (ring + row 2), then rest
+    const kIn = E.out(seg(t, CUE.one, CUE.one + 0.30));
+    const kPass = E.io(seg(t, CUE.per, CUE.per + 0.22));
+    const kOut = E.io(seg(t, CUE.rest, CUE.still));
+    const lit = [kIn * (1 - kPass), kPass * (1 - kOut)];
+    // the box "draws": it fades in while closing from 10 px outside onto the row
+    const grow = (r, k) => [r[0] - 10 * (1 - k), r[1] - 10 * (1 - k), r[2] + 20 * (1 - k), r[3] + 20 * (1 - k)];
+    P.hl.rect(grow(EP.RECT.wRow(0, EP.WL.STORED), kIn), lit[0]);
+    P.hl2.rect(grow(EP.RECT.wRow(1, EP.WL.STORED), kPass), lit[1]);
+
+    EP.bg(g);
+    net(gw, lit);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
