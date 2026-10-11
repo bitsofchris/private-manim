@@ -1,0 +1,277 @@
+[
+ {
+  "start": 0.67,
+  "end": 2.036,
+  "text": "PyTorch stores one"
+ },
+ {
+  "start": 2.096,
+  "end": 3.103,
+  "text": "output neuron"
+ },
+ {
+  "start": 3.163,
+  "end": 3.81,
+  "text": "per row."
+ },
+ {
+  "start": 3.81,
+  "end": 4.731,
+  "text": "So when you"
+ },
+ {
+  "start": 4.791,
+  "end": 6.173,
+  "text": "give nn.Linear 3 in"
+ },
+ {
+  "start": 6.232,
+  "end": 7.0,
+  "text": "and 2 out,"
+ },
+ {
+  "start": 7.0,
+  "end": 7.792,
+  "text": "the weight will"
+ },
+ {
+  "start": 7.852,
+  "end": 8.545,
+  "text": "come back two"
+ },
+ {
+  "start": 8.605,
+  "end": 9.1,
+  "text": "by three."
+ },
+ {
+  "start": 9.1,
+  "end": 9.982,
+  "text": "A neuron takes"
+ },
+ {
+  "start": 10.042,
+  "end": 11.1,
+  "text": "all three inputs"
+ },
+ {
+  "start": 11.1,
+  "end": 12.001,
+  "text": "multiplies each by"
+ },
+ {
+  "start": 12.061,
+  "end": 12.82,
+  "text": "its own weight"
+ },
+ {
+  "start": 12.82,
+  "end": 13.69,
+  "text": "sums them, adds"
+ },
+ {
+  "start": 13.75,
+  "end": 14.402,
+  "text": "a bias, and"
+ },
+ {
+  "start": 14.463,
+  "end": 15.55,
+  "text": "outputs one number."
+ },
+ {
+  "start": 15.55,
+  "end": 16.664,
+  "text": "Two outputs, two"
+ },
+ {
+  "start": 16.724,
+  "end": 17.904,
+  "text": "neurons, two rows"
+ },
+ {
+  "start": 17.964,
+  "end": 18.62,
+  "text": "of three."
+ },
+ {
+  "start": 18.62,
+  "end": 19.825,
+  "text": "In the forward"
+ },
+ {
+  "start": 19.885,
+  "end": 21.491,
+  "text": "pass, PyTorch flips"
+ },
+ {
+  "start": 21.551,
+  "end": 22.11,
+  "text": "it: x @ weight.T"
+ },
+ {
+  "start": 22.17,
+  "end": 23.78,
+  "text": "plus a bias."
+ },
+ {
+  "start": 23.78,
+  "end": 24.646,
+  "text": "The flipped weight"
+ },
+ {
+  "start": 24.706,
+  "end": 25.116,
+  "text": "is three"
+ },
+ {
+  "start": 25.176,
+  "end": 25.54,
+  "text": "by two"
+ },
+ {
+  "start": 25.54,
+  "end": 26.484,
+  "text": "exactly the W"
+ },
+ {
+  "start": 26.544,
+  "end": 27.151,
+  "text": "from the"
+ },
+ {
+  "start": 27.211,
+  "end": 28.02,
+  "text": "last video"
+ },
+ {
+  "start": 28.02,
+  "end": 28.908,
+  "text": "where each row"
+ },
+ {
+  "start": 28.968,
+  "end": 29.678,
+  "text": "is where an"
+ },
+ {
+  "start": 29.738,
+  "end": 31.1,
+  "text": "input direction lands."
+ },
+ {
+  "start": 31.1,
+  "end": 31.481,
+  "text": "So don't ask"
+ },
+ {
+  "start": 31.541,
+  "end": 31.893,
+  "text": "which is in"
+ },
+ {
+  "start": 31.953,
+  "end": 32.246,
+  "text": "and which"
+ },
+ {
+  "start": 32.306,
+  "end": 32.54,
+  "text": "is out"
+ },
+ {
+  "start": 32.54,
+  "end": 33.38,
+  "text": "ask where are"
+ },
+ {
+  "start": 33.44,
+  "end": 34.16,
+  "text": "the landing"
+ },
+ {
+  "start": 34.22,
+  "end": 35.18,
+  "text": "vectors stored"
+ },
+ {
+  "start": 35.18,
+  "end": 36.033,
+  "text": "in the rows"
+ },
+ {
+  "start": 36.093,
+  "end": 37.23,
+  "text": "or the columns."
+ },
+ {
+  "start": 37.23,
+  "end": 38.186,
+  "text": "In math, vectors"
+ },
+ {
+  "start": 38.246,
+  "end": 39.146,
+  "text": "are columns and"
+ },
+ {
+  "start": 39.206,
+  "end": 39.768,
+  "text": "W times v"
+ },
+ {
+  "start": 39.828,
+  "end": 40.84,
+  "text": "uses the columns."
+ },
+ {
+  "start": 40.84,
+  "end": 42.348,
+  "text": "In PyTorch, vectors"
+ },
+ {
+  "start": 42.408,
+  "end": 43.388,
+  "text": "are rows and"
+ },
+ {
+  "start": 43.448,
+  "end": 44.126,
+  "text": "x @ W uses"
+ },
+ {
+  "start": 44.186,
+  "end": 44.94,
+  "text": "the rows."
+ },
+ {
+  "start": 44.94,
+  "end": 45.675,
+  "text": "It's the same"
+ },
+ {
+  "start": 45.735,
+  "end": 46.89,
+  "text": "idea just transposed."
+ },
+ {
+  "start": 46.89,
+  "end": 48.481,
+  "text": "nn.Linear stores neurons"
+ },
+ {
+  "start": 48.541,
+  "end": 49.05,
+  "text": "as rows"
+ },
+ {
+  "start": 49.05,
+  "end": 49.96,
+  "text": "and transposes on"
+ },
+ {
+  "start": 50.02,
+  "end": 50.88,
+  "text": "the way through."
+ }
+]
