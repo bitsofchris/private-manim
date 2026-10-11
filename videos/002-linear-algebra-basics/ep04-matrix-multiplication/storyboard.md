@@ -67,17 +67,46 @@ of `W` are where input directions land.
 
 ## States (what each beat opens and ends on)
 
+All states are built with `VEC.parts(root)` once and `VEC.canon(P, g)` at
+the top of `render(t)`; a beat then hides or moves only what differs.
+
 - **CANON** = `00_layout`: `x` column, `W`, `→`s, weighted rows, sum row
   `[ 4, −1 ]` (magenta border and digits), `x @ W` label; plane with axes,
   the chain teal → blue → gold tip to tail, the magenta output arrow
   (0, 0) → (4, −1) drawn under the chain.
 - **CANON+b** = CANON with the sum row reading `[ 4.1, −1.2 ]`, its label
-  `x @ W + b`, and the output arrow's tip at (4.1, −1.2).
+  `x @ W + b`, and the output arrow's tip at (4.1, −1.2); the chain is
+  unchanged (`VEC.canon(P, g, { bias: true })`).
+- **SIDEWAYS** = START with `x` turned into the column left of `W` (the
+  `x` header, `x`'s brackets), `x = [ … ]` gone, the three `→`s shown, the
+  landing arrows still from the origin. No highlight.
+- **SCALED** = SIDEWAYS plus the weighted rows (with their brackets) and,
+  on the plane, the three *weighted* arrows from the origin: (2, −1),
+  (1, 2), (1, −2). No landing arrows. No highlight.
+- **CHAINED** = SCALED with the arrows laid tip to tail as the chain, the
+  sum row's brackets in place (dim) and empty. No output arrow, no
+  `x @ W` label. No highlight.
 - **START** = what beat 2 builds toward: `x = [ 1, 2, −1 ]` flat on the
   header line, `W` with its three landing arrows from the origin; no `x`
   column, no weighted rows, no sum, no chain.
 
-## Beats (draft, from the cut take; times in `vo_final.wav`)
+## Final beats (the contract)
+
+`vo_final.wav` is 53.321 s. Every cut sits in a pause. Beat-local t = master − start.
+
+| # | Folder | Master start | Length | Opens on | Ends on | VO |
+|---|---|---:|---:|---|---|---|
+| 1 | `01_hook` | 0.00 | 7.35 | (frame 0: the computation already running) | CANON | x at W is just a weighted sum of W's rows. It's the one operation inside every linear layer. |
+| 2 | `02_setup` | 7.35 | 9.37 | CANON | START | Take x equals one, two, minus one, and W, a three by two matrix. Three rows, one for each input direction, each a 2D landing spot. |
+| 3 | `03_sideways` | 16.72 | 5.54 | START | SIDEWAYS | Now turn x sideways so it sits beside W. Now each number in x is a weight for one row. |
+| 4 | `04_scale` | 22.26 | 3.58 | SIDEWAYS | SCALED | One times the first row, two times the second row, minus one times the third row. |
+| 5 | `05_add` | 25.84 | 8.88 | SCALED | CHAINED | Now we have three weighted 2D vectors. To add vectors, you add first coordinates together and second coordinates together. That's summing down the columns. |
+| 6 | `06_result` | 34.72 | 2.28 | CHAINED | CANON | Four minus one, that's x at W. |
+| 7 | `07_meaning` | 37.00 | 6.03 | CANON | CANON | Rows are where input directions land. Columns are the totals in each output direction. |
+| 8 | `08_bias` | 43.03 | 5.80 | CANON | CANON+b | Add the bias and you have one row of a linear layer's output, 4.1 minus 1.2. |
+| 9 | `09_close` | 48.83 | 4.491 | CANON+b | CANON+b | Each number in x weights a row of W. Add the rows and you're done. |
+
+## Beats (the visual brief)
 
 | # | Folder | Start | Length | VO | Hero | Visual |
 |---|---|---:|---:|---|---|---|
@@ -85,8 +114,8 @@ of `W` are where input directions land.
 | 2 | `02_setup` | 7.35 | 9.37 | Take x equals one, two, minus one, and W, a three by two matrix. Three rows, one for each input direction, each a 2D landing spot. | `W`'s outline | Opens CANON. First 0.6 s: weighted rows, `→`s, sum row, label, chain and output arrow fade out; the `x` column lifts to the header line as `x = [ 1, 2, −1 ]` ("one, two, minus one" lands each number). "three by two matrix": a magenta outline draws around `W`. "Three rows": each row of `W` pulses in turn. "one for each input direction": row k's `x` number pulses with its row. "2D landing spot": the three arrows draw from the origin to (2, −1), (0.5, 1), (−1, 2), each in its row's colour, the row pulsing as its arrow lands. Ends START. |
 | 3 | `03_sideways` | 16.72 | 5.54 | Now turn x sideways so it sits beside W. Now each number in x is a weight for one row. | the `x` column | Opens START. "turn x sideways": the three numbers of `x` swing from the flat line down into the column left of `W` (≥ 0.8 s, one path each, the `x =` text becomes the `x` header). Outline moves from `W` to the `x` column (magenta). "a weight for one row": each `x` cell links to its row: a thin line of the row colour under the row from the `x` cell to the row's right end, one by one, then the `→`s appear. Plane: landing arrows stay. |
 | 4 | `04_scale` | 22.26 | 3.58 | One times the first row, two times the second row, minus one times the third row. | the `x` weight being applied | On each "times": the `x` cell's border magenta, the weighted row appears at the right (`2, −1`; `1, 2`; `1, −2`), and on the plane that row's arrow scales: row 1 holds (×1, a pulse), row 2 doubles (0.5, 1) → (1, 2), row 3 flips through the origin (−1, 2) → (1, −2). Ends: three weighted arrows from the origin, weighted rows filled, `x` borders back to muted. |
-| 5 | `05_add` | 25.84 | 8.88 | Now we have three weighted 2D vectors. To add vectors, you add first coordinates together and second coordinates together. That's summing down the columns. | the column being summed | "three weighted 2D vectors": the weighted rows and their arrows pulse together. "To add vectors": the blue arrow slides so its tail sits on the teal tip, then the gold onto the blue tip (the chain, ≥ 0.8 s each). "first coordinates": a magenta box around the weighted rows' first column, and on the plane the east steps light (guides along the axis). "second coordinates": box moves to column 2. "summing down the columns": a down-arrow under each column, the sum line under the weighted rows draws. No sum digits yet. |
-| 6 | `06_result` | 34.72 | 2.28 | Four minus one, that's x at W. | the sum row + output arrow | "Four": `4` drops into the sum row; "minus one": `−1`; the magenta output arrow draws (0, 0) → (4, −1) under the chain; "x at W": the `x @ W` label. Ends CANON. |
+| 5 | `05_add` | 25.84 | 8.88 | Now we have three weighted 2D vectors. To add vectors, you add first coordinates together and second coordinates together. That's summing down the columns. | the column being summed | "three weighted 2D vectors": the weighted rows and their arrows pulse together. "To add vectors": the blue arrow slides so its tail sits on the teal tip, then the gold onto the blue tip (the chain, ≥ 0.8 s each). "first coordinates": a magenta box around the weighted rows' first column, and on the plane the east steps light (guides along the axis). "second coordinates": box moves to column 2. "summing down the columns": the sum row's empty brackets appear (dim) under the weighted rows. No sum digits yet. Ends CHAINED. |
+| 6 | `06_result` | 34.72 | 2.28 | Four minus one, that's x at W. | the sum row + output arrow | "Four": `4,` drops into the sum row; "minus one": `−1`; the brackets turn magenta and the magenta output arrow draws (0, 0) → (4, −1) under the chain; "x at W": the `x @ W` label. Ends CANON. |
 | 7 | `07_meaning` | 37.00 | 6.03 | Rows are where input directions land. Columns are the totals in each output direction. | first `W`'s rows, then the sum row's columns | "Rows … land": `W`'s three rows outline in their colours and faint ghosts of the three landing arrows appear from the origin (alpha ~0.35). "Columns are the totals": ghosts fade; the sum cells' columns light one at a time with dashed guides from (4, −1) to 4 on the east axis and −1 on the north axis ("each output direction"). Guides fade before the hold. Ends CANON. |
 | 8 | `08_bias` | 43.03 | 5.80 | Add the bias and you have one row of a linear layer's output, 4.1 minus 1.2. | the output row | "Add the bias": a row `b  [ 0.1, −0.2 ]` (dim label, white digits) appears just under the sum row, over the empty top edge of the plane. "one row of a linear layer's output": it slides up into the sum row and is gone; the label becomes `x @ W + b`. "4.1": the first cell retypes to `4.1`; "minus 1.2": the second to `−1.2`; the output arrow's tip nudges to (4.1, −1.2). Ends CANON+b. |
 | 9 | `09_close` | 48.83 | 4.491 | Each number in x weights a row of W. Add the rows and you're done. | the output row | Opens CANON+b. "Each number in x weights a row of W": the three rows (x cell, W row, weighted row, arrow) pulse in turn, row colours. "Add the rows": the chain pulses tip to tail and the output row brightens. Last 0.6 s still on CANON+b: the frame episode 5 can open beside `nn.Linear`. |
@@ -107,4 +136,4 @@ audio (50 ms RMS envelope of your window), not from these.
 `vo_raw.m4a` (62.5 s; −67 dB floor, already clean) → `vo_clean.wav`
 (loudnorm only) → `vo_final.wav` (53.3 s):
 `tools/tighten_vo.py --max-gap 0.25` (pauses capped, no phrase removed).
-Pending Chris's approval.
+Approved by Chris (2026-10-10). The repeated "Now" kept.

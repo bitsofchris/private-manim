@@ -1,0 +1,11 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",     "end": 7.35},
+ {"clip": "media/hf/02_setup.mp4",    "end": 9.37},
+ {"clip": "media/hf/03_sideways.mp4", "end": 5.54},
+ {"clip": "media/hf/04_scale.mp4",    "end": 3.58},
+ {"clip": "media/hf/05_add.mp4",      "end": 8.88},
+ {"clip": "media/hf/06_result.mp4",   "end": 2.28},
+ {"clip": "media/hf/07_meaning.mp4",  "end": 6.03},
+ {"clip": "media/hf/08_bias.mp4",     "end": 5.80},
+ {"clip": "media/hf/09_close.mp4",    "end": 4.491}
+]}

@@ -149,7 +149,9 @@
         el.style.opacity = (o2.alpha == null ? 1 : o2.alpha).toFixed(3);
       },
     };
-    c.at(o.left || 0, o.top || 0, { alpha: o.alpha });
+    c.left0 = o.left || 0; c.top0 = o.top || 0; c.col0 = o.col || COL.text;
+    c.home = (o2 = {}) => c.at(c.left0, c.top0, o2);                    // back to its canonical place
+    c.at(c.left0, c.top0, { alpha: o.alpha });
     return c;
   }
   // A grid of rows × cols cells at its canonical place. vals[r][c] numbers;
@@ -206,10 +208,68 @@
   // "→" between W and the weighted rows, one per row
   const arrows = (root) => [0, 1, 2].map((r) => ISO.label(root, "→", { size: G.size, color: css(COL.dim), left: G.wLeft + 2 * G.cellW + G.brPad + G.brW, top: rowTop(r) + 2, width: G.pLeft - G.wLeft - 2 * G.cellW - 2 * (G.brPad + G.brW), align: "center" }));
 
+  // A highlight box (agents/style.md: a box that appears and goes again).
+  // hl.rect([left, top, w, h], alpha, col) — alpha 0 hides it.
+  function hbox(root) {
+    const el = document.createElement("div");
+    el.style.cssText = "position:absolute;left:0;top:0;box-sizing:border-box;border-radius:14px;border:6px solid;opacity:0;";
+    root.appendChild(el);
+    return {
+      el,
+      rect(r, alpha = 1, col = COL.hero) {
+        el.style.width = `${r[2]}px`; el.style.height = `${r[3]}px`;
+        el.style.transform = `translate(${r[0].toFixed(1)}px, ${r[1].toFixed(1)}px)`;
+        el.style.borderColor = css(col); el.style.opacity = clamp01(alpha).toFixed(3);
+      },
+    };
+  }
+  // Rectangles [left, top, w, h] around the parts, for hbox and for placing things.
+  const PADR = 10;
+  const pad = (l, t, w, h) => [l - PADR, t - PADR, w + 2 * PADR, h + 2 * PADR];
+  const RECT = {
+    x: pad(G.xLeft, G.top, G.xW, H3),
+    W: pad(G.wLeft, G.top, 2 * G.cellW, H3),
+    P: pad(G.pLeft, G.top, 2 * G.cellW, H3),
+    sum: pad(G.pLeft, G.sumTop, 2 * G.cellW, G.rowH),
+    xCell: (r) => pad(G.xLeft, rowTop(r), G.xW, G.rowH),
+    wRow: (r) => pad(G.wLeft, rowTop(r), 2 * G.cellW, G.rowH),
+    pRow: (r) => pad(G.pLeft, rowTop(r), 2 * G.cellW, G.rowH),
+    pCol: (c) => pad(G.pLeft + c * G.cellW, G.top, G.cellW, H3),
+    sumCell: (c) => pad(G.pLeft + c * G.cellW, G.sumTop, G.cellW, G.rowH),
+  };
+
+  // Every DOM part of the frame, created once, in a fixed order.
+  // P.h headers {x, W, shape, out}; P.arr the three "→"; P.xc[r][0], P.wc[r][c],
+  // P.pc[r][c] cells; P.sum[c]; P.xB, P.wB, P.pB, P.sB brackets; P.hl a highlight box.
+  function parts(root) {
+    return { h: headers(root), arr: arrows(root), xc: xColumn(root), wc: wGrid(root), pc: pGrid(root), sum: sumRow(root),
+             xB: xBr(root), wB: wBr(root), pB: pBr(root), sB: sumBr(root), hl: hbox(root) };
+  }
+  // Put the whole frame in CANON (o.bias: CANON+b) and draw the plane. A beat
+  // calls this first in render(t), then overrides only what it changes, so
+  // every beat's rest state is the same pixels.
+  function canon(Pt, g, o = {}) {
+    const lab = (el) => { el.style.transform = ""; el.style.opacity = "1"; el.style.color = css(COL.dim); };
+    Object.values(Pt.h).forEach(lab); Pt.arr.forEach(lab);
+    Pt.h.out.textContent = o.bias ? "x @ W + b" : "x @ W";
+    [Pt.xc, Pt.wc, Pt.pc].forEach((m) => m.forEach((row) => row.forEach((c) => { c.home(); c.color(c.col0); c.border(COL.hero, 0); })));
+    const vals = o.bias ? Y : SUM;
+    Pt.sum.forEach((c, i) => { c.home(); c.set(vtxt(vals[i], i)); c.color(COL.hero); c.border(COL.hero, 0); });
+    [Pt.xB, Pt.wB, Pt.pB].forEach((b) => { b.at(0, 0); b.color(COL.dim); });
+    Pt.sB.at(0, 0); Pt.sB.color(COL.hero);
+    Pt.hl.rect(RECT.sum, 0);
+    if (!g) return;
+    floor(g); axes(g);
+    arrow(g, [0, 0], vals, { col: COL.hero, width: 40 });              // under the chain: the teal head stays readable
+    for (let i = 0; i < 3; i++) arrow(g, CHAIN[i], CHAIN[i + 1], { col: ROWCOL[i] });   // the rows' sum; the bias moves only the output tip
+    puck(g, 0, 0);
+  }
+
   window.VEC = {
     X, W, XW, SUM, B, Y, CHAIN, ROWCOL, fmtv,
     G, rowTop, STEP, OX, FLOOR, PLANE_TOP, THIN, AXES, w, P2, at,
     floor, arrow, line, axes, guides, puck, label, place,
     code, vtxt, cell, grid, xColumn, wGrid, pGrid, sumRow, headers, arrows, brackets, xBr, wBr, pBr, sumBr,
+    hbox, RECT, parts, canon,
   };
 })();

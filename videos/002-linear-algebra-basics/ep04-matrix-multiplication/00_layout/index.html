@@ -31,21 +31,12 @@
   const { COL, seg } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
-  VEC.headers(root); VEC.arrows(root);
-  VEC.xColumn(root); VEC.wGrid(root); VEC.pGrid(root);
-  const sum = VEC.sumRow(root);
-  VEC.xBr(root); VEC.wBr(root); VEC.pBr(root);
-  const sumB = VEC.sumBr(root, COL.dim);
+  const P = VEC.parts(root);               // every DOM part, once
   ISO.guides(root);
   function render(t) {
-    const u = E.out(seg(t, 0.1, 1.2));
-    VEC.floor(g);
-    VEC.axes(g);
-    const C = VEC.CHAIN;
-    VEC.arrow(g, [0, 0], VEC.SUM, { col: COL.hero, u, width: 40 });   // under the chain: the teal head stays readable
-    for (let i = 0; i < 3; i++) VEC.arrow(g, C[i], C[i + 1], { col: VEC.ROWCOL[i], u });
-    VEC.puck(g, 0, 0);
-    sumB.color(ISO.mix(COL.dim, COL.hero, u));
+    VEC.canon(P, g);                       // CANON: the rest state every beat shares
+    // the one moving thing: the sum row's brackets settle from dim to magenta
+    P.sB.color(ISO.mix(COL.dim, COL.hero, E.out(seg(t, 0.1, 1.2))));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
