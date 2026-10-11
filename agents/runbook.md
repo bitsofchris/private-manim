@@ -148,7 +148,7 @@ jobs (measured on ep03 against 14 cues found by hand, 2026-10-11):
 | Model | Job | Why |
 |---|---|---|
 | Parakeet v3 | every transcript a person reads: the take (here), the cut checks (step 5), the spelling reference for captions and word times (step 7) | hears terms better ("row i of w", "i lands", digits, where Whisper wrote "IFW", "eye") and runs a 50 s take in ~1 s |
-| Whisper Small | one timing transcript of `vo_final.wav` (step 5), the input to `word_times.py` and `captions_from_transcript.py` | its phrases are tight and ordered; with `word_times.py` it times words to a median 0.045 s (worst 0.24 s). Parakeet's phrases are longer and can overlap (worst 0.63 s through the same tool), and its own word timings run in 80 ms steps and early (median 0.12 s) |
+| WhisperKit Large v2 | one timing transcript of `vo_final.wav` as JSON (step 5): a start per word from the recognizer, the input to `word_times.py`, which feeds the cues and the captions | ~20 s for 50 s of VO; median 0.07 s, worst 0.20 s against the 14 cues. Measured alongside: Parakeet's own word times (median 0.12 s, in 80 ms steps, early), WhisperKit Small.en (0.08 / 0.22 s, dropped a word), and whisper.cpp Small phrases + the estimator in `word_times.py` (0.045 / 0.24 s, but scored against cues found on the same loudness curve it uses). The estimator stays as the fallback for a segment without word times |
 
 ```
 MW=/Applications/MacWhisper.app/Contents/MacOS/mw
@@ -160,9 +160,12 @@ Gotchas:
 - Always pass `--model`; the app's default can change under you.
 - Without `--overwrite` it refuses an existing `-o` file, silently under
   `2>/dev/null`.
-- Whisper.cpp models give no word timings; Parakeet's (`--format json`, a
-  `words` array per segment) are too coarse for cues. Word times come from
-  `tools/word_times.py` (step 5).
+- Only WhisperKit and Parakeet put word times in `--format json` (a
+  `words` array per segment); whisper.cpp gives none. A recognizer often
+  pins a phrase's first word to the silence before it; `word_times.py`
+  moves such a word to where the speech starts.
+- A newly downloaded WhisperKit model is unknown to the CLI until the app
+  has finished preparing it ("Unknown model"); check `$MW models list`.
 
 ## 5. Tighten (Claude + Chris, the only judgment step)
 
@@ -191,19 +194,18 @@ tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
 5. Still over? `atempo=1.03` is inaudible and buys 3 %. Re-run loudnorm
    after it.
 
-Then the timing transcript and word times, once, for every beat agent:
+Then the timing transcript and word times, once, for every beat agent and
+for the captions:
 
 ```
-$MW transcribe --model whisper-cpp:ggml-model-whisper-small $TXT -o transcript_final.txt vo_final.wav
-tools/word_times.py transcript_final.txt vo_final.wav -o words.json
+$MW transcribe --model whisperkit:openai_whisper-large-v2 --language en --no-speakers \
+   --format json --overwrite -o transcript_final.json vo_final.wav
+tools/word_times.py transcript_final.json vo_final.wav -o words.json
 ```
 
-It spreads each phrase's words over its span by syllables and places the
-boundaries on the envelope's dips (no model, no new dependency). On ep03,
-against 14 cues the agents had found by hand, the median error was 0.045 s
-and the worst 0.24 s ("stored" after "this": a word that starts with a hiss
-straight after another reads late). Fix Whisper's spellings in it as in the
-captions.
+`words.json` is `[{"t", "end", "word", "seg"}]`, master seconds. Fix its
+spellings against `transcript_final_text.txt` (Parakeet) now: the captions
+are built from it in step 7, so one fix serves both.
 
 Then rewrite `storyboard.md` with the final beat table: master start,
 length, scene file, VO. Beat lengths are the contract for step 6.
@@ -256,7 +258,7 @@ stroke-only VMobject fills it. No LaTeX on this machine: `Text` only.
 ## 7. Captions and assembly (Claude, 1 min)
 
 ```
-tools/captions_from_transcript.py transcript_final.txt captions.json   # ≤3 words each
+tools/captions_from_transcript.py words.json captions.json   # ≤3 words each, timed by their words
 # beats.json: ordered {clip, end} per beat; ends must sum to the VO length
 #   clip is media/videos/<file>/1920p30/<Class>.mp4 (Manim) or media/hf/<beat>.mp4 (HyperFrames)
 tools/assemble.py beats.json --vo vo_final.wav --captions captions.json \
@@ -272,8 +274,8 @@ when a caption sits under white diagram text. One caption source per Short: burn
 also drawn in scenes.
 
 Read the generated `captions.json` once: Whisper writes "NX" for N× and
-"NN module" for nn.Module; fix the text against `transcript_final_text.txt`
-(Parakeet, step 5), the times are fine. Same for the words in `words.json`. A scene
+"NN module" for nn.Module. Spellings are fixed in `words.json` (step 5),
+so a wrong word here means a fix missed there: fix it there and rebuild. A scene
 element in the band too (a code card): `agents/style.md`, "Share the band
 with a scene element".
 
@@ -366,11 +368,11 @@ After the hand-off pack, ask once: "Ready for the update pass?" On yes:
 |---|---|---|
 | `enhance_vo.sh` | ffmpeg voice cleanup chain to −14 LUFS | manual |
 | `tighten_vo.py` | range cuts, pause capping, time map | yes |
-| `captions_from_transcript.py` | MacWhisper txt → captions.json | yes |
+| `captions_from_transcript.py` | `words.json` (or a MacWhisper .json / .txt) → captions.json | yes |
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
 | `review_frames.sh` | contact sheets at phone size | manual |
 | `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs | yes |
-| `word_times.py` | each word's start from the phrase transcript and the envelope → `words.json` | yes |
+| `word_times.py` | each word's start: the recognizer's (WhisperKit JSON) out of the silence, or estimated from the envelope → `words.json` | yes |
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |
 
 Run everything: `uv run --no-sync python -m unittest discover -s tests`.
