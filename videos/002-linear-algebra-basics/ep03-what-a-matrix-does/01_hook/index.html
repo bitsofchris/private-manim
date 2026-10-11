@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep03 beat 1, the hook: FAR view, W already swinging e1 and e2 (and x riding along)
-         to where they land; spots ring on "lands"; the move replays once. Started from 00_layout. -->
+    <!-- ep03 beat 1, the hook: the W card first (rows read on "records"), then in the FAR view W swings
+         e1 and e2 (and x riding along) to where they land; spots ring on "lands"; the move replays once. Started from 00_layout. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -30,9 +30,11 @@
   // Cues, beat-local seconds (master 0.00 + t), from a 50 ms RMS envelope of vo_final.wav
   // and MacWhisper sub-clips (speech 0.60-3.04, pause 3.04-3.42, 3.42-6.13).
   const CUE = {
-    swing0: -0.82, // the swing started before frame 0: s is ~0.3 at t = 0 (still moving)
-    landed: 1.30,  //  e1, e2 and x land; spots wait for "lands"
-    lands: 2.55,   // "lands" (master 2.55): magenta spots ring onto both landed tips
+    settle: 0.30,  //  frame 0: the W card settles in (scale 0.96 -> 1, alpha 0.7 -> 1); FAR at rest below
+    rec1: 1.30,    // "records" (master 1.30-1.80): row 1 lights toward off-white and back ...
+    rec2: 1.55,    //  ... then row 2, in turn (0.40 s each)
+    swing: 1.80,   // "where each direction": e1, e2 and x swing (0.75 s); the card fades out + drifts up over 0.40 s
+    lands: 2.55,   // "lands" (master 2.55): the swing lands and the magenta spots ring onto both tips
     every: 3.40,   // "Every weight matrix" (master 3.40): everything eases back to s = 0
     back: 4.62,    //  ... home (1.22 s), then lands again (1.22 s)
     again: 5.84,   //  landed again, "exactly this" (master ~5.65)
@@ -42,6 +44,7 @@
   const { COL, css, seg, lerp } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
+  const card = VEC.matCard(root, VEC.W);
   ISO.guides(root);
   // local helper: the FAR picture at swing s (shared shape with 02_sends' opening)
   //   floor dims 0.42 -> 0.14, moved lattice (0.35), e1/e2 ghosts, x ghost at (3, 2),
@@ -61,7 +64,7 @@
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
     VEC.setView(1);                                           // FAR throughout
-    let s = E.io(seg(t, CUE.swing0, CUE.landed));             // first swing, mid-flight at frame 0
+    let s = E.io(seg(t, CUE.swing, CUE.lands));               // first swing, after the card is read
     s = lerp(s, 0, E.io(seg(t, CUE.every, CUE.back)));        // the replay: back home ...
     s = lerp(s, 1, E.io(seg(t, CUE.back, CUE.again)));        // ... and landed again
     // spots: pop on "lands", fade during the trip, ring again on landing
@@ -70,6 +73,11 @@
     spotA = Math.max(spotA, seg(t, CUE.ring, CUE.ring + 0.12));
     const spotK = t < CUE.ring ? (pop1 > 0 ? 1 - E.out(pop1) : 0) : 1 - E.out(pop2);
     drawSwing(s, spotA, spotK);
+    // the W card: settles in at frame 0, rows read in turn on "records", leaves as the swing starts
+    const set = E.out(seg(t, 0, CUE.settle)), gone = E.io(seg(t, CUE.swing, CUE.swing + 0.4));
+    const bump = (a) => Math.sin(Math.PI * seg(t, a, a + 0.4));
+    card.light(0, bump(CUE.rec1), COL.text); card.light(1, bump(CUE.rec2), COL.text);
+    card.at(VEC.cardLeft(card.el), VEC.CARD_TOP - 20 * gone, { scale: lerp(0.96, 1, set), alpha: lerp(0.7, 1, set) * (1 - gone) });
   }
   // HyperFrames' static lint looks for this registration in the beat file itself.
   window.__timelines = window.__timelines || {};
