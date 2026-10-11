@@ -66,5 +66,17 @@ class Place(unittest.TestCase):
         self.assertEqual(WT.place([0.05, 0.25], self.ENV, 0.0)[0], 0.05)
 
 
+class RecognizerWords(unittest.TestCase):
+    def test_word_timed_segments_pass_through_without_audio(self):
+        segs = [{"start": 0.5, "end": 1.5, "text": "A matrix", "words": [(0.58, 0.7, "A"), (0.72, 1.2, "matrix")]}]
+        self.assertEqual(WT.word_times(segs, None, 0), [
+            {"t": 0.58, "end": 0.7, "word": "A", "seg": 0}, {"t": 0.72, "end": 1.2, "word": "matrix", "seg": 0}])
+
+    def test_a_start_in_silence_moves_to_the_speech(self):
+        env = [-60.0] * 50 + [-10.0] * 50                 # silence, then speech from 0.50 s
+        self.assertAlmostEqual(WT.out_of_silence(0.0, env, 0.0, -40.0), 0.50)
+        self.assertEqual(WT.out_of_silence(0.70, env, 0.0, -40.0), 0.70)   # already in speech
+
+
 if __name__ == "__main__":
     unittest.main()

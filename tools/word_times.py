@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
-"""Estimate when each word starts, from the phrase-level transcript and the audio.
+"""When each word starts: from the recognizer when it timed the word, else estimated from the audio.
 
 Usage (from the video folder):
-    uv run --no-sync python ../../tools/word_times.py transcript_final.txt vo_final.wav -o words.json
-    # prints "  1.302  records" lines too; words.json is [{"t": 1.302, "word": "records"}, ...]
+    uv run --no-sync python ../../tools/word_times.py transcript_final.json vo_final.wav -o words.json
+    # prints "  1.302  records" lines too; words.json is
+    # [{"t": 1.302, "end": 1.84, "word": "records", "seg": 0}, ...]; fix spellings in it
+    # (runbook step 7), then build the captions from it
+    # a .txt transcript works too (every word estimated)
 
-Why: MacWhisper's CLI (v15, Pro included) gives timestamps per phrase only,
-and a beat lands each change on the word that names it. Beat agents used to
+Why: a beat lands each change on the word that names it. Beat agents used to
 find each word by transcribing half-second sub-clips; this gives every word
-once, in step 4, so the storyboard can list them.
+once, in runbook step 5, so the storyboard can list them.
 
-How (per phrase, stdlib + numpy, no model):
+Source of each time:
+  - MacWhisper JSON from a WhisperKit model (runbook step 5) carries a
+    start per word from the recognizer; those are used as they are.
+  - A segment without word times (whisper.cpp, or a .txt transcript) is
+    estimated as below.
+
+How the estimate works (per phrase, stdlib + numpy, no model):
   1. A 10 ms RMS envelope of the phrase's span; speech runs from the first to
      the last frame above the floor (peak − 30 dB).
   2. Each word gets a share of that span by its estimated syllables (vowel
@@ -37,7 +45,7 @@ import wave
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from captions_from_transcript import parse_transcript  # noqa: E402
+from captions_from_transcript import load_segments  # noqa: E402
 
 HOP = 0.01      # envelope frame, s
 SNAP = 0.25     # how far a boundary may move from its first guess to find a dip, s
@@ -142,9 +150,37 @@ def envelope(x, sr: int, t0: float, t1: float):
     return np.convolve(db, np.ones(3) / 3, mode="same")
 
 
+def out_of_silence(t: float, env: list[float], t0: float, floor: float, hop: float = HOP) -> float:
+    """A start that sits in silence (envelope below floor) moves on to the next loud frame."""
+    i = max(0, int(round((t - t0) / hop)))
+    if i >= len(env) or env[i] > floor:
+        return t
+    for k in range(i, len(env)):
+        if env[k] > floor:
+            return t0 + k * hop
+    return t
+
+
 def word_times(segments, x, sr) -> list[dict]:
+    """segments: load_segments() dicts. Recognizer times where present (a word
+    placed in the silence before speech moves to the speech), estimates elsewhere.
+    Each entry: {"t": start, "end": end or None, "word", "seg": segment index}."""
     out = []
-    for s, e, text in segments:
+    for n, seg in enumerate(segments):
+        s, e, text = seg["start"], seg["end"], seg["text"]
+        if seg["words"]:
+            if x is None:
+                out.extend({"t": round(t0, 3), "end": round(t1, 3), "word": w, "seg": n} for t0, t1, w in seg["words"])
+                continue
+            a = min(s, seg["words"][0][0])
+            env = list(envelope(x, sr, a, max(e, seg["words"][-1][1])))
+            floor = max(env) - FLOOR_DB if env else 0.0
+            prev = -1.0
+            for t0, t1, w in seg["words"]:
+                t = max(out_of_silence(t0, env, a, floor), prev + HOP)
+                t = min(t, max(t1 - HOP, t0))           # never past the word's own end
+                out.append({"t": round(t, 3), "end": round(t1, 3), "word": w, "seg": n}); prev = t
+            continue
         words = text.split()
         if not words:
             continue
@@ -154,7 +190,8 @@ def word_times(segments, x, sr) -> list[dict]:
         loud = [i for i, v in enumerate(env) if v > env.max() - FLOOR_DB]
         a, b = s + loud[0] * HOP, s + (loud[-1] + 1) * HOP
         starts = place(split_span(words, a, b), list(env), s)
-        out.extend({"t": round(t, 3), "word": w} for t, w in zip(starts, words))
+        ends = starts[1:] + [b]
+        out.extend({"t": round(t, 3), "end": round(t1, 3), "word": w, "seg": n} for t, t1, w in zip(starts, ends, words))
     return out
 
 
@@ -164,7 +201,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("wav")
     ap.add_argument("-o", "--out", default="words.json")
     args = ap.parse_args(argv)
-    segs = parse_transcript(Path(args.transcript).read_text())
+    segs = load_segments(args.transcript)
     x, sr = read_mono(Path(args.wav))
     words = word_times(segs, x, sr)
     Path(args.out).write_text(json.dumps(words, indent=1) + "\n")
