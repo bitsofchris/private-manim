@@ -122,8 +122,10 @@ The `beats.json` row for the beat: `{"clip": "media/hf/NN_beat.mp4", "end": BEAT
   drift, stops before the end (both prototypes freeze at a `HOLD_FROM` /
   `T.still` constant).
 - Land each change on the word that names it. Cue times come from the
-  audio, not the brief: extract your window from `vo_final.wav` and run
-  silencedetect or a 50 ms RMS envelope (as in `agents/beat-brief.md`).
+  audio, not the brief: start from the video's `words.json` (master times,
+  runbook step 5), and check a cue that matters on a 10–50 ms RMS envelope
+  of your window from `vo_final.wav`. Transcribe a sub-clip only for a
+  word that is missing or misheard.
   Beat-local = master − start. Cues are named constants at the top of the
   script with the word in a comment: `const CUE = { auto: 1.30 /* "automate" */ };`.
 - A move the viewer must track gets ≥ 0.6 s (`S.BEAT`); pops and

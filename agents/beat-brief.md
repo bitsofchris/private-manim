@@ -37,8 +37,9 @@ contact sheet, report. You never edit `videos/_shared/`.
 - One magenta hero, the one the brief names. Everything else teal, FG,
   FG_DIM, BG_PANEL.
 - Land each change on the word that names it. Get cue times from the
-  audio, not the brief: extract your window from `vo_final.wav` and run
-  silencedetect or a 50 ms RMS envelope. Beat-local = master − start.
+  audio, not the brief: start from the video's `words.json` (runbook
+  step 5) and check a cue that matters on a 50 ms RMS envelope of your
+  window from `vo_final.wav`. Beat-local = master − start.
   Cues are named constants with the word in a comment.
 - Only `S.QUICK` / `S.BEAT` / `S.HOLD` run times (multiples of HOLD for
   rides). A move the viewer tracks gets ≥ BEAT.

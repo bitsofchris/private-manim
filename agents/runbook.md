@@ -154,8 +154,11 @@ $MW transcribe --model whisper-cpp:ggml-model-whisper-small --language en \
 Gotchas:
 - It will **not overwrite** an existing `-o` file and fails silently with
   `2>/dev/null`. `rm` the old file first.
-- Word-level timestamps and JSON need MacWhisper Pro. Segment-level is
-  enough for cutting; sub-clip transcription (step 5) refines boundaries.
+- Timestamps are per phrase only, Pro included: the v15 CLI has no
+  word-level option (`--format json` and `--group words` still give
+  phrases; checked 2026-10-11). Phrases are enough for cutting; sub-clip
+  transcription (step 5) refines boundaries, and `tools/word_times.py`
+  (step 5) gives the word times beats need.
 
 ## 5. Tighten (Claude + Chris, the only judgment step)
 
@@ -182,6 +185,19 @@ tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
 5. Still over? `atempo=1.03` is inaudible and buys 3 %. Re-run loudnorm
    after it.
 
+Then word times, once, for every beat agent:
+
+```
+tools/word_times.py transcript_final.txt vo_final.wav -o words.json
+```
+
+It spreads each phrase's words over its span by syllables and places the
+boundaries on the envelope's dips (no model, no new dependency). On ep03,
+against 14 cues the agents had found by hand, the median error was 0.045 s
+and the worst 0.24 s ("stored" after "this": a word that starts with a hiss
+straight after another reads late). Fix Whisper's spellings in it as in the
+captions.
+
 Then rewrite `storyboard.md` with the final beat table: master start,
 length, scene file, VO. Beat lengths are the contract for step 6.
 
@@ -205,8 +221,10 @@ length, scene file, VO. Beat lengths are the contract for step 6.
 - Name two or three finished beats that resemble each agent's brief as
   worked examples (same part, same kind of motion). Examples from our own
   passing scenes do more than rule lists.
-- Agents should place cues from the audio itself (silencedetect + energy
-  envelope), not only from the brief; that beat the estimates every time.
+- Agents place cues from `words.json` (step 5), master times, and check
+  the ones that matter on their window's envelope; a sub-clip
+  transcription only for a word that is missing or misheard. Cues from the
+  audio beat the brief's estimates every time.
 - Render (Manim): `cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching 0N_beat.py Class`.
   Output: `media/videos/0N_beat/1920p30/Class.mp4`. Agents may render while
   iterating, but the final pass is one sequential run per folder with
@@ -344,6 +362,7 @@ After the hand-off pack, ask once: "Ready for the update pass?" On yes:
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
 | `review_frames.sh` | contact sheets at phone size | manual |
 | `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs | yes |
+| `word_times.py` | each word's start from the phrase transcript and the envelope → `words.json` | yes |
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |
 
 Run everything: `uv run --no-sync python -m unittest discover -s tests`.
