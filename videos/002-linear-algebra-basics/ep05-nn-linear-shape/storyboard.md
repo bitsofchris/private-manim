@@ -128,4 +128,4 @@ from the audio (50 ms RMS envelope of your window), not from these.
 - Pauses capped at 0.25 s. No other phrase removed; the "if time" line
   (math vs PyTorch) fits.
 
-Approval: pending.
+Approved by Chris (2026-10-11), with the 00_layout look.
