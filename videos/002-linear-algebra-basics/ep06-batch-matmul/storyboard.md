@@ -7,7 +7,7 @@ ENGINE: hyperframes
 **Search phrase:** pytorch matrix multiplication (`../SERIES.md`, episode 6)
 
 Engine: HyperFrames (the default, `AGENTS.md` "Which engine"). Every beat is
-three matrices, a code card and a shape line; nothing needs Manim's axes or
+three matrices and a code card; nothing needs Manim's axes or
 3D camera.
 
 ## Preflight
@@ -18,10 +18,16 @@ three matrices, a code card and a shape line; nothing needs Manim's axes or
   loses track of which matrix is which and why the shapes work.
 - **THE ANSWER IN ONE SENTENCE:** `X` is data and `W` is the map:
   `(batch, in) @ (in, out)` applies the same map to every row.
+- **THE SEARCH PHRASE:** pytorch matrix multiplication (offered by YouTube
+  autocomplete; `../SERIES.md`). Not "batch matrix multiplication", which
+  autocomplete pairs with "dsa" / "using dp". VO line 1 ("One line of
+  PyTorch pushes a whole batch through a layer…") is a reframe and says
+  "PyTorch"; no recut.
 
 ## The look
 
-One stage, rendered in `00_layout/` (snapshot `media/hf/00_layout.png`). The
+One stage, rendered in `00_layout/` (snapshots `media/hf/00_layout_A.png`
+CANON, `_B.png` the beat-5 sweep, `_C.png` BIG). The
 code is `../../../_shared/web/vec/vec.js` (the shared plane kit, linked as
 `vec/`) plus this episode's `_ep/ep06.js` (linked as `ep/`): the ledger,
 where things sit, and the rest states. Notation is the series default
@@ -37,17 +43,26 @@ where things sit, and the rest states. Notation is the series default
   i-th feature) and row i of `W` (where input direction i lands) are one
   colour: 1 teal, 2 blue, 3 gold (`VEC.SLOT`). `Y`'s digits are white.
   Magenta is the one hero.
-- **Top (y 236–648):** the card slot at y 236, centred: the code card
-  `Y = X @ W` (monospace), later `Y = X @ W + b`, and in beats 6 and 8
-  the shape line (Inter) in its place. `W` (3, 2) under it, its label
-  `W  (3, 2)` at y 368 and its rows from y 444, centred at x 440, over the
-  gap between `X` and `Y`. In beats 7–9 the bias `b` sits at the top right,
-  directly above `Y`'s two columns (cells at x 620–920, y 444, label `b`
-  at y 368), so broadcasting is a straight slide down.
-- **Bottom (y 668–1084):** labels `X  (5, 3)` and `Y  (5, 2)` at y 668;
+- **Top (y 236–516):** `W  (3, 2)` labelled at y 236, its rows from
+  y 312, centred at x 440, over the gap between `X` and `Y`. In beats 7–9
+  the bias `b` sits at the top right, directly above `Y`'s two columns
+  (cells at x 620–920, y 312, label `b  (2,)` at y 236), so broadcasting
+  is a straight slide down.
+- **Middle (y 556–972):** labels `X  (5, 3)` and `Y  (5, 2)` at y 556;
   `X` (cells 100 px, x 100–400) at the left, `Y` (cells 150 px, x 620–920)
-  at the right, rows at y 744 + 68 px each, so row i of `X` and row i of
+  at the right, rows at y 632 + 68 px each, so row i of `X` and row i of
   `Y` share a line. A dim `→` per row in the gap between them (x 510).
+- **The code card (the code beat, runbook step 1 "Show the code"):** one
+  card for the whole Short, centred, top at y 1012, sharing the band top
+  as ep03's code cards did (bottom ≤ 1330; `assemble.py --captions-anchor
+  bottom`, every caption one line). Line 1 is `Y = X @ W`, and gains
+  `+ b` on "the bias" (beat 7). In beat 6 the card grows a comment line,
+  `# (5,3) @ (3,2) → (5,2)`, on "five by three at three by two gives five
+  by two"; in beat 8 the comment becomes `# (batch,seq,3) @ (3,2)`. The
+  tuples have no space after the comma because 60 px monospace holds ~24
+  columns in the safe width (the comment is 23). The output is `Y`, not
+  the `y` in SERIES.md's code-beat line, so the card and the matrix label
+  agree.
 - **The sweep:** a row "goes through W" as: a magenta box round row i of
   `X`, its `→` magenta, `W`'s brackets brighten, row i of `Y` fills, the
   box and `→` return to rest. One row at a time is the hero; "all five in
@@ -69,9 +84,9 @@ convention: `X @ W`, rows of `W` are where input directions land.
 | Y = X @ W + b `(5, 2)` | `[ 4.1, −1.2 ]`, `[ −3.4, 4.8 ]`, `[ 3.35, 0.3 ]`, `[ −3.4, 5.8 ]`, `[ 5.1, −5.2 ]` | `EP.Y` |
 | Row 1, worked (beat 5) | 1 × `(2, −1)` + 2 × `(0.5, 1)` + −1 × `(−1, 2)` = `[ 4, −1 ]` | |
 | Row 2, worked (beat 5) | 0 × `(2, −1)` + −1 × `(0.5, 1)` + 3 × `(−1, 2)` = `[ −3.5, 5 ]` | |
-| Code | `Y = X @ W`; after the bias, `Y = X @ W + b` (monospace) | `parts().code`, `.codeB` |
-| Shape line | `(5, 3) @ (3, 2) → (5, 2)` (Inter, as `.shape` prints) | `parts().shapes` |
-| Real-data shapes | `(batch, seq, 3) @ (3, 2)` | `parts().big` |
+| Code, line 1 | `Y = X @ W`; from beat 7, `Y = X @ W + b` (monospace) | `parts().card.line1` |
+| Code, comment | `# (5,3) @ (3,2) → (5,2)` (beats 6–7, 9) | `parts().card.shapes` |
+| Code, real data | `# (batch,seq,3) @ (3,2)` (beat 8) | `parts().card.big` |
 | Labels | `X`, `W`, `Y`, `b` (Inter 800) with shapes `(5, 3)`, `(3, 2)`, `(5, 2)`, `(2,)` in `--dim`; tags `data` (teal) and `map` (magenta) | `parts().names` |
 
 ## States (what each beat opens and ends on)
@@ -82,13 +97,13 @@ a beat then draws only what differs.
 - **INPUTS:** card `Y = X @ W`; `W`, `X`, the `→`s, and `Y`'s label and
   empty brackets (no digits). No `b`. No highlight.
 - **PRODUCT:** INPUTS + `Y`'s digits = `X @ W` (white).
-- **SHAPES:** PRODUCT with the card slot holding the shape line
-  `(5, 3) @ (3, 2) → (5, 2)`, digits `--text`, the two inner `3`s in
-  `--dim` ("they disappear"; `--muted` fails `check`'s 3:1 contrast).
-- **CANON** (`00_layout`): card `Y = X @ W + b` (the `+ b` in `--dim`); `b`
-  above `Y`; `Y`'s digits = the biased outputs.
-- **BIG:** CANON with the card slot holding `(batch, seq, 3) @ (3, 2)`, the
-  `3` magenta.
+- **SHAPES:** PRODUCT; the card has its comment `# (5,3) @ (3,2) → (5,2)`
+  (`#` and the two inner `3`s `--dim`, "they disappear"; `--muted` fails
+  `check`'s 3:1 contrast).
+- **CANON** (`00_layout` A): SHAPES with line 1 `Y = X @ W + b`; `b` above
+  `Y`; `Y`'s digits = the biased outputs.
+- **BIG:** CANON with the comment `# (batch,seq,3) @ (3,2)`, its `3`
+  magenta.
 
 ## Final beats (the contract)
 
@@ -111,15 +126,15 @@ Beat-local t = master − start. Cue times from `words.json` (master).
 
 | # | Folder | Hero | Visual |
 |---|---|---|---|
-| 1 | `01_hook` | the row going through `W`, then `W` | Frame 0: INPUTS with the sweep already on row 1 (its box, `→` and `Y` row half filled). Rows 1–5 go through `W` in turn, faster each time, `Y` filling row by row, all five done by "batch" (2.42). "layer" (3.04): `W`'s brackets pulse once. "X is data" (3.69–4.22): `X`'s brackets brighten teal and the tag `data` (teal) fades in after `X  (5, 3)`. "W is the map" (4.94–5.74): `W`'s brackets turn magenta and the tag `map` (magenta) fades in after `W  (3, 2)`. Tags and brackets back to rest by 6.0. Ends PRODUCT, still. |
+| 1 | `01_hook` | the row going through `W`, then `W` | Frame 0: INPUTS (card `Y = X @ W`) with the sweep already on row 1 (its box, `→` and `Y` row half filled). Rows 1–5 go through `W` in turn, faster each time, `Y` filling row by row, all five done by "batch" (2.42). "layer" (3.04): `W`'s brackets pulse once. "X is data" (3.69–4.22): `X`'s brackets brighten teal and the tag `data` (teal) fades in after `X  (5, 3)`. "W is the map" (4.94–5.74): `W`'s brackets turn magenta and the tag `map` (magenta) fades in after `W  (3, 2)`. Tags and brackets back to rest by 6.0. Ends PRODUCT, still. |
 | 2 | `02_rows` | the row being counted, then row 1 | Opens PRODUCT. First 0.4 s: `Y`'s digits fade (empty brackets stay). "five rows" (6.92–7.13): `X`'s five rows pulse top to bottom (fast). "each row is one input vector" (7.45–8.55): a magenta box round row 1. "three features" (9.21–9.52): row 1's three numbers swell in turn (teal, blue, gold), and the `3` in `(5, 3)` brightens. Box and swell gone by 3.5. Ends INPUTS. |
 | 3 | `03_map` | `W` | Opens INPUTS. "W is the map" (10.24–10.97): a magenta box round `W`. "three dimensions" (11.45): `W`'s three rows pulse in turn in their colours and the `3` in `(3, 2)` brightens. "to two" (12.50): `W`'s two columns pulse and the `2` brightens. Box gone by 2.7. Ends INPUTS. |
 | 4 | `04_roles` | first both brackets (white), then `X`'s stack, then `W` | Opens INPUTS. "both matrices" (13.97–14.17): `X`'s and `W`'s brackets brighten together (white, not magenta). "different roles" (15.22–15.68): they drift apart in colour: `X`'s brackets teal, `W`'s `--dim`. "X is data" (16.40–16.62): tag `data` (teal) after `X  (5, 3)`. "a stack of vectors" (17.64–18.08): a thin teal box draws round each of `X`'s five rows in turn, top to bottom (one stack). "W is a transformation" (19.08–19.90): `X`'s boxes go; tag `map` (magenta) after `W  (3, 2)` and `W`'s brackets magenta. All tags and colours back to rest in the last 0.6 s. Ends INPUTS. |
 | 5 | `05_sweep` | the active row (its box, the weights at `W`, its `Y` row) | Opens INPUTS. "the same thing to every row" (22.31–23.39): every `→` pulses once, top to bottom. "Row one of X" (23.99–25.00): magenta box round row 1 of `X`. "weights the rows of W" (25.33–26.67): copies of `1`, `2`, `−1` fly from row 1 to just left of `W`'s three rows, as `1 ×`, `2 ×`, `−1 ×` in their row colours, each `W` row pulsing as its weight lands (≥ 0.6 s). "and sums" (27.34): row 1's `→` magenta and `Y` row 1 fills `[ 4, −1 ]`. "Then row two" (28.12–28.71): the box moves to row 2; the weights retype `0 ×`, `−1 ×`, `3 ×`; `Y` row 2 fills `[ −3.5, 5 ]`. "all five in parallel" (29.30–30.19): the weights fade, boxes on rows 3–5 at once (magenta on all three), their `→`s light and `Y` rows 3–5 fill together. Boxes back to rest by 9.4. Ends PRODUCT. |
-| 6 | `06_shapes` | the shape line | Opens PRODUCT. First 0.4 s: the code card fades from the slot. "five by three" (30.88–31.62): a copy of `(5, 3)` flies from `X`'s label to the slot. "at three by two" (31.87–32.62): `@` and a copy of `(3, 2)` from `W`'s label join it. "gives five by two" (32.86–33.77): `→` and a copy of `(5, 2)` from `Y`'s label complete the line `(5, 3) @ (3, 2) → (5, 2)`, magenta. "The inner dimensions" (34.65–34.98): the line goes back to `--text` and the two inner `3`s get a magenta box each. "have to match" (35.83): a magenta bracket joins the two boxes under the line. "and then they disappear" (36.62): boxes and bracket go, the two `3`s fade to `--dim`, the outer `5` and `2` pulse. Ends SHAPES. |
-| 7 | `07_bias` | `b` | Opens SHAPES. "Then the bias" (37.57–38.04): the shape line cross-fades to `Y = X @ W + b` in the slot (`+ b` magenta), and `b` with `[ 0.1, −0.2 ]` fades in above `Y`. "broadcasts across every row" (38.28–39.07): five copies of `b`'s two numbers slide down `Y`'s columns, one per row (≥ 0.6 s, slight stagger), and as each lands that row's digits retype to the biased output. `+ b` to `--dim` and `b` to rest by 2.2. Ends CANON. |
-| 8 | `08_bigger` | the last dimension (`3`, with one row of `X`) | Opens CANON. "makes this bigger" (40.47–40.91): the code card fades and `(5, 3) @ (3, 2)` appears in the slot, `--text`. "a batch" (41.63): `(5, 3)` retypes as `(batch, 5, 3)`. "a sequence" (42.26): `5` retypes as `seq`, giving `(batch, seq, 3) @ (3, 2)`. "features" (42.82): the `3` in `(batch, seq, 3)` turns magenta. "The last dimension is always the vector" (43.40–44.62): a magenta box round row 1 of `X` (three numbers = one vector), and the `3` in `W`'s `(3, 2)` pulses. Box gone by 5.0; the `3` in the line stays magenta. Ends BIG. |
-| 9 | `09_close` | `W`, then all five rows | Opens BIG. First 0.5 s: the slot cross-fades back to `Y = X @ W + b`. "the same learned map in that matrix" (45.94–47.70): a magenta box round `W`. "applied to many vectors" (48.02–48.90): the box goes and all five `→`s light at once, with a teal box round each of `X`'s rows. Back to rest by 4.0; last 0.6 s still on CANON: the frame episode 7 can open on (`W` then splits into two stacked layers). |
+| 6 | `06_shapes` | the code card's comment (the code beat) | Opens PRODUCT. "This five by three" (30.88–31.62): the card grows its comment line (0.3 s) and `# (5,3)` types in, magenta, as `(5, 3)` in `X`'s label brightens. "at three by two" (31.87–32.62): ` @ (3,2)` types in, magenta, with `W`'s label. "gives five by two" (32.86–33.77): ` → (5,2)` types in, magenta, with `Y`'s label; the whole comment is magenta on "two". "The inner dimensions" (34.65–34.98): the comment goes back to `--text` and the two inner `3`s get a magenta box each. "have to match" (35.83): a magenta line joins the two boxes under the comment. "and then they disappear" (36.62): boxes and line go, the two `3`s fade to `--dim`, the outer `(5,` and `2)` pulse. Ends SHAPES. |
+| 7 | `07_bias` | `b` (with the card's `+ b`) | Opens SHAPES. "Then the bias" (37.57–38.04): ` + b` types into the card's line 1, magenta (the card widens and re-centres), and `b` with `[ 0.1, −0.2 ]` fades in above `Y`. "broadcasts across every row" (38.28–39.07): five copies of `b`'s two numbers slide down `Y`'s columns, one per row (≥ 0.6 s, slight stagger), and as each lands that row's digits retype to the biased output. `+ b` to `--text` and `b` to rest by 2.2. Ends CANON. |
+| 8 | `08_bigger` | the last dimension (`3`, with one row of `X`) | Opens CANON. "makes this bigger" (40.47–40.91): the comment becomes `# (5,3) @ (3,2)` (the ` → (5,2)` goes). "a batch" (41.63): it retypes as `# (batch,5,3) @ (3,2)` (`card.big`, with "seq" reading `5`). "a sequence" (42.26): `5` retypes as `seq`. "features" (42.82): the `3` turns magenta. "The last dimension is always the vector" (43.40–44.62): a magenta box round row 1 of `X` (three numbers = one vector), and the `3` in `W`'s `(3, 2)` pulses. Box gone by 5.0; the `3` in the comment stays magenta. Ends BIG. |
+| 9 | `09_close` | `W`, then all five rows | Opens BIG. First 0.5 s: the comment cross-fades back to `# (5,3) @ (3,2) → (5,2)`. "the same learned map in that matrix" (45.94–47.70): a magenta box round `W`. "applied to many vectors" (48.02–48.90): the box goes and all five `→`s light at once, with a teal box round each of `X`'s rows. Back to rest by 4.0; last 0.6 s still on CANON: the frame episode 7 can open on (`W` then splits into two stacked layers). |
 
 Beat boundaries sit in the pauses (silencedetect −35 dB on `vo_final.wav`).
 Place exact cues from `words.json` and check the ones that matter on a 50 ms
@@ -135,6 +150,9 @@ RMS envelope of your window.
 - Pauses capped at 0.25 s (the longest, 2.2 s after "all five in parallel",
   and 1.4 s after "they disappear").
 - The "if time" line ("Real data just makes this bigger…") fits and stays.
+- Both code-beat lines survive the cut: "This five by three at three by two
+  gives five by two" at 30.88–33.77 and "Then the bias broadcasts across
+  every row" at 37.57–39.47 (master, `vo_final.wav`).
 - Re-transcribed `vo_final.wav`: no fragments at the joins.
 - Whisper's spellings fixed in `words.json`: "waits" → "weights", "add" →
   "at". "X's data" is how Whisper hears "X is data"; captions will say

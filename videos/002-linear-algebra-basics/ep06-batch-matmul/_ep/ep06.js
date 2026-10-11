@@ -20,10 +20,11 @@
   // (teal, blue, gold). Y's digits are white. Magenta is the one hero.
 
   // ---- layout (px, 1080 x 1920; stage y 230-1100) ----
-  const SLOT_TOP = 236;                                   // the card slot: code card or shape line, centred
   const SIZE = 60, RH = 68;                               // digits and labels; row pitch
-  const TOP_LABEL = 368, W_TOP = 444;                     // W's and b's labels; their first row
-  const BOT_LABEL = 668, X_TOP = 744;                     // X's and Y's labels; their first row
+  const TOP_LABEL = 236, W_TOP = 312;                     // W's and b's labels; their first row
+  const BOT_LABEL = 556, X_TOP = 632;                     // X's and Y's labels; their first row
+  const CARD_TOP = 1012;                                  // the code card, centred, at the band top; it grows
+                                                          // down to 1196 with its comment line (bottom <= 1330)
   const XM = { left: 100, cw: 100 };                      // X: 3 columns, x 100-400
   const WM = { left: 340, cw: 100 };                      // W: 2 columns, x 340-540 (above the gap)
   const YM = { left: 620, cw: 150 };                      // Y: 2 columns, x 620-920; b sits above it
@@ -39,22 +40,23 @@
       left: M.left + c * M.cw, top: rowY(top, r), width: M.cw, height: RH, size: SIZE, col: colOf(r, c),
     })));
   }
-  // a line of Inter spans on a panel (the shape line); same panel as the code card
-  function slotLine(root, spans) {
-    const el = document.createElement("div");
-    el.style.cssText = `position:absolute;left:0;top:0;box-sizing:border-box;padding:14px 26px;border-radius:22px;` +
-      `background:${css(COL.panel)};border:6px solid ${css(COL.dim)};font-size:${SIZE}px;line-height:${Math.round(SIZE * 1.2)}px;` +
-      `white-space:pre;color:${css(COL.text)};font-variant-numeric:tabular-nums;transform-origin:50% 50%;`;
-    const els = spans.map((t) => { const s = document.createElement("span"); s.textContent = t; el.appendChild(s); return s; });
-    root.appendChild(el);
-    return {
-      el, spans: els,
-      at(left, top, o = {}) {
-        const s = o.scale == null ? 1 : o.scale;
-        el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px) scale(${s.toFixed(4)})`;
-        el.style.opacity = (o.alpha == null ? 1 : o.alpha).toFixed(3);
-      },
+  // the code card: VEC.codeCard with three rows (line 1, the shapes comment, the big comment);
+  // show({ b, line2 }) picks what is visible: b adds " + b", line2 is null | "shapes" | "big".
+  // Spans keep their colour until a beat sets it; state() resets them.
+  function codeCard(root) {
+    const c = VEC.codeCard(root, [
+      [["Y = X @ W"], [" + b"]],
+      [["# "], ["(5,"], ["3"], [")"], [" @ "], ["("], ["3"], [",2)"], [" → "], ["(5,2)"]],
+      [["# ("], ["batch,"], ["seq"], [","], ["3"], [") @ (3,2)"]],
+    ]);
+    const card = { el: c.el, line1: c.spans[0], shapes: c.spans[1], big: c.spans[2], rows: [...c.el.children] };
+    card.show = (o = {}) => {
+      card.line1[1].style.display = o.b ? "" : "none";
+      card.rows[1].style.display = o.line2 === "shapes" ? "" : "none";
+      card.rows[2].style.display = o.line2 === "big" ? "" : "none";
     };
+    card.at = (o = {}) => c.at(VEC.centreLeft(c.el), CARD_TOP, o);      // centred; call after show()
+    return card;
   }
   // a matrix label: the name in --text, two spaces, the shape in --dim; dims are their own spans
   // ("X  (5, 3)": spans name, "  (", d0, ", ", d1, ")"); { el, name, dims[] }
@@ -70,16 +72,15 @@
     root.appendChild(el);
     return { el, name: n, dims: ds };
   }
-  // P: code "Y = X @ W", codeB "Y = X @ W + b" (spans [0] = "Y = X @ W", [1] = " + b"),
-  // shapes "(5, 3) @ (3, 2) → (5, 2)" (spans: "(5, ", "3", ") @ (", "3", ", 2) → (5, 2)"),
-  // big "(batch, seq, 3) @ (3, 2)" (spans: "(batch, seq, ", "3", ") @ (3, 2)"),
+  // P: card, the one code card (monospace), three rows, shown by card.show():
+  //   card.line1: spans "Y = X @ W", " + b"
+  //   card.shapes: spans "# ", "(5,", "3", ")", " @ ", "(", "3", ",2)", " → ", "(5,2)"
+  //   card.big:    spans "# (", "batch,", "seq", ",", "3", ") @ (3,2)"   (beat 8 retypes "seq" from "5")
+  //   (60 px monospace holds ~24 columns in the safe width, so the tuples have no space after the comma)
   // x[r][c] / w[r][c] / y[r][c] / b[0][c] cells, xB / wB / yB / bB brackets,
   // names {x, w, y, b} (nameTag), tags {data, map}, arrows[r] ("→"), hl / hl2 / hl3 highlight boxes.
   function parts(root) {
-    const code = VEC.codeCard(root, ["Y = X @ W"]);
-    const codeB = VEC.codeCard(root, [[["Y = X @ W"], [" + b", COL.dim]]]);
-    const shapes = slotLine(root, ["(5, ", "3", ") @ (", "3", ", 2) → (5, 2)"]);
-    const big = slotLine(root, ["(batch, seq, ", "3", ") @ (3, 2)"]);
+    const card = codeCard(root);
     const x = cells(root, X, XM, X_TOP, (r, c) => SLOT[c]);
     const w = cells(root, W, WM, W_TOP, (r) => SLOT[r]);
     const y = cells(root, XW, YM, X_TOP, () => COL.text);
@@ -92,7 +93,7 @@
     const tag = (t, col) => ISO.label(root, t, { size: SIZE, color: css(col) });
     const tags = { data: tag("data", COL.data), map: tag("map", COL.hero) };
     const arrows = X.map(() => { const el = ISO.label(root, "→", { size: SIZE, color: css(COL.dim), width: 120, align: "center" }); el.style.lineHeight = `${RH - 8}px`; return el; });
-    return { code, codeB, shapes, big, x, w, y, b, xB, wB, yB, bB, names, tags, arrows,
+    return { card, x, w, y, b, xB, wB, yB, bB, names, tags, arrows,
              hl: VEC.hbox(root), hl2: VEC.hbox(root), hl3: VEC.hbox(root) };
   }
 
@@ -102,7 +103,6 @@
     el.style.opacity = alpha.toFixed(3);
     if (col) el.style.color = css(col);
   };
-  const centreLeft = (el) => VEC.centreLeft(el);
   // where each label sits (left, top); W's is centred over W
   const LABEL = {
     x: () => [XM.left, BOT_LABEL],
@@ -122,7 +122,7 @@
     wRow: (r) => [WM.left - 12, rowY(W_TOP, r) + 2, width(WM, 2) + 24, RH - 4],
     wCol: (c) => [WM.left + c * WM.cw - 4, W_TOP - 8, WM.cw + 8, 3 * RH + 16],
     b: () => [YM.left - 40, W_TOP - 12, width(YM, 2) + 80, RH + 24],
-    span: (el, pad = 6) => {                                 // a box round a span of the slot line
+    span: (el, pad = 6) => {                                 // a box round a span of the code card
       const r = el.getBoundingClientRect(), root = el.closest("#root").getBoundingClientRect();
       return [r.left - root.left - pad, r.top - root.top - pad + 4, r.width + 2 * pad, r.height + 2 * pad - 8];
     },
@@ -133,16 +133,18 @@
   // ---- the rest states (storyboard.md "States") ----
   // INPUTS  : card "Y = X @ W"; W, X, the →s, Y's label and empty brackets. No b.
   // PRODUCT : INPUTS + Y's digits = X @ W.
-  // SHAPES  : PRODUCT with the shape line in the slot, the inner 3s --dim (--muted fails contrast).
-  // CANON   : card "Y = X @ W + b"; b above Y; Y's digits = X @ W + b (00_layout).
-  // BIG     : CANON with "(batch, seq, 3) @ (3, 2)" in the slot, its 3 magenta.
+  // SHAPES  : PRODUCT; the card gains "# (5,3) @ (3,2) → (5,2)", the inner 3s --dim.
+  // CANON   : SHAPES with "Y = X @ W + b"; b above Y; Y's digits = X @ W + b (00_layout).
+  // BIG     : CANON with the comment "# (batch,seq,3) @ (3,2)", its 3 magenta.
   function state(Pt, g, name) {
     const bias = name === "CANON" || name === "BIG";
-    const slot = { INPUTS: "code", PRODUCT: "code", SHAPES: "shapes", CANON: "codeB", BIG: "big" }[name];
-    ["code", "codeB", "shapes", "big"].forEach((k) => Pt[k].at(centreLeft(Pt[k].el), SLOT_TOP, { alpha: k === slot ? 1 : 0 }));
-    Pt.codeB.spans[0][1].style.color = css(COL.dim);
-    Pt.shapes.spans.forEach((s, i) => { s.style.color = css(i === 1 || i === 3 ? COL.dim : COL.text); });
-    Pt.big.spans.forEach((s, i) => { s.style.color = css(i === 1 ? COL.hero : COL.text); });
+    const C = Pt.card;
+    C.show({ b: bias, line2: { SHAPES: "shapes", CANON: "shapes", BIG: "big" }[name] || null });
+    C.line1.forEach((s) => { s.style.color = css(COL.text); s.style.opacity = "1"; });
+    C.shapes.forEach((s, i) => { s.style.color = css(i === 0 ? COL.dim : i === 2 || i === 6 ? COL.dim : COL.text); s.style.opacity = "1"; });
+    C.big.forEach((s, i) => { s.style.color = css(i === 0 ? COL.dim : i === 4 ? COL.hero : COL.text); s.style.opacity = "1"; });
+    C.big[0].textContent = "# ("; C.big[1].textContent = "batch,"; C.big[2].textContent = "seq";
+    C.at();
     // the matrices
     [Pt.x, Pt.w].forEach((m) => m.forEach((row) => row.forEach((c) => { c.home(); c.color(c.col0); c.border(COL.hero, 0); })));
     Pt.y.forEach((row, r) => row.forEach((c, k) => {
@@ -165,7 +167,7 @@
 
   window.EP = {
     X, W, B, XW, Y,
-    SLOT_TOP, SIZE, RH, TOP_LABEL, W_TOP, BOT_LABEL, X_TOP, XM, WM, YM, ARROW_X, LABEL, RECT,
+    CARD_TOP, SIZE, RH, TOP_LABEL, W_TOP, BOT_LABEL, X_TOP, XM, WM, YM, ARROW_X, LABEL, RECT,
     rowY, parts, put, tagAt, arrowAt, bg, state,
   };
 })();
