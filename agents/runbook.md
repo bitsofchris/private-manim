@@ -142,32 +142,27 @@ ffmpeg -i vo_raw.m4a -af "loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1 vo_clean
 
 ## 4. Transcribe (Claude, 30 s)
 
-MacWhisper ships a CLI (Chris has Pro). No install needed:
+MacWhisper ships a CLI (Chris has Pro). No install needed. Two models, two
+jobs (measured on ep03 against 14 cues found by hand, 2026-10-11):
+
+| Model | Job | Why |
+|---|---|---|
+| Parakeet v3 | every transcript a person reads: the take (here), the cut checks (step 5), the spelling reference for captions and word times (step 7) | hears terms better ("row i of w", "i lands", digits, where Whisper wrote "IFW", "eye") and runs a 50 s take in ~1 s |
+| Whisper Small | one timing transcript of `vo_final.wav` (step 5), the input to `word_times.py` and `captions_from_transcript.py` | its phrases are tight and ordered; with `word_times.py` it times words to a median 0.045 s (worst 0.24 s). Parakeet's phrases are longer and can overlap (worst 0.63 s through the same tool), and its own word timings run in 80 ms steps and early (median 0.12 s) |
 
 ```
 MW=/Applications/MacWhisper.app/Contents/MacOS/mw
-$MW transcribe --model whisper-cpp:ggml-model-whisper-small --language en \
-   --no-speakers --format txt --timestamps --end-timestamps --milliseconds \
-   --overwrite -o transcript.txt vo_clean.wav
+TXT="--language en --no-speakers --format txt --timestamps --end-timestamps --milliseconds --overwrite"
+$MW transcribe --model parakeet-pro:nvidia_parakeet-v3 $TXT -o transcript.txt vo_clean.wav
 ```
 
 Gotchas:
-- Always pass `--model`: the app's default is Parakeet v3, and the timing
-  steps below are tuned on Whisper Small's phrases.
+- Always pass `--model`; the app's default can change under you.
 - Without `--overwrite` it refuses an existing `-o` file, silently under
   `2>/dev/null`.
-- **Which model for what** (measured on ep03 against 14 cues found by hand,
-  2026-10-11):
-  - *Timing:* Whisper Small's phrases + `tools/word_times.py` (step 5),
-    median error 0.045 s, worst 0.24 s. Parakeet v3's own word timings
-    (`--format json`, a `words` array per segment) were worse: median
-    0.12 s, worst 0.25 s, in 80 ms steps and early. Whisper.cpp models
-    give no word timings at all.
-  - *Text:* Parakeet v3 (`--model parakeet-pro:nvidia_parakeet-v3`) hears
-    terms better: "row i of w", "i lands" and digits where Whisper wrote
-    "IFW", "eye". Run it once on `vo_final.wav` as the spelling reference
-    when fixing `captions.json` and `words.json` (step 7). Its phrases are
-    longer and can overlap, so never feed them to the timing tools.
+- Whisper.cpp models give no word timings; Parakeet's (`--format json`, a
+  `words` array per segment) are too coarse for cues. Word times come from
+  `tools/word_times.py` (step 5).
 
 ## 5. Tighten (Claude + Chris, the only judgment step)
 
@@ -188,15 +183,18 @@ tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
 
    Drops the ranges, pads each kept piece 80 ms, caps every pause, 8 ms
    fades at each join, writes an old→new time map.
-4. **Verify by re-transcribing `vo_final.wav`.** Fragments show up as odd
-   words ("'cause we then", "with work", "or that"). Nudge the boundary
-   50–200 ms and repeat. Expect 2–3 rounds.
+4. **Verify by re-transcribing `vo_final.wav`** with Parakeet
+   (`-o transcript_final_text.txt`). Fragments show up as odd words
+   ("'cause we then", "with work", "or that"). Nudge the boundary 50–200 ms
+   and repeat. Expect 2–3 rounds. The last run is the spelling reference
+   for step 7.
 5. Still over? `atempo=1.03` is inaudible and buys 3 %. Re-run loudnorm
    after it.
 
-Then word times, once, for every beat agent:
+Then the timing transcript and word times, once, for every beat agent:
 
 ```
+$MW transcribe --model whisper-cpp:ggml-model-whisper-small $TXT -o transcript_final.txt vo_final.wav
 tools/word_times.py transcript_final.txt vo_final.wav -o words.json
 ```
 
@@ -274,8 +272,8 @@ when a caption sits under white diagram text. One caption source per Short: burn
 also drawn in scenes.
 
 Read the generated `captions.json` once: Whisper writes "NX" for N× and
-"NN module" for nn.Module; fix the text against the Parakeet v3 reference
-(step 4), the times are fine. A scene
+"NN module" for nn.Module; fix the text against `transcript_final_text.txt`
+(Parakeet, step 5), the times are fine. Same for the words in `words.json`. A scene
 element in the band too (a code card): `agents/style.md`, "Share the band
 with a scene element".
 
