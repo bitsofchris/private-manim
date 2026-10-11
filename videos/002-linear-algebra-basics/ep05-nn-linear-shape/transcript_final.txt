@@ -1,0 +1,58 @@
+00:00.670-00:03.810
+PyTorch stores one output neuron per row.
+
+00:03.810-00:07.000
+So when you give nn.linear 3n and 2out,
+
+00:07.000-00:09.100
+the weight will come back two by three.
+
+00:09.100-00:11.100
+A neuron takes all three inputs,
+
+00:11.100-00:12.820
+multiplies each by its own weight,
+
+00:12.820-00:15.550
+sums them, adds a bias, and outputs one number.
+
+00:15.550-00:18.620
+Two outputs, two neurons, two rows of three.
+
+00:18.620-00:23.780
+In the forward past, PyTorch flips it x@weight.t plus a bias.
+
+00:23.780-00:25.540
+The flipped weight is three by two,
+
+00:25.540-00:28.020
+exactly the W from the last video,
+
+00:28.020-00:31.100
+where each row is where an input direction lands.
+
+00:31.100-00:32.540
+So don't ask which is in and which is out,
+
+00:32.540-00:35.180
+ask where are the landing vectors stored,
+
+00:35.180-00:37.230
+in the rows or the columns.
+
+00:37.230-00:40.840
+In math, vectors are columns and W times V uses the columns.
+
+00:40.840-00:44.940
+In PyTorch, vectors are rows and x@W uses the rows.
+
+00:44.940-00:46.890
+It's the same idea just transposed.
+
+00:46.890-00:49.050
+nn.linear stores neurons as rows
+
+00:49.050-00:50.880
+and transposes on the way through.
+
+
