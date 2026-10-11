@@ -17,6 +17,11 @@ needs Manim's axes or 3D camera.
   they print `lin.weight.shape`.
 - **THE ANSWER IN ONE SENTENCE:** PyTorch stores one row per output neuron
   and flips it on the forward pass. It is the same map, stored sideways.
+- **THE SEARCH PHRASE:** `pytorch nn.linear` (YouTube autocomplete offers
+  "nn.linear pytorch", checked 2026-10-11). Code beat: `nn.Linear(3, 2)`
+  from frame 0, and the card `x @ weight.T + bias` lands on "In the forward
+  pass, PyTorch flips it" (beat 5: cross-fade 18.50–19.10 master, "In" at
+  18.58, "forward" at 19.09).
 
 ## The look
 
