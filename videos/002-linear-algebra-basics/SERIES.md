@@ -1,7 +1,7 @@
 # Linear Algebra for AI Engineers: the series
 
 **Name:** linear-algebra-series
-**Description:** Home base for the "Linear Algebra for Engineers" Shorts.
+**Description:** Home base for the "Linear Algebra for AI Engineers" Shorts.
 The arc, one row per episode, and a checklist of where each episode is.
 This folder keeps the source material (draft scenes, recap narration)
 and one `epNN-slug/` subfolder per episode, laid out like any other
@@ -52,7 +52,7 @@ keep the short working names; the table has the publish titles.
 |---|---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | What Is a Vector? \| Linear Algebra for AI Engineers | `ep01-what-is-a-vector` | x | x | x | x | x | x | |
 | 2 | Change of Basis \| Linear Algebra for AI Engineers | `ep02-change-of-basis` | x | x | x | x | x | x | |
-| 3 | What a Matrix Really Does \| Linear Algebra for AI Engineers | `ep03-what-a-matrix-does` | x | x | x | | | | |
+| 3 | What a Matrix Really Does \| Linear Algebra for AI Engineers | `ep03-what-a-matrix-does` | x | x | x | x | x | x | |
 | 4 | Matrix Multiplication (x @ W) \| Linear Algebra for AI Engineers | `ep04-matrix-multiplication` | x | x | x | | | | |
 | 5 | PyTorch nn.Linear Explained \| Linear Algebra for AI Engineers | `ep05-nn-linear-shape` | x | x | x | | | | |
 | 6 | Batch Matrix Multiplication \| Linear Algebra for AI Engineers | `ep06-batch-matmul` | x | x | x | | | | |
@@ -100,10 +100,17 @@ one running example and one `_parts.py`.
 - **Question:** What does a matrix actually do to a vector?
 - **Answer:** A matrix records where each input direction lands; every
   vector follows its recipe to the new place.
-- **Frame 0 / hero:** two basis arrows swing to new positions and a vector
-  rides along. Hero: the landed arrows.
+- **Frame 0 / hero (as built):** the W card, its rows lighting on
+  "records", then e1 and e2 swinging to (1, 0.5) and (−0.5, 1.25) with x
+  riding from (3, 2) to (2, 4). Hero: the landing spots (magenta rings),
+  and each row of W while its direction moves.
 - **Reuse:** `matrix_moves_basis_directions.py`, `matrix_as_stored_map.py`;
-  recap 4–5; Unit 2 notes.
+  recap 4–5; Unit 2 notes. W = `[[1, 0.5], [−0.5, 1.25]]`, x = (3, 2),
+  x @ W = (2, 4), from the draft.
+- **Ends on:** the canonical frame: the W card above e1 and e2 (muted
+  ghosts) and their landed arrows with magenta spots. A PyTorch code card
+  (`y = x @ W` / `W[0]`) appears in beat 6. Its matrix card has one bracket
+  pair per row; ep04's notation (one tall pair) is the series default now.
 
 ### 4. What `x @ W` really computes
 - **Question:** What is `x @ W` actually computing?

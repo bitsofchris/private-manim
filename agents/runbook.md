@@ -247,9 +247,9 @@ when a caption sits under white diagram text. One caption source per Short: burn
 also drawn in scenes.
 
 Read the generated `captions.json` once: Whisper writes "NX" for N× and
-"NN module" for nn.Module; fix the text, the times are fine. If a scene
-element needs the band too (a code card), put it at the band top and pass
-`--captions-anchor bottom`.
+"NN module" for nn.Module; fix the text, the times are fine. A scene
+element in the band too (a code card): `agents/style.md`, "Share the band
+with a scene element".
 
 ## 8. Review (Claude, then Chris)
 

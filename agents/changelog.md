@@ -3,6 +3,19 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-11
+
+- `agents/style.md` "Vectors and matrices as numbers": a matrix acting on the plane is on screen when the VO says "this matrix", and the row doing the work lights while its direction moves; pointing at a row is magenta digits first, a box only if colour is not enough. (Chris, ep03)
+- `agents/style.md` "Linear algebra": named camera views in the kit for numbers that don't fit one scale (ep03 `VEC.view`). (ep03)
+- `agents/style.md` "Share the band": the element's bottom edge ≤ y 1330 and every caption on one line while it is up; a two-line caption grew into ep03's code card. Runbook step 7 now points there instead of restating it. (ep03)
+- Beat brief trap: monospace set in the HTML (CSS class, ep01; inline `style` attribute, ep03) rendered in Inter; set `el.style.fontFamily` from the script. `agents/style.md`'s code row points to the trap instead of restating it. (ep03)
+- Beat brief review: pixel-diff seams with `hyperframes snapshot` PNGs, not mp4 frames (h264 noise up to ~60/255 around text). (ep03)
+- Hero rule, janitor: `AGENTS.md` rule 2 is the one home and says "one magenta hero on screen at a time; it may pass when the VO moves on", which is how ep01–ep03 were built and approved; `agents/style.md`, `agents/animation-rules.md` rule 12 and the HyperFrames brief said "per beat" and now point to it. (janitor)
+- `agents/parts.md`: the 2D plane kit has three users (ep01, ep03, ep04 copies, already diverging); promotion planned in `agents/plans/linear-algebra-plane-kit.md`, to run when no episode session is editing a `_vec/`. (ep03)
+- `SERIES.md`: episode 3 ticked (Storyboard, Beats, Assembled); its section brought up to the build. (ep03)
+- Open: a seam-check tool (snapshot both sides of each cut, pixel-diff); `ISO.start` renders frame 0 before Inter loads, so `hyperframes snapshot --at 0` misplaces DOM text sized by width (fix: re-render on `document.fonts.ready`; mp4 renders unaffected); word-level timings (as ep02). (ep03)
+- Open: two text floors that may disagree: `agents/style.md` Shorts says readable text ≥ ~1/20 of frame height (96 px line height, Manim), the HyperFrames brief says ≥ 60 px font-size. Decide whether 60 px is the HyperFrames equivalent and say so in one place. (janitor)
+
 ## 2026-10-10
 
 - `agents/style.md` "Vectors and matrices as numbers": the default notation for tensors on screen. Vectors are a bracketed row with commas, matrices are bare numbers in brackets with no cell boxes, shapes are written as `(3, 2)`, monospace only for code, and colour goes on digits per row. Deviate when it clearly helps a video. (Chris, ep04)

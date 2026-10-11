@@ -36,7 +36,7 @@
 
 ### Frame (layout / color / text)
 
-12. **Color is meaning. Use one magenta hero per beat, keep the same color for the same concept across every scene, and let everything else recede (`FG_DIM`, `MUTED`, `OP_GHOST`).**
+12. **Color is meaning. Use one magenta hero at a time (`AGENTS.md` rule 2), keep the same color for the same concept across every scene, and let everything else recede (`FG_DIM`, `MUTED`, `OP_GHOST`).**
     *Why:* Disney staging is "the presentation of any idea so that it is completely and unmistakably clear" (Johnston & Thomas). Heer asks for consistent mappings.
 13. **Put a label next to the thing it names and move it with that thing (`always_redraw` / `next_to`). Never use a legend or a far corner.**
     *Why:* Mayer's spatial contiguity principle (median effect size 1.10) is that corresponding words and pictures should be near each other.

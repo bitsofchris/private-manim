@@ -30,7 +30,7 @@ Subclass `BocShortScene` (1080x1920 @ 30 fps, frame 9 x 16 units, 1 unit = 120 p
 | Where text / the hero may go | `self.safe` | YouTube UI covers top 12%, bottom 20%, right 12%; 4% left gutter |
 | Where the visual goes | `self.stage` | upper two thirds of `safe`; `.move_to(self.stage)`, `scale_to_fit_width(self.stage.width)` |
 | Caption (Short without VO) | `self.show_caption("2-4 words")`; with VO, captions are burned in by `tools/assemble.py` and scenes draw none | lower third of `safe` (`self.band`), `S.SHORT_CAPTION_SCALE`, bold on a dark pill (`S.CAPTION_PILL_*`) so it never reads as a diagram label; too wide -> two lines |
-| Share the band with a scene element | element at the band top, `assemble.py --captions-anchor bottom` | burned captions sit just above the safe bottom (007 code cards) |
+| Share the band with a scene element | element at the band top (bottom edge ≤ y 1330), `assemble.py --captions-anchor bottom` | burned captions sit just above the safe bottom (007, ep03 code cards). While the element is up every caption must fit one line: a two-line caption grows upward into it (ep03 split "the input direction") |
 | Label next to a thing | `Text(...).scale(S.SHORT_LABEL_SCALE)` | the floor: ~98 px line height |
 | Data dot | `data_dot(p, radius=S.DOT_SHORT)` | ~50 px across |
 | Code on screen | `code_block(src, highlight=None)` | Menlo on BG_PANEL, literals teal, ~27 columns fit the safe width |
@@ -83,7 +83,7 @@ hold both; the same information is never shown twice.
 | a label for an object | flat and upright beside it; lay text on a front face only for the object's own name |
 | which column or choice something belongs to | one colour per token or choice, on the tile, the word and the digits alike (`ISO.COL.tokens`) |
 | a figure from a paper, when the beat is about reading it | the figure with its own marks and direction, unchanged (`DG.draw`); objects may come out of it afterwards |
-| the hero | one magenta mark per beat; it returns to its resting colour when the VO moves on |
+| the hero | one magenta mark at a time (`AGENTS.md` rule 2); it returns to its resting colour when the VO moves on |
 
 What it keeps from the Manim look, because that is where the clarity came
 from: one thing changes at a time, exact values are upright and large, and
@@ -93,7 +93,7 @@ surface.
 
 ## Linear algebra (HyperFrames Shorts)
 
-From the Linear Algebra for Engineers series (`videos/002-linear-algebra-basics/`).
+From the Linear Algebra for AI Engineers series (`videos/002-linear-algebra-basics/`).
 Vectors, bases and coordinates read on a **flat 2D number plane, not the
 isometric floor** (Chris, ep01: "the ISO view doesn't work for these linear
 algebra ones"). East is right, north is up, one grid square is one step.
@@ -110,6 +110,7 @@ The code is `videos/002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js`
 | the old grid under a sheared new one | ghost alpha about 0.14; at 0.3 the two grids read as a triangle mesh |
 | a 3D change-of-basis example | a basis whose third vector stays fixed, so the change is a floor shear (ep02: v1 = (0, −1, 0), v2 = (1, 1, 0), v3 = z) |
 | camera motion across beats | none: a drift frozen at each beat's hold jumps 0.1–0.8° at every cut; move inside a beat and return to the canonical view before the hold |
+| numbers that don't fit one scale (e1 at 1 step and x @ W at 4) | a few named camera views in the kit, each beat moving between them on the words that call for it and starting in the view the last one ended in (ep03 `VEC.view`: NEAR 300 px per step under the card, FAR 160 px for the recipe, MID centred) |
 
 ### Vectors and matrices as numbers
 
@@ -126,17 +127,18 @@ clearly helps that video, and say why in its storyboard. The code is
 | a vector (1-D) | one horizontal row in square brackets with commas: `[ 1, 2, −1 ]`; the row-vector (PyTorch) convention |
 | a matrix (2-D) | bare numbers in a tight grid inside one tall pair of square brackets; no commas, no box per number (009's readout card, ep01's brackets) |
 | its name and shape | the name above in `--dim` (`W`), the shape beside or under it as PyTorch prints `.shape`: `(3, 2)`, never "3×2" |
-| code | monospace, set inline, only for literal code (`x @ W`, `nn.Linear(3, 2)`, `.T`); the math stays in Inter |
+| code | monospace, only for literal code (`x @ W`, `nn.Linear(3, 2)`, `.T`); the math stays in Inter. How to set it so it renders: the monospace trap in `agents/beat-brief-hyperframes.md` |
 | a number | a true minus sign (−1); decimals only where the value has them (0.5, 4.1), never `2.0` |
 | colour | digits carry the meaning: one categorical colour per row when rows matter (rows of `W`, rows of a batch `X`); brackets `--dim`; the one hero gets magenta digits and brackets |
-| to point at an entry, row or column | a highlight box that appears and goes again; at rest it is notation, not a table |
+| to point at an entry, row or column | its digits turn magenta (a highlight box behind them if colour alone is not enough), then back; at rest it is notation, not a table |
+| a matrix acting on the plane | the matrix is on screen whenever the VO says "this matrix" or the plane moves because of it, and the row doing the work lights while its direction moves (Chris, ep03: "show a matrix for the transformation we're about to show"; "emphasize the row as you move e1 and e2") |
 | a vector used as a column | only as a visible move ("turn x sideways") and only for that step; the row is the default |
 | a big tensor (a batch, an embedding) | at most about 4 × 4 numbers, then `⋯`, with the shape saying the size |
 | a row and its geometry | the row's colour on its arrow from the origin on the plane, so "rows are where input directions land" is visible |
 
 ## Two-hero rule
 
-Exactly **one** mobject (or one tightly-related VGroup) is magenta per beat. If everything is hero, nothing is. The rest is teal (data), muted (construction), or FG_DIM (labels).
+The rule is `AGENTS.md` hard rule 2: one magenta hero on screen at a time. If everything is hero, nothing is. The rest is teal (data), muted (construction), or FG_DIM (labels).
 
 `ACCENT_CYAN` and `ACCENT_PINK` are for transient pulses only — a sweep trail, a one-frame highlight. Never for static elements.
 

@@ -25,7 +25,7 @@ clean").
 | Vendored web assets (GSAP, Inter) | `videos/_shared/web/vendor/` | offline HyperFrames renders; versions, licenses, sha256 in its README |
 | HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes; `stack-styles/`, one beat in ten visual styles plus the house-style control |
 | A whole Short in HyperFrames, and its isometric kit | `videos/009-transformer-short-iso/` | `videos/_shared/web/iso/iso.js` (world, tray, card, slabs, palette), `00_layout/` (the canonical frame), `BRIEF.md` (the beat contract) |
-| The Linear Algebra for Engineers series (2D plane look) | `videos/002-linear-algebra-basics/` | `SERIES.md` (arc, checklist, series rules), `EPISODE_PROMPT.md` (one session per episode), `ep01-what-is-a-vector/_vec/vec.js` (the plane kit) |
+| The Linear Algebra for AI Engineers series (2D plane look) | `videos/002-linear-algebra-basics/` | `SERIES.md` (arc, checklist, series rules), `EPISODE_PROMPT.md` (one session per episode), `ep01-what-is-a-vector/_vec/vec.js` (the plane kit) |
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
@@ -63,7 +63,10 @@ Rules 1, 3–5, 7 and 8 are Manim's; a HyperFrames beat follows
    font, duration, stroke width, or safe-area number in a scene. Missing
    constant: add it to `style.py` first.
 2. **Two heroes.** Teal (`S.DATA`) is data you can see; magenta
-   (`S.STRUCTURE`) is the discovered structure. One magenta hero per beat.
+   (`S.STRUCTURE`) is the discovered structure. One magenta hero on screen
+   at a time (one thing, or one tight group such as a matrix row and the
+   arrow it makes); when the VO moves on it may pass to the next thing and
+   the old one returns to rest.
 3. **Subclass the house scenes:** `BocShortScene` for Shorts, `BocScene` /
    `Boc3DScene` for 16:9. Use the preconfigured mobjects for their roles.
 4. **Three durations:** `S.QUICK` / `S.BEAT` / `S.HOLD` (multiples of HOLD

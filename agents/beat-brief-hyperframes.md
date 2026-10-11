@@ -138,11 +138,11 @@ if it changes, so does every beat.
 | `--text` | `FG` | `#ECEBE4` | ink, labels |
 | `--dim` | `FG_DIM` | `#8A8FB0` | secondary labels |
 | `--data` | `DATA` (`HERO_TEAL`) | `#2DD4BF` | what you can see / keep |
-| `--hero` | `STRUCTURE` (`HERO_MAGENTA`) | `#C084FC` | the one hero per beat |
+| `--hero` | `STRUCTURE` (`HERO_MAGENTA`) | `#C084FC` | the one hero on screen |
 | `--muted` | `MUTED` | `#4A5070` | construction lines, retired heroes |
 
-One magenta hero per beat, the one the brief names; when the beat moves
-on, the old hero goes teal, `--dim` or `--muted`. `ACCENT_CYAN` /
+One magenta hero at a time (`AGENTS.md` rule 2), the one the brief names;
+when the VO moves on, the old hero goes teal, `--dim` or `--muted`. `ACCENT_CYAN` /
 `ACCENT_PINK` only for one-frame pulses.
 
 **Layout, in pixels** (from the `SHORT_SAFE_*` fractions in `style.py`).
@@ -195,9 +195,11 @@ and `videos/009-transformer-short-iso/`.
   `monospace` works. Any other face has to be vendored first.
 - **Stepped full-frame grain** makes huge files (37 MB for 5 s): freeze or
   slow it.
-- **Monospace set by a CSS class rendered in Inter**; the same
-  `font-family: monospace` set inline on the element worked (ep01 beats 5
-  and 6; cause not confirmed). Set the code font inline.
+- **Monospace set in the HTML rendered in Inter**, both by a CSS class
+  (ep01) and by an inline `style="font-family: monospace"` attribute
+  (ep03). Set it from the script, on the element and every span inside it:
+  `el.style.fontFamily = "monospace"` (ep01 beats 5–6, ep03 beats 6–7;
+  cause not confirmed).
 - **Layout budget:** Inter ExtraBold at 60 px is about 140 px per `+0.4`.
   Count rows and widths before drawing; nine numbers plus three words is
   already a 546 x 258 px card.
@@ -229,7 +231,10 @@ narrower and lighter).
 Frame 0 must be the previous beat's last frame. If its render exists
 (`media/hf/<previous>.mp4`), grab the last frame and compare it with yours
 side by side; if it does not exist yet, build from the brief and say in the
-report which end state you assumed.
+report which end state you assumed. For a pixel diff, compare
+`hyperframes snapshot` PNGs of the two moments, not mp4 frames: h264 noise
+around text and edges reads as a difference (up to ~60/255) where there is
+none (ep03).
 
 Fix the smallest thing first: the attribute, then the element, then the
 beat. Two review rounds. If the same kind of problem is still there after
