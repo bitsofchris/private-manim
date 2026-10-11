@@ -204,8 +204,8 @@ one running example and one `_parts.py`.
     followed by the same write-up sentence.
 
 - One question per episode, in the viewer's words. One sentence answers it.
-- **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. Copy `ep01-what-is-a-vector/_vec/vec.js` for the plane, arrows, dots and the vector card; the look's rules are in `agents/style.md` "Linear algebra".
-- **Episode folders are one level deeper** than `videos/NNN-slug/`, so every repo-relative path gains a level: HyperFrames symlinks `../../../_shared/web/vendor` (and `iso`), tools at `../../../tools/`, the Manim shim `parents[3]`.
+- **Flat 2D grid, not the isometric floor** (Chris, 2026-10-09, after ep01): east right, north up, one square per step, brighter axes. The plane, arrows, dots, cards and matrix notation are the shared kit `videos/_shared/web/vec/vec.js` (linked as `vec/`); start a beat from `prototypes/hyperframes/vec-plane/index.html`. Shipped episodes keep their own `_vec/` copies. The look's rules are in `agents/style.md` "Linear algebra".
+- **Episode folders are one level deeper** than `videos/NNN-slug/`, so every repo-relative path gains a level: HyperFrames symlinks `../../../_shared/web/vendor` (and `iso`, `vec`), tools at `../../../tools/`, the Manim shim `parents[3]`.
 - Row-vector (PyTorch) convention everywhere: `x @ W`, `W` is `(in, out)`,
   rows of `W` are where input directions land.
 - Episodes 3–6 share the `(5, 3) @ (3, 2)` numbers already in the draft

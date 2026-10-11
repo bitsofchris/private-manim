@@ -30,12 +30,12 @@ Do, in runbook order:
 5. Write FOLDER/publish.md (step 9) with the title and the series description line from SERIES.md ("Series rules", publish copy), and send the hand-off pack (step 10) when I say done.
 
 Look and checks for this series:
-- Linear algebra uses the flat 2D number plane, not the isometric floor (agents/style.md "Linear algebra"). Copy ep01-what-is-a-vector/_vec/vec.js into FOLDER/_vec/ as the starting kit; take matrix and vector notation from ep04-matrix-multiplication/_vec/vec.js (agents/style.md "Vectors and matrices as numbers") and camera views from ep03-what-a-matrix-does/_vec/vec.js if the numbers need more than one scale.
+- Linear algebra uses the flat 2D number plane, not the isometric floor (agents/style.md "Linear algebra"). The plane kit is shared: link ../../../_shared/web/vec into each beat as vec/ (next to vendor/ and iso/), keep only this episode's numbers and views in a local script, and start from prototypes/hyperframes/vec-plane/index.html. Don't copy or edit the shared kit; list what it lacks in the hand-off.
 - Before spawning beat agents, render FOLDER/00_layout (the canonical frame) and send it to me; build beats only after I OK the look.
 - After the parallel build, check every cut (last frame of beat N beside the first frame of beat N+1) before assembling.
 
 Traps in this series:
-- Episode folders are one level deeper than a normal videos/NNN-slug/. Every path relative to the repo gains a level. Manim scene shim: parents[3], not parents[2]. HyperFrames symlinks: ../../../_shared/web/vendor and ../../../_shared/web/iso. Render from inside FOLDER (or the beat folder, for HyperFrames), never from the repo root, never two renders at once in one folder.
+- Episode folders are one level deeper than a normal videos/NNN-slug/. Every path relative to the repo gains a level. Manim scene shim: parents[3], not parents[2]. HyperFrames symlinks: ../../../_shared/web/vendor, ../../../_shared/web/iso and ../../../_shared/web/vec. Render from inside FOLDER (or the beat folder, for HyperFrames), never from the repo root, never two renders at once in one folder.
 - Use the row-vector (PyTorch) convention throughout: x @ W, rows of W are where input directions land (SERIES.md "Series rules").
 - No LaTeX: Text only.
 

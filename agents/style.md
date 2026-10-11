@@ -47,7 +47,7 @@ Subclass `BocShortScene` (1080x1920 @ 30 fps, frame 9 x 16 units, 1 unit = 120 p
 Rules that are specific to Shorts:
 
 - Something is on screen at frame 0 and something is moving by frame 1. No title card, no empty dark opener.
-- Readable text is at least ~1/20 of frame height (96 px). Nothing smaller than `SHORT_LABEL_SCALE`.
+- Readable text has one floor per engine, both passed on a phone: Manim, nothing smaller than `SHORT_LABEL_SCALE` (~1/20 of frame height, ~96 px line height); HyperFrames, 60 px font-size, weight 800 (`agents/beat-brief-hyperframes.md`, "Layout, in pixels").
 - One caption at a time, 2 to 4 words, always in the band. Burned-in VO captions from `tools/assemble.py` use the same band, so a beat uses scene captions or VO captions, not both.
 
 ### Manim 0.18.1 gotchas found building the Short pipeline
@@ -97,7 +97,7 @@ From the Linear Algebra for AI Engineers series (`videos/002-linear-algebra-basi
 Vectors, bases and coordinates read on a **flat 2D number plane, not the
 isometric floor** (Chris, ep01: "the ISO view doesn't work for these linear
 algebra ones"). East is right, north is up, one grid square is one step.
-The code is `videos/002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js`.
+The code is `videos/_shared/web/vec/vec.js` (linked into a beat as `vec/`); start a beat from `prototypes/hyperframes/vec-plane/index.html`.
 
 | When you want | Use |
 |---|---|
@@ -110,7 +110,7 @@ The code is `videos/002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js`
 | the old grid under a sheared new one | ghost alpha about 0.14; at 0.3 the two grids read as a triangle mesh |
 | a 3D change-of-basis example | a basis whose third vector stays fixed, so the change is a floor shear (ep02: v1 = (0, −1, 0), v2 = (1, 1, 0), v3 = z) |
 | camera motion across beats | none: a drift frozen at each beat's hold jumps 0.1–0.8° at every cut; move inside a beat and return to the canonical view before the hold |
-| numbers that don't fit one scale (e1 at 1 step and x @ W at 4) | a few named camera views in the kit, each beat moving between them on the words that call for it and starting in the view the last one ended in (ep03 `VEC.view`: NEAR 300 px per step under the card, FAR 160 px for the recipe, MID centred) |
+| numbers that don't fit one scale (e1 at 1 step and x @ W at 4) | a few named camera views, each beat moving between them on the words that call for it and starting in the view the last one ended in (`VEC.view(A, B, u)`; ep03: NEAR 300 px per step under the card, FAR 160 px for the recipe, MID centred) |
 
 ### Vectors and matrices as numbers
 
@@ -119,8 +119,8 @@ first layout boxed every number and "looks kind of like a table, and it
 loses that sort of matrix notation"). One notation, close to what PyTorch
 prints, so a frame reads like a tensor from a notebook. Deviate when it
 clearly helps that video, and say why in its storyboard. The code is
-`videos/002-linear-algebra-basics/ep04-matrix-multiplication/_vec/vec.js`
-(`VEC.grid`, `VEC.brackets`).
+`videos/_shared/web/vec/vec.js` (`VEC.grid`, `VEC.brackets`, `VEC.vecCard`,
+`VEC.codeCard`, `VEC.hbox`).
 
 | When you want | Use |
 |---|---|

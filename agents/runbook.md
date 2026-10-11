@@ -262,9 +262,12 @@ with a scene element".
 - Dead-zone proof: overlay a caption PNG on a real frame and `drawbox`
   the four zones at 25 % red. If text touches red, fix the constant.
 - **Check every cut:** the last frame of beat N beside the first frame of
-  beat N+1, at 360 px wide. Parallel agents rebuild a neighbour's end state
-  from the brief, not its render, and drift: ep01 had three cuts where a
-  border colour, an arrow's alpha or a label changed at the splice.
+  beat N+1. Parallel agents rebuild a neighbour's end state from the brief,
+  not its render, and drift: ep01 had three cuts where a border colour, an
+  arrow's alpha or a label changed at the splice. HyperFrames:
+  `tools/seam_check.py beats.json` diffs snapshots of every cut and writes
+  the pairs to `media/seams/` (exit code = failing cuts). Manim: grab the
+  frames with ffmpeg and look at them side by side at 360 px.
 - Chris: watch it on a phone with sound, then muted. Listen once at the
   splice points.
 - Fixing what a sheet shows: name the object and the line, fix the line,
@@ -340,6 +343,7 @@ After the hand-off pack, ask once: "Ready for the update pass?" On yes:
 | `captions_from_transcript.py` | MacWhisper txt → captions.json | yes |
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
 | `review_frames.sh` | contact sheets at phone size | manual |
+| `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs | yes |
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |
 
 Run everything: `uv run --no-sync python -m unittest discover -s tests`.

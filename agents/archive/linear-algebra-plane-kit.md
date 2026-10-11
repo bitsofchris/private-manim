@@ -7,6 +7,7 @@
 **When to use:** once the Linear Algebra episodes being built in parallel
 have shipped (no session is editing an episode's `_vec/`), before the next
 episode starts a new copy.
+**Status:** done 2026-10-11: `videos/_shared/web/vec/vec.js`, `tests/test_vec_kit.py`, `prototypes/hyperframes/vec-plane/`. Agent wishes not yet in the kit are listed in `agents/parts.md`.
 **How it works:** one kit, `videos/_shared/web/vec/vec.js`, linked into each
 beat as `vec/` like `iso/`. Episode numbers (the ledger) stay in each
 episode, passed in rather than baked into the kit.

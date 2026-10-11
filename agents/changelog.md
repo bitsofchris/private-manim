@@ -11,10 +11,13 @@ that forced it. Newest first.
 - Beat brief trap: monospace set in the HTML (CSS class, ep01; inline `style` attribute, ep03) rendered in Inter; set `el.style.fontFamily` from the script. `agents/style.md`'s code row points to the trap instead of restating it. (ep03)
 - Beat brief review: pixel-diff seams with `hyperframes snapshot` PNGs, not mp4 frames (h264 noise up to ~60/255 around text). (ep03)
 - Hero rule, janitor: `AGENTS.md` rule 2 is the one home and says "one magenta hero on screen at a time; it may pass when the VO moves on", which is how ep01–ep03 were built and approved; `agents/style.md`, `agents/animation-rules.md` rule 12 and the HyperFrames brief said "per beat" and now point to it. (janitor)
-- `agents/parts.md`: the 2D plane kit has three users (ep01, ep03, ep04 copies, already diverging); promotion planned in `agents/plans/linear-algebra-plane-kit.md`, to run when no episode session is editing a `_vec/`. (ep03)
+- The 2D plane kit is shared: `videos/_shared/web/vec/vec.js` merges ep01's plane, ep03's camera views and linear map, and ep04's matrix notation, with a code card; tests in `tests/test_vec_kit.py`; starter `prototypes/hyperframes/vec-plane/`. Shipped episodes keep their `_vec/` copies; new episodes link the shared kit (`SERIES.md`, `EPISODE_PROMPT.md`, `agents/style.md`, `agents/parts.md`, `AGENTS.md` map). Plan archived. (ep01, ep03, ep04)
 - `SERIES.md`: episode 3 ticked (Storyboard, Beats, Assembled); its section brought up to the build. (ep03)
-- Open: a seam-check tool (snapshot both sides of each cut, pixel-diff); `ISO.start` renders frame 0 before Inter loads, so `hyperframes snapshot --at 0` misplaces DOM text sized by width (fix: re-render on `document.fonts.ready`; mp4 renders unaffected); word-level timings (as ep02). (ep03)
-- Open: two text floors that may disagree: `agents/style.md` Shorts says readable text ≥ ~1/20 of frame height (96 px line height, Manim), the HyperFrames brief says ≥ 60 px font-size. Decide whether 60 px is the HyperFrames equivalent and say so in one place. (janitor)
+- `tools/seam_check.py`: snapshots both sides of every HyperFrames cut, pixel-diffs them, writes side-by-side PNGs; runbook step 8 and the beat brief point to it. All seven ep03 cuts diff at 0/255. (ep03)
+- `iso.js` `ISO.start` draws again on `document.fonts.ready`: a snapshot at t = 0 placed width-measured DOM text ~66 px off (ep03 00_layout card); verified to match the mp4 after the fix. Renders were never affected. (ep03)
+- Beat brief: never `hyperframes snapshot` without `--describe false`; it sends frames to Gemini whenever `GEMINI_API_KEY` is set. (janitor)
+- Open: word-level timings for cue placement (as ep02). Forced alignment needs a new dependency; Chris's call. (ep03)
+- Text floor, one per engine, said once in `agents/style.md` (Shorts rules): Manim `SHORT_LABEL_SCALE` (~96 px line height), HyperFrames 60 px font-size at weight 800 (the brief), the size every HyperFrames Short (009–011, ep01–ep04) passed on a phone. (janitor)
 
 ## 2026-10-10
 

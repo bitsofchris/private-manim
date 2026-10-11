@@ -54,7 +54,9 @@ delete the `CLAUDE.md` / `AGENTS.md` it writes, and replace its jsDelivr
 
 Never: `npx skills add`, `hyperframes skills`, `add` / `catalog` (registry
 downloads), `publish` / `cloud` / `lambda` (uploads), `tts` / `transcribe`
-/ `models` (model downloads), or installing any npm package. HyperFrames
+/ `models` (model downloads), `snapshot` without `--describe false` (it
+sends frames to Gemini whenever `GEMINI_API_KEY` is set), or installing
+any npm package. HyperFrames
 lints `../` paths above the project root as errors, which is why vendored
 files come in through the `vendor` symlink, not a relative path.
 
@@ -231,10 +233,10 @@ narrower and lighter).
 Frame 0 must be the previous beat's last frame. If its render exists
 (`media/hf/<previous>.mp4`), grab the last frame and compare it with yours
 side by side; if it does not exist yet, build from the brief and say in the
-report which end state you assumed. For a pixel diff, compare
-`hyperframes snapshot` PNGs of the two moments, not mp4 frames: h264 noise
-around text and edges reads as a difference (up to ~60/255) where there is
-none (ep03).
+report which end state you assumed. For a pixel diff, run
+`tools/seam_check.py beats.json` from the video folder (it compares
+`hyperframes snapshot` PNGs, not mp4 frames: h264 noise around text reads as
+a difference of up to ~60/255 where there is none, ep03).
 
 Fix the smallest thing first: the attribute, then the element, then the
 beat. Two review rounds. If the same kind of problem is still there after

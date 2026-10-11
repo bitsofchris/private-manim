@@ -35,6 +35,7 @@ add a test under `tests/`, update this table. Retired parts go to
 | `code_block`, `highlight_lines` | `mobjects.py` | code card with a sliding magenta bar | 003, 007 |
 | `build_block` (transformer diagram) | `transformer.py` | Embed → [Attention → ⊕ → FFN → ⊕] N× → Linear, named parts; `GPT_SOURCE` + `MARK_LINES` | 006, 007, 008 |
 | `label`, `op_box`, `flow_arrow`, `add_node` | `transformer.py` | phone-size label, diagram box, teal arrow, ⊕ node | 006–008 |
+| 2D number plane kit (HyperFrames) | `web/vec/vec.js`, linked as `vec/` | camera `view(A, B, u)`; `floor`, `axes` (ticks from the view's extents), `guides`, `arrow` (thin), `line`, `puck`, `spot` (landing ring), `lattice` (a matrix's grid); row-vector `map` / `basisTo` / `comb`; DOM `label` / `place`, `vecCard`, `grid` + `brackets` (matrix notation), `cell`, `hbox`, `codeCard`, `code`. Starter: `prototypes/hyperframes/vec-plane/`. Tests: `tests/test_vec_kit.py` | ep01, ep03, ep04 (each shipped with its own copy) |
 
 ## Local, candidates for promotion (second use promotes)
 
@@ -53,7 +54,7 @@ Paths in this table are relative to `videos/`.
 | token matrix | `005-transformer-short/_tokens.py` | L×d token columns, attention arcs | 005 | 1 |
 | decision loop + diamonds | `008-jev-decision-models/04_agents.py` | agent loop ring with labelled decision diamonds | 008 | 1 |
 | paper-figure cross-fade + zoom | `006-diagram-grammar/02_grammar.py` | real figure in, zoom to a region, our diagram over it | 006 | 1 |
-| 2D number plane kit (HyperFrames) | `002-linear-algebra-basics/ep01-what-is-a-vector/_vec/vec.js` | `VEC.floor` (grid), `arrow` (thin, flat), `puck` (dot), `axes` + `guides` (coordinates), `line`, `label`/`place`, `vecCard` (a `[ a, b ]` card with per-slot `light`), all taking `oy` to move the plane. Wished for: `compass()`, a card slot `swell`, a card that grows and wraps (ep01 beat 7 wrote `listCard`), a name line above the card and a fit-to-width size (beat 5 wrote `fitSize`). Copied and extended by ep03 (`ep03-what-a-matrix-does/_vec/vec.js`: camera views `view`/`NEAR`/`FAR`/`MID`, `lattice`, `basis`/`map`, `spot`, `matCard`) and ep04 (`grid`, `brackets`, the matrix notation) | ep01, ep03, ep04 | 3 → promote: `agents/plans/linear-algebra-plane-kit.md` |
+| plane-kit wishes not yet in `web/vec/` | ep01–ep04 beats | `compass()`; a card slot `swell`; a card that grows and wraps (ep01 `listCard`); fit-to-width text (ep01 `fitSize`); label offsets per view that avoid the band and the left dead zone; a recipe drawer with hop ticks (ep03 `tick`, `hops`); a ring of vectors (ep03 beats 7–8) | ep01, ep03 | 1 each |
 | 3D basis kit (HyperFrames) | `002-linear-algebra-basics/ep02-change-of-basis/_kit/basis.js` | floor-and-route world (`BK.world`, `route`, `floorGrid`, `coordsAt`), the address readout `makeReadout` (ticking numbers, one colour per basis vector), `makeBasisLabels` | ep02 | 1 |
 
 ## HyperFrames prototypes (copy, do not import)

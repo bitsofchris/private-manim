@@ -20,6 +20,7 @@ motion must be a tween or a pure function of time (no clocks, no random).
 | `quiz/` | "I scored 7 out of 20 on my own quiz" | a stick figure fills a bucket from a lecture; it leaks overnight; the cold quiz is the dipstick; day 1 / day 4 / week 2 reviews patch the holes | 34 s |
 | `ironies/` | Bainbridge's "Ironies of Automation" | one operator, one desk: AUTO takes the levers, the hard knot lands in their lap, the 1983 panel becomes a 2026 chat, a SKILL bar drains until "YOUR TURN" | 31 s |
 | `stack-styles/` | which visual styles are possible | one beat (the transformer stack) in ten styles plus the house-style control; its own README | 5 s each |
+| `vec-plane/` | the starting file for a beat on the shared 2D plane kit | ep03's canonical frame rebuilt on `videos/_shared/web/vec/vec.js`: a camera view, e1 and e2 swinging to the rows of W, landing spots, W in the series' matrix notation, a code card | 2 s |
 
 ```
 cd prototypes/hyperframes/quiz
