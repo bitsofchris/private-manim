@@ -142,23 +142,32 @@ ffmpeg -i vo_raw.m4a -af "loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1 vo_clean
 
 ## 4. Transcribe (Claude, 30 s)
 
-MacWhisper ships a CLI. No install needed:
+MacWhisper ships a CLI (Chris has Pro). No install needed:
 
 ```
 MW=/Applications/MacWhisper.app/Contents/MacOS/mw
 $MW transcribe --model whisper-cpp:ggml-model-whisper-small --language en \
    --no-speakers --format txt --timestamps --end-timestamps --milliseconds \
-   -o transcript.txt vo_clean.wav
+   --overwrite -o transcript.txt vo_clean.wav
 ```
 
 Gotchas:
-- It will **not overwrite** an existing `-o` file and fails silently with
-  `2>/dev/null`. `rm` the old file first.
-- Timestamps are per phrase only, Pro included: the v15 CLI has no
-  word-level option (`--format json` and `--group words` still give
-  phrases; checked 2026-10-11). Phrases are enough for cutting; sub-clip
-  transcription (step 5) refines boundaries, and `tools/word_times.py`
-  (step 5) gives the word times beats need.
+- Always pass `--model`: the app's default is Parakeet v3, and the timing
+  steps below are tuned on Whisper Small's phrases.
+- Without `--overwrite` it refuses an existing `-o` file, silently under
+  `2>/dev/null`.
+- **Which model for what** (measured on ep03 against 14 cues found by hand,
+  2026-10-11):
+  - *Timing:* Whisper Small's phrases + `tools/word_times.py` (step 5),
+    median error 0.045 s, worst 0.24 s. Parakeet v3's own word timings
+    (`--format json`, a `words` array per segment) were worse: median
+    0.12 s, worst 0.25 s, in 80 ms steps and early. Whisper.cpp models
+    give no word timings at all.
+  - *Text:* Parakeet v3 (`--model parakeet-pro:nvidia_parakeet-v3`) hears
+    terms better: "row i of w", "i lands" and digits where Whisper wrote
+    "IFW", "eye". Run it once on `vo_final.wav` as the spelling reference
+    when fixing `captions.json` and `words.json` (step 7). Its phrases are
+    longer and can overlap, so never feed them to the timing tools.
 
 ## 5. Tighten (Claude + Chris, the only judgment step)
 
@@ -265,7 +274,8 @@ when a caption sits under white diagram text. One caption source per Short: burn
 also drawn in scenes.
 
 Read the generated `captions.json` once: Whisper writes "NX" for N× and
-"NN module" for nn.Module; fix the text, the times are fine. A scene
+"NN module" for nn.Module; fix the text against the Parakeet v3 reference
+(step 4), the times are fine. A scene
 element in the band too (a code card): `agents/style.md`, "Share the band
 with a scene element".
 
