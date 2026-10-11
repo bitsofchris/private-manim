@@ -1,0 +1,58 @@
+00:00.290-00:02.950
+One line of PyTorch pushes a whole batch through a layer
+
+00:02.950-00:06.420
+because X is data and W is the map.
+
+00:06.420-00:08.820
+X is five rows, each row is one input vector
+
+00:08.820-00:10.390
+with three features.
+
+00:10.390-00:13.550
+W is the map from three dimensions to two.
+
+00:13.550-00:16.770
+X and W are both matrices, but they play different roles.
+
+00:16.770-00:19.470
+X's data, which is a stack of vectors here,
+
+00:19.470-00:21.810
+W is a transformation.
+
+00:21.810-00:24.740
+So X at W does the same thing to every row.
+
+00:24.740-00:29.450
+Row one of X waits the rows of W and sums.
+
+00:29.450-00:34.050
+Then row two, then all five in parallel.
+
+00:34.050-00:37.690
+This five by three, add three by two, gives five by two.
+
+00:37.690-00:41.770
+The inner dimensions have to match and then they disappear.
+
+00:41.770-00:44.770
+Then the bias broadcasts across every row.
+
+00:44.770-00:46.090
+Real data just makes this bigger.
+
+00:46.090-00:48.130
+There's a batch, there's a sequence, there's features.
+
+00:48.130-00:50.580
+The last dimension is always the vector.
+
+00:50.580-00:53.360
+It's the same learned map in that matrix
+
+00:53.360-00:54.690
+applied to many vectors.
+
+
