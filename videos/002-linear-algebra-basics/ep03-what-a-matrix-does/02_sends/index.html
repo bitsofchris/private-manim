@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- ep03 beat 2, sends: opens on beat 1's last frame (FAR, landed, spots, x at (2, 4)),
          pushes in to NEAR while e1, e2 go home, then W sends e1 and e2 to their landing spots.
-         Ends on the canonical frame (00_layout) without the card. Started from 00_layout. -->
+         The W card comes in on "This matrix"; each row lights
+         magenta while its direction swings. Ends on the canonical frame (00_layout), card included. Started from 00_layout. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -35,6 +36,7 @@
     near: 1.40,   //  NEAR reached, e1 and e2 at home
     e1: 0.47,     // "e1" (master 6.80): label "e1" fades in
     e2: 0.85,     // "e2" (master 7.18): label "e2" fades in
+    card: 1.60,   // "This matrix" (master 7.93): the W card fades in and settles (0.35 s), after the push
     send1: 2.02,  // "matrix sends" (master 8.31-8.58): e1 starts its swing (0.82 s) ...
     here1: 2.84,  // "here" (master 9.19, local 2.86): ... e1 lands, its spot rings
     send2: 2.88,  //  e2 starts as soon as e1 has landed (0.68 s: the VO gives no more) ...
@@ -46,6 +48,12 @@
   const E = ISO.E();
   const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
   const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
+  const card = VEC.matCard(root, VEC.W);
+  // local helper: row i of the card (cells and its "e1"/"e2" tag) toward magenta by k
+  function lightRow(i, k) {
+    card.light(i, k);
+    card.tagEls[i].style.color = css(ISO.mix(VEC.SLOT[i], COL.hero, k), 1, lerp(0.75, 1, k));
+  }
   ISO.guides(root);
   const lerp2 = (p, q, u) => [lerp(p[0], q[0], u), lerp(p[1], q[1], u)];
   function render(t) {
@@ -73,6 +81,11 @@
     const sp2 = t < 1 ? { alpha: 1 - out, k: 0 } : ring(CUE.here2);
     VEC.spot(g, B0[0], B0[1], sp1); VEC.spot(g, B1[0], B1[1], sp2);
     VEC.puck(g, 0, 0, { half: 14 });
+    // the W card: in on "This matrix"; each row lights magenta while its direction swings to its spot
+    const cin = E.out(seg(t, CUE.card, CUE.card + 0.35));
+    card.at(VEC.cardLeft(card.el), VEC.CARD_TOP, { scale: lerp(0.96, 1, cin), alpha: cin });
+    lightRow(0, E.out(seg(t, CUE.send1, CUE.send1 + 0.2)) * (1 - E.io(seg(t, CUE.here1 - 0.04, CUE.send2 + 0.04))));
+    lightRow(1, E.out(seg(t, CUE.send2 + 0.04, CUE.send2 + 0.2)) * (1 - E.io(seg(t, CUE.here2, CUE.still))));
     // labels ride with the tips, a fixed px offset in either view (00_layout's k)
     const k = lerp(2, 1, u);
     VEC.place(l1, B0[0] + 0.32 * k, B0[1] - 0.16 * k, { alpha: seg(t, CUE.e1, CUE.e1 + 0.3) });

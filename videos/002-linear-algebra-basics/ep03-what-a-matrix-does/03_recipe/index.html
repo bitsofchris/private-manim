@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- Beat 3, 03_recipe: "Now take a vector, three of e1 plus two of e2. The vector is a recipe."
-         Opens on the canonical frame without the card (NEAR, landed, spots on). The spots fade,
+         Opens on the canonical frame (00_layout end, W card on). The spots and the W card fade,
          e1 and e2 ease home, the camera pulls out to FAR; three teal hops, two blue hops, the
          magenta x draws to (3, 2); the x card drops in. Hero: the vector x. -->
     <script src="vendor/gsap.min.js"></script>
@@ -34,7 +34,7 @@
   // Beat-local seconds (master = 10.37 + t), from a 50 ms RMS envelope of vo_final.wav
   // 10.37-15.23 and MacWhisper sub-clip transcriptions.
   const CUE = {
-    now:    0.20,  /* "Now take a vector"  : spots fade, e1 e2 ease home, camera pulls out to FAR */
+    now:    0.20,  /* "Now take a vector"  : spots and the W card fade (0-0.40), e1 e2 ease home, camera pulls out to FAR */
     three:  1.45,  /* "three"              : first teal hop starts */
     e1:     1.85,  /* "of e1"              : hops 2-3 (land 2.05, 2.33) */
     plus:   2.30,  /* "plus"               */
@@ -53,6 +53,7 @@
   const { COL, css, seg, lerp } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
+  const card = VEC.matCard(root, VEC.W);                      // the W card, as 00_layout leaves it; fades out with the spots
   const xcard = VEC.vecCard(root, VEC.X, { name: "x =", cols: VEC.SLOT });
   const l1 = VEC.label(root, "e1", { color: css(VEC.SLOT[0]), width: 120 });
   const l2 = VEC.label(root, "e2", { color: css(VEC.SLOT[1]), width: 120 });
@@ -110,6 +111,7 @@
     VEC.place(l1, B[0][0], B[0][1], { dx: off[0][0], dy: off[0][1] });
     VEC.place(l2, B[1][0], B[1][1], { dx: off[1][0], dy: off[1][1] });
 
+    card.at(VEC.cardLeft(card.el), VEC.CARD_TOP - 20 * (1 - sp), { alpha: sp });
     const c = E.out(seg(t, ...T.card));
     xcard.at(VEC.cardLeft(xcard.el), VEC.CARD_TOP - 50 * (1 - c), { alpha: c });
   }
