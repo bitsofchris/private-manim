@@ -42,10 +42,12 @@
   const WORD_RIGHT = 236;                                // the word column's right edge
   const LL = 286, RL = 626;                              // left slot (X / Q), right slot (W_Q / W_K / K)
   const GL = 286, GCW = 160;                             // the score grid: left edge, cell width
-  const SIDE = 810;                                      // right of the grid: ÷ √2, = 1
+  const SIDE = 835;                                      // right of the grid: ÷ √2, = 1
   const SHAPE_LEFT = 70;                                 // (3, 3), above the word column
   // the plane, lower stage: first quadrant, every vector here is within (2, 2)
-  const PLANE = { step: 165, ox: 215, oy: 1075, ax: { w: -0.35, e: 2.4, s: -0.3, n: 2.25 }, top: 700 };
+  const PLANE = { step: 165, ox: 215, oy: 1075, ax: { w: -0.35, e: 2.4, s: -0.3, n: 2.25 }, top: 700, bottom: 1135 };
+  // tip labels' offsets from their arrow tips (px), clear of the arrowheads
+  const TIP = { name: { dx: -175, dy: 20 }, is: { dx: 92, dy: 10 } };
   const READ = { left: 640, top: 850 };                  // the dot-product readout, right of the plane
   const ALPHA_OFF = 0.22;                                // arrows not in the pair
   const rowTop = (r) => MAT_TOP + r * RH;
@@ -129,8 +131,8 @@
   // tip labels beside the pair's arrow tips (grid points), o: alpha, scale
   function placeTips(Pt, a = 1, o = {}) {
     VEC.view(PLANE);
-    VEC.place(Pt.tips.name, Q[HERO.r][0], Q[HERO.r][1], { dx: -150, dy: 34, alpha: a, scale: o.scale });
-    VEC.place(Pt.tips.is, K[HERO.c][0], K[HERO.c][1], { dx: 92, dy: 10, alpha: a, scale: o.scale });
+    VEC.place(Pt.tips.name, Q[HERO.r][0], Q[HERO.r][1], { dx: TIP.name.dx, dy: TIP.name.dy, alpha: a, scale: o.scale });
+    VEC.place(Pt.tips.is, K[HERO.c][0], K[HERO.c][1], { dx: TIP.is.dx, dy: TIP.is.dy, alpha: a, scale: o.scale });
   }
   // highlight-box rects: a row of the left (Q) or right (K) slot, or a grid row
   const RECT = {
@@ -175,7 +177,7 @@
   function plane(g, o = {}) {
     VEC.view(PLANE);
     bg(g);
-    g.save(); g.beginPath(); g.rect(0, PLANE.top, ISO.W, ISO.SAFE.stageBottom - PLANE.top); g.clip();
+    g.save(); g.beginPath(); g.rect(0, PLANE.top, ISO.W, PLANE.bottom - PLANE.top); g.clip();
     VEC.floor(g); VEC.axes(g);
     const each = (arr, fn) => (arr || []).forEach((a, i) => { if (a > 0.001) fn(a, i); });
     each(o.ghost, (a, i) => qArrow(g, X[i], COL.muted, { alpha: a }));
@@ -223,7 +225,7 @@
 
   window.EP = {
     TOK, X, WQ, WK, Q, K, S, SR, SS, WT, WN, HERO, D, CODE,
-    CARD_TOP, NAME_TOP, MAT_TOP, RH, CW, SIZE, WORD_RIGHT, LL, RL, GL, GCW, SIDE, SHAPE_LEFT, PLANE, READ, ALPHA_OFF,
+    CARD_TOP, NAME_TOP, MAT_TOP, RH, CW, SIZE, WORD_RIGHT, LL, RL, GL, GCW, SIDE, SHAPE_LEFT, PLANE, TIP, READ, ALPHA_OFF,
     PAIR_Q, PAIR_K, PULL_K, PLANES, RECT, rowTop, colMid,
     parts, put, placeCard, placeM, placeGrid, placeWords, placeHeads, placeSums, placeRead, placeTips, hideAll,
     keyArrow, qArrow, lerp2, bg, plane, state,
