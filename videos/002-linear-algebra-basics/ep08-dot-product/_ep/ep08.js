@@ -37,9 +37,9 @@
   // Readouts: the lead text right-aligned to leadR, the number left-aligned at numL,
   // so the number never pushes the words around while it ticks. Two rows.
   const RO = { size: 64, leadR: 700, numL: 724, top: [250, 326] };
-  // The pairwise sum under the readout (row 2): 1 × bx + 1 × by, fixed slots so it never jitters.
-  // Slots: a0 × b0 + a1 × b1 (a's numbers teal, b's blue, operators dim).
-  const FORM = { size: 60, top: 326, cx: 507, w: [50, 56, 130, 64, 50, 56, 130] };
+  // The pairwise sum under the readout (row 2): 1 × bx + 1 × by (a's numbers teal, b's blue,
+  // operators dim), left edge at x 300 so "1 × 2 + 1 × 2" sits under "dot product = 4".
+  const FORM = { size: 60, top: 326, left: 300 };
   // The tip labels: a's beside its tip; b's only near a landmark (its text and offset per landmark).
   const TIP = {
     a: { dx: 150, dy: 30 },
@@ -47,7 +47,7 @@
         { th: 90, text: "[ −2, 2 ]", dx: 110, dy: -50 },
         { th: 180, text: "[ −2, −2 ]", dx: 240, dy: -40 }],
   };
-  const CODE_TOP = 1115;                                 // the code card, centred, at the band top (captions sit at the band bottom)
+  const CODE_TOP = 900;                                  // the code card, centred, in the empty lower stage under the aligned pair (at the band top it collided with two-line captions)
 
   // ---- DOM parts, made once per beat ----
   function readout(root) {
@@ -69,26 +69,23 @@
       },
     };
   }
-  // the pairwise sum: 7 fixed slots. .set(th, { alpha, k: [7 alphas] (build in slot by slot) })
+  // the pairwise sum: one line of 7 spans, left edge fixed at FORM.left (it flows, so it reads
+  // tight at the landmarks and never crowds on "−2.8"; only its tail moves while b ticks).
+  // .set(th, { alpha, k: [7 alphas] (build in span by span) })
   function formula(root) {
     const cols = [SLOT[0], COL.dim, SLOT[1], COL.dim, SLOT[0], COL.dim, SLOT[1]];
-    const total = FORM.w.reduce((s, v) => s + v, 0);
-    let x = FORM.cx - total / 2;
-    const slots = FORM.w.map((wd, i) => {
-      const el = ISO.label(root, "", { size: FORM.size, color: css(cols[i]), width: wd, align: "center" });
-      el.style.fontVariantNumeric = "tabular-nums"; el.dataset.left = String(x); x += wd; return el;
-    });
-    const txt = ["1", "×", "", "+", "1", "×", ""];
+    const el = ISO.label(root, "", { size: FORM.size, color: css(COL.dim) });
+    el.style.fontVariantNumeric = "tabular-nums"; el.style.whiteSpace = "pre";
+    const slots = cols.map((c) => { const sp = document.createElement("span"); sp.style.color = css(c); el.appendChild(sp); return sp; });
+    const txt = ["1", "\u2002×\u2002", "", "\u2002+\u2002", "1", "\u2002×\u2002", ""];   // en spaces: a plain space reads cramped beside "−"
     return {
-      slots,
+      el, slots,
       set(th, o = {}) {
         const b = bAt(th), a = o.alpha == null ? 1 : o.alpha, k = o.k || [1, 1, 1, 1, 1, 1, 1];
         txt[2] = fmtd(b[0]); txt[6] = fmtd(b[1]);
-        slots.forEach((el, i) => {
-          if (el.textContent !== txt[i]) el.textContent = txt[i];
-          el.style.transform = `translate(${el.dataset.left}px, ${FORM.top}px)`;
-          el.style.opacity = clamp01(a * k[i]).toFixed(3);
-        });
+        slots.forEach((sp, i) => { if (sp.textContent !== txt[i]) sp.textContent = txt[i]; sp.style.opacity = clamp01(k[i]).toFixed(3); });
+        el.style.transform = `translate(${FORM.left}px, ${FORM.top}px)`;
+        el.style.opacity = clamp01(a).toFixed(3);
       },
     };
   }

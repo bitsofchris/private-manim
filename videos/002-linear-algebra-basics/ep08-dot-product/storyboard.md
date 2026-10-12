@@ -20,7 +20,7 @@ no plotted data, no 3D camera, no Manim part cheaper to reuse than to redraw.
 - **THE SEARCH PHRASE:** `dot product explained visually` (autocomplete
   offers it word for word, SERIES.md). The title promises "visually", so
   frame 0 is the arrow already turning with the number ticking, under line 1.
-- **Code beat:** `torch.dot(a, b)` / `# 1·2 + 1·2 = 4` at the band top,
+- **Code beat:** `torch.dot(a, b)` / `# 1·2 + 1·2 = 4` in the lower stage (y 900),
   landing on "The way the math works" (beat 2) over the aligned pair whose
   numbers it computes.
 
@@ -56,7 +56,7 @@ helpers (`pair`, `nums`, `arc`, `rightMark`, `words`) and the rest states.
   1s teal, b's numbers blue (one decimal while moving), operators dim.
 - **Tip labels:** `[ 1, 1 ]` teal beside a's tip; b's label (`[ 2, 2 ]`,
   `[ −2, 2 ]`, `[ −2, −2 ]`) only near a landmark (full within 3°, gone by 12°).
-- **Code card** at the band top (y 1115), only in beat 2; captions sit at the
+- **Code card** in the empty lower stage (y 900) under the aligned pair, beats 2–3 only; at the band top it collided with two-line captions. Captions sit at the
   band bottom (`--captions-anchor bottom`).
 
 ## Ledger (identical in every beat; constants in `_ep/ep08.js`)
@@ -117,14 +117,14 @@ overlap at all" 17.78–18.60, "opposite" 19.44, "negative" 20.02, "everywhere"
 
 ## Beats (the visual brief)
 
-Stage y 230–1100; the band y 1100–1536 holds captions at its bottom (and the
-code card at its top in beat 2 only). Grid lines may bleed into it; arrows
+Stage y 230–1100; the band y 1100–1536 holds only captions.
+Grid lines may bleed into it; arrows
 may not.
 
 | # | Hero (the one magenta thing) | Visual |
 |---|---|---|
 | 1 | the readout number | **Frame 0 is the finished visual working:** b turning toward a with the number ticking up through 0, landing at th 0 on "same way": `4`, a lying on b. "measure similarity": b leans out to th 25 and back. Ends exactly `ALIGNED`. (Built; unchanged except the plane's new step and origin.) |
-| 2 | `dot` in the code card on "multiply pairwise", then the readout `4` on "sum" | From ALIGNED. "The way the math works": the code card drops in at the band top (y 1115), line 1 only; `[ 1, 1 ]` and `[ 2, 2 ]` fade in at the tips. "multiply pairwise": `dot` in the card goes magenta; the pairwise sum builds in under the readout: `1 × 2` on "multiply" (7.12), `+ 1 × 2` on "pairwise" (7.56), each pair of slots popping in. "and then sum": `dot` back to white; the comment `# 1·2 + 1·2` types in; on "sum" (8.54) ` = 4` appears in the comment and the readout `4` swells. Ends exactly `MATH`, still from ~8.8. |
+| 2 | `dot` in the code card on "multiply pairwise", then the readout `4` on "sum" | From ALIGNED. "The way the math works": the code card drops in under the pair (y 900), line 1 only; `[ 1, 1 ]` and `[ 2, 2 ]` fade in at the tips. "multiply pairwise": `dot` in the card goes magenta; the pairwise sum builds in under the readout: `1 × 2` on "multiply" (7.12), `+ 1 × 2` on "pairwise" (7.56), each pair of slots popping in. "and then sum": `dot` back to white; the comment `# 1·2 + 1·2` types in; on "sum" (8.54) ` = 4` appears in the comment and the readout `4` swells. Ends exactly `MATH`, still from ~8.8. |
 | 3 | the readout number | From MATH: the code card fades out (0–0.4). "Watch the number": the number swells. "as this arrow turns": b swings out from th 0 to th 70 (≥ 1 s), the readout and the pairwise sum ticking down (b's tip label fades as it leaves); "Pointing the same direction": b turns back, landing at th 0 / `4` on "direction"; "positive": the number swells. Ends exactly `ALIGNED_N`. |
 | 4 | the readout number | From ALIGNED_N (as built, plus `EP.nums` every frame): b turns 0 → 90 landing on "degrees", the sum reads `1 × −2 + 1 × 2`; right-angle mark on "perpendicular"; `0` swells on "zero"; mark pulses on "overlap"; b turns 90 → 180 landing on "negative" with a swell, the sum `1 × −2 + 1 × −2`. Ends exactly `OPPOSITE_N`. |
 | 5 | the king–queen arc on "similar directions", then `5` | From OPPOSITE_N: a, b, the arc, the readout, the pairwise sum and the tip labels fade out (≤ 0.5 s). Then as built: the words grow, the magenta arc, `king · queen = 5`, `king · banana = 0`. Ends exactly `WORDS`. |
