@@ -60,158 +60,128 @@
   "text": "and then sum."
  },
  {
-  "start": 9.26,
-  "end": 10.38,
-  "text": "1, 2, 3"
- },
- {
-  "start": 10.64,
-  "end": 11.12,
-  "text": "dot 4"
- },
- {
-  "start": 11.47,
-  "end": 12.28,
-  "text": "minus 1, 0."
- },
- {
-  "start": 12.8,
-  "end": 13.22,
-  "text": "That's 4"
- },
- {
-  "start": 13.35,
-  "end": 14.46,
-  "text": "minus 2, 0"
- },
- {
-  "start": 15.02,
-  "end": 15.64,
-  "text": "sum 2."
- },
- {
-  "start": 16.11,
-  "end": 16.64,
+  "start": 9.192,
+  "end": 9.722,
   "text": "Watch the number"
  },
  {
-  "start": 16.7,
-  "end": 17.14,
+  "start": 9.782,
+  "end": 10.222,
   "text": "as this"
  },
  {
-  "start": 17.2,
-  "end": 17.82,
+  "start": 10.282,
+  "end": 10.902,
   "text": "arrow turns."
  },
  {
-  "start": 18.32,
-  "end": 18.9,
+  "start": 11.402,
+  "end": 11.982,
   "text": "Pointing the same"
  },
  {
-  "start": 18.96,
-  "end": 19.8,
+  "start": 12.042,
+  "end": 12.882,
   "text": "direction is positive."
  },
  {
-  "start": 20.25,
-  "end": 20.96,
+  "start": 13.332,
+  "end": 14.042,
   "text": "At 90 degrees"
  },
  {
-  "start": 21.54,
-  "end": 22.18,
+  "start": 14.622,
+  "end": 15.262,
   "text": "they're perpendicular"
  },
  {
-  "start": 22.4,
-  "end": 22.76,
+  "start": 15.482,
+  "end": 15.842,
   "text": "orthogonal"
  },
  {
-  "start": 23.24,
-  "end": 24.1,
+  "start": 16.322,
+  "end": 17.182,
   "text": "exactly zero."
  },
  {
-  "start": 24.7,
-  "end": 25.16,
+  "start": 17.782,
+  "end": 18.242,
   "text": "No overlap"
  },
  {
-  "start": 25.22,
-  "end": 25.56,
+  "start": 18.302,
+  "end": 18.642,
   "text": "at all."
  },
  {
-  "start": 26.1,
-  "end": 26.62,
+  "start": 19.182,
+  "end": 19.702,
   "text": "Pointing opposite"
  },
  {
-  "start": 26.68,
-  "end": 27.24,
+  "start": 19.762,
+  "end": 20.322,
   "text": "is negative."
  },
  {
-  "start": 27.7,
-  "end": 28.16,
+  "start": 20.782,
+  "end": 21.242,
   "text": "That's why it's"
  },
  {
-  "start": 28.22,
-  "end": 29.04,
+  "start": 21.302,
+  "end": 22.122,
   "text": "everywhere in AI."
  },
  {
-  "start": 29.1,
-  "end": 29.6,
+  "start": 22.182,
+  "end": 22.682,
   "text": "Embeddings that mean"
  },
  {
-  "start": 29.66,
-  "end": 30.82,
+  "start": 22.742,
+  "end": 23.902,
   "text": "similar things point"
  },
  {
-  "start": 30.82,
-  "end": 31.98,
+  "start": 23.902,
+  "end": 25.062,
   "text": "in similar directions"
  },
  {
-  "start": 32.32,
-  "end": 32.49,
+  "start": 25.402,
+  "end": 25.572,
   "text": "and the"
  },
  {
-  "start": 32.55,
-  "end": 33.16,
+  "start": 25.632,
+  "end": 26.242,
   "text": "dot product"
  },
  {
-  "start": 33.17,
-  "end": 33.38,
+  "start": 26.252,
+  "end": 26.462,
   "text": "is how"
  },
  {
-  "start": 33.44,
-  "end": 34.0,
+  "start": 26.522,
+  "end": 27.082,
   "text": "you check."
  },
  {
-  "start": 34.46,
-  "end": 34.86,
+  "start": 27.542,
+  "end": 27.942,
   "text": "It's also the"
  },
  {
-  "start": 34.92,
-  "end": 35.26,
+  "start": 28.002,
+  "end": 28.342,
   "text": "core of"
  },
  {
-  "start": 35.28,
-  "end": 35.6,
+  "start": 28.362,
+  "end": 28.682,
   "text": "attention."
  }
 ]
