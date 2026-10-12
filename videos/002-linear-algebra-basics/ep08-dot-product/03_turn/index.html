@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep08 beat 4 (04_turn): from SUM, the numbers fade to the plane (b at th 70, 1.4); b turns
-         onto a on "same direction" (4); the number swells on "number" and "positive". Ends ALIGNED.
+    <!-- ep08 beat 3 (03_turn), revision 2: from MATH, the code card fades; b swings out to th 70 on
+         "as this arrow turns" (readout and pairwise sum ticking down) and back onto a on "direction" (4);
+         the number swells on "number" and "positive". Ends ALIGNED_N.
          Started from 00_layout, whose notes follow:
          t < 1  CANON: the plane, a (1, 1) teal and b blue turning about the origin, the angle arc,
                 "dot product = 2" with the number magenta (the hero). Frame 0 of the Short looks like this.
@@ -35,18 +36,21 @@
     <script>
 (() => {
   const BEAT_SECONDS = 4.17;
-  // Cues, beat-local = master - 15.91. Checked on a 20 ms RMS envelope of vo_final.wav:
-  // "Watch" onset 16.10, "number" 16.44, "arrow" 17.20, "turns" ends 17.92, "Pointing" 18.31,
-  // "same" 18.83, "direction" 18.96-19.42, "positive" 19.48-19.88.
+  // Cues, beat-local = master - 8.99 (unchanged from the first build: the audio shifted -6.918 s).
+  // Checked on a 20 ms RMS envelope of the first build's vo_final.wav (same samples):
+  // "Watch" onset 0.19, "number" 0.53, "arrow" 1.29, "turns" ends 2.01, "Pointing" 2.40,
+  // "same" 2.92, "direction" 3.05-3.51, "positive" 3.57-3.97.
   const CUE = {
-    fade: 0.00,     // SUM -> plane cross-fade starts on frame 0 (0.5 s)
+    card: 0.00,     // frame 0: the code card starts fading out (0.4 s)
     number: 0.53,   // "number": the readout swells once
-    turn0: 1.29,    // "arrow turns": b starts toward a
-    land: 3.05,     // "same direction" ("direction" 18.96): b lies under a, readout 4
+    out0: 1.20,     // "as this arrow turns": b swings out from th 0 ...
+    out1: 2.30,     // ... to th 70 (1.1 s), readout and sum ticking down
+    back0: 2.40,    // "Pointing the same direction": b turns back ...
+    land: 3.05,     // ... landing at th 0 on "direction", readout 4
     pos: 3.57,      // "positive": the number swells (done 3.97)
-    still: 3.97,    // nothing moves after this: state ALIGNED exactly
+    still: 3.97,    // nothing moves after this: state ALIGNED_N exactly
   };
-  const TH0 = 70;                           // b's angle as the plane fades in (readout 1.4)
+  const TH_OUT = 70;                        // how far b swings out (readout 1.4)
   const { seg } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
@@ -54,19 +58,12 @@
   ISO.guides(root);
   const swell = (t, t0) => 1 + 0.15 * Math.sin(Math.PI * seg(t, t0, t0 + 0.4));
   function render(t) {
-    if (t >= CUE.still) { EP.state(P, g, "ALIGNED"); return; }   // the last frames are ALIGNED, untouched
-    const u = E.io(seg(t, CUE.fade, CUE.fade + 0.5));            // 0 = SUM, 1 = plane
-    const th = TH0 * (1 - E.io(seg(t, CUE.turn0, CUE.land)));
-    EP.state(P, g, "SUM");
-    // SUM's DOM parts fade out
-    ["a", "b", "p"].forEach((k) => EP.placeRow(P, k, { alpha: 1 - u }));
-    EP.placeSum(P, { alpha: 1 - u, eqA: 1 - u });
-    EP.placeCode(P, 1 - u, 5);
-    // canvas: the plane clears and redraws; the rule fades over it; the pair fades in
-    EP.plane(g, { alpha: u });
-    EP.rule(g, 1, 1 - u);
-    EP.pair(g, th, { alpha: u });
-    P.ro[0].set("dot product = ", EP.dotAt(th), { alpha: u, scale: swell(t, CUE.number) * swell(t, CUE.pos) });
+    EP.state(P, g, "ALIGNED_N");
+    if (t >= CUE.still) return;                                  // the last frames are ALIGNED_N, untouched
+    const th = TH_OUT * (E.io(seg(t, CUE.out0, CUE.out1)) - E.io(seg(t, CUE.back0, CUE.land)));
+    EP.placeCode(P, 1 - E.io(seg(t, CUE.card, CUE.card + 0.4)));   // MATH's card (line 2 full) fades out
+    EP.plane(g); EP.pair(g, th); EP.nums(P, th);
+    P.ro[0].set("dot product = ", EP.dotAt(th), { scale: swell(t, CUE.number) * swell(t, CUE.pos) });
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);

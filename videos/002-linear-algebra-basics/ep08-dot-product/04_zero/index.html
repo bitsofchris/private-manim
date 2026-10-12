@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep08 beat 5 (05_zero): from ALIGNED, b turns to 90 on "ninety degrees" (0), the right-angle
+    <!-- ep08 beat 4 (04_zero), revision 2: from ALIGNED_N (numbers on the pair every frame), b turns to 90 on "ninety degrees" (0), the right-angle
          mark draws on "perpendicular", 0 swells on "exactly zero", the mark pulses on "overlap";
-         on "Pointing opposite" the mark fades and b turns to 180, landing on "negative" (−4). Ends OPPOSITE.
+         on "Pointing opposite" the mark fades and b turns to 180, landing on "negative" (−4). Ends OPPOSITE_N.
          Started from 00_layout, whose notes follow:
          t < 1  CANON: the plane, a (1, 1) teal and b blue turning about the origin, the angle arc,
                 "dot product = 2" with the number magenta (the hero). Frame 0 of the Short looks like this.
@@ -36,7 +36,8 @@
     <script>
 (() => {
   const BEAT_SECONDS = 7.44;
-  // Cues, beat-local = master - 20.08. Checked on a 20 ms RMS envelope of vo_final.wav:
+  // Cues, beat-local = master - 13.16 (unchanged from the first build: the audio shifted -6.918 s).
+  // Checked on a 20 ms RMS envelope of the first build's vo_final.wav, local times + 20.08:
   // "At" onset 20.27, "ninety" 20.40, "degrees" ends 20.96, "they're" 21.52, "perpendicular" 21.62,
   // "orthogonal" 22.40, "exactly" 23.10, "zero" 23.50, "No" 24.62, "overlap" 24.80, "Pointing" 26.08,
   // "opposite" 26.36, "negative" 26.94 (ends 27.36).
@@ -48,7 +49,7 @@
     overlap: 4.72,  // "No overlap at all": the mark pulses once (0.4 s)
     opp: 6.00,      // "Pointing opposite": the mark fades (0.3 s), b turns 90 -> 180 ...
     at180: 6.86,    // ... landing on "negative", readout −4, with a swell (0.4 s)
-    still: 7.26,    // nothing moves after this: state OPPOSITE exactly
+    still: 7.26,    // nothing moves after this: state OPPOSITE_N exactly
   };
   const { seg, COL, css, lerp } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
@@ -80,7 +81,7 @@
     VEC.puck(g, 0, 0);
   }
   function render(t) {
-    if (t >= CUE.still) { EP.state(P, g, "OPPOSITE"); return; }  // the last frames are OPPOSITE, untouched
+    if (t >= CUE.still) { EP.state(P, g, "OPPOSITE_N"); return; }  // the last frames are OPPOSITE_N, untouched
     const th = 90 * E.io(seg(t, CUE.turn90, CUE.at90)) + 90 * E.io(seg(t, CUE.opp, CUE.at180));
     const mark = {
       u: E.out(seg(t, CUE.perp, CUE.perp + 0.35)),
@@ -88,8 +89,8 @@
       width: 6 + 5 * bump(t, CUE.overlap),
     };
     const sc = 1 + 0.15 * (bump(t, CUE.zero) + bump(t, CUE.at180));
-    EP.state(P, g, "ALIGNED");
-    EP.plane(g); pairM(g, th, mark);
+    EP.state(P, g, "ALIGNED_N");
+    EP.plane(g); pairM(g, th, mark); EP.nums(P, th);
     P.ro[0].set("dot product = ", EP.dotAt(th), { scale: sc });
   }
   window.__timelines = window.__timelines || {};

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep08 beat 2, 02_math (master 6.07, 2.92 s). Opens ALIGNED, ends MATH: torch.dot(a, b) drops in at the band top on "The way the math works", the tip labels fade in, the pairwise sum builds on "multiply" / "pairwise" while dot is the hero, the comment types in on "and then sum" and the readout 4 swells on "sum". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep08.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.92" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.92;
+  // Cues, beat-local seconds (master 6.07 + t). Word times from words.json, onsets checked on a
+  // 20 ms RMS envelope of vo_final.wav (this window is unchanged by the Revision 2 cut).
+  const CUE = {
+    card: 0.00,                 // from frame 0, landing on "math" (6.54): the code card drops in at the band top
+    tips: 0.40,                 // "math works" (6.54-6.96): [ 1, 1 ] and [ 2, 2 ] fade in at the tips
+    mul: 1.00,                  // "multiply" (onset 7.08): `dot` goes magenta (the readout 4 rests in off-white); 1 × 2 pops in
+    pair: 1.37,                 // "pairwise" (onset 7.46): + 1 × 2 pops in
+    and: 2.15,                  // "and then" (onset 8.24): `dot` back to white; the comment types # 1·2 + 1·2
+    sum: 2.43,                  // "sum" (onset 8.48): " = 4" in the comment; the readout 4 is magenta again and swells
+    still: 2.80,                // nothing moves after this (MATH)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  P.form.slots.forEach((el) => { el.style.transformOrigin = "50% 55%"; });
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  const pop = (t, t0) => seg(t, t0, t0 + 0.25);          // a slot's pop: 0..1
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "ALIGNED");                    // plane, a over b, readout 4
+
+    // the readout 4 hands the hero to `dot` for "multiply pairwise" and takes it back on "sum"
+    const h = E.io(seg(t, CUE.mul, CUE.mul + 0.25)) * (1 - E.io(seg(t, CUE.and, CUE.and + 0.2)));
+    const rest = E.io(seg(t, CUE.mul, CUE.mul + 0.25)) * (1 - E.io(seg(t, CUE.sum, CUE.sum + 0.15)));
+    const roCol = mix(COL.hero, COL.text, rest);
+    P.ro[0].set("dot product = ", EP.dotAt(0), { col: roCol, scale: 1 + 0.15 * pulse(t, CUE.sum, 0.35) });
+
+    // tip labels, and the pairwise sum slot by slot: "1 × 2" on multiply, "+ 1 × 2" on pairwise
+    const tip = E.io(seg(t, CUE.tips, CUE.tips + 0.35));
+    const ks = [0, 0, 0, 1, 1, 1, 1].map((grp) => pop(t, grp ? CUE.pair : CUE.mul));
+    EP.nums(P, 0, { aA: tip, bA: tip, k: ks.map((u) => E.out(Math.min(1, u * 2.5))) });
+    P.form.slots.forEach((el, i) => { if (ks[i] > 0 && ks[i] < 1) el.style.transform += ` scale(${(1.3 - 0.3 * E.out(ks[i])).toFixed(4)})`; });
+
+    // the code card drops in; `dot` is the hero from "multiply" to "and then"; the comment types in
+    const c = E.out(seg(t, CUE.card, CUE.card + 0.55));
+    EP.placeCode(P, c, 0, { dy: -40 * (1 - c) });
+    P.code.spans[0][1].style.color = css(h > 0.001 ? mix(COL.text, COL.hero, h) : COL.text);
+    const at = [CUE.and, CUE.and + 0.07, CUE.and + 0.16, CUE.sum];
+    P.code.spans[1].forEach((s, j) => { s.style.opacity = E.out(seg(t, at[j], at[j] + 0.1)).toFixed(3); });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep08 beat 6 (06_embed), master 27.52, 6.69 s.
+    <!-- ep08 beat 5 (05_embed), master 20.60, 6.69 s (revision 2).
          VO: "That's why it's everywhere in AI. Embeddings that mean similar things point in
          similar directions, and the dot product is how you check."
-         Opens on OPPOSITE (beat 5's end), ends on WORDS + the muted king–queen arc
-         (beat 7 opens with that arc, identically). Hero: the king–queen arc, then the 5. -->
+         Opens on OPPOSITE_N (beat 4's end), ends exactly on WORDS (which carries the muted
+         king–queen arc). Hero: the king–queen arc, then the 5. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -31,17 +31,17 @@
     <script>
 (() => {
   const BEAT_SECONDS = 6.69;
-  // beat-local cues (master − 27.52), from words.json checked on a 20 ms RMS envelope of vo_final.wav
+  // beat-local cues (master − 20.60), from words.json checked on a 20 ms RMS envelope of vo_final.wav
   const CUE = {
-    everywhere: 0.70, /* "everywhere (in AI)" 28.22 */
-    similar: 2.18,    /* "(mean) similar things" 29.70 */
-    point: 2.98,      /* "point (in similar directions)" 30.50 */
-    directions: 3.46, /* "similar directions" 30.98 */
-    dot: 5.03,        /* "the dot product" 32.55 */
-    check: 6.14,      /* "check" 33.66 (envelope; words.json 33.60) */
+    everywhere: 0.70, /* "everywhere (in AI)" 21.30 */
+    similar: 2.18,    /* "(mean) similar things" 22.78 */
+    point: 2.98,      /* "point (in similar directions)" 23.58 */
+    directions: 3.46, /* "similar directions" 24.06 */
+    dot: 5.03,        /* "the dot product" 25.63 */
+    check: 6.14,      /* "check" 26.74 (envelope; words.json 26.68) */
   };
   const T = {
-    out: [0, 0.45],                       // a, b, half-turn arc and "dot product = −4" fade (frame 0 moving)
+    out: [0, 0.45],                       // a, b, half-turn arc, readout, pairwise sum, tip labels fade (frame 0 moving)
     grow: CUE.everywhere - 0.12,          // king, then queen, then banana grow from the origin, 0.15 s apart
     growLen: 0.7,
     lift: [CUE.similar - 0.05, CUE.similar + 0.75],     // "similar things": king and queen brighten once
@@ -72,21 +72,19 @@
   }
 
   function render(t) {
-    if (t >= T.still) {                    // the end state, exactly: WORDS + the muted king–queen arc
-      EP.state(P, g, "WORDS");
-      EP.arc(g, KQ_ARC[0], KQ_ARC[1], { r: 0.9, col: COL.muted });
-      return;
-    }
-    EP.state(P, g, "OPPOSITE");            // resets every DOM part; draws plane, pair, readout
-    EP.bg(g); EP.plane(g);
+    if (t >= T.still) { EP.state(P, g, "WORDS"); return; }   // the end state, exactly (muted arc included)
+    EP.state(P, g, "OPPOSITE_N");          // resets every DOM part
+    EP.plane(g);                           // (clears the canvas)
 
     // "That's why": OPPOSITE fades out (the plane stays)
     const out = 1 - E.io(seg(t, ...T.out));
     if (out > 0.001) {
       EP.pair(g, EP.TH.OPPOSITE, { alpha: out });
       P.ro[0].set("dot product = ", EP.dotAt(EP.TH.OPPOSITE), { alpha: out });
+      EP.nums(P, EP.TH.OPPOSITE, { alpha: out });   // [ 1, 1 ], [ −2, −2 ], 1 × −2 + 1 × −2
     } else {
       P.ro[0].set("", "", { alpha: 0 });
+      EP.nums(P, EP.TH.OPPOSITE, { alpha: 0 });
     }
 
     // "everywhere in AI": the three words grow from the origin, labels riding the tips
