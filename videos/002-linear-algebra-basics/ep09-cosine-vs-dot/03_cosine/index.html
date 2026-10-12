@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep09 beat 3 (03_cosine): DOT -> UNIT. "Cosine similarity divides by both lengths. Both
+         magnitudes go away, and you're left with pure direction, a number between −1 and 1. And
+         that's what you use to compare embeddings." Hero: the cos value, then the code card. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep09.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.38" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 10.38;
+  // Cues, beat-local = master - 13.82, from words.json; onsets checked on a 20 ms RMS envelope of
+  // vo_final.wav ("Cosine" 14.02, "both" 15.80, "Both" 16.94, "pure" ~18.85, "A number" 20.18,
+  // "And that's" 22.38).
+  const CUE = {
+    cos: 0.00,      // "Cosine (similarity)" (14.04): dot back to off-white, cos magenta, from frame 0
+    divides: 1.12,  // "divides": cos value replaced by 3 ÷ (2.5 × 2)
+    both: 2.04,     // "both (lengths)": |u| and |v| pulse
+    gone: 3.12,     // "Both (magnitudes)": the length labels fade
+    shrink: 3.35,   // "magnitudes (go away)": both arrows shrink to unit length (1.2 s)
+    away: 4.00,     // "away": the formula collapses to 0.6
+    pure: 4.98,     // "pure (direction)": the arc brightens and back
+    pan: 5.70,      // after "direction.": the view slides right so u has room to swing (0.6 s)
+    swing: 6.30,    // "a number (between)": u swings round the origin, cos tracking live
+    neg: 7.02,      // "−1": u at 180°, cos reads −1
+    pos: 7.78,      // "(and) 1": u at 0°, cos reads 1
+    home: 8.30,     // u back at its angle, cos 0.6; the view slides back (0.6 s)
+    thats: 8.66,    // "that's (what you use)": the code card rises into the band top
+    light: 9.16,    // card up: its # 0.6 lights magenta, the cos value goes off-white
+    unlight: 9.86,  // after "embeddings": card comment back to dim, cos back to magenta (UNIT)
+    still: 10.16,   // nothing moves after this: UNIT exactly
+  };
+  const { seg, lerp, mix, COL } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  // at 0° the turned "u" label sits ~100 px under "v" (clear on the sheet); the line boxes still meet
+  P.lab.u.setAttribute("data-layout-allow-overlap", "");
+
+  // The swing view: EP.PLANE with the origin moved right, so a unit u at 180° stays in the safe area
+  // (in EP.PLANE the origin is 250 px from the left edge, less than one 260 px step).
+  const SWING = { step: 260, ox: 520, oy: 1010, ax: { w: -1.6, e: 1.5, s: -0.33, n: 2.05 }, top: EP.PLANE.top };
+  const TH0 = Math.atan2(EP.UHAT[1], EP.UHAT[0]);        // u's angle, cos = 0.6
+  // EP.labels puts "u" at (dx 58, dy -20) px from the tip; the same offset as (along u, across u) at TH0
+  const U_OFF = [58 * 0.6 + 20 * 0.8, 58 * 0.8 - 20 * 0.6];
+
+  // local helper: EP.plane with the view and the arc's colour exposed; no drop line or shadow here
+  function plane(g, o) {
+    VEC.view(EP.PLANE, SWING, o.pan);
+    VEC.floor(g, { alpha: 0.42 });
+    VEC.axes(g, {});
+    EP.arc(g, o.u, o.v, { alpha: 1, col: o.arcCol });
+    VEC.arrow(g, [0, 0], o.v, { col: EP.VCOL, width: 40 });
+    VEC.arrow(g, [0, 0], o.u, { col: EP.UCOL, width: 40 });
+    VEC.puck(g, 0, 0);
+  }
+  // local helper: a value replaced in place by another (fade and shrink out, fade and grow in)
+  function swap(t, t0, a, b, dur = 0.3) {
+    const k = seg(t, t0, t0 + dur);
+    if (k < 0.5) { const q = E.io(k * 2); return { text: a, alpha: 1 - q, scale: 1 - 0.12 * q }; }
+    const q = E.io(k * 2 - 1); return { text: b, alpha: q, scale: 0.88 + 0.12 * q };
+  }
+  const bump = (t, t0, dur) => Math.sin(Math.PI * seg(t, t0, t0 + dur));   // 0 -> 1 -> 0
+  // cos to one decimal with a true minus; whole values bare ("1", "−1", "0"), never "1.0"
+  const fmtc = (c) => { const r = ISO.round1(c); return VEC.fmtv(Number.isInteger(r) ? r : Number(r.toFixed(1))); };
+  // u's angle during the swing: up and over to 180° on "−1", back down to 0° on "1", home to 0.6
+  function theta(t) {
+    if (t < CUE.swing || t >= CUE.home) return TH0;
+    if (t < CUE.neg) return lerp(TH0, Math.PI, E.sine(seg(t, CUE.swing, CUE.neg)));
+    if (t < CUE.pos) return lerp(Math.PI, 0, E.sine(seg(t, CUE.neg, CUE.pos)));
+    return lerp(0, TH0, E.sine(seg(t, CUE.pos, CUE.home)));
+  }
+
+  function render(tt) {
+    const t = Math.min(tt, CUE.still);
+    EP.state(P, null, "DOT");                                     // DOM base: readouts, cards off
+
+    const kc = E.io(seg(t, CUE.cos, CUE.cos + 0.4));               // hero: dot -> cos
+    const kg = E.io(seg(t, CUE.gone, CUE.gone + 0.4));             // length labels fade
+    const ks = E.io(seg(t, CUE.shrink, CUE.shrink + 1.2));         // arrows to unit length
+    const ka = E.io(seg(t, CUE.pure, CUE.pure + 0.3)) * (1 - E.io(seg(t, CUE.pure + 0.45, CUE.pure + 0.75)));
+    const kp = E.io(seg(t, CUE.pan, CUE.pan + 0.6)) * (1 - E.io(seg(t, CUE.home, CUE.home + 0.6)));
+    const kr = E.out(seg(t, CUE.thats, CUE.thats + 0.5));          // code card rises
+    const kl = E.io(seg(t, CUE.light, CUE.light + 0.25)) * (1 - E.io(seg(t, CUE.unlight, CUE.unlight + 0.3)));
+
+    // the arrows: shrink to unit, then u swings at unit length
+    let u = EP.lerp2(EP.U, EP.UHAT, ks);
+    const v = EP.lerp2(EP.V, EP.VHAT, ks);
+    const th = theta(t);
+    if (t >= CUE.swing && t < CUE.home) u = [Math.cos(th), Math.sin(th)];
+
+    EP.bg(g);
+    plane(g, { u, v, pan: kp, arcCol: mix(COL.dim, COL.text, ka) });
+    EP.labels(P, { u, v, lens: 1 - kg });
+    if (t >= CUE.swing && t < CUE.home) {                          // the u label turns with u, so at 0° it sits
+      const d = [Math.cos(th), -Math.sin(th)], n = [Math.sin(th), Math.cos(th)];   // under v's label, not on it
+      VEC.place(P.lab.u, u[0], u[1], { dx: U_OFF[0] * d[0] + U_OFF[1] * n[0], dy: U_OFF[0] * d[1] + U_OFF[1] * n[1] });
+    }
+    const lp = 1 + 0.2 * bump(t, CUE.both, 0.6);                   // "both lengths": both labels pulse
+    if (lp > 1.0001) {
+      VEC.place(P.lab.lu, u[0] / 2, u[1] / 2, { dx: 175, dy: 50, alpha: 1 - kg, scale: lp });
+      VEC.place(P.lab.lv, v[0] / 2, v[1] / 2, { dx: 0, dy: 70, alpha: 1 - kg, scale: lp });
+    }
+
+    // readouts
+    EP.row(P, "dot", { col: mix(COL.hero, COL.text, kc) });
+    let sw = { text: EP.VAL.cos, alpha: 1, scale: 1 };
+    if (t >= CUE.divides && t < CUE.away) sw = swap(t, CUE.divides, EP.VAL.cos, EP.DERIV.cos);
+    else if (t >= CUE.away) sw = swap(t, CUE.away, EP.DERIV.cos, EP.VAL.cos);
+    if (t >= CUE.swing && t < CUE.home) sw = { text: fmtc(Math.cos(th)), alpha: 1, scale: 1 };
+    EP.row(P, "cos", { col: mix(mix(COL.text, COL.hero, kc), COL.text, kl), text: sw.text, scale: sw.scale });
+    P.rows.cos.val.style.opacity = sw.alpha.toFixed(3);
+
+    // the code card: rises into the band top on "that's"; its # 0.6 takes the hero, then gives it back
+    P.code.at(EP.cardLeft(P.code.el), EP.CARD_TOP + 90 * (1 - kr), { alpha: kr });
+    P.code.spans[1][1].style.color = ISO.css(mix(COL.dim, COL.hero, kl));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

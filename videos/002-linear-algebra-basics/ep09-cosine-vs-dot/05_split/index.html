@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep09 beat 5, 05_split (master 33.00, 7.05 s). CANON -> SPLIT.
+         "The shadow keeps the original's length in the answer, and it splits the vector in two:
+         the part along the direction and the part left over."
+         Hero: the shadow with the proj value. The leftover arrow is off-white. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep09.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.05" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.05;
+  // beat-local = master - 33.00 (words.json, onsets checked on the vo_final.wav RMS envelope)
+  const CUE = {
+    shadow: 0.34,   /* "shadow" */
+    keeps: 0.60,    /* "keeps" */
+    length: 1.68,   /* "length" (original's length) */
+    answer: 2.08,   /* "answer" */
+    splits: 2.78,   /* "splits" */
+    along: 4.92,    /* "along" (the part along the direction) */
+    the2: 6.04,     /* "the" (the part left over) */
+    left: 6.32,     /* "left" */
+  };
+  const HOLD_FROM = 6.75;                   // SPLIT exactly from here to the end
+
+  const { COL, seg, mix } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const bump = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));        // 0 -> 1 -> 0
+  const num = (x) => String(Math.round(x * 100) / 100);               // 1.5, 0.75, 1.23; never 1.50
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM);
+
+    // ---- u: half length and back ("keeps the original's length", "in the answer") ----
+    const shrink = E.io(seg(t, 0.0, 1.1));                               // >= 0.8 s, moving from frame 0
+    const regrow = E.io(seg(t, CUE.answer - 0.1, CUE.answer + 0.75));
+    const u = EP.lerp2(EP.lerp2(EP.U, EP.USMALL, shrink), EP.U, regrow);
+    const p = EP.shadowOf(u, EP.V);
+
+    // ---- readouts ----
+    EP.row(P, "dot");
+    const cosP = bump(t, CUE.length, CUE.length + 0.55);                 // cos pulses, stays 0.6
+    EP.row(P, "cos", { scale: 1 + 0.15 * cosP });
+    EP.row(P, "proj", { col: COL.hero, text: num(p[0]) });               // tracks the shadow live
+    P.hl.rect(EP.rowRect(1), 0.9 * cosP, COL.text);                      // off-white box: not magenta
+    P.hl2.rect(EP.rowRect(1), 0);
+    P.code.at(EP.cardLeft(P.code.el), EP.CARD_TOP, { alpha: 0 });
+    P.ucard.at(EP.cardLeft(P.ucard.el), EP.CARD_TOP, { alpha: 0 });
+
+    // ---- the plane (EP.plane's draw order: arc, v, u, drop, leftover, shadow, puck) ----
+    const shP = Math.max(bump(t, CUE.shadow - 0.1, CUE.shadow + 0.4), bump(t, CUE.along, CUE.along + 0.55));
+    const cut = bump(t, CUE.splits, CUE.splits + 0.6);                   // "splits": the drop line brightens
+    const resid = E.io(seg(t, CUE.the2, CUE.left + 0.4));                // "the part left over": 0.7 s
+    EP.bg(g);
+    EP.plane(g, { u, drop: 1, dropA: 0.9, shadow: 0 });
+    if (cut > 0.001) VEC.line(g, u, p, { col: COL.text, alpha: cut, width: 5 + 3 * cut, dash: [14, 12] });
+    if (resid > 0.001) VEC.arrow(g, p, u, { col: COL.text, width: 40, u: resid });
+    EP.shadow(g, p, { width: 18 + 12 * shP });
+    VEC.puck(g, 0, 0);
+
+    EP.labels(P, { u });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

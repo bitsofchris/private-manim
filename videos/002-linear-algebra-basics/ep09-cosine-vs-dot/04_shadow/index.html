@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep09 beat 4, 04_shadow (master 24.20, 8.80 s). UNIT -> CANON.
+         "Now projection divides by only the target's length. Picture casting a shadow from one
+         vector onto another, and projection asks: how much of u points along this direction?"
+         Hero: the proj value (spoken row), then the shadow with it. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep09.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.80" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.80;
+  // beat-local = master - 24.20 (words.json, onsets checked on the vo_final.wav RMS envelope)
+  const CUE = {
+    now: 0.30,      /* "Now" */
+    proj: 0.40,     /* "projection" */
+    divides: 0.72,  /* "divides" */
+    only: 1.26,     /* "only" */
+    target: 1.92,   /* "target's" */
+    lengthEnd: 2.50,/* "length." ends */
+    picture: 2.90,  /* "Picture" */
+    shadow: 3.70,   /* "shadow" */
+    u: 6.98,        /* "u" */
+    along: 7.70,    /* "along" */
+  };
+  const HOLD_FROM = 8.30;                   // CANON exactly from here to the end
+
+  const { COL, seg, mix, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const bump = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));        // 0 -> 1 -> 0
+  // swap a readout value at the midpoint of a quick dip (local helper: "replaced in place")
+  const swap = (t, at, d = 0.24) => ({ after: t >= at + d / 2, k: 1 - 0.3 * bump(t, at, at + d), a: 1 - 0.8 * bump(t, at, at + d) });
+
+  function render(tRaw) {
+    const t = Math.min(tRaw, HOLD_FROM);
+
+    // ---- readouts ----
+    const heroSwap = E.io(seg(t, CUE.proj, CUE.proj + 0.25));           // cos hands magenta to proj
+    EP.row(P, "dot");
+    EP.row(P, "cos", { col: mix(COL.hero, COL.text, heroSwap) });
+    const s1 = swap(t, CUE.divides), s2 = swap(t, CUE.lengthEnd);
+    const projText = s1.after && !s2.after ? EP.DERIV.proj : EP.VAL.proj;
+    const projA = t < CUE.lengthEnd ? s1.a : s2.a, projK = t < CUE.lengthEnd ? s1.k : s2.k;
+    EP.row(P, "proj", { col: mix(COL.text, COL.hero, heroSwap), text: projText, scale: projK });
+    P.rows.proj.val.style.opacity = projA.toFixed(3);
+    P.hl.rect(EP.rowRect(0), 0); P.hl2.rect(EP.rowRect(1), 0);
+
+    // ---- cards: the code card leaves on "Now" ----
+    const cardOut = E.io(seg(t, 0, 0.5));
+    P.code.at(EP.cardLeft(P.code.el), EP.CARD_TOP + 30 * cardOut, { alpha: 1 - cardOut });
+    P.ucard.at(EP.cardLeft(P.ucard.el), EP.CARD_TOP, { alpha: 0 });
+
+    // ---- the plane ----
+    const grow = E.io(seg(t, 0.05, 1.25));                              // unit -> full length, 1.2 s
+    const u = EP.lerp2(EP.UHAT, EP.U, grow), v = EP.lerp2(EP.VHAT, EP.V, grow);
+    const drop = E.io(seg(t, CUE.picture, CUE.picture + 0.7));          // "Picture casting"
+    const sh = E.out(seg(t, CUE.shadow, CUE.shadow + 0.7));             // "shadow"
+    EP.bg(g);
+    const p = EP.plane(g, { u, v, drop, shadow: 0 });
+    const uP = bump(t, CUE.u, CUE.u + 0.5);                             // "u": u brightens once
+    if (uP > 0.001) VEC.arrow(g, [0, 0], u, { col: mix(EP.UCOL, COL.text, 0.6), alpha: uP, width: 40 });
+    const shP = bump(t, CUE.along, CUE.along + 0.5);                    // "along": the shadow pulses
+    EP.shadow(g, p, { u: sh, width: 18 + 12 * shP });
+    VEC.puck(g, 0, 0);
+
+    // ---- labels ----
+    EP.labels(P, { u, v });
+    if (uP > 0.001) VEC.place(P.lab.u, u[0], u[1], { dx: 58, dy: -20, scale: 1 + 0.2 * uP });
+    const lvIn = E.back(seg(t, CUE.only, CUE.only + 0.35));             // "only": |v| = 2 pops on
+    const lvOut = E.io(seg(t, CUE.lengthEnd + 0.05, CUE.lengthEnd + 0.45));
+    const lvPulse = bump(t, CUE.target, CUE.target + 0.45);             // "target's length"
+    VEC.place(P.lab.lv, v[0] / 2, v[1] / 2, {
+      dx: 0, dy: 70, alpha: Math.min(seg(t, CUE.only, CUE.only + 0.15), 1 - lvOut),
+      scale: (0.6 + 0.4 * lvIn) * (1 + 0.2 * lvPulse),
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep09 beat 6 (06_coords): SPLIT -> COORDS. "Even coordinates are projections, one onto each
+         basis direction." The leftover arrow, v and the arc go; the shadow on v stays as u's shadow on
+         e1; a second shadow grows up e2; the card u = [ 1.5, 2 ] lights each slot on its word. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep09.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.75" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.75;                 // master 40.05 -> 43.80
+  // cues, beat-local (master - 40.05), from words.json, checked on the RMS envelope of vo_final.wav
+  const CUE = {
+    even: 0.21,     /* "Even"         40.26 */
+    coords: 0.41,   /* "coordinates"  40.46 */
+    proj: 1.09,     /* "projections"  41.14 */
+    one: 1.96,      /* "one"          42.01 (onset on the envelope; words.json 42.10) */
+    each: 2.41,     /* "each"         42.46 */
+    basis: 2.74,    /* "basis"        42.79 */
+    dir: 3.01,      /* "direction"    43.06 */
+  };
+  const HOLD_FROM = 3.45;                    // every motion done; the rest is COORDS, still
+  const { COL, css, mix, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const U = EP.U, E1 = [U[0], 0], E2 = [0, U[1]];
+  const bump = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));   // 0 -> 1 -> 0
+
+  // Local plane: SPLIT's drawing at k = 0 and COORDS' at the end, in one fixed draw order.
+  // o: vA (v + arc), resid, yGuide (0..1), yShadow (0..1), xW (x shadow width), puckTop (alpha of the
+  // origin dot drawn over the shadows, as SPLIT draws it; COORDS draws it under).
+  function plane(o) {
+    VEC.view(EP.PLANE);
+    EP.bg(g);
+    VEC.floor(g, { alpha: 0.42 });
+    VEC.axes(g, {});
+    EP.arc(g, U, EP.V, { alpha: o.vA });
+    VEC.arrow(g, [0, 0], EP.V, { col: EP.VCOL, alpha: o.vA, width: 40 });
+    VEC.arrow(g, [0, 0], U, { col: EP.UCOL, width: 40 });
+    VEC.puck(g, 0, 0);
+    EP.drop(g, U, E1, {});                                     // SPLIT's drop line is COORDS' e1 guide
+    if (o.resid > 0.001) VEC.arrow(g, E1, U, { col: COL.text, alpha: o.resid, width: 40 });
+    VEC.line(g, U, E2, { col: COL.dim, alpha: 0.9, width: 5, dash: [14, 12], u: o.yGuide });
+    EP.shadow(g, E1, { width: o.xW });
+    EP.shadow(g, E2, { u: o.yShadow });
+    if (o.puckTop > 0.001) VEC.puck(g, 0, 0, { alpha: o.puckTop });
+  }
+
+  function render(t) {
+    EP.state(P, null, "COORDS");             // DOM rest: boxes and code card off; overridden below
+    // "Even coordinates": leftover, v, arc go; readouts dim to 0.35, proj value back to off-white
+    const kOut = E.out(seg(t, 0.0, 0.7));
+    const kDim = E.io(seg(t, CUE.even, CUE.even + 0.6));
+    EP.ROWS.forEach((k) => EP.row(P, k, {
+      alpha: 1 - 0.65 * kDim,
+      col: k === "proj" ? mix(COL.hero, COL.text, kDim) : COL.text,
+    }));
+    // "coordinates": the card u = [ 1.5, 2 ] rises into the band top
+    const kCard = E.out(seg(t, CUE.coords, CUE.coords + 0.6));
+    P.ucard.at(EP.cardLeft(P.ucard.el), EP.CARD_TOP + 70 * (1 - kCard), { alpha: kCard });
+    // "one": 1.5 lights (and the e1 shadow swells once); "each": 2 lights as the e2 shadow grows
+    const l0 = E.out(seg(t, CUE.one - 0.05, CUE.one + 0.15)) * (1 - E.io(seg(t, CUE.each, CUE.each + 0.4)));
+    const l1 = E.out(seg(t, CUE.each - 0.05, CUE.each + 0.15)) * (1 - E.io(seg(t, CUE.dir + 0.05, HOLD_FROM)));
+    P.ucard.light(0, l0); P.ucard.light(1, l1);
+    // labels: u stays, v goes with its arrow
+    EP.labels(P, {});
+    P.lab.v.style.opacity = (1 - kOut).toFixed(3);
+    plane({
+      vA: 1 - kOut,
+      resid: 1 - kOut,
+      yGuide: E.io(seg(t, CUE.proj, CUE.proj + 0.6)),        // "are projections": the e2 guide draws
+      yShadow: E.io(seg(t, CUE.each, CUE.each + 0.75)),     // "each basis direction": up e2 to 2
+      xW: 18 + 10 * bump(t, CUE.one - 0.05, CUE.one + 0.4),
+      puckTop: 1 - E.io(seg(t, CUE.each, CUE.each + 0.4)),
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

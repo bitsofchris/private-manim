@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep09 beat 7, the close: COORDS -> CANON. The card and e2 shadow go, v and the arc return, the
+         e1 guide stays as the drop line; the hero passes dot -> cos -> proj (with the shadow). Ends on
+         CANON exactly. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep09.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.529" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.529;
+  const START = 43.80;
+  // Cues, beat-local = master − 43.80, from words.json; onsets checked on a 20 ms RMS envelope of
+  // vo_final.wav ("The" 44.00, "cosine" 46.40, "Projection" 48.66).
+  const CUE = {
+    back: 0.00,     // frame 0 is COORDS; the return to the plane starts at once (done 0.75)
+    dot: 0.30,      // "dot (product)": the dot value magenta, the shadow off-white
+    length: 1.84,   // "(with the) length": |u|, |v| flash on (and off by "cosine")
+    cos: 2.62,      // "cosine": cos value magenta, dot back
+    without: 3.68,  // "without (them)": u and v dip to unit length and back
+    proj: 4.90,     // "Projection": proj value and the shadow magenta together
+    lies: 6.38,     // "(how much of you) lies (along that line)": the drop line pulses
+    still: 7.60,    // "line": nothing moves after this: CANON exactly (0.93 s still)
+  };
+  const BACK = 0.75, DIP = 0.6;
+  const { seg, lerp, mix, COL } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const U = EP.U, V = EP.V;
+  function render(t) {
+    EP.state(P, g, "CANON");
+    if (t >= CUE.still) return;               // the last frames are CANON, untouched
+    const kb = E.io(seg(t, CUE.back, CUE.back + BACK));            // COORDS -> plane
+    // the hero walk: dot (from "dot"), cos (from "cosine"), proj + shadow (from "Projection")
+    const hDot = E.io(seg(t, CUE.dot - 0.2, CUE.dot + 0.15)) * (1 - E.io(seg(t, CUE.cos - 0.1, CUE.cos + 0.2)));
+    const hCos = E.io(seg(t, CUE.cos - 0.1, CUE.cos + 0.2)) * (1 - E.io(seg(t, CUE.proj - 0.1, CUE.proj + 0.2)));
+    const hProj = E.io(seg(t, CUE.proj - 0.1, CUE.proj + 0.2));
+    const shProj = hProj, shOff = E.io(seg(t, 0, CUE.dot + 0.15));   // the shadow: magenta -> off-white -> magenta
+    const shCol = mix(COL.hero, COL.text, shOff * (1 - shProj));
+    const ra = lerp(0.35, 1, kb);
+    EP.row(P, "dot", { alpha: ra, col: mix(COL.text, COL.hero, hDot) });
+    EP.row(P, "cos", { alpha: ra, col: mix(COL.text, COL.hero, hCos) });
+    EP.row(P, "proj", { alpha: ra, col: mix(COL.text, COL.hero, hProj) });
+    // "without them": both arrows to unit length and back
+    const dip = E.io(seg(t, CUE.without - 0.1, CUE.without - 0.1 + DIP)) - E.io(seg(t, CUE.without + 0.55, CUE.without + 0.55 + DIP));
+    const u = EP.lerp2(U, EP.UHAT, dip), v = EP.lerp2(V, EP.VHAT, dip), p = EP.shadowOf(u, v);
+    EP.bg(g);
+    EP.plane(g, { u, v, vA: kb, arc: kb, drop: 0, shadow: 0 });
+    // the e1 guide is the drop line (same dash, same ink); the e2 guide and the e2 shadow fade
+    EP.drop(g, u, p);
+    VEC.line(g, U, [0, U[1]], { col: COL.dim, alpha: 0.9 * (1 - kb), width: 5, dash: [14, 12] });
+    EP.shadow(g, [0, U[1]], { alpha: 1 - kb });
+    // "lies along that line": the drop line pulses once (off-white, thicker)
+    const pl = Math.sin(Math.PI * seg(t, CUE.lies, CUE.lies + 0.9));
+    if (pl > 0) VEC.line(g, u, p, { col: COL.text, alpha: pl, width: 5 + 5 * pl, dash: [14, 12] });
+    EP.shadow(g, p, { col: shCol });
+    VEC.puck(g, 0, 0, { alpha: kb });         // COORDS has the shadows over the origin dot, CANON the dot on top
+    // labels: names follow the tips (v's fades back in); |u|, |v| flash on "length"
+    const fl = E.out(seg(t, CUE.length - 0.1, CUE.length + 0.15)) * (1 - E.io(seg(t, CUE.length + 0.4, CUE.cos - 0.1)));
+    EP.labels(P, { u, v, lens: fl });
+    P.lab.v.style.opacity = kb.toFixed(3);
+    P.ucard.at(EP.cardLeft(P.ucard.el), EP.CARD_TOP, { alpha: 1 - E.io(seg(t, 0, 0.5)) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
