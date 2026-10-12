@@ -1,0 +1,43 @@
+00:00.001-00:04.960
+Without activation functions, a 100-layer neural network is just one matrix.
+
+00:04.960-00:06.240
+Here's why.
+
+00:06.240-00:11.200
+Matrices are functions, and multiplying matrices combines those functions.
+
+00:10.800-00:18.000
+So if you stack two layers, x at w1, then at w2, the order matters, but it's associative.
+
+00:18.000-00:21.600
+So that's the same as x at w1 times w2.
+
+00:21.760-00:24.720
+And W1 times W2 is just one matrix.
+
+00:24.720-00:29.680
+So two linear layers, or 200, collapse into a single linear transformation.
+
+00:29.680-00:31.440
+The depth here doesn't buy you anything.
+
+00:32.320-00:36.320
+Now a linear map keeps the origin fixed and the grid line straight.
+
+00:36.320-00:39.680
+It can stretch, rotate, and squish, but it can't bend.
+
+00:39.680-00:44.960
+Put a relue or a jelly between the layers and the collapse stops.
+
+00:45.579-00:50.219
+Now each layer can bend the path, and stacking actually adds something.
+
+00:50.219-00:55.579
+That's why every layer in a model is a matrix multiply followed by some nonlinearity.
+
+00:55.579-00:59.260
+Without activations, a deep network is just one matrix.
+
+
