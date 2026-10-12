@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep05 beat 6, 06_landing (master 23.58, 7.30 s). Opens FLIPPED, ends CANON.
+    <!-- ep05 beat 6, 06_landing (master 24.58, 7.30 s). Opens FLIPPED, ends CANON.
          "The flipped weight is three by two, exactly the W from the last video,
           where each row is where an input direction lands." -->
     <script src="vendor/gsap.min.js"></script>
@@ -30,9 +30,9 @@
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 7.30;               // master 23.58 → 30.88 in vo_final.wav
+  const BEAT_SECONDS = 7.30;               // master 24.58 → 31.88 in vo_final.wav
   const { COL, seg, mix, css } = ISO;
-  // beat-local = master − 23.58; words.json checked on a 30 ms RMS envelope
+  // beat-local = master − 24.58 (cues measured before the +1.0 s shift; local times unchanged); words.json checked on a 30 ms RMS envelope
   const CUE = {
     flipped: 0.42,  /* "The flipped weight" (0.18–1.05) */
     three: 1.27,    /* "three by two" (1.14–1.85) */
@@ -42,7 +42,7 @@
     where: 4.42,    /* "where" (4.42–4.60) */
     row: 5.00,      /* "each row" (4.71–5.30) */
     lands: 6.96,    /* "direction lands" (6.24–7.14) */
-    still: 7.00,    /* CANON from here to the end (0.30 s still) */
+    still: 7.05,    /* CANON from here to the end (0.25 s still) */
   };
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
@@ -57,7 +57,7 @@
   const shapeBox = VEC.hbox(root);
   // "= W": ep04's name for this matrix, under weight.T (Inter, --dim). The name row has
   // no room beside "weight.T" inside x ≤ 950, and (3, 2) sits under the name, so it goes
-  // under the matrix, in the lower stage, gone before the plane fades in.
+  // under the matrix, in the lower stage, gone (4.20) before the lift starts (4.25).
   const tagW = ISO.label(root, "= W", { size: 60, color: css(COL.dim), width: 220, align: "center" });
   // the plane with each arrow drawn on its own clock (EP.plane draws all three at once)
   function planeEach(alpha, us) {
@@ -68,13 +68,17 @@
     VEC.puck(g, 0, 0, { alpha });
   }
   // each row of weight.T: its box and its arrow, ≥ 0.6 s each, on "each row … lands"
-  const ROW = [CUE.row - 0.10, CUE.row + 0.60, CUE.row + 1.30];        // 4.90, 5.60, 6.30: the last lands on "lands"
+  const ROW = [CUE.row + 0.05, CUE.row + 0.70, CUE.row + 1.35];        // 5.05, 5.70, 6.35: the last lands on "lands"
   const DRAW = 0.60;
-  const PLANE_IN = [CUE.where, CUE.where + 0.50];
+  // the lift (EP.lift: names and shapes go, matrices rise to MAT_UP), one 0.7 s move, starting
+  // just before "where" so the rows are not late; the plane fades in as it finishes
+  const LIFT = [CUE.where - 0.17, CUE.where + 0.53];                   // 4.25 → 4.95
+  const PLANE_IN = [CUE.where + 0.33, CUE.where + 0.78];               // 4.75 → 5.20
 
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
     EP.state(P, g, "FLIPPED");
+    EP.lift(P, E.io(seg(t, LIFT[0], LIFT[1])));
     const cardT = P.cardB.spans[0][3];
 
     // "The flipped weight": weight.T's brackets brighten once (moving from frame 0)

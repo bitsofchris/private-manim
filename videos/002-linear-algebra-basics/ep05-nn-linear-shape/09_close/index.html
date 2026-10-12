@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep05 beat 9, 09_close (master 45.76 after the 1.0 s insert, 6.581 s). Opens CANON, ends MODEL (storyboard Revision 1; the
+    <!-- ep05 beat 9, 09_close (master 45.76 after the 1.0 s insert, 6.581 s). Opens CANON (lifted: no names or shapes, matrices at EP.MAT_UP), ends MODEL (names stay off) (storyboard Revision 1; the
          Short's final frame, still from 5.30 s). Hero: the .T.
          VO: "It's the same idea, just transposed. nn.Linear stores neurons as rows and
          transposes on the way through."
@@ -49,7 +49,7 @@
   // "and transposes on the way through": plane out, card A→model, matrices down one block.
   // Every motion ends by 5.30; still on MODEL from there (1.28 s; the Short's last frame).
   const T = { planeOut: [4.25, 4.65], cardOut: [4.30, 4.60], down: [4.35, 5.05], modelIn: [4.55, 5.20], still: 5.30 };
-  const DROP = 228;            // the matrices block moves down so names clear the four-line card (236 + ~328 + gap)
+  const DROP = 220;            // the lifted matrices (top 392, ".T" at 386) move down to clear the four-line card (236-564): top 612
   const { COL, seg, mix, css } = ISO;
   const { SLOT, fmtv } = VEC;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
@@ -85,8 +85,8 @@
     // "just transposed": ghosts fly column c of weight → row c of weight.T, then fade
     ghosts.forEach((row, r) => row.forEach((gc, c) => {
       const a = CUE.transposed - 0.05 + 0.1 * c, u = seg(t, a, a + 0.75), k = E.io(u);
-      const x0 = EP.WL.LEFT + c * EP.CW, y0 = EP.MAT_TOP + r * EP.RH;
-      const x1 = EP.TL + r * EP.CW, y1 = EP.MAT_TOP + c * EP.RH;
+      const x0 = EP.WL.LEFT + c * EP.CW, y0 = EP.LAY.top + r * EP.RH;
+      const x1 = EP.TL + r * EP.CW, y1 = EP.LAY.top + c * EP.RH;
       const lift = -46 * Math.sin(Math.PI * k);                  // a small arc over the ".T →"
       const al = u <= 0 || u >= 1 ? 0 : 0.8 * Math.min(1, u / 0.12) * (1 - E.inn(seg(u, 0.5, 0.95)));
       gc.at(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k + lift, { alpha: al });
@@ -101,9 +101,10 @@
     const swell = pulse(t, CUE.transposed - 0.1, 0.9);           // "just transposed"
     const sT = 1 + 0.35 * swell + 0.28 * kT;
     const sArr = 1 + 0.3 * swell + 0.2 * kT;
-    EP.put(P.tArrow.dot, EP.ARROW.x - 60, EP.ARROW.y - 70);
+    const dyA = EP.LAY.top - EP.MAT_TOP;                         // CANON is lifted (EP.MAT_UP)
+    EP.put(P.tArrow.dot, EP.ARROW.x - 60, EP.ARROW.y - 70 + dyA);
     P.tArrow.dot.style.transform += ` scale(${sT.toFixed(4)})`;
-    EP.put(P.tArrow.arr, EP.ARROW.x - 60, EP.ARROW.y);
+    EP.put(P.tArrow.arr, EP.ARROW.x - 60, EP.ARROW.y + dyA);
     P.tArrow.arr.style.transform += ` scale(${sArr.toFixed(4)})`;
     const lit = E.io(seg(t, CUE.transposes - 0.05, CUE.transposes + 0.45));   // the → stays lit with the .T
     P.tArrow.arr.style.color = css(mix(COL.dim, COL.text, Math.max(0.6 * swell, lit)));

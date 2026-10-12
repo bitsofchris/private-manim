@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep05 beat 8, 08_conventions (master 37.04, 7.72 s). Opens CANON, ends CANON.
+    <!-- ep05 beat 8, 08_conventions (master 37.04, 7.72 s). Opens CANON (lifted, 2026-10-12), ends CANON.
          VO: "In math, vectors are columns, and W times v uses the columns. In PyTorch,
          vectors are rows, and x @ W uses the rows."
          The plane gives way to two panels: math (v as a column, W v; weight's columns box
@@ -57,8 +57,8 @@
   ISO.guides(root);
   const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));   // 0 → 1 → 0
 
-  // ---- local parts: the two panels of the lower stage (y 770-1100, x 65-950) ----
-  const PANEL = { top: 778, h: 314, L: [62, 468], R: [488, 953] };   // panel backgrounds (may bleed 3 px)
+  // ---- local parts: the two panels of the lower stage (y 640-1100 since the lift, x 65-950) ----
+  const PANEL = { top: 700, h: 390, L: [62, 468], R: [488, 953] };   // panel backgrounds (may bleed 3 px); under weight.T's W tag (616-682)
   const mkPanel = () => { const d = document.createElement("div"); d.className = "pnl"; root.appendChild(d); return d; };
   const pnlL = mkPanel(), pnlR = mkPanel();
   [[pnlL, PANEL.L], [pnlR, PANEL.R]].forEach(([d, [a, b]]) => { d.style.width = `${b - a}px`; d.style.height = `${PANEL.h}px`; });
@@ -66,7 +66,7 @@
   const ttlL = lab("math", COL.dim), ttlR = lab("PyTorch", COL.dim);
   // math: v = [1; 2; −1] as one column in one tall bracket pair, then "W v" (Inter)
   const vEq = lab("v =", COL.text), Wv = lab("W v", COL.text);
-  const CV = { cw: 92, rh: 66, top: 868 };
+  const CV = { cw: 92, rh: 66, top: 790 };
   const vCells = EP.X.map((v, i) => VEC.cell(root, fmtv(v), { width: CV.cw, height: CV.rh, size: 60, col: SLOT[i], alpha: 0 }));
   const vB = VEC.brackets(root, 0, CV.top, CV.cw, 3 * CV.rh);
   // PyTorch: x = [ 1, 2, −1 ] as a row, then "x @ W" (monospace, set from script)
@@ -78,15 +78,10 @@
   xs(" ]", COL.dim);
   xRow.setAttribute("data-layout-allow-overlap", ""); root.appendChild(xRow);
   const xW = VEC.code(lab("x @ W", COL.text));
-  // the W tags in the top half: "= W" beside weight (math), "W =" beside weight.T (PyTorch)
-  const tagW = document.createElement("div"), tagT = document.createElement("div");
-  [[tagW, [["= ", COL.dim], ["W", COL.text]]], [tagT, [["W", COL.text], [" =", COL.dim]]]].forEach(([d, parts]) => {
-    d.style.cssText = "position:absolute;left:0;top:0;font-size:60px;line-height:66px;white-space:pre;opacity:0;";
-    parts.forEach(([s, c]) => { const sp = document.createElement("span"); sp.textContent = s; sp.style.color = css(c); d.appendChild(sp); });
-    root.appendChild(d);
-  });
-  // where a label's glyphs sit (the name labels are 400 px boxes with centred text)
-  const textBox = (el) => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); };
+  // the W tags (Inter, --dim), one under each matrix (CANON is lifted: no names or shapes):
+  // under weight on "W times v" (math's W), under weight.T on "x @ W" (PyTorch's W)
+  const tagW = lab("W", COL.dim), tagT = lab("W", COL.dim);
+  const midW = EP.WL.LEFT + 1.5 * EP.CW, midT = EP.TL + EP.CW;      // the matrices' centres
   const place = (el, left, top, a, s = 1) => {
     el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px) scale(${s.toFixed(4)})`;
     el.style.opacity = Math.max(0, Math.min(1, a)).toFixed(3);
@@ -105,8 +100,8 @@
     place(pnlL, PANEL.L[0], PANEL.top, aL);
     place(pnlR, PANEL.R[0], PANEL.top, aR);
     const cL = (PANEL.L[0] + PANEL.L[1]) / 2, cR = (PANEL.R[0] + PANEL.R[1]) / 2;
-    place(ttlL, cL - ttlL.offsetWidth / 2, 790, aL);
-    place(ttlR, cR - ttlR.offsetWidth / 2, 790, aR);
+    place(ttlL, cL - ttlL.offsetWidth / 2, 712, aL);
+    place(ttlR, cR - ttlR.offsetWidth / 2, 712, aR);
 
     // math: v = column, then W v. Content row: [v =][ [col] ][gap][W v], centred in the left panel
     const gap = 14, br = 24, wide = vEq.offsetWidth + gap + br + CV.cw + br + 30 + Wv.offsetWidth;
@@ -122,9 +117,8 @@
     const kWv = E.out(seg(t, CUE.W - 0.05, CUE.W + 0.3));
     place(Wv, colL + CV.cw + br + 30, midY - 33, aL * kWv);
 
-    // "= W" beside weight on "W times v", gone on "In PyTorch"
-    const nW = textBox(P.names.w);
-    place(tagW, nW.right + 16, EP.NAME_TOP, kWv * (1 - E.io(seg(t, CUE.py, CUE.py + 0.35))));
+    // "W" under weight on "W times v", gone on "In PyTorch"
+    place(tagW, midW - tagW.offsetWidth / 2, EP.LAY.top + 2 * EP.RH + 8, kWv * (1 - E.io(seg(t, CUE.py, CUE.py + 0.35))));
 
     // "uses the columns": weight's three columns box in turn (in their slot colours), then go
     const boxes = [P.hl, P.hl2, hl3];
@@ -136,7 +130,7 @@
 
     // PyTorch: x = [ 1, 2, −1 ] as a row, then x @ W
     const kRow = E.out(seg(t, CUE.vecRows - 0.05, CUE.vecRows + 0.35));
-    const rowTop = 872;
+    const rowTop = 806;
     place(xRow, cR - xRow.offsetWidth / 2, rowTop + 16 * (1 - kRow), aR * kRow);
     xSlots.forEach((s, i) => {
       const k = E.out(seg(t, CUE.vecRows + 0.15 * i, CUE.vecRows + 0.15 * i + 0.4));
@@ -145,11 +139,10 @@
       s.style.transform = `scale(${(1 + 0.22 * pu).toFixed(4)})`;
     });
     const kXW = E.out(seg(t, CUE.xw - 0.05, CUE.xw + 0.3));
-    place(xW, cR - xW.offsetWidth / 2, 980, aR * kXW);
+    place(xW, cR - xW.offsetWidth / 2, 930, aR * kXW);
 
-    // "W =" beside weight.T on "x @ W", gone with the panels
-    const nT = textBox(P.names.t);
-    place(tagT, nT.left - 16 - tagT.offsetWidth, EP.NAME_TOP, kXW * (1 - E.io(seg(t, T.back, T.still))));
+    // "W" under weight.T on "x @ W", gone with the panels
+    place(tagT, midT - tagT.offsetWidth / 2, EP.LAY.top + 3 * EP.RH + 8, kXW * (1 - E.io(seg(t, T.back, T.still))));
 
     // "uses the rows": weight.T's three rows box in turn, held through "rows", then go
     if (t >= 4) {

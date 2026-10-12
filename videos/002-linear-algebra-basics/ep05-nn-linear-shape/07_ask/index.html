@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep05 beat 7, 07_ask (master 30.88, 6.16 s). Opens and ends CANON.
+    <!-- ep05 beat 7, 07_ask (master 31.88, 6.16 s). Opens and ends CANON.
          "So don't ask which is in and which is out, ask where are the landing
           vectors stored, in the rows or the columns?" -->
     <script src="vendor/gsap.min.js"></script>
@@ -30,9 +30,9 @@
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.16;               // master 30.88 → 37.04 in vo_final.wav
+  const BEAT_SECONDS = 6.16;               // master 31.88 → 38.04 in vo_final.wav
   const { COL, seg, mix, css } = ISO;
-  // beat-local = master − 30.88; words.json checked on a 30 ms RMS envelope
+  // beat-local = master − 31.88 (cues measured before the +1.0 s shift; local times unchanged); words.json checked on a 30 ms RMS envelope
   const CUE = {
     so: 0.20,       /* "So don't ask" (0.17–0.60) */
     in: 0.91,       /* "which is in" (0.68–1.20) */
@@ -54,10 +54,23 @@
   // six boxes: row i of weight.T and column i of weight, both in SLOT[i] (the kit has two hboxes)
   const rowBox = [0, 1, 2].map(() => VEC.hbox(root));
   const colBox = [0, 1, 2].map(() => VEC.hbox(root));
-  // the shape label's pulse: --dim → white and a small swell (not magenta: the .T is the hero at rest)
-  function shapePulse(el, k) {
-    el.style.color = css(mix(COL.dim, COL.text, k));
-    el.style.transform += ` scale(${(1 + 0.14 * k).toFixed(4)})`;
+  // a matrix's pulse: its brackets --dim → white and the whole matrix (cells and brackets)
+  // swells a little about its centre (not magenta: the .T is the hero at rest). CANON has
+  // no names or shapes since the lift, so the matrices themselves pulse.
+  function matPulse(cells, brk, left, cols, rows, k) {
+    if (k <= 0.0001) return;
+    const sc = 1 + 0.10 * k, top = EP.LAY.top, dx = left - (cells === P.w ? EP.WL.STORED : left), dy = top - EP.MAT_TOP;
+    const cx = left + cols * EP.CW / 2, cy = top + rows * EP.RH / 2;
+    cells.forEach((row, r) => row.forEach((c, j) => {
+      const ex = left + j * EP.CW + c.wd / 2, ey = top + r * EP.RH + c.ht / 2;
+      c.at(cx + (ex - cx) * sc - c.wd / 2, cy + (ey - cy) * sc - c.ht / 2, { scale: sc });
+    }));
+    brk.color(mix(COL.dim, COL.text, k));
+    brk.els.forEach((el) => {
+      const w0 = parseFloat(el.style.width), h0 = parseFloat(el.style.height);
+      const ex = parseFloat(el.style.left) + w0 / 2 + dx, ey = parseFloat(el.style.top) + h0 / 2 + dy;
+      el.style.transform = `translate(${(dx + (ex - cx) * (sc - 1)).toFixed(1)}px, ${(dy + (ey - cy) * (sc - 1)).toFixed(1)}px) scale(${sc.toFixed(4)})`;
+    });
   }
   // the plane with the arrows swollen by k (EP.plane has no pulse)
   function planePulse(k) {
@@ -78,9 +91,9 @@
     if (t >= CUE.still) t = CUE.still;
     EP.state(P, g, "CANON");
 
-    // "which is in and which is out": (2, 3), then (3, 2) (moving from frame 0)
-    shapePulse(P.names.wShape, pulse(t, 0, 1.50));
-    shapePulse(P.names.tShape, pulse(t, CUE.out - 0.40, 0.80));
+    // "which is in and which is out": weight, then weight.T (moving from frame 0)
+    matPulse(P.w, P.wB, EP.WL.LEFT, 3, 2, pulse(t, 0, 1.50));
+    matPulse(P.wt, P.tB, EP.TL, 2, 3, pulse(t, CUE.out - 0.40, 0.80));
 
     // "the landing vectors": the three arrows swell together
     const kA = pulse(t, CUE.landing - 0.20, 0.90);
