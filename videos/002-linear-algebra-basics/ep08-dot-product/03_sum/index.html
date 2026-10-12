@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep08 beat 3, 03_sum (master 12.58, 3.33 s). Opens NUMS, ends SUM: the rule draws; on "four, minus two, zero" the magenta box walks the columns and each product drops into the products row while the comment fills term by term; "sum =" on "sum", the magenta 2 on "two". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep08.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.33" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.33;
+  // Cues, beat-local seconds (master 12.58 + t). Word times from words.json, onsets checked on
+  // a 20 ms RMS envelope of vo_final.wav; each cue sits ~0.03 s before its onset.
+  const CUE = {
+    rule: 0.00,                 // (beat 2's end) the rule draws, the products' brackets and "# " fade in
+    p: [0.47, 0.68, 1.45],      // "four" 13.08, "minus two" 13.28 (two 13.64), "zero" 14.06:
+                                //   the box moves to the column, the product drops out of the box into its slot, the comment term lands
+    boxOff: 1.85,               // after "zero": the box fades
+    sum: 2.39,                  // "sum" (15.00): the products pulse, "sum =" fades in
+    two: 2.89,                  // "two" (15.50): the 2 pops in magenta, comment " = 2"
+    still: 3.22,                // nothing moves after this (SUM)
+  };
+  const FLY = 0.36;             // a product's flight from between its two factors into the products row
+  const { COL, css, seg } = ISO;
+  const { NUM } = EP;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  // products fly past rows a and b and swell on "sum"; the box sits over a and b's digits
+  [...P.cells.p, ...P.commas.p, P.br.p[0], P.br.p[1], P.eq, P.sum, ...P.cells.a, ...P.cells.b, ...P.commas.a, ...P.commas.b]
+    .forEach((el) => el.setAttribute("data-layout-allow-overlap", ""));
+  P.cells.p.forEach((el) => { el.style.transformOrigin = "80% 55%"; });
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // the highlight box between columns: x moves with each cue, size fixed (EP.colRect)
+  function box(t) {
+    const c = E.io(seg(t, CUE.p[1], CUE.p[1] + 0.2)) + E.io(seg(t, CUE.p[2], CUE.p[2] + 0.2));
+    const r0 = EP.colRect(Math.floor(c)), r1 = EP.colRect(Math.min(2, Math.floor(c) + 1)), f = c - Math.floor(c);
+    const a = E.out(seg(t, CUE.p[0] - 0.05, CUE.p[0] + 0.12)) * (1 - E.io(seg(t, CUE.boxOff, CUE.boxOff + 0.3)));
+    P.hl.rect([r0[0] + (r1[0] - r0[0]) * f, r0[1], r0[2], r0[3]], a);
+  }
+  // product i: rises out of the box under b[i] and drops into its slot; o.scale for the "sum" pulse
+  function product(i, t, sc) {
+    const u = seg(t, CUE.p[i], CUE.p[i] + FLY), k = E.io(u);
+    const x = NUM.colX[i] - NUM.cellW, y0 = NUM.rowY.b + 60, y = y0 + (NUM.rowY.p - y0) * k;
+    EP.put(P.cells.p[i], x, y, u > 0 ? E.out(Math.min(1, u * 2.5)) : 0, (0.7 + 0.3 * k) * sc);
+    if (i < 2) P.commas.p[i].style.opacity = E.out(seg(u, 0.7, 1)).toFixed(3);
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "NUMS");                       // bg, rows a, b, card line 1
+
+    EP.rule(g, E.out(seg(t, CUE.rule, CUE.rule + 0.3)));
+    EP.placeRow(P, "p", { cell: [0, 0, 0], br: E.out(seg(t, CUE.rule + 0.05, CUE.rule + 0.35)), commaA: 0 });
+    box(t);
+    const sc = 1 + 0.15 * pulse(t, CUE.sum, 0.4);
+    for (let i = 0; i < 3; i++) product(i, t, sc);
+
+    // "sum =" on "sum"; the 2 pops in magenta on "two"
+    const two = seg(t, CUE.two, CUE.two + 0.3);
+    EP.placeSum(P, { eqA: E.out(seg(t, CUE.sum, CUE.sum + 0.3)), alpha: E.out(Math.min(1, two * 3)), scale: 1.3 - 0.3 * E.out(two) });
+
+    // the comment fills term by term: "# " with the rule, then 4, − 2, + 0 as each product lands, = 2 on "two"
+    EP.placeCode(P, 1, 0);
+    const at = [CUE.rule, CUE.p[0] + 0.25, CUE.p[1] + 0.3, CUE.p[2] + 0.25, CUE.two + 0.03];
+    P.code.spans[1].forEach((s, j) => { s.style.opacity = E.out(seg(t, at[j], at[j] + 0.15)).toFixed(3); });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

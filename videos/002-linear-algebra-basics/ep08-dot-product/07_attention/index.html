@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep08 beat 7 (07_attention), master 34.21, 2.79 s. The last beat of the Short.
+         VO: "It's also the core of attention."
+         Opens on beat 6's end (WORDS + the muted king–queen arc), ends on ATTN, still from 1.75 s.
+         Hero: the 5 (as query · key = 5). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep08.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.79" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.79;
+  // beat-local cues (master − 34.21), from words.json checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    core: 0.71,       /* "core" 34.92 */
+    attention: 1.09,  /* "attention" 35.30 (words.json 35.28) */
+  };
+  const T = {
+    out: [0, 0.5],                                   // banana, its readout and the arc fade (frame 0 moving)
+    swap: [CUE.core - 0.1, CUE.core + 0.5],          // king → query, queen → key, lead → "query · key = " (cross-fades)
+    att: [CUE.attention - 0.05, CUE.attention + 0.45],   // "attention score" fades in under it
+    swell: [CUE.attention, CUE.attention + 0.55],    // the 5 swells once
+    still: 1.75,                                     // ATTN exactly from here to the end
+  };
+  const { COL, seg, css } = ISO;
+  const { SLOT } = VEC;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const pulse = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));   // 0 → 1 → 0
+  const KQ_ARC = [26.57, 53.13];
+
+  // local: the incoming labels and lead, the second element of each cross-fade (kit parts carry the outgoing text)
+  const qLab = VEC.label(root, "query", { color: css(SLOT[0]), width: 260 });
+  const kLab = VEC.label(root, "key", { color: css(SLOT[1]), width: 260 });
+  const lead2 = ISO.label(root, "query · key = ", { size: EP.RO.size, color: css(COL.dim), width: 640, align: "right" });
+  [qLab, kLab, lead2].forEach((el) => { el.style.opacity = "0"; });
+  // the cross-fade pairs share a spot on purpose
+  [qLab, kLab, lead2, P.words.king, P.words.queen, P.ro[0].lead].forEach((el) => el.setAttribute("data-layout-allow-overlap", ""));
+  // the label positions EP.words uses
+  const placeAt = (el, w, a, ddx = 0) => { const p = EP.WORDS[w], o = EP.WORD_OFF[w]; VEC.place(el, p[0], p[1], { dx: o.dx + ddx, dy: o.dy, alpha: a }); };
+  // "query" at king's offset ends at x 957, past the safe edge (950): it sits 20 px left (ATTN in the kit does not)
+  const Q_DX = -20;
+
+  function render(t) {
+    [qLab, kLab, lead2].forEach((el) => { el.style.opacity = "0"; });
+    if (t >= T.still) { EP.state(P, g, "ATTN"); placeAt(P.words.king, "king", 1, Q_DX); return; }
+
+    EP.state(P, g, "WORDS");               // resets the DOM parts; draws plane, words, both readouts
+    const out = 1 - E.io(seg(t, ...T.out)), x = E.io(seg(t, ...T.swap));
+    EP.bg(g); EP.plane(g);
+    EP.words(g, P, { alpha: { banana: out } });
+    EP.arc(g, KQ_ARC[0], KQ_ARC[1], { r: 0.9, col: COL.muted, alpha: out });
+
+    // "core": king → query, queen → key (same spot, cross-fade)
+    placeAt(P.words.king, "king", 1 - x); placeAt(qLab, "king", x, Q_DX);
+    placeAt(P.words.queen, "queen", 1 - x); placeAt(kLab, "queen", x);
+
+    // readout row 0: the lead cross-fades, the 5 stays put (and swells on "attention")
+    P.ro[0].set("king · queen = ", EP.KQ, { scale: 1 + 0.18 * pulse(t, ...T.swell) });
+    P.ro[0].lead.style.opacity = (1 - x).toFixed(3);
+    lead2.style.transform = `translate(${(EP.RO.leadR - 640).toFixed(1)}px, ${EP.RO.top[0]}px)`;
+    lead2.style.opacity = x.toFixed(3);
+
+    // row 1: king · banana fades with banana; "attention score" fades in on "attention"
+    const att = E.out(seg(t, ...T.att));
+    if (att > 0.001) P.ro[1].set("attention score", "", { row: 1, leadCol: COL.dim, alpha: att });
+    else P.ro[1].set("king · banana = ", EP.KB, { row: 1, col: COL.text, alpha: out });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

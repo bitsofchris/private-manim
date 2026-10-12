@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep08 beat 4 (04_turn): from SUM, the numbers fade to the plane (b at th 70, 1.4); b turns
+         onto a on "same direction" (4); the number swells on "number" and "positive". Ends ALIGNED.
+         Started from 00_layout, whose notes follow:
+         t < 1  CANON: the plane, a (1, 1) teal and b blue turning about the origin, the angle arc,
+                "dot product = 2" with the number magenta (the hero). Frame 0 of the Short looks like this.
+         t < 2  SUM: the pairwise numbers a = [ 1, 2, 3 ], b = [ 4, −1, 0 ], products 4 + −2 + 0, "= 2",
+                and the code card torch.dot(a, b) / # 4 − 2 + 0 = 2.
+         t >= 2 WORDS: king, queen, banana on the plane; "king · queen = 5", "king · banana = 0".
+         Copy this file to start a beat. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep08.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.17" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.17;
+  // Cues, beat-local = master - 15.91. Checked on a 20 ms RMS envelope of vo_final.wav:
+  // "Watch" onset 16.10, "number" 16.44, "arrow" 17.20, "turns" ends 17.92, "Pointing" 18.31,
+  // "same" 18.83, "direction" 18.96-19.42, "positive" 19.48-19.88.
+  const CUE = {
+    fade: 0.00,     // SUM -> plane cross-fade starts on frame 0 (0.5 s)
+    number: 0.53,   // "number": the readout swells once
+    turn0: 1.29,    // "arrow turns": b starts toward a
+    land: 3.05,     // "same direction" ("direction" 18.96): b lies under a, readout 4
+    pos: 3.57,      // "positive": the number swells (done 3.97)
+    still: 3.97,    // nothing moves after this: state ALIGNED exactly
+  };
+  const TH0 = 70;                           // b's angle as the plane fades in (readout 1.4)
+  const { seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const swell = (t, t0) => 1 + 0.15 * Math.sin(Math.PI * seg(t, t0, t0 + 0.4));
+  function render(t) {
+    if (t >= CUE.still) { EP.state(P, g, "ALIGNED"); return; }   // the last frames are ALIGNED, untouched
+    const u = E.io(seg(t, CUE.fade, CUE.fade + 0.5));            // 0 = SUM, 1 = plane
+    const th = TH0 * (1 - E.io(seg(t, CUE.turn0, CUE.land)));
+    EP.state(P, g, "SUM");
+    // SUM's DOM parts fade out
+    ["a", "b", "p"].forEach((k) => EP.placeRow(P, k, { alpha: 1 - u }));
+    EP.placeSum(P, { alpha: 1 - u, eqA: 1 - u });
+    EP.placeCode(P, 1 - u, 5);
+    // canvas: the plane clears and redraws; the rule fades over it; the pair fades in
+    EP.plane(g, { alpha: u });
+    EP.rule(g, 1, 1 - u);
+    EP.pair(g, th, { alpha: u });
+    P.ro[0].set("dot product = ", EP.dotAt(th), { alpha: u, scale: swell(t, CUE.number) * swell(t, CUE.pos) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
