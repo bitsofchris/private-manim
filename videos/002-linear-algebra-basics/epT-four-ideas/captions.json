@@ -1,257 +1,312 @@
 [
  {
   "start": 0.59,
-  "end": 1.06,
-  "text": "You only need"
+  "text": "You only need",
+  "end": 1.08
  },
  {
   "start": 1.12,
-  "end": 1.84,
-  "text": "four ideas from"
+  "text": "four ideas from",
+  "end": 1.86
  },
  {
   "start": 1.9,
-  "end": 2.5,
-  "text": "linear algebra to"
+  "text": "linear algebra",
+  "end": 2.38
  },
  {
-  "start": 2.56,
-  "end": 3.18,
-  "text": "understand what AI"
+  "start": 2.42,
+  "text": "to understand",
+  "end": 2.9
  },
  {
-  "start": 3.24,
-  "end": 4.0,
-  "text": "models are doing."
+  "start": 2.94,
+  "text": "what AI models",
+  "end": 3.54
+ },
+ {
+  "start": 3.58,
+  "text": "are doing.",
+  "end": 4.4
  },
  {
   "start": 4.44,
-  "end": 4.88,
-  "text": "A vector is"
+  "text": "A vector is",
+  "end": 4.9
  },
  {
   "start": 4.94,
-  "end": 5.4,
-  "text": "a move."
+  "text": "a move.",
+  "end": 5.54
  },
  {
   "start": 5.58,
-  "end": 6.34,
-  "text": "Its numbers are"
+  "text": "Its numbers are",
+  "end": 6.36
  },
  {
   "start": 6.4,
-  "end": 6.94,
-  "text": "the recipe."
+  "text": "the recipe.",
+  "end": 7.06
  },
  {
   "start": 7.1,
-  "end": 8.18,
-  "text": "Amounts along directions"
+  "text": "Amounts along",
+  "end": 7.68
+ },
+ {
+  "start": 7.72,
+  "text": "directions",
+  "end": 8.2
  },
  {
   "start": 8.24,
-  "end": 8.62,
-  "text": "that we all"
+  "text": "that we all",
+  "end": 8.64
  },
  {
   "start": 8.68,
-  "end": 9.2,
-  "text": "agreed on."
+  "text": "agreed on.",
+  "end": 9.54
  },
  {
   "start": 9.58,
-  "end": 10.3,
-  "text": "A matrix says"
+  "text": "A matrix says",
+  "end": 10.32
  },
  {
   "start": 10.36,
-  "end": 10.91,
-  "text": "where those"
+  "text": "where those",
+  "end": 10.93
  },
  {
   "start": 10.97,
-  "end": 11.8,
-  "text": "directions land."
+  "text": "directions land.",
+  "end": 12.32
  },
  {
   "start": 12.36,
-  "end": 13.4,
-  "text": "Multiplying rebuilds that"
+  "text": "Multiplying",
+  "end": 12.84
+ },
+ {
+  "start": 12.88,
+  "text": "rebuilds that",
+  "end": 13.42
  },
  {
   "start": 13.46,
-  "end": 14.12,
-  "text": "recipe in the"
+  "text": "recipe in the",
+  "end": 14.14
  },
  {
   "start": 14.18,
-  "end": 14.82,
-  "text": "new directions."
+  "text": "new directions.",
+  "end": 15.42
  },
  {
   "start": 15.46,
-  "end": 16.42,
-  "text": "In PyTorch,"
+  "text": "In PyTorch,",
+  "end": 16.43
  },
  {
   "start": 16.47,
-  "end": 16.88,
-  "text": "x at W"
+  "text": "x at W",
+  "end": 16.88
  },
  {
   "start": 16.92,
-  "end": 17.62,
-  "text": "is just that."
+  "text": "is just that.",
+  "end": 18.03
  },
  {
   "start": 18.07,
-  "end": 18.98,
-  "text": "Each number in x"
+  "text": "Each number",
+  "end": 18.6
+ },
+ {
+  "start": 18.62,
+  "text": "in x",
+  "end": 19.02
  },
  {
   "start": 19.06,
-  "end": 19.52,
-  "text": "weights a row"
+  "text": "weights a row",
+  "end": 19.66
  },
  {
-  "start": 19.56,
-  "end": 20.06,
-  "text": "of W"
+  "start": 19.7,
+  "text": "of W",
+  "end": 20.06
  },
  {
   "start": 20.1,
-  "end": 20.8,
-  "text": "and adds them up."
+  "text": "and adds",
+  "end": 20.46
+ },
+ {
+  "start": 20.5,
+  "text": "them up.",
+  "end": 21.22
  },
  {
   "start": 21.26,
-  "end": 22.1,
-  "text": "A dot product"
+  "text": "A dot product",
+  "end": 22.12
  },
  {
   "start": 22.16,
-  "end": 23.1,
-  "text": "measures alignment."
+  "text": "measures",
+  "end": 22.58
+ },
+ {
+  "start": 22.62,
+  "text": "alignment.",
+  "end": 23.66
  },
  {
   "start": 23.7,
-  "end": 24.58,
-  "text": "Attention scores are"
+  "text": "Attention scores",
+  "end": 24.38
  },
  {
-  "start": 24.64,
-  "end": 25.58,
-  "text": "dot products between"
+  "start": 24.42,
+  "text": "are dot products",
+  "end": 25.3
  },
  {
-  "start": 25.64,
-  "end": 26.56,
-  "text": "queries and keys"
+  "start": 25.34,
+  "text": "between queries",
+  "end": 26.0
  },
  {
-  "start": 26.62,
-  "end": 27.34,
-  "text": "of your tokens."
+  "start": 26.04,
+  "text": "and keys of",
+  "end": 26.78
+ },
+ {
+  "start": 26.82,
+  "text": "your tokens.",
+  "end": 27.84
  },
  {
   "start": 27.88,
-  "end": 28.2,
-  "text": "In a neural"
+  "text": "In a neural",
+  "end": 28.22
  },
  {
   "start": 28.26,
-  "end": 29.34,
-  "text": "network, those matrices"
+  "text": "network, those",
+  "end": 29.04
  },
  {
-  "start": 29.4,
-  "end": 30.76,
-  "text": "are learned, layer"
+  "start": 29.08,
+  "text": "matrices are",
+  "end": 29.62
+ },
+ {
+  "start": 29.66,
+  "text": "learned, layer",
+  "end": 30.78
  },
  {
   "start": 30.82,
-  "end": 31.32,
-  "text": "by layer."
+  "text": "by layer.",
+  "end": 31.8
  },
  {
   "start": 31.84,
-  "end": 32.72,
-  "text": "Training finds which"
+  "text": "Training finds",
+  "end": 32.54
  },
  {
-  "start": 32.78,
-  "end": 33.8,
-  "text": "directions to amplify"
+  "start": 32.58,
+  "text": "which directions",
+  "end": 33.1
+ },
+ {
+  "start": 33.14,
+  "text": "to amplify,",
+  "end": 33.82
  },
  {
   "start": 33.86,
-  "end": 34.5,
-  "text": "which to ignore"
+  "text": "which to ignore,",
+  "end": 34.52
  },
  {
   "start": 34.56,
-  "end": 35.11,
-  "text": "and which ones"
+  "text": "and which ones",
+  "end": 35.13
  },
  {
   "start": 35.17,
-  "end": 35.52,
-  "text": "to mix."
+  "text": "to mix.",
+  "end": 36.1
  },
  {
   "start": 36.14,
-  "end": 36.72,
-  "text": "The model doesn't"
+  "text": "The model",
+  "end": 36.46
+ },
+ {
+  "start": 36.5,
+  "text": "doesn't",
+  "end": 36.76
  },
  {
   "start": 36.78,
-  "end": 37.45,
-  "text": "understand in a"
+  "text": "understand in a",
+  "end": 37.47
  },
  {
   "start": 37.51,
-  "end": 37.88,
-  "text": "human way"
+  "text": "human way,",
+  "end": 38.3
  },
  {
   "start": 38.34,
-  "end": 38.95,
-  "text": "it learns moves"
+  "text": "it learns moves",
+  "end": 38.97
  },
  {
   "start": 39.01,
-  "end": 39.32,
-  "text": "that make the"
+  "text": "that make the",
+  "end": 39.34
  },
  {
   "start": 39.38,
-  "end": 40.1,
-  "text": "task easier."
+  "text": "task easier.",
+  "end": 40.5
  },
  {
   "start": 40.54,
-  "end": 42.22,
-  "text": "Vectors hold information"
+  "text": "Vectors hold",
+  "end": 41.12
+ },
+ {
+  "start": 41.16,
+  "text": "information,",
+  "end": 42.24
  },
  {
   "start": 42.28,
-  "end": 43.48,
-  "text": "matrices reshape it"
+  "text": "matrices reshape",
+  "end": 43.38
  },
  {
-  "start": 43.54,
-  "end": 44.18,
-  "text": "into the forms"
+  "start": 43.42,
+  "text": "it into the",
+  "end": 43.84
  },
  {
-  "start": 44.24,
-  "end": 44.67,
-  "text": "the model"
+  "start": 43.88,
+  "text": "forms the model",
+  "end": 44.69
  },
  {
   "start": 44.73,
-  "end": 45.18,
-  "text": "can use."
+  "text": "can use.",
+  "end": 45.18
  }
 ]

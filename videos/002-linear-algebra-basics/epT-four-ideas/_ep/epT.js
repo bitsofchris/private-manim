@@ -323,7 +323,7 @@
     if (name === "CODE") { plane(g, M.REBUILT); return; }
     if (M[name]) {
       plane(g, M[name]);
-      if (name === "VECTOR") { tipLabel(P.tip.e1, [1, 0], 0, 70); tipLabel(P.tip.e2, [0, 1], -70, 0); }
+      if (name === "VECTOR") { tipLabel(P.tip.e1, [1.3, 0], 0, -52); tipLabel(P.tip.e2, [0, 1], -70, 0); }
       return;
     }
     const done = centre(g);
