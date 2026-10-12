@@ -1,0 +1,11 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4",    "end": 6.35},
+ {"clip": "media/hf/02_rows.mp4",    "end": 3.75},
+ {"clip": "media/hf/03_map.mp4",     "end": 2.95},
+ {"clip": "media/hf/04_roles.mp4",   "end": 7.90},
+ {"clip": "media/hf/05_sweep.mp4",   "end": 9.80},
+ {"clip": "media/hf/06_shapes.mp4",  "end": 6.60},
+ {"clip": "media/hf/07_bias.mp4",    "end": 2.40},
+ {"clip": "media/hf/08_bigger.mp4",  "end": 5.45},
+ {"clip": "media/hf/09_close.mp4",   "end": 4.637}
+]}
