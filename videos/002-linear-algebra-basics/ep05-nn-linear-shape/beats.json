@@ -1,11 +1,11 @@
 {"beats": [
- {"clip": "media/hf/01_hook.mp4",        "end": 3.60},
- {"clip": "media/hf/02_shape.mp4",       "end": 5.24},
- {"clip": "media/hf/03_neuron.mp4",      "end": 6.47},
- {"clip": "media/hf/04_two.mp4",         "end": 3.09},
- {"clip": "media/hf/05_flip.mp4",        "end": 5.18},
- {"clip": "media/hf/06_landing.mp4",     "end": 7.30},
- {"clip": "media/hf/07_ask.mp4",         "end": 6.16},
+ {"clip": "media/hf/01_hook.mp4", "end": 4.6},
+ {"clip": "media/hf/02_shape.mp4", "end": 5.24},
+ {"clip": "media/hf/03_neuron.mp4", "end": 6.47},
+ {"clip": "media/hf/04_two.mp4", "end": 3.09},
+ {"clip": "media/hf/05_flip.mp4", "end": 5.18},
+ {"clip": "media/hf/06_landing.mp4", "end": 7.3},
+ {"clip": "media/hf/07_ask.mp4", "end": 6.16},
  {"clip": "media/hf/08_conventions.mp4", "end": 7.72},
- {"clip": "media/hf/09_close.mp4",       "end": 6.581}
+ {"clip": "media/hf/09_close.mp4", "end": 6.581}
 ]}

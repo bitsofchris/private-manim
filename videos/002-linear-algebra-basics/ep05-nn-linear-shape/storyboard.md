@@ -20,8 +20,8 @@ needs Manim's axes or 3D camera.
 - **THE SEARCH PHRASE:** `pytorch nn.linear` (YouTube autocomplete offers
   "nn.linear pytorch", checked 2026-10-11). Code beat: `nn.Linear(3, 2)`
   from frame 0, and the card `x @ weight.T + bias` lands on "In the forward
-  pass, PyTorch flips it" (beat 5: cross-fade 18.50–19.10 master, "In" at
-  18.58, "forward" at 19.09).
+  pass, PyTorch flips it" (beat 5: cross-fade 19.50–20.10 master, "In" at
+  19.58, "forward" at 20.09).
 
 ## The look
 
@@ -84,19 +84,19 @@ a beat then draws only what differs.
 
 ## Final beats (the contract)
 
-`vo_final.wav` is 51.341 s. Every cut sits in a pause. Beat-local t = master − start.
+`vo_final.wav` is 52.341 s (51.341 s of speech plus 1.0 s of silence inserted at 3.60, so beat 1 has room to zoom into the code; Chris, 2026-10-11). Every cut sits in a pause. Beat-local t = master − start.
 
 | # | Folder | Master start | Length | Opens on | Ends on | VO |
 |---|---|---:|---:|---|---|---|
-| 1 | `01_hook` | 0.00 | 3.60 | (frame 0: already moving) | STORED | PyTorch stores one output neuron per row. |
-| 2 | `02_shape` | 3.60 | 5.24 | STORED | STORED | So when you give nn.Linear three in and two out, the weight will come back two by three. |
-| 3 | `03_neuron` | 8.84 | 6.47 | STORED | OUTPUTS minus output 2 | A neuron takes all three inputs, multiplies each by its own weight, sums them, adds a bias, and outputs one number. |
-| 4 | `04_two` | 15.31 | 3.09 | OUTPUTS minus output 2 | OUTPUTS | Two outputs, two neurons, two rows of three. |
-| 5 | `05_flip` | 18.40 | 5.18 | OUTPUTS | FLIPPED | In the forward pass, PyTorch flips it. x @ weight.T plus a bias. |
-| 6 | `06_landing` | 23.58 | 7.30 | FLIPPED | CANON | The flipped weight is three by two, exactly the W from the last video, where each row is where an input direction lands. |
-| 7 | `07_ask` | 30.88 | 6.16 | CANON | CANON | So don't ask which is in and which is out, ask where are the landing vectors stored, in the rows or the columns? |
-| 8 | `08_conventions` | 37.04 | 7.72 | CANON | CANON | In math, vectors are columns, and W times v uses the columns. In PyTorch, vectors are rows, and x @ W uses the rows. |
-| 9 | `09_close` | 44.76 | 6.581 | CANON | CANON | It's the same idea, just transposed. nn.Linear stores neurons as rows and transposes on the way through. |
+| 1 | `01_hook` | 0.00 | 4.60 | (frame 0: already moving) | STORED | PyTorch stores one output neuron per row. |
+| 2 | `02_shape` | 4.60 | 5.24 | STORED | STORED | So when you give nn.Linear three in and two out, the weight will come back two by three. |
+| 3 | `03_neuron` | 9.84 | 6.47 | STORED | OUTPUTS minus output 2 | A neuron takes all three inputs, multiplies each by its own weight, sums them, adds a bias, and outputs one number. |
+| 4 | `04_two` | 16.31 | 3.09 | OUTPUTS minus output 2 | OUTPUTS | Two outputs, two neurons, two rows of three. |
+| 5 | `05_flip` | 19.40 | 5.18 | OUTPUTS | FLIPPED | In the forward pass, PyTorch flips it. x @ weight.T plus a bias. |
+| 6 | `06_landing` | 24.58 | 7.30 | FLIPPED | CANON | The flipped weight is three by two, exactly the W from the last video, where each row is where an input direction lands. |
+| 7 | `07_ask` | 31.88 | 6.16 | CANON | CANON | So don't ask which is in and which is out, ask where are the landing vectors stored, in the rows or the columns? |
+| 8 | `08_conventions` | 38.04 | 7.72 | CANON | CANON | In math, vectors are columns, and W times v uses the columns. In PyTorch, vectors are rows, and x @ W uses the rows. |
+| 9 | `09_close` | 45.76 | 6.581 | CANON | MODEL (the last frame) | It's the same idea, just transposed. nn.Linear stores neurons as rows and transposes on the way through. |
 
 ## Beats (the visual brief)
 
@@ -112,7 +112,43 @@ a beat then draws only what differs.
 | 8 | `08_conventions` | first `weight`'s columns, then `weight.T`'s rows | Opens CANON. "In math": the plane fades out (0.4 s) and the lower stage becomes two labelled panels: left `math` (Inter, `--dim`), right `PyTorch`. "vectors are columns": under `math`, `v` as a column `[1; 2; −1]` (teal, blue, gold, one tall bracket pair). "W times v": `W v` (Inter) beside it; the name `weight` gets a `W` tag; "uses the columns": `weight`'s three columns box in turn. "In PyTorch, vectors are rows": under `PyTorch`, `x = [ 1, 2, −1 ]` as a row. "x @ W": `x @ W` (monospace); "uses the rows": `weight.T`'s three rows box in turn. At ~7.0 s the panels fade and the plane fades back. Ends CANON. |
 | 9 | `09_close` | the `.T` | Opens CANON. "same idea": the three arrows pulse once. "just transposed": the `.T →` swells and a ghost of each column of `weight` slides to its row of `weight.T` and fades (≤ 1 s). "stores neurons as rows": `weight`'s two rows box in turn (magenta). "transposes on the way through": the card's `.T` and the `.T →` pulse magenta. Last 0.8 s still on CANON: the frame episode 6 opens beside `X`. |
 
-Segment times (master, `transcript_final.txt`): 0.67 "PyTorch stores…",
+## Revision 1: the code around the layer (Chris, 2026-10-11)
+
+Chris, after the first cut: "I don't really understand what this video is
+about at the beginning … what did we mean by neuron and PyTorch in the
+first place?" Fix: open on a small model, zoom into its `nn.Linear` line,
+and come back to code in beats 2, 3, 4 and 9. These rows replace beats 1–4
+and 9 above; 5–8 are unchanged. Code text is `EP.MODEL` and `EP.CODE` in
+`_ep/ep05.js` (literal PyTorch, ASCII minus as it prints).
+
+```
+model = nn.Sequential(
+    nn.Linear(3, 2),
+    nn.ReLU(),
+)
+```
+
+- **Two-line cards** (beats 2–4) replace the one-line card in place, top
+  edge at y 236, the same panel and 60 px monospace; while one is up, the
+  matrix names and shapes (y 372–506) fade out of its way and come back
+  when it shrinks to one line again.
+- **MODEL** (09's last frame): the four-line card centred in the upper stage
+  with the `nn.Linear(3, 2),` line magenta; under it the two matrices
+  (`weight` → `.T` → `weight.T`); the plane gone.
+
+| # | Folder | Length | Hero | Visual |
+|---|---|---:|---|---|
+| 1 | `01_hook` | 4.60 | the `nn.Linear(3, 2),` line, then each neuron's row | Frame 0: the four-line model card at 60 px (its 22-character first line nearly fills the safe width: 72 px would not fit), centred in the stage, already easing in (scale 0.96 → 1). "PyTorch": the `nn.Linear(3, 2),` line turns magenta, the other lines dim. "stores one output neuron": the card zooms into that line, the other lines fade and the card shrinks to the one-line `nn.Linear(3, 2)` card at its STORED place (≥ 0.8 s; one path, the line keeps its identity); as it lands, `weight` and the network grow out below it (wires growing). "per row" and the 1 s pause after it (3.6–4.6): neuron 1 + row 1, then neuron 2 + row 2 (box + ring, as before), back to rest; last 5 frames STORED. |
+| 2 | `02_shape` | 5.24 | the printed shape | As built through "two out" (input rings, neurons, card digits pulse). "the weight will come back": the card grows to two lines, line 1 `model[0].weight.shape` typed on (≤ 0.5 s); names and shapes fade. "two by three": line 2 `torch.Size([2, 3])` prints, `[2, 3]` magenta; "two" the rows pulse, "three" the columns pulse. Then the card shrinks back to `nn.Linear(3, 2)`, names and shapes return, and `(2, 3)` flashes magenta once as the printed `[2, 3]` goes. Last 5 frames STORED. |
+| 3 | `03_neuron` | 6.47 | neuron 1 | As built through "adds a bias". "outputs one number": as 4.1 lands, the card becomes `x @ weight[0]` / `  + bias[0]  # 4.1` (two lines, `# 4.1` in `--dim`, the `4.1` white); names and shapes fade. Ends: OUTPUTS minus `−1.2` with that two-line card up and names hidden. |
+| 4 | `04_two` | 3.09 | neuron 2, then both rows | Opens on 03's end. "Two outputs": the card becomes `model[0](x)` / `tensor([4.1, -1.2])` and `−1.2` appears beside neuron 2 together with the `-1.2` in the card. "two neurons": both rings pulse. "two rows of three": the card shrinks back to `nn.Linear(3, 2)`, names return, and the box round the whole matrix shows through "three". Last 5 frames OUTPUTS. |
+| 9 | `09_close` | 6.581 | the `.T`, then the model line | As built through "stores neurons as rows". "and transposes on the way through": the plane fades; the one-line card `x @ weight.T + bias` cross-fades to the four-line model card, which grows in above the matrices (the matrices move down as one block if the stage needs it; one move, ≥ 0.6 s); its `nn.Linear(3, 2),` line magenta, and the `.T →` between the matrices stays lit (the one hero pair: the line and what it does). Last ≥ 0.8 s still on MODEL. |
+
+The cut list gains one edit: 1.0 s of silence inserted at 3.60 s of
+`vo_final.wav`. `words.json` and `captions.json` are shifted +1.0 s after
+3.60.
+
+Segment times (master, `transcript_final.txt`, before the 1.0 s insert; add 1.0 after 3.60): 0.67 "PyTorch stores…",
 3.81 "So when you give…", 7.00 "the weight will come back…", 9.10 "A neuron
 takes…", 11.10 "multiplies each…", 12.82 "sums them…", 15.55 "Two outputs…",
 18.62 "In the forward pass…", 23.78 "The flipped weight…", 25.54 "exactly

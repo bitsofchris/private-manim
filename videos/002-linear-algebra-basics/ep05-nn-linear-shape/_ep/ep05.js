@@ -16,6 +16,16 @@
   const DOT = [4, -1];                                   // row n of weight · x  (x @ weight.T)
   const Y = [4.1, -1.2];                                 // x @ weight.T + bias
   const PROD = [[2, 1, 1], [-1, 2, -2]];                 // x[i] * weight[n][i]
+  // The code on screen (literal PyTorch, ASCII minus as PyTorch prints it).
+  // MODEL is the context (beat 1 zooms into line 1, beat 9 zooms back out);
+  // CODE are the two-line cards beats 2-4 show in place of the one-line card.
+  const MODEL = ["model = nn.Sequential(", "    nn.Linear(3, 2),", "    nn.ReLU(),", ")"];
+  const MODEL_LINE = 1;                                  // the nn.Linear line
+  const CODE = {
+    shape: ["model[0].weight.shape", "torch.Size([2, 3])"],   // beat 2, "come back two by three"
+    neuron: ["x @ weight[0]", "  + bias[0]  # 4.1"],         // beat 3, "outputs one number"
+    call: ["model[0](x)", "tensor([4.1, -1.2])"],           // beat 4, "two outputs"
+  };
   // Colour carries the input direction everywhere: input i, column i of weight,
   // row i of weight.T and its landing arrow are SLOT[i] (teal, blue, gold).
   // Neurons have no colour of their own; the active one gets the magenta box.
@@ -154,7 +164,7 @@
   }
 
   window.EP = {
-    X, WEIGHT, WT, B, DOT, Y, PROD,
+    X, WEIGHT, WT, B, DOT, Y, PROD, MODEL, MODEL_LINE, CODE,
     CARD_TOP, NAME_TOP, SHAPE_TOP, MAT_TOP, CW, RH, SIZE, WL, TL, ARROW, NET, PLANE, RECT,
     parts, put, placeW, placeT, network, ring, plane, bg, state,
   };
