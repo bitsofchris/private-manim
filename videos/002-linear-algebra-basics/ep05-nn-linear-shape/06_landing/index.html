@@ -37,12 +37,12 @@
     flipped: 0.42,  /* "The flipped weight" (0.18–1.05) */
     three: 1.27,    /* "three by two" (1.14–1.85) */
     two: 1.62,      /* "two" (1.60–1.85) */
-    W: 2.88,        /* "the W" (2.60–3.15) */
+    W: 2.88,        /* "the W" (2.60–3.15): the two-line card W = weight.T is in */
     video: 3.75,    /* "last video" (3.75–4.02), then a pause to 4.40 */
     where: 4.42,    /* "where" (4.42–4.60) */
     row: 5.00,      /* "each row" (4.71–5.30) */
     lands: 6.96,    /* "direction lands" (6.24–7.14) */
-    still: 7.05,    /* CANON from here to the end (0.25 s still) */
+    still: 6.95,    /* CANON from here to the end (0.35 s still) */
   };
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
@@ -55,10 +55,16 @@
   // one box per row of weight.T, in the row's own colour (local: the kit has two hboxes)
   const rowBox = [0, 1, 2].map(() => VEC.hbox(root));
   const shapeBox = VEC.hbox(root);
-  // "= W": ep04's name for this matrix, under weight.T (Inter, --dim). The name row has
-  // no room beside "weight.T" inside x ≤ 950, and (3, 2) sits under the name, so it goes
-  // under the matrix, in the lower stage, gone (4.20) before the lift starts (4.25).
-  const tagW = ISO.label(root, "= W", { size: 60, color: css(COL.dim), width: 220, align: "center" });
+  // "W = weight.T": on "exactly the W from the last video" the one-line card swaps for a
+  // two-line card that says ep04's W is this weight.T (swap as in 03_neuron / 04_two:
+  // old card gone in the first 45 %, new one in over the rest, no overlap)
+  const cardW = VEC.codeCard(root, [[["W = weight"], [".T", COL.hero]], ["x @ W + bias"]]);
+  [cardW.el, P.cardB.el].flatMap((c) => [c, ...c.querySelectorAll("*")]).concat([P.names.w, P.names.t]).forEach((el) => {   // swaps in place
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  const showCard = (card, a) => card.at(VEC.centreLeft(card.el), EP.CARD_TOP, { alpha: a, scale: 0.96 + 0.04 * a });
+  const outk = (k) => seg(k, 0, 0.45), inn = (k) => seg(k, 0.45, 1);
+  // the two-line card reaches y ~420: the names (y 372) step out of its way; the shapes (y 440) stay
   // the plane with each arrow drawn on its own clock (EP.plane draws all three at once)
   function planeEach(alpha, us) {
     VEC.view(EP.PLANE);
@@ -68,12 +74,14 @@
     VEC.puck(g, 0, 0, { alpha });
   }
   // each row of weight.T: its box and its arrow, ≥ 0.6 s each, on "each row … lands"
-  const ROW = [CUE.row + 0.05, CUE.row + 0.70, CUE.row + 1.35];        // 5.05, 5.70, 6.35: the last lands on "lands"
+  const ROW = [CUE.row + 0.40, CUE.row + 0.875, CUE.row + 1.35];       // 5.40, 5.875, 6.35: the last lands on "lands"
   const DRAW = 0.60;
-  // the lift (EP.lift: names and shapes go, matrices rise to MAT_UP), one 0.7 s move, starting
-  // just before "where" so the rows are not late; the plane fades in as it finishes
-  const LIFT = [CUE.where - 0.17, CUE.where + 0.53];                   // 4.25 → 4.95
-  const PLANE_IN = [CUE.where + 0.33, CUE.where + 0.78];               // 4.75 → 5.20
+  // the lift (EP.lift: names and shapes go, matrices rise to MAT_UP), one 0.65 s move once the
+  // one-line card and the names are back; the plane fades in as it finishes; rows after
+  const SWAP_IN = [CUE.W - 0.43, CUE.W + 0.02];                        // 2.45 → 2.90 (lands on "W")
+  const SWAP_BACK = [4.30, 4.75];                                      // after "last video", in the pause
+  const LIFT = [SWAP_BACK[1], SWAP_BACK[1] + 0.65];                    // 4.75 → 5.40, once the names are back
+  const PLANE_IN = [LIFT[0] + 0.40, LIFT[0] + 0.85];                   // 5.15 → 5.60
 
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
@@ -94,9 +102,13 @@
     const tCol = css(mix(COL.hero, COL.dim, kT));
     P.tArrow.dot.style.color = tCol; cardT.style.color = tCol;
 
-    // "exactly the W from the last video": "= W" under weight.T, gone by the pause
-    const kW = inOut(t, CUE.W - 0.25, CUE.W + 0.05, CUE.video + 0.15, CUE.video + 0.45);
-    EP.put(tagW, EP.TL + EP.CW - 110, EP.MAT_TOP + 3 * EP.RH + 12 + 10 * (1 - kW), kW);
+    // "exactly the W from the last video": x @ weight.T + bias -> W = weight.T / x @ W + bias,
+    // held ~1.4 s through "last video", then back to the one-line card and the names
+    const k1 = E.io(seg(t, SWAP_IN[0], SWAP_IN[1])), k2 = E.io(seg(t, SWAP_BACK[0], SWAP_BACK[1]));
+    showCard(P.cardB, (1 - outk(k1)) + inn(k2));
+    showCard(cardW, inn(k1) * (1 - outk(k2)));
+    const an = (1 - outk(k1)) + inn(k2);
+    [P.names.w, P.names.t].forEach((el) => { el.style.opacity = (an * EP.LAY.names).toFixed(3); });
 
     // "where each row is where an input direction lands": the plane, then each row of
     // weight.T boxed in its colour while its arrow draws from the origin
@@ -104,7 +116,7 @@
     const us = ROW.map((a) => E.io(seg(t, a, a + DRAW)));
     if (kP > 0.001) planeEach(kP, us);
     ROW.forEach((a, i) => {
-      const kb = inOut(t, a - 0.05, a + 0.12, a + DRAW - 0.10, a + DRAW + 0.05);
+      const kb = inOut(t, a - 0.05, a + 0.12, a + DRAW - 0.15, a + DRAW - 0.02);
       rowBox[i].rect(EP.RECT.tRow(i), kb, VEC.SLOT[i]);
       P.wt[i].forEach((c) => c.color(mix(c.col0, COL.text, 0.35 * kb)));
     });

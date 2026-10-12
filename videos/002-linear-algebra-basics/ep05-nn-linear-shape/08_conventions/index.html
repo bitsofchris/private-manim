@@ -58,7 +58,7 @@
   const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));   // 0 → 1 → 0
 
   // ---- local parts: the two panels of the lower stage (y 640-1100 since the lift, x 65-950) ----
-  const PANEL = { top: 700, h: 390, L: [62, 468], R: [488, 953] };   // panel backgrounds (may bleed 3 px); under weight.T's W tag (616-682)
+  const PANEL = { top: 700, h: 390, L: [62, 468], R: [488, 953] };   // panel backgrounds (may bleed 3 px); clear of the row boxes (to ~612)
   const mkPanel = () => { const d = document.createElement("div"); d.className = "pnl"; root.appendChild(d); return d; };
   const pnlL = mkPanel(), pnlR = mkPanel();
   [[pnlL, PANEL.L], [pnlR, PANEL.R]].forEach(([d, [a, b]]) => { d.style.width = `${b - a}px`; d.style.height = `${PANEL.h}px`; });
@@ -78,10 +78,17 @@
   xs(" ]", COL.dim);
   xRow.setAttribute("data-layout-allow-overlap", ""); root.appendChild(xRow);
   const xW = VEC.code(lab("x @ W", COL.text));
-  // the W tags (Inter, --dim), one under each matrix (CANON is lifted: no names or shapes):
-  // under weight on "W times v" (math's W), under weight.T on "x @ W" (PyTorch's W)
-  const tagW = lab("W", COL.dim), tagT = lab("W", COL.dim);
-  const midW = EP.WL.LEFT + 1.5 * EP.CW, midT = EP.TL + EP.CW;      // the matrices' centres
+  // which matrix each panel's W is (Chris: one letter, two matrices): a code line under each
+  // formula, "W = " --dim and the name in ink. The .T stays ink: the card's .T and ".T →" are
+  // already the magenta hero in CANON.
+  const defLine = (name) => {
+    const d = document.createElement("div");
+    d.style.cssText = "position:absolute;left:0;top:0;font-size:60px;line-height:66px;white-space:pre;opacity:0;";
+    [["W = ", COL.dim], [name, COL.text]].forEach(([txt, c]) => { const sp = document.createElement("span"); sp.textContent = txt; sp.style.color = css(c); d.appendChild(sp); });
+    root.appendChild(d); return VEC.code(d);
+  };
+  const defW = defLine("weight"), defT = defLine("weight.T");
+  const DEF_TOP = 1006;                                             // under the panels' content (ends ~996), panel bottom 1090
   const place = (el, left, top, a, s = 1) => {
     el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px) scale(${s.toFixed(4)})`;
     el.style.opacity = Math.max(0, Math.min(1, a)).toFixed(3);
@@ -117,8 +124,8 @@
     const kWv = E.out(seg(t, CUE.W - 0.05, CUE.W + 0.3));
     place(Wv, colL + CV.cw + br + 30, midY - 33, aL * kWv);
 
-    // "W" under weight on "W times v", gone on "In PyTorch"
-    place(tagW, midW - tagW.offsetWidth / 2, EP.LAY.top + 2 * EP.RH + 8, kWv * (1 - E.io(seg(t, CUE.py, CUE.py + 0.35))));
+    // "W = weight" under the math content, with "W times v"; dims with its panel
+    place(defW, cL - defW.offsetWidth / 2, DEF_TOP, aL * kWv);
 
     // "uses the columns": weight's three columns box in turn (in their slot colours), then go
     const boxes = [P.hl, P.hl2, hl3];
@@ -141,8 +148,8 @@
     const kXW = E.out(seg(t, CUE.xw - 0.05, CUE.xw + 0.3));
     place(xW, cR - xW.offsetWidth / 2, 930, aR * kXW);
 
-    // "W" under weight.T on "x @ W", gone with the panels
-    place(tagT, midT - tagT.offsetWidth / 2, EP.LAY.top + 3 * EP.RH + 8, kXW * (1 - E.io(seg(t, T.back, T.still))));
+    // "W = weight.T" under x @ W, with "x @ W"; goes with the panels
+    place(defT, cR - defT.offsetWidth / 2, DEF_TOP, aR * kXW);
 
     // "uses the rows": weight.T's three rows box in turn, held through "rows", then go
     if (t >= 4) {
