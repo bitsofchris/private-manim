@@ -1,0 +1,40 @@
+00:00.320-00:04.320
+You only need four ideas from linear algebra to understand what AI models are doing.
+
+00:04.320-00:05.600
+A vector is a move.
+
+00:05.600-00:09.680
+Its numbers are the recipe, amounts along directions that we all agreed on.
+
+00:09.300-00:12.100
+A matrix says where those directions land.
+
+00:12.100-00:15.220
+Multiplying rebuilds that recipe in the new directions.
+
+00:15.220-00:18.260
+In PyTorch, x at w is just that.
+
+00:17.800-00:21.160
+Each number in X weights a row of W and adds them up.
+
+00:21.160-00:23.560
+A dot product measures alignment.
+
+00:23.560-00:28.119
+Attention scores are dot products between queries and keys of your tokens.
+
+00:27.600-00:30.480
+In a neural network, those matrices are learned.
+
+00:30.480-00:36.160
+Layer by layer, training finds which directions to amplify, which to ignore, and which ones to mix.
+
+00:35.860-00:40.420
+The model doesn't understand in a human way, it learns moves that make the task easier.
+
+00:40.420-00:45.860
+Vectors hold information, matrices reshape it into the forms the model can use.
+
+

@@ -1,0 +1,777 @@
+{
+  "segments" : [
+    {
+      "end" : 4000,
+      "id" : "D13D1F87-2736-4A7D-B35F-86B8BA6C6C6C",
+      "start" : 1,
+      "text" : "You only need four ideas from linear algebra to understand what AI models are doing.",
+      "words" : [
+        {
+          "end" : 680,
+          "start" : 0,
+          "text" : "You"
+        },
+        {
+          "end" : 940,
+          "start" : 680,
+          "text" : "only"
+        },
+        {
+          "end" : 1120,
+          "start" : 940,
+          "text" : "need"
+        },
+        {
+          "end" : 1400,
+          "start" : 1120,
+          "text" : "four"
+        },
+        {
+          "end" : 1740,
+          "start" : 1400,
+          "text" : "ideas"
+        },
+        {
+          "end" : 1900,
+          "start" : 1740,
+          "text" : "from"
+        },
+        {
+          "end" : 2140,
+          "start" : 1900,
+          "text" : "linear"
+        },
+        {
+          "end" : 2420,
+          "start" : 2140,
+          "text" : "algebra"
+        },
+        {
+          "end" : 2560,
+          "start" : 2420,
+          "text" : "to"
+        },
+        {
+          "end" : 2940,
+          "start" : 2560,
+          "text" : "understand"
+        },
+        {
+          "end" : 3080,
+          "start" : 2940,
+          "text" : "what"
+        },
+        {
+          "end" : 3240,
+          "start" : 3080,
+          "text" : "AI"
+        },
+        {
+          "end" : 3580,
+          "start" : 3240,
+          "text" : "models"
+        },
+        {
+          "end" : 3680,
+          "start" : 3580,
+          "text" : "are"
+        },
+        {
+          "end" : 4000,
+          "start" : 3680,
+          "text" : "doing."
+        }
+      ]
+    },
+    {
+      "end" : 9200,
+      "id" : "24CA3D16-C193-4C37-B3DC-2D0341FB04FA",
+      "start" : 4440,
+      "text" : "A vector is a MOV. Its numbers are the recipe. Amounts along directions that we all agreed on.",
+      "words" : [
+        {
+          "end" : 4560,
+          "start" : 4440,
+          "text" : "A"
+        },
+        {
+          "end" : 4800,
+          "start" : 4560,
+          "text" : "vector"
+        },
+        {
+          "end" : 4940,
+          "start" : 4800,
+          "text" : "is"
+        },
+        {
+          "end" : 5100,
+          "start" : 4940,
+          "text" : "a"
+        },
+        {
+          "end" : 5400,
+          "start" : 5100,
+          "text" : "MOV."
+        },
+        {
+          "end" : 5720,
+          "start" : 5480,
+          "text" : "Its"
+        },
+        {
+          "end" : 6120,
+          "start" : 5720,
+          "text" : "numbers"
+        },
+        {
+          "end" : 6400,
+          "start" : 6120,
+          "text" : "are"
+        },
+        {
+          "end" : 6500,
+          "start" : 6400,
+          "text" : "the"
+        },
+        {
+          "end" : 6940,
+          "start" : 6500,
+          "text" : "recipe."
+        },
+        {
+          "end" : 7520,
+          "start" : 7100,
+          "text" : "Amounts"
+        },
+        {
+          "end" : 7720,
+          "start" : 7520,
+          "text" : "along"
+        },
+        {
+          "end" : 8240,
+          "start" : 7720,
+          "text" : "directions"
+        },
+        {
+          "end" : 8400,
+          "start" : 8240,
+          "text" : "that"
+        },
+        {
+          "end" : 8500,
+          "start" : 8400,
+          "text" : "we"
+        },
+        {
+          "end" : 8680,
+          "start" : 8500,
+          "text" : "all"
+        },
+        {
+          "end" : 8980,
+          "start" : 8680,
+          "text" : "agreed"
+        },
+        {
+          "end" : 9200,
+          "start" : 8980,
+          "text" : "on."
+        }
+      ]
+    },
+    {
+      "end" : 14820,
+      "id" : "778197EC-A2C2-49CF-BCCC-FE91B14B29D7",
+      "start" : 9580,
+      "text" : "A matrix says where those directions land. Multiplying rebuilds that recipe in the new directions.",
+      "words" : [
+        {
+          "end" : 9660,
+          "start" : 9580,
+          "text" : "A"
+        },
+        {
+          "end" : 10100,
+          "start" : 9660,
+          "text" : "matrix"
+        },
+        {
+          "end" : 10360,
+          "start" : 10100,
+          "text" : "says"
+        },
+        {
+          "end" : 10680,
+          "start" : 10360,
+          "text" : "where"
+        },
+        {
+          "end" : 10940,
+          "start" : 10680,
+          "text" : "those"
+        },
+        {
+          "end" : 11380,
+          "start" : 10940,
+          "text" : "directions"
+        },
+        {
+          "end" : 11800,
+          "start" : 11380,
+          "text" : "land."
+        },
+        {
+          "end" : 12880,
+          "start" : 12360,
+          "text" : "Multiplying"
+        },
+        {
+          "end" : 13360,
+          "start" : 12880,
+          "text" : "rebuilds"
+        },
+        {
+          "end" : 13460,
+          "start" : 13360,
+          "text" : "that"
+        },
+        {
+          "end" : 13820,
+          "start" : 13460,
+          "text" : "recipe"
+        },
+        {
+          "end" : 14100,
+          "start" : 13820,
+          "text" : "in"
+        },
+        {
+          "end" : 14180,
+          "start" : 14100,
+          "text" : "the"
+        },
+        {
+          "end" : 14360,
+          "start" : 14180,
+          "text" : "new"
+        },
+        {
+          "end" : 14820,
+          "start" : 14360,
+          "text" : "directions."
+        }
+      ]
+    },
+    {
+      "end" : 20800,
+      "id" : "8C221F64-9B54-47F0-B4A4-C672AA58F6D7",
+      "start" : 15300,
+      "text" : "In PyTorch, x at w is just that. Each number in x weights a row of w and adds them up.",
+      "words" : [
+        {
+          "end" : 15560,
+          "start" : 15300,
+          "text" : "In"
+        },
+        {
+          "end" : 16160,
+          "start" : 15560,
+          "text" : "PyTorch,"
+        },
+        {
+          "end" : 16520,
+          "start" : 16420,
+          "text" : "x"
+        },
+        {
+          "end" : 16620,
+          "start" : 16520,
+          "text" : "at"
+        },
+        {
+          "end" : 16920,
+          "start" : 16620,
+          "text" : "w"
+        },
+        {
+          "end" : 17120,
+          "start" : 16920,
+          "text" : "is"
+        },
+        {
+          "end" : 17340,
+          "start" : 17120,
+          "text" : "just"
+        },
+        {
+          "end" : 17620,
+          "start" : 17340,
+          "text" : "that."
+        },
+        {
+          "end" : 18320,
+          "start" : 18020,
+          "text" : "Each"
+        },
+        {
+          "end" : 18620,
+          "start" : 18320,
+          "text" : "number"
+        },
+        {
+          "end" : 18740,
+          "start" : 18620,
+          "text" : "in"
+        },
+        {
+          "end" : 19060,
+          "start" : 18740,
+          "text" : "x"
+        },
+        {
+          "end" : 19380,
+          "start" : 19060,
+          "text" : "weights"
+        },
+        {
+          "end" : 19560,
+          "start" : 19380,
+          "text" : "a"
+        },
+        {
+          "end" : 19700,
+          "start" : 19560,
+          "text" : "row"
+        },
+        {
+          "end" : 19960,
+          "start" : 19700,
+          "text" : "of"
+        },
+        {
+          "end" : 20100,
+          "start" : 19960,
+          "text" : "w"
+        },
+        {
+          "end" : 20260,
+          "start" : 20100,
+          "text" : "and"
+        },
+        {
+          "end" : 20500,
+          "start" : 20260,
+          "text" : "adds"
+        },
+        {
+          "end" : 20620,
+          "start" : 20500,
+          "text" : "them"
+        },
+        {
+          "end" : 20800,
+          "start" : 20620,
+          "text" : "up."
+        }
+      ]
+    },
+    {
+      "end" : 27340,
+      "id" : "C9FE8BB3-BB9C-4F6B-8D90-57B838CE594F",
+      "start" : 21260,
+      "text" : "A dot product measures alignment. Attention scores are dot products between queries and keys of your tokens.",
+      "words" : [
+        {
+          "end" : 21500,
+          "start" : 21260,
+          "text" : "A"
+        },
+        {
+          "end" : 21700,
+          "start" : 21500,
+          "text" : "dot"
+        },
+        {
+          "end" : 22160,
+          "start" : 21700,
+          "text" : "product"
+        },
+        {
+          "end" : 22620,
+          "start" : 22160,
+          "text" : "measures"
+        },
+        {
+          "end" : 23100,
+          "start" : 22620,
+          "text" : "alignment."
+        },
+        {
+          "end" : 24060,
+          "start" : 23700,
+          "text" : "Attention"
+        },
+        {
+          "end" : 24420,
+          "start" : 24060,
+          "text" : "scores"
+        },
+        {
+          "end" : 24640,
+          "start" : 24420,
+          "text" : "are"
+        },
+        {
+          "end" : 24980,
+          "start" : 24640,
+          "text" : "dot"
+        },
+        {
+          "end" : 25340,
+          "start" : 24980,
+          "text" : "products"
+        },
+        {
+          "end" : 25640,
+          "start" : 25340,
+          "text" : "between"
+        },
+        {
+          "end" : 26040,
+          "start" : 25640,
+          "text" : "queries"
+        },
+        {
+          "end" : 26240,
+          "start" : 26040,
+          "text" : "and"
+        },
+        {
+          "end" : 26620,
+          "start" : 26240,
+          "text" : "keys"
+        },
+        {
+          "end" : 26820,
+          "start" : 26620,
+          "text" : "of"
+        },
+        {
+          "end" : 26980,
+          "start" : 26820,
+          "text" : "your"
+        },
+        {
+          "end" : 27340,
+          "start" : 26980,
+          "text" : "tokens."
+        }
+      ]
+    },
+    {
+      "end" : 31320,
+      "id" : "75EFA5F8-DBE8-4E04-992B-3CA07C20D891",
+      "start" : 27340,
+      "text" : "In a neural network, those matrices are learned, layer by layer.",
+      "words" : [
+        {
+          "end" : 27940,
+          "start" : 27340,
+          "text" : "In"
+        },
+        {
+          "end" : 28100,
+          "start" : 27940,
+          "text" : "a"
+        },
+        {
+          "end" : 28260,
+          "start" : 28100,
+          "text" : "neural"
+        },
+        {
+          "end" : 28580,
+          "start" : 28260,
+          "text" : "network,"
+        },
+        {
+          "end" : 29080,
+          "start" : 28920,
+          "text" : "those"
+        },
+        {
+          "end" : 29400,
+          "start" : 29080,
+          "text" : "matrices"
+        },
+        {
+          "end" : 29660,
+          "start" : 29400,
+          "text" : "are"
+        },
+        {
+          "end" : 30120,
+          "start" : 29660,
+          "text" : "learned,"
+        },
+        {
+          "end" : 30820,
+          "start" : 30500,
+          "text" : "layer"
+        },
+        {
+          "end" : 31020,
+          "start" : 30820,
+          "text" : "by"
+        },
+        {
+          "end" : 31320,
+          "start" : 31020,
+          "text" : "layer."
+        }
+      ]
+    },
+    {
+      "end" : 35520,
+      "id" : "FFB894C1-2838-4121-A261-C36D95CD0DE0",
+      "start" : 31840,
+      "text" : "Training finds which directions to amplify, which to ignore, and which ones to mix.",
+      "words" : [
+        {
+          "end" : 32240,
+          "start" : 31840,
+          "text" : "Training"
+        },
+        {
+          "end" : 32580,
+          "start" : 32240,
+          "text" : "finds"
+        },
+        {
+          "end" : 32780,
+          "start" : 32580,
+          "text" : "which"
+        },
+        {
+          "end" : 33140,
+          "start" : 32780,
+          "text" : "directions"
+        },
+        {
+          "end" : 33280,
+          "start" : 33140,
+          "text" : "to"
+        },
+        {
+          "end" : 33680,
+          "start" : 33280,
+          "text" : "amplify,"
+        },
+        {
+          "end" : 33980,
+          "start" : 33860,
+          "text" : "which"
+        },
+        {
+          "end" : 34120,
+          "start" : 33980,
+          "text" : "to"
+        },
+        {
+          "end" : 34460,
+          "start" : 34120,
+          "text" : "ignore,"
+        },
+        {
+          "end" : 34700,
+          "start" : 34560,
+          "text" : "and"
+        },
+        {
+          "end" : 34820,
+          "start" : 34700,
+          "text" : "which"
+        },
+        {
+          "end" : 35100,
+          "start" : 34820,
+          "text" : "ones"
+        },
+        {
+          "end" : 35200,
+          "start" : 35100,
+          "text" : "to"
+        },
+        {
+          "end" : 35520,
+          "start" : 35200,
+          "text" : "mix."
+        }
+      ]
+    },
+    {
+      "end" : 40100,
+      "id" : "6DE45D7F-BF17-4669-B755-F175339EFAD1",
+      "start" : 36140,
+      "text" : "The model doesn't understand in a human way, it learns moves that make the task easier.",
+      "words" : [
+        {
+          "end" : 36260,
+          "start" : 36140,
+          "text" : "The"
+        },
+        {
+          "end" : 36500,
+          "start" : 36260,
+          "text" : "model"
+        },
+        {
+          "end" : 36780,
+          "start" : 36500,
+          "text" : "doesn't"
+        },
+        {
+          "end" : 37180,
+          "start" : 36780,
+          "text" : "understand"
+        },
+        {
+          "end" : 37340,
+          "start" : 37180,
+          "text" : "in"
+        },
+        {
+          "end" : 37460,
+          "start" : 37340,
+          "text" : "a"
+        },
+        {
+          "end" : 37640,
+          "start" : 37460,
+          "text" : "human"
+        },
+        {
+          "end" : 37880,
+          "start" : 37640,
+          "text" : "way,"
+        },
+        {
+          "end" : 38460,
+          "start" : 38340,
+          "text" : "it"
+        },
+        {
+          "end" : 38680,
+          "start" : 38460,
+          "text" : "learns"
+        },
+        {
+          "end" : 38980,
+          "start" : 38680,
+          "text" : "moves"
+        },
+        {
+          "end" : 39080,
+          "start" : 38980,
+          "text" : "that"
+        },
+        {
+          "end" : 39220,
+          "start" : 39080,
+          "text" : "make"
+        },
+        {
+          "end" : 39340,
+          "start" : 39220,
+          "text" : "the"
+        },
+        {
+          "end" : 39700,
+          "start" : 39340,
+          "text" : "task"
+        },
+        {
+          "end" : 40100,
+          "start" : 39700,
+          "text" : "easier."
+        }
+      ]
+    },
+    {
+      "end" : 45180,
+      "id" : "AF7267F5-536E-41CB-BCDA-6A0BD3730F26",
+      "start" : 40540,
+      "text" : "Vectors hold information, matrices reshape it into the forms the model can use.",
+      "words" : [
+        {
+          "end" : 40840,
+          "start" : 40540,
+          "text" : "Vectors"
+        },
+        {
+          "end" : 41160,
+          "start" : 40840,
+          "text" : "hold"
+        },
+        {
+          "end" : 41720,
+          "start" : 41160,
+          "text" : "information,"
+        },
+        {
+          "end" : 42660,
+          "start" : 42280,
+          "text" : "matrices"
+        },
+        {
+          "end" : 43420,
+          "start" : 42660,
+          "text" : "reshape"
+        },
+        {
+          "end" : 43540,
+          "start" : 43420,
+          "text" : "it"
+        },
+        {
+          "end" : 43740,
+          "start" : 43540,
+          "text" : "into"
+        },
+        {
+          "end" : 43880,
+          "start" : 43740,
+          "text" : "the"
+        },
+        {
+          "end" : 44240,
+          "start" : 43880,
+          "text" : "forms"
+        },
+        {
+          "end" : 44420,
+          "start" : 44240,
+          "text" : "the"
+        },
+        {
+          "end" : 44640,
+          "start" : 44420,
+          "text" : "model"
+        },
+        {
+          "end" : 44840,
+          "start" : 44640,
+          "text" : "can"
+        },
+        {
+          "end" : 45180,
+          "start" : 44840,
+          "text" : "use."
+        }
+      ]
+    }
+  ],
+  "text" : "You only need four ideas from linear algebra to understand what AI models are doing.\nA vector is a MOV. Its numbers are the recipe. Amounts along directions that we all agreed on.\nA matrix says where those directions land. Multiplying rebuilds that recipe in the new directions.\nIn PyTorch, x at w is just that. Each number in x weights a row of w and adds them up.\nA dot product measures alignment. Attention scores are dot products between queries and keys of your tokens.\nIn a neural network, those matrices are learned, layer by layer.\nTraining finds which directions to amplify, which to ignore, and which ones to mix.\nThe model doesn't understand in a human way, it learns moves that make the task easier.\nVectors hold information, matrices reshape it into the forms the model can use."
+}
