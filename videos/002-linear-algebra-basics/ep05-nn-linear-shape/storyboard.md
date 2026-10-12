@@ -80,7 +80,12 @@ a beat then draws only what differs.
   `−1.2` beside the neurons (white). No highlight.
 - **FLIPPED:** card `x @ weight.T + bias` (`.T` magenta); `weight` at the
   left, `.T →`, `weight.T (3, 2)` at the right; lower stage empty.
-- **CANON:** FLIPPED + the plane with the three landing arrows (00_layout B).
+- **CANON:** FLIPPED *lifted* + the plane with the three landing arrows
+  (00_layout B). Lifted (Chris, 2026-10-12, "the graph looks a little
+  squished"): the matrix names and shapes are gone and the matrices sit at
+  y 392 (`EP.MAT_UP`) instead of 516, so the plane gets 118 px a step
+  (was 92), origin (600, 940), clipped above y 640. Beat 6 lifts on "where
+  each row…" just before the plane fades in (`EP.lift(P, u)`).
 
 ## Final beats (the contract)
 

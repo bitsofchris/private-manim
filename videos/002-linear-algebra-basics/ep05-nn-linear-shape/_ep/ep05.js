@@ -36,11 +36,18 @@
   const MAT_TOP = 516, CW = 110, RH = 72, SIZE = 60;     // matrix cells
   const WL = { STORED: 375, LEFT: 120 };                 // weight's left edge: centred (beats 1-4), left (5-9)
   const TL = 650;                                        // weight.T's left edge
-  const ARROW = { x: 550, y: 580 };                      // the ".T →" between the two matrices (centre)
+  const ARROW = { x: 550, y: 580 };                      // the ".T →" between the two matrices (centre, at MAT_TOP)
+  // LIFTED (beats 6-9, once the plane is in; Chris, 2026-10-12): the names and
+  // shapes go and the matrices move up by LIFT, so the plane gets their room.
+  const MAT_UP = 392, LIFT = MAT_TOP - MAT_UP;
+  // LAY.top: the matrices' current top; LAY.names: the names' and shapes' alpha.
+  // state() sets both; a beat moving between them calls lift(Pt, u) after state().
+  const LAY = { top: MAT_TOP, names: 1 };
   // the network (lower stage, beats 1-4): inputs -> two neurons -> outputs
   const NET = { inX: 280, inY: [818, 930, 1042], nX: 640, nY: [874, 986], r: 46, outX: 720 };
   // the plane (lower stage, beats 6-9): rows of weight.T as arrows from the origin
-  const PLANE = { step: 92, ox: 600, oy: 980, ax: { w: -1.6, e: 2.6, s: -1.3, n: 2.3 }, top: 770 };
+  // (first build: step 92, oy 980, top 770; taller since the lift)
+  const PLANE = { step: 118, ox: 600, oy: 940, ax: { w: -1.6, e: 2.6, s: -1.3, n: 2.3 }, top: 640 };
 
   const matW = (cols) => cols * CW;
   const mid = (left, cols) => left + matW(cols) / 2;
@@ -85,24 +92,32 @@
   };
   // weight's cells and brackets at left edge `left` (alpha a)
   function placeW(Pt, left, a = 1) {
-    Pt.w.forEach((row, r) => row.forEach((c, k) => { c.at(left + k * CW, MAT_TOP + r * RH, { alpha: a }); }));
-    Pt.wB.at(left - WL.STORED, 0, { alpha: a });
-    put(Pt.names.w, mid(left, 3) - 200, NAME_TOP, a);
-    put(Pt.names.wShape, mid(left, 3) - 200, SHAPE_TOP, a);
+    const dy = LAY.top - MAT_TOP;
+    Pt.w.forEach((row, r) => row.forEach((c, k) => { c.at(left + k * CW, LAY.top + r * RH, { alpha: a }); }));
+    Pt.wB.at(left - WL.STORED, dy, { alpha: a });
+    put(Pt.names.w, mid(left, 3) - 200, NAME_TOP + dy, a * LAY.names);
+    put(Pt.names.wShape, mid(left, 3) - 200, SHAPE_TOP + dy, a * LAY.names);
   }
   function placeT(Pt, a = 1) {
-    Pt.wt.forEach((row) => row.forEach((c) => c.home({ alpha: a })));
-    Pt.tB.at(0, 0, { alpha: a });
-    put(Pt.names.t, mid(TL, 2) - 200, NAME_TOP, a);
-    put(Pt.names.tShape, mid(TL, 2) - 200, SHAPE_TOP, a);
-    put(Pt.tArrow.dot, ARROW.x - 60, ARROW.y - 70, a);
-    put(Pt.tArrow.arr, ARROW.x - 60, ARROW.y, a);
+    const dy = LAY.top - MAT_TOP;
+    Pt.wt.forEach((row, r) => row.forEach((c, k) => c.at(TL + k * CW, LAY.top + r * RH, { alpha: a })));
+    Pt.tB.at(0, dy, { alpha: a });
+    put(Pt.names.t, mid(TL, 2) - 200, NAME_TOP + dy, a * LAY.names);
+    put(Pt.names.tShape, mid(TL, 2) - 200, SHAPE_TOP + dy, a * LAY.names);
+    put(Pt.tArrow.dot, ARROW.x - 60, ARROW.y - 70 + dy, a);
+    put(Pt.tArrow.arr, ARROW.x - 60, ARROW.y + dy, a);
   }
-  // highlight-box rects: a row of weight, a column of weight, a row of weight.T
+  // the names and shapes fade over the first half, the matrices rise over the whole (u 0..1)
+  function lift(Pt, u) {
+    const k = ISO.clamp01(u);
+    LAY.top = MAT_TOP - LIFT * k; LAY.names = 1 - ISO.clamp01(k * 2);
+    placeW(Pt, WL.LEFT); placeT(Pt, 1);
+  }
+  // highlight-box rects (at the matrices' current top): a row of weight, a column of weight, a row of weight.T
   const RECT = {
-    wRow: (n, left = WL.LEFT) => [left - 12, MAT_TOP + n * RH - 4, matW(3) + 24, RH + 8],
-    wCol: (i, left = WL.LEFT) => [left + i * CW - 4, MAT_TOP - 12, CW + 8, 2 * RH + 24],
-    tRow: (i) => [TL - 12, MAT_TOP + i * RH - 4, matW(2) + 24, RH + 8],
+    wRow: (n, left = WL.LEFT) => [left - 12, LAY.top + n * RH - 4, matW(3) + 24, RH + 8],
+    wCol: (i, left = WL.LEFT) => [left + i * CW - 4, LAY.top - 12, CW + 8, 2 * RH + 24],
+    tRow: (i) => [TL - 12, LAY.top + i * RH - 4, matW(2) + 24, RH + 8],
     shapeW: (left = WL.LEFT) => [mid(left, 3) - 110, SHAPE_TOP - 6, 220, 80],
     shapeT: () => [mid(TL, 2) - 110, SHAPE_TOP - 6, 220, 80],
   };
@@ -141,9 +156,11 @@
   // STORED  : cardA; weight (2, 3) centred; the network, inputs empty, no outputs.
   // OUTPUTS : STORED + input numbers 1, 2, −1 + outputs 4.1, −1.2.
   // FLIPPED : cardB; weight at the left, ".T →", weight.T (3, 2) at the right; lower stage empty.
-  // CANON   : FLIPPED + the plane with weight.T's rows as landing arrows (00_layout).
+  // CANON   : FLIPPED lifted (no names or shapes, matrices at MAT_UP) + the plane with
+  //           weight.T's rows as landing arrows.
   function state(Pt, g, name) {
     const A = name === "STORED" || name === "OUTPUTS";
+    LAY.top = name === "CANON" ? MAT_UP : MAT_TOP; LAY.names = name === "CANON" ? 0 : 1;
     Pt.cardA.at(VEC.centreLeft(Pt.cardA.el), CARD_TOP, { alpha: A ? 1 : 0 });
     Pt.cardB.at(VEC.centreLeft(Pt.cardB.el), CARD_TOP, { alpha: A ? 0 : 1 });
     [Pt.w, Pt.wt].forEach((m) => m.forEach((row) => row.forEach((c) => { c.color(c.col0); c.border(COL.hero, 0); })));
@@ -165,7 +182,7 @@
 
   window.EP = {
     X, WEIGHT, WT, B, DOT, Y, PROD, MODEL, MODEL_LINE, CODE,
-    CARD_TOP, NAME_TOP, SHAPE_TOP, MAT_TOP, CW, RH, SIZE, WL, TL, ARROW, NET, PLANE, RECT,
-    parts, put, placeW, placeT, network, ring, plane, bg, state,
+    CARD_TOP, NAME_TOP, SHAPE_TOP, MAT_TOP, MAT_UP, LIFT, LAY, CW, RH, SIZE, WL, TL, ARROW, NET, PLANE, RECT,
+    parts, put, placeW, placeT, lift, network, ring, plane, bg, state,
   };
 })();
