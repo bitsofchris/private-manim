@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- epT beat 8, 08_layers (master 27.700, 3.910 s): ATTN -> LAYERS.
+         VO: "In a neural network, those matrices are learned, layer by layer." -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.91" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.91;
+  // Cues, beat-local seconds (master 27.700 + t), from words.json, checked on a 50 ms RMS
+  // envelope of vo_final.wav (speech 0.18-0.92, 1.20-2.42, 2.85-3.70).
+  const CUE = {
+    network: 0.00,   // "In a neural network" (0.18-0.88): arrows, tips, scores fade (0-0.5); W1 W2 W3 fade in (0.3-0.9)
+    ring: 0.40,      // "neural" (0.40): the 16 dots pop onto the unit circle in turn
+    learned: 1.94,   // "learned" (1.96-2.42): all twelve numbers flicker once (0.56 s)
+    layer1: 2.80,    // "layer" (2.85): the magenta box lands on W1
+    by: 2.98,        // "by" (3.12): box steps to W2
+    layer2: 3.18,    // "layer" (3.32): box steps to W3, then back to W1
+    still: 3.50,     // LAYERS, still (last 0.41 s)
+  };
+  const { COL, css, mix, seg, clamp01, hash } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // local: the ring of dots popping on in turn (EP.ring draws them all at once)
+  function ringPop(t) {
+    for (let k = 0; k < EP.RING; k++) {
+      const s = E.back(seg(t, CUE.ring + k * 0.03, CUE.ring + k * 0.03 + 0.35));
+      if (s <= 0.001) continue;
+      const th = (k / EP.RING) * Math.PI * 2;
+      VEC.puck(g, Math.cos(th), Math.sin(th), { half: 13 * s, col: COL.data, alpha: clamp01(s * 3) });
+    }
+  }
+  // local: a layer's identity digits ticking through nearby whole values and back (u 0..1).
+  // Whole numbers: two one-decimal numbers side by side in a 110 px cell run together ("1.10.1").
+  function flicker(L, k, u) {
+    const step = Math.floor(u * 8), env = Math.sin(Math.PI * clamp01(u));
+    const M = EP.IDENT.map((row, r) => row.map((v, c) => {
+      if (u <= 0 || u >= 1) return v;
+      const h = hash(k * 31 + r * 7 + c * 3 + step * 17);
+      return Math.round(v + (h - 0.5) * 3.2 * env);
+    }));
+    EP.setLayer(L, M);
+  }
+  // the box: W1, W2, W3, back to W1
+  function boxRect(t) {
+    const a = E.io(seg(t, CUE.by, CUE.by + 0.15)), b = E.io(seg(t, CUE.layer2, CUE.layer2 + 0.14)), c = E.io(seg(t, CUE.layer2 + 0.16, CUE.still));
+    if (c > 0) return EP.rectLerp(EP.RECT.layer(2), EP.RECT.layer(0), c);
+    if (b > 0) return EP.rectLerp(EP.RECT.layer(1), EP.RECT.layer(2), b);
+    return EP.rectLerp(EP.RECT.layer(0), EP.RECT.layer(1), a);
+  }
+
+  function render(t) {
+    if (t >= CUE.still) { EP.state(P, g, "LAYERS"); return; }
+    const off = 1 - E.io(seg(t, CUE.network, CUE.network + 0.5));          // ATTN's arrows, tips, scores
+    const lay = E.io(seg(t, CUE.network + 0.3, CUE.network + 0.9));     // W1 W2 W3
+    EP.strip(P, { scores: off, layers: lay });
+    const fu = seg(t, CUE.learned, CUE.learned + 0.56);
+    P.layers.forEach((L, k) => flicker(L, k, fu));
+    EP.bg(g);
+    const done = EP.centre(g);
+    if (off > 0.001) {
+      EP.KEYS.forEach((k, i) => VEC.arrow(g, [0, 0], k, { col: i === EP.BEST ? COL.hero : EP.GOLD, alpha: off }));
+      VEC.arrow(g, [0, 0], EP.Q, { col: VEC.SLOT[0], alpha: off });
+    }
+    ringPop(t);
+    done();
+    EP.tipLabel(P.tip.q, EP.Q, 55, 10, off);
+    EP.KEYS.forEach((k, i) => {
+      EP.tipLabel(P.tip.keys[i], k, EP.KEY_DX[i][0], EP.KEY_DX[i][1], off);
+      P.tip.keys[i].style.color = css(i === EP.BEST ? COL.hero : EP.GOLD);
+    });
+    P.hl.rect(boxRect(t), E.out(seg(t, CUE.layer1, CUE.layer1 + 0.12)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

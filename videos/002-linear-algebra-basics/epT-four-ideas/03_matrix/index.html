@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- epT beat 3, 03_matrix: VECTOR -> LANDED. "A matrix says where those directions land."
+         Master 9.350, 2.690 s. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.69" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.69;
+  // Beat-local seconds (master = 9.350 + t), words.json checked on a 50 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    matrix: 0.20,  /* "A matrix" (onset 9.55, words 9.58-10.10): W (2, 2) fades in at the top right (0.20-0.50) */
+    says:   0.77,  /* "says" (10.12): the e1, e2 labels fade; e1 swings to row 1 (0.77-1.39), row 1 magenta */
+    where:  1.36,  /* "where those directions" (10.36-11.38): e2 swings to row 2 (1.36-1.98), row 2 magenta;
+                      lattice in to 0.35, old recipe and x to 0.35, x muted (0.77-1.90) */
+    land:   1.95,  /* "land" (onset 11.30, words 11.38): magenta spots ring onto both tips */
+    still:  2.29,  /* nothing moves after this; the frame is EP.state LANDED (last 0.40 s) */
+  };
+  const T = {
+    wIn: [0.20, 0.50], labOut: [0.77, 0.97],
+    swing1: [0.77, 1.39], swing2: [1.36, 1.98], row1: [0.72, 0.87, 1.36, 1.52], row2: [1.33, 1.48, 1.88, 2.05],
+    mute: [0.77, 1.90], spot: 1.95,
+  };
+  const { COL, css, mix, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const lit = (t, w) => E.out(seg(t, w[0], w[1])) * (1 - E.io(seg(t, w[2], w[3])));
+  // EP.plane with the landed directions given row by row (B = [where e1 is, where e2 is]), so e1 and
+  // e2 can swing one after the other; same draw order and alphas as EP.plane. o: lattice, ghosts,
+  // old, xA, xCol, spots, spotK ([k1, k2], the ring's pop).
+  function planeB(g, B, o) {
+    VEC.view(EP.MAIN);
+    g.save(); EP.clip(g, EP.PLANE_CLIP(EP.MAIN));
+    EP.grid(g, 0.42 * lerp(1, 0.33, ISO.clamp01(o.lattice / 0.35)));
+    if (o.lattice) VEC.lattice(g, B, { alpha: o.lattice });
+    VEC.axes(g);
+    if (o.ghosts) { VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted, alpha: o.ghosts }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted, alpha: o.ghosts }); }
+    EP.recipe(g, EP.LEGS_OLD, { alpha: o.old });
+    VEC.arrow(g, [0, 0], EP.X, { col: o.xCol, alpha: o.xA });
+    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    [0, 1].forEach((i) => VEC.spot(g, B[i][0], B[i][1], { alpha: o.spots[i], k: o.spotK[i] }));
+    VEC.puck(g, 0, 0, { half: 12 });
+    g.restore();
+  }
+  const lerp2 = (p, q, u) => [lerp(p[0], q[0], u), lerp(p[1], q[1], u)];
+
+  function render(t) {
+    if (t < CUE.matrix) { EP.state(P, g, "VECTOR"); return; }          // frame 0 = beat 2's end, exactly
+    if (t >= CUE.still) { EP.state(P, g, "LANDED"); return; }          // the hold = beat 4's frame 0, exactly
+    // the strip: W fades in on "A matrix"; each row lights magenta while its direction swings
+    const wa = E.out(seg(t, ...T.wIn));
+    EP.strip(P, { x: 1, w: wa });
+    const r1 = lit(t, T.row1), r2 = lit(t, T.row2);
+    P.wc.forEach((row, r) => row.forEach((c) => c.color(mix(VEC.SLOT[r], COL.hero, r === 0 ? r1 : r2))));
+    // the plane: e1 then e2 swing to W's rows; the lattice follows the landed rows
+    const s1 = E.io(seg(t, ...T.swing1)), s2 = E.io(seg(t, ...T.swing2));
+    const B = [lerp2([1, 0], EP.W[0], s1), lerp2([0, 1], EP.W[1], s2)];
+    const m = E.io(seg(t, ...T.mute));
+    const pop = (a) => ({ alpha: seg(t, a - 0.06, a + 0.06), k: 1 - E.out(seg(t, a - 0.06, a + 0.24)) });
+    const sp = pop(T.spot);
+    EP.bg(g);
+    planeB(g, B, {
+      lattice: 0.35 * m, ghosts: Math.max(seg(t, T.swing1[0], T.swing1[0] + 0.15), 0) , old: lerp(1, 0.35, m),
+      xA: lerp(1, 0.35, m), xCol: mix(COL.text, COL.muted, m), spots: [sp.alpha, sp.alpha], spotK: [sp.k, sp.k],
+    });
+    // the labels e1, e2 fade where they sit in VECTOR
+    const la = 1 - E.io(seg(t, ...T.labOut));
+    if (la > 0.001) { EP.tipLabel(P.tip.e1, [1, 0], 0, 70, la); EP.tipLabel(P.tip.e2, [0, 1], -70, 0, la); }
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

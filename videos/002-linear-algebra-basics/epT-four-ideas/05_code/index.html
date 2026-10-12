@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5, 05_code (master 15.250, 5.790 s). Opens REBUILT, ends CODE.
+         "In PyTorch, x at W is just that. Each number in x weights a row of W and adds them up."
+         Hero: the code line, then the weighted rows, then the sum (with the plane's x @ W arrow). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.79" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.79;                // master 15.250 → 21.040 in vo_final.wav
+  const { COL, css, mix, seg, lerp } = ISO;
+  const SLOT = VEC.SLOT;
+  // beat-local = master − 15.25; words.json checked on a 50 ms RMS envelope of the window
+  const CUE = {
+    pytorch: 0.21,  /* "In PyTorch" (0.21–0.91) */
+    xAtW: 1.10,     /* "x at W" (words.json 1.22–1.67; the envelope rises at 1.05) */
+    just: 1.87,     /* "just that" (1.87–2.37) */
+    each: 2.80,     /* "Each number in x" (2.80–3.81) */
+    weights: 3.85,  /* "weights" (3.85–4.13; the envelope dips 3.70–3.85) */
+    row: 4.31,      /* "a row of W" (4.31–4.85) */
+    adds: 5.00,     /* "and adds them up" (4.85–5.55; "adds" from 5.01) */
+    still: 5.39,    /* CODE, still, from here to the end (0.40 s) */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, a, d) => { const u = seg(t, a, a + d); return u <= 0 || u >= 1 ? 0 : Math.sin(Math.PI * u); };   // 0 → 1 → 0
+  const R = EP.RECT, M = EP.MAIN;
+  // REBUILT's plane knobs (epT.js state()), with the x @ W arrow's colour free
+  const REBUILT = { s: 1, e: 1, ghosts: 1, lattice: 0.35, xA: 0.35, xCol: COL.muted, nu: 1, out: 1 };
+  const cardSpans = P.card.spans[0];        // "y = ", "x", " @ ", "W"
+  const CARD_REST = [COL.text, COL.data, COL.text, COL.text];
+  // A flying copy of a weight: built like the "n ×" cell (same box, same type) but as a
+  // block with two inline spans, so " ×" can fade in while the number flies.
+  const flyers = EP.X.map((v, i) => {
+    const c = P.weights[i], el = document.createElement("div");
+    el.style.cssText = `position:absolute;left:0;top:0;width:${c.wd}px;height:${c.ht}px;box-sizing:border-box;` +
+      `border:4px solid transparent;font-size:${EP.SIZE}px;line-height:${c.ht - 8}px;text-align:center;` +
+      `font-variant-numeric:tabular-nums;white-space:pre;transform-origin:50% 50%;color:${css(SLOT[i])};opacity:0;`;
+    el.setAttribute("data-layout-allow-overlap", "");   // it passes over x's cells and lands on its own cell
+    const num = document.createElement("span"), times = document.createElement("span");
+    num.textContent = VEC.fmtv(v); times.textContent = " ×"; el.append(num, times);
+    [num, times].forEach((sp) => sp.setAttribute("data-layout-allow-overlap", ""));
+    root.appendChild(el);
+    return { el, num, times };
+  });
+  // the width of a string in the strip's type (to find the digit inside "3,")
+  const meas = document.createElement("span");
+  meas.style.cssText = `position:absolute;left:0;top:0;visibility:hidden;white-space:pre;font-size:${EP.SIZE}px;`;
+  root.appendChild(meas);
+  const textW = (s) => { meas.textContent = s; return meas.offsetWidth; };
+
+  // ---- the schedule ----
+  const CARD_IN = [0.0, 0.55];                                   // the card rises into the band top
+  const LAUNCH = [CUE.weights - 0.05, CUE.weights + 0.07];       // the 3, then the 2, leave x
+  const FLY = 0.6;                                               // ≥ 0.6 s: a tracked move
+  const LAND = LAUNCH.map((l) => l + FLY);                       // 4.40, 4.52
+  const POP = [CUE.adds, CUE.adds + 0.10];                       // the sum's 2, then its 4
+
+  function render(t) {
+    if (t >= CUE.still) t = BEAT_SECONDS;
+    flyers.forEach((f) => { f.el.style.opacity = "0"; });
+    cardSpans.forEach((sp, i) => { sp.style.color = css(CARD_REST[i]); });
+    P.weights.forEach((c, i) => c.color(SLOT[i]));
+    if (t >= CUE.still) { EP.state(P, g, "CODE"); return; }     // the still: CODE exactly
+
+    // the strip as REBUILT (x, W), then this beat's parts on top
+    EP.state(P, null, "REBUILT");
+
+    // the card: rises 40 px into the band top on "In PyTorch"
+    const kc = E.out(seg(t, CARD_IN[0], CARD_IN[1]));
+    P.card.at(VEC.centreLeft(P.card.el), EP.CODE_TOP + 40 * (1 - kc), { alpha: kc });
+    // "x at W": the card's x @ W turns magenta, back to rest by "just that"
+    const kx = E.out(seg(t, CUE.xAtW - 0.05, CUE.xAtW + 0.20)) * (1 - E.io(seg(t, CUE.just, CUE.just + 0.30)));
+    [1, 2, 3].forEach((i) => { cardSpans[i].style.color = css(mix(CARD_REST[i], COL.hero, kx)); });
+
+    // the plane's x @ W arrow: magenta at frame 0, off-white while the code and the rows lead,
+    // magenta again with the sum (one group with it)
+    const outHero = (1 - E.io(seg(t, CUE.xAtW - 0.30, CUE.xAtW))) + E.io(seg(t, CUE.adds, CUE.adds + 0.25));
+    EP.bg(g);
+    EP.plane(g, Object.assign({}, REBUILT, { outCol: mix(COL.text, COL.hero, Math.min(1, outHero)) }));
+    const kp = pulse(t, CUE.adds, 0.38);                         // ... and pulses with it
+    if (kp > 0) {
+      VEC.view(M);
+      VEC.arrow(g, [0, 0], EP.XW, { col: COL.hero, width: 44 * (1 + 0.35 * kp), head: 90 * (1 + 0.2 * kp) });
+      VEC.puck(g, 0, 0, { half: 12 });
+    }
+
+    // "Each number in x": a magenta box round x; it goes as the weights leave
+    const kb = E.out(seg(t, CUE.each, CUE.each + 0.25)) * (1 - E.io(seg(t, CUE.weights, CUE.weights + 0.30)));
+    P.hl.rect(R.x(), kb);
+
+    // "weights": copies of the 3 and the 2 fly from x to "3 ×", "2 ×" beside W's rows
+    flyers.forEach((f, i) => {
+      if (t < LAUNCH[i]) return;
+      const u = E.io(seg(t, LAUNCH[i], LAND[i]));
+      const xc = P.xc[i], nx = f.num.offsetLeft + f.num.offsetWidth / 2;
+      const digitCx = xc.left0 + xc.wd / 2 - (i === 0 ? textW(",") / 2 : 0);   // the 3 sits left of "3,"'s centre
+      const startL = digitCx - nx, endL = P.weights[i].left0;
+      const startT = xc.top0, endT = P.weights[i].top0;
+      const arc = (i === 0 ? -28 : 28) * Math.sin(Math.PI * u);   // the 3 lifts, the 2 dips: their paths stay apart
+      const land = seg(t, LAND[i] - 0.02, LAND[i] + 0.02);       // hand over to the real cell
+      f.el.style.transform = `translate(${lerp(startL, endL, u).toFixed(1)}px, ${(lerp(startT, endT, u) + arc).toFixed(1)}px)`;
+      f.el.style.opacity = (1 - land).toFixed(3);
+      f.times.style.opacity = E.out(seg(t, LAUNCH[i] + 0.30, LAND[i])).toFixed(3);
+      f.el.style.color = css(SLOT[i]);
+      // the x cell swells once as its copy leaves
+      const ks = pulse(t, LAUNCH[i] - 0.08, 0.40);
+      if (ks > 0) { xc.home({ scale: 1 + 0.18 * ks }); xc.color(mix(SLOT[i], COL.text, 0.35 * ks)); }
+    });
+
+    // the weighted rows: each row (and its weight) lights magenta as its weight lands,
+    // both swell on "a row of W", back to their colours as the sum comes in
+    const rowsOff = 1 - E.io(seg(t, CUE.adds - 0.10, CUE.adds + 0.15));
+    const kSwell = pulse(t, CUE.row + 0.10, 0.50);
+    [0, 1].forEach((r) => {
+      const kr = E.out(seg(t, LAND[r] - 0.05, LAND[r] + 0.15)) * rowsOff;
+      const wa = seg(t, LAND[r] - 0.02, LAND[r] + 0.02);
+      P.weights[r].home({ alpha: wa, scale: 1 + 0.06 * kSwell });
+      P.weights[r].color(mix(SLOT[r], COL.hero, kr));
+      P.wc[r].forEach((c) => { c.home({ scale: 1 + 0.06 * kSwell }); c.color(mix(SLOT[r], COL.hero, kr)); });
+    });
+
+    // "and adds them up": the sum [ 2, 4 ] and x @ W appear under W, each number popping 1.3 → 1
+    P.sum.forEach((c, i) => {
+      if (t < POP[i]) { c.home({ alpha: 0 }); return; }
+      const u = E.out(seg(t, POP[i], POP[i] + 0.15));
+      c.home({ alpha: seg(t, POP[i], POP[i] + 0.05), scale: 1.3 - 0.3 * u });
+    });
+    const ks = E.out(seg(t, CUE.adds, CUE.adds + 0.15));
+    P.sb.at(0, 0, { alpha: ks });
+    EP.put(P.sumName, EP.WL.left - 330, EP.SUM_TOP + 2, ks);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

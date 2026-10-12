@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- epT beat 2, 02_vector: TILES -> VECTOR. "A vector is a move. Its numbers are the recipe,
+         amounts along directions that we all agreed on." Master 4.225, 5.125 s. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.125" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.125;
+  // Beat-local seconds (master = 4.225 + t), words.json checked on a 50 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    vector: 0.15,  /* "A vector" (master 4.38 onset, 4.44 words): tiles 2-4 fade, tile 1 grows into MAIN (0.15-1.15) */
+    move:   0.78,  /* "is a move" ("a" 4.94, "move" 5.10): x turns magenta (0.78-0.98) */
+    nums:   1.33,  /* "Its numbers" (onset 5.55): x [ 3, 2 ] fades in; x back to off-white */
+    recipe: 2.12,  /* "the recipe" (6.35-6.75 on the envelope): the 3 and the 2 swell once (2.12-2.62) */
+    amounts:2.83,  /* "Amounts along directions" (onset 7.05 -> 8.24): the old legs redraw hop by hop (2.83-3.98) */
+    agreed: 4.15,  /* "we all agreed on" (8.40-8.98): e1, e2 at home fade in and pulse, labels e1, e2 */
+    still:  4.725, /* nothing moves after this; the frame is EP.state VECTOR (last 0.40 s) */
+  };
+  const T = {
+    grow: [0.15, 1.15], fadeTiles: [0.15, 0.65], fadeFrame: [0.15, 0.75], legsOut: [0.35, 1.0],
+    hops: [2.83, 3.98], light3: [2.78, 2.93, 3.47, 3.62], light2: [3.47, 3.62, 3.98, 4.15],
+    eIn: [4.15, 4.45], pulse: [4.25, 4.70],
+  };
+  const { COL, css, mix, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  // hop-by-hop progress over n hops in [a, b], each hop eased: returns u 0..1 for EP.recipe
+  const hopU = (t, a, b, n) => { const x = seg(t, a, b) * n, k = Math.min(n - 1, Math.floor(x)); return (k + E.io(x - k)) / n; };
+  const lit = (t, w) => E.out(seg(t, w[0], w[1])) * (1 - E.io(seg(t, w[2], w[3])));
+  // VEC.axes for the growing camera. VEC.axes ticks every integer strictly inside the extents, so a tile
+  // axis ending exactly on a step (n = 3, w = -1) pops a tick on the first frame of the grow. Here a tick
+  // the tile had stays, and a new one waits until the axis has run 0.25 past it. Same ticks as VEC.axes
+  // at both ends (tile 1, MAIN).
+  const T0 = EP.TILE_VIEWS[0].ax;
+  function axesGrow(g) {
+    const A = VEC.CAM.ax, tk = 0.08 * 165 / VEC.CAM.step;
+    const d = { col: COL.dim, alpha: 0.55, width: 5 }, tc = { col: COL.dim, alpha: 0.9, width: 5 };
+    const ticks = (lo, hi, lo0, hi0) => VEC.ticks(lo, hi).filter((k) => (k > lo0 && k < hi0) || (k > lo + 0.25 && k < hi - 0.25));
+    VEC.line(g, [A.w, 0], [A.e, 0], d); VEC.line(g, [0, A.s], [0, A.n], d);
+    ticks(A.w, A.e, T0.w, T0.e).forEach((x) => VEC.line(g, [x, -tk], [x, tk], tc));
+    ticks(A.s, A.n, T0.s, T0.n).forEach((y) => VEC.line(g, [-tk, y], [tk, y], tc));
+  }
+  // Tile 1 growing into the MAIN plane at u (0 = EP.tile(g, P, 0, 1), 1 = EP.plane VECTOR without e1, e2).
+  // o: panel / frame alpha (the tile's fill, outline and label), old (legs alpha), xCol.
+  function grown(g, u, o) {
+    const r = EP.rectLerp(EP.TR[0], EP.PLANE_CLIP(EP.MAIN), u), rad = lerp(26, 0, u);
+    VEC.view(EP.TILE_VIEWS[0], EP.MAIN, u);
+    g.save(); EP.clip(g, r, rad);
+    g.fillStyle = css(COL.bg); g.fillRect(r[0], r[1], r[2], r[3]);              // hide the fading tiles under it
+    g.fillStyle = css(COL.panel, 1, o.panel); g.fillRect(r[0], r[1], r[2], r[3]);
+    EP.grid(g, 0.42); axesGrow(g);
+    EP.recipe(g, EP.LEGS_OLD, { alpha: o.old });
+    VEC.arrow(g, [0, 0], EP.X, { col: o.xCol });
+    VEC.puck(g, 0, 0, { half: lerp(9, 12, u) });
+    g.restore();
+    if (o.frame > 0.001) {                                                      // the tile's outline, as EP.tile draws it
+      const rr = lerp(24, 0, u);
+      g.save(); g.beginPath(); g.roundRect(r[0] + 3, r[1] + 3, r[2] - 6, r[3] - 6, rr);
+      g.strokeStyle = css(COL.muted, 1, o.frame); g.lineWidth = 6; g.stroke(); g.restore();
+    }
+    EP.put(P.tileLab[0], r[0] + 10, r[1] + r[3] - 88, o.frame);
+    P.tileLab[0].style.color = css(COL.text);
+  }
+
+  function render(t) {
+    if (t < CUE.vector) { EP.state(P, g, "TILES"); return; }            // frame 0 = beat 1's end, exactly
+    if (t >= CUE.still) { EP.state(P, g, "VECTOR"); return; }           // the hold = beat 3's frame 0, exactly
+    // the strip: x [ 3, 2 ] fades in on "Its numbers", swells on "recipe", each slot lights with its hops
+    const xa = E.out(seg(t, CUE.nums, CUE.nums + 0.3));
+    EP.strip(P, { x: xa });
+    const sw = 1 + 0.22 * Math.sin(Math.PI * seg(t, CUE.recipe, CUE.recipe + 0.5));
+    const l3 = lit(t, T.light3), l2 = lit(t, T.light2);
+    P.xc.forEach((c, i) => { c.home({ alpha: xa, scale: sw }); c.color(mix(VEC.SLOT[i], COL.hero, i === 0 ? l3 : l2)); });
+    // x: magenta on "move", back to off-white on "Its numbers"
+    const hk = E.out(seg(t, CUE.move, CUE.move + 0.2)) * (1 - E.io(seg(t, CUE.nums, CUE.nums + 0.3)));
+    const xCol = mix(COL.text, COL.hero, hk);
+    EP.bg(g);
+    const u = E.io(seg(t, ...T.grow));
+    if (u < 1) {
+      const ta = 1 - E.io(seg(t, ...T.fadeTiles));
+      [1, 2, 3].forEach((i) => EP.tile(g, P, i, 1, { alpha: ta }));
+      grown(g, u, { panel: 1 - E.io(seg(t, ...T.fadeFrame)), frame: 1 - E.io(seg(t, ...T.fadeFrame)),
+        old: 1 - E.io(seg(t, ...T.legsOut)), xCol });
+      return;
+    }
+    // MAIN: the legs redraw hop by hop on "Amounts along directions"; e1, e2 come in on "we all agreed on"
+    const oldU = hopU(t, ...T.hops, 5), legsOn = t >= T.hops[0] ? 1 : 0;
+    const ea = E.out(seg(t, ...T.eIn));
+    EP.plane(g, { s: 0, e: ea, old: legsOn, oldU, xA: 1, xCol });
+    const pk = Math.sin(Math.PI * seg(t, ...T.pulse));
+    if (pk > 0.001) {                                                   // the pulse: e1, e2 flash toward off-white
+      g.save(); EP.clip(g, EP.PLANE_CLIP(EP.MAIN));
+      VEC.arrow(g, [0, 0], [1, 0], { col: COL.text, alpha: 0.45 * pk }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.text, alpha: 0.45 * pk });
+      VEC.puck(g, 0, 0, { half: 12 }); g.restore();
+    }
+    EP.tipLabel(P.tip.e1, [1, 0], 0, 70, ea); EP.tipLabel(P.tip.e2, [0, 1], -70, 0, ea);
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

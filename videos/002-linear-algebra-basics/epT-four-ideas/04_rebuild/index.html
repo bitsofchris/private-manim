@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- epT beat 4, 04_rebuild: LANDED -> REBUILT. "Multiplying rebuilds that recipe in the new
+         directions." Master 12.040, 3.210 s. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.21" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.21;
+  // Beat-local seconds (master = 12.040 + t), words.json checked on a 50 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    mult:    0.21,  /* "Multiplying" (onset 12.25, words 12.36): the spots and the old legs fade (0.21-0.55) */
+    rebuild: 0.84,  /* "rebuilds that recipe" (12.88-13.82): new legs walk hop by hop (0.84-2.05), the 3 lit
+                       with the teal hops, the 2 with the blue */
+    newdir:  2.05,  /* "in the new directions" ("new" 14.18, "directions" 14.36): x @ W draws, magenta (2.05-2.70) */
+    still:   2.81,  /* nothing moves after this; the frame is EP.state REBUILT (last 0.40 s) */
+  };
+  const T = {
+    fade: [0.21, 0.55], hops: [0.84, 2.05], light3: [0.79, 0.94, 1.52, 1.67], light2: [1.52, 1.67, 2.02, 2.17],
+    out: [2.05, 2.70],
+  };
+  const { COL, css, mix, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const lit = (t, w) => E.out(seg(t, w[0], w[1])) * (1 - E.io(seg(t, w[2], w[3])));
+  const hopU = (t, a, b, n) => { const x = seg(t, a, b) * n, k = Math.min(n - 1, Math.floor(x)); return (k + E.io(x - k)) / n; };
+  // EP.plane for LANDED -> REBUILT with a draw progress on the output arrow (EP.plane's `out` is alpha
+  // only); same draw order and alphas as EP.plane. o: spots, old, newU (new legs drawn when > 0), outU.
+  function planeOut(g, o) {
+    const B = EP.W;
+    VEC.view(EP.MAIN);
+    g.save(); EP.clip(g, EP.PLANE_CLIP(EP.MAIN));
+    EP.grid(g, 0.42 * 0.33);
+    VEC.lattice(g, B, { alpha: 0.35 });
+    VEC.axes(g);
+    VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted });
+    EP.recipe(g, EP.LEGS_OLD, { alpha: o.old });
+    VEC.arrow(g, [0, 0], EP.X, { col: COL.muted, alpha: 0.35 });
+    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    if (o.newU > 0) EP.recipe(g, EP.LEGS_NEW, { u: o.newU });
+    VEC.arrow(g, [0, 0], EP.XW, { col: COL.hero, u: o.outU });
+    VEC.spot(g, B[0][0], B[0][1], { alpha: o.spots }); VEC.spot(g, B[1][0], B[1][1], { alpha: o.spots });
+    VEC.puck(g, 0, 0, { half: 12 });
+    g.restore();
+  }
+
+  function render(t) {
+    if (t < CUE.mult) { EP.state(P, g, "LANDED"); return; }            // frame 0 = beat 3's end, exactly
+    if (t >= CUE.still) { EP.state(P, g, "REBUILT"); return; }         // the hold = beat 5's frame 0, exactly
+    // the strip: the 3 lights (and swells a little) with the teal hops, the 2 with the blue
+    EP.strip(P, { x: 1, w: 1 });
+    const l = [lit(t, T.light3), lit(t, T.light2)];
+    P.xc.forEach((c, i) => { c.home({ scale: 1 + 0.12 * l[i] }); c.color(mix(VEC.SLOT[i], COL.hero, l[i])); });
+    const f = E.io(seg(t, ...T.fade));
+    EP.bg(g);
+    planeOut(g, { spots: 1 - f, old: 0.35 * (1 - f), newU: t >= T.hops[0] ? hopU(t, ...T.hops, 5) : 0, outU: E.out(seg(t, ...T.out)) });
+  }
+  // HyperFrames' static lint looks for this registration in the beat file itself.
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

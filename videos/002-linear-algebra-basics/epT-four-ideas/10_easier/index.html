@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 10 "10_easier" (master 35.880, 4.460 s): TRAINED -> EASY.
+         VO: "The model doesn't understand in a human way, it learns moves that make the task easier." -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.46" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.46;
+  // Cues, beat-local seconds (master 35.880 + t), from words.json, checked on a 50 ms RMS
+  // envelope of vo_final.wav (speech 36.12-37.92, pause, 38.32-40.15).
+  const CUE = {
+    fade: 0.00,    // frame 0: the strip (W1 W2 W3, the box) and the ring with e1, e2 start to fade ("The model" 0.26)
+    fadeEnd: 0.75,
+    cls: 0.55,     // "doesn't understand" (0.62-1.30): the two classes fade in at the identity
+    clsEnd: 1.25,  //  ... then still through "in a human way" (1.30-2.00)
+    ride: 2.44,    // "it learns moves" (2.46-3.10): every dot rides I -> EASY (1.0 s)
+    rideEnd: 3.44,
+    line: 3.40,    // "the task" (3.39): the magenta dashed boundary draws up through the gap ...
+    lineEnd: 3.95, //  ... landing on "easier" (3.89)
+    still: 4.00,   // EASY, nothing moves after this (last 0.46 s)
+  };
+  const { COL, css, seg, lerp } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const I = VEC.I2;
+  // local helper: TRAINED's strip at alpha a (EP.state draws it only at alpha 1)
+  function trainedStrip(a) {
+    EP.strip(P, { layers: a });
+    P.layers.forEach((L) => EP.setLayer(L, EP.IDENT));
+    EP.setLayer(P.layers[0], EP.W1T, COL.hero); P.hl.rect(EP.RECT.layer(0), a);
+    P.layers.slice(1).forEach((L) => { L.cells.flat().forEach((c) => c.color(COL.dim)); });
+  }
+  function render(t) {
+    if (t >= CUE.still) { EP.state(P, g, "EASY"); return; }        // the end state, nothing on top
+    const out = 1 - E.io(seg(t, CUE.fade, CUE.fadeEnd));               // TRAINED going
+    const cls = E.out(seg(t, CUE.cls, CUE.clsEnd));                   // the classes coming
+    const M = EP.mlerp(I, EP.EASY, E.io(seg(t, CUE.ride, CUE.rideEnd)));
+    const lu = E.io(seg(t, CUE.line, CUE.lineEnd));
+    trainedStrip(out);
+    EP.bg(g);
+    const done = EP.centre(g);
+    if (out > 0.001) {                                                 // TRAINED's plane, fading (same order as EP.state)
+      EP.ring(g, EP.W1T, { alpha: out });
+      VEC.arrow(g, [0, 0], EP.W1T[0], { col: VEC.SLOT[0], alpha: out });
+      VEC.arrow(g, [0, 0], EP.W1T[1], { col: VEC.SLOT[1], alpha: out });
+    }
+    if (lu > 0) {                                                      // the boundary: the image of the gap line, drawn bottom to top
+      const d = VEC.comb([Math.SQRT1_2, -Math.SQRT1_2], EP.EASY), k = 6;   // = (0, 0.5): upright
+      // the line runs (0, -3) -> (0, 3); the clip shows y -2.1..2.4, so start the draw at the clip edge
+      VEC.line(g, [-d[0] * k, -d[1] * k], [d[0] * k, d[1] * k], { col: COL.hero, width: 7, dash: [22, 14], u: lerp(0.13, 1, lu) });
+    }
+    if (cls > 0.001) EP.classes(g, M, { alpha: cls });
+    done();
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

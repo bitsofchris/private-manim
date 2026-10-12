@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- epT beat 1, 01_hook (master 0.000 → 4.225). Frame 0: the four tiles already moving,
+         staggered (tile i's progress u runs 0 → 1 over 1.2 s from −0.3, 0.1, 0.5, 0.9 s), so
+         tile 1 is mid-motion at frame 0. "four ideas": the tiles light magenta in turn 1 → 4,
+         0.16 s apart, each back to rest as the next lights (frame, label, hero element).
+         All at rest by 2.1; from 3.6 the frame is EP.state(TILES) exactly. Ends TILES, still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/epT.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.225" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.225;
+  // beat-local = master (start 0.000). words.json, checked on a 50 ms RMS envelope of vo_final.wav 0–4.6.
+  const CUE = {
+    four: 1.22,    /* "four" (words.json 1.12–1.40; envelope: dip 1.15, onset 1.22): tile 1 lights */
+    ideas: 1.53,   /* "ideas" (words.json 1.40–1.74; envelope: dip 1.50, onset 1.53): tile 3 lights */
+  };
+  const START = [-0.3, 0.4, 1.1, 1.8], DUR = 1.6;       // tile i's motion: u 0 → 1 over DUR from START[i]
+  const STEP = 0.155;                                    // lights 1.22, 1.375, 1.53, 1.685
+  const LIT = [0, 1, 2, 3].map((i) => CUE.four + i * STEP);
+  const UP = 0.06, DOWN = 0.08;                          // each lights in 0.06 s, falls as the next lights
+  const T = { still: 3.6 };                              // from here: EP.state(TILES), nothing on top
+  const { seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  const litAt = (t, i) => {
+    const off = i < 3 ? LIT[i + 1] : LIT[i] + STEP;
+    return E.out(seg(t, LIT[i], LIT[i] + UP)) * (1 - E.io(seg(t, off, off + DOWN)));
+  };
+  function render(t) {
+    if (t >= T.still) { EP.state(P, g, "TILES"); return; }
+    EP.state(P, g, "TILES");                             // strip hidden, tiles at rest; redrawn below
+    EP.bg(g);
+    for (let i = 0; i < 4; i++) EP.tile(g, P, i, seg(t, START[i], START[i] + DUR), { lit: litAt(t, i) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
