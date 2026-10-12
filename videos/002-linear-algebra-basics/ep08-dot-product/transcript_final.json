@@ -1,0 +1,639 @@
+{
+  "segments" : [
+    {
+      "end" : 3480,
+      "id" : "8DF5DCDB-5155-4F19-8408-8B79200EF167",
+      "start" : 1,
+      "text" : "A dot product tells you how much two vectors point the same way.",
+      "words" : [
+        {
+          "end" : 720,
+          "start" : 0,
+          "text" : "A"
+        },
+        {
+          "end" : 840,
+          "start" : 720,
+          "text" : "dot"
+        },
+        {
+          "end" : 1040,
+          "start" : 840,
+          "text" : "product"
+        },
+        {
+          "end" : 1560,
+          "start" : 1040,
+          "text" : "tells"
+        },
+        {
+          "end" : 1660,
+          "start" : 1560,
+          "text" : "you"
+        },
+        {
+          "end" : 1800,
+          "start" : 1660,
+          "text" : "how"
+        },
+        {
+          "end" : 2020,
+          "start" : 1800,
+          "text" : "much"
+        },
+        {
+          "end" : 2220,
+          "start" : 2020,
+          "text" : "two"
+        },
+        {
+          "end" : 2540,
+          "start" : 2220,
+          "text" : "vectors"
+        },
+        {
+          "end" : 2900,
+          "start" : 2540,
+          "text" : "point"
+        },
+        {
+          "end" : 3020,
+          "start" : 2900,
+          "text" : "the"
+        },
+        {
+          "end" : 3240,
+          "start" : 3020,
+          "text" : "same"
+        },
+        {
+          "end" : 3480,
+          "start" : 3240,
+          "text" : "way."
+        }
+      ]
+    },
+    {
+      "end" : 5820,
+      "id" : "054C1A86-AE01-4864-A2D1-8CAC94E3AC75",
+      "start" : 3960,
+      "text" : "It's a way to measure similarity in AI models.",
+      "words" : [
+        {
+          "end" : 4060,
+          "start" : 3960,
+          "text" : "It's"
+        },
+        {
+          "end" : 4140,
+          "start" : 4060,
+          "text" : "a"
+        },
+        {
+          "end" : 4180,
+          "start" : 4140,
+          "text" : "way"
+        },
+        {
+          "end" : 4340,
+          "start" : 4180,
+          "text" : "to"
+        },
+        {
+          "end" : 4500,
+          "start" : 4340,
+          "text" : "measure"
+        },
+        {
+          "end" : 5080,
+          "start" : 4500,
+          "text" : "similarity"
+        },
+        {
+          "end" : 5240,
+          "start" : 5080,
+          "text" : "in"
+        },
+        {
+          "end" : 5420,
+          "start" : 5240,
+          "text" : "AI"
+        },
+        {
+          "end" : 5820,
+          "start" : 5420,
+          "text" : "models."
+        }
+      ]
+    },
+    {
+      "end" : 8740,
+      "id" : "40F7399A-7E5D-4C5B-BB16-981DFF29458E",
+      "start" : 6280,
+      "text" : "The way the math works is you multiply pairwise and then sum.",
+      "words" : [
+        {
+          "end" : 6340,
+          "start" : 6280,
+          "text" : "The"
+        },
+        {
+          "end" : 6420,
+          "start" : 6340,
+          "text" : "way"
+        },
+        {
+          "end" : 6540,
+          "start" : 6420,
+          "text" : "the"
+        },
+        {
+          "end" : 6700,
+          "start" : 6540,
+          "text" : "math"
+        },
+        {
+          "end" : 6960,
+          "start" : 6700,
+          "text" : "works"
+        },
+        {
+          "end" : 7060,
+          "start" : 6960,
+          "text" : "is"
+        },
+        {
+          "end" : 7120,
+          "start" : 7060,
+          "text" : "you"
+        },
+        {
+          "end" : 7560,
+          "start" : 7120,
+          "text" : "multiply"
+        },
+        {
+          "end" : 8120,
+          "start" : 7560,
+          "text" : "pairwise"
+        },
+        {
+          "end" : 8340,
+          "start" : 8120,
+          "text" : "and"
+        },
+        {
+          "end" : 8540,
+          "start" : 8340,
+          "text" : "then"
+        },
+        {
+          "end" : 8740,
+          "start" : 8540,
+          "text" : "sum."
+        }
+      ]
+    },
+    {
+      "end" : 12280,
+      "id" : "D20B5F85-5F66-4AC3-B3E0-96D52BFEBD47",
+      "start" : 9260,
+      "text" : "1, 2, 3, dot, 4, minus 1, 0.",
+      "words" : [
+        {
+          "end" : 9400,
+          "start" : 9260,
+          "text" : "1,"
+        },
+        {
+          "end" : 9700,
+          "start" : 9500,
+          "text" : "2,"
+        },
+        {
+          "end" : 10380,
+          "start" : 10080,
+          "text" : "3,"
+        },
+        {
+          "end" : 10760,
+          "start" : 10640,
+          "text" : "dot,"
+        },
+        {
+          "end" : 11120,
+          "start" : 10880,
+          "text" : "4,"
+        },
+        {
+          "end" : 11580,
+          "start" : 11470,
+          "text" : "minus"
+        },
+        {
+          "end" : 11940,
+          "start" : 11580,
+          "text" : "1,"
+        },
+        {
+          "end" : 12280,
+          "start" : 12120,
+          "text" : "0."
+        }
+      ]
+    },
+    {
+      "end" : 15640,
+      "id" : "58F5F444-CEEC-482F-9EF3-B4272264CE05",
+      "start" : 12800,
+      "text" : "That's 4, minus 2, 0, sum, 2.",
+      "words" : [
+        {
+          "end" : 13000,
+          "start" : 12800,
+          "text" : "That's"
+        },
+        {
+          "end" : 13220,
+          "start" : 13000,
+          "text" : "4,"
+        },
+        {
+          "end" : 13460,
+          "start" : 13350,
+          "text" : "minus"
+        },
+        {
+          "end" : 13880,
+          "start" : 13460,
+          "text" : "2,"
+        },
+        {
+          "end" : 14460,
+          "start" : 14180,
+          "text" : "0,"
+        },
+        {
+          "end" : 15260,
+          "start" : 15020,
+          "text" : "sum,"
+        },
+        {
+          "end" : 15640,
+          "start" : 15520,
+          "text" : "2."
+        }
+      ]
+    },
+    {
+      "end" : 17820,
+      "id" : "5D48DCA2-75AE-420F-BC14-FEFED9226556",
+      "start" : 15880,
+      "text" : "Watch the number as this arrow turns.",
+      "words" : [
+        {
+          "end" : 16340,
+          "start" : 15880,
+          "text" : "Watch"
+        },
+        {
+          "end" : 16440,
+          "start" : 16340,
+          "text" : "the"
+        },
+        {
+          "end" : 16700,
+          "start" : 16440,
+          "text" : "number"
+        },
+        {
+          "end" : 17040,
+          "start" : 16700,
+          "text" : "as"
+        },
+        {
+          "end" : 17200,
+          "start" : 17040,
+          "text" : "this"
+        },
+        {
+          "end" : 17400,
+          "start" : 17200,
+          "text" : "arrow"
+        },
+        {
+          "end" : 17820,
+          "start" : 17400,
+          "text" : "turns."
+        }
+      ]
+    },
+    {
+      "end" : 19800,
+      "id" : "9EA1F2A9-93E6-4287-BB73-B4C8B1F251CE",
+      "start" : 18200,
+      "text" : "Pointing the same direction is positive.",
+      "words" : [
+        {
+          "end" : 18680,
+          "start" : 18200,
+          "text" : "Pointing"
+        },
+        {
+          "end" : 18800,
+          "start" : 18680,
+          "text" : "the"
+        },
+        {
+          "end" : 18960,
+          "start" : 18800,
+          "text" : "same"
+        },
+        {
+          "end" : 19320,
+          "start" : 18960,
+          "text" : "direction"
+        },
+        {
+          "end" : 19420,
+          "start" : 19320,
+          "text" : "is"
+        },
+        {
+          "end" : 19800,
+          "start" : 19420,
+          "text" : "positive."
+        }
+      ]
+    },
+    {
+      "end" : 24100,
+      "id" : "B180E7D7-72C0-4027-B3B9-74F9A1B4CBA4",
+      "start" : 20250,
+      "text" : "At 90 degrees, they're perpendicular, orthogonal, exactly 0.",
+      "words" : [
+        {
+          "end" : 20400,
+          "start" : 20250,
+          "text" : "At"
+        },
+        {
+          "end" : 20620,
+          "start" : 20400,
+          "text" : "90"
+        },
+        {
+          "end" : 20960,
+          "start" : 20620,
+          "text" : "degrees,"
+        },
+        {
+          "end" : 21620,
+          "start" : 21540,
+          "text" : "they're"
+        },
+        {
+          "end" : 22180,
+          "start" : 21620,
+          "text" : "perpendicular,"
+        },
+        {
+          "end" : 22760,
+          "start" : 22400,
+          "text" : "orthogonal,"
+        },
+        {
+          "end" : 23560,
+          "start" : 23240,
+          "text" : "exactly"
+        },
+        {
+          "end" : 24100,
+          "start" : 23560,
+          "text" : "0."
+        }
+      ]
+    },
+    {
+      "end" : 25560,
+      "id" : "104F9DE1-24FC-418D-A88C-4C69A6597B81",
+      "start" : 24700,
+      "text" : "No overlap at all.",
+      "words" : [
+        {
+          "end" : 24800,
+          "start" : 24700,
+          "text" : "No"
+        },
+        {
+          "end" : 25220,
+          "start" : 24800,
+          "text" : "overlap"
+        },
+        {
+          "end" : 25360,
+          "start" : 25220,
+          "text" : "at"
+        },
+        {
+          "end" : 25560,
+          "start" : 25360,
+          "text" : "all."
+        }
+      ]
+    },
+    {
+      "end" : 27240,
+      "id" : "0D425FBB-043D-4CA8-B016-E1E2F2D3EF33",
+      "start" : 26100,
+      "text" : "Pointing opposite is negative.",
+      "words" : [
+        {
+          "end" : 26360,
+          "start" : 26100,
+          "text" : "Pointing"
+        },
+        {
+          "end" : 26680,
+          "start" : 26360,
+          "text" : "opposite"
+        },
+        {
+          "end" : 26940,
+          "start" : 26680,
+          "text" : "is"
+        },
+        {
+          "end" : 27240,
+          "start" : 26940,
+          "text" : "negative."
+        }
+      ]
+    },
+    {
+      "end" : 31340,
+      "id" : "16765752-E909-48D7-8EBA-FB1CB4B140AF",
+      "start" : 28000,
+      "text" : "why it's everywhere in AI. Embeddings that mean similar things point in similar",
+      "words" : [
+        {
+          "end" : 28100,
+          "start" : 28000,
+          "text" : "why"
+        },
+        {
+          "end" : 28220,
+          "start" : 28100,
+          "text" : "it's"
+        },
+        {
+          "end" : 28440,
+          "start" : 28220,
+          "text" : "everywhere"
+        },
+        {
+          "end" : 28560,
+          "start" : 28440,
+          "text" : "in"
+        },
+        {
+          "end" : 28860,
+          "start" : 28560,
+          "text" : "AI."
+        },
+        {
+          "end" : 29380,
+          "start" : 29100,
+          "text" : "Embeddings"
+        },
+        {
+          "end" : 29500,
+          "start" : 29380,
+          "text" : "that"
+        },
+        {
+          "end" : 29660,
+          "start" : 29500,
+          "text" : "mean"
+        },
+        {
+          "end" : 30080,
+          "start" : 29660,
+          "text" : "similar"
+        },
+        {
+          "end" : 30400,
+          "start" : 30080,
+          "text" : "things"
+        },
+        {
+          "end" : 30820,
+          "start" : 30400,
+          "text" : "point"
+        },
+        {
+          "end" : 30960,
+          "start" : 30820,
+          "text" : "in"
+        },
+        {
+          "end" : 31340,
+          "start" : 30960,
+          "text" : "similar"
+        }
+      ]
+    },
+    {
+      "end" : 35260,
+      "id" : "87032157-68AA-4DF3-B352-E281D1B35D5D",
+      "start" : 31560,
+      "text" : "directions, and the dot product is how you check. It's also the core of",
+      "words" : [
+        {
+          "end" : 31980,
+          "start" : 31560,
+          "text" : "directions,"
+        },
+        {
+          "end" : 32380,
+          "start" : 32320,
+          "text" : "and"
+        },
+        {
+          "end" : 32540,
+          "start" : 32380,
+          "text" : "the"
+        },
+        {
+          "end" : 32759,
+          "start" : 32540,
+          "text" : "dot"
+        },
+        {
+          "end" : 33160,
+          "start" : 32759,
+          "text" : "product"
+        },
+        {
+          "end" : 33260,
+          "start" : 33160,
+          "text" : "is"
+        },
+        {
+          "end" : 33440,
+          "start" : 33260,
+          "text" : "how"
+        },
+        {
+          "end" : 33600,
+          "start" : 33440,
+          "text" : "you"
+        },
+        {
+          "end" : 34000,
+          "start" : 33600,
+          "text" : "check."
+        },
+        {
+          "end" : 34560,
+          "start" : 34460,
+          "text" : "It's"
+        },
+        {
+          "end" : 34740,
+          "start" : 34560,
+          "text" : "also"
+        },
+        {
+          "end" : 34920,
+          "start" : 34740,
+          "text" : "the"
+        },
+        {
+          "end" : 35160,
+          "start" : 34920,
+          "text" : "core"
+        },
+        {
+          "end" : 35260,
+          "start" : 35160,
+          "text" : "of"
+        }
+      ]
+    },
+    {
+      "end" : 35600,
+      "id" : "F3EEC69C-7D57-4F65-B1DD-8BAFBB2A1C9E",
+      "start" : 35280,
+      "text" : "attention.",
+      "words" : [
+        {
+          "end" : 35600,
+          "start" : 35280,
+          "text" : "attention."
+        }
+      ]
+    }
+  ],
+  "text" : "A dot product tells you how much two vectors point the same way.\nIt's a way to measure similarity in AI models.\nThe way the math works is you multiply pairwise and then sum.\n1, 2, 3, dot, 4, minus 1, 0.\nThat's 4, minus 2, 0, sum, 2.\nWatch the number as this arrow turns.\nPointing the same direction is positive.\nAt 90 degrees, they're perpendicular, orthogonal, exactly 0.\nNo overlap at all.\nPointing opposite is negative.\nwhy it's everywhere in AI. Embeddings that mean similar things point in similar\ndirections, and the dot product is how you check. It's also the core of\nattention."
+}

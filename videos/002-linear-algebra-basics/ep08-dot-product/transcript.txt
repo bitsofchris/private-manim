@@ -1,0 +1,43 @@
+00:00.001-00:03.840
+A dot product tells you how much two vectors point the same way.
+
+00:03.840-00:06.560
+It's a way to measure similarity in AI models.
+
+00:08.340-00:11.700
+The way the math works is you multiply pairwise and then sum.
+
+00:11.700-00:15.300
+1, 2, 3, 4, minus 1, 0.
+
+00:15.300-00:18.900
+That's 4 minus 2, 0, sum 2.
+
+00:19.240-00:21.640
+Watch the number as this arrow turns.
+
+00:21.640-00:23.640
+Pointing the same direction is positive.
+
+00:23.640-00:28.200
+At 90 degrees, they're perpendicular, orthogonal, exactly zero.
+
+00:28.200-00:29.640
+No overlap at all.
+
+00:29.640-00:31.800
+Pointing opposite is negative.
+
+00:31.740-00:33.260
+That's why it's everywhere in AI.
+
+00:33.260-00:36.460
+Embeddings that mean similar things point in similar directions.
+
+00:36.460-00:38.780
+And the dot product is how you check.
+
+00:38.780-00:41.100
+It's also the core of attention.
+
+
