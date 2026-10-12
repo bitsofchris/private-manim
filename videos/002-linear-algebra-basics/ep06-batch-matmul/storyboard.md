@@ -33,7 +33,7 @@ code is `../../../_shared/web/vec/vec.js` (the shared plane kit, linked as
 where things sit, and the rest states. Notation is the series default
 (`agents/style.md` "Vectors and matrices as numbers").
 
-- **No plane in this episode (a deviation, for Chris to OK on 00_layout).**
+- **No plane in this episode (a deviation; Chris OK'd it on 00_layout).**
   The five outputs run from −5.2 to 5.8 on both axes; a plane that holds
   them beside fifteen input numbers would be about 35 px a step, too small
   to read. The episode is about the batch and the shapes, so the stage
