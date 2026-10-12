@@ -1,0 +1,881 @@
+{
+  "segments" : [
+    {
+      "end" : 5220,
+      "id" : "7CB21ADB-A224-4009-AF14-D77B8FD04493",
+      "start" : 1,
+      "text" : "Cosine similarity is just the dot product with both lengths divided out.",
+      "words" : [
+        {
+          "end" : 980,
+          "start" : 0,
+          "text" : "Cosine"
+        },
+        {
+          "end" : 1500,
+          "start" : 980,
+          "text" : "similarity"
+        },
+        {
+          "end" : 1800,
+          "start" : 1500,
+          "text" : "is"
+        },
+        {
+          "end" : 2100,
+          "start" : 1800,
+          "text" : "just"
+        },
+        {
+          "end" : 2340,
+          "start" : 2100,
+          "text" : "the"
+        },
+        {
+          "end" : 2540,
+          "start" : 2340,
+          "text" : "dot"
+        },
+        {
+          "end" : 2860,
+          "start" : 2540,
+          "text" : "product"
+        },
+        {
+          "end" : 3400,
+          "start" : 2860,
+          "text" : "with"
+        },
+        {
+          "end" : 3760,
+          "start" : 3400,
+          "text" : "both"
+        },
+        {
+          "end" : 4120,
+          "start" : 3760,
+          "text" : "lengths"
+        },
+        {
+          "end" : 4880,
+          "start" : 4120,
+          "text" : "divided"
+        },
+        {
+          "end" : 5220,
+          "start" : 4880,
+          "text" : "out."
+        }
+      ]
+    },
+    {
+      "end" : 8760,
+      "id" : "94A5CC05-6168-46BE-AECB-00A5AE2C1945",
+      "start" : 5779,
+      "text" : "Projection divides out only one. Here's when you want each.",
+      "words" : [
+        {
+          "end" : 6300,
+          "start" : 5779,
+          "text" : "Projection"
+        },
+        {
+          "end" : 6760,
+          "start" : 6300,
+          "text" : "divides"
+        },
+        {
+          "end" : 6980,
+          "start" : 6760,
+          "text" : "out"
+        },
+        {
+          "end" : 7260,
+          "start" : 6980,
+          "text" : "only"
+        },
+        {
+          "end" : 7560,
+          "start" : 7260,
+          "text" : "one."
+        },
+        {
+          "end" : 8180,
+          "start" : 8000,
+          "text" : "Here's"
+        },
+        {
+          "end" : 8280,
+          "start" : 8180,
+          "text" : "when"
+        },
+        {
+          "end" : 8400,
+          "start" : 8280,
+          "text" : "you"
+        },
+        {
+          "end" : 8520,
+          "start" : 8400,
+          "text" : "want"
+        },
+        {
+          "end" : 8760,
+          "start" : 8520,
+          "text" : "each."
+        }
+      ]
+    },
+    {
+      "end" : 13600,
+      "id" : "BC6A9EC0-9555-4ED8-8EF0-891DC0039DAE",
+      "start" : 9240,
+      "text" : "Now all three start from the same thing. The dot product, alignment with the length still in it.",
+      "words" : [
+        {
+          "end" : 9320,
+          "start" : 9240,
+          "text" : "Now"
+        },
+        {
+          "end" : 9520,
+          "start" : 9320,
+          "text" : "all"
+        },
+        {
+          "end" : 9740,
+          "start" : 9520,
+          "text" : "three"
+        },
+        {
+          "end" : 9980,
+          "start" : 9740,
+          "text" : "start"
+        },
+        {
+          "end" : 10100,
+          "start" : 9980,
+          "text" : "from"
+        },
+        {
+          "end" : 10240,
+          "start" : 10100,
+          "text" : "the"
+        },
+        {
+          "end" : 10420,
+          "start" : 10240,
+          "text" : "same"
+        },
+        {
+          "end" : 10720,
+          "start" : 10420,
+          "text" : "thing."
+        },
+        {
+          "end" : 11040,
+          "start" : 10850,
+          "text" : "The"
+        },
+        {
+          "end" : 11240,
+          "start" : 11040,
+          "text" : "dot"
+        },
+        {
+          "end" : 11520,
+          "start" : 11240,
+          "text" : "product,"
+        },
+        {
+          "end" : 12460,
+          "start" : 12120,
+          "text" : "alignment"
+        },
+        {
+          "end" : 12700,
+          "start" : 12460,
+          "text" : "with"
+        },
+        {
+          "end" : 12840,
+          "start" : 12700,
+          "text" : "the"
+        },
+        {
+          "end" : 13040,
+          "start" : 12840,
+          "text" : "length"
+        },
+        {
+          "end" : 13300,
+          "start" : 13040,
+          "text" : "still"
+        },
+        {
+          "end" : 13440,
+          "start" : 13300,
+          "text" : "in"
+        },
+        {
+          "end" : 13600,
+          "start" : 13440,
+          "text" : "it."
+        }
+      ]
+    },
+    {
+      "end" : 19620,
+      "id" : "C9A41A7A-1D00-44C2-8C68-DB35010E4FF8",
+      "start" : 14040,
+      "text" : "Cosine similarity divides by both lengths. Both magnitudes go away and you're left with pure direction.",
+      "words" : [
+        {
+          "end" : 14460,
+          "start" : 14040,
+          "text" : "Cosine"
+        },
+        {
+          "end" : 14940,
+          "start" : 14460,
+          "text" : "similarity"
+        },
+        {
+          "end" : 15700,
+          "start" : 14940,
+          "text" : "divides"
+        },
+        {
+          "end" : 15860,
+          "start" : 15700,
+          "text" : "by"
+        },
+        {
+          "end" : 16120,
+          "start" : 15860,
+          "text" : "both"
+        },
+        {
+          "end" : 16440,
+          "start" : 16120,
+          "text" : "lengths."
+        },
+        {
+          "end" : 17140,
+          "start" : 16940,
+          "text" : "Both"
+        },
+        {
+          "end" : 17560,
+          "start" : 17140,
+          "text" : "magnitudes"
+        },
+        {
+          "end" : 17820,
+          "start" : 17560,
+          "text" : "go"
+        },
+        {
+          "end" : 18100,
+          "start" : 17820,
+          "text" : "away"
+        },
+        {
+          "end" : 18300,
+          "start" : 18100,
+          "text" : "and"
+        },
+        {
+          "end" : 18400,
+          "start" : 18300,
+          "text" : "you're"
+        },
+        {
+          "end" : 18620,
+          "start" : 18400,
+          "text" : "left"
+        },
+        {
+          "end" : 18780,
+          "start" : 18620,
+          "text" : "with"
+        },
+        {
+          "end" : 19200,
+          "start" : 18780,
+          "text" : "pure"
+        },
+        {
+          "end" : 19620,
+          "start" : 19200,
+          "text" : "direction."
+        }
+      ]
+    },
+    {
+      "end" : 23860,
+      "id" : "C80C9F2C-1DAB-4D6E-9A9B-092731F22CE4",
+      "start" : 20180,
+      "text" : "A number between -1 and 1. And that's what you use to compare embeddings.",
+      "words" : [
+        {
+          "end" : 20300,
+          "start" : 20180,
+          "text" : "A"
+        },
+        {
+          "end" : 20540,
+          "start" : 20300,
+          "text" : "number"
+        },
+        {
+          "end" : 20840,
+          "start" : 20540,
+          "text" : "between"
+        },
+        {
+          "end" : 21440,
+          "start" : 20840,
+          "text" : "-1"
+        },
+        {
+          "end" : 21600,
+          "start" : 21440,
+          "text" : "and"
+        },
+        {
+          "end" : 21900,
+          "start" : 21600,
+          "text" : "1."
+        },
+        {
+          "end" : 22480,
+          "start" : 22380,
+          "text" : "And"
+        },
+        {
+          "end" : 22760,
+          "start" : 22480,
+          "text" : "that's"
+        },
+        {
+          "end" : 22880,
+          "start" : 22760,
+          "text" : "what"
+        },
+        {
+          "end" : 22960,
+          "start" : 22880,
+          "text" : "you"
+        },
+        {
+          "end" : 23080,
+          "start" : 22960,
+          "text" : "use"
+        },
+        {
+          "end" : 23200,
+          "start" : 23080,
+          "text" : "to"
+        },
+        {
+          "end" : 23500,
+          "start" : 23200,
+          "text" : "compare"
+        },
+        {
+          "end" : 23860,
+          "start" : 23500,
+          "text" : "embeddings."
+        }
+      ]
+    },
+    {
+      "end" : 29160,
+      "id" : "82B305A5-F63C-41FF-9EDC-84BB51DEABBE",
+      "start" : 24500,
+      "text" : "Now projection divides by only the target's length. Picture casting a shadow from one vector onto another.",
+      "words" : [
+        {
+          "end" : 24600,
+          "start" : 24500,
+          "text" : "Now"
+        },
+        {
+          "end" : 24920,
+          "start" : 24600,
+          "text" : "projection"
+        },
+        {
+          "end" : 25320,
+          "start" : 24920,
+          "text" : "divides"
+        },
+        {
+          "end" : 25460,
+          "start" : 25320,
+          "text" : "by"
+        },
+        {
+          "end" : 25940,
+          "start" : 25460,
+          "text" : "only"
+        },
+        {
+          "end" : 26120,
+          "start" : 25940,
+          "text" : "the"
+        },
+        {
+          "end" : 26540,
+          "start" : 26120,
+          "text" : "target's"
+        },
+        {
+          "end" : 26700,
+          "start" : 26540,
+          "text" : "length."
+        },
+        {
+          "end" : 27280,
+          "start" : 27040,
+          "text" : "Picture"
+        },
+        {
+          "end" : 27760,
+          "start" : 27280,
+          "text" : "casting"
+        },
+        {
+          "end" : 27900,
+          "start" : 27760,
+          "text" : "a"
+        },
+        {
+          "end" : 28100,
+          "start" : 27900,
+          "text" : "shadow"
+        },
+        {
+          "end" : 28280,
+          "start" : 28100,
+          "text" : "from"
+        },
+        {
+          "end" : 28500,
+          "start" : 28280,
+          "text" : "one"
+        },
+        {
+          "end" : 28720,
+          "start" : 28500,
+          "text" : "vector"
+        },
+        {
+          "end" : 28900,
+          "start" : 28720,
+          "text" : "onto"
+        },
+        {
+          "end" : 29160,
+          "start" : 28900,
+          "text" : "another."
+        }
+      ]
+    },
+    {
+      "end" : 33120,
+      "id" : "12F07439-EB3F-4314-9E58-932DC21045F3",
+      "start" : 29400,
+      "text" : "And projection asks, \"How much of you points along this direction?\"",
+      "words" : [
+        {
+          "end" : 29740,
+          "start" : 29400,
+          "text" : "And"
+        },
+        {
+          "end" : 30020,
+          "start" : 29740,
+          "text" : "projection"
+        },
+        {
+          "end" : 30380,
+          "start" : 30020,
+          "text" : "asks,"
+        },
+        {
+          "end" : 30740,
+          "start" : 30660,
+          "text" : "\"How"
+        },
+        {
+          "end" : 31000,
+          "start" : 30740,
+          "text" : "much"
+        },
+        {
+          "end" : 31180,
+          "start" : 31000,
+          "text" : "of"
+        },
+        {
+          "end" : 31360,
+          "start" : 31180,
+          "text" : "you"
+        },
+        {
+          "end" : 31900,
+          "start" : 31360,
+          "text" : "points"
+        },
+        {
+          "end" : 32160,
+          "start" : 31900,
+          "text" : "along"
+        },
+        {
+          "end" : 32300,
+          "start" : 32160,
+          "text" : "this"
+        },
+        {
+          "end" : 33120,
+          "start" : 32300,
+          "text" : "direction?\""
+        }
+      ]
+    },
+    {
+      "end" : 37060,
+      "id" : "CC93397B-3AEB-4447-8C76-F95594C61078",
+      "start" : 33220,
+      "text" : "The shadow keeps the original's length in the answer and it splits the vector in two,",
+      "words" : [
+        {
+          "end" : 33340,
+          "start" : 33220,
+          "text" : "The"
+        },
+        {
+          "end" : 33600,
+          "start" : 33340,
+          "text" : "shadow"
+        },
+        {
+          "end" : 34060,
+          "start" : 33600,
+          "text" : "keeps"
+        },
+        {
+          "end" : 34240,
+          "start" : 34060,
+          "text" : "the"
+        },
+        {
+          "end" : 34680,
+          "start" : 34240,
+          "text" : "original's"
+        },
+        {
+          "end" : 34860,
+          "start" : 34680,
+          "text" : "length"
+        },
+        {
+          "end" : 34980,
+          "start" : 34860,
+          "text" : "in"
+        },
+        {
+          "end" : 35080,
+          "start" : 34980,
+          "text" : "the"
+        },
+        {
+          "end" : 35400,
+          "start" : 35080,
+          "text" : "answer"
+        },
+        {
+          "end" : 35680,
+          "start" : 35400,
+          "text" : "and"
+        },
+        {
+          "end" : 35780,
+          "start" : 35680,
+          "text" : "it"
+        },
+        {
+          "end" : 36200,
+          "start" : 35780,
+          "text" : "splits"
+        },
+        {
+          "end" : 36380,
+          "start" : 36200,
+          "text" : "the"
+        },
+        {
+          "end" : 36640,
+          "start" : 36380,
+          "text" : "vector"
+        },
+        {
+          "end" : 36880,
+          "start" : 36640,
+          "text" : "in"
+        },
+        {
+          "end" : 37060,
+          "start" : 36880,
+          "text" : "two,"
+        }
+      ]
+    },
+    {
+      "end" : 39800,
+      "id" : "65152C10-CF63-440D-ACBE-28B6B0B85227",
+      "start" : 37560,
+      "text" : "the part along the direction and the part left over.",
+      "words" : [
+        {
+          "end" : 37680,
+          "start" : 37560,
+          "text" : "the"
+        },
+        {
+          "end" : 37920,
+          "start" : 37680,
+          "text" : "part"
+        },
+        {
+          "end" : 38180,
+          "start" : 37920,
+          "text" : "along"
+        },
+        {
+          "end" : 38280,
+          "start" : 38180,
+          "text" : "the"
+        },
+        {
+          "end" : 38700,
+          "start" : 38280,
+          "text" : "direction"
+        },
+        {
+          "end" : 39040,
+          "start" : 38700,
+          "text" : "and"
+        },
+        {
+          "end" : 39160,
+          "start" : 39040,
+          "text" : "the"
+        },
+        {
+          "end" : 39320,
+          "start" : 39160,
+          "text" : "part"
+        },
+        {
+          "end" : 39480,
+          "start" : 39320,
+          "text" : "left"
+        },
+        {
+          "end" : 39800,
+          "start" : 39480,
+          "text" : "over."
+        }
+      ]
+    },
+    {
+      "end" : 43440,
+      "id" : "DB24D949-2971-48FD-BDB8-A581FFA6DE34",
+      "start" : 40260,
+      "text" : "Even coordinates are projections, one onto each basis direction.",
+      "words" : [
+        {
+          "end" : 40460,
+          "start" : 40260,
+          "text" : "Even"
+        },
+        {
+          "end" : 40980,
+          "start" : 40460,
+          "text" : "coordinates"
+        },
+        {
+          "end" : 41140,
+          "start" : 40980,
+          "text" : "are"
+        },
+        {
+          "end" : 41620,
+          "start" : 41140,
+          "text" : "projections,"
+        },
+        {
+          "end" : 42240,
+          "start" : 42100,
+          "text" : "one"
+        },
+        {
+          "end" : 42460,
+          "start" : 42240,
+          "text" : "onto"
+        },
+        {
+          "end" : 42720,
+          "start" : 42460,
+          "text" : "each"
+        },
+        {
+          "end" : 43060,
+          "start" : 42720,
+          "text" : "basis"
+        },
+        {
+          "end" : 43440,
+          "start" : 43060,
+          "text" : "direction."
+        }
+      ]
+    },
+    {
+      "end" : 48240,
+      "id" : "75BF88D9-79AC-494F-8398-B6861C0136AF",
+      "start" : 44020,
+      "text" : "The dot product is alignment with the length, cosine is alignment without them.",
+      "words" : [
+        {
+          "end" : 44100,
+          "start" : 44020,
+          "text" : "The"
+        },
+        {
+          "end" : 44260,
+          "start" : 44100,
+          "text" : "dot"
+        },
+        {
+          "end" : 44500,
+          "start" : 44260,
+          "text" : "product"
+        },
+        {
+          "end" : 44760,
+          "start" : 44500,
+          "text" : "is"
+        },
+        {
+          "end" : 45160,
+          "start" : 44760,
+          "text" : "alignment"
+        },
+        {
+          "end" : 45440,
+          "start" : 45160,
+          "text" : "with"
+        },
+        {
+          "end" : 45640,
+          "start" : 45440,
+          "text" : "the"
+        },
+        {
+          "end" : 45940,
+          "start" : 45640,
+          "text" : "length,"
+        },
+        {
+          "end" : 46780,
+          "start" : 46420,
+          "text" : "cosine"
+        },
+        {
+          "end" : 47080,
+          "start" : 46780,
+          "text" : "is"
+        },
+        {
+          "end" : 47480,
+          "start" : 47080,
+          "text" : "alignment"
+        },
+        {
+          "end" : 47940,
+          "start" : 47480,
+          "text" : "without"
+        },
+        {
+          "end" : 48240,
+          "start" : 47940,
+          "text" : "them."
+        }
+      ]
+    },
+    {
+      "end" : 51720,
+      "id" : "C8AA8118-ECA1-434D-9602-1FD049827D65",
+      "start" : 48700,
+      "text" : "Projection is how much of you lies along that line.",
+      "words" : [
+        {
+          "end" : 49200,
+          "start" : 48700,
+          "text" : "Projection"
+        },
+        {
+          "end" : 49340,
+          "start" : 49200,
+          "text" : "is"
+        },
+        {
+          "end" : 49560,
+          "start" : 49340,
+          "text" : "how"
+        },
+        {
+          "end" : 49820,
+          "start" : 49560,
+          "text" : "much"
+        },
+        {
+          "end" : 50020,
+          "start" : 49820,
+          "text" : "of"
+        },
+        {
+          "end" : 50180,
+          "start" : 50020,
+          "text" : "you"
+        },
+        {
+          "end" : 50860,
+          "start" : 50180,
+          "text" : "lies"
+        },
+        {
+          "end" : 51200,
+          "start" : 50860,
+          "text" : "along"
+        },
+        {
+          "end" : 51400,
+          "start" : 51200,
+          "text" : "that"
+        },
+        {
+          "end" : 51720,
+          "start" : 51400,
+          "text" : "line."
+        }
+      ]
+    }
+  ],
+  "text" : "Cosine similarity is just the dot product with both lengths divided out.\nProjection divides out only one. Here's when you want each.\nNow all three start from the same thing. The dot product, alignment with the length still in it.\nCosine similarity divides by both lengths. Both magnitudes go away and you're left with pure direction.\nA number between -1 and 1. And that's what you use to compare embeddings.\nNow projection divides by only the target's length. Picture casting a shadow from one vector onto another.\nAnd projection asks, \"How much of you points along this direction?\"\nThe shadow keeps the original's length in the answer and it splits the vector in two,\nthe part along the direction and the part left over.\nEven coordinates are projections, one onto each basis direction.\nThe dot product is alignment with the length, cosine is alignment without them.\nProjection is how much of you lies along that line."
+}

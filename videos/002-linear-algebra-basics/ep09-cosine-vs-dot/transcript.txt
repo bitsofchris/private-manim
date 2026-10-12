@@ -1,0 +1,52 @@
+00:00.160-00:05.520
+Cosine similarity is just a dot product with both lengths divided out.
+
+00:05.520-00:07.920
+Projection divides out only one.
+
+00:07.920-00:09.440
+Here's one you want each.
+
+00:09.440-00:11.280
+Now all three start from the same thing.
+
+00:11.280-00:14.880
+The dot product, alignment with the length still in it.
+
+00:14.719-00:17.840
+Cosine similarity divides by both lengths.
+
+00:17.840-00:23.439
+Both magnitudes go away, and you're left with pure direction, a number between minus one and one.
+
+00:23.439-00:26.080
+And that's what you use to compare embeddings.
+
+00:25.940-00:28.900
+Now projection divides by only the target's length.
+
+00:28.900-00:31.460
+Picture casting a shadow from one vector onto another.
+
+00:31.460-00:35.620
+And projection asks, how much of u points along this direction?
+
+00:35.540-00:40.420
+The shadow keeps the original's length in the answer and it splits the vector in two.
+
+00:40.420-00:43.780
+The part along the direction and the part left over.
+
+00:43.780-00:47.780
+Even coordinates are projections, one onto each basis direction.
+
+00:49.280-00:52.000
+The dot product is alignment with the length.
+
+00:52.000-00:54.400
+Cosine is alignment without them.
+
+00:54.400-00:58.240
+Projection is how much of you lies along that line.
+
+
