@@ -1,0 +1,12 @@
+{"beats": [
+ {"clip": "media/hf/01_hook.mp4", "end": 5.5},
+ {"clip": "media/hf/02_tokens.mp4", "end": 1.93},
+ {"clip": "media/hf/03_query.mp4", "end": 6.22},
+ {"clip": "media/hf/04_key.mp4", "end": 6.77},
+ {"clip": "media/hf/05_pair.mp4", "end": 4.86},
+ {"clip": "media/hf/06_aligned.mp4", "end": 3.69},
+ {"clip": "media/hf/07_grid.mp4", "end": 5.52},
+ {"clip": "media/hf/08_softmax.mp4", "end": 5.8},
+ {"clip": "media/hf/09_parallel.mp4", "end": 6.12},
+ {"clip": "media/hf/10_close.mp4", "end": 4.6}
+]}
