@@ -178,4 +178,4 @@ RMS envelope of your window.
   (27.34 → 27.88) was pinned before the pause; it is moved to where the
   speech starts.
 
-Approval: pending (cut list and 00_layout look).
+Approval: Chris, 2026-10-12 (cut list and 00_layout look: tiles hook, 120 px MAIN plane, identity layers before training).
