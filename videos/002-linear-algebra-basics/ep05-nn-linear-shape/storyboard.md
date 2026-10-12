@@ -3,7 +3,7 @@ ENGINE: hyperframes
 # Ep 5. The `nn.Linear` shape gotcha — storyboard
 
 **Series:** Linear Algebra for AI Engineers, episode 5 (`../SERIES.md`).
-**Title:** PyTorch nn.Linear Explained | Linear Algebra for AI Engineers
+**Title:** How a PyTorch Linear Layer Works | Linear Algebra for AI Engineers (`publish.md`)
 
 Engine: HyperFrames (the default, `AGENTS.md` "Which engine"). Every beat is
 code, number grids, a small network diagram and the flat 2D plane; nothing
@@ -17,8 +17,9 @@ needs Manim's axes or 3D camera.
   they print `lin.weight.shape`.
 - **THE ANSWER IN ONE SENTENCE:** PyTorch stores one row per output neuron
   and flips it on the forward pass. It is the same map, stored sideways.
-- **THE SEARCH PHRASE:** `pytorch nn.linear` (YouTube autocomplete offers
-  "nn.linear pytorch", checked 2026-10-11). Code beat: `nn.Linear(3, 2)`
+- **THE SEARCH PHRASE:** `pytorch linear layer` (2026-10-12; autocomplete
+  offers it first for "pytorch linear", beside "pytorch nn.linear", which
+  description line 1 also carries). Was `pytorch nn.linear` (2026-10-11). Code beat: `nn.Linear(3, 2)`
   from frame 0, and the card `x @ weight.T + bias` lands on "In the forward
   pass, PyTorch flips it" (beat 5: cross-fade 19.50–20.10 master, "In" at
   19.58, "forward" at 20.09).
@@ -46,6 +47,10 @@ things sit, and the four rest states. Notation is the series default
   930, 1042), two neurons at x 640 (y 874, 986), outputs to the right at
   x 740. Second half, the plane: 92 px a step, origin (600, 980), clipped
   above y 770, `weight.T`'s rows as arrows from the origin.
+- **Revision 3 (2026-10-12):** `W = weight.T` on screen: beat 6 swaps the
+  card to `W = weight.T` / `x @ W + bias` on "exactly the W from the last
+  video"; beat 8 labels its panels `W = weight` (math) and `W = weight.T`
+  (PyTorch), because the VO uses "W" for both.
 - **Magenta, one at a time:** the active neuron's row and ring; the shape
   `(2, 3)`; the `.T`; a lit row or column. At rest in CANON the `.T` (in the
   code card and between the matrices) is the hero.
