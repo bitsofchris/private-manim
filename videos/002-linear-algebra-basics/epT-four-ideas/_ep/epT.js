@@ -273,7 +273,7 @@
       recipe(g, LEGS_NEW, { alpha: al, u: seg01(u, 0, 0.7) });
       VEC.arrow(g, [0, 0], XW, { col: heroCol(COL.text), alpha: al, u: E.out(seg01(u, 0.55, 1)) });
     } else {                                           // dot product: b turns against a
-      const b = rot(A, lerp(-0.6, 0.35, E.io(u)));
+      const b = rot(A, lerp(-0.15, 1.1, E.io(u)));           // rests ~63° past a, so the two read apart
       VEC.arrow(g, [0, 0], A, { col: SLOT[0], alpha: al });
       VEC.arrow(g, [0, 0], b, { col: heroCol(SLOT[1]), alpha: al });
     }

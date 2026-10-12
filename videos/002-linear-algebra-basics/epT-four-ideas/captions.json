@@ -1,0 +1,257 @@
+[
+ {
+  "start": 0.59,
+  "end": 1.06,
+  "text": "You only need"
+ },
+ {
+  "start": 1.12,
+  "end": 1.84,
+  "text": "four ideas from"
+ },
+ {
+  "start": 1.9,
+  "end": 2.5,
+  "text": "linear algebra to"
+ },
+ {
+  "start": 2.56,
+  "end": 3.18,
+  "text": "understand what AI"
+ },
+ {
+  "start": 3.24,
+  "end": 4.0,
+  "text": "models are doing."
+ },
+ {
+  "start": 4.44,
+  "end": 4.88,
+  "text": "A vector is"
+ },
+ {
+  "start": 4.94,
+  "end": 5.4,
+  "text": "a move."
+ },
+ {
+  "start": 5.58,
+  "end": 6.34,
+  "text": "Its numbers are"
+ },
+ {
+  "start": 6.4,
+  "end": 6.94,
+  "text": "the recipe."
+ },
+ {
+  "start": 7.1,
+  "end": 8.18,
+  "text": "Amounts along directions"
+ },
+ {
+  "start": 8.24,
+  "end": 8.62,
+  "text": "that we all"
+ },
+ {
+  "start": 8.68,
+  "end": 9.2,
+  "text": "agreed on."
+ },
+ {
+  "start": 9.58,
+  "end": 10.3,
+  "text": "A matrix says"
+ },
+ {
+  "start": 10.36,
+  "end": 10.91,
+  "text": "where those"
+ },
+ {
+  "start": 10.97,
+  "end": 11.8,
+  "text": "directions land."
+ },
+ {
+  "start": 12.36,
+  "end": 13.4,
+  "text": "Multiplying rebuilds that"
+ },
+ {
+  "start": 13.46,
+  "end": 14.12,
+  "text": "recipe in the"
+ },
+ {
+  "start": 14.18,
+  "end": 14.82,
+  "text": "new directions."
+ },
+ {
+  "start": 15.46,
+  "end": 16.42,
+  "text": "In PyTorch,"
+ },
+ {
+  "start": 16.47,
+  "end": 16.88,
+  "text": "x at W"
+ },
+ {
+  "start": 16.92,
+  "end": 17.62,
+  "text": "is just that."
+ },
+ {
+  "start": 18.07,
+  "end": 18.98,
+  "text": "Each number in x"
+ },
+ {
+  "start": 19.06,
+  "end": 19.52,
+  "text": "weights a row"
+ },
+ {
+  "start": 19.56,
+  "end": 20.06,
+  "text": "of W"
+ },
+ {
+  "start": 20.1,
+  "end": 20.8,
+  "text": "and adds them up."
+ },
+ {
+  "start": 21.26,
+  "end": 22.1,
+  "text": "A dot product"
+ },
+ {
+  "start": 22.16,
+  "end": 23.1,
+  "text": "measures alignment."
+ },
+ {
+  "start": 23.7,
+  "end": 24.58,
+  "text": "Attention scores are"
+ },
+ {
+  "start": 24.64,
+  "end": 25.58,
+  "text": "dot products between"
+ },
+ {
+  "start": 25.64,
+  "end": 26.56,
+  "text": "queries and keys"
+ },
+ {
+  "start": 26.62,
+  "end": 27.34,
+  "text": "of your tokens."
+ },
+ {
+  "start": 27.88,
+  "end": 28.2,
+  "text": "In a neural"
+ },
+ {
+  "start": 28.26,
+  "end": 29.34,
+  "text": "network, those matrices"
+ },
+ {
+  "start": 29.4,
+  "end": 30.76,
+  "text": "are learned, layer"
+ },
+ {
+  "start": 30.82,
+  "end": 31.32,
+  "text": "by layer."
+ },
+ {
+  "start": 31.84,
+  "end": 32.72,
+  "text": "Training finds which"
+ },
+ {
+  "start": 32.78,
+  "end": 33.8,
+  "text": "directions to amplify"
+ },
+ {
+  "start": 33.86,
+  "end": 34.5,
+  "text": "which to ignore"
+ },
+ {
+  "start": 34.56,
+  "end": 35.11,
+  "text": "and which ones"
+ },
+ {
+  "start": 35.17,
+  "end": 35.52,
+  "text": "to mix."
+ },
+ {
+  "start": 36.14,
+  "end": 36.72,
+  "text": "The model doesn't"
+ },
+ {
+  "start": 36.78,
+  "end": 37.45,
+  "text": "understand in a"
+ },
+ {
+  "start": 37.51,
+  "end": 37.88,
+  "text": "human way"
+ },
+ {
+  "start": 38.34,
+  "end": 38.95,
+  "text": "it learns moves"
+ },
+ {
+  "start": 39.01,
+  "end": 39.32,
+  "text": "that make the"
+ },
+ {
+  "start": 39.38,
+  "end": 40.1,
+  "text": "task easier."
+ },
+ {
+  "start": 40.54,
+  "end": 42.22,
+  "text": "Vectors hold information"
+ },
+ {
+  "start": 42.28,
+  "end": 43.48,
+  "text": "matrices reshape it"
+ },
+ {
+  "start": 43.54,
+  "end": 44.18,
+  "text": "into the forms"
+ },
+ {
+  "start": 44.24,
+  "end": 44.67,
+  "text": "the model"
+ },
+ {
+  "start": 44.73,
+  "end": 45.18,
+  "text": "can use."
+ }
+]

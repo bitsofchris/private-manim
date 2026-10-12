@@ -1,0 +1,48 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 4.225
+  },
+  {
+   "clip": "media/hf/02_vector.mp4",
+   "end": 5.125
+  },
+  {
+   "clip": "media/hf/03_matrix.mp4",
+   "end": 2.69
+  },
+  {
+   "clip": "media/hf/04_rebuild.mp4",
+   "end": 3.21
+  },
+  {
+   "clip": "media/hf/05_code.mp4",
+   "end": 5.79
+  },
+  {
+   "clip": "media/hf/06_dot.mp4",
+   "end": 2.45
+  },
+  {
+   "clip": "media/hf/07_attention.mp4",
+   "end": 4.21
+  },
+  {
+   "clip": "media/hf/08_layers.mp4",
+   "end": 3.91
+  },
+  {
+   "clip": "media/hf/09_train.mp4",
+   "end": 4.27
+  },
+  {
+   "clip": "media/hf/10_easier.mp4",
+   "end": 4.46
+  },
+  {
+   "clip": "media/hf/11_close.mp4",
+   "end": 5.491
+  }
+ ]
+}
