@@ -1,0 +1,43 @@
+00:00.001-00:05.440
+An attention score is just a dot product between one token's query and another token's key.
+
+00:05.440-00:07.680
+Every token starts as a vector.
+
+00:07.680-00:14.560
+A learned matrix WQ moves each one into a query, which is the question this token asks.
+
+00:14.160-00:18.400
+Another matrix, WK, moves each one into a key.
+
+00:18.400-00:21.360
+What question can this token help answer?
+
+00:21.360-00:26.800
+To score one pair, you take one token's query and another token's key and do the dot product.
+
+00:26.400-00:28.160
+High value here means they're aligned.
+
+00:28.160-00:30.880
+This token has what the other one is looking for.
+
+00:30.880-00:34.640
+Q at K transpose does every pair at once.
+
+00:34.820-00:37.700
+3 tokens, a 3x3 grid of scores.
+
+00:37.700-00:44.180
+Then divide by the square root of the head size and soft max turns each row into weights that add up to 1.
+
+00:44.220-00:46.780
+Transformers process every position in parallel.
+
+00:46.780-00:50.620
+Attention is how tokens decide who to pull information from.
+
+00:50.620-00:55.420
+And attention scores measure which tokens are aligned under these alert projections.
+
+
