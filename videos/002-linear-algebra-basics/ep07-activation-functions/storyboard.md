@@ -152,3 +152,43 @@ Mid-Short beats end on ≥ 5 still frames; only beat 10 holds ≥ 0.8 s still.
 - Verified by re-transcribing `vo_final.wav` (Parakeet,
   `transcript_final_text.txt`): every word intact. `words.json` spellings fixed
   (`W1`, `W2`, `@` for "at", `GELU`, `100-layer`, `nonlinearity`).
+
+## Revision 1: open on "can't bend" (Chris, 2026-10-12)
+
+Chris, after the first cut: open on the strongest part, "a linear map … can
+stretch, rotate, and squish, but it can't bend", then explain the collapse,
+then the ReLU payoff. Beat 6 ("So two linear layers, or 200, … doesn't buy you
+anything") is dropped, and so is the "Now" before "a linear map". The previous
+cut's files are kept as `vo_final_v1.wav`, `words_v1.json`, `captions_v1.json`
+and `beats_v1.json`. `06_depth/` stays on disk but is out of `beats.json`.
+
+**VO re-splice** (from the v1 `vo_final.wav`, 8 ms fades at each join):
+0.25 s silence + [30.12, 36.35] + [0, 23.05] + [36.35, 53.34] = **46.52 s**.
+The cut at 30.12 drops "Now" (30.06 still transcribes as "Our linear map").
+The join after "can't bend" leaves a 0.80 s pause before "Without activation
+functions", kept on purpose as the turn into "Here's why". Re-transcribed clean
+(`transcript_final_text.txt`). `words.json` is remapped by the same offsets and
+`captions.json` rebuilt from it.
+
+Line 1 is no longer the answer, and the search phrase "activation functions"
+is now at 7.1 s. That breaks runbook step 1 on purpose: Chris chose the visual
+hook. Check it at the day-10 read.
+
+| # | Folder | Master start | Length | Opens on | Ends on | VO |
+|---|---|---:|---:|---|---|---|
+| 1 | `07_straight` | 0.00 | 6.48 | (frame 0: the grid easing into W) | LINEAR | A linear map keeps the origin fixed and the grid line straight. It can stretch, rotate, and squish, but it can't bend. |
+| 2 | `01_hook` | 6.48 | 5.91 | LINEAR (then into the deck) | STACK | Without activation functions, a 100-layer neural network is just one matrix. Here's why. |
+| 3 | `02_functions` | 12.39 | 4.64 | STACK | CHAIN | Matrices are functions, and multiplying matrices combines those functions. |
+| 4 | `03_stack` | 17.03 | 6.29 | CHAIN | ASSOC | So if you stack two layers, x @ W1, then @ W2, the order matters, but it's associative. |
+| 5 | `04_same` | 23.32 | 3.47 | ASSOC | SAME | So that's the same as x @ W1 times W2. |
+| 6 | `05_one` | 26.79 | 2.74 | SAME | MERGED | And W1 times W2 is just one matrix. |
+| 7 | `08_relu` | 29.53 | 4.18 | MERGED | FOLDED | Put a ReLU or a GELU between the layers, and the collapse stops. |
+| 8 | `09_bend` | 33.71 | 4.38 | FOLDED | BENT | Now each layer can bend the path, and stacking actually adds something. |
+| 9 | `10_close` | 38.09 | 8.43 | BENT | END | That's why every layer in a model is a matrix multiply followed by some nonlinearity. Without activations, a deep network is just one matrix. |
+
+**Beats reworked:**
+- `07_straight` opens cold: there is no hand-off from MERGED, the W grid eases in from the plain grid, and W is white from frame 0.
+- `01_hook` opens on LINEAR and leaves it (plane back to the plain grid, hero line out) as the deck comes in.
+- `08_relu` opens on MERGED: the shortcut hop fades and the hero line fades in before relu bends it.
+
+The other six beats are unchanged.
