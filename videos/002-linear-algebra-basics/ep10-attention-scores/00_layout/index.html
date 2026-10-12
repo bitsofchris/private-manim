@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- The canonical frames of ep10, the four looks of the Short.
+         t < 1: QK (beat 4's end): K = X @ W_K, Q beside K, queries solid, keys outline.
+         1 <= t < 2: PAIR (beats 5-6): query "name" and key "is", the readout 1·2 + 2·2 = 6.
+         2 <= t < 3: GRID (the hook's end, beat 7, the last frame): scores = Q @ K.T, the 6 cell magenta.
+         t >= 3: WEIGHTS (beat 8's end): the softmax weights, = 1 per row.
+         Copy this file to start a beat. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.0;
+  const { COL, seg, css, mix } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  ISO.guides(root);
+  function render(t) {
+    const k = E.out(seg(t % 1, 0.05, 0.5));  // the one moving thing per look: a name brightening
+    if (t < 1) {
+      EP.state(P, g, "QK");
+      P.names.K.style.color = css(mix(COL.dim, COL.text, k));
+    } else if (t < 2) {
+      EP.state(P, g, "PAIR");
+      P.read.eq.style.color = css(mix(COL.dim, COL.text, k));
+    } else if (t < 3) {
+      EP.state(P, g, "GRID");
+      P.shape.style.color = css(mix(COL.dim, COL.text, k));
+    } else {
+      EP.state(P, g, "WEIGHTS");
+      P.sums.forEach((el) => { el.style.color = css(mix(COL.dim, COL.text, k)); });
+    }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
