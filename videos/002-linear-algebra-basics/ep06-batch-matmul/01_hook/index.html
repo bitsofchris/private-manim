@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep06 beat 1, 01_hook (master 0.00 → 6.35).
-         Frame 0: INPUTS with row 1 of X already going through W (box up, numbers flashing).
-         Rows 1–5 go through W one at a time, faster each time, Y filling row by row (never
-         pre-filled); all five done by "batch". "layer": W's brackets pulse. "X is data": X's
-         brackets teal + tag data. "W is the map": W's brackets magenta + tag map.
-         Ends PRODUCT, still. -->
+    <!-- ep06 beat 1, 01_hook (master 0.00 → 6.35). Built part by part (Chris, first watch).
+         Frame 0: only the code card, 1.6× in the middle of the stage, typing "Y = X @ W" (done by
+         "PyTorch"). "pushes": it shrinks and slides to its slot. "whole batch": X builds in.
+         "through a layer": W builds in, then Y's label, empty brackets and the →s. Then rows 1–5 go
+         through W one at a time, faster each time, Y filling row by row (never pre-filled), all done
+         before "W is the map". "X is data": X's brackets teal + tag data. "W is the map": W's
+         brackets magenta + tag map. Ends PRODUCT, still. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -35,17 +36,17 @@
   // beat-local = master (start 0.00). words.json, checked on a 50 ms RMS envelope of
   // vo_final.wav 0–6.5 (words.json's times after "because" are evenly spaced; the envelope wins).
   const CUE = {
-    batch: 2.42,    /* "batch" (2.15–2.50): all five rows done by here */
-    layer: 2.80,    /* "layer" (2.75–3.00) */
+    pytorch: 1.19,  /* "PyTorch" (1.15–1.45): the card is typed by here */
+    pushes: 1.60,   /* "pushes" (1.60–1.95): the card shrinks and slides to its slot */
+    whole: 2.08,    /* "whole batch" (2.08–2.50): X builds in */
+    through: 2.60,  /* "through a layer" (2.60–3.00): W builds in, then Y's frame and the →s */
     x: 3.65,        /* "X is data" (3.65–4.10; words.json 3.69) */
-    w: 4.50,        /* "W is the map" (4.35–5.95; words.json 4.94) */
-    map: 5.70,      /* "map" (5.70–5.95) */
+    w: 4.50,        /* "W is the map" (4.35–5.95; words.json 4.94): W becomes the hero */
   };
-  const T = { rest: 5.85, still: 6.17 };   // tags and brackets back to rest 5.85–6.17; still after
-  // the sweep: row r goes through W from ROWS[r][0] for ROWS[r][1] s, faster each time.
-  // Row 1 started 0.3 s before frame 0, so frame 0 is mid-flash.
-  const ROWS = [[-0.30, 0.80], [0.50, 0.60], [1.10, 0.45], [1.55, 0.35], [1.90, 0.30]];   // ends 2.20
-  const { COL, css, seg, mix } = ISO;
+  const T = { type: 1.12, rest: 5.85, still: 6.17 };   // typing 0–1.12; rest 5.85–6.17; still after
+  // the sweep: row r goes through W from ROWS[r][0] for ROWS[r][1] s, faster each time; ends 4.34
+  const ROWS = [[3.05, 0.36], [3.41, 0.29], [3.70, 0.24], [3.94, 0.21], [4.15, 0.19]];
+  const { COL, css, seg, mix, lerp } = ISO;
   const { SLOT } = VEC;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const E = ISO.E();
@@ -55,9 +56,44 @@
   // the flashing cells swell over their neighbours on purpose
   [...P.x.flat(), ...P.w.flat(), ...P.y.flat()].forEach((c) => c.el.setAttribute("data-layout-allow-overlap", ""));
 
+  // ---- local: the card typing, big, in the middle of the stage ----
+  // a ghost span after line 1 holds the untyped rest (hidden), so the card keeps its width
+  const LINE = "Y = X @ W";
+  const ghost = document.createElement("span");
+  ghost.style.visibility = "hidden"; ghost.style.fontFamily = "monospace"; ghost.style.fontWeight = "700";
+  P.card.rows[0].appendChild(ghost);
+  const BIG = { s: 1.6, cy: 665 };                 // 1.6× centred at stage middle (stage y 230–1100)
+  function cardAt(t) {
+    const n = Math.min(LINE.length, 1 + Math.floor(seg(t, 0, T.type) * LINE.length));
+    P.card.line1[0].textContent = LINE.slice(0, n); ghost.textContent = LINE.slice(n);
+    const el = P.card.el, w = el.offsetWidth, h = el.offsetHeight;
+    const k = E.io(seg(t, CUE.pushes - 0.12, CUE.pushes + 0.53));   // 0.65 s
+    const s0 = lerp(1.5, BIG.s, E.out(seg(t, 0, 0.4)));              // a small settle at frame 0
+    const s = lerp(s0, 1, k), cy = lerp(BIG.cy, EP.CARD_TOP + h / 2, k);
+    el.style.transform = `translate(${VEC.centreLeft(el).toFixed(1)}px, ${(cy - h / 2).toFixed(1)}px) scale(${s.toFixed(4)})`;
+  }
+  // a part building in: fade, dropping from 36 px above
+  const drop = (c, t, t0) => { const k = E.out(seg(t, t0, t0 + 0.25)); c.at(c.left0, c.top0 - 36 * (1 - k), { alpha: Math.min(1, 1.5 * k) }); return k; };
+  const fade = (t, t0, d = 0.25) => E.out(seg(t, t0, t0 + d));
+  function build(t) {
+    // X: label, brackets, rows top to bottom
+    const lx = fade(t, CUE.whole - 0.08);
+    EP.put(P.names.x.el, ...EP.LABEL.x(), lx);
+    P.xB.at(0, 0, { alpha: fade(t, CUE.whole - 0.02) });
+    P.x.forEach((row, r) => row.forEach((c) => drop(c, t, CUE.whole + 0.07 * r)));
+    // W: label, brackets, rows
+    EP.put(P.names.w.el, ...EP.LABEL.w(P), fade(t, CUE.through - 0.05));
+    P.wB.at(0, 0, { alpha: fade(t, CUE.through) });
+    P.w.forEach((row, r) => row.forEach((c) => drop(c, t, CUE.through + 0.05 + 0.07 * r)));
+    // then Y's label, empty brackets and the →s
+    EP.put(P.names.y.el, ...EP.LABEL.y(), fade(t, CUE.through + 0.25));
+    P.yB.at(0, 0, { alpha: fade(t, CUE.through + 0.28) });
+    P.arrows.forEach((el, r) => { el.style.opacity = fade(t, CUE.through + 0.25 + 0.04 * r, 0.2).toFixed(3); });
+  }
+
   // one row going through W, u = 0..1 over its duration:
   //   u 0.00–0.60 its three numbers flash in turn with W's matching rows
-  //   u 0.50      its → turns magenta (back to dim over 0.25 s after the row ends)
+  //   u 0.50      its → turns magenta (back to dim over 0.15 s after the row ends)
   //   u 0.62/0.80 Y's first / second number pops in (scale 1.3, magenta → white, 0.15 s)
   function sweep(t, r) {
     const [t0, d] = ROWS[r], at = (u) => t0 + u * d;
@@ -68,8 +104,8 @@
       xc.color(mix(SLOT[i], COL.text, 0.6 * k)); xc.home({ scale: 1 + 0.25 * k });
       P.w[i].forEach((wc) => { wc.color(mix(SLOT[i], COL.text, 0.5 * k)); wc.home({ scale: 1 + 0.15 * k }); });
     }
-    const ka = E.out(seg(t, at(0.5), at(0.5) + 0.08)) * (1 - E.io(seg(t, t0 + d, t0 + d + 0.25)));
-    P.arrows[r].style.color = css(mix(COL.dim, COL.hero, ka));
+    const ka = E.out(seg(t, at(0.5), at(0.5) + 0.08)) * (1 - E.io(seg(t, t0 + d, t0 + d + 0.15)));
+    if (ka > 0) P.arrows[r].style.color = css(mix(COL.dim, COL.hero, ka));
     [0.62, 0.80].forEach((u, j) => {
       const c = P.y[r][j], k = seg(t, at(u), at(u) + 0.15);
       if (t < at(u)) { c.home({ alpha: 0 }); return; }
@@ -83,25 +119,28 @@
     while (r < 4 && t >= ROWS[r + 1][0]) r++;
     const a = EP.RECT.xRow(r);
     if (r === 0) return a;
-    const p = EP.RECT.xRow(r - 1), k = E.io(seg(t, ROWS[r][0] - 0.1, ROWS[r][0] + 0.02));
+    const p = EP.RECT.xRow(r - 1), k = E.io(seg(t, ROWS[r][0] - 0.08, ROWS[r][0] + 0.02));
     return p.map((v, i) => v + (a[i] - v) * k);
   }
 
   function render(t) {
-    if (t >= T.still) { EP.state(P, g, "PRODUCT"); return; }   // the last frames: PRODUCT exactly
+    if (t >= T.still) {                                           // the last frames: PRODUCT exactly
+      P.card.line1[0].textContent = LINE; ghost.textContent = "";
+      EP.state(P, g, "PRODUCT"); return;
+    }
     EP.state(P, g, "INPUTS");                                     // Y empty; it fills row by row below
+    cardAt(t);
+    build(t);
     for (let r = 0; r < 5; r++) sweep(t, r);
     const end = ROWS[4][0] + ROWS[4][1];
-    P.hl.rect(boxRect(t), 1 - E.io(seg(t, end, end + 0.25)));
+    P.hl.rect(boxRect(t), seg(t, ROWS[0][0] - 0.1, ROWS[0][0]) * (1 - E.io(seg(t, end, end + 0.15))));
 
-    // "layer": W's brackets pulse once (dim → magenta → dim)
-    const kl = pulse(t, CUE.layer - 0.1, 0.5);
     // "X is data": X's brackets teal, tag data; "W is the map": W's brackets magenta, tag map
     const back = E.io(seg(t, T.rest, T.still));
     const kx = E.out(seg(t, CUE.x, CUE.x + 0.3)) * (1 - back);
     const kw = E.out(seg(t, CUE.w, CUE.w + 0.3)) * (1 - back);
     P.xB.color(mix(COL.dim, COL.data, kx));
-    P.wB.color(mix(COL.dim, COL.hero, Math.max(kl, kw)));
+    P.wB.color(mix(COL.dim, COL.hero, kw));
     const [dl, dt] = EP.tagAt(P, "x"), [ml, mt] = EP.tagAt(P, "w");
     EP.put(P.tags.data, dl - 20 * (1 - kx), dt, kx);
     EP.put(P.tags.map, ml - 20 * (1 - kw), mt, kw);
