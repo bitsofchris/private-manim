@@ -3,14 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep07 beat 7, 07_straight (master 29.78, 6.57 s). VO: "Now a linear map keeps the origin
-         fixed and the grid line straight. It can stretch, rotate, and squish, but it can't bend."
-         Opens MERGED. The shortcut hop fades and W's digits go white (the hero passes to the plane).
-         "origin fixed": a magenta ring pulses on the origin, then goes. "grid line straight": the
-         hero line (x1 = 1) turns magenta and the grid brightens once. "stretch, rotate, and squish":
-         one ride through the post dial (east-west x1.4, a 30 degree turn, north-south x0.6), back to
-         none before "but"; the hero line stays straight. "can't bend": the line kinks at its middle
-         and springs straight. Last 5 frames LINEAR, still. Hero: the origin, then the hero line. -->
+    <!-- ep07 07_straight, now the Short's opening beat (master 0.00, 6.48 s). VO: "A linear map
+         keeps the origin fixed and the grid line straight. It can stretch, rotate, and squish, but it
+         can't bend." Frame 0: the plain grid, x at (1, 2), W white, already easing into W's grid
+         (w1 = w2 = 0 -> 1 by 1.2 s, x rides to (-1, 1.5)). "origin fixed": a magenta ring pulses on
+         the origin, then goes. "grid line straight": the hero line (x1 = 1) turns magenta and the
+         grid brightens once. "stretch, rotate, and squish": one ride through the post dial
+         (east-west x1.4, a 30 degree turn, north-south x0.6), back to none before "but"; the hero
+         line stays straight. "can't bend": the line kinks at its middle and springs straight.
+         Last 5 frames LINEAR, still. Hero: the origin, then the hero line. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -28,28 +29,29 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6.57" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.48" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.57;
-  // Cues, beat-local = master - 29.78, from a 20 ms RMS envelope of vo_final.wav:
-  // "Now" 29.98, "keeps" 30.86, "origin" 31.14-31.46, "fixed" 31.58-31.98, "and" 32.28,
-  // "grid" 32.50, "line" 32.70, "straight" 32.90-33.22, "It can" 33.70, "stretch" 33.98-34.18,
-  // "rotate" 34.22-34.60, "squish" 34.66-35.00, "but" 35.10, "can't" 35.34, "bend" 35.82-36.10.
+  const BEAT_SECONDS = 6.48;
+  // Cues, beat-local = master (the re-spliced vo_final.wav: 0.25 s silence, then "A linear map").
+  // From a 20 ms RMS envelope: "A linear map" 0.24-0.80, "keeps" 0.92, "origin" 1.28-1.56,
+  // "fixed" 1.72-2.0, "and the grid" 2.44-2.72, "line" 2.84, "straight" 2.96-3.36, "It can" 3.84,
+  // "stretch" 4.08-4.24, "rotate" 4.28-4.52, "squish" 4.60-5.08, "but" 5.24, "can't" 5.48, "bend" ~5.9.
+  // (Old beat-local cues - 0.09 s; they sit on the new envelope.)
   const CUE = {
-    pass: 0.00,      // "Now a linear map": shortcut hop fades, W's digits go white (0.6 s)
-    origin: 1.34,    // "origin": the ring on the origin appears and pulses
-    fixed: 1.82,     // "fixed": second pulse, then the ring goes
-    grid: 2.68,      // "grid line": the hero line turns magenta
-    straight: 3.10,  // "straight": the grid brightens once
-    stretch: 4.16,   // "stretch": post -> east-west x1.4
-    rotate: 4.44,    // "rotate": + a 30 degree turn
-    squish: 4.86,    // "squish": + north-south x0.6
-    home: 5.06,      // back to post = none by "but" (5.32)
-    bend: 5.98,      // "bend" (6.04): the hero line kinks and springs straight (0.42 s)
-    still: 6.40,     // nothing moves after this (last 5 frames LINEAR)
+    map: 0.00,       // "A linear map": the plain grid eases into W's grid (to 1.20), x rides along
+    origin: 1.25,    // "origin": the ring on the origin appears and pulses
+    fixed: 1.73,     // "fixed": second pulse, then the ring goes
+    grid: 2.59,      // "grid line": the hero line turns magenta
+    straight: 3.01,  // "straight": the grid brightens once
+    stretch: 4.07,   // "stretch": post -> east-west x1.4
+    rotate: 4.35,    // "rotate": + a 30 degree turn
+    squish: 4.77,    // "squish": + north-south x0.6
+    home: 4.97,      // back to post = none by "but" (5.23)
+    bend: 5.89,      // "bend": the hero line kinks and springs straight (0.42 s)
+    still: 6.31,     // nothing moves after this (last 5 frames LINEAR)
   };
   const { COL, css, mix, lerp, seg } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
@@ -97,7 +99,6 @@
     EP.warp(g, f, {});
     if (o.boost > 0) EP.warp(g, f, { col: COL.dim, alpha: 0.7 * o.boost });
     VEC.axes(g, {});
-    if (o.trail > 0) EP.SHORT.forEach(([a, b]) => { EP.hop(g, a, b, { alpha: 0.9 * o.trail }); VEC.puck(g, a[0], a[1], { half: 11, col: COL.dim, alpha: o.trail }); });
     if (o.kink) heroKink(f, o.kink); else if (o.hero > 0) EP.heroLine(g, f, { alpha: o.hero });
     VEC.arrow(g, [0, 0], f(EP.X), { col: COL.data, width: 40 });
     VEC.puck(g, 0, 0);
@@ -109,12 +110,10 @@
     if (t >= CUE.still) t = CUE.still;
     EP.state(P, null, "LINEAR");                          // DOM only; the canvas is plane7
 
-    // the hero passes to the plane: W's digits go white, the shortcut hop fades
-    const kPass = E.io(seg(t, CUE.pass, CUE.pass + 0.6));
-    P.m.W.forEach((row) => row.forEach((c) => c.color(mix(COL.hero, COL.text, kPass))));
-    P.cards.merged.spans[0][2].style.color = css(mix(COL.hero, COL.text, kPass));   // and the card's W
-    // honest DOM motion while it passes (the check's sweep reads geometry): W's name dips in scale
-    const nameLeft = EP.ML.W + EP.CW - 150, kName = 1 - 0.08 * pulse(t, CUE.pass, 0.6);
+    // "A linear map": the grid eases from the plain grid into W's (frame 0 already moving)
+    const kMap = E.io(seg(t, CUE.map, CUE.map + 1.20));
+    // honest DOM motion while the grid moves (the check's sweep reads geometry): W's name dips in scale
+    const nameLeft = EP.ML.W + EP.CW - 150, kName = 1 - 0.08 * pulse(t, CUE.map, 1.20);
     P.names.W.style.transform = `translate(${nameLeft.toFixed(1)}px, ${EP.NAME_TOP.toFixed(1)}px)` + (kName < 1 ? ` scale(${kName.toFixed(4)})` : "");
 
     // origin ring: in on "origin", pulses on "origin" and "fixed", out after
@@ -122,12 +121,11 @@
     const ringK = pulse(t, CUE.origin, 0.36) + pulse(t, CUE.fixed - 0.06, 0.36);
 
     const pm = post(t);
-    const f = EP.stage(Object.assign({}, EP.S.W, pm ? { post: pm } : {}));
+    const f = EP.stage(Object.assign({ w1: kMap, w2: kMap }, pm ? { post: pm } : {}));
     // a damped spring: out to ~16 px, back, a small overshoot, flat again by CUE.bend + 0.42
     const amp = t > CUE.bend && t < CUE.bend + 0.42 ? 16 * Math.sin(Math.PI * 2.2 * seg(t, CUE.bend, CUE.bend + 0.42)) * Math.exp(-3 * seg(t, CUE.bend, CUE.bend + 0.42)) * (1 - seg(t, CUE.bend + 0.30, CUE.bend + 0.42)) : 0;
     plane7({
       f,
-      trail: 1 - kPass,
       hero: E.io(seg(t, CUE.grid - 0.10, CUE.grid + 0.30)),
       boost: pulse(t, CUE.straight - 0.05, 0.50),
       ring, ringK,

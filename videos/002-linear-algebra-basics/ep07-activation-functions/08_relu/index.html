@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep07 beat 8, 08_relu (master 36.35, 4.18 s). Code beat. Opens LINEAR, ends FOLDED
+    <!-- ep07 beat 8, 08_relu (4.18 s; after 05_one). Code beat. Opens MERGED (follows 05_one), ends FOLDED
          (still from 3.98). Hero: nn.ReLU(), then the bent line (one hero pair).
          VO: "Put a ReLU or a GELU between the layers, and the collapse stops."
-         "Put": W (digits, brackets, name) and the card x @ W fade; the nn.Sequential card
+         "Put": W (magenta digits, brackets, name), the card x @ W and the shortcut hop fade;
+         the nn.Sequential card
          fades in with its nn.ReLU() row collapsed (the four lines). "ReLU": the row opens a
          gap and nn.ReLU() types in, magenta. "GELU": the line reads nn.GELU() for the word,
-         nn.ReLU() again on "between". "between the layers": w2 1 -> 0 (the grid un-squishes to
+         nn.ReLU() again on "between". The hero line (x1 = 1, straight, magenta) fades in
+         before "between", paired with nn.ReLU(). "between the layers": w2 1 -> 0 (the grid un-squishes to
          W1's, x back to (−1, 3)). "and the collapse stops": relu 0 -> 1 (0.9 s), the grid
          folds, the hero line bends, x slides to (0, 3). -->
     <script src="vendor/gsap.min.js"></script>
@@ -36,7 +38,7 @@
     <script>
 (() => {
   const BEAT_SECONDS = 4.18;
-  // Beat-local cues (master − 36.35), from words.json checked on a 30 ms RMS envelope of
+  // Beat-local cues (master − 36.35 in the first cut; the re-ordered master shifts every word equally, Put 29.74), from words.json checked on a 30 ms RMS envelope of
   // vo_final.wav. Speech: 0.18 "Put", 0.33-0.87 "a ReLU", 0.99 "or", 1.20-1.59 "a GELU",
   // 1.74 "between", 2.0-2.40 "the layers", pause, 2.82 "and", 3.12 "collapse", 3.51 "stops".
   const CUE = {
@@ -49,6 +51,7 @@
   const T = {
     wOut: [CUE.put, 0.28], cardIn: [0.12, 0.40],
     gap: [CUE.relu, CUE.relu + 0.26], type: [CUE.relu + 0.12, CUE.relu + 0.50],
+    hero: [1.00, 1.60],                             // the straight hero line, in before "between"
     w2: [CUE.between, CUE.between + 0.72], relu: [CUE.and, CUE.and + 0.90],
     still: 3.98,                                    // FOLDED, exact, from here (6 frames)
   };
@@ -80,9 +83,9 @@
 
     // "Put": W and the x @ W card go; the Sequential card (four lines) comes in
     const wa = 1 - E.io(seg(t, ...T.wOut));
-    EP.placeM(P, "W", EP.ML.W, wa, COL.text, wa);
+    EP.placeM(P, "W", EP.ML.W, wa, COL.hero, wa);   // MERGED: W magenta, goes with W
     EP.placeCard(P.cards.merged, wa);
-    P.cards.merged.spans[0][2].style.color = ISO.css(COL.text);   // LINEAR: the card's W is white (the hero is the line)
+    P.cards.merged.spans[0][2].style.color = css(COL.hero);   // MERGED: the card's W is magenta (set here, not left to the state)
     const kc = E.out(seg(t, ...T.cardIn));
     EP.placeCard(seq, kc, { scale: 0.96 + 0.04 * kc });
 
@@ -97,7 +100,8 @@
     // the plane: back to "between the layers" (w2 1 -> 0), then relu folds it (relu 0 -> 1)
     const w2 = 1 - E.io(seg(t, ...T.w2)), relu = E.io(seg(t, ...T.relu));
     EP.bg(g);
-    EP.plane(g, { f: EP.stage({ w1: 1, w2, relu }), hero: 1 });
+    const hero = E.io(seg(t, ...T.hero));
+    EP.plane(g, { f: EP.stage({ w1: 1, w2, relu }), hero, trail: [[EP.X, EP.XW, wa]] });   // the shortcut hop fades with W
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);

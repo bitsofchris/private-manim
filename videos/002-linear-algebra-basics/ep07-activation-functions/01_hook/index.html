@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- ep07 beat 1, 01_hook (master 0.00, 5.91 s). VO: "Without activation functions, a 100-layer
          neural network is just one matrix. Here's why."
-         Frame 0: a deck of five layer cards (W1, W2, W3, ⋮, W100) already sliding together in the top
-         stage, over the plane in STACK (plain grid, x at (1, 2)).
+         Plays after 07_straight. Frame 0 = EP.state LINEAR, already moving: in 0.65 s the hero line
+         fades, the plane un-warps W -> plain grid (x rides back to (1, 2)) and the card x @ W and W
+         fade, while a deck of five layer cards (W1, W2, W3, ⋮, W100) slides in and together in the top
+         stage, over the plane in STACK.
          "100-layer": the W100 card's name and border brighten.
          "just one matrix": the deck collapses into one card that becomes the matrix W at its MERGED
          place (digits magenta, name W): one move, 0.64 s.
@@ -46,7 +48,11 @@
   // "layer" 2.84, "neural network" 3.06-3.50, "is" 3.64, "just" 3.86 [3.76], "one" 4.18 [4.12],
   // "matrix" 4.36-4.70, pause, "Here's" 5.32 [5.38], "why" 5.48-5.66.
   const CUE = {
-    slide: 0.00,    // frame 0: the deck is already sliding together (pitch 108 -> 96, done 1.40)
+    out: 0.00,      // frame 0 = LINEAR (after 07_straight), already moving: the hero line fades, the
+    unwarp: 0.65,   //   plane un-warps W -> plain grid and x rides back to (1, 2) (done 0.65, before "Without" 0.60 ends);
+    gone: 0.35,     //   the card x @ W and the matrix W fade out by 0.35
+    slide: 0.25,    // the deck slides in (fades in 0.25-0.65, pitch 108 -> 96 and up 60 px, done 1.25)
+    deckIn: 1.25,
     hundred: 2.40,  // "hundred": the W100 card brightens (0.25 s)
     just: 3.86,     // "just": the deck starts collapsing ...
     land: 4.50,     // ... and lands as the matrix W, magenta, on "one matrix" (one move, 0.64 s)
@@ -101,20 +107,32 @@
 
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
-    EP.state(P, g, "STACK");                             // the end state; the plane is STACK throughout
+    EP.state(P, g, "STACK");                             // the end state
+
+    // ---- the way out of LINEAR: plane W -> plain grid, hero line fades, x back to (1, 2) ----
+    const k = E.io(seg(t, CUE.out, CUE.unwarp));
+    if (k < 1) {
+      EP.bg(g);
+      EP.plane(g, { f: EP.stage({ w1: 1 - k, w2: 1 - k }), hero: 1 - k });
+    }
+    const kGone = 1 - E.io(seg(t, CUE.out, CUE.gone));    // the card x @ W (W white) and the matrix W
+    P.cards.merged.spans[0][2].style.color = css(COL.text);
+    EP.placeCard(P.cards.merged, kGone);
 
     // ---- the deck: slide together, W100 brightens, collapse ----
-    const pitch = lerp(DECK.p0, DECK.p1, E.out(seg(t, CUE.slide, 1.40)));
+    const kSlide = E.out(seg(t, CUE.slide, CUE.deckIn));
+    const pitch = lerp(DECK.p0, DECK.p1, kSlide), dy = 60 * (1 - kSlide);
+    const aEnter = E.out(seg(t, CUE.slide, CUE.slide + 0.40));
     const kHundred = E.out(seg(t, CUE.hundred, CUE.hundred + 0.25));
     const u = E.io(seg(t, CUE.just, CUE.land));          // the collapse, one move
     const aDeck = 1 - E.io(seg(u, 0.55, 1));             // the panel hands over to W's brackets
     const inkA = 1 - E.out(seg(u, 0, 0.45));             // the names go as the cards pile up
     DECK.names.forEach((name, i) => {
-      const r0 = [DECK.cx - DECK.w / 2, DECK.top + i * pitch, DECK.w, DECK.h];
+      const r0 = [DECK.cx - DECK.w / 2, DECK.top + dy + i * pitch, DECK.w, DECK.h];
       const r = r0.map((v, k) => lerp(v, TARGET[k], u));
       const lit = i === 4 ? kHundred : 0;
       const border = mix(mix(COL.dim, COL.text, lit), COL.hero, E.io(seg(u, 0.2, 0.8)));
-      placeDeck(i, r, u >= 1 ? 0 : aDeck, border, mix(COL.dim, COL.text, lit), inkA);
+      placeDeck(i, r, u >= 1 ? 0 : aDeck * aEnter, border, mix(COL.dim, COL.text, lit), inkA);
     });
     popW100(kHundred);
 
@@ -122,7 +140,8 @@
     const aIn = E.out(seg(u, 0.45, 1));                  // W's digits, brackets and name arrive
     const v = E.io(seg(t, CUE.split, CUE.still));        // the split
     const aW = aIn * (1 - E.io(seg(v, 0, 0.3)));     // W goes before the halves are legible
-    EP.placeM(P, "W", EP.ML.W, aW, COL.hero, aW);
+    if (t < CUE.just) EP.placeM(P, "W", EP.ML.W, kGone, COL.text, kGone);   // LINEAR's white W, fading
+    else EP.placeM(P, "W", EP.ML.W, aW, COL.hero, aW);
     // W1 and W2 slide out from W's place to their STACK places; digits magenta -> white
     const a12 = E.out(seg(v, 0.3, 0.75));
     const col12 = mix(COL.hero, COL.text, E.io(seg(v, 0.3, 1)));
