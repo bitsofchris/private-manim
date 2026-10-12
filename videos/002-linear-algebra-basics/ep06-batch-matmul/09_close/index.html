@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep06 beat 9, 09_close (master 45.20 → 49.837).
+         Opens BIG; the comment cross-fades back to # (5,3) @ (3,2) → (5,2) in the first 0.5 s.
+         "the same learned map in that matrix": a magenta box round W. "applied to many vectors":
+         the box goes, all five →s light magenta and a teal box rings each row of X.
+         Back to rest by 4.0; the last 0.6 s are still on CANON (the Short's last frame). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep06.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.637" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.637;
+  // beat-local = master − 45.20; words.json checked on a 50 ms RMS envelope of vo_final.wav
+  const CUE = {
+    same: 0.74,     /* "same" (master 45.94; voiced 45.80) */
+    matrix: 2.50,   /* "matrix" ends (silence 47.65–47.95) */
+    applied: 2.80,  /* "applied" (master 48.00–48.10) */
+    vectors: 3.70,  /* "vectors" (48.75–49.30) */
+  };
+  const T = { swap: 0.50, rest: 3.65, still: 4.03 };   // comment back by 0.5; rest 3.65–4.0; still from 4.03
+  const { COL, css, seg, mix } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  ISO.guides(root);
+  // local: one teal box per row of X (the kit has three highlight boxes; this needs five)
+  const rowBox = EP.X.map(() => VEC.hbox(root));
+
+  function render(t) {
+    if (t >= T.still) { EP.state(P, g, "CANON"); rowBox.forEach((h) => h.rect(EP.RECT.xRow(0), 0)); return; }
+    // the comment: BIG's fades out, then CANON's fades in (both comments are 23 columns,
+    // so the card keeps its size and place)
+    const kOut = E.io(seg(t, 0, T.swap / 2)), kIn = E.io(seg(t, T.swap / 2, T.swap));
+    if (t < T.swap / 2) {
+      EP.state(P, g, "BIG");
+      P.card.big.forEach((s) => { s.style.opacity = (1 - kOut).toFixed(3); });
+    } else {
+      EP.state(P, g, "CANON");
+      P.card.shapes.forEach((s) => { s.style.opacity = kIn.toFixed(3); });
+    }
+    // "the same learned map in that matrix": a magenta box round W (it draws in from 10 px out)
+    const kW = E.out(seg(t, CUE.same - 0.2, CUE.same + 0.15)) * (1 - E.io(seg(t, CUE.matrix, CUE.applied)));
+    const grow = (r, k) => [r[0] - 10 * (1 - k), r[1] - 10 * (1 - k), r[2] + 20 * (1 - k), r[3] + 20 * (1 - k)];
+    P.hl.rect(grow(EP.RECT.w(), Math.min(1, kW + 0.001)), kW);
+    // "applied to many vectors": every → magenta and a teal box round each row of X, all at once
+    const kA = E.out(seg(t, CUE.applied - 0.05, CUE.applied + 0.25)) * (1 - E.io(seg(t, T.rest, T.still - 0.03)));
+    P.arrows.forEach((el) => { el.style.color = css(mix(COL.dim, COL.hero, kA)); });
+    rowBox.forEach((h, r) => h.rect(grow(EP.RECT.xRow(r), kA), kA, COL.data));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

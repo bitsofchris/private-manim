@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep06 beat 5, 05_sweep (master 20.95 → 30.75). Opens INPUTS, ends PRODUCT.
+         "X at W": X's and W's brackets brighten once. "the same thing to every row": every →
+         pulses, top to bottom. "Row one of X": a magenta box round row 1. "weights the rows of W":
+         1, 2, −1 fly from row 1 to W's rows as "1 ×", "2 ×", "−1 ×", each W row pulsing as its
+         weight lands. "and sums": row 1's → magenta, Y row 1 fills [ 4, −1 ]. "Then row two":
+         the box slides down, the weights retype 0 ×, −1 ×, 3 ×, Y row 2 fills [ −3.5, 5 ].
+         "all five in parallel": weights fade, boxes on rows 3-5, their →s magenta, Y rows 3-5
+         fill in a cascade 0.12 s apart. Still on PRODUCT from 9.40. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep06.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.8" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.8;                 // master 20.95 → 30.75 in vo_final.wav
+  const { COL, css, seg, mix, lerp } = ISO;
+  // beat-local = master − 20.95; words.json checked on a 50 ms RMS envelope of the window
+  const CUE = {
+    xAtW: 0.35,     /* "X at W" (0.35–0.95) */
+    same: 1.36,     /* "the same thing to every row" (1.36–2.55) */
+    row1: 3.05,     /* "Row one of X" (3.05–3.90) */
+    weights: 4.25,  /* "weights" (4.25–4.70); "the rows of W" 4.85–5.95 */
+    sums: 6.10,     /* "and sums" (6.10–6.70; "sums" from 6.35) */
+    row2: 7.15,     /* "Then row two" (7.15–7.85; "two" from 7.60) */
+    all: 8.10,      /* "then all five" (8.10–8.80) */
+    parallel: 9.15, /* "parallel" (9.15–9.50) */
+    still: 9.40,    /* PRODUCT, still, from here to the end */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, a, d) => { const u = seg(t, a, a + d); return u <= 0 || u >= 1 ? 0 : Math.sin(Math.PI * u); };   // 0 → 1 → 0, exactly 0 outside
+  const lerpRect = (a, b, u) => a.map((v, i) => lerp(v, b[i], u));
+  const R = EP.RECT;
+  // the weights at W: "n ×" right-aligned to W's left bracket; the number and " ×" are their own spans
+  const WT_W = 220, WT_LEFT = EP.WM.left - 40 - WT_W;
+  const wts = [0, 1, 2].map((i) => {
+    const el = ISO.label(root, "", { size: EP.SIZE, color: css(VEC.SLOT[i]), width: WT_W, align: "right" });
+    el.setAttribute("data-layout-allow-overlap", "");   // they fly over X's label and swell into each other on purpose
+    const num = document.createElement("span"), times = document.createElement("span");
+    times.textContent = " ×"; el.append(num, times);
+    [num, times].forEach((sp) => sp.setAttribute("data-layout-allow-overlap", ""));
+    return { el, num, times };
+  });
+  // the centre x of a weight's number inside its label (offsets ignore transforms)
+  const numCx = (w) => w.num.offsetLeft + w.num.offsetWidth / 2;
+  // an arrow at rest position with an extra scale
+  function arrow(r, col, s = 1) {
+    const [l, tp] = EP.arrowAt(r), el = P.arrows[r];
+    el.style.transform = `translate(${l.toFixed(1)}px, ${tp.toFixed(1)}px) scale(${s.toFixed(4)})`;
+    el.style.color = css(col);
+  }
+  // a Y cell popping in at t0: scale 1.3 → 1 over 0.15 s, magenta settling to white
+  function popY(c, t, t0) {
+    if (t < t0) { c.home({ alpha: 0 }); return; }
+    const u = E.out(seg(t, t0, t0 + 0.15));
+    c.home({ alpha: seg(t, t0, t0 + 0.05), scale: 1.3 - 0.3 * u });
+    c.color(mix(COL.hero, COL.text, E.io(seg(t, t0 + 0.10, t0 + 0.35))));
+  }
+  // a W row and an X cell swell together (the weighting), brightening toward white
+  const swellRow = (cells, k) => cells.forEach((c) => { c.home({ scale: 1 + 0.18 * k }); c.color(mix(c.col0, COL.text, 0.45 * k)); });
+  const swellCell = (c, k) => { c.home({ scale: 1 + 0.22 * k }); c.color(mix(c.col0, COL.text, 0.35 * k)); };
+
+  // ---- the schedule ----
+  const LAUNCH = [0, 1, 2].map((i) => CUE.weights + 0.40 * i);      // row 1's weights leave X: 4.25, 4.65, 5.05
+  const FLY = 0.65;                                                  // each flight (≥ 0.6 s, a tracked move)
+  const RETYPE = [0, 1, 2].map((i) => CUE.row2 + 0.20 + 0.10 * i);   // row 2's weights: 7.35, 7.45, 7.55
+  const FILL = [[CUE.sums + 0.10, CUE.sums + 0.30], [7.85, 8.00]];   // Y rows 1, 2: first number, then second
+  const CASCADE = 8.45, STEP = 0.12;                                 // Y rows 3-5: six pops 0.12 s apart (last 9.05)
+  const REST = [9.05, 9.35];                                         // boxes and →s back to rest
+
+  function render(t) {
+    if (t >= CUE.still) t = BEAT_SECONDS;
+    wts.forEach((w) => EP.put(w.el, 0, 0, 0));
+    if (t >= CUE.still) { EP.state(P, g, "PRODUCT"); return; }       // the still: PRODUCT exactly
+    EP.state(P, g, "INPUTS");
+
+    // "X at W": X's and W's brackets brighten once (t = 0 is INPUTS, already rising)
+    const kb = pulse(t, 0, 1.15);
+    if (kb > 0) { P.xB.color(mix(COL.dim, COL.text, 0.85 * kb)); P.wB.color(mix(COL.dim, COL.text, 0.85 * kb)); }
+
+    // "the same thing to every row": each → pulses once, top to bottom
+    const arrowK = [0, 1, 2, 3, 4].map((r) => pulse(t, CUE.same + 0.18 * r, 0.45));
+    // the hero →: row 1 on "sums", row 2 after "two", rows 3-5 on "all five"
+    const heroK = [
+      E.out(seg(t, CUE.sums - 0.05, CUE.sums + 0.15)) * (1 - E.io(seg(t, CUE.row2 - 0.10, CUE.row2 + 0.20))),
+      E.out(seg(t, 7.75, 7.90)) * (1 - E.io(seg(t, CUE.all + 0.05, CUE.all + 0.30))),
+      ...[2, 3, 4].map(() => E.out(seg(t, CUE.all + 0.20, CUE.all + 0.35)) * (1 - E.io(seg(t, REST[0], REST[1])))),
+    ];
+    [0, 1, 2, 3, 4].forEach((r) => {
+      if (arrowK[r] > 0) arrow(r, mix(COL.dim, COL.text, arrowK[r]), 1 + 0.12 * arrowK[r]);   // ≤ 1.12: line boxes stay apart
+      else if (heroK[r] > 0) arrow(r, mix(COL.dim, COL.hero, heroK[r]));
+    });
+
+    // the box: in on "Row one", slides to row 2 on "Then row two", to row 3 on "then all"
+    let rc = R.xRow(0);
+    rc = lerpRect(rc, R.xRow(1), E.io(seg(t, CUE.row2 - 0.10, CUE.row2 + 0.50)));
+    rc = lerpRect(rc, R.xRow(2), E.io(seg(t, CUE.all, CUE.all + 0.40)));
+    const rest = 1 - E.io(seg(t, REST[0], REST[1]));
+    P.hl.rect(rc, E.out(seg(t, CUE.row1 - 0.05, CUE.row1 + 0.30)) * rest);
+    const k45 = E.out(seg(t, CUE.all + 0.05, CUE.all + 0.40)) * rest;
+    P.hl2.rect(R.xRow(3), k45); P.hl3.rect(R.xRow(4), k45);
+
+    // the weights: row 1's fly from X to W's rows; row 2's retype in place; all fade on "then all"
+    const fade = 1 - E.io(seg(t, CUE.all, CUE.all + 0.25));
+    wts.forEach((w, i) => {
+      const done = t >= RETYPE[i] + 0.15;
+      w.num.textContent = VEC.fmtv(done ? EP.X[1][i] : EP.X[0][i]);
+      const cx = numCx(w), endL = WT_LEFT, endT = EP.rowY(EP.W_TOP, i) + 2;
+      const startL = EP.XM.left + (i + 0.5) * EP.XM.cw - cx, startT = EP.rowY(EP.X_TOP, 0) + 1;
+      if (t < LAUNCH[i]) return;
+      const u = E.io(seg(t, LAUNCH[i], LAUNCH[i] + FLY));
+      const arc = -40 * Math.sin(Math.PI * u);                       // a slight lift on the way
+      const s = 1 + 0.18 * pulse(t, LAUNCH[i] + FLY - 0.05, 0.3) + 0.22 * pulse(t, RETYPE[i], 0.3);
+      EP.put(w.el, lerp(startL, endL, u) + arc * 0.5, lerp(startT, endT, u) + arc, fade);
+      w.el.style.transform += ` scale(${s.toFixed(4)})`;
+      w.el.style.transformOrigin = `${cx.toFixed(1)}px 50%`;
+      w.times.style.opacity = E.out(seg(t, LAUNCH[i] + 0.35, LAUNCH[i] + FLY)).toFixed(3);
+    });
+    // the weighting: row 1's number swells as it leaves, W's row as its weight lands;
+    // on row 2 both swell together as each weight retypes
+    [0, 1, 2].forEach((i) => {
+      const kx = pulse(t, LAUNCH[i] - 0.10, 0.40), kx2 = pulse(t, RETYPE[i] - 0.05, 0.40);
+      if (kx > 0) swellCell(P.x[0][i], kx);
+      if (kx2 > 0) swellCell(P.x[1][i], kx2);
+      const kw = Math.max(pulse(t, LAUNCH[i] + FLY - 0.10, 0.45), kx2);
+      if (kw > 0) swellRow(P.w[i], kw);
+    });
+
+    // Y: never pre-filled; each row fills as its computation runs
+    FILL.forEach((ts, r) => ts.forEach((t0, c) => popY(P.y[r][c], t, t0)));
+    [2, 3, 4].forEach((r, j) => [0, 1].forEach((c) => popY(P.y[r][c], t, CASCADE + STEP * (2 * j + c))));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

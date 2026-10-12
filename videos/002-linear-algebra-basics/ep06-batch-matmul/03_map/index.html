@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep06 beat 3, 03_map (master 10.10, 2.95 s). Opens INPUTS, ends INPUTS.
+         VO: "W is the map from three dimensions to two."
+         A magenta box round W; W's three rows pulse in turn with the 3 in (3, 2);
+         W's two columns pulse with the 2. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep06.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.95" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.95;
+  // Cues, beat-local seconds (master 10.10 + t), from words.json checked on a 50 ms RMS envelope.
+  // Speech: 0.15-0.80 "W is the map", 1.10-2.10 "from three dimensions", 2.15-2.65 "to two".
+  const CUE = {
+    w: 0.00,        // "W" (10.25): the box round W grows in from frame 0, full on "W"
+    three: 1.38,    // "three" (11.50): W's rows pulse in turn, the 3 in (3, 2) brightens
+    two: 2.22,      // "two" (12.45): W's columns pulse, the 2 brightens (the 3 hands over)
+    boxOut: 2.38,   // box and highlights go
+    still: 2.64,    // nothing moves after this (INPUTS)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  // W's cells swell into their neighbours' boxes on purpose (the glyphs stay apart)
+  P.w.flat().forEach((c) => c.el.setAttribute("data-layout-allow-overlap", ""));
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+
+  function render(t) {
+    EP.state(P, g, "INPUTS");
+    if (t >= CUE.still) return;
+    const off = 1 - E.io(seg(t, CUE.boxOut, CUE.still));
+
+    // "W is the map": the magenta box round W (alpha 0 at frame 0, in by "W")
+    const kOn = E.out(seg(t, CUE.w, CUE.w + 0.3));
+    const rw = EP.RECT.w(), d = 20 * (1 - kOn);
+    P.hl.rect([rw[0] - d, rw[1] - d, rw[2] + 2 * d, rw[3] + 2 * d], kOn * off);
+
+    // "three dimensions": the rows swell in turn (in their own colours); "to two": the columns
+    const rowP = [0, 1, 2].map((r) => pulse(t, CUE.three + 0.14 * r, 0.36));
+    const colP = [0, 1].map((c) => pulse(t, CUE.two + 0.08 * c, 0.30));
+    P.w.forEach((row, r) => row.forEach((c, k) => c.home({ scale: 1 + 0.22 * rowP[r] + 0.22 * colP[k] })));
+
+    // the 3 in (3, 2) brightens on "three" and hands over to the 2 on "two"; both --dim by the hold
+    const k3 = E.out(seg(t, CUE.three, CUE.three + 0.2)) * (1 - E.io(seg(t, CUE.two, CUE.two + 0.25)));
+    const k2 = E.out(seg(t, CUE.two, CUE.two + 0.2)) * off;
+    P.names.w.dims[0].style.color = css(mix(COL.dim, COL.text, k3));
+    P.names.w.dims[1].style.color = css(mix(COL.dim, COL.text, k2));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

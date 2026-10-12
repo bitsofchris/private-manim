@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep06 beat 2, 02_rows (master 6.35, 3.75 s). Opens PRODUCT, ends INPUTS.
+         VO: "X is five rows. Each row is one input vector with three features."
+         Y's digits fade (Y is never pre-filled); X's rows pulse top to bottom; a magenta
+         box round row 1; row 1's three numbers swell in turn with the 3 in (5, 3). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep06.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.75" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.75;
+  // Cues, beat-local seconds (master 6.35 + t), from words.json checked on a 50 ms RMS envelope.
+  // Speech: 0.15-1.00 "X is five rows", 1.15-2.50 "each row is one input vector with", 2.80-3.40 "three features".
+  const CUE = {
+    fade: 0.40,     // Y's digits gone (from frame 0)
+    five: 0.50,     // "five" (6.85-7.05): X's rows pulse top to bottom
+    each: 1.12,     // "each row is one input vector" (7.50): magenta box round row 1
+    three: 2.78,    // "three" (9.15-9.30): row 1's numbers swell in turn, the 3 in (5, 3) brightens
+    boxOut: 3.12,   // box and swell gone by 3.42
+    still: 3.42,    // nothing moves after this (INPUTS)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  // X's cells swell into their neighbours' boxes on purpose (the glyphs stay apart)
+  P.x.flat().forEach((c) => c.el.setAttribute("data-layout-allow-overlap", ""));
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+
+  function render(t) {
+    EP.state(P, g, "INPUTS");
+    if (t >= CUE.still) return;
+    // Y's digits fade out (frame 0 is PRODUCT: alpha 1)
+    const ya = 1 - E.io(seg(t, 0, CUE.fade));
+    P.y.forEach((row) => row.forEach((c) => c.home({ alpha: ya })));
+
+    // "five rows": each row of X swells, top to bottom; "three features": row 1's numbers in turn
+    const rowP = [0, 1, 2, 3, 4].map((r) => pulse(t, CUE.five + 0.09 * r, 0.32));
+    const featP = [0, 1, 2].map((c) => pulse(t, CUE.three + 0.10 * c, 0.30));
+    P.x.forEach((row, r) => row.forEach((c, k) => {
+      c.home({ scale: 1 + 0.16 * rowP[r] + (r === 0 ? 0.26 * featP[k] : 0) });
+    }));
+
+    // "each row is one input vector": the magenta box round row 1, grows in, goes at the end
+    const kOn = E.out(seg(t, CUE.each, CUE.each + 0.25)), kOff = E.io(seg(t, CUE.boxOut, CUE.still));
+    const r0 = EP.RECT.xRow(0), d = 14 * (1 - kOn);
+    P.hl.rect([r0[0] - d, r0[1] - d, r0[2] + 2 * d, r0[3] + 2 * d], kOn * (1 - kOff));
+
+    // the 3 in X's (5, 3) brightens on "three", back to --dim by the hold
+    const k3 = E.out(seg(t, CUE.three, CUE.three + 0.2)) * (1 - E.io(seg(t, CUE.boxOut, CUE.still)));
+    P.names.x.dims[1].style.color = css(mix(COL.dim, COL.text, k3));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

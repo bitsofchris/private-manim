@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep06 beat 8, 08_bigger (master 39.75, 5.45 s). Opens CANON, ends BIG.
+         The comment loses " → (5,2)" ("bigger"), gains "batch," ("a batch"), its 5 retypes as
+         "seq" ("a sequence"), its 3 turns magenta ("features"); then a box round row 1 of X
+         and W's 3 pulses ("the last dimension is always the vector"). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep06.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.45" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.45;
+  // Cues, beat-local seconds (master 39.75 + t), from words.json checked on a 50 ms RMS envelope
+  // of vo_final.wav. Speech: 0.05-1.35 "Real data just makes this bigger" ("bigger" 1.05-1.35),
+  // 1.45-2.00 "There's a batch", 2.05-2.50 "there's a sequence", 2.65-3.35 "there's features",
+  // 3.45-4.05 "The last dimension", 4.35-5.20 "is always the vector".
+  const CUE = {
+    bigger: 0.80,   // "makes this bigger" (0.72-1.35): " → (5,2)" backspaces out (0.35 s)
+    batch: 1.80,    // "batch" (1.88): "batch," types in after "# (", magenta (0.3 s)
+    seq: 2.42,      // "sequence" (2.51): the 5 backspaces and "seq" types in, magenta (0.3 s)
+    feat: 3.05,     // "features" (3.07-3.35): the comment's 3 turns magenta (it stays)
+    last: 3.60,     // "last" (3.65): a magenta box round row 1 of X (one vector, three numbers)
+    pulse: 4.30,    // "always the vector" (4.35-5.20): the 3 in W's (3, 2) pulses (0.6 s)
+    boxOff: 4.75,   // box gone by 5.0
+    still: 5.10,    // BIG, still, from here to the end
+  };
+  const { COL, css, seg, mix, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  const C = P.card, S = C.shapes, B = C.big;
+  const S8 = S[8].textContent, S9 = S[9].textContent, B1 = B[1].textContent, B2 = B[2].textContent;
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, a, d) => { const u = seg(t, a, a + d); return u <= 0 || u >= 1 ? 0 : Math.sin(Math.PI * u); };
+  const typed = (full, k) => full.slice(0, Math.floor(Math.min(1, Math.max(0, k)) * full.length + 1e-6));
+  // the card's natural width for a given content (fn sets it); the content is left as fn set it
+  const natural = (fn) => { C.el.style.width = ""; fn(); return C.el.offsetWidth; };
+  // the comment's four contents: A "# (5,3) @ (3,2) → (5,2)", B "# (5,3) @ (3,2)",
+  // Cb "# (batch,5,3) @ (3,2)", D "# (batch,seq,3) @ (3,2)" (BIG)
+  const showA = () => { C.show({ b: true, line2: "shapes" }); S[8].textContent = S8; S[9].textContent = S9; };
+  const showB = () => { C.show({ b: true, line2: "shapes" }); S[8].textContent = ""; S[9].textContent = ""; };
+  const showC = (bt, sq) => { C.show({ b: true, line2: "big" }); B[1].textContent = bt; B[2].textContent = sq; };
+
+  function render(t) {
+    S[8].textContent = S8; S[9].textContent = S9;
+    C.el.style.width = ""; C.el.style.overflow = ""; P.names.w.dims[0].style.textShadow = "none";
+    if (t >= CUE.still) { EP.state(P, g, "BIG"); return; }
+    EP.state(P, g, "CANON");
+    if (t < CUE.bigger) return;
+
+    // ---- the comment: its text at t, and the card's width eased between the contents' widths ----
+    const wA = natural(showA), wB = natural(showB), wC = natural(() => showC(B1, "5")), wD = natural(() => showC(B1, B2));
+    const kB = E.io(seg(t, CUE.bigger, CUE.bigger + 0.35)), kC = E.io(seg(t, CUE.batch, CUE.batch + 0.3));
+    const kD = E.io(seg(t, CUE.seq, CUE.seq + 0.3));
+    let w;
+    if (t < CUE.batch) {                                       // " → (5,2)" backspaces out
+      showA();
+      const back = typed(S8 + S9, 1 - seg(t, CUE.bigger, CUE.bigger + 0.35));
+      S[8].textContent = back.slice(0, S8.length); S[9].textContent = back.slice(S8.length);
+      w = lerp(wA, wB, kB);
+    } else if (t < CUE.seq) {                                  // "batch," types in
+      showC(typed(B1, seg(t, CUE.batch, CUE.batch + 0.3)), "5");
+      w = lerp(wB, wC, kC);
+    } else {                                                   // "5" out, "seq" in (4 key presses)
+      const n = Math.floor(seg(t, CUE.seq, CUE.seq + 0.3) * 4 + 1e-6);
+      showC(B1, n === 0 ? "5" : B2.slice(0, n - 1));
+      w = lerp(wC, wD, kD);
+    }
+    const settled = (t >= CUE.bigger + 0.35 && t < CUE.batch) || (t >= CUE.batch + 0.3 && t < CUE.seq) || t >= CUE.seq + 0.3;
+    if (!settled) { C.el.style.width = `${w.toFixed(1)}px`; C.el.style.overflow = "hidden"; }
+    C.at();
+
+    // colours: the inner 3s come back to --text as the shapes row goes (they are the features again);
+    // the newest word is magenta until the next; the 3 turns magenta on "features" and stays
+    const back3 = E.io(seg(t, CUE.bigger, CUE.bigger + 0.35));
+    [2, 6].forEach((i) => { S[i].style.color = css(mix(COL.dim, COL.text, back3)); });
+    const bOff = E.io(seg(t, CUE.seq, CUE.seq + 0.2)), sOff = E.io(seg(t, CUE.feat, CUE.feat + 0.2));
+    B[1].style.color = css(mix(COL.hero, COL.text, bOff));
+    B[2].style.color = css(t < CUE.seq ? COL.text : mix(COL.hero, COL.text, sOff));
+    B[4].style.color = css(mix(COL.text, COL.hero, sOff));
+
+    // "The last dimension is always the vector": row 1 of X boxed; W's 3 pulses
+    const box = E.out(seg(t, CUE.last, CUE.last + 0.3)) * (1 - E.io(seg(t, CUE.boxOff, CUE.boxOff + 0.25)));
+    P.hl.rect(EP.RECT.xRow(0), box);
+    const pu = pulse(t, CUE.pulse, 0.6);
+    const d = P.names.w.dims[0];
+    d.style.color = css(mix(COL.dim, COL.hero, pu));
+    if (pu > 0) d.style.textShadow = `0 0 ${(24 * pu).toFixed(1)}px ${css(COL.hero, 1, 0.8 * pu)}`;
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

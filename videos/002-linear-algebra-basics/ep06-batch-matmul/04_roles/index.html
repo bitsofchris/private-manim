@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep06 beat 4, 04_roles (master 13.05, 7.90 s). Opens INPUTS, ends INPUTS.
+         VO: "X and W are both matrices, but they play different roles. X is data, which is
+         a stack of vectors here. W is a transformation."
+         X's and W's brackets brighten together (white), then part: X's teal, W's --dim;
+         tag data; a thin teal box round each of X's rows in turn; then tag map and W's
+         brackets magenta; all back to rest before the hold. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep06.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.9" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.90;
+  // Cues, beat-local seconds (master 13.05 + t), from words.json checked on a 50 ms RMS envelope.
+  // Speech: 0.10-1.65 "X and W are both matrices", 1.80-2.95 "but they play different roles",
+  // 3.35-4.05 "X is data", 4.45-5.65 "which is a stack of vectors here", 6.00-7.70 "W is a transformation".
+  // words.json puts "stack" at 17.645 and "data" at 16.62 (estimates); the envelope has a gap
+  // 17.15-17.45 and the "stack" burst at 17.80, "data" at 16.75.
+  const CUE = {
+    both: 0.00,     // "both matrices" (13.90-14.20): brackets brighten white from frame 0, full on "both"
+    bothFull: 0.90,
+    roles: 2.15,    // "different roles" (15.20-15.95): X's brackets go teal, W's go --dim
+    data: 3.62,     // "data" (16.75): tag data fades in after X  (5, 3)
+    stack: 4.68,    // "stack" (17.80): a thin teal box round each of X's rows, top to bottom
+    w: 6.00,        // "W is a transformation" (19.05): X's boxes go; tag map, W's brackets magenta
+    rest: 6.95,     // everything back to rest (INPUTS)
+    still: 7.55,    // nothing moves after this
+  };
+  const { COL, css, mix, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  // five thin teal boxes, one per row of X (the kit has three highlight boxes, 6 px)
+  const rowBox = EP.X.map(() => { const h = VEC.hbox(root); h.el.style.borderWidth = "3px"; return h; });
+
+  function render(t) {
+    EP.state(P, g, "INPUTS");
+    rowBox.forEach((h) => h.rect(EP.RECT.xRow(0), 0));                  // the local boxes' rest
+    if (t >= CUE.still) return;
+    const back = E.io(seg(t, CUE.rest, CUE.still));                    // 0 -> 1: back to rest
+
+    // brackets: dim -> white together, then they part (X teal, W dim -> magenta on "W")
+    const kWhite = E.io(seg(t, CUE.both, CUE.bothFull));
+    const kPart = E.io(seg(t, CUE.roles, CUE.roles + 0.75));
+    const kMap = E.io(seg(t, CUE.w, CUE.w + 0.45));
+    const both = mix(COL.dim, COL.text, kWhite);
+    const xCol = mix(mix(both, COL.data, kPart), COL.dim, back);
+    const wCol = mix(mix(mix(both, COL.dim, kPart), COL.hero, kMap), COL.dim, back);
+    P.xB.color(xCol); P.wB.color(wCol);
+
+    // "X is data": the tag data (teal), sliding in from the label
+    const [dl, dt] = EP.tagAt(P, "x"), kD = E.out(seg(t, CUE.data, CUE.data + 0.35));
+    EP.put(P.tags.data, dl - 24 * (1 - kD), dt, kD * (1 - back));
+
+    // "a stack of vectors": thin teal boxes, one per row, top to bottom; they go on "W"
+    const kOut = E.io(seg(t, CUE.w, CUE.w + 0.35));
+    rowBox.forEach((h, r) => {
+      const t0 = CUE.stack + 0.12 * r, k = E.out(seg(t, t0, t0 + 0.25)), d = 10 * (1 - k);
+      const rr = EP.RECT.xRow(r);
+      h.rect([rr[0] - d, rr[1] - d, rr[2] + 2 * d, rr[3] + 2 * d], k * (1 - kOut), COL.data);
+    });
+
+    // "W is a transformation": the tag map (magenta) after W  (3, 2)
+    const [ml, mt] = EP.tagAt(P, "w"), kM = E.out(seg(t, CUE.w, CUE.w + 0.35));
+    EP.put(P.tags.map, ml - 24 * (1 - kM), mt, kM * (1 - back));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
