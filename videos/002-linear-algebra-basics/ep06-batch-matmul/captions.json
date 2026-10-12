@@ -6,13 +6,23 @@
  },
  {
   "start": 1.162,
+  "end": 1.54,
+  "text": "PyTorch"
+ },
+ {
+  "start": 1.6,
   "end": 1.902,
-  "text": "PyTorch pushes a"
+  "text": "pushes a"
  },
  {
   "start": 1.962,
+  "end": 2.566,
+  "text": "whole batch"
+ },
+ {
+  "start": 2.626,
   "end": 2.832,
-  "text": "whole batch through"
+  "text": "through"
  },
  {
   "start": 2.892,
@@ -81,8 +91,13 @@
  },
  {
   "start": 13.659,
+  "end": 14.107,
+  "text": "are both"
+ },
+ {
+  "start": 14.167,
   "end": 14.655,
-  "text": "are both matrices"
+  "text": "matrices"
  },
  {
   "start": 14.715,
@@ -91,8 +106,13 @@
  },
  {
   "start": 15.509,
+  "end": 15.621,
+  "text": "different"
+ },
+ {
+  "start": 15.681,
   "end": 16.4,
-  "text": "different roles."
+  "text": "roles."
  },
  {
   "start": 16.4,
@@ -191,8 +211,13 @@
  },
  {
   "start": 34.45,
+  "end": 34.92,
+  "text": "The inner"
+ },
+ {
+  "start": 34.98,
   "end": 35.479,
-  "text": "The inner dimensions"
+  "text": "dimensions"
  },
  {
   "start": 35.539,
@@ -215,24 +240,34 @@
   "text": "Then the bias"
  },
  {
-  "start": 38.337,
-  "end": 39.245,
-  "text": "broadcasts across"
+  "start": 38.28,
+  "end": 38.62,
+  "text": "broadcasts"
  },
  {
-  "start": 39.305,
+  "start": 38.68,
+  "end": 39.0,
+  "text": "across"
+ },
+ {
+  "start": 39.07,
   "end": 39.86,
   "text": "every row."
  },
  {
   "start": 39.86,
-  "end": 40.416,
+  "end": 40.42,
   "text": "Real data just"
  },
  {
-  "start": 40.476,
+  "start": 40.47,
+  "end": 40.85,
+  "text": "makes this"
+ },
+ {
+  "start": 40.91,
   "end": 41.18,
-  "text": "makes this bigger."
+  "text": "bigger."
  },
  {
   "start": 41.18,
@@ -241,8 +276,13 @@
  },
  {
   "start": 41.833,
+  "end": 42.197,
+  "text": "there's a"
+ },
+ {
+  "start": 42.257,
   "end": 42.532,
-  "text": "there's a sequence"
+  "text": "sequence"
  },
  {
   "start": 42.592,
@@ -251,8 +291,13 @@
  },
  {
   "start": 43.22,
+  "end": 43.51,
+  "text": "The last"
+ },
+ {
+  "start": 43.57,
   "end": 44.138,
-  "text": "The last dimension"
+  "text": "dimension"
  },
  {
   "start": 44.198,
