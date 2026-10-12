@@ -3,774 +3,774 @@
   "t": 0.25,
   "end": 0.33,
   "word": "A",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 0.33,
   "end": 0.55,
   "word": "linear",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 0.55,
   "end": 0.83,
   "word": "map",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 0.91,
   "end": 1.09,
   "word": "keeps",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 1.09,
   "end": 1.25,
   "word": "the",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 1.27,
   "end": 1.55,
   "word": "origin",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 1.55,
   "end": 2.07,
   "word": "fixed",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 2.42,
   "end": 2.49,
   "word": "and",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 2.49,
   "end": 2.67,
   "word": "the",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 2.67,
   "end": 2.79,
   "word": "grid",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 2.79,
   "end": 2.99,
   "word": "line",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 2.99,
   "end": 3.33,
   "word": "straight.",
-  "seg": 8
+  "seg": 0
  },
  {
   "t": 3.83,
   "end": 3.91,
   "word": "It",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 3.91,
   "end": 4.07,
   "word": "can",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 4.07,
   "end": 4.31,
   "word": "stretch,",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 4.58,
   "end": 4.65,
   "word": "rotate,",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 4.73,
   "end": 4.83,
   "word": "and",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 4.83,
   "end": 5.13,
   "word": "squish,",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 5.13,
   "end": 5.27,
   "word": "but",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 5.27,
   "end": 5.39,
   "word": "it",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 5.39,
   "end": 5.69,
   "word": "can't",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 5.94,
   "end": 6.25,
   "word": "bend.",
-  "seg": 9
+  "seg": 1
  },
  {
   "t": 7.07,
   "end": 7.3,
   "word": "Without",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 7.3,
   "end": 7.96,
   "word": "activation",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 7.96,
   "end": 8.46,
   "word": "functions,",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 8.71,
   "end": 8.8,
   "word": "a",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 8.8,
   "end": 9.5,
   "word": "100-layer",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 9.5,
   "end": 9.72,
   "word": "neural",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 9.72,
   "end": 9.96,
   "word": "network",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 9.96,
   "end": 10.24,
   "word": "is",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 10.24,
   "end": 10.6,
   "word": "just",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 10.6,
   "end": 10.84,
   "word": "one",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 10.84,
   "end": 11.3,
   "word": "matrix.",
-  "seg": 0
+  "seg": 2
  },
  {
   "t": 11.86,
   "end": 11.94,
   "word": "Here's",
-  "seg": 1
+  "seg": 3
  },
  {
   "t": 11.94,
   "end": 12.18,
   "word": "why.",
-  "seg": 1
+  "seg": 3
  },
  {
   "t": 12.76,
   "end": 12.94,
   "word": "Matrices",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 12.94,
   "end": 13.28,
   "word": "are",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 13.28,
   "end": 13.82,
   "word": "functions,",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 14.18,
   "end": 14.26,
   "word": "and",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 14.26,
   "end": 14.86,
   "word": "multiplying",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 14.86,
   "end": 15.3,
   "word": "matrices",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 15.3,
   "end": 16.08,
   "word": "combines",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 16.08,
   "end": 16.3,
   "word": "those",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 16.3,
   "end": 16.62,
   "word": "functions.",
-  "seg": 2
+  "seg": 4
  },
  {
   "t": 17.25,
   "end": 17.32,
   "word": "So",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 17.32,
   "end": 17.38,
   "word": "if",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 17.38,
   "end": 17.4,
   "word": "you",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 17.4,
   "end": 17.74,
   "word": "stack",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 17.81,
   "end": 17.98,
   "word": "two",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 17.98,
   "end": 18.38,
   "word": "layers,",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 18.67,
   "end": 18.72,
   "word": "x",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 18.72,
   "end": 18.86,
   "word": "@",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 18.86,
   "end": 19.38,
   "word": "W1,",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 19.88,
   "end": 20.02,
   "word": "then",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 20.02,
   "end": 20.28,
   "word": "@",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 20.35,
   "end": 20.88,
   "word": "W2,",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 21.38,
   "end": 21.46,
   "word": "the",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 21.46,
   "end": 21.64,
   "word": "order",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 21.64,
   "end": 21.96,
   "word": "matters,",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 22.12,
   "end": 22.22,
   "word": "but",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 22.22,
   "end": 22.38,
   "word": "it's",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 22.38,
   "end": 23.06,
   "word": "associative.",
-  "seg": 3
+  "seg": 5
  },
  {
   "t": 23.56,
   "end": 23.66,
   "word": "So",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 23.66,
   "end": 23.84,
   "word": "that's",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 23.84,
   "end": 24.02,
   "word": "the",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 24.02,
   "end": 24.28,
   "word": "same",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 24.28,
   "end": 24.42,
   "word": "as",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 24.42,
   "end": 24.68,
   "word": "x",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 24.68,
   "end": 24.78,
   "word": "@",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 24.78,
   "end": 25.36,
   "word": "W1",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 25.36,
   "end": 25.98,
   "word": "times",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 25.98,
   "end": 26.56,
   "word": "W2.",
-  "seg": 4
+  "seg": 6
  },
  {
   "t": 27.02,
   "end": 27.1,
   "word": "And",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 27.1,
   "end": 27.48,
   "word": "W1",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 27.48,
   "end": 27.72,
   "word": "times",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 27.72,
   "end": 28.16,
   "word": "W2",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 28.16,
   "end": 28.32,
   "word": "is",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 28.32,
   "end": 28.52,
   "word": "just",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 28.52,
   "end": 28.76,
   "word": "one",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 28.76,
   "end": 29.24,
   "word": "matrix.",
-  "seg": 5
+  "seg": 7
  },
  {
   "t": 29.74,
   "end": 29.86,
   "word": "Put",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 29.86,
   "end": 30.0,
   "word": "a",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 30.0,
   "end": 30.36,
   "word": "ReLU",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 30.36,
   "end": 30.62,
   "word": "or",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 30.62,
   "end": 30.74,
   "word": "a",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 30.74,
   "end": 31.0,
   "word": "GELU",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 31.0,
   "end": 31.36,
   "word": "between",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 31.36,
   "end": 31.54,
   "word": "the",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 31.54,
   "end": 31.78,
   "word": "layers,",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 32.38,
   "end": 32.46,
   "word": "and",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 32.46,
   "end": 32.6,
   "word": "the",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 32.6,
   "end": 32.92,
   "word": "collapse",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 32.92,
   "end": 33.4,
   "word": "stops.",
-  "seg": 10
+  "seg": 8
  },
  {
   "t": 33.9,
   "end": 34.38,
   "word": "Now",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 34.38,
   "end": 34.64,
   "word": "each",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 34.64,
   "end": 34.84,
   "word": "layer",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 34.84,
   "end": 35.04,
   "word": "can",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 35.04,
   "end": 35.26,
   "word": "bend",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 35.26,
   "end": 35.36,
   "word": "the",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 35.36,
   "end": 35.8,
   "word": "path,",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 36.06,
   "end": 36.14,
   "word": "and",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 36.14,
   "end": 36.68,
   "word": "stacking",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 36.68,
   "end": 37.22,
   "word": "actually",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 37.22,
   "end": 37.5,
   "word": "adds",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 37.5,
   "end": 37.84,
   "word": "something.",
-  "seg": 11
+  "seg": 9
  },
  {
   "t": 38.22,
   "end": 38.56,
   "word": "That's",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 38.56,
   "end": 38.66,
   "word": "why",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 38.66,
   "end": 38.94,
   "word": "every",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 38.94,
   "end": 39.22,
   "word": "layer",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 39.22,
   "end": 39.28,
   "word": "in",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 39.28,
   "end": 39.42,
   "word": "a",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 39.42,
   "end": 39.72,
   "word": "model",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 39.72,
   "end": 39.94,
   "word": "is",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 39.94,
   "end": 40.12,
   "word": "a",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 40.12,
   "end": 40.44,
   "word": "matrix",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 40.44,
   "end": 40.96,
   "word": "multiply",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 40.96,
   "end": 41.64,
   "word": "followed",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 41.64,
   "end": 41.86,
   "word": "by",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 41.86,
   "end": 42.14,
   "word": "some",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 42.14,
   "end": 42.9,
   "word": "nonlinearity.",
-  "seg": 12
+  "seg": 10
  },
  {
   "t": 43.34,
   "end": 43.64,
   "word": "Without",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 43.64,
   "end": 44.2,
   "word": "activations,",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 44.3,
   "end": 44.42,
   "word": "a",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 44.42,
   "end": 44.6,
   "word": "deep",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 44.6,
   "end": 44.84,
   "word": "network",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 44.84,
   "end": 45.0,
   "word": "is",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 45.0,
   "end": 45.18,
   "word": "just",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 45.18,
   "end": 45.4,
   "word": "one",
-  "seg": 13
+  "seg": 11
  },
  {
   "t": 45.4,
   "end": 45.88,
   "word": "matrix.",
-  "seg": 13
+  "seg": 11
  }
 ]

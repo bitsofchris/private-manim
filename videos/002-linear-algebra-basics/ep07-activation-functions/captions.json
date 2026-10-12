@@ -1,5 +1,45 @@
 [
  {
+  "start": 0.25,
+  "end": 0.85,
+  "text": "A linear map"
+ },
+ {
+  "start": 0.91,
+  "end": 1.49,
+  "text": "keeps the origin"
+ },
+ {
+  "start": 1.55,
+  "end": 2.61,
+  "text": "fixed and the"
+ },
+ {
+  "start": 2.67,
+  "end": 3.33,
+  "text": "grid line straight."
+ },
+ {
+  "start": 3.83,
+  "end": 4.52,
+  "text": "It can stretch"
+ },
+ {
+  "start": 4.58,
+  "end": 5.07,
+  "text": "rotate, and squish"
+ },
+ {
+  "start": 5.13,
+  "end": 5.33,
+  "text": "but it"
+ },
+ {
+  "start": 5.39,
+  "end": 6.25,
+  "text": "can't bend."
+ },
+ {
   "start": 7.07,
   "end": 8.65,
   "text": "Without activation functions"
@@ -103,46 +143,6 @@
   "start": 28.52,
   "end": 29.24,
   "text": "one matrix."
- },
- {
-  "start": 0.25,
-  "end": 0.85,
-  "text": "A linear map"
- },
- {
-  "start": 0.91,
-  "end": 1.49,
-  "text": "keeps the origin"
- },
- {
-  "start": 1.55,
-  "end": 2.61,
-  "text": "fixed and the"
- },
- {
-  "start": 2.67,
-  "end": 3.33,
-  "text": "grid line straight."
- },
- {
-  "start": 3.83,
-  "end": 4.52,
-  "text": "It can stretch"
- },
- {
-  "start": 4.58,
-  "end": 5.07,
-  "text": "rotate, and squish"
- },
- {
-  "start": 5.13,
-  "end": 5.33,
-  "text": "but it"
- },
- {
-  "start": 5.39,
-  "end": 6.25,
-  "text": "can't bend."
  },
  {
   "start": 29.74,
