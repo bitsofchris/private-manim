@@ -29,11 +29,12 @@
     <script>
 (() => {
   const BEAT_SECONDS = 3.09;
-  // Cues, beat-local seconds (master 15.31 + t), from a 30 ms RMS envelope of vo_final.wav.
+  // Cues, beat-local seconds (master 16.31 + t, after the 1.0 s insert at 3.60), from a 30 ms RMS envelope of vo_final.wav.
   // Speech: 0.20-0.90 "Two outputs", 1.28-2.00 "two neurons", 2.21-2.93 "two rows of three".
   const CUE = {
     two: 0.20,      // "Two outputs": neuron 2's ring magenta, its wires flick, −1.2 appears
     neurons: 1.28,  // "two neurons": both rings pulse (neuron 2's magenta hands over)
+    card: 1.90,     // "two rows" coming: the card shrinks back to nn.Linear(3, 2), names return
     rows: 2.05,     // "two rows of three": one box round the whole of weight (in by "two" at 2.21)
     boxOut: 2.80,   // the box goes at the end of "three" (2.72-2.93)
     still: 2.94,    // nothing moves after this (last 5 frames, on OUTPUTS)
@@ -44,6 +45,27 @@
   const E = ISO.E();
   const P = EP.parts(root);
   ISO.guides(root);
+
+  // ---- local: the two-line code cards (EP.CODE) that stand in for the one-line card ----
+  // (03_neuron and 04_two hold identical copies of this block; the cut between them is exact)
+  function neuronCard() {          // "x @ weight[0]" / "  + bias[0]  # 4.1": "# " dim, 4.1 white
+    const [a, b] = EP.CODE.neuron[1].split("# ");
+    return VEC.codeCard(root, [EP.CODE.neuron[0], [[a], ["# ", COL.dim], [b]]]);
+  }
+  function callCard() {            // "model[0](x)" / "tensor([4.1, -1.2])": the -1.2 is its own span
+    const s = EP.CODE.call[1], k = s.indexOf("-1.2");
+    return VEC.codeCard(root, [EP.CODE.call[0], [[s.slice(0, k)], [s.slice(k, k + 4)], [s.slice(k + 4)]]]);
+  }
+  const NC = neuronCard(), CC = callCard();
+  [NC.el, CC.el, P.cardA.el].flatMap((c) => [c, ...c.querySelectorAll("*")]).concat([P.names.w, P.names.wShape]).forEach((el) => {   // cross-fades in place
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  // a card centred at the card line (alpha a; it settles from 0.96 as it comes in)
+  const showCard = (card, a) => card.at(VEC.centreLeft(card.el), EP.CARD_TOP, { alpha: a, scale: 0.96 + 0.04 * a });
+  // a swap k 0..1 between two cards: the old one is gone (outk) before the new one comes (inn), no overlap
+  const outk = (k) => seg(k, 0, 0.45), inn = (k) => seg(k, 0.45, 1);
+  // the matrix name and shape step out of a two-line card's way (alpha a)
+  const names = (a) => [P.names.w, P.names.wShape].forEach((el) => { el.style.opacity = a.toFixed(3); });
 
   // ---- local helpers ----
   const pulse = (t, t0, d = 0.45) => Math.sin(Math.PI * seg(t, t0, t0 + d));
@@ -64,7 +86,9 @@
   const BOX = [WL.STORED - 12, MAT_TOP - 10, EP.CW * 3 + 24, 2 * RH + 20];
 
   function render(t) {
-    if (t >= CUE.still) { EP.state(P, g, "OUTPUTS"); return; }   // the hold: 05_flip opens on it
+    if (t >= CUE.still) {            // the hold: 05_flip opens on it
+      EP.state(P, g, "OUTPUTS"); showCard(NC, 0); showCard(CC, 0); return;
+    }
     // the base: OUTPUTS without −1.2 (03_neuron's last frame)
     EP.state(P, g, "STORED");
     EP.bg(g);
@@ -73,7 +97,17 @@
     // "Two outputs": neuron 2 is the hero (from frame 0), its wires flick bright and back, −1.2 in
     const n2 = E.out(seg(t, 0.0, CUE.two + 0.3)) * (1 - E.io(seg(t, CUE.neurons, CUE.neurons + 0.4)));
     for (let i = 0; i < 3; i++) wire(i, 1, pulse(t, CUE.two + 0.05 + 0.08 * i, 0.55));
-    EP.put(P.net.outs[1], NET.outX + 20, NET.nY[1] - 33, E.out(seg(t, CUE.two + 0.1, CUE.two + 0.45)), COL.text);
+    const o2 = E.out(seg(t, CUE.two + 0.1, CUE.two + 0.45));
+    EP.put(P.net.outs[1], NET.outX + 20, NET.nY[1] - 33, o2, COL.text);
+
+    // the cards: neuron card (03's end) -> model[0](x) / tensor([4.1, -1.2]) on "Two outputs",
+    // its -1.2 printing with neuron 2's; back to nn.Linear(3, 2) and the names on "two rows"
+    const k1 = E.io(seg(t, 0.0, CUE.two + 0.3)), k2 = E.io(seg(t, CUE.card, CUE.card + 0.5));
+    showCard(NC, 1 - outk(k1));
+    showCard(CC, inn(k1) * (1 - outk(k2)));
+    CC.spans[1][1].style.opacity = o2.toFixed(3);
+    P.cardA.at(VEC.centreLeft(P.cardA.el), EP.CARD_TOP, { alpha: inn(k2) });
+    names(inn(k2));                 // back once the two-line card has gone
 
     // "two neurons": both rings pulse together (magenta and a swell), neuron 2's own magenta hands over
     const pb = pulse(t, CUE.neurons, 0.5);

@@ -30,7 +30,7 @@
     <script>
 (() => {
   const BEAT_SECONDS = 6.47;
-  // Cues, beat-local seconds (master 8.84 + t), from a 30 ms RMS envelope of vo_final.wav.
+  // Cues, beat-local seconds (master 9.84 + t, after the 1.0 s insert at 3.60), from a 30 ms RMS envelope of vo_final.wav.
   // Speech: 0.19-0.94 "A neuron", 1.06-2.00 "takes all three inputs", 2.23-3.80 "multiplies
   // each by its own weight", 3.97-4.55 "sums them", 4.60-5.20 "adds a bias", 5.25-6.30
   // "and outputs one number".
@@ -40,7 +40,7 @@
     mul: [2.25, 2.70, 3.15],    // "multiplies" / "each by" / "its own weight": 2, 0.5, −1 pulse with their wire
     sum: 3.97,                  // "sums": 4 at the output spot
     bias: 4.60,                 // "adds a bias": + 0.1 (dim) beside it
-    out: 5.55,                  // "outputs": 4 + 0.1 becomes 4.1; ring and box go back to rest
+    out: 5.55,                  // "outputs": 4 + 0.1 becomes 4.1; the card becomes x @ weight[0] / + bias[0]  # 4.1
     rest: 5.90,                 // "one number": ring, box and wires settle back to rest
     still: 6.30,                // nothing moves after this ("number" ends 6.28; 0.20 s hold)
   };
@@ -58,6 +58,27 @@
   sum.style.fontVariantNumeric = "tabular-nums";
   sum.setAttribute("data-layout-allow-overlap", "");   // crossfades into EP's 4.1 on "outputs"
   ISO.guides(root);
+
+  // ---- local: the two-line code cards (EP.CODE) that stand in for the one-line card ----
+  // (03_neuron and 04_two hold identical copies of this block; the cut between them is exact)
+  function neuronCard() {          // "x @ weight[0]" / "  + bias[0]  # 4.1": "# " dim, 4.1 white
+    const [a, b] = EP.CODE.neuron[1].split("# ");
+    return VEC.codeCard(root, [EP.CODE.neuron[0], [[a], ["# ", COL.dim], [b]]]);
+  }
+  function callCard() {            // "model[0](x)" / "tensor([4.1, -1.2])": the -1.2 is its own span
+    const s = EP.CODE.call[1], k = s.indexOf("-1.2");
+    return VEC.codeCard(root, [EP.CODE.call[0], [[s.slice(0, k)], [s.slice(k, k + 4)], [s.slice(k + 4)]]]);
+  }
+  const NC = neuronCard(), CC = callCard();
+  [NC.el, CC.el, P.cardA.el].flatMap((c) => [c, ...c.querySelectorAll("*")]).concat([P.names.w, P.names.wShape]).forEach((el) => {   // cross-fades in place
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  // a card centred at the card line (alpha a; it settles from 0.96 as it comes in)
+  const showCard = (card, a) => card.at(VEC.centreLeft(card.el), EP.CARD_TOP, { alpha: a, scale: 0.96 + 0.04 * a });
+  // a swap k 0..1 between two cards: the old one is gone (outk) before the new one comes (inn), no overlap
+  const outk = (k) => seg(k, 0, 0.45), inn = (k) => seg(k, 0.45, 1);
+  // the matrix name and shape step out of a two-line card's way (alpha a)
+  const names = (a) => [P.names.w, P.names.wShape].forEach((el) => { el.style.opacity = a.toFixed(3); });
 
   // ---- local helpers ----
   const pulse = (t, t0, d = 0.45) => Math.sin(Math.PI * seg(t, t0, t0 + d));
@@ -106,6 +127,12 @@
     sumB.style.display = sb * (1 - go) > 0.001 ? "inline-block" : "none";
     sumB.style.transform = `translateX(${(-40 * go).toFixed(1)}px)`;
     EP.put(P.net.outs[0], ox, oy, m, COL.text);
+
+    // "outputs one number": as 4.1 lands, the card becomes the two-line neuron card; names step aside
+    const cd = E.io(seg(t, CUE.out, CUE.out + 0.5));
+    showCard(NC, inn(cd)); showCard(CC, 0);
+    P.cardA.at(VEC.centreLeft(P.cardA.el), EP.CARD_TOP, { alpha: 1 - outk(cd) });
+    names(1 - outk(cd));            // gone before the two-line card reaches their line
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);

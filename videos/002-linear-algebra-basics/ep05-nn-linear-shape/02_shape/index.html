@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep05 beat 2, 02_shape (master 3.60, 5.24 s). VO: "So when you give nn.Linear three in
-         and two out, the weight will come back two by three."
+    <!-- ep05 beat 2, 02_shape (master 4.60, 5.24 s; storyboard "Revision 1"). VO: "So when you give
+         nn.Linear three in and two out, the weight will come back two by three."
          Opens STORED. "three in": the input rings pulse in turn and the 3 in the card swells;
-         "two out": the neurons pulse and the 2 in the card swells. "the weight": weight's brackets
-         brighten once. "come back": the shape (2, 3) turns magenta with a box round it; "two": the
-         2 and both rows pulse; "three": the 3 and the three columns pulse. Box goes and the shape
-         is --dim again by the hold. Ends STORED, still. Hero: the shape (2, 3). -->
+         "two out": the neurons pulse and the 2 in the card swells. "the weight will come back": the
+         card grows to two lines, line 1 model[0].weight.shape typed on; names and shapes fade.
+         "two by three": line 2 torch.Size([2, 3]) prints with [2, 3] magenta; "two" the 2 and the
+         rows pulse, "three" the 3 and the columns pulse. Then the card shrinks back to nn.Linear(3, 2),
+         names and shapes return and (2, 3) flashes magenta once. Last 5 frames STORED, still.
+         Hero: the printed shape. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -33,21 +35,22 @@
     <script>
 (() => {
   const BEAT_SECONDS = 5.24;
-  // Cues, beat-local = master - 3.60. From a 20 ms RMS envelope of vo_final.wav plus its >3 kHz
-  // share (the "th" of three and the "t" of two are the only high-frequency bursts):
-  // "So" 3.78, "nn.Linear" 5.08, "three" 5.58 (th) / 5.74 (vowel), "in" 5.88, "two" 6.14 (t),
-  // "out" 6.32, "the" 6.98, "weight" 7.10, "will" 7.44, "come" 7.60, "two" 7.90 (t),
-  // "by" 8.14, "three" 8.30 (th) - 8.70. (words.json has two 8.31 / by 8.73 / three 8.84, which
-  // fall in the silence after 8.72; the envelope wins.)
+  // Cues, beat-local = master - 4.60 (= the pre-insert master - 3.60). From a 20 ms RMS envelope of
+  // vo_final.wav plus its >3 kHz share (the "th" of three and the "t" of two are the only
+  // high-frequency bursts); pre-insert master times: "So" 3.78, "nn.Linear" 5.08, "three" 5.58 (th),
+  // "in" 5.88, "two" 6.14 (t), "out" 6.32, "the" 6.98, "weight" 7.10, "will" 7.44, "come" 7.60,
+  // "two" 7.90 (t), "by" 8.14, "three" 8.30 (th) - 8.70.
   const CUE = {
-    threeIn: 1.98,  // "three in" (master 5.58): input rings pulse in turn, the card's 3 swells
-    twoOut: 2.54,   // "two out" (6.14): the neurons pulse, the card's 2 swells
-    weight: 3.46,   // "weight" (7.10, vowel 7.12): weight's brackets brighten once
-    back: 3.95,     // "come back" (7.55): the shape (2, 3) goes magenta, the box draws round it
-    two: 4.26,      // "two" (7.90): the 2 and the two rows pulse, row 1 then row 2
-    three: 4.70,    // "three" (8.30, th): the 3 and the three columns pulse in turn
-    off: 4.92,      // the box goes and the shape fades back to --dim
-    still: 5.09,    // nothing moves after this (last 0.15 s still on STORED)
+    threeIn: 1.98,  // "three in": input rings pulse in turn, the card's 3 swells
+    twoOut: 2.54,   // "two out": the neurons pulse, the card's 2 swells
+    grow: 3.30,     // "the weight" (3.38): the card grows to two lines, names and shapes fade
+    weight: 3.46,   // "weight": weight's brackets brighten once
+    type: 3.55,     // "will come back": line 1 typed on (to 4.00)
+    print: 4.20,    // "two" (4.30): line 2 torch.Size([2, 3]) prints
+    two: 4.26,      // "two": the printed 2 and the two rows pulse, row 1 then row 2
+    three: 4.70,    // "three": the printed 3 and the three columns pulse in turn
+    back: 4.86,     // the card shrinks back to nn.Linear(3, 2), names return, (2, 3) flashes
+    still: 5.07,    // nothing moves after this (last 0.17 s = 5 frames still on STORED)
   };
   const { COL, css, mix, seg } = ISO;
   const NET = EP.NET, SLOT = VEC.SLOT;
@@ -90,8 +93,25 @@
   }
   // the card "nn.Linear(3, 2)" (cardA is one span): [nn.Linear(, 3, ", ", 2, )]
   const cardS = split(P.cardA.spans[0][0], ["nn.Linear(", "3", ", ", "2", ")"], true);
-  // the shape "(2, 3)": [(, 2, ", ", 3, )]
-  const shapeS = split(P.names.wShape, ["(", "2", ", ", "3", ")"], false);
+  // ---- local: the two-line card (EP.CODE.shape), text only, over a panel that changes size ----
+  const L2 = EP.CODE.shape[1], b0 = L2.indexOf("["), b1 = L2.indexOf("]") + 1;   // "[2, 3]" is the hero
+  const shapeCard = VEC.codeCard(root, [[[EP.CODE.shape[0]]],
+    [[L2.slice(0, b0)], ["[", COL.hero], ["2", COL.hero], [", ", COL.hero], ["3", COL.hero], ["]", COL.hero], [L2.slice(b1)]]]);
+  shapeCard.el.style.background = "transparent"; shapeCard.el.style.borderColor = "transparent";
+  const line1 = shapeCard.spans[0][0], line2 = shapeCard.spans[1];
+  [line2[2], line2[4]].forEach((sp) => { sp.style.display = "inline-block"; sp.style.transformOrigin = "50% 55%"; });
+  const panel = document.createElement("div");      // same background, border and radius as VEC.codeCard
+  panel.style.cssText = `position:absolute;left:0;top:0;box-sizing:border-box;border-radius:22px;` +
+    `background:${css(COL.panel)};border:6px solid ${css(COL.dim)};`;
+  root.insertBefore(panel, P.cardA.el);
+  const setPanel = (r, a) => {
+    panel.style.width = `${r[2].toFixed(1)}px`; panel.style.height = `${r[3].toFixed(1)}px`;
+    panel.style.transform = `translate(${r[0].toFixed(1)}px, ${r[1].toFixed(1)}px)`;
+    panel.style.opacity = a.toFixed(3);
+  };
+  [shapeCard.el, panel, P.cardA.el, P.names.w, P.names.wShape].forEach((el) => {   // cross-fades in place
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
   // the network's canvas part (EP.network without its DOM numbers), with ring pulses:
   // inP[i], nP[n] in 0..1 swell the ring and fill it faintly in its own colour (inputs) or white (neurons)
   function net(inP, nP) {
@@ -124,17 +144,40 @@
     // "the weight": the brackets brighten once
     P.wB.color(mix(COL.dim, COL.text, pulse(t, CUE.weight - 0.05, 0.50)));
 
-    // the hero: the shape (2, 3), magenta with a box, from "come back" to the hold
-    const kOn = E.out(seg(t, CUE.back, CUE.back + 0.25));
-    const kOff = E.io(seg(t, CUE.off, CUE.still));
-    const k = kOn * (1 - kOff);
-    P.names.wShape.style.color = css(mix(COL.dim, COL.hero, k));
-    const r = EP.RECT.shapeW(EP.WL.STORED), d = 10 * (1 - kOn);
-    P.hl.rect([r[0] - d, r[1] - d, r[2] + 2 * d, r[3] + 2 * d], k);
-    // "two": the 2 and both rows; "by three": the 3 and the three columns
+    // ---- the card: one line -> two lines (typed, then printed) -> back to one line ----
+    const kGrow = E.io(seg(t, CUE.grow, CUE.grow + 0.32)), kBack = E.io(seg(t, CUE.back, CUE.still));
+    const up = kGrow * (1 - kBack);                      // 0 = the one-line card, 1 = the two-line card
+    line1.textContent = EP.CODE.shape[0];                // measure with the full text
+    const cw = shapeCard.el.offsetWidth, ch = shapeCard.el.offsetHeight, cLeft = VEC.centreLeft(shapeCard.el);
+    const n = Math.round(EP.CODE.shape[0].length * seg(t, CUE.type, CUE.type + 0.45));
+    line1.textContent = EP.CODE.shape[0].slice(0, n);
+    const aLeft = VEC.centreLeft(P.cardA.el), aw = P.cardA.el.offsetWidth, ah = P.cardA.el.offsetHeight;
+    const r0 = [aLeft, EP.CARD_TOP, aw, ah], r1 = [cLeft, EP.CARD_TOP, cw, ch];
+    const pr = r0.map((v, i) => v + (r1[i] - v) * up);
+    setPanel(pr, up > 0.0005 ? 1 : 0);
+    // the two-line text is clipped to the inside of the panel while it shrinks
+    const ins = [0, cLeft + cw - (pr[0] + pr[2] - 6), EP.CARD_TOP + ch - (pr[1] + pr[3] - 6), pr[0] + 6 - cLeft].map((v) => Math.max(0, v));
+    shapeCard.el.style.clipPath = `inset(${ins.map((v) => v.toFixed(1) + "px").join(" ")})`;
+    const aA = 1 - seg(t, CUE.grow, CUE.grow + 0.12) + seg(t, CUE.back + 0.08, CUE.still);   // cardA out, then back in
+    // while the card changes size the panel draws the box; cardA keeps only its text
+    const moving = up > 0.0005;
+    P.cardA.el.style.background = moving ? "transparent" : css(COL.panel);
+    P.cardA.el.style.borderColor = moving ? "transparent" : css(COL.dim);
+    P.cardA.spans[0][0].style.opacity = Math.min(1, aA).toFixed(3);
+    const kText = 1 - seg(t, CUE.back, CUE.back + 0.10);                                   // the two-line text goes first
+    shapeCard.at(cLeft, EP.CARD_TOP, { alpha: t < CUE.type ? 0 : kText });
+    const kPrint = E.out(seg(t, CUE.print, CUE.print + 0.12));
+    line2.forEach((sp) => { sp.style.opacity = kPrint.toFixed(3); });
+    // names and shapes step out of its way, and come back; (2, 3) flashes once as [2, 3] goes
+    const aN = 1 - E.io(seg(t, CUE.grow - 0.05, CUE.grow + 0.25)) + E.io(seg(t, CUE.back + 0.02, CUE.still));
+    [P.names.w, P.names.wShape].forEach((el) => { el.style.opacity = Math.min(1, aN).toFixed(3); });
+    P.names.wShape.style.color = css(mix(COL.dim, COL.hero, pulse(t, CUE.back, CUE.still - CUE.back)));
+
+    // "two": the printed 2 and the rows; "three": the printed 3 and the columns
     const pRow = [0, 1].map((rr) => pulse(t, CUE.two + 0.10 * rr, 0.26));
-    const pCol = [0, 1, 2].map((cc) => pulse(t, CUE.three + 0.06 * cc, 0.22));
-    shapeS.set([0, pulse(t, CUE.two, 0.36), 0, pulse(t, CUE.three, 0.34), 0]);
+    const pCol = [0, 1, 2].map((cc) => pulse(t, CUE.three + 0.05 * cc, 0.20));
+    line2[2].style.transform = `scale(${(1 + 0.35 * pulse(t, CUE.two, 0.36)).toFixed(4)})`;
+    line2[4].style.transform = `scale(${(1 + 0.35 * pulse(t, CUE.three, 0.30)).toFixed(4)})`;
     P.w.forEach((row, rr) => row.forEach((c, cc) => {
       c.at(EP.WL.STORED + cc * EP.CW, EP.MAT_TOP + rr * EP.RH, { scale: 1 + 0.2 * pRow[rr] + 0.2 * pCol[cc] });
     }));

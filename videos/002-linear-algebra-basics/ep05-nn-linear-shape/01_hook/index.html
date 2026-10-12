@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep05 beat 1, 01_hook (master 0.00, 3.60 s). VO: "PyTorch stores one output neuron per row."
-         Frame 0: STORED with the six wires already growing from the inputs to the neurons.
-         "one": neuron 1's ring goes magenta, its wires brighten, the magenta box draws round weight's row 1.
-         "per row": ring, wires and box pass to neuron 2 / row 2. Then both back to rest; ends STORED, still.
-         Hero: the active neuron's row (box + ring), one at a time. -->
+    <!-- ep05 beat 1, 01_hook (master 0.00, 4.60 s; storyboard "Revision 1"). VO: "PyTorch stores one
+         output neuron per row." then a 1.0 s pause.
+         Frame 0: the four-line model card (EP.MODEL) centred in the stage, easing in (scale 0.96 -> 1).
+         "PyTorch": its nn.Linear line turns magenta, the other lines dim. "stores one output neuron": the
+         card collapses onto that line and lands as the one-line nn.Linear(3, 2) card at its STORED place
+         (one path, 1.1 s); weight, its labels and the network grow in below as it lands.
+         "per row" + the pause: neuron 1 + row 1, then neuron 2 + row 2 (box + ring), back to rest.
+         Last 5 frames STORED, still. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="vec/vec.js"></script>
@@ -25,20 +28,25 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="3.6" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.6" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 3.60;
+  const BEAT_SECONDS = 4.60;
   // Cues, beat-local = master (start 0.00). From a 20 ms RMS envelope of vo_final.wav:
-  // "PyTorch" 0.60, "stores" 1.18, "one" 1.62, "output" 1.98, "neuron" 2.44, "per" 2.96, "row" 3.18-3.46.
+  // "PyTorch" 0.60, "stores" 1.18, "one" 1.62, "output" 1.98, "neuron" 2.44, "per" 2.96,
+  // "row" 3.18-3.46, then the inserted 1.0 s pause (3.60-4.60).
   const CUE = {
-    grow: 0.00,     // frame 0: the wires are already growing (done by ~0.6 s)
-    one: 1.62,      // "one": neuron 1 ring + wires + row-1 box
-    per: 2.96,      // "per": the hero passes to neuron 2 / row 2 (lands by "row" 3.18)
-    rest: 3.20,     // "row": ring, wires and box back to rest
-    still: 3.45,    // nothing moves after this (last 0.15 s still on STORED)
+    ease: 0.00,     // frame 0: the model card is already easing in (scale 0.96 -> 1, done 0.55)
+    torch: 0.60,    // "PyTorch": the nn.Linear line magenta, the other lines dim
+    zoom: 1.18,     // "stores": the card starts collapsing onto that line ...
+    land: 2.28,     // ... and lands as the one-line card at the STORED place ("neuron")
+    grow: 1.95,     // weight, its labels and the network grow in below (to ~2.75)
+    per: 2.96,      // "per": neuron 1 + row 1
+    pass: 3.55,     // in the pause: the hero passes to neuron 2 + row 2
+    rest: 4.10,     // back to rest
+    still: 4.42,    // nothing moves after this (last 0.18 s = 5 frames still on STORED)
   };
   const { COL, css, mix, lerp, seg } = ISO;
   const NET = EP.NET, SLOT = VEC.SLOT;
@@ -47,11 +55,35 @@
   const P = EP.parts(root);
   ISO.guides(root);
 
-  // ---- local helper: the network's canvas part (EP.network without its DOM numbers),
-  // with wire growth gw[i] per input and a lit[n] that ramps the wire alpha continuously
-  // (EP.network steps from 0.35 to 0.5 as soon as lit > 0; the endpoints here are identical:
+  // ---- local: the model card (EP.MODEL), text only, over a separate panel that can change size ----
+  // The text is a VEC.codeCard with its own panel and border made transparent (the 6 px border stays,
+  // so the text sits exactly where a real code card's would); the "nn.Linear(3, 2)" of line 2 is its
+  // own span, so the card can be moved until that span lies exactly on cardA's text.
+  const ML = EP.MODEL[EP.MODEL_LINE], k0 = ML.indexOf("nn."), k1 = ML.lastIndexOf(",");
+  const model = VEC.codeCard(root, EP.MODEL.map((ln, i) => (i === EP.MODEL_LINE
+    ? [[ML.slice(0, k0)], [ML.slice(k0, k1)], [ML.slice(k1)]] : [[ln]])));
+  model.el.style.background = "transparent"; model.el.style.borderColor = "transparent";
+  const lineSpan = model.spans[EP.MODEL_LINE][1];
+  // a code-card panel whose rect is set per frame (same background, border and radius as VEC.codeCard)
+  const panel = document.createElement("div");
+  panel.style.cssText = `position:absolute;left:0;top:0;box-sizing:border-box;border-radius:22px;` +
+    `background:${css(COL.panel)};border:6px solid ${css(COL.dim)};`;
+  root.insertBefore(panel, model.el);
+  const setPanel = (r, a) => {
+    panel.style.width = `${r[2].toFixed(1)}px`; panel.style.height = `${r[3].toFixed(1)}px`;
+    panel.style.transform = `translate(${r[0].toFixed(1)}px, ${r[1].toFixed(1)}px)`;
+    panel.style.opacity = a.toFixed(3);
+  };
+  [model.el, panel, P.cardA.el].forEach((el) => {     // the card passes over the matrix while it lands
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  const MODEL_TOP = 501;                               // centred in the stage (y 230-1100)
+
+  // ---- local helper: the network's canvas part (EP.network without its DOM numbers), with wire
+  // growth gw[i] per input, ring alpha ra, and a lit[n] that ramps the wire alpha continuously
+  // (EP.network steps from 0.35 to 0.5 as soon as lit > 0; the end values are identical:
   // lit 0 = alpha 0.35, width 5; lit 1 = alpha 0.8, width 8).
-  function net(gw, lit) {
+  function net(gw, lit, ra) {
     const wa = 0.5;
     NET.nY.forEach((ny, n) => NET.inY.forEach((iy, i) => {
       const u = gw[i];
@@ -60,19 +92,61 @@
       g.save(); g.strokeStyle = css(SLOT[i], 1, wa * (0.7 + 0.3 * lit[n]) + 0.3 * lit[n]); g.lineWidth = 5 + 3 * lit[n];
       g.beginPath(); g.moveTo(x0, iy); g.lineTo(lerp(x0, x1, u), lerp(iy, ny, u)); g.stroke(); g.restore();
     }));
-    NET.inY.forEach((iy, i) => EP.ring(g, NET.inX, iy, SLOT[i], 1));
-    NET.nY.forEach((ny, n) => EP.ring(g, NET.nX, ny, mix(COL.dim, COL.hero, lit[n]), 1));
+    if (ra <= 0.001) return;
+    NET.inY.forEach((iy, i) => EP.ring(g, NET.inX, iy, SLOT[i], ra));
+    NET.nY.forEach((ny, n) => EP.ring(g, NET.nX, ny, mix(COL.dim, COL.hero, lit[n]), ra));
   }
 
   function render(t) {
     if (t >= CUE.still) t = CUE.still;
     EP.state(P, g, "STORED");
 
-    // the wires grow from each input to both neurons, input 1 first (frame 0 already partway)
-    const gw = [0, 1, 2].map((i) => E.out(seg(t, CUE.grow - 0.12 + 0.08 * i, CUE.grow + 0.42 + 0.08 * i)));
-    // the hero: neuron 1 (ring + row 1), then neuron 2 (ring + row 2), then rest
-    const kIn = E.out(seg(t, CUE.one, CUE.one + 0.30));
-    const kPass = E.io(seg(t, CUE.per, CUE.per + 0.22));
+    // ---- the model card -> the one-line card ----
+    const u = E.io(seg(t, CUE.zoom, CUE.land));          // one path
+    const sc = 0.96 + 0.04 * E.out(seg(t, CUE.ease - 0.15, CUE.ease + 0.55));
+    const kHero = E.out(seg(t, CUE.torch, CUE.torch + 0.30));
+    const aLeft = VEC.centreLeft(P.cardA.el);
+    const mLeft = VEC.centreLeft(model.el);
+    // where the model text must sit so its nn.Linear span lies on cardA's text (offsets are layout, not transform)
+    const sA = P.cardA.spans[0][0];
+    const tx = aLeft + sA.offsetLeft - lineSpan.offsetLeft, ty = EP.CARD_TOP + sA.offsetTop - lineSpan.offsetTop;
+    const mw = model.el.offsetWidth, mh = model.el.offsetHeight;
+    const aw = P.cardA.el.offsetWidth, ah = P.cardA.el.offsetHeight;
+    if (u < 1) {
+      P.cardA.at(aLeft, EP.CARD_TOP, { alpha: 0 });
+      const ex = lerp(mLeft, tx, u), ey = lerp(MODEL_TOP, ty, u);
+      model.at(ex, ey, { scale: sc });
+      // the panel: the model card's rect (scaled about its centre) -> cardA's rect
+      const r0 = [mLeft + mw * (1 - sc) / 2, MODEL_TOP + mh * (1 - sc) / 2, mw * sc, mh * sc];
+      const r1 = [aLeft, EP.CARD_TOP, aw, ah];
+      const pr = r0.map((v, i) => lerp(v, r1[i], u));
+      setPanel(pr, 1);
+      // the text is clipped to the inside of the shrinking panel (sc is 1 by the time it moves)
+      const ins = [pr[1] + 6 - ey, ex + mw - (pr[0] + pr[2] - 6), ey + mh - (pr[1] + pr[3] - 6), pr[0] + 6 - ex].map((v) => Math.max(0, v));
+      model.el.style.clipPath = u > 0 ? `inset(${ins.map((v) => v.toFixed(1) + "px").join(" ")})` : "none";
+      // colours: the nn.Linear line magenta on "PyTorch", back to ink as it lands; the rest dims, then goes
+      const kOther = 1 - E.out(seg(u, 0, 0.3));
+      model.spans.forEach((row, i) => row.forEach((sp, j) => {
+        const isLine = i === EP.MODEL_LINE && j === 1;
+        if (isLine) { sp.style.color = css(mix(mix(COL.text, COL.hero, kHero), COL.text, E.io(seg(u, 0.55, 1)))); sp.style.opacity = "1"; }
+        else { sp.style.color = css(mix(COL.text, COL.dim, kHero)); sp.style.opacity = kOther.toFixed(3); }
+      }));
+    } else {
+      model.at(tx, ty, { alpha: 0 });
+      setPanel([aLeft, EP.CARD_TOP, aw, ah], 0);
+    }
+
+    // ---- weight, its labels and the network grow in below as the card lands ----
+    const a = E.out(seg(t, CUE.grow, CUE.grow + 0.55));
+    EP.placeW(P, EP.WL.STORED, a);
+    P.w.forEach((row, r) => row.forEach((c, k) => {
+      c.at(EP.WL.STORED + k * EP.CW, EP.MAT_TOP + r * EP.RH, { alpha: a, scale: 0.85 + 0.15 * a });
+    }));
+    const gw = [0, 1, 2].map((i) => E.out(seg(t, CUE.grow + 0.15 + 0.08 * i, CUE.grow + 0.65 + 0.08 * i)));
+
+    // ---- the hero: neuron 1 (ring + row 1), then neuron 2 (ring + row 2), then rest ----
+    const kIn = E.out(seg(t, CUE.per, CUE.per + 0.25));
+    const kPass = E.io(seg(t, CUE.pass, CUE.pass + 0.25));
     const kOut = E.io(seg(t, CUE.rest, CUE.still));
     const lit = [kIn * (1 - kPass), kPass * (1 - kOut)];
     // the box "draws": it fades in while closing from 10 px outside onto the row
@@ -81,7 +155,7 @@
     P.hl2.rect(grow(EP.RECT.wRow(1, EP.WL.STORED), kPass), lit[1]);
 
     EP.bg(g);
-    net(gw, lit);
+    net(gw, lit, a);
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
