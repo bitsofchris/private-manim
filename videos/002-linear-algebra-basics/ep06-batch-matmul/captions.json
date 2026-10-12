@@ -1,0 +1,292 @@
+[
+ {
+  "start": 0.58,
+  "end": 1.102,
+  "text": "One line of"
+ },
+ {
+  "start": 1.162,
+  "end": 1.902,
+  "text": "PyTorch pushes a"
+ },
+ {
+  "start": 1.962,
+  "end": 2.832,
+  "text": "whole batch through"
+ },
+ {
+  "start": 2.892,
+  "end": 3.24,
+  "text": "a layer"
+ },
+ {
+  "start": 3.24,
+  "end": 4.374,
+  "text": "because X is"
+ },
+ {
+  "start": 4.434,
+  "end": 5.393,
+  "text": "data and W"
+ },
+ {
+  "start": 5.453,
+  "end": 6.5,
+  "text": "is the map."
+ },
+ {
+  "start": 6.5,
+  "end": 6.993,
+  "text": "X is 5"
+ },
+ {
+  "start": 7.053,
+  "end": 7.793,
+  "text": "rows, each row"
+ },
+ {
+  "start": 7.853,
+  "end": 8.199,
+  "text": "is one"
+ },
+ {
+  "start": 8.259,
+  "end": 8.9,
+  "text": "input vector"
+ },
+ {
+  "start": 8.9,
+  "end": 10.24,
+  "text": "with 3 features."
+ },
+ {
+  "start": 10.24,
+  "end": 10.83,
+  "text": "W is the"
+ },
+ {
+  "start": 10.89,
+  "end": 11.874,
+  "text": "map from 3"
+ },
+ {
+  "start": 11.934,
+  "end": 13.18,
+  "text": "dimensions to 2."
+ },
+ {
+  "start": 13.18,
+  "end": 13.599,
+  "text": "X and W"
+ },
+ {
+  "start": 13.659,
+  "end": 14.655,
+  "text": "are both matrices"
+ },
+ {
+  "start": 14.715,
+  "end": 15.449,
+  "text": "but they play"
+ },
+ {
+  "start": 15.509,
+  "end": 16.4,
+  "text": "different roles."
+ },
+ {
+  "start": 16.4,
+  "end": 17.316,
+  "text": "X is data, which"
+ },
+ {
+  "start": 17.376,
+  "end": 18.006,
+  "text": "is a stack"
+ },
+ {
+  "start": 18.066,
+  "end": 19.04,
+  "text": "of vectors here"
+ },
+ {
+  "start": 19.04,
+  "end": 19.475,
+  "text": "W is"
+ },
+ {
+  "start": 19.535,
+  "end": 21.1,
+  "text": "a transformation."
+ },
+ {
+  "start": 21.1,
+  "end": 21.584,
+  "text": "So X @"
+ },
+ {
+  "start": 21.644,
+  "end": 22.309,
+  "text": "W does the"
+ },
+ {
+  "start": 22.369,
+  "end": 23.215,
+  "text": "same thing to"
+ },
+ {
+  "start": 23.275,
+  "end": 23.94,
+  "text": "every row."
+ },
+ {
+  "start": 23.94,
+  "end": 24.95,
+  "text": "Row 1 of"
+ },
+ {
+  "start": 25.01,
+  "end": 26.113,
+  "text": "X weights the"
+ },
+ {
+  "start": 26.173,
+  "end": 27.091,
+  "text": "rows of W"
+ },
+ {
+  "start": 27.151,
+  "end": 28.07,
+  "text": "and sums."
+ },
+ {
+  "start": 28.07,
+  "end": 28.989,
+  "text": "Then row 2"
+ },
+ {
+  "start": 29.049,
+  "end": 29.967,
+  "text": "then all 5"
+ },
+ {
+  "start": 30.027,
+  "end": 30.88,
+  "text": "in parallel."
+ },
+ {
+  "start": 30.88,
+  "end": 31.81,
+  "text": "This 5 by 3,"
+ },
+ {
+  "start": 31.87,
+  "end": 32.8,
+  "text": "@ 3 by 2,"
+ },
+ {
+  "start": 32.86,
+  "end": 34.45,
+  "text": "gives 5 by 2."
+ },
+ {
+  "start": 34.45,
+  "end": 35.479,
+  "text": "The inner dimensions"
+ },
+ {
+  "start": 35.539,
+  "end": 36.225,
+  "text": "have to match"
+ },
+ {
+  "start": 36.285,
+  "end": 36.726,
+  "text": "and then"
+ },
+ {
+  "start": 36.786,
+  "end": 37.57,
+  "text": "they disappear."
+ },
+ {
+  "start": 37.57,
+  "end": 38.277,
+  "text": "Then the bias"
+ },
+ {
+  "start": 38.337,
+  "end": 39.245,
+  "text": "broadcasts across"
+ },
+ {
+  "start": 39.305,
+  "end": 39.86,
+  "text": "every row."
+ },
+ {
+  "start": 39.86,
+  "end": 40.416,
+  "text": "Real data just"
+ },
+ {
+  "start": 40.476,
+  "end": 41.18,
+  "text": "makes this bigger."
+ },
+ {
+  "start": 41.18,
+  "end": 41.773,
+  "text": "There's a batch"
+ },
+ {
+  "start": 41.833,
+  "end": 42.532,
+  "text": "there's a sequence"
+ },
+ {
+  "start": 42.592,
+  "end": 43.22,
+  "text": "there's features."
+ },
+ {
+  "start": 43.22,
+  "end": 44.138,
+  "text": "The last dimension"
+ },
+ {
+  "start": 44.198,
+  "end": 44.68,
+  "text": "is always"
+ },
+ {
+  "start": 44.74,
+  "end": 45.32,
+  "text": "the vector."
+ },
+ {
+  "start": 45.32,
+  "end": 46.201,
+  "text": "It's the same"
+ },
+ {
+  "start": 46.261,
+  "end": 47.205,
+  "text": "learned map in"
+ },
+ {
+  "start": 47.265,
+  "end": 48.02,
+  "text": "that matrix"
+ },
+ {
+  "start": 48.02,
+  "end": 48.574,
+  "text": "applied to"
+ },
+ {
+  "start": 48.634,
+  "end": 49.34,
+  "text": "many vectors."
+ }
+]
