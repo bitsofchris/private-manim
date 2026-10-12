@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep07 beat 1, 01_hook (master 0.00, 5.91 s). VO: "Without activation functions, a 100-layer
+         neural network is just one matrix. Here's why."
+         Frame 0: a deck of five layer cards (W1, W2, W3, ⋮, W100) already sliding together in the top
+         stage, over the plane in STACK (plain grid, x at (1, 2)).
+         "100-layer": the W100 card's name and border brighten.
+         "just one matrix": the deck collapses into one card that becomes the matrix W at its MERGED
+         place (digits magenta, name W): one move, 0.64 s.
+         "Here's why": W splits into W1 @ W2 (each slides to its STACK place, the @ fades in, digits
+         white) and the card x @ W1 @ W2 fades in. Last 5 frames: EP.state STACK, still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+      .deck { position: absolute; left: 0; top: 0; border-radius: 22px; background: var(--panel);
+              border: 6px solid var(--dim); display: flex; align-items: center; justify-content: center;
+              font-size: 60px; line-height: 66px; color: var(--dim); white-space: nowrap; }
+      .dots { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+      .dots i { display: block; width: 12px; height: 12px; border-radius: 6px; background: var(--dim); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.91" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.91;
+  // Cues, beat-local = master (start 0.00). From a 20 ms RMS envelope of vo_final.wav (words.json
+  // in brackets): "Without" 0.60, "activation" 1.02, "functions" 1.64, "a" 2.22, "hundred" 2.42 [2.32],
+  // "layer" 2.84, "neural network" 3.06-3.50, "is" 3.64, "just" 3.86 [3.76], "one" 4.18 [4.12],
+  // "matrix" 4.36-4.70, pause, "Here's" 5.32 [5.38], "why" 5.48-5.66.
+  const CUE = {
+    slide: 0.00,    // frame 0: the deck is already sliding together (pitch 108 -> 96, done 1.40)
+    hundred: 2.40,  // "hundred": the W100 card brightens (0.25 s)
+    just: 3.86,     // "just": the deck starts collapsing ...
+    land: 4.50,     // ... and lands as the matrix W, magenta, on "one matrix" (one move, 0.64 s)
+    split: 5.12,    // in the pause, just before "Here's": W splits into W1 @ W2 (0.62 s) ...
+    still: 5.74,    // ... landed on "why"; nothing moves after this (last 5 frames = STACK)
+  };
+  const { COL, css, mix, lerp, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local: the deck of layer cards (Inter 60 px names on --panel cards) ----
+  // Widths: "W100" at 60 px is ~150 px of ink; the cards are 300 x 84, centred on x 507 (the
+  // matrices' centre, so the collapse is straight up/down), tops from 244, pitch 108 -> 96.
+  const DECK = { names: ["W1", "W2", "W3", null, "W100"], w: 300, h: 84, top: 244, p0: 108, p1: 96, cx: EP.ML.W + EP.CW };
+  const deck = DECK.names.map((name) => {
+    const el = document.createElement("div");
+    el.className = "deck";
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+    const inner = document.createElement("div");
+    if (name) inner.textContent = name;
+    else { inner.className = "dots"; inner.innerHTML = "<i></i><i></i><i></i>"; }
+    el.appendChild(inner);
+    root.appendChild(el);
+    return { el, inner };
+  });
+  // the collapse target: W's bracketed block at its MERGED place
+  const TARGET = [EP.ML.W - 24, EP.MAT_TOP - 4, 2 * EP.CW + 48, 2 * EP.RH + 8];
+  function placeDeck(i, r, alpha, border, ink, inkAlpha) {
+    const el = deck[i].el;
+    el.style.width = `${r[2].toFixed(1)}px`; el.style.height = `${r[3].toFixed(1)}px`;
+    el.style.transform = `translate(${r[0].toFixed(1)}px, ${r[1].toFixed(1)}px)`;
+    el.style.opacity = alpha.toFixed(3);
+    el.style.borderColor = css(border);
+    deck[i].inner.style.color = css(ink);
+    deck[i].inner.style.opacity = inkAlpha.toFixed(3);
+  }
+  // the kit's parts that pass over each other while W splits
+  [P.m.W, P.m.W1, P.m.W2].forEach((m) => m.forEach((row) => row.forEach((c) => {
+    c.el.setAttribute("data-layout-allow-overlap", ""); c.el.setAttribute("data-layout-allow-occlusion", "");
+  })));
+  [P.names.W, P.names.W1, P.names.W2].forEach((el) => {
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+
+  // the W100 card swells a little when "hundred" lands (a pop, back to 1 by 0.5 s after)
+  const popW100 = (k) => {
+    const pop = 1 + 0.08 * Math.sin(Math.PI * k);
+    deck[4].inner.style.transform = `scale(${pop.toFixed(4)})`;
+  };
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "STACK");                             // the end state; the plane is STACK throughout
+
+    // ---- the deck: slide together, W100 brightens, collapse ----
+    const pitch = lerp(DECK.p0, DECK.p1, E.out(seg(t, CUE.slide, 1.40)));
+    const kHundred = E.out(seg(t, CUE.hundred, CUE.hundred + 0.25));
+    const u = E.io(seg(t, CUE.just, CUE.land));          // the collapse, one move
+    const aDeck = 1 - E.io(seg(u, 0.55, 1));             // the panel hands over to W's brackets
+    const inkA = 1 - E.out(seg(u, 0, 0.45));             // the names go as the cards pile up
+    DECK.names.forEach((name, i) => {
+      const r0 = [DECK.cx - DECK.w / 2, DECK.top + i * pitch, DECK.w, DECK.h];
+      const r = r0.map((v, k) => lerp(v, TARGET[k], u));
+      const lit = i === 4 ? kHundred : 0;
+      const border = mix(mix(COL.dim, COL.text, lit), COL.hero, E.io(seg(u, 0.2, 0.8)));
+      placeDeck(i, r, u >= 1 ? 0 : aDeck, border, mix(COL.dim, COL.text, lit), inkA);
+    });
+    popW100(kHundred);
+
+    // ---- W: lands magenta with its name, then splits into W1 @ W2 ----
+    const aIn = E.out(seg(u, 0.45, 1));                  // W's digits, brackets and name arrive
+    const v = E.io(seg(t, CUE.split, CUE.still));        // the split
+    const aW = aIn * (1 - E.io(seg(v, 0, 0.3)));     // W goes before the halves are legible
+    EP.placeM(P, "W", EP.ML.W, aW, COL.hero, aW);
+    // W1 and W2 slide out from W's place to their STACK places; digits magenta -> white
+    const a12 = E.out(seg(v, 0.3, 0.75));
+    const col12 = mix(COL.hero, COL.text, E.io(seg(v, 0.3, 1)));
+    EP.placeM(P, "W1", lerp(EP.ML.W, EP.ML.W1, v), a12, col12, E.out(seg(v, 0.4, 1)));
+    EP.placeM(P, "W2", lerp(EP.ML.W, EP.ML.W2, v), a12, col12, E.out(seg(v, 0.4, 1)));
+    P.at.style.opacity = E.out(seg(v, 0.5, 1)).toFixed(3);
+    EP.placeCard(P.cards.stack, E.out(seg(v, 0.35, 1)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

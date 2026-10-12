@@ -184,6 +184,7 @@
     placeM(Pt, "W2", ML.W2, two ? 1 : 0, COL.text, two ? na : 0);
     placeM(Pt, "W", ML.W, one ? 1 : 0, name === "LINEAR" ? COL.text : COL.hero, one ? 1 : 0);
     Object.keys(Pt.b).forEach((k) => Pt.b[k].color(COL.dim));
+    Pt.cards.merged.spans[0][2].style.color = css(name === "LINEAR" ? COL.text : COL.hero);   // one hero: in LINEAR it is the line
     put(Pt.at, AT.x - 60, AT.y - 40, two ? 1 : 0);
     Pt.hl.rect(RECT.mat("W1"), 0); Pt.hl2.rect(RECT.mat("W2"), 0);
     if (!g) return;

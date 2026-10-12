@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep07 beat 9, 09_bend (master 40.53, 4.38 s). Opens FOLDED, ends BENT (still from 4.20).
+         Hero: the bent line (with nn.ReLU(), one hero pair).
+         VO: "Now each layer can bend the path, and stacking actually adds something."
+         "Now each layer": magenta rings (VEC.spot) come up on the hero line's two corners;
+         "bend" and "path": they pulse. "stacking": the second nn.Linear(2, 2), line brightens
+         and W2 acts on the bent grid (w2 0 -> 1, 1.2 s): the corners ride to (2, 0) and (0, 1),
+         the line stays bent, x rides to (0, 1.5). Rings and the glow are gone before the hold. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.38" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.38;
+  // Beat-local cues (master − 40.53), from words.json checked on a 30 ms RMS envelope of
+  // vo_final.wav. Speech: 0.18-0.69 "Now", 0.78 "each", 0.90 "layer", 1.23 "can",
+  // 1.41-1.65 "bend", 1.71 "the path", 2.34 "and", 2.61 "stacking", 3.12 "actually",
+  // 3.57 "adds", 3.78 "something".
+  const CUE = {
+    each: 0.0,        /* "Now each layer" (0.18 / 0.78): the corner rings come up */
+    bend: 1.38,       /* "bend" (1.41): the rings pulse */
+    path: 1.70,       /* "path" (1.71): a second pulse */
+    stacking: 2.58,   /* "stacking" (2.61): second nn.Linear brightens, w2 0 -> 1 */
+  };
+  const T = {
+    rings: [CUE.each, 0.80], ringsOut: [3.85, 4.15],
+    w2: [CUE.stacking, CUE.stacking + 1.20],
+    glowIn: [CUE.stacking - 0.05, CUE.stacking + 0.25], glowOut: [3.70, 4.15],
+    still: 4.20,                                    // BENT, exact, from here (6 frames)
+  };
+  const { COL, seg, mix, css } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));   // 0 -> 1 -> 0
+  // the second nn.Linear(2, 2), line of CODE.seq (one span)
+  const lin2 = P.cards.seq.spans[EP.SEQ_RELU + 1][0];
+  // the hero line's two corners: the inputs (LINE_X, ±1) where x @ W1 crosses an axis
+  const CORNERS = [[EP.LINE_X, 1], [EP.LINE_X, -1]];
+
+  function render(t) {
+    if (t > T.still) t = T.still;
+    EP.state(P, null, "BENT");                    // DOM at BENT (the card is the same as FOLDED)
+
+    // "stacking": the second nn.Linear line brightens (toward white, a soft glow), then rests
+    const kl = E.out(seg(t, ...T.glowIn)) * (1 - E.io(seg(t, ...T.glowOut)));
+    lin2.style.color = css(mix(COL.text, [255, 255, 255], kl));
+    lin2.style.textShadow = kl > 0.001 ? `0 0 ${(26 * kl).toFixed(1)}px ${css(COL.text, 1, 0.85 * kl)}` : "none";
+
+    // the plane: W2 acts on the bent grid (w2 0 -> 1, relu = 1)
+    const w2 = E.io(seg(t, ...T.w2)), f = EP.stage({ w1: 1, relu: 1, w2 });
+    EP.bg(g);
+    EP.plane(g, { f, hero: 1 });
+
+    // rings on the corners, riding them; pulse on "bend" and "path"; gone before the hold
+    const ra = E.out(seg(t, ...T.rings)) * (1 - E.io(seg(t, ...T.ringsOut)));
+    const k = Math.max(pulse(t, CUE.bend, 0.4), 0.7 * pulse(t, CUE.path, 0.4));
+    VEC.view(EP.PLANE);
+    CORNERS.forEach((p) => { const q = f(p); VEC.spot(g, q[0], q[1], { alpha: ra, k, r: 34 }); });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

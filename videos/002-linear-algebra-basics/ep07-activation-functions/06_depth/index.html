@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep07 beat 6, 06_depth (master 23.05, 6.73 s). VO: "So two linear layers, or 200, collapse
+         into a single linear transformation. The depth here doesn't buy you anything."
+         Opens MERGED. "two linear layers": the card becomes x @ W1 @ W2, W's digits go white.
+         "or 200": the card becomes x @ W1 @ ⋯ @ W200. "collapse into a single linear
+         transformation": the card collapses back to x @ W (0.7 s), W's digits go magenta, W pulses.
+         "The depth here doesn't buy you anything": the shortcut hop and x pulse once.
+         Last 5 frames MERGED, still. Hero: W. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.73" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.73;
+  // Cues, beat-local = master - 23.05, from a 20 ms RMS envelope of vo_final.wav:
+  // "two" 23.44 (the t stop at 23.40), "layers" 23.95, "or" 24.40, "200" 24.56-25.10,
+  // "collapse" 25.24 (k), "single" 26.0, "transformation" 27.1-27.85, "depth" 28.44,
+  // "doesn't" 28.84, "buy" 29.04, "anything" ~29.2-29.6.
+  const CUE = {
+    two: 0.36,       // "two": card -> x @ W1 @ W2, W's digits go white
+    many: 1.36,      // "or 200": card -> x @ W1 @ ⋯ @ W200
+    collapse: 2.15,  // "collapse": card collapses back to x @ W (0.70 s)
+    magenta: 2.70,   // W's digits back to magenta as the card lands
+    single: 2.95,    // "single": W pulses once
+    pulse: 5.62,     // "doesn't buy you anything": shortcut hop and x pulse once (0.80 s)
+    still: 6.56,     // nothing moves after this (last 5 frames MERGED)
+  };
+  const { COL, css, mix, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d) => { const k = Math.sin(Math.PI * seg(t, t0, t0 + d)); return k < 1e-4 ? 0 : k; };
+  // the 200-layer card: one line, 17 characters (⋯ is one), ~650 px wide
+  const deep = VEC.codeCard(root, [[["x", COL.data], [" @ "], ["W1"], [" @ "], ["⋯"], [" @ "], ["W200"]]]);
+  // morph panel: the box of a card changing size (same look as VEC.codeCard's panel)
+  const panel = document.createElement("div");
+  panel.style.cssText = `position:absolute;left:0;top:0;box-sizing:border-box;border-radius:22px;` +
+    `background:${css(COL.panel)};border:6px solid ${css(COL.dim)};opacity:0;`;
+  root.insertBefore(panel, P.cards.stack.el);
+  const CARDS = [P.cards.merged, P.cards.stack, deep];
+  [panel, ...CARDS.map((c) => c.el)].forEach((el) => {
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  const rectOf = (c) => [VEC.centreLeft(c.el), EP.CARD_TOP, c.el.offsetWidth, c.el.offsetHeight];
+  // morph(A, B, u): card A becomes card B in place. The panel lerps A's box to B's; A's text
+  // fades out over the first half, B's fades in over the second, both clipped to the panel.
+  function morph(A, B, u) {
+    const ra = rectOf(A), rb = rectOf(B), pr = ra.map((v, i) => v + (rb[i] - v) * u);
+    panel.style.width = `${pr[2].toFixed(1)}px`; panel.style.height = `${pr[3].toFixed(1)}px`;
+    panel.style.transform = `translate(${pr[0].toFixed(1)}px, ${pr[1].toFixed(1)}px)`;
+    panel.style.opacity = "1";
+    [[A, ra, 1 - seg(u, 0, 0.5)], [B, rb, seg(u, 0.5, 1)]].forEach(([c, r, a]) => {
+      const il = Math.max(0, pr[0] + 6 - r[0]), ir = Math.max(0, r[0] + r[2] - (pr[0] + pr[2] - 6));
+      c.el.style.background = "transparent"; c.el.style.borderColor = "transparent";
+      c.el.style.clipPath = `inset(0px ${ir.toFixed(1)}px 0px ${il.toFixed(1)}px)`;
+      c.at(r[0], EP.CARD_TOP, { alpha: a });
+    });
+  }
+  function rest(card) {                                   // one card on show, as a plain codeCard
+    CARDS.forEach((c) => {
+      c.el.style.background = css(COL.panel); c.el.style.borderColor = css(COL.dim); c.el.style.clipPath = "none";
+      EP.placeCard(c, c === card ? 1 : 0);
+    });
+    panel.style.opacity = "0";
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, g, "MERGED");
+
+    // ---- the card: x @ W -> x @ W1 @ W2 -> x @ W1 @ ⋯ @ W200 -> x @ W ----
+    const u1 = E.io(seg(t, CUE.two - 0.06, CUE.two + 0.30));
+    const u2 = E.io(seg(t, CUE.many - 0.06, CUE.many + 0.30));
+    const u3 = E.io(seg(t, CUE.collapse, CUE.collapse + 0.70));
+    rest(P.cards.merged);
+    if (u3 >= 1) rest(P.cards.merged);
+    else if (u3 > 0) { rest(null); morph(deep, P.cards.merged, u3); }
+    else if (u2 >= 1) rest(deep);
+    else if (u2 > 0) { rest(null); morph(P.cards.stack, deep, u2); }
+    else if (u1 >= 1) rest(P.cards.stack);
+    else if (u1 > 0) { rest(null); morph(P.cards.merged, P.cards.stack, u1); }
+
+    // ---- W: digits white while the card shows many layers, magenta again on the collapse; one pulse ----
+    const kWhite = E.io(seg(t, CUE.two - 0.06, CUE.two + 0.30)) * (1 - E.io(seg(t, CUE.magenta - 0.10, CUE.magenta + 0.25)));
+    const pW = pulse(t, CUE.single, 0.50);
+    P.m.W.forEach((row, r) => row.forEach((c, k) => {
+      c.color(mix(COL.hero, COL.text, kWhite));
+      c.at(EP.ML.W + k * EP.CW, EP.MAT_TOP + r * EP.RH, { scale: 1 + 0.15 * pW });
+    }));
+    P.b.W.color(mix(COL.dim, COL.hero, pW));
+
+    // ---- "doesn't buy you anything": the shortcut hop and x pulse once ----
+    const pX = pulse(t, CUE.pulse, 0.80);
+    if (pX > 0) {
+      g.save(); g.beginPath(); g.rect(0, EP.PLANE.top, ISO.W, ISO.SAFE.stageBottom - EP.PLANE.top); g.clip();
+      VEC.line(g, EP.X, EP.XW, { col: COL.text, alpha: 0.9 * pX, width: 5 + 4 * pX, dash: [14, 12] });
+      VEC.puck(g, EP.X[0], EP.X[1], { half: 11 + 5 * pX, col: mix(COL.dim, COL.text, pX) });
+      VEC.arrow(g, [0, 0], EP.XW, { col: COL.data, width: 40 * (1 + 0.35 * pX) });
+      VEC.puck(g, 0, 0);
+      g.restore();
+    }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

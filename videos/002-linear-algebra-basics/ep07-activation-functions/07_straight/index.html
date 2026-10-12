@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep07 beat 7, 07_straight (master 29.78, 6.57 s). VO: "Now a linear map keeps the origin
+         fixed and the grid line straight. It can stretch, rotate, and squish, but it can't bend."
+         Opens MERGED. The shortcut hop fades and W's digits go white (the hero passes to the plane).
+         "origin fixed": a magenta ring pulses on the origin, then goes. "grid line straight": the
+         hero line (x1 = 1) turns magenta and the grid brightens once. "stretch, rotate, and squish":
+         one ride through the post dial (east-west x1.4, a 30 degree turn, north-south x0.6), back to
+         none before "but"; the hero line stays straight. "can't bend": the line kinks at its middle
+         and springs straight. Last 5 frames LINEAR, still. Hero: the origin, then the hero line. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.57" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.57;
+  // Cues, beat-local = master - 29.78, from a 20 ms RMS envelope of vo_final.wav:
+  // "Now" 29.98, "keeps" 30.86, "origin" 31.14-31.46, "fixed" 31.58-31.98, "and" 32.28,
+  // "grid" 32.50, "line" 32.70, "straight" 32.90-33.22, "It can" 33.70, "stretch" 33.98-34.18,
+  // "rotate" 34.22-34.60, "squish" 34.66-35.00, "but" 35.10, "can't" 35.34, "bend" 35.82-36.10.
+  const CUE = {
+    pass: 0.00,      // "Now a linear map": shortcut hop fades, W's digits go white (0.6 s)
+    origin: 1.34,    // "origin": the ring on the origin appears and pulses
+    fixed: 1.82,     // "fixed": second pulse, then the ring goes
+    grid: 2.68,      // "grid line": the hero line turns magenta
+    straight: 3.10,  // "straight": the grid brightens once
+    stretch: 4.16,   // "stretch": post -> east-west x1.4
+    rotate: 4.44,    // "rotate": + a 30 degree turn
+    squish: 4.86,    // "squish": + north-south x0.6
+    home: 5.06,      // back to post = none by "but" (5.32)
+    bend: 5.98,      // "bend" (6.04): the hero line kinks and springs straight (0.42 s)
+    still: 6.40,     // nothing moves after this (last 5 frames LINEAR)
+  };
+  const { COL, css, mix, lerp, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local helpers ----
+  const pulse = (t, t0, d) => { const k = Math.sin(Math.PI * seg(t, t0, t0 + d)); return k < 1e-4 ? 0 : k; };
+  const mul = (A, B) => [[A[0][0] * B[0][0] + A[0][1] * B[1][0], A[0][0] * B[0][1] + A[0][1] * B[1][1]],
+                         [A[1][0] * B[0][0] + A[1][1] * B[1][0], A[1][0] * B[0][1] + A[1][1] * B[1][1]]];
+  // post(t): one continuous ride, stretch @ turn @ squish, each factor from the identity on its
+  // word and all back to the identity together. Row-vector: p @ post. Always linear.
+  function post(t) {
+    const back = 1 - E.io(seg(t, CUE.home, CUE.home + 0.26));
+    const a = lerp(1, 1.4, E.io(seg(t, CUE.stretch - 0.08, CUE.stretch + 0.26)) * back);
+    const th = (Math.PI / 6) * E.io(seg(t, CUE.rotate - 0.08, CUE.rotate + 0.34)) * back;
+    const b = lerp(1, 0.6, E.io(seg(t, CUE.squish - 0.12, CUE.squish + 0.20)) * back);
+    if (a === 1 && th === 0 && b === 1) return null;
+    const c = Math.cos(th), s = Math.sin(th);
+    return mul(mul([[a, 0], [0, 1]], [[c, s], [-s, c]]), [[1, 0], [0, b]]);
+  }
+  // the hero line with a kink: EP.heroLine's sampled polyline, its points pushed sideways (screen
+  // px) by a tent of height amp centred at input t = 0.5 (the line's middle on screen).
+  function heroKink(f, amp) {
+    const pts = [], n = 450;
+    for (let i = 0; i <= n; i++) { const tt = lerp(-9, 9, i / n), q = f([EP.LINE_X, tt]); pts.push([tt, VEC.at(q[0], q[1])]); }
+    const d0 = pts[0][1], d1 = pts[n][1], L = Math.hypot(d1[0] - d0[0], d1[1] - d0[1]);
+    const nx = -(d1[1] - d0[1]) / L, ny = (d1[0] - d0[0]) / L;
+    g.beginPath();
+    pts.forEach(([tt, s], i) => {
+      const k = amp * Math.max(0, 1 - Math.abs(tt - 0.5) / 0.7);
+      const x = s[0] + nx * k, y = s[1] + ny * k;
+      if (i === 0) g.moveTo(x, y); else g.lineTo(x, y);
+    });
+    g.strokeStyle = css(COL.hero); g.lineWidth = 7; g.lineJoin = "round"; g.lineCap = "round"; g.stroke();
+  }
+  // plane7: EP.plane's drawing order with this beat's extras (grid boost, origin ring, kink)
+  function plane7(o) {
+    const f = o.f;
+    EP.bg(g);
+    VEC.view(EP.PLANE);
+    g.save(); g.beginPath(); g.rect(0, EP.PLANE.top, ISO.W, ISO.SAFE.stageBottom - EP.PLANE.top); g.clip();
+    VEC.floor(g, { alpha: 0.12 });
+    EP.warp(g, f, {});
+    if (o.boost > 0) EP.warp(g, f, { col: COL.dim, alpha: 0.7 * o.boost });
+    VEC.axes(g, {});
+    if (o.trail > 0) EP.SHORT.forEach(([a, b]) => { EP.hop(g, a, b, { alpha: 0.9 * o.trail }); VEC.puck(g, a[0], a[1], { half: 11, col: COL.dim, alpha: o.trail }); });
+    if (o.kink) heroKink(f, o.kink); else if (o.hero > 0) EP.heroLine(g, f, { alpha: o.hero });
+    VEC.arrow(g, [0, 0], f(EP.X), { col: COL.data, width: 40 });
+    VEC.puck(g, 0, 0);
+    if (o.ring > 0) VEC.spot(g, 0, 0, { alpha: o.ring, k: o.ringK });
+    g.restore();
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    EP.state(P, null, "LINEAR");                          // DOM only; the canvas is plane7
+
+    // the hero passes to the plane: W's digits go white, the shortcut hop fades
+    const kPass = E.io(seg(t, CUE.pass, CUE.pass + 0.6));
+    P.m.W.forEach((row) => row.forEach((c) => c.color(mix(COL.hero, COL.text, kPass))));
+    P.cards.merged.spans[0][2].style.color = css(mix(COL.hero, COL.text, kPass));   // and the card's W
+    // honest DOM motion while it passes (the check's sweep reads geometry): W's name dips in scale
+    const nameLeft = EP.ML.W + EP.CW - 150, kName = 1 - 0.08 * pulse(t, CUE.pass, 0.6);
+    P.names.W.style.transform = `translate(${nameLeft.toFixed(1)}px, ${EP.NAME_TOP.toFixed(1)}px)` + (kName < 1 ? ` scale(${kName.toFixed(4)})` : "");
+
+    // origin ring: in on "origin", pulses on "origin" and "fixed", out after
+    const ring = seg(t, CUE.origin - 0.12, CUE.origin + 0.06) * (1 - seg(t, CUE.fixed + 0.30, CUE.fixed + 0.55));
+    const ringK = pulse(t, CUE.origin, 0.36) + pulse(t, CUE.fixed - 0.06, 0.36);
+
+    const pm = post(t);
+    const f = EP.stage(Object.assign({}, EP.S.W, pm ? { post: pm } : {}));
+    // a damped spring: out to ~16 px, back, a small overshoot, flat again by CUE.bend + 0.42
+    const amp = t > CUE.bend && t < CUE.bend + 0.42 ? 16 * Math.sin(Math.PI * 2.2 * seg(t, CUE.bend, CUE.bend + 0.42)) * Math.exp(-3 * seg(t, CUE.bend, CUE.bend + 0.42)) * (1 - seg(t, CUE.bend + 0.30, CUE.bend + 0.42)) : 0;
+    plane7({
+      f,
+      trail: 1 - kPass,
+      hero: E.io(seg(t, CUE.grid - 0.10, CUE.grid + 0.30)),
+      boost: pulse(t, CUE.straight - 0.05, 0.50),
+      ring, ringK,
+      kink: Math.abs(amp) > 0.05 ? amp : 0,
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

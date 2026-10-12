@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep07 beat 8, 08_relu (master 36.35, 4.18 s). Code beat. Opens LINEAR, ends FOLDED
+         (still from 3.98). Hero: nn.ReLU(), then the bent line (one hero pair).
+         VO: "Put a ReLU or a GELU between the layers, and the collapse stops."
+         "Put": W (digits, brackets, name) and the card x @ W fade; the nn.Sequential card
+         fades in with its nn.ReLU() row collapsed (the four lines). "ReLU": the row opens a
+         gap and nn.ReLU() types in, magenta. "GELU": the line reads nn.GELU() for the word,
+         nn.ReLU() again on "between". "between the layers": w2 1 -> 0 (the grid un-squishes to
+         W1's, x back to (−1, 3)). "and the collapse stops": relu 0 -> 1 (0.9 s), the grid
+         folds, the hero line bends, x slides to (0, 3). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.18" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.18;
+  // Beat-local cues (master − 36.35), from words.json checked on a 30 ms RMS envelope of
+  // vo_final.wav. Speech: 0.18 "Put", 0.33-0.87 "a ReLU", 0.99 "or", 1.20-1.59 "a GELU",
+  // 1.74 "between", 2.0-2.40 "the layers", pause, 2.82 "and", 3.12 "collapse", 3.51 "stops".
+  const CUE = {
+    put: 0.0,        /* "Put" (0.18): W and x @ W fade, the Sequential card fades in */
+    relu: 0.36,      /* "ReLU" (0.40): the gap opens, nn.ReLU() types in */
+    gelu: 1.22,      /* "GELU" (1.25): the line reads nn.GELU() */
+    between: 1.72,   /* "between" (1.74): back to nn.ReLU(); w2 1 -> 0 starts */
+    and: 3.00,       /* "and the collapse stops" (2.82 / 3.12): relu 0 -> 1 */
+  };
+  const T = {
+    wOut: [CUE.put, 0.28], cardIn: [0.12, 0.40],
+    gap: [CUE.relu, CUE.relu + 0.26], type: [CUE.relu + 0.12, CUE.relu + 0.50],
+    w2: [CUE.between, CUE.between + 0.72], relu: [CUE.and, CUE.and + 0.90],
+    still: 3.98,                                    // FOLDED, exact, from here (6 frames)
+  };
+  const { COL, seg, mix, css, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const pulse = (t, a, d) => Math.sin(Math.PI * seg(t, a, a + d));   // 0 -> 1 -> 0
+
+  // local: the nn.ReLU() row of the Sequential card, collapsed to a gap of height k * line
+  const seq = P.cards.seq, reluRow = seq.el.children[EP.SEQ_RELU], reluSp = seq.spans[EP.SEQ_RELU];
+  const LINE = parseFloat(seq.el.style.lineHeight);
+  [reluRow, ...reluRow.querySelectorAll("*")].forEach((e) => e.setAttribute("data-layout-allow-overflow", ""));
+  function openGap(k, text) {
+    if (k >= 1) { reluRow.style.height = ""; reluRow.style.overflow = ""; }
+    else { reluRow.style.height = `${(LINE * k).toFixed(1)}px`; reluRow.style.overflow = "hidden"; }
+    if (reluSp[1].textContent !== text.name) reluSp[1].textContent = text.name;
+    if (reluSp[2].textContent !== text.comma) reluSp[2].textContent = text.comma;
+  }
+  // the outgoing x @ W card and W cross-fade with the incoming card in the same place
+  [P.cards.merged.el, seq.el].forEach((el) => [el, ...el.querySelectorAll("*")].forEach((e) => { e.setAttribute("data-layout-allow-overlap", ""); e.setAttribute("data-layout-allow-occlusion", ""); }));
+  P.m.W.flat().forEach((c) => c.el.setAttribute("data-layout-allow-overlap", ""));
+  P.b.W.els.concat([P.names.W]).forEach((el) => el.setAttribute("data-layout-allow-overlap", ""));
+
+  function render(t) {
+    if (t > T.still) t = T.still;
+    EP.state(P, null, "FOLDED");                  // DOM at FOLDED; this beat draws what differs
+
+    // "Put": W and the x @ W card go; the Sequential card (four lines) comes in
+    const wa = 1 - E.io(seg(t, ...T.wOut));
+    EP.placeM(P, "W", EP.ML.W, wa, COL.text, wa);
+    EP.placeCard(P.cards.merged, wa);
+    P.cards.merged.spans[0][2].style.color = ISO.css(COL.text);   // LINEAR: the card's W is white (the hero is the line)
+    const kc = E.out(seg(t, ...T.cardIn));
+    EP.placeCard(seq, kc, { scale: 0.96 + 0.04 * kc });
+
+    // "ReLU": the gap opens and nn.ReLU() types in, magenta; "GELU" swaps the name for the word
+    const kg = E.io(seg(t, ...T.gap)), nType = Math.round(10 * seg(t, ...T.type));   // 9 chars + ","
+    const gelu = t >= CUE.gelu && t < CUE.between;
+    const full = gelu ? "nn.GELU()" : "nn.ReLU()";
+    openGap(kg, { name: full.slice(0, Math.min(nType, 9)), comma: nType >= 10 ? "," : "" });
+    const flash = Math.max(pulse(t, CUE.gelu, 0.3), pulse(t, CUE.between, 0.3));
+    reluSp[1].style.color = css(mix(COL.hero, COL.text, 0.5 * flash));
+
+    // the plane: back to "between the layers" (w2 1 -> 0), then relu folds it (relu 0 -> 1)
+    const w2 = 1 - E.io(seg(t, ...T.w2)), relu = E.io(seg(t, ...T.relu));
+    EP.bg(g);
+    EP.plane(g, { f: EP.stage({ w1: 1, w2, relu }), hero: 1 });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_same: "So that's the same as x @ W1 times W2." Opens ASSOC, ends SAME.
+         Code beat. The card grows to two lines (names fade), line 2 `== x @ (W1 @ W2)` types on;
+         `(W1 @ W2)` lights magenta while the shortcut hop draws (1, 2) -> (-1, 1.5).
+         Hero: the shortcut hop (with its line of code). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.47" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.47;
+  // Cues, beat-local seconds (master 16.84 + t), from a 30 ms RMS envelope of vo_final.wav.
+  // Speech: 0.18-0.45 "So that's", 0.72-1.02 "same as", 1.14-1.44 "x @", 1.53-2.07 "W1",
+  // 2.16-2.64 "times", 2.76-3.21 "W2".
+  const CUE = {
+    grow: 0.00,    // "So that's": the card grows to two lines (frame 0 already moving), names fade
+    type: 0.42,    // "the same as": line 2 types on (0.45 s)
+    lit: 1.50,     // "W1": (W1 @ W2) lights magenta, the shortcut hop starts drawing
+    land: 2.76,    // "W2": the hop lands on x's tip
+    rest: 2.82,    // light back to rest
+    still: 3.22,   // nothing moves after this ("W2" ends 3.21)
+  };
+  const { COL, css, mix, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // ---- local: the growing two-line card (EP's `same` card, grown in place of `assoc`) ----
+  const C = P.cards.same, row2 = C.spans[1][0].parentNode;
+  const L2 = C.spans[1].map((s) => s.textContent);            // "== ", "x", " @ ", "(W1 @ W2)"
+  const N2 = L2.join("").length;
+  [C.el, ...C.el.querySelectorAll("*")].forEach((el) => {      // clipped on purpose while it grows
+    el.setAttribute("data-layout-allow-overflow", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  // natural sizes of the assoc card and the full same card
+  function natural(card) { card.el.style.width = ""; card.el.style.height = ""; return [card.el.offsetWidth, card.el.offsetHeight]; }
+  // the card at grow k (0 = assoc's box, 1 = same's box), n characters of line 2 typed
+  function growCard(k, n) {
+    row2.style.height = ""; row2.style.overflow = ""; C.el.style.overflow = "";
+    C.spans[1].forEach((s, i) => { s.textContent = L2[i]; });
+    const [w0, h0] = natural(P.cards.assoc), [w1, h1] = natural(C);
+    let left = n;
+    C.spans[1].forEach((s, i) => { const m = Math.max(0, Math.min(L2[i].length, left)); s.textContent = L2[i].slice(0, m); left -= m; });
+    C.el.style.overflow = "hidden";
+    C.el.style.width = `${lerp(w0, w1, k).toFixed(1)}px`;
+    C.el.style.height = `${lerp(h0, h1, k).toFixed(1)}px`;
+    C.at(VEC.centreLeft(C.el), EP.CARD_TOP, { alpha: 1 });
+  }
+  function restCard() {
+    C.spans[1].forEach((s, i) => { s.textContent = L2[i]; });
+    C.el.style.width = ""; C.el.style.height = ""; C.el.style.overflow = "";
+  }
+
+  // ---- local: CHAIN's plane plus the shortcut hop drawn to u, colour col (at u = 1, col = dim it is SAME) ----
+  function planeHop(u, col) {
+    EP.bg(g);
+    EP.plane(g, { f: EP.stage(EP.S.W), trail: EP.TRAIL2, x: false });
+    VEC.view(EP.PLANE);
+    g.save(); g.beginPath(); g.rect(0, EP.PLANE.top, ISO.W, ISO.SAFE.stageBottom - EP.PLANE.top); g.clip();
+    if (u > 0.001) EP.hop(g, EP.X, EP.XW, { u, col });
+    VEC.puck(g, EP.X[0], EP.X[1], { half: 11, col: COL.dim });
+    VEC.arrow(g, [0, 0], EP.XW, { col: COL.data, width: 40 });
+    VEC.puck(g, 0, 0);
+    g.restore();
+  }
+
+  function render(t) {
+    if (t >= CUE.still) t = CUE.still;
+    const grow = E.io(seg(t, CUE.grow, CUE.grow + 0.45));
+    const typed = Math.round(N2 * seg(t, CUE.type, CUE.type + 0.45));
+    const lit = E.out(seg(t, CUE.lit, CUE.lit + 0.3)) * (1 - E.io(seg(t, CUE.rest, CUE.still)));
+    const u = E.io(seg(t, CUE.lit, CUE.land));
+    const done = t >= CUE.still;
+
+    // DOM: SAME, then this beat's differences
+    if (done) restCard();
+    EP.state(P, null, "SAME");
+    const na = 1 - E.out(seg(t, 0, 0.28));                  // names step aside before the card reaches y 372
+    ["W1", "W2"].forEach((k) => EP.put(P.names[k], EP.ML[k] + EP.CW - 150, EP.NAME_TOP, na));
+    if (!done) growCard(grow, typed);
+    C.spans[1][3].style.color = css(mix(COL.text, COL.hero, lit));
+
+    // canvas
+    if (done) EP.state(P, g, "SAME");
+    else planeHop(u, mix(COL.dim, COL.hero, lit));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

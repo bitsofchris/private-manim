@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_one: "And W1 times W2 is just one matrix." Opens SAME, ends MERGED.
+         W1 and W2 slide together into W (one move); W lands magenta with its name; line 2's
+         `(W1 @ W2)` collapses into `W` and the card shrinks to `x @ W`; the two-hop trail fades.
+         Hero: the merged W. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep07.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.74" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.74;
+  // Cues, beat-local seconds (master 20.31 + t), from a 30 ms RMS envelope of vo_final.wav.
+  // Speech: 0.18-0.27 "And", 0.30-0.70 "W1", 0.75-0.93 "times", 0.99-1.26 "W2", 1.29-1.50 "is",
+  // 1.56-1.68 "just", 1.77-1.98 "one", 1.98-2.55 "matrix".
+  const CUE = {
+    merge: 0.30,   // "W1 times W2": W1 and W2 slide together into W (0.95 s, one move); the @ goes
+    swap: 1.00,    // "W2": line 2's (W1 @ W2) collapses into W
+    shrink: 1.30,  // "is just": the card shrinks to one line, x @ W
+    hero: 1.55,    // "just one": W's digits and the card's W go magenta
+    name: 1.77,    // "one matrix": the name W fades in (the card has cleared y 372)
+    trail: 1.55,   // the two-hop trail fades, the shortcut stays
+    still: 2.45,   // nothing moves after this (the last ~9 frames are MERGED)
+  };
+  const { COL, css, mix, seg, lerp } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  // merging matrices and the name pass over each other on purpose
+  ["W1", "W2", "W"].forEach((k) => {
+    P.m[k].flat().map((c) => c.el).concat(P.b[k].els, [P.names[k]]).forEach((el) => el.setAttribute("data-layout-allow-overlap", ""));
+  });
+  P.at.setAttribute("data-layout-allow-overlap", "");
+
+  // ---- local: EP's two-line `same` card collapsing into the one-line `x @ W` ----
+  const C = P.cards.same, row1 = C.spans[0][0].parentNode, eq = C.spans[1][0], wsp = C.spans[1][3];
+  const W_TXT = wsp.textContent;                                // "(W1 @ W2)"
+  [C.el, ...C.el.querySelectorAll("*")].forEach((el) => {       // clipped on purpose while it shrinks
+    el.setAttribute("data-layout-allow-overflow", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  function resetCard() {
+    C.el.style.width = ""; C.el.style.overflow = "";
+    row1.style.height = ""; row1.style.overflow = ""; row1.style.opacity = "";
+    eq.style.display = ""; eq.style.width = ""; eq.style.overflow = ""; eq.style.verticalAlign = ""; eq.style.opacity = "";
+    wsp.textContent = W_TXT; wsp.style.opacity = ""; wsp.style.color = "";
+  }
+  // swap s 0..1 ((W1 @ W2) dips out, comes back as W), k 0..1 the shrink, h 0..1 W magenta
+  function collapseCard(s, k, h) {
+    resetCard();
+    wsp.textContent = s >= 0.5 ? "W" : W_TXT;
+    const wA = C.el.offsetWidth;                                 // line 1 sets the width
+    const eqW = (eq.style.display = "inline-block", eq.offsetWidth);
+    const wM = P.cards.merged.el.offsetWidth;
+    wsp.style.opacity = Math.abs(1 - 2 * s).toFixed(3);
+    wsp.style.color = css(mix(COL.text, COL.hero, h));
+    if (k > 0) {
+      C.el.style.overflow = "hidden";
+      C.el.style.width = `${lerp(wA, wM, E.io(k)).toFixed(1)}px`;
+      row1.style.overflow = "hidden";
+      row1.style.height = `${(EP.SIZE * 1.2 * (1 - E.io(k))).toFixed(1)}px`;
+      row1.style.opacity = (1 - E.out(seg(k, 0, 0.5))).toFixed(3);
+      eq.style.overflow = "hidden"; eq.style.verticalAlign = "top";
+      eq.style.width = `${(eqW * (1 - E.io(k))).toFixed(1)}px`;
+      eq.style.opacity = (1 - E.out(seg(k, 0, 0.5))).toFixed(3);
+    } else eq.style.display = "";
+    C.at(VEC.centreLeft(C.el), EP.CARD_TOP, { alpha: 1 });
+  }
+
+  function render(t) {
+    if (t >= CUE.still) {                                       // MERGED, exactly
+      resetCard();
+      EP.state(P, g, "MERGED");
+      return;
+    }
+    EP.state(P, null, "SAME");
+
+    // the merge: one move, W1 and W2 slide to W's place, their digits handing over to W's
+    const m = E.io(seg(t, CUE.merge, CUE.merge + 0.95));
+    const out = 1 - E.io(seg(t, CUE.merge + 0.3, CUE.merge + 0.95)), inn = E.io(seg(t, CUE.merge + 0.3, CUE.merge + 0.95));
+    const h = E.io(seg(t, CUE.hero, CUE.hero + 0.3));
+    EP.placeM(P, "W1", lerp(EP.ML.W1, EP.ML.W, m), out, COL.text, 0);
+    EP.placeM(P, "W2", lerp(EP.ML.W2, EP.ML.W, m), out, COL.text, 0);
+    EP.placeM(P, "W", EP.ML.W, inn, mix(COL.text, COL.hero, h), E.out(seg(t, CUE.name, CUE.name + 0.35)));
+    EP.put(P.at, EP.AT.x - 60, EP.AT.y - 40, 1 - E.out(seg(t, CUE.merge, CUE.merge + 0.4)));
+
+    // the card
+    collapseCard(seg(t, CUE.swap, CUE.swap + 0.3), seg(t, CUE.shrink, CUE.shrink + 0.5), h);
+
+    // the plane: the two-hop trail fades, the shortcut stays
+    const a = 1 - E.io(seg(t, CUE.trail, CUE.trail + 0.6));
+    EP.bg(g);
+    EP.plane(g, { f: EP.stage(EP.S.W), trail: [[EP.X, EP.XW1, a], [EP.XW1, EP.XW, a]].concat(EP.SHORT) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
