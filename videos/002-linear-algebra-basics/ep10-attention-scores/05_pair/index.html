@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 5, 05_pair: QK -> PAIR. "To score one pair": every arrow but query `name` and key
+         `is` fades to 0.22. "one token's query": Q's `name` row boxed (--dim), tip label `name`
+         pops in beside the query. "another token's key": K's `is` row boxed, tip label `is`.
+         "do the dot product": a copy of each digit flies from its matrix row into the readout
+         1·2 + 2·2 (q digits blue, k digits gold), then "= 6" lands, the 6 magenta. Hero: the 6. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.86" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.86;
+  // Cues, beat-local seconds (master 20.42 + t). words.json, checked on a 30 ms RMS envelope
+  // of vo_final.wav (onsets: "one" 21.05, "query" 22.49, "key" 23.62, "do" 24.20, "dot" 24.53).
+  const CUE = {
+    pair: 0.60,     // "one pair" (21.04): the other arrows fade to 0.22 (0.6 s)
+    query: 2.00,    // "query" (22.45): Q's name row boxed, tip label `name`
+    key: 3.12,      // "key" (23.57): K's is row boxed, tip label `is`
+    fly: 3.42,      // "and do" (23.84-24.40; a pause 23.90-24.17): digits fly into the readout (0.6 s), all in by "dot"
+    dot: 4.10,      // "dot product" (24.54): "= 6" lands, magenta (0.3 s pop)
+    still: 4.62,    // PAIR exactly from here (the last 7 frames)
+  };
+  const FADE = 0.6, BOX = 0.3, FLY = 0.6, STAG = 0.03, POP = 0.3;
+  const { COL, css, lerp, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  const R = P.read, HQ = EP.HERO.r, HK = EP.HERO.c;
+  ISO.guides(root);
+
+  // local helper: a flying copy of one readout glyph, set like the readout's line (60 px, 75 px line)
+  const flier = (text, col) => {
+    const el = document.createElement("div");
+    el.textContent = text;
+    el.style.cssText = `position:absolute;left:0;top:0;font-size:${EP.SIZE}px;line-height:${Math.round(EP.SIZE * 1.25)}px;` +
+      `white-space:pre;font-variant-numeric:tabular-nums;transform-origin:50% 50%;opacity:0;color:${css(col)};`;
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+    root.appendChild(el); return el;
+  };
+  // the four digits: [readout span, source matrix left, source row, column, colour]
+  const FL = [
+    { sp: R.q[0], left: EP.LL, r: HQ, c: 0, col: VEC.SLOT[HQ] }, { sp: R.k[0], left: EP.RL, r: HK, c: 0, col: VEC.SLOT[HK] },
+    { sp: R.q[1], left: EP.LL, r: HQ, c: 1, col: VEC.SLOT[HQ] }, { sp: R.k[1], left: EP.RL, r: HK, c: 1, col: VEC.SLOT[HK] },
+  ].map((f) => Object.assign(f, { el: flier(f.sp.textContent, f.col) }));
+  const six = flier(R.res.textContent, COL.hero);
+  const spans = [...R.q, ...R.k, ...R.ops, R.eq, R.res];
+  const put = (el, left, top, a, s = 1) => {
+    el.style.transform = `translate(${left.toFixed(2)}px, ${top.toFixed(2)}px) scale(${s.toFixed(4)})`;
+    el.style.opacity = Math.max(0, Math.min(1, a)).toFixed(3);
+  };
+  // a tip label: alpha with a small scale pop (1.3 -> 1)
+  const tip = (el, p, k) => VEC.place(el, p[0], p[1], { dx: el === P.tips.name ? EP.TIP.name.dx : EP.TIP.is.dx, dy: el === P.tips.name ? EP.TIP.name.dy : EP.TIP.is.dy,
+    alpha: k, scale: lerp(1.3, 1, E.out(k)) });
+
+  function render(t) {
+    spans.forEach((s) => { s.style.opacity = ""; });
+    FL.forEach((f) => { f.el.style.opacity = "0"; }); six.style.opacity = "0";
+    if (t >= CUE.still) { EP.state(P, g, "PAIR"); return; }
+    EP.state(P, null, "QK");
+
+    // "one pair": the other arrows fade to 0.22
+    const f = E.io(seg(t, CUE.pair, CUE.pair + FADE)), off = lerp(1, EP.ALPHA_OFF, f);
+    EP.plane(g, { q: [off, 1, off], k: [off, off, 1] });
+
+    // "query" / "key": the row boxes and the tip labels
+    const kq = E.out(seg(t, CUE.query, CUE.query + BOX)), kk = E.out(seg(t, CUE.key, CUE.key + BOX));
+    P.hl.q.rect(EP.RECT.q(HQ), kq, COL.dim); P.hl.k.rect(EP.RECT.k(HK), kk, COL.dim);
+    tip(P.tips.name, EP.Q[HQ], kq); tip(P.tips.is, EP.K[HK], kk);
+
+    // "do the dot product": the readout builds from flying copies of the matrix digits
+    if (t < CUE.fly) return;
+    EP.placeRead(P, 1);
+    const lh = EP.SIZE * 1.25;
+    FL.forEach((fl, i) => {
+      const u = seg(t, CUE.fly + STAG * i, CUE.fly + STAG * i + FLY), e = E.io(u), w = fl.el.offsetWidth;
+      const sx = fl.left + fl.c * EP.CW + EP.CW / 2 - w / 2, sy = EP.rowTop(fl.r) + 36 - lh / 2;   // over the cell's digit
+      const tx = fl.sp.getBoundingClientRect().left, ty = R.l1.getBoundingClientRect().top;                                        // its readout slot
+      if (u >= 1) return;                                                                          // landed: the span shows
+      fl.sp.style.opacity = "0";
+      put(fl.el, lerp(sx, tx, e), lerp(sy, ty, e) - 60 * Math.sin(Math.PI * e), u > 0 ? 1 : 0);
+    });
+    const kOps = E.out(seg(t, CUE.fly + 0.35, CUE.fly + FLY + 3 * STAG));
+    R.ops.forEach((s) => { s.style.opacity = kOps.toFixed(3); });
+    // "= 6": the equals fades in, the 6 pops in magenta
+    const k6 = seg(t, CUE.dot, CUE.dot + POP);
+    R.eq.style.opacity = E.out(k6).toFixed(3);
+    R.res.style.opacity = "0";
+    if (k6 > 0) put(six, R.res.getBoundingClientRect().left, R.l2.getBoundingClientRect().top, E.out(Math.min(1, k6 * 2)), lerp(1.6, 1, E.back(k6)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

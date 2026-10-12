@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep10 beat 2, tokens (master 5.50, 1.93 s). Opens GRID, ends TOKENS.
+         One cross-fade from the score grid to X; the three X arrows grow together on "vector". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1.93" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 1.93;
+  // Cues, beat-local = master - 5.50. words.json, checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    fade: 0.00,    // frame 0 is GRID and already fading; "Every" (master 5.70, local 0.20) mid-fade
+    grow: 1.24,    // "a vector" ("a" 1.28; "vector" onset master 6.84 = local 1.34): X arrows grow
+    still: 1.75,   // nothing moves after this: frames 53-57 are TOKENS exactly
+  };
+  const { seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+
+  function render(t) {
+    if (t >= CUE.still) { EP.state(P, g, "TOKENS"); return; }
+    if (t <= 0) { EP.state(P, g, "GRID"); return; }
+    EP.state(P, g, "TOKENS");
+    // ---- the one cross-fade (0.00-0.55): the grid side out first, X in over it ----
+    const out = 1 - E.io(seg(t, CUE.fade, CUE.fade + 0.32));
+    const inn = E.io(seg(t, CUE.fade + 0.22, CUE.fade + 0.55));
+    EP.placeCard(P.cards.s, out);
+    EP.placeHeads(P, out);
+    EP.placeGrid(P, EP.SR, out);
+    EP.put(P.shape, EP.SHAPE_LEFT, EP.NAME_TOP, out);
+    EP.placeTips(P, out);
+    EP.placeM(P, "X", inn);
+    // ---- the plane: GRID's arrows fade out; the X arrows grow from the origin together ----
+    const u = E.io(seg(t, CUE.grow, CUE.still));
+    EP.plane(g, {
+      q: EP.PLANES.GRID.q.map((a) => a * out), k: EP.PLANES.GRID.k.map((a) => a * out),
+      x: u > 0 ? [1, 1, 1] : null, xU: u,
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

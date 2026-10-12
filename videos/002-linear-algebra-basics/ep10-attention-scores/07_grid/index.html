@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep10 beat 7, 07_grid (code beat). Opens PAIR, ends GRID. Master 28.97 + t.
+         VO: "Q @ K transpose does every pair at once. 3 tokens, a 3-by-3 grid of scores."
+         Hero: the 6 (the readout's result flies into row name, column is). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.52" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.52;
+  // Cues, beat-local seconds (master 28.97 + t). words.json, checked on a 20 ms RMS
+  // envelope of vo_final.wav (speech 0.24-1.06 "Q @ K transpose", 1.12-1.38 "does",
+  // 1.58-1.74 "every", 1.90-2.60 "pair at once", 3.26-3.82 "3 tokens", 4.00-5.12
+  // "a 3-by-3 grid of scores"; words.json's in-phrase times for "every" (1.69) are
+  // interpolated, the envelope wins).
+  const CUE = {
+    card: 0.24,     // "Q" (0.24): card K = X @ W_K -> scores = Q @ K.T (cross-fade 0.45 s)
+    fade: 0.36,     // "@ K" (0.39): Q, K, their names and row boxes fade (0.6 s)
+    tpose: 0.60,    // "transpose" (0.69): a copy of the word column turns into the header row (0.9 s + 0.1 s stagger)
+    pop: 1.58,      // "every" (1.58): all nine cells pop; the readout's 6 flies to row name, column is (0.7 s)
+    toks: 3.26,     // "3" (3.26) "tokens": the row words pulse (0.5 s)
+    shape: 4.10,    // "3-by-3" (4.10): (3, 3) fades in (0.5 s)
+    still: 4.80,    // nothing moves after this (last 0.72 s = GRID exactly)
+  };
+  const XFADE = 0.45, FADE = 0.6, TPOSE = 0.9, STAG = 0.1, POP = 0.3, FLY = 0.7, PULSE = 0.5, SHAPE = 0.5, BULGE = 200;
+  const { COL, css, mix, lerp, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  const HR = EP.HERO.r, HC = EP.HERO.c;
+  const hero = P.m.S[HR][HC];
+  // the two cards cross-fade in one place; the header copies and the flying 6 cross the fading matrices
+  [P.cards.k.el, P.cards.s.el].forEach((el) => [el, ...el.querySelectorAll("*")].forEach((e) => e.setAttribute("data-layout-allow-overlap", "")));
+  [...P.heads, ...P.words, hero.el, ...Object.values(P.names), P.read.el].forEach((el) => {
+    el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+  });
+  P.words.forEach((el) => { el.style.transformOrigin = "100% 50%"; });   // pulse from the right-aligned text
+  ISO.guides(root);
+  // local helpers: a one-shot 0 -> 1 -> 0 pulse; the screen centre of an element's text
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  const range = document.createRange();
+  const inkMid = (el) => { range.selectNodeContents(el); const r = range.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2, r.width]; };
+
+  function render(t) {
+    if (t > CUE.still) t = CUE.still;
+    EP.state(P, g, "GRID");                 // the end state; PAIR's pieces are drawn back on top
+
+    // "Q @ K transpose": the card swaps
+    const xc = E.io(seg(t, CUE.card, CUE.card + XFADE));
+    EP.placeCard(P.cards.k, 1 - xc); EP.placeCard(P.cards.s, xc);
+
+    // Q and K (and the row boxes around the pair) fade
+    const am = 1 - E.io(seg(t, CUE.fade, CUE.fade + FADE));
+    EP.placeM(P, "Q", am); EP.placeM(P, "K", am);
+    P.hl.q.rect(EP.RECT.q(HR), am, COL.dim); P.hl.k.rect(EP.RECT.k(HC), am, COL.dim);
+
+    // the transpose: each word's copy (its header) leaves the column and lands above its column
+    P.heads.forEach((el, i) => {
+      const u = E.io(seg(t, CUE.tpose + STAG * i, CUE.tpose + STAG * i + TPOSE));
+      const [, , tw] = inkMid(P.words[i]);
+      const x0 = EP.WORD_RIGHT - tw / 2 - (EP.GCW + 40) / 2, y0 = EP.rowTop(i) + 3;
+      const x1 = EP.colMid(i) - (EP.GCW + 40) / 2, y1 = EP.NAME_TOP;
+      EP.put(el, lerp(x0, x1, u), lerp(y0, y1, u), t >= CUE.tpose + STAG * i ? 1 : 0);
+    });
+
+    // "every pair at once": nine cells pop together ...
+    const kp = seg(t, CUE.pop, CUE.pop + POP), ap = E.out(kp), sp = t >= CUE.pop ? E.back(kp) : 0;
+    P.m.S.forEach((row, r) => row.forEach((c, k) => {
+      if (r === HR && k === HC) return;
+      c.at(EP.GL + k * EP.GCW, EP.rowTop(r), { alpha: ap, scale: lerp(0.5, 1, sp) });
+    }));
+    P.b.S.at(0, 0, { alpha: ap });
+    // ... and the readout's 6 flies into row name, column is (the readout's rest fades)
+    const ar = 1 - E.io(seg(t, CUE.pop, CUE.pop + 0.4));
+    EP.placeRead(P, t < CUE.pop + 0.4 ? 1 : 0);
+    P.read.l1.style.opacity = ar.toFixed(3); P.read.eq.style.opacity = ar.toFixed(3);
+    P.read.res.style.opacity = t < CUE.pop ? "1" : "0";
+    const hx = EP.GL + HC * EP.GCW, hy = EP.rowTop(HR);
+    hero.at(hx, hy);
+    const [cx, cy] = inkMid(hero.el), [rx, ry] = inkMid(P.read.res);
+    const uf = E.io(seg(t, CUE.pop, CUE.pop + FLY));
+    // it swings out right of the grid on the way, so it never crosses the `4` below its cell
+    hero.at(lerp(hx + rx - cx, hx, uf) + BULGE * Math.sin(Math.PI * uf), lerp(hy + ry - cy, hy, uf), { alpha: t >= CUE.pop ? 1 : 0 });
+
+    // "3 tokens": the row words pulse
+    const kt = pulse(t, CUE.toks, PULSE);
+    P.words.forEach((el, r) => {
+      EP.put(el, EP.WORD_RIGHT - 200, EP.rowTop(r) + 3, 1, mix(VEC.SLOT[r], COL.text, 0.5 * kt), 1 + 0.18 * kt);
+    });
+
+    // "3-by-3 grid of scores": the shape
+    EP.put(P.shape, EP.SHAPE_LEFT, EP.NAME_TOP, E.out(seg(t, CUE.shape, CUE.shape + SHAPE)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

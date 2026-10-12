@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep10 beat 10, 10_close (master 46.41, 4.60 s). Opens PULL, ends GRID (the Short's last
+         frame, still from T.still). Hero: the 6 cell.
+         VO: "And attention scores measure which tokens are aligned under these learned projections."
+         "And attention scores": the card becomes scores = Q @ K.T, the grid ticks back from the
+         weights to the raw scores, the = 1 labels and the name row box go. "aligned": the keys go
+         back to the GRID alphas and the 6 pulses once. "learned projections": the tip labels
+         (name, is) brighten once. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.6" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.6;
+  // beat-local cues (master − 46.41), from words.json checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    and: 0.19,         /* "And" (RMS onset 46.60) */
+    attention: 0.29,   /* "attention (scores)" */
+    scores: 0.57,      /* "scores" */
+    aligned: 2.23,     /* "aligned" */
+    under: 2.71,       /* "under": RMS onset 49.12; words.json says 49.02 */
+    learned: 3.21,     /* "learned" */
+    projections: 3.41, /* "projections"; the VO ends at 3.83 */
+  };
+  const T = {
+    card: [CUE.and, CUE.scores + 0.05],                // w = scores.softmax(-1) -> scores = Q @ K.T
+    tick: [CUE.attention - 0.04, CUE.scores + 0.36],   // weights tick back to raw scores (0.68 s)
+    off: [CUE.and + 0.05, CUE.scores + 0.1],           // = 1 labels and the name row box go
+    keys: [CUE.aligned - 0.25, CUE.aligned + 0.4],     // keys PULL_K -> PAIR_K
+    six: [CUE.aligned - 0.05, CUE.aligned + 0.55],     // the 6 pulses once
+    tips: [CUE.learned - 0.2, CUE.projections + 0.3],  // tip labels brighten once
+    still: 3.75,                                       // GRID exactly from here (0.85 s)
+  };
+  const { COL, seg, css, mix, lerp } = ISO;
+  const { SLOT } = VEC;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  [P.cards.w.el, P.cards.s.el].forEach((c) => [c, ...c.querySelectorAll("*")].forEach((el) => el.setAttribute("data-layout-allow-overlap", "")));   // they cross-fade on purpose
+  const pulse = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));   // 0 → 1 → 0
+  // local: the grid's text mid-tick, weights (EP.WT) -> raw scores (EP.SR); exact text at both ends
+  const tickVals = (u) => (u <= 0 ? EP.WT : u >= 1 ? EP.SR : EP.WT.map((row, r) => row.map((w, c) => {
+    const v = lerp(parseFloat(w), EP.S[r][c], u);
+    return u < 0.5 ? v.toFixed(1) : String(Math.round(v));
+  })));
+
+  function render(t) {
+    P.tips.name.style.color = css(SLOT[EP.HERO.r]); P.tips.is.style.color = css(SLOT[EP.HERO.c]);   // their rest colours
+    if (t >= T.still) { EP.state(P, g, "GRID"); return; }
+    EP.state(P, g, "PULL");
+
+    // "And attention scores": the card swaps, the grid ticks back, = 1 and the row box go
+    const kC = E.io(seg(t, ...T.card));
+    EP.placeCard(P.cards.w, 1 - kC);
+    EP.placeCard(P.cards.s, kC);
+    EP.placeGrid(P, tickVals(E.io(seg(t, ...T.tick))), 1);
+    const kOff = E.io(seg(t, ...T.off));
+    EP.placeSums(P, 1 - kOff);
+    P.hl.rows[EP.HERO.r].rect(EP.RECT.row(EP.HERO.r), 1 - kOff, COL.dim);
+
+    // "aligned": the 6 pulses once (magenta, swelling)
+    const k6 = pulse(t, ...T.six), c6 = P.m.S[EP.HERO.r][EP.HERO.c];
+    c6.at(EP.GL + EP.HERO.c * EP.GCW, EP.rowTop(EP.HERO.r), { alpha: 1, scale: 1 + 0.3 * k6 });
+
+    // "learned projections": the tip labels brighten once
+    const kT = pulse(t, ...T.tips);
+    EP.placeTips(P, 1, { scale: 1 + 0.12 * kT });
+    P.tips.name.style.color = css(mix(SLOT[EP.HERO.r], COL.text, 0.55 * kT));
+    P.tips.is.style.color = css(mix(SLOT[EP.HERO.c], COL.text, 0.55 * kT));
+
+    // "aligned": keys back to the GRID alphas
+    const kK = E.io(seg(t, ...T.keys));
+    EP.plane(g, { q: EP.PAIR_Q, k: EP.PULL_K.map((a, i) => lerp(a, EP.PAIR_K[i], kK)) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

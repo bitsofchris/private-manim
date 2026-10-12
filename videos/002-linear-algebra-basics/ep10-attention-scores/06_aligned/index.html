@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Beat 6, 06_aligned: PAIR -> PAIR. "High value": the readout's 6 pulses. "they're aligned":
+         a --dim wedge opens at the origin between query `name` (1, 2) and key `is` (2, 2), about
+         18°. "This token has": key `is` and its tip label pulse. "looking for": query `name` and
+         its tip label pulse. The wedge fades before the hold. Hero: the 6. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.69" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.69;
+  // Cues, beat-local seconds (master 25.28 + t). words.json, checked on a 30 ms RMS envelope
+  // of vo_final.wav (onsets: "High" 25.50, "they're" 26.32, "aligned" 26.45, "This" 26.80,
+  // "has" 27.17, "looking" 28.30).
+  const CUE = {
+    high: 0.18,     // "High value" (25.50): the 6 pulses (0.55 s)
+    wedge: 1.00,    // "they're aligned" (26.28-26.74): the wedge opens from the query to the key (0.6 s)
+    has: 1.52,      // "This token has" (26.82-27.24): key `is` and its label pulse (0.6 s)
+    look: 2.98,     // "looking for" (28.32): query `name` and its label pulse (0.5 s)
+    gone: 2.90,     // the wedge fades (0.55 s), gone before the hold
+    still: 3.50,    // PAIR exactly from here (the last 6 frames)
+  };
+  const R_WEDGE = 275;                      // px from the origin: inside the query's shaft, under its head
+  const { COL, css, lerp, seg } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  const R = P.read, HQ = EP.HERO.r, HK = EP.HERO.c, QP = EP.Q[HQ], KP = EP.K[HK];
+  ISO.guides(root);
+
+  // local helper: a one-shot 0 -> 1 -> 0 pulse over d seconds from t0
+  const pulse = (t, t0, d) => Math.sin(Math.PI * seg(t, t0, t0 + d));
+  // local helper: an overlay of the readout's 6, set like the readout's line, for the scale pulse
+  const six = document.createElement("div");
+  six.textContent = R.res.textContent;
+  six.style.cssText = `position:absolute;left:0;top:0;font-size:${EP.SIZE}px;line-height:${Math.round(EP.SIZE * 1.25)}px;` +
+    `white-space:pre;font-variant-numeric:tabular-nums;transform-origin:50% 50%;opacity:0;color:${css(COL.hero)};`;
+  six.setAttribute("data-layout-allow-overlap", "");
+  root.appendChild(six);
+  // local helper: the angle wedge at the origin, from the query's direction swept u of the way to the key's
+  const ang = (p) => Math.atan2(-p[1], p[0]);           // screen angle (y runs down)
+  function wedge(gc, u, a) {
+    if (u <= 0.001 || a <= 0.001) return;
+    const [ox, oy] = VEC.at(0, 0), a0 = ang(QP), a1 = lerp(a0, ang(KP), u);
+    gc.save();
+    gc.beginPath(); gc.moveTo(ox, oy); gc.arc(ox, oy, R_WEDGE, a0, a1, false); gc.closePath();
+    gc.fillStyle = css(COL.dim, 1, 0.4 * a); gc.fill();
+    gc.beginPath(); gc.arc(ox, oy, R_WEDGE, a0, a1, false);
+    gc.strokeStyle = css(COL.dim, 1, a); gc.lineWidth = 7; gc.lineCap = "round"; gc.stroke();
+    gc.restore();
+  }
+
+  function render(t) {
+    R.res.style.opacity = ""; six.style.opacity = "0";
+    if (t >= CUE.still) { EP.state(P, g, "PAIR"); return; }
+    EP.state(P, null, "PAIR");
+
+    const pK = pulse(t, CUE.has, 0.6), pQ = pulse(t, CUE.look, 0.5);
+    const wu = E.io(seg(t, CUE.wedge, CUE.wedge + 0.6)), wa = 1 - E.io(seg(t, CUE.gone, CUE.gone + 0.55));
+    // the plane as PAIR, the pair drawn again on top of the wedge (and a little wider while it pulses)
+    EP.plane(g, Object.assign({}, EP.PLANES.PAIR, {
+      after: (gc) => {
+        if (wu * wa <= 0.001 && pK <= 0.001 && pQ <= 0.001) return;
+        wedge(gc, wu, wa);
+        VEC.arrow(gc, [0, 0], QP, { col: VEC.SLOT[HQ], width: 44 * (1 + 0.35 * pQ), head: 90 * (1 + 0.2 * pQ) });
+        EP.keyArrow(gc, [0, 0], KP, VEC.SLOT[HK], { width: 60 * (1 + 0.35 * pK), head: 90 * (1 + 0.2 * pK), line: 6 + 4 * pK });
+        VEC.puck(gc, 0, 0);
+      },
+    }));
+
+    // tip labels pulse with their arrows
+    VEC.place(P.tips.name, QP[0], QP[1], { dx: EP.TIP.name.dx, dy: EP.TIP.name.dy, scale: 1 + 0.25 * pQ });
+    VEC.place(P.tips.is, KP[0], KP[1], { dx: EP.TIP.is.dx, dy: EP.TIP.is.dy, scale: 1 + 0.25 * pK });
+
+    // "High value": the 6 pulses
+    const p6 = pulse(t, CUE.high, 0.55);
+    if (p6 > 0.001) {
+      R.res.style.opacity = "0";
+      six.style.transform = `translate(${R.res.getBoundingClientRect().left.toFixed(2)}px, ${R.l2.getBoundingClientRect().top.toFixed(2)}px) scale(${(1 + 0.4 * p6).toFixed(4)})`;
+      six.style.opacity = "1";
+    }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+</script>
+  </body>
+</html>

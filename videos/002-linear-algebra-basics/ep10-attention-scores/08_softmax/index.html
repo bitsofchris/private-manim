@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep10 beat 8, 08_softmax (code beat). Opens GRID, ends WEIGHTS. Master 34.49 + t.
+         VO: "Then divide by the square root of the head size, and softmax turns each row
+         into weights that add up to one." Hero: the 6 cell, then 4.2, then 0.8. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.8" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.80;
+  // Cues, beat-local seconds (master 34.49 + t). words.json, checked on a 20 ms RMS
+  // envelope of vo_final.wav (speech 0.20-0.98 "Then divide by the", 1.04-2.44 "square
+  // root of the head size", 2.54-2.70 "and", 2.70-3.30 "softmax", 3.32-4.80 "turns each
+  // row into weights that", 4.92-5.54 "add up to one").
+  const CUE = {
+    divide: 0.36,   // "divide" (0.43): card scores = Q @ K.T -> scores /= d**0.5 (0.45 s cross-fade); ÷ √2 fades in
+    tick: 0.95,     // "square root" (0.95): every cell ticks to the scaled value (0.9 s)
+    soft: 2.66,     // "softmax" (2.71): card -> w = scores.softmax(-1); ÷ √2 goes
+    rows: 3.32,     // "turns" (3.32) "each row into weights": rows tick to the weights, 0.2 s apart (0.6 s each)
+    one: 4.93,      // "add" (4.93) "up to one": = 1 fades in right of each row (0.4 s)
+    still: 5.40,    // nothing moves after this (last 0.40 s = WEIGHTS exactly)
+  };
+  const XFADE = 0.45, TICK = 0.9, ROW = 0.6, STAG = 0.2, ONE = 0.4;
+  const { COL, css, mix, lerp, seg, clamp01 } = ISO;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);                 // every DOM part, once
+  // the cards cross-fade in one place
+  [P.cards.s.el, P.cards.d.el, P.cards.w.el].forEach((el) => [el, ...el.querySelectorAll("*")].forEach((e) => e.setAttribute("data-layout-allow-overlap", "")));
+  ISO.guides(root);
+  // local helper: a cell's text while it ticks from a to b (text in, text out; one decimal between)
+  const num = (s) => parseFloat(s);
+  const tickTxt = (a, b, u) => (u <= 0 ? a : u >= 1 ? b : lerp(num(a), num(b), u).toFixed(1));
+  const RAW = EP.S.map((r) => r.map((v) => v / Math.sqrt(EP.D)));   // unrounded scaled values (the tick's path)
+
+  function render(t) {
+    if (t > CUE.still) t = CUE.still;
+    EP.state(P, g, "WEIGHTS");              // the end state; GRID's pieces are drawn back on top
+
+    // "Then divide ...": card s -> d -> w
+    const kd = E.io(seg(t, CUE.divide, CUE.divide + XFADE)), kw = E.io(seg(t, CUE.soft, CUE.soft + XFADE));
+    EP.placeCard(P.cards.s, 1 - kd); EP.placeCard(P.cards.d, kd * (1 - kw)); EP.placeCard(P.cards.w, kw);
+    // ÷ √2 beside the grid while the division is on
+    EP.put(P.div, EP.SIDE, EP.rowTop(EP.HERO.r) + 3, E.out(seg(t, CUE.divide + 0.1, CUE.divide + 0.5)) * (1 - kw), COL.dim);
+
+    // the grid: raw -> scaled (all together) -> weights (row by row)
+    const us = E.io(seg(t, CUE.tick, CUE.tick + TICK));
+    const vals = EP.SR.map((row, r) => row.map((sr, c) => {
+      const uw = E.io(seg(t, CUE.rows + STAG * r, CUE.rows + STAG * r + ROW));
+      if (uw > 0) return tickTxt(EP.SS[r][c], EP.WT[r][c], uw);
+      if (us >= 1) return EP.SS[r][c];
+      if (us <= 0) return sr;
+      const v = lerp(EP.S[r][c], RAW[r][c], us);
+      return EP.S[r][c] === 0 ? "0" : v.toFixed(1);
+    }));
+    EP.placeGrid(P, vals, 1);
+
+    // "add up to one"
+    EP.placeSums(P, E.out(seg(t, CUE.one, CUE.one + ONE)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

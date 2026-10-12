@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep10 beat 1, the hook (master 0.00, 5.50 s). Ends on GRID.
+         Query "name" fans to the three keys in turn; each dot product fills its cell in the
+         "name" row: 1, 4, then 6 (magenta, the hero) on "key". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.50;
+  // Cues, beat-local = master (start 0.00). words.json, checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    my: 0.00,      // frame 0: the connector to key "my" is already drawing (fills 1 at ~0.30)
+    name: 1.25,    // "is just a dot product" (1.34-2.40): connector to key "name", fills 4 at ~1.60
+    query: 3.66,   // "query" (words 3.58; onset 3.64-3.72 on the envelope): query "name" pulses
+    is: 4.55,      // "another token's" (4.20-4.94): the connector starts toward key "is"
+    key: 5.03,     // "key" (5.03; plosive 5.02, vowel 5.10): key "is" brightens, 6 lands magenta
+    still: 5.33,   // nothing moves after this: frames 160-164 are GRID exactly
+  };
+  const { COL, css, mix, seg } = ISO;
+  const SLOT = VEC.SLOT, H = EP.HERO, KEY0 = 0.6;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  const bump = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));        // 0 -> 1 -> 0
+
+  // ---- local helper: EP.plane's draw (same order: queries, then key outlines, puck, extras) with a
+  // per-arrow pulse (qp / kp, 0..1: wider and lighter). At qp = kp = 0 it draws exactly what EP.plane does.
+  function planeHook(qa, ka, qp, kp, after) {
+    const PL = EP.PLANE;
+    VEC.view(PL); EP.bg(g);
+    g.save(); g.beginPath(); g.rect(0, PL.top, ISO.W, PL.bottom - PL.top); g.clip();
+    VEC.floor(g); VEC.axes(g);
+    qa.forEach((a, i) => { if (a > 0.001) VEC.arrow(g, [0, 0], EP.Q[i], { col: mix(SLOT[i], COL.text, 0.35 * qp[i]), alpha: a, width: 44 * (1 + 0.4 * qp[i]) }); });
+    ka.forEach((a, i) => { if (a > 0.001) EP.keyArrow(g, [0, 0], EP.K[i], mix(SLOT[i], COL.text, 0.35 * kp[i]), { alpha: a, line: 6 + 5 * kp[i] }); });
+    VEC.puck(g, 0, 0);
+    after(g);
+    g.restore();
+  }
+
+  // per key c: connector draw window, cell fill time
+  const FAN = [
+    { c: 0, d0: CUE.my - 0.12, d1: CUE.my + 0.28, fill: 0.30, off: CUE.name },
+    { c: 1, d0: CUE.name, d1: CUE.name + 0.35, fill: 1.60, off: CUE.is },
+    { c: 2, d0: CUE.is, d1: CUE.key, fill: CUE.key, off: CUE.key + 0.05 },
+  ];
+
+  function render(t) {
+    if (t >= CUE.still) { EP.state(P, g, "GRID"); return; }
+    EP.state(P, g, "GRID");
+
+    // ---- the "name" row's cells fill in turn; the 6 pops magenta on "key" (<= 0.3 s) ----
+    const settle = E.io(seg(t, CUE.key, CUE.still));                 // keys "my" / "name" to 0.22, connectors go
+    FAN.forEach((f) => {
+      const cell = P.m.S[H.r][f.c];
+      const dur = f.c === 2 ? 0.27 : 0.25;
+      const k = E.out(seg(t, f.fill, f.fill + dur));
+      cell.color(f.c === H.c ? COL.hero : COL.text);
+      cell.at(EP.GL + f.c * EP.GCW, EP.rowTop(H.r), { alpha: k, scale: 1.35 - 0.35 * k });
+    });
+    // the tip label "is" arrives with its key
+    P.tips.is.style.opacity = E.out(seg(t, CUE.key, CUE.key + 0.27)).toFixed(3);
+
+    // ---- the plane: query "name" full, other queries at 0.22; keys at 0.6, the one in focus brightens ----
+    const qa = [EP.ALPHA_OFF, 1, EP.ALPHA_OFF];
+    const qp = [0, bump(t, CUE.query, CUE.query + 0.5), 0];
+    const ka = [], kp = [];
+    FAN.forEach((f) => {
+      const on = E.out(seg(t, f.d0, f.d1 - 0.05));
+      const off = f.c === 2 ? 0 : E.io(seg(t, f.off, f.off + 0.3));
+      const focus = on * (1 - off);
+      const rest = f.c === 2 ? KEY0 : KEY0 + (EP.ALPHA_OFF - KEY0) * settle;
+      ka[f.c] = f.c === 2 ? KEY0 + (1 - KEY0) * Math.max(focus * 0.5, E.out(seg(t, CUE.key, CUE.key + 0.15))) : rest + (1 - rest) * focus;
+      kp[f.c] = f.c === 2 ? bump(t, CUE.key, CUE.key + 0.3) : 0;
+    });
+    planeHook(qa, ka, qp, kp, (gg) => {
+      FAN.forEach((f) => {
+        const u = E.io(seg(t, f.d0, f.d1));
+        const fade = f.c === 2 ? 1 - E.io(seg(t, CUE.key + 0.05, CUE.still - 0.03)) : 1 - E.io(seg(t, f.off, f.off + 0.3));
+        VEC.line(gg, EP.Q[H.r], EP.K[f.c], { col: COL.dim, alpha: 0.9 * fade, width: 5, dash: [14, 12], u });
+      });
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

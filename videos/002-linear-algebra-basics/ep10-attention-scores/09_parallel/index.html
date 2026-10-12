@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep10 beat 9, 09_parallel (master 40.29, 6.12 s). Opens WEIGHTS, ends PULL. Hero: the 0.8 cell.
+         VO: "Transformers process every position in parallel. Attention is how tokens decide
+         who to pull information from."
+         "every position in parallel": the three grid rows box together (--dim) and the three row
+         words pulse at once. "Attention is how tokens decide": the my / is boxes go, name stays
+         boxed. "who to pull information from": the plane's keys move to name's weights (PULL_K)
+         and a short dim pull mark runs from key is's tip toward query name's, then fades.
+         Still on PULL from T.still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="vec/vec.js"></script>
+    <script src="ep/ep10.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.12" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.12;
+  // beat-local cues (master − 40.29), from words.json checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    every: 1.29,      /* "every (position)" */
+    position: 1.45,   /* "position" */
+    parallel: 1.95,   /* "parallel" */
+    attention: 2.51,  /* "Attention (is how)" */
+    tokens: 3.27,     /* "tokens (decide)" */
+    decide: 3.65,     /* "decide" */
+    who: 4.49,        /* "who (to pull)": RMS onset 44.78; words.json says 44.36, which is the tail of "decide" */
+    pull: 4.85,       /* "pull" */
+    from: 5.47,       /* "from"; the VO ends at 5.91 */
+  };
+  const T = {
+    boxIn: [CUE.every - 0.1, CUE.every + 0.2],              // all three rows boxed together
+    words: [CUE.position - 0.05, CUE.parallel + 0.3],       // the row words pulse at once
+    boxOut: [CUE.decide - 0.5, CUE.decide],                 // my / is boxes go
+    keys: [CUE.who - 0.05, CUE.who + 0.75],                 // keys -> PULL_K
+    mark: [CUE.pull - 0.05, CUE.pull + 0.55],               // the pull mark runs
+    markOut: [CUE.from - 0.05, CUE.from + 0.35],            // and fades
+    still: 5.85,                                            // PULL exactly from here (≥ 8 frames)
+  };
+  const { COL, seg, css, mix, lerp } = ISO;
+  const { SLOT } = VEC;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const E = ISO.E();
+  const P = EP.parts(root);
+  ISO.guides(root);
+  P.words.forEach((el) => { el.style.transformOrigin = "100% 50%"; });   // right-aligned words swell from their right edge
+  const pulse = (t, a, b) => Math.sin(Math.PI * seg(t, a, b));           // 0 → 1 → 0
+
+  // local: the pull mark, a short dim arrow from key is's tip toward query name's tip (y = 2),
+  // inside the plane's clip; u draw progress, a alpha
+  const KT = EP.K[EP.HERO.c], QT = EP.Q[EP.HERO.r];
+  function pullMark(g2, u, a) {
+    if (u <= 0.001 || a <= 0.001) return;
+    const x0 = KT[0] - 0.14, x1 = lerp(x0, QT[0] + 0.16, u);
+    VEC.line(g2, [x0, KT[1]], [x1, QT[1]], { col: COL.dim, alpha: a, width: 7 });
+    const p = VEC.at(x1, QT[1]), hl = 26, hh = 15;                       // a small head pointing at the query
+    g2.save(); g2.beginPath(); g2.moveTo(p[0] - 6, p[1]); g2.lineTo(p[0] + hl, p[1] - hh); g2.lineTo(p[0] + hl, p[1] + hh); g2.closePath();
+    g2.fillStyle = css(COL.dim, 1, a); g2.fill(); g2.restore();
+  }
+
+  function render(t) {
+    if (t >= T.still) { EP.state(P, g, "PULL"); return; }
+    EP.state(P, g, "WEIGHTS");
+
+    // "every position in parallel": three row boxes together; "tokens decide": my / is go
+    const kIn = E.out(seg(t, ...T.boxIn)), kOut = E.io(seg(t, ...T.boxOut));
+    P.hl.rows.forEach((h, r) => h.rect(EP.RECT.row(r), kIn * (r === EP.HERO.r ? 1 : 1 - kOut), COL.dim));
+
+    // the three row words pulse at once
+    const kW = pulse(t, ...T.words);
+    P.words.forEach((el, r) => EP.put(el, EP.WORD_RIGHT - 200, EP.rowTop(r) + 3, 1, mix(SLOT[r], COL.text, 0.45 * kW), 1 + 0.18 * kW));
+
+    // "who to pull information from": keys to name's weights; the pull mark runs, then fades
+    const kK = E.io(seg(t, ...T.keys));
+    const kAl = EP.PAIR_K.map((a, i) => lerp(a, EP.PULL_K[i], kK));
+    const uM = E.out(seg(t, ...T.mark)), aM = 0.9 * (1 - E.io(seg(t, ...T.markOut)));
+    EP.plane(g, { q: EP.PAIR_Q, k: kAl, after: (g2) => pullMark(g2, uM, aM) });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
