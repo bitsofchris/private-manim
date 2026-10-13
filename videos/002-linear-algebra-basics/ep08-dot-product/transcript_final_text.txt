@@ -10,28 +10,28 @@ The way the math works is you multiply pairwise and then sum.
 00:09.120-00:11.520
 Watch the number as this arrow turns.
 
-00:11.340-00:13.180
+00:11.340-00:13.260
 Pointing the same direction is positive.
 
-00:13.180-00:17.180
-At ninety degrees, they're perpendicular, exactly zero.
+00:13.260-00:17.660
+At ninety degrees, they're perpendicular, orthogonal, exactly zero.
 
-00:17.180-00:18.540
-No overlap at all.
+00:17.660-00:19.100
+No overlap at all
 
-00:18.540-00:20.540
+00:18.900-00:20.660
 Pointing opposite is negative.
 
-00:20.100-00:21.540
+00:20.660-00:22.020
 That's why it's everywhere in AI.
 
-00:21.540-00:24.740
+00:22.020-00:25.220
 Embeddings that mean similar things point in similar directions.
 
-00:24.740-00:26.900
+00:25.220-00:27.380
 And the dot product is how you check.
 
-00:26.900-00:28.900
+00:27.380-00:29.380
 It's also the core of attention.
 
 
