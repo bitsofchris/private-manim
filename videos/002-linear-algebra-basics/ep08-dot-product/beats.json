@@ -1,8 +1,28 @@
-{"beats": [
- {"clip": "media/hf/01_hook.mp4", "end": 6.07},
- {"clip": "media/hf/02_math.mp4", "end": 2.92},
- {"clip": "media/hf/03_turn.mp4", "end": 4.17},
- {"clip": "media/hf/04_zero.mp4", "end": 7.44},
- {"clip": "media/hf/05_embed.mp4", "end": 6.69},
- {"clip": "media/hf/06_attention.mp4", "end": 2.79}
-]}
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 6.07
+  },
+  {
+   "clip": "media/hf/02_math.mp4",
+   "end": 2.92
+  },
+  {
+   "clip": "media/hf/03_turn.mp4",
+   "end": 4.17
+  },
+  {
+   "clip": "media/hf/04_zero.mp4",
+   "end": 6.96
+  },
+  {
+   "clip": "media/hf/05_embed.mp4",
+   "end": 6.69
+  },
+  {
+   "clip": "media/hf/06_attention.mp4",
+   "end": 2.79
+  }
+ ]
+}

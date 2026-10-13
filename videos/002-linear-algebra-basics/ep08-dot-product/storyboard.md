@@ -92,8 +92,9 @@ a beat then draws only what differs (see `00_layout/index.html`).
 
 ## Final beats (the contract)
 
-`vo_final.wav` is 30.080 s (29.39 s of take + 0.69 s of silence so the last
-still holds). Cuts sit in pauses. Beat-local t = master − start. Word times:
+`vo_final.wav` is 29.600 s (28.91 s of take + 0.69 s of silence so the last
+still holds). Rev 2b cut "orthogonal" (Chris): beats 5–6 and beat 4's cues from
+"exactly" on moved 0.48 s earlier. Cuts sit in pauses. Beat-local t = master − start. Word times:
 `words.json` (master seconds). Beats 3–6 kept their audio exactly (shifted
 −6.918 s), so their beat-local cues are unchanged from the first build.
 
@@ -102,18 +103,18 @@ still holds). Cuts sit in pauses. Beat-local t = master − start. Word times:
 | 1 | `01_hook` | 0.00 | 6.07 | A dot product tells you how much two vectors point the same way. It's a way to measure similarity in AI models. |
 | 2 | `02_math` | 6.07 | 2.92 | The way the math works is you multiply pairwise and then sum. |
 | 3 | `03_turn` | 8.99 | 4.17 | Watch the number as this arrow turns. Pointing the same direction is positive. |
-| 4 | `04_zero` | 13.16 | 7.44 | At ninety degrees, they're perpendicular, orthogonal, exactly zero. No overlap at all. Pointing opposite is negative. |
-| 5 | `05_embed` | 20.60 | 6.69 | That's why it's everywhere in AI. Embeddings that mean similar things point in similar directions, and the dot product is how you check. |
-| 6 | `06_attention` | 27.29 | 2.79 | It's also the core of attention. |
+| 4 | `04_zero` | 13.16 | 6.96 | At ninety degrees, they're perpendicular, exactly zero. No overlap at all. Pointing opposite is negative. |
+| 5 | `05_embed` | 20.12 | 6.69 | That's why it's everywhere in AI. Embeddings that mean similar things point in similar directions, and the dot product is how you check. |
+| 6 | `06_attention` | 26.81 | 2.79 | It's also the core of attention. |
 
 Key word times (master): "same way" 3.02–3.40, "similarity" 4.50, "math
 works" 6.54–6.90, "multiply" 7.12, "pairwise" 7.56, "and then" 8.12–8.40,
 "sum" 8.54, "Watch" 9.19, "number" 9.52, "arrow turns" 10.28–10.70, "same
 direction" 11.88–12.40, "positive" 12.50, "90 degrees" 13.48–14.05,
-"perpendicular" 14.70, "orthogonal" 15.48, "exactly zero" 16.32–16.98, "No
-overlap at all" 17.78–18.60, "opposite" 19.44, "negative" 20.02, "everywhere"
-21.30, "similar directions" 24.04–24.95, "dot product" 25.63, "check" 26.68,
-"core" 28.00, "attention" 28.36–28.81.
+"perpendicular" 14.70, "exactly zero" 15.84–16.50, "No overlap at all"
+17.30–18.12, "opposite" 18.96, "negative" 19.54, "everywhere" 20.82, "similar
+directions" 23.56–24.47, "dot product" 25.15, "check" 26.20, "core" 27.52,
+"attention" 27.88–28.33.
 
 ## Beats (the visual brief)
 
@@ -151,12 +152,14 @@ uv run --no-sync python ../../../tools/assemble.py beats.json --vo vo_final.wav 
 
 `vo_raw.m4a` (40.8 s) → `vo_clean.wav` (loudnorm only: the same Studio Sound
 take as ep01–ep07) → `vo_final.wav`: `tools/tighten_vo.py --max-gap 0.25
---remove 11.30-19.45` (revision 2: the read-out numbers), 10 pieces, 29.39 s;
+--remove 11.30-19.45 --remove 25.64-26.53` (revision 2: the read-out numbers;
+revision 2b: "orthogonal", found by a sub-clip transcription and a 20 ms
+envelope), 11 pieces, 28.91 s;
 then 0.69 s of silence appended so the last beat holds a still after
 "attention". The re-transcription (`transcript_final_text.txt`) reads word
 for word. `words.json` is the first build's WhisperKit word times with the
-cut range dropped and later words shifted −6.918 s (the cut is the only
-change; `transcript_final.json` is the first build's timing transcript).
+cut ranges dropped and later words shifted (−6.918 s, then −0.48 s from
+"exactly" on; the cuts are the only change; `transcript_final.json` is the first build's timing transcript).
 
 Flagged in the take, kept:
 - "It's **a way to measure similarity in AI models**" (planned: "It's how AI
