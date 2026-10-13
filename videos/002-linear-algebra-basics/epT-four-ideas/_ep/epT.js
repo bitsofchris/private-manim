@@ -8,6 +8,8 @@
   const { COL, css, lerp, clamp01, mix, hash } = ISO;
   const { fmtv, SLOT } = VEC;
   const GOLD = SLOT[2];
+  const BASIS = COL.dim;                             // e1, e2 (and where they land): grey-lavender, never a row colour,
+                                                     // so they don't read as the teal / blue recipe legs (Chris, first watch)
 
   // ---- the ledger (storyboard.md) ----
   // Row-vector (PyTorch) convention: x @ W, row i of W is where e_i lands. ep03's numbers.
@@ -96,7 +98,7 @@
     const tokens = TOKENS.map((w) => lab(root, w, { col: GOLD, width: 180 }));
     const scores = SCORES.map((v) => VEC.cell(root, fmtv(v), { width: 180, height: RH, size: SIZE, col: COL.text }));
     // arrow-tip labels on the plane
-    const tip = { e1: lab(root, "e1", { col: SLOT[0], width: 100 }), e2: lab(root, "e2", { col: SLOT[1], width: 100 }),
+    const tip = { e1: lab(root, "e1", { col: BASIS, width: 100 }), e2: lab(root, "e2", { col: BASIS, width: 100 }),
       a: lab(root, "a", { col: SLOT[0], width: 80 }), b: lab(root, "b", { col: SLOT[1], width: 80 }), q: lab(root, "q", { col: SLOT[0], width: 80 }),
       keys: TOKENS.map((w) => lab(root, w, { col: GOLD, width: 140 })) };
     // beats 8-9: three layers
@@ -215,7 +217,7 @@
     recipe(g, LEGS_OLD, { alpha: (o.old || 0) * al, u: o.oldU });
     if (o.xA) VEC.arrow(g, [0, 0], X, { col: o.xCol || COL.text, alpha: o.xA * al });
     const ea = o.e == null ? 1 : o.e;
-    if (ea > 0.001) { VEC.arrow(g, [0, 0], Bs[0], { col: SLOT[0], alpha: ea * al }); VEC.arrow(g, [0, 0], Bs[1], { col: SLOT[1], alpha: ea * al }); }
+    if (ea > 0.001) { VEC.arrow(g, [0, 0], Bs[0], { col: BASIS, alpha: ea * al }); VEC.arrow(g, [0, 0], Bs[1], { col: BASIS, alpha: ea * al }); }
     recipe(g, LEGS_NEW, { alpha: (o.nu || 0) * al, u: o.newU });
     if (o.out) VEC.arrow(g, [0, 0], XW, { col: o.outCol || COL.hero, alpha: o.out * al });
     if (o.spots) { VEC.spot(g, Bs[0][0], Bs[0][1], { alpha: o.spots * al }); VEC.spot(g, Bs[1][0], Bs[1][1], { alpha: o.spots * al }); }
@@ -266,7 +268,7 @@
     } else if (i === 1) {                              // matrix: e1, e2 swing to W's rows
       const s = E.io(seg01(u, 0, 0.85)), Bs = VEC.basisTo(VEC.I2, W, s);
       VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted, alpha: al }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted, alpha: al });
-      VEC.arrow(g, [0, 0], Bs[0], { col: SLOT[0], alpha: al }); VEC.arrow(g, [0, 0], Bs[1], { col: SLOT[1], alpha: al });
+      VEC.arrow(g, [0, 0], Bs[0], { col: BASIS, alpha: al }); VEC.arrow(g, [0, 0], Bs[1], { col: BASIS, alpha: al });
       const sp = seg01(u, 0.8, 1) * lit;
       VEC.spot(g, Bs[0][0], Bs[0][1], { alpha: sp * al, r: 22 }); VEC.spot(g, Bs[1][0], Bs[1][1], { alpha: sp * al, r: 22 });
     } else if (i === 2) {                              // x @ W: the new recipe, then the output
@@ -340,7 +342,7 @@
       ring(g, IDENT); done(); P.hl.rect(RECT.layer(0), 1);
     } else if (name === "TRAINED") {
       ring(g, W1T);
-      VEC.arrow(g, [0, 0], W1T[0], { col: SLOT[0] }); VEC.arrow(g, [0, 0], W1T[1], { col: SLOT[1] });
+      VEC.arrow(g, [0, 0], W1T[0], { col: BASIS }); VEC.arrow(g, [0, 0], W1T[1], { col: BASIS });
       done(); setLayer(P.layers[0], W1T, COL.hero); P.hl.rect(RECT.layer(0), 1);
       P.layers.slice(1).forEach((L) => { L.cells.flat().forEach((c) => c.color(COL.dim)); });
     } else if (name === "EASY") {
@@ -354,7 +356,7 @@
   }
 
   window.EP = {
-    X, W, XW, ROWS_W, A, B_TURN, Q, TOKENS, KEYS, SCORES, BEST, IDENT, AMP, IGN, MIX, W1T, RING, EASY, CLASSES, GOLD,
+    X, W, XW, ROWS_W, BASIS, A, B_TURN, Q, TOKENS, KEYS, SCORES, BEST, IDENT, AMP, IGN, MIX, W1T, RING, EASY, CLASSES, GOLD,
     NAME_TOP, ROW_TOP, RH, SIZE, XL, WL, SUM_TOP, WEIGHT_LEFT, CODE_TOP, LAYER, MAIN, CENTER, PLANE_CLIP, TR, TILE_VIEWS, TILE_LABELS,
     LEGS_OLD, LEGS_NEW, KEY_DX,
     parts, put, strip, setLayer, RECT, bg, grid, clip, rectLerp, recipe, plane, centre, rot, bAt, dot, ring, mlerp, mmul, classes,
