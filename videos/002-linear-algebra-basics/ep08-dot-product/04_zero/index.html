@@ -30,27 +30,26 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6.96" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.44" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.96;
+  const BEAT_SECONDS = 7.44;
   // Cues, beat-local = master - 13.16 (unchanged from the first build: the audio shifted -6.918 s).
   // Checked on a 20 ms RMS envelope of the first build's vo_final.wav, local times + 20.08:
   // "At" onset 20.27, "ninety" 20.40, "degrees" ends 20.96, "they're" 21.52, "perpendicular" 21.62,
-  // rev 2b: "orthogonal" cut (0.48 s); cues from "exactly" on moved 0.48 earlier. First-build times:
-  // "exactly" 23.10, "zero" 23.50, "No" 24.62, "overlap" 24.80, "Pointing" 26.08,
+  // "orthogonal" 22.40, "exactly" 23.10, "zero" 23.50, "No" 24.62, "overlap" 24.80, "Pointing" 26.08,
   // "opposite" 26.36, "negative" 26.94 (ends 27.36).
   const CUE = {
     turn90: 0.00,   // b leaves a on frame 0 ...
     at90: 0.88,     // ... and lands at 90 on "ninety degrees" (end of "degrees"), readout 0
     perp: 1.54,     // "perpendicular": the right-angle mark draws in (0.35 s)
-    zero: 2.94,     // "exactly zero": the 0 swells (0.4 s)
-    overlap: 4.24,  // "No overlap at all": the mark pulses once (0.4 s)
-    opp: 5.52,      // "Pointing opposite": the mark fades (0.3 s), b turns 90 -> 180 ...
-    at180: 6.38,    // ... landing on "negative", readout −4, with a swell (0.4 s)
-    still: 6.78,    // nothing moves after this: state OPPOSITE_N exactly
+    zero: 3.42,     // "exactly zero": the 0 swells (0.4 s)
+    overlap: 4.72,  // "No overlap at all": the mark pulses once (0.4 s)
+    opp: 6.00,      // "Pointing opposite": the mark fades (0.3 s), b turns 90 -> 180 ...
+    at180: 6.86,    // ... landing on "negative", readout −4, with a swell (0.4 s)
+    still: 7.26,    // nothing moves after this: state OPPOSITE_N exactly
   };
   const { seg, COL, css, lerp } = ISO;
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
