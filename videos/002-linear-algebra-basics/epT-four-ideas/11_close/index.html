@@ -65,7 +65,7 @@
     if (o.cls > 0.001) EP.classes(g, EP.EASY, { alpha: o.cls, line: 1 });
     if (o.ghosts) { VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted, alpha: o.ghosts }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted, alpha: o.ghosts }); }
     if (o.xGhost) VEC.arrow(g, [0, 0], EP.X, { col: COL.muted, alpha: o.xGhost });
-    if (o.e > 0.001) { VEC.arrow(g, [0, 0], Bs[0], { col: VEC.SLOT[0], alpha: o.e }); VEC.arrow(g, [0, 0], Bs[1], { col: VEC.SLOT[1], alpha: o.e }); }
+    if (o.e > 0.001) { VEC.arrow(g, [0, 0], Bs[0], { col: EP.BASIS, alpha: o.e }); VEC.arrow(g, [0, 0], Bs[1], { col: EP.BASIS, alpha: o.e }); }
     if (o.xA > 0.001) VEC.arrow(g, [0, 0], VEC.map(EP.X, EP.W, o.xS), { col: o.xCol, alpha: 1, u: o.xA });
     VEC.puck(g, 0, 0, { half: 12 });
     g.restore();

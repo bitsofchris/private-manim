@@ -65,8 +65,8 @@
     const done = EP.centre(g);
     if (out > 0.001) {                                                 // TRAINED's plane, fading (same order as EP.state)
       EP.ring(g, EP.W1T, { alpha: out });
-      VEC.arrow(g, [0, 0], EP.W1T[0], { col: VEC.SLOT[0], alpha: out });
-      VEC.arrow(g, [0, 0], EP.W1T[1], { col: VEC.SLOT[1], alpha: out });
+      VEC.arrow(g, [0, 0], EP.W1T[0], { col: EP.BASIS, alpha: out });
+      VEC.arrow(g, [0, 0], EP.W1T[1], { col: EP.BASIS, alpha: out });
     }
     if (lu > 0) {                                                      // the boundary: the image of the gap line, drawn bottom to top
       const d = VEC.comb([Math.SQRT1_2, -Math.SQRT1_2], EP.EASY), k = 6;   // = (0, 0.5): upright

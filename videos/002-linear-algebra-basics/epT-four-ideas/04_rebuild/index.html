@@ -61,7 +61,7 @@
     VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted });
     EP.recipe(g, EP.LEGS_OLD, { alpha: o.old });
     VEC.arrow(g, [0, 0], EP.X, { col: COL.muted, alpha: 0.35 });
-    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    VEC.arrow(g, [0, 0], B[0], { col: EP.BASIS }); VEC.arrow(g, [0, 0], B[1], { col: EP.BASIS });
     if (o.newU > 0) EP.recipe(g, EP.LEGS_NEW, { u: o.newU });
     VEC.arrow(g, [0, 0], EP.XW, { col: COL.hero, u: o.outU });
     VEC.spot(g, B[0][0], B[0][1], { alpha: o.spots }); VEC.spot(g, B[1][0], B[1][1], { alpha: o.spots });

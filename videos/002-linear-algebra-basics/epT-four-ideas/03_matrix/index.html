@@ -62,7 +62,7 @@
     if (o.ghosts) { VEC.arrow(g, [0, 0], [1, 0], { col: COL.muted, alpha: o.ghosts }); VEC.arrow(g, [0, 0], [0, 1], { col: COL.muted, alpha: o.ghosts }); }
     EP.recipe(g, EP.LEGS_OLD, { alpha: o.old });
     VEC.arrow(g, [0, 0], EP.X, { col: o.xCol, alpha: o.xA });
-    VEC.arrow(g, [0, 0], B[0], { col: VEC.SLOT[0] }); VEC.arrow(g, [0, 0], B[1], { col: VEC.SLOT[1] });
+    VEC.arrow(g, [0, 0], B[0], { col: EP.BASIS }); VEC.arrow(g, [0, 0], B[1], { col: EP.BASIS });
     [0, 1].forEach((i) => VEC.spot(g, B[i][0], B[i][1], { alpha: o.spots[i], k: o.spotK[i] }));
     VEC.puck(g, 0, 0, { half: 12 });
     g.restore();

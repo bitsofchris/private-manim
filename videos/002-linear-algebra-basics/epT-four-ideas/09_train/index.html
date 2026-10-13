@@ -77,7 +77,7 @@
     const done = EP.centre(g);
     EP.ring(g, M);
     const u = E.out(seg(t, CUE.rows, CUE.rows + 0.67));
-    VEC.arrow(g, [0, 0], M[0], { col: VEC.SLOT[0], u }); VEC.arrow(g, [0, 0], M[1], { col: VEC.SLOT[1], u });
+    VEC.arrow(g, [0, 0], M[0], { col: EP.BASIS, u }); VEC.arrow(g, [0, 0], M[1], { col: EP.BASIS, u });
     done();
   }
   window.__timelines = window.__timelines || {};
