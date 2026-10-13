@@ -167,6 +167,11 @@ RMS envelope of your window.
   (the first "The model doesn't," and a breath) is cut. The second take of
   the phrase starts at 39.80.
 - Pauses capped at 0.25 s.
+- **Tone match (Chris, first watch: "doesn't sound like Studio Sound"):**
+  the trailer sits 2–3 dB heavier below 150 Hz than ep03–07 (same take,
+  same chain; recorded last, likely closer to the mic). `vo_final.wav` then
+  got `lowshelf=f=150:g=-3,volume=-0.3dB,alimiter=limit=0.84:level=false`:
+  −16.3 LUFS, −1.5 dBTP, level with ep06. Timing unchanged.
 - Nothing else cut. The take matches the planned script except "that we all
   agreed on", "which ones to mix" and "of your tokens", which stay.
 - Both code-beat lines survive the cut: "In PyTorch, x at W is just that"
