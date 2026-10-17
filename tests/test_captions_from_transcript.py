@@ -70,7 +70,7 @@ class MacWhisperJson(unittest.TestCase):
         self.assertEqual(segs[1]["words"], [])
 
     def test_word_timed_captions_start_on_their_first_word(self):
-        caps = cft.build_captions(cft.parse_mw_json(self.DOC), 3)
+        caps = cft.build_captions(cft.parse_mw_json(self.DOC), 3, max_chars=30)
         self.assertEqual([c["text"] for c in caps[:2]], ["A matrix just", "records where"])
         self.assertEqual(caps[0]["start"], 0.58)
         self.assertEqual(caps[1]["start"], 1.36)
@@ -85,7 +85,7 @@ class MacWhisperJson(unittest.TestCase):
         self.assertEqual(cft.build_captions(segs, 3)[0]["start"], 0.58)
 
     def test_segment_without_words_falls_back_to_proportional(self):
-        caps = cft.build_captions(cft.parse_mw_json(self.DOC), 3)
+        caps = cft.build_captions(cft.parse_mw_json(self.DOC), 3, max_chars=30)
         self.assertEqual(caps[-1]["text"], "Every weight matrix")
         self.assertEqual(caps[-1]["start"], 3.4)
 
@@ -117,6 +117,25 @@ class SentencesAndSegments(unittest.TestCase):
         self.assertEqual([s["text"] for s in segs], ["one.", "two", "three"])
         caps = cft.build_captions(segs, 3)
         self.assertEqual([c["start"] for c in caps], sorted(c["start"] for c in caps))
+
+
+
+class MaxChars(unittest.TestCase):
+    """013: a caption over ~15 characters wraps and climbs into the stage."""
+
+    def test_long_group_splits_at_balanced_break(self):
+        self.assertEqual(cft.chunk_words(["predicted", "attack,", "but"], 3, 15), [["predicted"], ["attack,", "but"]])
+
+    def test_short_group_untouched(self):
+        self.assertEqual(cft.chunk_words(["50", "are", "attacks."], 3, 15), [["50", "are", "attacks."]])
+
+    def test_single_long_word_stays_whole(self):
+        self.assertEqual(cft.fit_chars(["supercalifragilistic"], 15), [["supercalifragilistic"]])
+
+    def test_every_caption_fits(self):
+        words = [(i * 0.3, i * 0.3 + 0.25, w) for i, w in enumerate("We want to look at the confusion matrix.".split())]
+        caps = cft.captions_for_words(words, 3, 15)
+        self.assertTrue(all(len(c["text"]) <= 15 for c in caps), caps)
 
 
 if __name__ == "__main__":
