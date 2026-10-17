@@ -4,7 +4,7 @@
 **Question:** what is an agent harness / what does "harness engineering" mean?
 **Who's asking:** an engineer who uses Claude Code or Codex daily, keeps hearing "harness" on X and in blog posts, and wants a crisp definition plus why it matters to them.
 **Answer in one sentence:** the harness is everything in an agent that isn't the model: what it sees, what it remembers, what tools it can call, and the loop that checks its work and decides when to stop. Harness engineering is the habit of turning every agent mistake into a permanent fix in that machinery.
-**Search phrase:** "what is an agent harness" / "harness engineering explained" (guess)
+**Search phrase:** "what is an agent harness" / "harness engineering explained" (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short (45–90 s). One definition, one rule, one receipt. The OpenAI details and the naming history go to the companion.
 
 ## Hook options

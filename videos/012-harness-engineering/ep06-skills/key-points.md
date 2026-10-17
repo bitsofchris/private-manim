@@ -4,7 +4,7 @@
 **Question:** What are Claude skills / agent skills, and how do I write ones that actually help?
 **Who's asking:** a Claude Code user who has seen `~/.claude/skills`, maybe used skill-creator, and isn't sure skills are more than saved prompts.
 **Answer in one sentence:** A skill is a procedure that worked, saved where the agent can find it by a one-line description, and it helps only if it's written from a real run and checked again. Skills an agent writes from scratch before doing the task made agents worse.
-**Search phrase:** claude skills explained / agent skills (guess).
+**Search phrase:** claude skills explained / agent skills (guess). **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The core (what a skill is, the bot's door skill, the "write it after, not before" finding) fits 75–90 s. Progressive disclosure detail, the survey's lifecycle, SkillForge and MemSkill go in the companion.
 
 ## Hook options

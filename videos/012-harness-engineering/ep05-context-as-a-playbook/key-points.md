@@ -4,7 +4,7 @@
 **Question:** How do I stop my CLAUDE.md / AGENTS.md from rotting when the agent keeps updating it?
 **Who's asking:** an engineer whose agent "updates the context file with what it learned" every session, and the file keeps getting blander, or longer and contradictory.
 **Answer in one sentence:** Never let the agent rewrite the whole file. Have it add or change one small, labeled item at a time, each in its one home, and keep a log line per change. Whole-file rewrites quietly throw lessons away.
-**Search phrase:** how to write CLAUDE.md / AGENTS.md best practices (guess). Alt: "context engineering" (guess; ep 4 may own it).
+**Search phrase:** how to write CLAUDE.md / AGENTS.md best practices (guess). Alt: "context engineering" (guess; ep 4 may own it). **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The core (rewrite vs. small edits, with one number) fits 60–75 s. The three-role loop, dedupe details and the comparison with Chris's two systems need the companion.
 
 ## Hook options

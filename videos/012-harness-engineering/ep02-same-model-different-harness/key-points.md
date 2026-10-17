@@ -4,7 +4,7 @@
 **Question:** does the harness matter as much as the model?
 **Who's asking:** an engineer choosing between "switch to the newer model" and "fix my agent setup", who sees leaderboard numbers and isn't sure what they measure.
 **Answer in one sentence:** often yes, and sometimes more: the same model can score 55% or 99.9% depending on its harness. But the gap is biggest where the model is starved (tight context, long messy tasks), and it can shrink to nothing when the model already has room.
-**Search phrase:** "does the harness matter more than the model" / "same model different harness" (guess)
+**Search phrase:** "does the harness matter more than the model" / "same model different harness" (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The Short carries the hook, one mechanism, one controlled experiment, and the catch. The leaderboard evidence and the counter-study go to the companion.
 
 ## Hook options

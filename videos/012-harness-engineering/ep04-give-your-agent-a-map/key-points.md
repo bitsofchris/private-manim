@@ -4,7 +4,7 @@
 **Question:** why does my agent burn its context searching around, and what should I give it instead?
 **Who's asking:** an engineer whose agent greps, reads ten files, fills its window, and still misses the one file that mattered. Or one whose CLAUDE.md has grown to 500 lines and gets ignored.
 **Answer in one sentence:** Agents explore because they don't know what to search for yet, so give them a short map to read first, then let them drill into the raw data only where the map says it's worth it.
-**Search phrase:** context engineering (guess). Fallback: "claude code context window" or "AGENTS.md too long" (guess).
+**Search phrase:** context engineering (guess). Fallback: "claude code context window" or "AGENTS.md too long" (guess). **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short (60–90 s). The core is one idea (map first, drill later) with one external check (OpenAI and Anthropic both landed on it). The essay is the written companion as is. The four-layer architecture and the paper evidence go in the companion, not the Short.
 
 ## Hook options

@@ -20,9 +20,9 @@ are yours and which are drafted for you, and any fact to know before you
 say it out loud. Say episode 3's Short D beats, and cut later if they
 don't fit. Episode 10 has a Short and a long cut, so record both.
 
-Titles follow the runbook rule (step 9). Search phrases are guesses and
-haven't been checked against YouTube autocomplete. Check them at publish
-time.
+Titles follow the runbook rule (step 9). Search phrases were checked on
+2026-10-17 against YouTube autocomplete (US English) and the top results;
+✗ marks a phrase autocomplete doesn't offer.
 
 Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay the point cut). Not yet recorded.
 
@@ -31,8 +31,8 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 ## Ep 1. What Is an Agent Harness?
 
 **Title:** `What Is an Agent Harness? Everything But the Model`
-**Backup:** `Harness Engineering Explained Simply`
-**Searched as:** "what is an agent harness", "harness engineering explained" (guesses, not checked against autocomplete)
+**Backup:** `AI Harness Engineering Explained Simply`
+**Searched as:** "what is agent harness", "agent harness", "ai harness engineering" (autocomplete ✓ 10/17). Not plain "harness engineering": it returns wiring harnesses.
 **Words:** 126 (~53 s)
 
 > Every AI agent is a blob of intelligence flowing through pipes. The pipes are the agent harness.
@@ -57,9 +57,9 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 
 ## Ep 2. Same Model, Different Harness
 
-**Title:** `Does the Harness Matter More Than the Model?`
-**Backup:** `Same Model, Different Harness (AI Agents)`
-**Searched as:** "does the harness matter more than the model", "same model different harness" (guesses, not checked against autocomplete)
+**Title:** `AI Agent Harness vs Model: Which Matters More?`
+**Backup:** `Same Model, Different Harness (AI Agent Harness)`
+**Searched as:** "ai agent harness" (autocomplete ✓ 10/17); top results include "Why The Harness Matters More Than The Model". ✗ "does the harness matter…", "same model different harness".
 **Words:** 123 (~51 s)
 
 > Same model, same puzzles. Fifty-five percent in one harness, ninety-nine point nine in another.
@@ -88,9 +88,9 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 
 ## Ep 3. Harness 101: build your own
 
-**Title:** `AGENTS.md Best Practices Made Simple`
-**Backup:** `How to Set Up AGENTS.md (Beginner Friendly)`
-**Searched as:** "agents.md best practices", "how to set up agents.md" (guesses, not checked against autocomplete)
+**Title:** `How to Write AGENTS.md: Fix the Repo, Not the Chat`
+**Backup:** `AGENTS.md Best Practices Made Simple`
+**Searched as:** "how to write agents.md", "agents.md best practices" (autocomplete ✓ 10/17). ✗ "how to set up agents.md".
 **Words:** 130 (~54 s); 91 without the two Short D beats
 
 > Your agent isn't the problem. Your repo is underspecified. AGENTS.md is where the fix starts.
@@ -110,7 +110,7 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 **Notes for Chris** (max 5 bullets)
 - **From Short D (cut these two first if the take runs long, or if D gets its own Short):** "I run the repo that makes these videos this way…" and "One font bug showed up twice…". Without them the script is 91 words and still lands. The font bug is real: `agents/changelog.md`, "Beat brief trap: monospace… rendered in Inter", logged at ep01 and again at ep03, then made a rule. "Into the repo" simplifies runbook step 11 ("into its one home", then a janitor step); say "its one home" if you'd rather.
 - **Your own words:** "Have good primitives and then let the agents do things" ([[2026-06-02 - Good Primitives]]), trimmed for the last line. "Fix the repo, not the chat" was cut from the closer; beat 2 already says it.
-- **Title check:** the title promises AGENTS.md best practices, but only one beat is about the file; the script is about fixing the repo after each failure. Retitle at publish, or add an AGENTS.md beat.
+- **Title:** retitled 10/17 to "How to Write AGENTS.md: Fix the Repo, Not the Chat". The old "AGENTS.md Best Practices" promised more about the file than the script has. "Best practices" is now the backup, and ep 5 owns the CLAUDE.md version.
 - **Line 1 is adapted from OpenAI's post**, not yours: "not because Codex was incapable, but because the environment was underspecified." If you want to credit it, say "OpenAI's team found…".
 - **Doc vs linter beat** carries Böckeler's guides-vs-sensors framing (martinfowler.com, Apr 2026); the separate "docs steer, checks catch" line was cut as a repeat. The error-message-as-fix idea is OpenAI's custom lints. Don't call ~100 lines a rule if you ad-lib a number for AGENTS.md.
 - **The janitor hand-off to 3b was cut**: it gave this Short's viewer nothing. The map beat still hands off to ep 4; the bridge to 3a happens in the visuals.
@@ -120,7 +120,7 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 ## Ep 3a. The four layers an LLM wiki needs (KB Short A)
 
 **Title:** `LLM Wiki: The 4 Layers It Needs`
-**Searched as:** "llm wiki" (guess)
+**Searched as:** "llm wiki", "llm knowledge base" (autocomplete ✓ 10/17). Results are all Karpathy's LLM Wiki: searchers arrive expecting his pattern.
 **Status:** script agreed 10/11, pending one read-aloud. Every line is
 yours (the 10/2 note and your 10/11 chat answer). Built on the building
 set.
@@ -143,7 +143,7 @@ set.
 
 ## Ep 3b. Your system needs a janitor (KB Short B)
 
-**Title:** `Why Your AI Agent Setup Gets Messy` (feed Short; no search phrase found)
+**Title:** `Why Your AI Agent Setup Gets Messy` (feed Short; checked 10/17, no search phrase fits)
 **Status:** draft. Beat 3 needs your words.
 
 > The janitor for agents: de-dupe and have fewer things to maintain.
@@ -159,7 +159,7 @@ set.
 ## Ep 3c. Let your agent write notes you never read (KB Short C)
 
 **Title:** `Claude Code Memory: Notes You Never Read`
-**Searched as:** "claude code memory" (guess)
+**Searched as:** "claude code memory" (autocomplete ✓ 10/17), one of the strongest phrases in the series.
 **Status:** draft. Every line is from your 10/2 note except the last beat,
 which needs your words.
 
@@ -178,8 +178,8 @@ which needs your words.
 ## Ep 4. Give Your Agent a Map
 
 **Title:** `Context Engineering: Give Your Agent a Map`
-**Backup:** `Context Engineering Made Simple (AI Agents)`
-**Searched as:** "context engineering", "claude code context window", "agents.md too long" (guesses, not checked against autocomplete)
+**Backup:** `Context Engineering for Agents Made Simple`
+**Searched as:** "context engineering", "context engineering for agents", "claude code context window" (autocomplete ✓ 10/17). ✗ "agents.md too long".
 **Words:** 145 (~60 s)
 
 > Context engineering is giving your agent a map. Today agents are using a magnifying glass to search through a warehouse.
@@ -206,8 +206,8 @@ which needs your words.
 ## Ep 5. Context as a Playbook (ACE)
 
 **Title:** `CLAUDE.md Best Practices: Don't Rewrite It`
-**Backup:** `AGENTS.md Best Practices (Stop Context Rot)`
-**Searched as:** "how to write claude.md", "agents.md best practices" (guesses, not checked against autocomplete)
+**Backup:** `How to Write CLAUDE.md (Don't Rewrite It)`
+**Searched as:** "claude.md best practices", "how to write claude.md" (autocomplete ✓ 10/17). "agents.md best practices" now belongs to ep 3.
 **Words:** 159 (~66 s; 143 without the *(if time)* beat)
 
 > Don't let your agent rewrite its CLAUDE.md. Have it make small, labeled edits, or it throws lessons away.
@@ -239,8 +239,8 @@ which needs your words.
 ## Ep 6. Write the Skill After the Work
 
 **Title:** `Claude Skills Explained: Write Them After the Work`
-**Backup:** `Agent Skills Explained (Claude Code)`
-**Searched as:** "claude skills explained", "agent skills", "claude code skills" (guesses, not checked against autocomplete)
+**Backup:** `Claude Code Skills Explained: Save What Worked`
+**Searched as:** "claude skills explained", "claude code skills explained" (autocomplete ✓ 10/17). Avoid plain "agent skills": autocomplete mixes in Digimon.
 **Words:** 171 (~71 s)
 
 > A Claude skill is a procedure that worked, saved where the agent can find it. The trick is writing it after the work.
@@ -272,8 +272,8 @@ which needs your words.
 ## Ep 7. The check is the pipe that matters
 
 **Title:** `Evals for AI Agents: The Check Matters Most`
-**Backup:** `Verifier's Law for AI Agents (Made Simple)`
-**Searched as:** "evals for ai agents", "verifier's law" (guesses, not checked against autocomplete)
+**Backup:** `AI Evals Explained: The Check Owns the Loop`
+**Searched as:** "evals for ai agents", "ai evals explained" (autocomplete ✓ 10/17). ✗ "verifier's law".
 **Words:** 166 (~69 s; 154 without the *(if time)* beat)
 
 > The most important part of an agent setup is the eval: the check that tells it whether it got better.
@@ -307,7 +307,7 @@ which needs your words.
 
 **Title:** `Self-Improving AI Agents Made Simple`
 **Backup:** `Self-Improving Agent: Harness That Edits Itself`
-**Searched as:** "self-improving agent", "self improving ai agent", "agent harness engineering" (guesses, not checked against autocomplete)
+**Searched as:** "self improving ai agents", "self improving agents" (autocomplete ✓ 10/17). Results lead with Stanford's CS329A course: on topic.
 **Words:** 173 (~77 s; ~154 and ~69 s without the *(if time)* beat)
 
 > A self-improving agent is a loop where every change it makes to itself must predict what it fixes.
@@ -341,7 +341,7 @@ which needs your words.
 
 **Title:** `Parallel Claude Code Agents: Share One Git Repo`
 **Backup:** `Multi-Agent Coding Made Simple (Shared Git Repo)`
-**Searched as:** "parallel claude code agents", "multi agent coding", "agent swarm" (guesses, not checked against autocomplete)
+**Searched as:** "parallel claude code", "parallel coding agents", "multi agent coding", "agent swarm" (autocomplete ✓ 10/17). Results are mostly git worktrees; the shared-repo angle is the difference.
 **Words:** 178 (~74 s); 158 without the *(if time)* beat
 
 > Parallel coding agents should share one notebook. A git repo where every attempt gets committed, even the failures.
@@ -373,12 +373,12 @@ which needs your words.
 
 ## Ep 10. Harness Instead of RL? (+ the human in the harness)
 
-**Title:** `Prompt Optimization vs Reinforcement Learning`
-**Backup:** `When to Fine-Tune vs Prompt (Beginner Friendly)`
-**Searched as:** "prompt optimization vs reinforcement learning", "when to fine tune vs prompt" (guesses, not checked against autocomplete)
-**Words:** 153 (~64 s)
+**Title:** `Prompt Optimization Can Beat RL (GEPA Explained)`
+**Backup:** `GEPA Prompt Optimization Made Simple`
+**Searched as:** "prompt optimization", "gepa prompt optimization", "dspy gepa" (autocomplete ✓ 10/17). ✗ "prompt optimization vs reinforcement learning", "when to fine tune vs prompt".
+**Words:** 156 (~65 s)
 
-> You can often match reinforcement learning without training anything. Let a model read its own mistakes and rewrite its own prompt.
+> You can often match reinforcement learning without training anything. Let a model read its own mistakes and rewrite its own prompt. That's prompt optimization.
 >
 > A paper called GEPA runs your agent, then hands a second model the whole trace: what it did, what the grader said, even the compiler error.
 >
@@ -392,7 +392,7 @@ which needs your words.
 >
 > Fix the prompt from your traces first. Train the weights when you need better judgement on one thing, or when it has to be cheap, fast, or private.
 
-**Long cut** (604 words, ~4.5 min)
+**Long cut** (604 words, ~4.5 min). **Title:** `When to Fine-Tune an LLM vs Optimize the Prompt` ("when to fine tune llm" ✓ 10/17)
 
 > You can often match reinforcement learning without training anything. Let a model read its own mistakes and rewrite its own prompt.
 >
@@ -439,6 +439,7 @@ which needs your words.
 > Let the harness learn, and let the weights learn from it. The step-back and steer is the part that stays human.
 
 **Notes for Chris**
+- "That's prompt optimization" (line 1, drafted) says the search phrase; "prompt optimization vs reinforcement learning" isn't something people type. The Short and the long cut now have different titles: the long cut covers when to train, so it takes "when to fine tune llm".
 - In the Short, "My rule: prompt a big model first" and the "train the weights when…" beat merged into one traces-first closer; the rule had been said twice. "Prompt a big model first" stays in the long cut.
 - Your own words: "Nothing you intend matters, only what the gradient rewards" and "Prompt a big model first", plus the weights-vs-loop pair (9/6 note). The Minecraft hit-observe-plan story and "big model writes the action rules and tools, small classifier decides" are from your 10/12 AugiCraft journal. "Capable interns… nudge them when stuck" is your 6/13 draft. "On my loop, every reframe that unstuck progress came from me", "The step-back was human, every time" and "The step-back and steer is the part that stays human" are from your published post *The Anatomy of a Self-Improving Loop*.
 - Rule beat: "cheap, fast, private, off-distribution" is the idea from the 9/6 "They're not successive…" line, which isn't yours. It's reworded here, not quoted. Say it your own way.

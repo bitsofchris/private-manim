@@ -17,6 +17,7 @@ traces and rewrite its instructions beat RL training on 5 of 6 tasks, with
 far fewer tries. But that learning lives in text, not in the model, so
 prompt a big model first, then distill what works into weights when you
 need it cheap, fast or durable, and keep a human on the reframes.
+**Superseded:** search phrases checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Search phrase:** prompt optimization vs reinforcement learning / when to
 fine-tune vs prompt (guess)
 **Length:** needs a long cut. The Short core is points 1–4 (about 75 s).

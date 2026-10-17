@@ -4,7 +4,7 @@
 **Question:** What's the most important part of my coding agent setup?
 **Who's asking:** An engineer whose agent keeps "finishing" work that isn't right, or keeps circling on an optimization without getting better.
 **Answer in one sentence:** The check: an agent can only get as good as the thing that tells it whether it got better, so write the check before you let it loop, and make sure the check measures what you actually care about.
-**Search phrase:** evals for ai agents / verifier's law (guess)
+**Search phrase:** evals for ai agents / verifier's law (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short (45–90 s). One idea (the check), one receipt (the data-loader loop), one rule. Extra material goes to the companion, which already exists: Chris's published post "The Anatomy of a Self-Improving Loop" (bitsofchris.com, 14 Jun 2026).
 
 ## Hook options

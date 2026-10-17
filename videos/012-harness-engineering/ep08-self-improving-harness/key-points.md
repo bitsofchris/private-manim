@@ -4,7 +4,7 @@
 **Question:** Can an AI agent improve its own harness?
 **Who's asking:** An engineer who keeps hand-editing AGENTS.md, tools and hooks after every agent mistake and wonders if the agent could do that itself, and whether all that added setup is even helping.
 **Answer in one sentence:** Yes: if every part of the harness is a file, every edit states what it expects to fix, and edits that miss get reverted, an agent can improve its own harness. What it learns lives in tools, hooks and memory, not in more prompt text.
-**Search phrase:** self-improving agent (guess)
+**Search phrase:** self-improving agent (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The Short is the AHE loop plus the "79 lines cost 2.3 points" twist (points 1–5). The "less harness" beat with Pi (point 6) fits only if the Short runs near 90 s. Otherwise it goes in the companion. Chris's published post "The Anatomy of a Self-Improving Loop" is the companion for the loop half.
 
 ## Hook options

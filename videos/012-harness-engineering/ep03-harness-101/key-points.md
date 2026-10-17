@@ -7,7 +7,7 @@
 **Question:** how do I set up my repo so Claude Code / Codex does good work in it?
 **Who's asking:** an engineer who uses a coding agent daily and keeps correcting the same mistakes in chat.
 **Answer in one sentence:** Give the agent a short map of the repo, checks that tell it when it's wrong and how to fix it, and a cleanup pass. Every time it fails, have it write the fix into the repo.
-**Search phrase:** AGENTS.md best practices / how to set up AGENTS.md (guess; "AGENTS.md" is also Short D's guess)
+**Search phrase:** AGENTS.md best practices / how to set up AGENTS.md (guess; "AGENTS.md" is also Short D's guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The core (points 1, 2, 4, 6) fits about 75–90 s. Points 3 and 5 hand off to eps 4 and 3b, so the Short can name them in one line each. The D material (point 6) is the part that might push it past 90 s.
 
 **Overlap with ep 1.** Ep 1's key points already use Hashimoto's rule ("anytime you find an agent makes a mistake…"), the OpenAI receipt (zero hand-written code), and the takeaway "ask what was missing and add a line, a script or a check." Ep 3 shouldn't re-explain that. Open on the rule in one line as the thing ep 1 promised, then spend the episode on *what you actually build*.

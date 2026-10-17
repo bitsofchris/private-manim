@@ -79,8 +79,8 @@ harnesses daily. This repo, OpenAugi over his vault, and AugiCraft
 
 ## Episodes
 
-Search phrases are guesses, not checked against YouTube autocomplete
-(runbook step 0). "Read" marks how deep each source has been checked so
+The search phrases below are the first guesses. The checked phrases and
+titles (YouTube autocomplete, 2026-10-17) are in `SCRIPTS.md`. "Read" marks how deep each source has been checked so
 far. *abstract* means only the abstract has been read. *search* means
 only a search summary. *highlights* means only Chris's Readwise
 highlights. **New 10/13** marks an episode added from the vault pass.

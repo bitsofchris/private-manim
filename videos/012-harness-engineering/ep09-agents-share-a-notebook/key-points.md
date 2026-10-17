@@ -11,7 +11,7 @@ sessions in parallel and watches them redo each other's work.
 **Answer in one sentence:** Give parallel agents one shared git repo where
 every attempt, including the failures, is committed with a note on what it
 built on, and their work starts to compound instead of repeat.
-**Search phrase:** multi-agent coding / agent swarm / parallel claude code
+**Search phrase:** multi-agent coding / agent swarm / parallel claude code **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 agents (guess)
 **Length:** Short + companion. The Short carries one paper, one number, and
 one Minecraft moment. The design details (the commit format, the three
