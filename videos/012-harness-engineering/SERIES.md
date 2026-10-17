@@ -92,10 +92,12 @@ Times are seconds into the full take; exact segments are in each
 
 | # | Folder | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|:-:|:-:|:-:|:-:|:-:|
-| 1 | `ep01-what-is-a-harness/` | x | x | x | x | |
-| 2 | `ep02-give-your-agent-a-map/` | x | | | | |
-| 3 | `ep03-llm-wiki-four-layers/` | x | | | | |
-| 4 | `ep04-dont-keep-agents-busy/` | x | | | | |
+| 1 | `ep01-what-is-a-harness/` | x | x | x | x | x |
+| 2 | `ep02-give-your-agent-a-map/` | x | x | x | x | x |
+| 3 | `ep03-llm-wiki-four-layers/` | x | x | x | x | x |
+| 4 | `ep04-dont-keep-agents-busy/` | x | x | x | x | x |
+
+All four shipped 2026-10-17. Day-10 read (runbook step 12) due 10/27, day-30 11/16, into each `publish.md`.
 
 VO means cut into the folder's `vo_raw.m4a`, with `script.md`. The
 `key-points.md` files in eps 1–3 are research from the dropped plan:
