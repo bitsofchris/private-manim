@@ -143,12 +143,12 @@ highlights. **New 10/13** marks an episode added from the vault pass.
 ### 2. Same model, different harness
 
 - **Question:** Does the harness matter as much as the model?
-- **Answer:** Often, yes, and sometimes more. The same model scored 54.8%
-  in ARC Prize's standard harness and 99.9% in its provider's own harness
-  (ARC-AGI-3, GPT-6 Astra). The gap is biggest where the model is
-  starved, with a tight context or long messy tasks, and it can shrink to
-  nothing when the model has room. The model only acts on what the harness
-  puts in front of it.
+- **Answer (revised 10/17):** a model does its best work in the harness
+  it was trained in. Same model on ARC-AGI-3 (GPT-6 Astra): 54.8% in ARC
+  Prize's standard harness, 99.9% in OpenAI's own, which keeps the
+  model's reasoning state and uses its compaction. Start in the maker's
+  harness, or build yours to look like it. The experiments below are
+  companion material; see the key points.
 - **The controlled experiment:** one harness configuration took a local
   open model from 28.0% to 49.1% mean fail-to-pass on 169 SWE-bench
   Verified tasks (43 to 72 solved), and it helped three other open models

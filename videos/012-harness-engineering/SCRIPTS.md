@@ -62,32 +62,35 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 
 ## Ep 2. Same Model, Different Harness
 
-**Title:** `AI Agent Harness vs Model: Which Matters More?`
-**Backup:** `Same Model, Different Harness (AI Agent Harness)`
-**Searched as:** "ai agent harness" (autocomplete ✓ 10/17); top results include "Why The Harness Matters More Than The Model". ✗ "does the harness matter…", "same model different harness".
-**Words:** 123 (~51 s)
+**Title:** `AI Agent Harness: Use the One It Was Trained In`
+**Backup:** `AI Agent Harness vs Model: Which Matters More?`
+**Searched as:** "ai agent harness", "claude agent harness" (autocomplete ✓ 10/17). ✗ "does the harness matter…", "same model different harness".
+**Words:** 186 (~78 s)
 
-> Same model, same puzzles. Fifty-five percent in one harness, ninety-nine point nine in another.
+> Astra's ninety-nine point nine on ARC-AGI-3 wasn't just the model. It was the harness.
 >
-> That's GPT-6 Astra on ARC-AGI-3: ARC Prize's neutral harness, then OpenAI's own. Same weights, same reasoning setting. Only the harness changed.
+> Same model, same puzzles, same reasoning setting. In ARC Prize's neutral harness, fifty-five percent. In OpenAI's own, ninety-nine point nine.
 >
-> The model sees one block of text, and the harness picks what's in it.
+> What changed? OpenAI's harness kept the model's own reasoning from step to step and used OpenAI's own compaction. The neutral one only kept the notes the model chose to write.
 >
-> A 2026 paper held everything fixed and flipped one setting: trim old tool output as the context fills, and nudge the agent when it repeats itself.
+> Here's why that matters. Models are post-trained inside their maker's harness. With RL, the model isn't learning the task. It's learning to act on the context that harness produces.
 >
-> A mid-size open model in a tight twenty-K window went from twenty-eight percent of required tests passing to forty-nine.
+> Change the context, and the model is working in a world it never trained in.
 >
-> The catch: with a huge window, the gain was zero.
+> You can see it in the tools. Claude's bash tool has no schema you write. The schema is built into the model.
 >
-> The harness matters most when your model is starved for context, so check what it saw before you switch.
+> So start in the maker's harness: Claude in Claude Code or the Agent SDK, GPT in Codex.
+>
+> If you build your own, keep the maker's tools and formats, and carry the model's state forward. Don't hand it a context it's never seen.
+>
+> A model is only as good as the harness it was trained to expect.
 
 **Notes for Chris**
-- Your "my read" line from [[2026-09-07 - harness matters]] (post-training inside a scaffold learns a policy for that scaffold's context) was cut: it's a second idea, why a vendor harness wins, between the mechanism and the evidence. It belongs in the companion, framed as your read, since ARC Prize doesn't say why the gap exists.
-- "Partly, the old setup just ran out of room" was cut as a hedge on the payoff. The nuance stands: part of the 20K gain is the baseline running out of context.
-- The hook rounds 54.8 to "fifty-five". If you want it exact, say "fifty-four point eight" in beat 2. Astra's run is ARC-AGI-3, with OpenAI's provider harness. Don't call it AGI, and don't say "99.9 on ARC-AGI" without the "3".
-- Beats 5–6 are Lewis, *Same Model, Different Harness* (arXiv, Aug 2026): Qwen3.6-35B, 4-bit, local, 169 SWE-bench Verified tasks. The setting was a package (trimming, a stall nudge, command safeguards), so don't say "one change". "Huge window" is 262K tokens, where the gain was minus 0.3 points.
-- Your Astra line ("Astra arc agi 99.9 was the harness") would fit as a second sentence in beat 1 if you'd rather say it your way: "That was the harness."
-- LangChain's Terminal-Bench jump and the Arjmandi counter-study (vendor and neutral harnesses tied on frontier models) belong in the written companion. No long cut was asked for.
+- Rewritten 10/17 around one idea from your 9/7 note ([[2026-09-07 - harness matters]]): a model does its best work in the harness it was trained in, so use that harness or build yours to look like it. It answers your questions there: how or why, what they change, can we do it ourselves.
+- Your words: line 1 ("Astra arc agi 99.9 was the harness") and the RL beat (your RL line, trimmed). The rest is drafted; say it your way. The RL beat is your read: ARC Prize doesn't say why the gap exists.
+- Astra facts (ARC Prize, 3 Sep 2026, ARC-AGI-3 Semi-Private, high reasoning): standard harness 54.8%, provider adapter 99.9%. The adapter "preserves opaque reasoning state between requests and uses compaction for longer conversations"; the standard harness lets the model "carry forward notes it chooses to keep". Say "ARC-AGI-3", never "ARC-AGI", and don't call it AGI.
+- "Post-trained inside their maker's harness": LangChain's *Anatomy* ("agent products like Claude Code and Codex are post-trained with models and harnesses in the loop"). Bash tool: Anthropic's docs say "the schema is built into Claude's model and can't be modified".
+- Know before you say it: Arjmandi (arXiv 2609.11987) ran Opus 4.8 and GPT-5.5 on coding tasks in their makers' harnesses and in a neutral one (deepagents) and found them tied within about a point on average. So never say a neutral harness "always" loses. If you want the line: "A good neutral harness can close the gap", which fits the build-your-own beat.
 
 ---
 

@@ -1,11 +1,17 @@
 # Ep 2: Same model, different harness (key points)
 
 **Status:** research done 2026-10-16, not yet scripted. Sources read: 7 (three arXiv papers in full text, the LangChain blog post, ARC Prize's Astra blog post and results page, Hashimoto for context), plus 3 vault notes.
-**Question:** does the harness matter as much as the model?
+**Question:** does the harness matter as much as the model, and what do I do about it? (Chris's 9/7 questions: how or why? what are they changing in the harness? can we do this for our own harness?)
 **Who's asking:** an engineer choosing between "switch to the newer model" and "fix my agent setup", who sees leaderboard numbers and isn't sure what they measure.
-**Answer in one sentence:** often yes, and sometimes more: the same model can score 55% or 99.9% depending on its harness. But the gap is biggest where the model is starved (tight context, long messy tasks), and it can shrink to nothing when the model already has room.
+**Answer in one sentence:** a model does its best work in the harness it was trained in, because post-training teaches it to act on the context that harness produces; so start in the maker's harness, or build yours to look like it (same tools and formats, model state carried forward).
 **Search phrase:** "does the harness matter more than the model" / "same model different harness" (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
-**Length:** Short + companion. The Short carries the hook, one mechanism, one controlled experiment, and the catch. The leaderboard evidence and the counter-study go to the companion.
+**Length:** Short + companion. Revised 2026-10-17 (Chris): the Short is one idea, the trained-in harness, built from points 1 and 2 (Astra, and the RL line) plus the "what to do" beat below. Points 3–5 (Lewis's trimming experiment, the leaderboard numbers from LangChain and Zhang et al.) go to the companion: they're about tuning context on small or fixed models, a different idea. Point 6 (Arjmandi) stays as the caveat Chris knows before recording.
+
+## What to do (the Short's payoff, added 10/17)
+
+- **Start in the maker's harness:** Claude in Claude Code or the Agent SDK, GPT in Codex. Evidence: LangChain, *The Anatomy of an Agent Harness*: "Today's agent products like Claude Code and Codex are post-trained with models and harnesses in the loop" (fetched 10/17).
+- **Building your own: keep the maker's tools and formats, and carry the model's state forward.** Evidence: Anthropic's [bash tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool): "The tool is schema-less ... because the schema is built into Claude's model and can't be modified" (fetched 10/17). Astra's winning harness "preserves opaque reasoning state between requests" (ARC Prize). Arjmandi's tie between native and a neutral harness on frontier models is the hopeful side: a good neutral harness can close the gap.
+- **Don't say "trained on apply_patch"** for GPT: OpenAI's docs describe the tool but don't state how the model was trained.
 
 ## Hook options
 
@@ -54,7 +60,9 @@
 
 ## The takeaway
 
-Before you blame the model or pay for a bigger one, look at what your agent was seeing when it failed: how full was the context, and how much of it was stale logs and repeated output? Try one harness change on your own tasks this week: trim old tool output, add a "you're repeating yourself" check, or force a verify step before it says done. Measure before and after.
+Short (10/17): a model is only as good as the harness it was trained to expect, so start in the maker's harness, or copy its tools, formats and state handling.
+
+Companion: Before you blame the model or pay for a bigger one, look at what your agent was seeing when it failed: how full was the context, and how much of it was stale logs and repeated output? Try one harness change on your own tasks this week: trim old tool output, add a "you're repeating yourself" check, or force a verify step before it says done. Measure before and after.
 
 ## Bridge
 
