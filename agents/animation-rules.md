@@ -27,6 +27,8 @@
    *Why:* Heer & Robertson's "maximize predictability" calls for slow-in slow-out timing. This is also Disney's "slow in and slow out" principle.
 7. **Prefer translate, grow, and fade over rotate and complex morphs, and keep motion paths direct so the endpoint is predictable mid-flight.**
    *Why:* Heer & Robertson's "use simple transitions" says translation and expand/contract are easier to follow than rotation.
+7a. **Two things that trade places travel on sideways arcs that bow apart, never along one line with an up/down bend, and the swap is reviewed at 10 fps, not on the 4-tile sheet.**
+   *Why:* 013 ep04's axis names ("recall" ↔ "precision") swapped on opposite vertical arcs, still crossed at one height, and collided mid-move; `check` and the contact sheet both missed it.
 8. **A mobject that stands for a thing stays that mobject through the transition. Use `Transform` only when the object keeps its identity, and `FadeOut`+`FadeIn` when it doesn't.**
    *Why:* Heer & Robertson's "respect semantic correspondence" says marks for one data point must not be reused for a different one.
 9. **Give any move the viewer must track at least `S.BEAT`. Use `S.HOLD`-scale run times (about 1 s) for staged steps. Never use `S.QUICK` for a change that carries meaning.**

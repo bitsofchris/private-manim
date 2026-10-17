@@ -133,8 +133,9 @@ context. The two `vo_context_*` clips were cut from its take.)
     Eps 3–5.
   - `vo_context_long.m4a` (4.15 s): "…10,000 requests come in, but only
     50 are attacks." Ep 2, which opens on "50 attacks" with no setup.
-  Ep 4's raw take is 59.8 s, so it pays for the splice with a cut (the
-  random-pair line first).
+  Ep 4 as shipped has no splice: Chris cut it on the first watch (the
+  spliced line sounded bad), so its frame-0 tag carries the context, as
+  in ep 1.
 - **On screen:** frame 0 of every episode labels the score line with a
   short tag, "prompt-injection detector · 10,000 requests · 50 attacks",
   so muted viewers have it too.

@@ -54,6 +54,10 @@ engine.
   axes and plotted data, 3D camera moves, an existing shared part in
   `videos/_shared/` that would cost more to redraw than to reuse, and all
   16:9 scenes. Nothing Manim is retired; the Manim rules below stand.
+- **One engine per Short when one image is on screen in every beat.** A
+  plot that shares every beat with a HyperFrames image is drawn on the
+  canvas from the real data, not in Manim: `mixed` would put an engine
+  seam at every cut (013 ep04: the ROC → PR morph under the score line).
 
 Both engines share the house style (palette, safe area, one magenta hero,
 captions burned in by `tools/assemble.py`) and the whole process; only

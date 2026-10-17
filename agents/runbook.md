@@ -252,6 +252,11 @@ Gotchas:
 1. Read the transcript. Mark: flubs, repeated ideas, clauses that don't
    earn their seconds. Propose whole-phrase cuts with per-beat second
    counts. **Chris approves the cut list.** Under 60 s is the constraint.
+   Send with it, as clips, anything only an ear can settle: a number the
+   recognizers hear differently from the script (013 ep04: both heard
+   "0.95"; Chris said 0.985) and any line spliced in from elsewhere in the
+   take (013 ep04's context splice was approved on paper and cut on the
+   first watch).
 2. Find cut boundaries:
    - `ffmpeg silencedetect` (`-35dB`, `d=0.45`) gives the pause map.
    - A cut that falls mid-phrase: extract the 2–5 s region, transcribe
@@ -532,7 +537,8 @@ also works.
 | `beat_cuts.py` | cuts mid-pause before each beat's first word → `beats.json` + the final beat table | yes |
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
 | `review_frames.sh` | contact sheets at phone size, ending on the final frame; `--at` adds cue times | manual |
-| `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs | yes |
+| `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs; `--beat` for one beat's cuts | yes |
+| `hf_state_check.js` | a seam-state HyperFrames beat's first and last states against the kit's `SEAM`, in Node, before rendering | yes |
 | `word_times.py` | each word's start: the recognizer's (WhisperKit JSON) out of the silence, or estimated from the envelope → `words.json` | yes |
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |
 

@@ -242,6 +242,20 @@ frame from it, so a cut matches by construction: 013's `SC.SEAM`, 012
 ep02's world kit and ep04's `DESK.SEAM`. A beat that only reads the table
 in prose rebuilds its neighbour's state by hand and drifts.
 
+What the kit owes its beats (013 ep04):
+- `mount(root)` returns `draw` and every part a beat may animate (the
+  readout, the axis names), so a beat never searches the DOM for them.
+- Its `00_layout` cycles through every seam state, so every string the
+  kit can show is on screen once before beats are built. ep04's baseline
+  label was wired to a field `draw` never passed and showed nowhere.
+
+Before rendering, check your beat's states against the table:
+`node "$(git rev-parse --show-toplevel)"/tools/hf_state_check.js NN_beat FROM TO`
+(from the video folder; FROM and TO are the seam numbers of your cuts). It
+runs the page in Node, compares S(0), S(end) and the last 0.3 s with
+`SEAM[FROM]` / `SEAM[TO]`, and names every field that differs. A field
+under a part at opacity 0 isn't compared.
+
 ## Review
 
 `check` must report 0 errors (the "file too large" warning and
@@ -258,7 +272,8 @@ side by side; if it does not exist yet, build from the brief and say in the
 report which end state you assumed. Once a neighbour's render exists, run
 `"$(git rev-parse --show-toplevel)"/tools/seam_check.py beats.json` from
 the video folder and report every cut it flags, yours or not (012 ep01's
-beat 3–4 agent caught the 4 → 5 cut this way). It compares
+beat 3–4 agent caught the 4 → 5 cut this way); `--beat NN_beat` checks only
+your own cuts. It compares
 `hyperframes snapshot` PNGs, not mp4 frames: h264 noise around text reads as
 a difference of up to ~60/255 where there is none, ep03).
 
@@ -272,7 +287,9 @@ keep nudging.
 Per beat: the cue constants with their VO word, the mp4 path and its
 measured duration, the `check` summary (errors / warnings), anything
 changed from the brief and why, and anything you wished existed (a part
-to copy, a rule, a vendored weight). Do not commit.
+to copy, a rule, a vendored weight). Do not commit. Temporary files go in
+`<scratchpad>/<your agent name>/`: agents share one scratchpad, and 013
+ep04's overwrote each other's check scripts.
 
 ## More of the toolbox
 

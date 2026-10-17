@@ -5,6 +5,8 @@ that forced it. Newest first.
 
 ## 2026-10-17
 
+- New `tools/hf_state_check.js` (a seam-state beat's S(0) / S(end) against the kit's `SEAM`, in Node, no render; test `tests/test_hf_state_check.py`) and `seam_check.py --beat`. HyperFrames brief: run it before rendering; a kit's `mount` returns its parts and its `00_layout` cycles every seam state; agents keep temp files in their own scratch folder. (013 ep04: every beat agent wrote its own state check; a label that never drew; two agents overwrote each other's scripts)
+- `agents/animation-rules.md` 7a: things that trade places move on arcs that bow apart; review the swap at 10 fps. Runbook step 5: numbers the recognizers dispute and spliced lines go to Chris as clips with the cut list. AGENTS.md "Which engine": one image in every beat keeps the Short in one engine. `agents/parts.md`: ep04's ROC / PR plot. (013 ep04)
 - `agents/series.md` step 5: build a series' recurring image once at the series root (`_kit/`, `00_layout/`) before the episode sessions; 013's five sessions each wrote their own `score.js`. `agents/parts.md`: the score line + confusion box kit (5 uses). AGENTS.md map: the 013 series. (013 update pass)
 - Runbook step 1: the thing the title names is on screen and said within ~8 s, and setup frame 0 already shows is not spoken. Step 8: a late line cut goes through `tools/cut_vo.py` (new, tested) on the finished VO so later beats keep their audio. (Chris, 013 ep01: two late cuts, "confusion matrix" from 20.8 s to 6.4 s)
 - `captions_from_transcript.py --max-chars 15` (default) and a flash report; `agents/style.md` band row points to it. (013: ep01, ep02, ep05 each kept captions to one line by hand)
