@@ -50,7 +50,7 @@ the beat points at, ink is people and structure.
 
 | # | Scene (frame 0 already moving) | The hero moves |
 |---|---|---|
-| 1 | The model blob with its four pipes (`CAST.blob`), the human beside it | one pipe per part as it's named: context, tools, memory, the loop; on "which piece was missing" the four light in turn |
+| 1 | The agent wearing its harness (Chris chose it over the blob-and-pipes rig, 10/17; `ep01/_kit/rig.js`): its head is the model, drawn dim; context pages above it, a terminal in its right hand, a drawer in its left, a loop arrow round its feet | each part as it's named: context, tools, memory, the loop; two agents with the same head, one missing parts, for "the model can be the same"; on "which piece was missing" the four light in turn |
 | 2 | An agent at a long column of files, then the map card (`CAST.mapCard`) whose arrows point to just three | the stuffed window, then the map, then the one file it drills into |
 | 3 | The building in cross-section: agents writing pages in the basement, the human at one board upstairs, the glass case on the stairs, the janitor between floors | each layer as it's named, in the opener's order; then the janitor's broom on the conflicting rule |
 | 4 | The human at a desk while agents stream finished pages at them | the pile (the bottleneck), then the human writing the core alone while an agent does the plumbing |
@@ -92,7 +92,7 @@ Times are seconds into the full take; exact segments are in each
 
 | # | Folder | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|:-:|:-:|:-:|:-:|:-:|
-| 1 | `ep01-what-is-a-harness/` | x | | | | |
+| 1 | `ep01-what-is-a-harness/` | x | x | x | x | |
 | 2 | `ep02-give-your-agent-a-map/` | x | | | | |
 | 3 | `ep03-llm-wiki-four-layers/` | x | | | | |
 | 4 | `ep04-dont-keep-agents-busy/` | x | | | | |
