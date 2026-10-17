@@ -32,8 +32,10 @@ contact sheet, report. You never edit `videos/_shared/`.
   The 3-line `sys.path` shim at the top.
 - `BEAT_SECONDS` is the beat's length to the millisecond. End with
   `self.hold_until(BEAT_SECONDS)`. Never overrun (the log warns).
-- Frame 0 has the beat's content on screen and the first play starts
-  motion. Last frame still and clean.
+- Frame 0 has the beat's content on screen. In the hook beat the first
+  play starts motion; a later beat moves only what its VO names and may
+  hold still until its first cue (`agents/style.md` Shorts rules). Last
+  frame still and clean.
 - One magenta hero, the one the brief names. Everything else teal, FG,
   FG_DIM, BG_PANEL.
 - Land each change on the word that names it. Get cue times from the

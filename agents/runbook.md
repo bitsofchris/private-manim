@@ -258,7 +258,9 @@ Gotchas:
    take (013 ep04's context splice was approved on paper and cut on the
    first watch).
 2. Find cut boundaries:
-   - `ffmpeg silencedetect` (`-35dB`, `d=0.45`) gives the pause map.
+   - `ffmpeg silencedetect` (`d=0.45`, noise 12 dB above the floor that
+     `tools/vo_floor.py` prints, as `--noise auto` sets it) gives the
+     pause map.
    - A cut that falls mid-phrase: extract the 2–5 s region, transcribe
      just that clip (`mw` on the sub-clip gives finer segments), and run
      silencedetect at `-40dB d=0.04` for micro-pauses.
@@ -377,7 +379,7 @@ stroke-only VMobject fills it. No LaTeX on this machine: `Text` only.
 
 ```
 tools/captions_from_transcript.py words.json captions.json   # ≤3 words and ≤15 characters (one line), timed by their words
-# beats.json (tools/beat_cuts.py, step 5): ordered {clip, end} per beat; ends sum to the VO length
+# beats.json (tools/beat_cuts.py, step 5): {"beats": [{clip, end}, ...]} in order; ends sum to the VO length
 #   clip is media/videos/<file>/1920p30/<Class>.mp4 (Manim) or media/hf/<beat>.mp4 (HyperFrames)
 tools/assemble.py beats.json --vo vo_final.wav --captions captions.json \
     -o media/short.mp4

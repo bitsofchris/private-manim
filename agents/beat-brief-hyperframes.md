@@ -165,7 +165,9 @@ when the VO moves on, the old hero goes teal, `--dim` or `--muted`. `ACCENT_CYAN
 - Safe area: x 65–950, y 230–1536 (dead zones: top 230, bottom 384,
   right 130, left 65). Text and the hero stay inside; backgrounds and
   floor lines may bleed to the frame edge.
-- Stage (the visual): y 230–1100. Caption band: y 1100–1536.
+- Stage (the visual): y 230–1100. Caption band: y 1100–1536. With
+  captions anchored bottom the stage runs to y 1330 (`agents/style.md`,
+  "Share the band"); the video's brief says which.
 - With VO: the band stays empty. `tools/assemble.py` burns the word
   captions there; a beat draws no captions.
 - Without VO (a silent clip): one caption at a time, 2–4 words, in the

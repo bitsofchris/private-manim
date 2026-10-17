@@ -6,7 +6,7 @@ Manim video, what each found, and the handful of rules worth borrowing.
 One agent report, 2026-10-03, read from arXiv pages and repo prompts (not
 full PDFs); numbers are as those pages state them.
 **When to use:** before changing how beats are planned, briefed, checked
-or repaired. Feeds `agents/plans/design-system.md`.
+or repaired. Feeds `agents/archive/design-system.md`.
 
 ## The one finding that matters
 

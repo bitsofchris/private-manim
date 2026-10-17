@@ -126,14 +126,8 @@ One home per topic, from the map above. When you learn something:
 - Never state the same rule in two files. Link instead. If you find a
   duplicate or a contradiction, resolve it toward the precedence order
   and note it in `agents/changelog.md`.
-- After the hand-off pack, ask Chris: "Ready for the update pass?" On yes
-  (runbook step 11): go back through the session for every change Chris
-  asked for and every workaround an agent made, and decide for each
-  whether it becomes a rule, a token, a part, a tool, or nothing; make
-  those edits in their one home; update `agents/parts.md` use counts and
-  promote anything at two uses; move finished plans to `agents/archive/`;
-  move retired scene files to `videos/_graveyard/`; delete `_preview.py`
-  files; re-read this file and `agents/` for anything stale or
-  contradictory; add changelog lines; commit separately from the video.
+- After the hand-off pack, ask Chris: "Ready for the update pass?" On yes,
+  run runbook step 11 (mine the session, janitor, changelog, commit
+  separately from the video).
 - Commit small and often: one concern per commit, scenes separate from
   system changes.

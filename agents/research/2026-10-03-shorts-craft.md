@@ -8,7 +8,7 @@ motion style and how a design system stays alive. Three agent reports from
 or **O** (opinion / practice).
 **When to use:** when changing `agents/style.md`, `agents/animation-rules.md`, the Shorts
 constants, the storyboard step, or the hook of a Short. The plan that acts on
-this is `agents/plans/design-system.md`.
+this is `agents/archive/design-system.md`.
 
 ## 1. What holds up (measured)
 
