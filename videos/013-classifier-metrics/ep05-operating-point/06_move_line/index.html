@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_move_line: beat 6 of 013 ep05. SEAM[5] → SEAM[6]: the threshold becomes the hero and slides 0.70 → 0.656; the readout ticks from the dots. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.0;
+  const MASTER = 34.70;
+  // beat-local seconds (words.json master − 34.70), checked on the vo_final.wav RMS envelope
+  const CUE = {
+    move: 0.32,     /* "move the line" (words 35.02) */
+    allows: 1.58,   /* "allows." (words 36.28–36.56) */
+    n41: 2.39,      /* "41 of 50" (words 37.14; envelope onset ~37.09) */
+  };
+  const HOLD = 3.0;  // still from here; S(t) === SEAM[6]
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const SLIDE = [0.40, 1.92];  // thrS T_A → T_END, 1.52 s, lands ~0.34 s after "allows" starts
+  function S(t) {
+    if (t <= 0) return SEAM[5];
+    if (t >= HOLD) return SEAM[6];
+    const swap = E.io(seg(t, CUE.move, CUE.move + 0.3));             // hero: the rule hands it to the threshold
+    const thrS = lerp(SC.T_A, SC.T_END, E.io(seg(t, SLIDE[0], SLIDE[1])));
+    return {
+      thr: 1, flag: 1, thrS, thrHero: swap, bars: SEAM[5].bars,
+      target: Object.assign({}, SEAM[5].target, { ruleHero: 1 - swap, caughtPulse: pulse(t, CUE.n41, 0.6) }),
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_model_a (master 14.70, 4.20 s): "Our model, 40 percent precision, 80 percent recall, scores 0.53."
+         Opens on SC.SEAM[2], ends on SC.SEAM[3]. Hero: the F1 line. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.20;
+  const MASTER = 14.70;
+  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav 20 ms RMS envelope)
+  const CUE = {
+    our: 0.24,     /* "Our model" (14.94; envelope onset 14.92) threshold drops in, mean fades */
+    forty: 0.87,   /* "40 percent" (15.57; onset 15.56) precision 0.9 -> 0.40 */
+    eighty: 1.84,  /* "80 percent" (16.54; onset 16.54) recall 0.1 -> 0.80 */
+    f1: 2.88,      /* "0.53" (17.58, after "scores" 17.45) F1 0.18 -> 0.53 */
+  };
+  const HOLD = 3.55;  // F1 lands by 3.5; S(t >= HOLD) is SEAM[3] itself
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, SEAM, BARS_A } = SC, E = SC.E();
+  const K = SC.mount(root);
+  function S(t) {
+    if (t <= 0) return SEAM[2];
+    if (t >= HOLD) return SEAM[3];
+    const drop = E.out(seg(t, CUE.our, CUE.our + 0.7));        // threshold drops in, dim (thrHero 0)
+    const flag = E.io(seg(t, CUE.our, CUE.our + 0.7));         // the 100 right of it light up with it
+    const meanOut = E.io(seg(t, CUE.our, CUE.our + 0.6));
+    const pu = E.io(seg(t, CUE.forty, CUE.forty + 0.7));
+    const ru = E.io(seg(t, CUE.eighty, CUE.eighty + 0.7));
+    const fu = E.io(seg(t, CUE.f1, CUE.f1 + 0.62));
+    const ex = SC.BARS_EX;
+    return {
+      thr: drop, flag,
+      bars: {
+        opacity: 1,
+        p: lerp(ex.p, BARS_A.p, pu), pText: t >= CUE.forty ? BARS_A.pText : ex.pText,
+        r: lerp(ex.r, BARS_A.r, ru), rText: t >= CUE.eighty ? BARS_A.rText : ex.rText,
+        f1: lerp(ex.f1, BARS_A.f1, fu), f1Text: t >= CUE.f1 ? BARS_A.f1Text : ex.f1Text,
+        mean: 1 - meanOut,
+      },
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
