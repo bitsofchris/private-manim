@@ -83,7 +83,7 @@ the same 200 px. Promote-later note in the hand-off.
 | 7 | What you missed | 3.2 | Recall is all about what you missed. These are the attacks that got through, | "missed": the FN cell (10) lights and the recall bar's 50 shows its 10 part; "got through": the 10 gold dots left of the threshold ring on the score line, and "10 got through" appears under the recall bar. | the FN cell |
 | 8 | What you wasted | 4.3 | and precision is about what you wasted. These are real users that you ended up blocking. | "wasted": FN to rest, the FP cell (60) lights; "real users": the 60 teal dots right of the threshold ring, and "60 users blocked" appears under the precision bar. Settles still: both bars, both notes, nothing lit. | the FP cell, then none |
 
-## Final beats (the contract; `vo_final.wav` 35.79 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 35.64 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`).
 
@@ -91,12 +91,12 @@ Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`)
 |---|---|---:|---:|---|
 | 1 | `01_recall_q` | 0.00 | 4.35 | Recall is asking, of all the positives, how many did I actually catch? |
 | 2 | `02_context` | 4.35 | 2.55 | 10,000 requests come in, but only 50 are attacks. |
-| 3 | `03_recall_80` | 6.90 | 4.25 | If there were 50 attacks and we only caught 40, recall is about 80%. |
-| 4 | `04_precision_q` | 11.15 | 6.50 | Now precision is saying, of the ones that I did predict were positive, how many actually were positive? |
-| 5 | `05_precision_40` | 17.65 | 3.80 | We flagged 100, 40 were attacks, precision is 40%. |
-| 6 | `06_no_tn` | 21.45 | 6.35 | Neither one uses the true negatives. In this case, there's almost 10,000 of them. That's why they still work when the attacks are rare. |
-| 7 | `07_missed` | 27.80 | 3.26 | Recall is all about what you missed. These are the attacks that got through, |
-| 8 | `08_wasted` | 31.06 | 4.732 | and precision is about what you wasted. These are real users that you ended up blocking. |
+| 3 | `03_recall_80` | 6.90 | 4.10 | If there were 50 attacks and we only caught 40, recall is about 80%. |
+| 4 | `04_precision_q` | 11.00 | 6.50 | Now precision is saying, of the ones that I did predict were positive, how many actually were positive? |
+| 5 | `05_precision_40` | 17.50 | 3.80 | We flagged 100, 40 were attacks, precision is 40%. |
+| 6 | `06_no_tn` | 21.30 | 6.35 | Neither one uses the true negatives. In this case, there's almost 10,000 of them. That's why they still work when the attacks are rare. |
+| 7 | `07_missed` | 27.65 | 3.26 | Recall is all about what you missed. These are the attacks that got through, |
+| 8 | `08_wasted` | 30.91 | 4.732 | and precision is about what you wasted. These are real users that you ended up blocking. |
 
 ## Cut list (approved by Chris, 10/17; v2 after his first watch, applied)
 
@@ -115,7 +115,7 @@ two-pass linear loudnorm. Result −14.5 LUFS (true-peak bound), −1.5 dBTP.
 ```
 ffmpeg -i vo_raw.m4a -i ../vo_context_long.m4a -filter_complex "[0:a]atrim=0:12.45,…[a];[1:a]atrim=start=1.72,…[b];[0:a]atrim=start=12.45,…[c];[a][b][c]concat=n=3:v=0:a=1" vo_joined.wav
 ffmpeg -i vo_joined.wav -af "highpass=f=80,loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1 vo_clean.wav
-tools/tighten_vo.py vo_clean.wav --out vo_tight.wav --map timemap.json --max-gap 0.25 --noise=-45dB --remove 0-8.40 --remove 18.93-21.38
+tools/tighten_vo.py vo_clean.wav --out vo_tight.wav --map timemap.json --max-gap 0.25 --noise=-45dB --remove 0-8.40 --remove 18.78-21.38
 ffmpeg -i vo_tight.wav -stream_loop -1 -i tone.wav -filter_complex "[1:a]atrim=0:D,volume=-5dB[t];[0:a][t]amix=inputs=2:normalize=0:duration=first" vo_bed.wav
 ffmpeg -i vo_bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=11:measured_…:linear=true" vo_final.wav   # two-pass
 ```
@@ -123,10 +123,10 @@ ffmpeg -i vo_bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=11:measured_…:linear=true
 | # | Cut | vo_clean range | Saves | Why |
 |---|---|---|---:|---|
 | 1 | "Recall is asking of all the positives my model classified, how… Sorry. Redo." | 0–8.40 | 8.4 s | the flub and restart; script.md flags it |
-| 2 | "We caught 40 out of the 50 that are possible." | 18.93–21.38 | 2.4 s | repeats the line before it; script.md flags it. Starts 80 ms before "percent" ends, because the tool pads each kept piece 80 ms: v1 started at the word end, and the pad kept the onset of "We" (Chris heard a blip after "80%") |
+| 2 | "We caught 40 out of the 50 that are possible." | 18.78–21.38 | 2.6 s | repeats the line before it; script.md flags it. "We" runs right after "percent" (raw 16.44–16.56, found by transcribing sub-clips ending at 16.30 / 16.44 / 16.56), and the tool pads each kept piece 80 ms, so the cut starts 80 ms before "percent" ends at 16.43. v1 and v2 kept part of "We": the blip Chris heard twice |
 | — | (splice) "10,000 requests come in, but only 50 are attacks." after VO line 1 | — | +2.43 s | SERIES.md "Context in every episode" |
 
-Result **35.8 s**, re-transcribed with Parakeet (`transcript_final_text.txt`):
+Result **35.64 s** (v3), re-transcribed with Parakeet (`transcript_final_text.txt`):
 every join reads clean, and the envelope at the "80%" join falls straight
 to room tone. Words in `words.json` (WhisperKit, spellings fixed: "10" +
 ",000" merged; "through." → "through,"; "40?" → "40,"; "attacks I got" →

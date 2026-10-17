@@ -2,7 +2,7 @@
 
 **Name:** classifier-ep02-beat-brief
 **Description:** The contract for the eight HyperFrames beats of
-"Precision vs recall" (35.79 s). Every beat draws with the episode kit
+"Precision vs recall" (35.64 s). Every beat draws with the episode kit
 `_kit/score.js` through one call, `K.draw(g, S)`, where `S` is a state
 object; each beat opens on `SC.SEAM[n-1]` and ends on `SC.SEAM[n]`, so cuts
 are exact by construction.
@@ -104,12 +104,12 @@ Beat 2 lost "It's a prompt injection detector": it starts on "10,000", so
 |---|---|---:|---:|---|---|---|
 | 1 | `01_recall_q` | 0.00 | 4.35 | `SEAM[0]` (first frame of the Short) | `SEAM[1]` | the attack column (tp + fn frames) |
 | 2 | `02_context` | 4.35 | 2.55 | `SEAM[1]` | `SEAM[2]` | none (the tag brightens white) |
-| 3 | `03_recall_80` | 6.90 | 4.25 | `SEAM[2]` | `SEAM[3]` | the lift, then recall's 80% |
-| 4 | `04_precision_q` | 11.15 | 6.50 | `SEAM[3]` | `SEAM[4]` | the flagged row (tp + fp frames) |
-| 5 | `05_precision_40` | 17.65 | 3.80 | `SEAM[4]` | `SEAM[5]` | the lift, then precision's 40% |
-| 6 | `06_no_tn` | 21.45 | 6.35 | `SEAM[5]` | `SEAM[6]` | the TN cell, then none |
-| 7 | `07_missed` | 27.80 | 3.26 | `SEAM[6]` | `SEAM[7]` | the FN cell |
-| 8 | `08_wasted` | 31.06 | 4.732 | `SEAM[7]` | `SEAM[8]` (last frame of the Short, still) | the FP cell, then none |
+| 3 | `03_recall_80` | 6.90 | 4.10 | `SEAM[2]` | `SEAM[3]` | the lift, then recall's 80% |
+| 4 | `04_precision_q` | 11.00 | 6.50 | `SEAM[3]` | `SEAM[4]` | the flagged row (tp + fp frames) |
+| 5 | `05_precision_40` | 17.50 | 3.80 | `SEAM[4]` | `SEAM[5]` | the lift, then precision's 40% |
+| 6 | `06_no_tn` | 21.30 | 6.35 | `SEAM[5]` | `SEAM[6]` | the TN cell, then none |
+| 7 | `07_missed` | 27.65 | 3.26 | `SEAM[6]` | `SEAM[7]` | the FN cell |
+| 8 | `08_wasted` | 30.91 | 4.732 | `SEAM[7]` | `SEAM[8]` (last frame of the Short, still) | the FP cell, then none |
 
 **1 Recall, the question** — "Recall is asking, of all the positives, how
 many did I actually catch?" Words (master): Recall 0.38, positives 1.88,
