@@ -31,7 +31,7 @@ With rare positives, don't read the accuracy. Read the four boxes.
 
 ## Precision vs recall (series ep 2 of 5)
 
-*107 words, ~42s*
+*100 words, ~40s*
 
 Precision versus recall comes down to one thing: the same forty catches,
 divided by two different numbers.
@@ -42,19 +42,17 @@ attacks. We caught forty. Recall is eighty percent.
 Precision: of the ones I predicted positive, how many actually were? We
 flagged a hundred. Forty were attacks. Precision is forty percent.
 
-Recall is about what you missed: attacks that got through. Precision is
-about what you wasted: real users you blocked.
-
 Neither one uses the true negatives, almost ten thousand of them. That's
 why they still work when attacks are rare.
 
-Two questions. Two denominators. You need both.
+Recall is about what you missed: attacks that got through. Precision is
+about what you wasted: real users you blocked.
 
 ---
 
 ## ROC curve explained (series ep 3 of 5)
 
-*123 words, ~49s (117 without the if-time line)*
+*123 words, ~49s (117 without the if-time lines)*
 
 You can change what your classifier does without retraining it. Just move
 this line. An ROC curve shows every place you could put it.
@@ -64,13 +62,13 @@ threshold turns that score into a yes.
 
 Slide it left, and we catch every attack. But we block half our users.
 
-Slide it right, and almost nobody gets blocked. *(if time:)* But half the
-attacks get through.
+Slide it right, and almost nobody gets blocked. But half the attacks get
+through.
 
 Every threshold gives a new confusion matrix, and each one is a point:
 true positive rate up, false positive rate across.
 
-Top left is the sweet spot. The diagonal is a coin flip.
+Top left is the sweet spot. *(if time:)* The diagonal is a coin flip.
 
 ROC is for picking thresholds: decide whether you'd rather avoid false
 positives, or get all the positives.
@@ -79,14 +77,14 @@ positives, or get all the positives.
 
 ## ROC AUC vs PR AUC: the precision-recall curve (series ep 4 of 5)
 
-*139 words, ~55s*
+*139 words, ~55s (122 without the if-time lines)*
 
 This model's ROC AUC is 0.985. Nearly perfect. And most of what it flags
 is wrong.
 
-AUC is the area under the curve. It's for comparing models. Pick a random
-attack and a random user, and 98.5% of the time the attack scores higher.
-A coin flip is 0.5.
+AUC is the area under the curve. It's for comparing models. A coin flip is
+0.5. *(if time:)* Pick a random attack and a random user, and 98.5% of the
+time the attack scores higher.
 
 Now look at this point. False positive rate, 2.3 percent. Sounds small.
 It's 233 real users blocked, to catch 44 attacks.
@@ -104,13 +102,14 @@ When positives are rare, compare models on the precision-recall curve.
 
 ## F1 score explained, and picking the threshold (series ep 5 of 5)
 
-*149 words, ~59s (138 without the if-time line)*
+*149 words, ~59s (128 without the if-time lines)*
 
 The F1 score is precision and recall in one number, and it punishes
 whichever one is worse.
 
 Average 0.9 and 0.1, you get 0.5. F1 gives you 0.18. It's a harmonic
-mean. Our model, 40 percent precision, 80 percent recall, scores 0.53.
+mean. *(if time:)* Our model, 40 percent precision, 80 percent recall,
+scores 0.53.
 
 But F1 treats both mistakes the same, and here they aren't. A false
 positive blocks a real user, who can try again. A false negative lets an

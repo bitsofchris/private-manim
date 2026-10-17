@@ -146,13 +146,13 @@ pulls in the movie soundtrack).
 
 ## Checklist
 
-All five are storyboarded (v1, 10/16). VO for all five is read in one session from `SCRIPTS.md`.
+All five are storyboarded (v1, 10/16) and recorded in one take (10/17, `TRANSCRIPT.md`), split into each folder's `vo_raw.m4a` + `script.md`. Build each with `EPISODE_PROMPT.md`, one session per folder.
 
-- [ ] ep01: storyboard v1 → record → build
-- [ ] ep02: storyboard v1 → record → build
-- [ ] ep03: storyboard v1 → record → build
-- [ ] ep04: storyboard v1 → record → build
-- [ ] ep05: storyboard v1 → record → build
+- [ ] ep01: storyboard v1 → recorded → build
+- [ ] ep02: storyboard v1 → recorded → build
+- [ ] ep03: storyboard v1 → recorded → build
+- [ ] ep04: storyboard v1 → recorded → build
+- [ ] ep05: storyboard v1 → recorded → build
 - [ ] optional: stitch 1–5 into one 16:9 explainer after all five ship
 
 ## Sources
