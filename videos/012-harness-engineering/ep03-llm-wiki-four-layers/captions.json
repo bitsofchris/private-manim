@@ -1,0 +1,457 @@
+[
+ {
+  "start": 0.36,
+  "end": 0.62,
+  "text": "A good"
+ },
+ {
+  "start": 0.68,
+  "end": 1.32,
+  "text": "LLM wiki"
+ },
+ {
+  "start": 1.38,
+  "end": 1.56,
+  "text": "needs"
+ },
+ {
+  "start": 1.62,
+  "end": 2.14,
+  "text": "four layers."
+ },
+ {
+  "start": 2.72,
+  "end": 3.14,
+  "text": "A place where"
+ },
+ {
+  "start": 3.2,
+  "end": 3.86,
+  "text": "agents can write"
+ },
+ {
+  "start": 3.92,
+  "end": 4.9,
+  "text": "for agents, a"
+ },
+ {
+  "start": 4.96,
+  "end": 5.66,
+  "text": "clean surface for"
+ },
+ {
+  "start": 5.72,
+  "end": 6.86,
+  "text": "humans to read"
+ },
+ {
+  "start": 6.92,
+  "end": 7.56,
+  "text": "a curated"
+ },
+ {
+  "start": 7.64,
+  "end": 8.5,
+  "text": "layer of slowly"
+ },
+ {
+  "start": 8.56,
+  "end": 8.94,
+  "text": "changing"
+ },
+ {
+  "start": 8.98,
+  "end": 9.56,
+  "text": "context and"
+ },
+ {
+  "start": 9.62,
+  "end": 10.04,
+  "text": "rules that you"
+ },
+ {
+  "start": 10.1,
+  "end": 11.16,
+  "text": "review, and a"
+ },
+ {
+  "start": 11.22,
+  "end": 11.54,
+  "text": "janitor"
+ },
+ {
+  "start": 11.58,
+  "end": 12.04,
+  "text": "that keeps"
+ },
+ {
+  "start": 12.04,
+  "end": 12.44,
+  "text": "it all up"
+ },
+ {
+  "start": 12.5,
+  "end": 12.66,
+  "text": "to date"
+ },
+ {
+  "start": 12.72,
+  "end": 13.36,
+  "text": "and consistent."
+ },
+ {
+  "start": 13.82,
+  "end": 14.44,
+  "text": "The agent layer"
+ },
+ {
+  "start": 14.5,
+  "end": 15.2,
+  "text": "is written by"
+ },
+ {
+  "start": 15.26,
+  "end": 15.88,
+  "text": "agents for"
+ },
+ {
+  "start": 15.94,
+  "end": 16.58,
+  "text": "other agents."
+ },
+ {
+  "start": 16.98,
+  "end": 17.46,
+  "text": "Agents can be"
+ },
+ {
+  "start": 17.52,
+  "end": 18.28,
+  "text": "as verbose as"
+ },
+ {
+  "start": 18.34,
+  "end": 18.52,
+  "text": "they need"
+ },
+ {
+  "start": 18.58,
+  "end": 18.96,
+  "text": "to be."
+ },
+ {
+  "start": 19.34,
+  "end": 19.76,
+  "text": "These can include"
+ },
+ {
+  "start": 19.82,
+  "end": 20.58,
+  "text": "details that they"
+ },
+ {
+  "start": 20.64,
+  "end": 21.08,
+  "text": "need to resume"
+ },
+ {
+  "start": 21.14,
+  "end": 21.68,
+  "text": "a task later"
+ },
+ {
+  "start": 21.74,
+  "end": 22.39,
+  "text": "like hashes,"
+ },
+ {
+  "start": 22.43,
+  "end": 22.68,
+  "text": "branches"
+ },
+ {
+  "start": 22.8,
+  "end": 23.1,
+  "text": "commits."
+ },
+ {
+  "start": 23.58,
+  "end": 24.22,
+  "text": "You never need"
+ },
+ {
+  "start": 24.28,
+  "end": 24.66,
+  "text": "to read it"
+ },
+ {
+  "start": 24.72,
+  "end": 25.12,
+  "text": "or go here."
+ },
+ {
+  "start": 25.56,
+  "end": 26.14,
+  "text": "The human layer"
+ },
+ {
+  "start": 26.2,
+  "end": 27.54,
+  "text": "is the clean"
+ },
+ {
+  "start": 27.6,
+  "end": 27.74,
+  "text": "distilled"
+ },
+ {
+  "start": 27.78,
+  "end": 28.18,
+  "text": "view that"
+ },
+ {
+  "start": 28.24,
+  "end": 28.84,
+  "text": "you link out"
+ },
+ {
+  "start": 28.9,
+  "end": 29.66,
+  "text": "and that goes"
+ },
+ {
+  "start": 29.72,
+  "end": 30.46,
+  "text": "to these detailed"
+ },
+ {
+  "start": 30.52,
+  "end": 30.86,
+  "text": "agent notes"
+ },
+ {
+  "start": 30.92,
+  "end": 31.52,
+  "text": "when necessary."
+ },
+ {
+  "start": 31.98,
+  "end": 32.24,
+  "text": "Think of a"
+ },
+ {
+  "start": 32.3,
+  "end": 32.96,
+  "text": "dashboard or a"
+ },
+ {
+  "start": 33.02,
+  "end": 33.58,
+  "text": "Kanban board."
+ },
+ {
+  "start": 34.13,
+  "end": 34.68,
+  "text": "It's less about"
+ },
+ {
+  "start": 34.74,
+  "end": 34.98,
+  "text": "reviewing"
+ },
+ {
+  "start": 35.02,
+  "end": 35.14,
+  "text": "what the"
+ },
+ {
+  "start": 35.2,
+  "end": 35.6,
+  "text": "agent's up to"
+ },
+ {
+  "start": 35.66,
+  "end": 36.14,
+  "text": "and more about"
+ },
+ {
+  "start": 36.2,
+  "end": 36.66,
+  "text": "managing your"
+ },
+ {
+  "start": 36.72,
+  "end": 37.36,
+  "text": "own context."
+ },
+ {
+  "start": 37.8,
+  "end": 38.67,
+  "text": "The curated layer"
+ },
+ {
+  "start": 38.73,
+  "end": 39.14,
+  "text": "this is the"
+ },
+ {
+  "start": 39.2,
+  "end": 39.92,
+  "text": "slowly changing"
+ },
+ {
+  "start": 39.96,
+  "end": 40.24,
+  "text": "context"
+ },
+ {
+  "start": 40.3,
+  "end": 40.78,
+  "text": "that you need"
+ },
+ {
+  "start": 40.84,
+  "end": 41.14,
+  "text": "to handle"
+ },
+ {
+  "start": 41.2,
+  "end": 41.62,
+  "text": "with care."
+ },
+ {
+  "start": 42.06,
+  "end": 42.36,
+  "text": "These are the"
+ },
+ {
+  "start": 42.42,
+  "end": 43.64,
+  "text": "skills and rules"
+ },
+ {
+  "start": 43.7,
+  "end": 43.75,
+  "text": "the"
+ },
+ {
+  "start": 43.79,
+  "end": 44.36,
+  "text": "conventions of"
+ },
+ {
+  "start": 44.42,
+  "end": 44.76,
+  "text": "your repo."
+ },
+ {
+  "start": 45.28,
+  "end": 45.46,
+  "text": "And then you"
+ },
+ {
+  "start": 45.52,
+  "end": 46.2,
+  "text": "need the janitor."
+ },
+ {
+  "start": 46.68,
+  "end": 47.06,
+  "text": "This looks to"
+ },
+ {
+  "start": 47.12,
+  "end": 47.34,
+  "text": "catch"
+ },
+ {
+  "start": 47.38,
+  "end": 48.24,
+  "text": "conflicting rules"
+ },
+ {
+  "start": 48.3,
+  "end": 48.98,
+  "text": "in your agent"
+ },
+ {
+  "start": 49.04,
+  "end": 49.5,
+  "text": "notes before"
+ },
+ {
+  "start": 49.56,
+  "end": 50.04,
+  "text": "they spread."
+ },
+ {
+  "start": 50.44,
+  "end": 50.74,
+  "text": "And it cleans"
+ },
+ {
+  "start": 50.8,
+  "end": 51.46,
+  "text": "up old material"
+ },
+ {
+  "start": 51.52,
+  "end": 52.0,
+  "text": "so the human"
+ },
+ {
+  "start": 52.06,
+  "end": 52.5,
+  "text": "layer stays"
+ },
+ {
+  "start": 52.54,
+  "end": 52.82,
+  "text": "useful."
+ },
+ {
+  "start": 53.36,
+  "end": 53.54,
+  "text": "This is how"
+ },
+ {
+  "start": 53.6,
+  "end": 54.16,
+  "text": "I structure all"
+ },
+ {
+  "start": 54.22,
+  "end": 54.73,
+  "text": "of my repos"
+ },
+ {
+  "start": 54.79,
+  "end": 55.1,
+  "text": "these days."
+ },
+ {
+  "start": 55.52,
+  "end": 56.0,
+  "text": "With all four"
+ },
+ {
+  "start": 56.06,
+  "end": 56.48,
+  "text": "layers, you can"
+ },
+ {
+  "start": 56.54,
+  "end": 57.44,
+  "text": "build a strong"
+ },
+ {
+  "start": 57.5,
+  "end": 57.79,
+  "text": "agentic"
+ },
+ {
+  "start": 57.83,
+  "end": 58.32,
+  "text": "knowledge base."
+ }
+]

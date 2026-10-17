@@ -1,26 +1,28 @@
-[
- {
-  "clip": "media/hf/01_four_layers.mp4",
-  "end": 13.55
- },
- {
-  "clip": "media/hf/02_agent_layer.mp4",
-  "end": 11.8
- },
- {
-  "clip": "media/hf/03_human_layer.mp4",
-  "end": 12.2
- },
- {
-  "clip": "media/hf/04_curated_layer.mp4",
-  "end": 7.5
- },
- {
-  "clip": "media/hf/05_janitor.mp4",
-  "end": 8.0
- },
- {
-  "clip": "media/hf/06_close.mp4",
-  "end": 5.77
- }
-]
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_four_layers.mp4",
+   "end": 13.55
+  },
+  {
+   "clip": "media/hf/02_agent_layer.mp4",
+   "end": 11.8
+  },
+  {
+   "clip": "media/hf/03_human_layer.mp4",
+   "end": 12.2
+  },
+  {
+   "clip": "media/hf/04_curated_layer.mp4",
+   "end": 7.5
+  },
+  {
+   "clip": "media/hf/05_janitor.mp4",
+   "end": 8.0
+  },
+  {
+   "clip": "media/hf/06_close.mp4",
+   "end": 5.77
+  }
+ ]
+}
