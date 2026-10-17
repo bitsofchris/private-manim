@@ -45,7 +45,8 @@ Times are seconds into the full take; exact segments are in each
 - **1:** 10.8–53.2, the announcement removed.
 - **2:** 249.8–294.6, the announcement and the magnifying-glass line
   (253.2–257.3, rejected in the take) removed.
-- **3:** the second reading of the four rules (303–435) in 11 segments,
+- **3:** the second reading of the four rules (303–435) in 12 segments
+  (tightened to 63.9 s on 10/17),
   plus "This is how I structure all of my repos these days" from the
   first take (163.6). The first take of episode 3 (the primitives,
   59–187) and of 3A (190–241) are not used: 3A says the same thing with
