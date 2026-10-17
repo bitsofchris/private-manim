@@ -3,9 +3,24 @@
 **Status:** research done 2026-10-16, not yet scripted. Sources read: 7 primary (OpenAI post in full, Böckeler, Guo, Hashimoto, LangChain "Anatomy", LangChain "Improving Deep Agents", marmelab), plus 1 paper abstract reused from ep 2 (Lewis), plus 8 vault notes.
 **Question:** what is an agent harness / what does "harness engineering" mean?
 **Who's asking:** an engineer who uses Claude Code or Codex daily, keeps hearing "harness" on X and in blog posts, and wants a crisp definition plus why it matters to them.
-**Answer in one sentence:** the harness is everything in an agent that isn't the model: what it sees, what it remembers, what tools it can call, and the loop that checks its work and decides when to stop. Harness engineering is the habit of turning every agent mistake into a permanent fix in that machinery.
+**Answer in one sentence:** the harness is everything in an agent that isn't the model, and it has four parts: context (what it sees), tools (what it can do), memory (what carries over), and the loop (runs it, checks the work, decides when to stop).
 **Search phrase:** "what is an agent harness" / "harness engineering explained" (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
-**Length:** Short (45–90 s). One definition, one rule, one receipt. The OpenAI details and the naming history go to the companion.
+**Length:** Short. Revised 2026-10-17 (Chris): the Short is the definition, the four parts, one worked example of them together, and why it matters. Hashimoto's rule, the OpenAI receipt and "Agent = Model + Harness" (points 3–5 below) go to the companion.
+
+## The four parts (the taxonomy)
+
+There is no official taxonomy; write-ups list 4 to 12 parts (Cloudzy 9, a DEV post 12, a readthedocs survey 6). The sources worth citing come down to four:
+
+| Part | What it is | Sources |
+|---|---|---|
+| Context | what goes into the model this turn: instructions, system prompt, retrieved files, the last tool result | Lewis "decides what the model sees"; Anthropic "retrieval"; LangChain system prompts, compaction, tool-call offloading |
+| Tools | what it can act on: file ops, bash, browser, search; the model emits a call, the harness runs it | Anthropic "tools"; Lewis "which tools it can use"; LangChain bash, sandbox, filesystem |
+| Memory | what survives the session and is loaded back: AGENTS.md, notes, files, git | Anthropic "memory"; LangChain "memory file standards like AGENTS.md"; Chris "state (memory)" |
+| The loop | call model → run tool → feed result back → check → continue or stop | Anthropic "LLMs using tools based on environmental feedback in a loop", "stopping conditions", "ground truth from the environment at each step"; Lewis "how the work continues"; LangChain Ralph loops, self-verification |
+
+Where the longer lists fit: prompts and retrieval are context; guardrails and permissions are tools; checks, hooks and stop conditions are the loop; subagents are a loop calling a loop.
+
+Sources: Anthropic, [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents), 19 Dec 2024 (fetched 10/17); LangChain, The Anatomy of an Agent Harness (fetched 10/17); Lewis (below); Chris, [[2026-09-07 - harness matters]].
 
 ## Hook options
 
@@ -47,7 +62,9 @@
 
 ## The takeaway
 
-Next time your agent gets something wrong, don't just correct it in chat. Ask "what was missing?" and add one line, one script, or one check to the repo so it can't make that mistake again. Keep an AGENTS.md where every line traces back to a real failure, like Hashimoto's.
+Short (10/17): when your agent fails, don't blame the model first; ask which piece was missing: the context, a tool, the memory, or the check.
+
+Companion: Next time your agent gets something wrong, don't just correct it in chat. Ask "what was missing?" and add one line, one script, or one check to the repo so it can't make that mistake again. Keep an AGENTS.md where every line traces back to a real failure, like Hashimoto's.
 
 ## Bridge
 

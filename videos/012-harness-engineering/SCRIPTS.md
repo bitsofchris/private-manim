@@ -30,28 +30,33 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 
 ## Ep 1. What Is an Agent Harness?
 
-**Title:** `What Is an Agent Harness? Everything But the Model`
-**Backup:** `AI Harness Engineering Explained Simply`
+**Title:** `What Is an Agent Harness? The 4 Parts Explained`
+**Backup:** `What Is an Agent Harness? Everything But the Model`
 **Searched as:** "what is agent harness", "agent harness", "ai harness engineering" (autocomplete ✓ 10/17). Not plain "harness engineering": it returns wiring harnesses.
-**Words:** 126 (~53 s)
+**Words:** 205 (~85 s)
 
-> Every AI agent is a blob of intelligence flowing through pipes. The pipes are the agent harness.
+> An agent harness is everything except the model. It decides what the model sees, what it can do, what it remembers, and when it's done.
 >
-> Poke the model alone and you get a blob back.
+> Context is what goes in on this turn: your instructions, the files it opened, the last error.
 >
-> The harness is everything but the model. Context goes in. Memory carries over between runs. Tools are what it can touch. A loop checks the work and decides: try again, or stop.
+> Tools are what it can touch: read a file, run a command, search the web. The model only asks. The harness runs it.
 >
-> An OpenAI team shipped about a million lines of code, none written by hand. Early on it was slow. Not because the model couldn't code. The environment was underspecified.
+> Memory is what carries over when the session ends: notes and rules, like an AGENTS.md, loaded back in next time.
 >
-> Harness engineering is one rule, named by Mitchell Hashimoto: every time the agent makes a mistake, fix the machine so it never makes it again.
+> The loop runs the model, runs the tool, feeds the result back, and checks the work. Try again, or stop.
 >
-> Agent equals model plus harness, and the harness is the part you build.
+> Here's all four at once. You ask Claude Code to fix a failing test. The test and your request go into context. The model asks to run the tests. The harness runs them, and the error goes back in. It edits the code, and the loop runs the tests again. Green. It stops.
+>
+> The model can be the same in every app. The harness is why one agent fixes your bug and another goes in circles.
+>
+> So when your agent fails, don't blame the model first. Ask which piece was missing: the context, a tool, the memory, or the check.
 
 **Notes for Chris**
-- The blob and "poke it" are your words from `idea.md`. The context / memory / tools list echoes your note [[2026-09-07 - harness matters]] ("Context, state (memory), tools, prompts").
-- "Agent equals model plus harness" is LangChain's formula (Trivedy, "The Anatomy of an Agent Harness"); it's the series vocabulary. Their line "If you're not the model, you're the harness" was cut for length; add it after the harness list if the take runs short.
-- Hashimoto "named" it, never "coined". OpenAI's numbers: "on the order of a million lines", "0 lines of manually-written code"; "underspecified" is their word. If you add the team size, say "a small team, starting with three", not "three engineers".
-- Order is problem (underspecified) → rule (Hashimoto) → formula. The "don't argue in chat, add it to the repo" beat was cut: it restated Hashimoto's rule, and episode 3 opens on it.
+- Rewritten 10/17 around the four parts: what a harness is, its pieces, how they work together, why it matters. The four are your 9/7 note ([[2026-09-07 - harness matters]]: "Context, state (memory), tools, prompts"); prompts fold into context. The sentences are drafted, so say them your way.
+- There's no official taxonomy (write-ups list 4 to 12 parts), but the sources worth citing all come down to these four: Anthropic's *Building Effective Agents* (an LLM "enhanced with augmentations such as retrieval, tools, and memory", and agents as "LLMs using tools based on environmental feedback in a loop"), Lewis (a harness "decides what the model sees, which tools it can use, and how the work continues"), LangChain's *Anatomy*. Guardrails sit inside tools, checks and stop conditions inside the loop, subagents are a loop calling a loop. Details in `ep01-what-is-a-harness/key-points.md`.
+- "The model only asks. The harness runs it." is literal: the model outputs a tool call, and harness code runs it and returns the result.
+- "The model can be the same in every app" points at ep 2 without using its numbers, so ep 2's 55-vs-99.9 hook stays fresh.
+- Hashimoto, the OpenAI million-lines story and "Agent = Model + Harness" are out of the Short; they're in the key points' companion material. The blob and pipes can stay as the visual: the blob is the model, and four labelled pipes are the harness.
 
 ---
 
