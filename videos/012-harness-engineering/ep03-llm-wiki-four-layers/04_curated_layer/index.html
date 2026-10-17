@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_curated_layer (beat 4, master 37.55, 7.50 s). Opens on WIKI.SEAM[3], ends on WIKI.SEAM[4].
+         "curated": the case goes magenta, the link fades, the human's arm comes down ·
+         "handle with care": one glint across the glass · "skills and rules": the rules item is the hero · hold. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/wiki.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.5" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.5;            // storyboard "Final beats", row 4
+  const MASTER = 37.55;                // master start
+  const CUE = {                        // words.json master − MASTER
+    curated: 0.31,                     /* "curated" 37.86 */
+    handle: 3.41,                      /* "handle" 40.96 */
+    care: 3.90,                        /* "care." 41.45 */
+    skills: 4.87,                      /* "skills" 42.42 */
+    conventions: 6.24,                 /* "conventions" 43.79 */
+  };
+  const HOLD_FROM = 7.1;               // still from here (S deep-equals SEAM[4])
+  const { seg, merge, SEAM } = WIKI, E = WIKI.E();
+  const root = document.getElementById("root");
+  const K = WIKI.mount(root);
+  ISO.guides(root);
+  function S(t) {
+    if (t >= HOLD_FROM) return merge(SEAM[4], {});
+    // the agents keep writing from frame 1, and stop before the hold
+    const write = E.out(seg(t, 0, 0.3)) * (1 - E.io(seg(t, 6.3, 6.9)));
+    // "curated": the human's arm comes down, the link fades
+    const arm = E.io(seg(t, CUE.curated, CUE.curated + 0.7));
+    const g = seg(t, CUE.handle, CUE.handle + 0.8);              // one glint pass over "handle with care"
+    const s = merge(SEAM[3], {
+      write, pen: write > 0 ? t * 1.6 : 0,
+      link: 1 - E.io(seg(t, CUE.curated, CUE.curated + 0.5)),
+      glint: g < 1 ? E.io(g) : 0,                                // invisible at both ends of the pass
+      human: { armR: 100 - 78 * arm, tilt: 6 - 6 * arm },
+    });
+    s.hero = t < CUE.curated ? "board" : t < CUE.skills ? "case" : "rules";
+    return s;
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, (t) => K.draw(S(t)));
+})();
+    </script>
+  </body>
+</html>

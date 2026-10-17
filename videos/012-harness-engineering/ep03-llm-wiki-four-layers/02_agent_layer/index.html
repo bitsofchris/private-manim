@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 02_agent_layer (012 ep03, beat 2, master 13.55–25.35, 11.80 s). Opens on SEAM[1], ends on SEAM[2].
+         "agent layer": the pages go magenta · "for other agents": A hands its page to B and takes it back ·
+         "verbose": wall 3 → 5, pages fill faster · "resume a task": the callout card lifts out of page B ·
+         "hashes / branches / commits": its three lines, one per word · "never need to read it": the card sinks back. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/wiki.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11.8" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 11.80;
+  const MASTER = 13.55;
+  const CUE = {                       // beat-local = master − 13.55 (words.json, checked on the vo_final envelope)
+    agent: 0.41,     /* "agent layer"   13.96 */
+    forOther: 2.10,  /* "for other agents" 15.65 */
+    agentsEnd: 3.03, /* "agents." ends  16.58 */
+    verbose: 4.19,   /* "verbose"       17.74 */
+    these: 5.79,     /* "These"         19.34 */
+    resume: 7.39,    /* "resume"        20.94 */
+    hashes: 8.38,    /* "hashes"        21.94 (onset 21.93 on the envelope) */
+    branches: 8.87,  /* "branches"      22.43 (b burst 22.42) */
+    commits: 9.23,   /* "commits"       22.80 (k burst 22.78) */
+    never: 10.17,    /* "never"         23.72 */
+    read: 10.93,     /* "read"          24.48 */
+  };
+  const HOLD = 11.40;                 // still from here: S(t) === SEAM[2]
+  const { seg, merge, mix, SEAM } = WIKI, E = WIKI.E();
+  const root = document.getElementById("root");
+  const K = WIKI.mount(root);
+  ISO.guides(root);
+
+  function S(t) {
+    if (t >= HOLD) return merge(SEAM[2], {});
+    // the agents write from the first frames, and stop before the hold
+    const write = E.io(seg(t, 0, 0.3)) * (1 - E.io(seg(t, 10.8, 11.3)));
+    // fill creeps, then runs faster once they are "verbose"
+    const p = 0.2 * seg(t, 0, CUE.verbose) + 0.55 * E.io(seg(t, CUE.verbose, CUE.verbose + 2.0)) + 0.25 * seg(t, CUE.verbose + 2.0, 11.3);
+    const s = merge(SEAM[1], {
+      write, pen: write > 0 ? t * 1.6 : 0,
+      fill: mix(SEAM[1].fill, SEAM[2].fill, p),
+      wall: 3 + 2 * E.io(seg(t, CUE.verbose, CUE.verbose + 1.0)),
+    });
+    // "for other agents": A passes its page toward B and takes it back (the kit pulses S.hand)
+    const h = E.io(seg(t, CUE.forOther, CUE.forOther + 1.25));
+    s.hand = h < 1 ? h : 0;
+    // heroes: the pages on "agent layer", none from "These", the callout on "resume"
+    if (t >= CUE.agent && t < CUE.these) s.hero = "pages";
+    // the callout card: grows on "resume a task", lines one per word, sinks on "never need to read it"
+    const cIn = E.out(seg(t, CUE.resume, CUE.resume + 0.6));
+    const cOut = E.io(seg(t, CUE.never, CUE.never + 0.75));
+    const c = cIn * (1 - cOut);
+    if (c > 0) {
+      s.callout = c;
+      s.hero = "callout";
+      s.lines = seg(t, CUE.hashes - 0.04, CUE.hashes + 0.08) + seg(t, CUE.branches - 0.04, CUE.branches + 0.08) + seg(t, CUE.commits - 0.04, CUE.commits + 0.08);
+    }
+    return s;
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, (t) => K.draw(S(t)));
+})();
+    </script>
+  </body>
+</html>

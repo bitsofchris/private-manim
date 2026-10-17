@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 01_four_layers (beat 1, master 0.00–13.55): the first frame of the Short. The whole building already
+         working (agents writing from frame 0); the four layers light in the ledger order on their naming words
+         (pages, board, case, janitor), one broom sweep on "up to date", still on SEAM[1] from 13.20. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/wiki.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13.55" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 13.55;
+  const MASTER = 0.0;
+  const CUE = {
+    agents: 3.20,   /* "agents" (can write for agents) */
+    clean: 4.96,    /* "clean" (surface for humans) */
+    curated: 7.14,  /* "curated" (layer) */
+    janitor: 11.22, /* "janitor" */
+    up: 12.30,      /* "up" (to date) */
+    cons: 12.95,    /* "consistent" 12.95–13.36 */
+  };
+  const T = { sweep: 0.65, wOff: 12.75, still: 13.20 };   // broom sweep length; write ramps 1 → 0 from wOff; still from `still`
+  const { seg, pulse, merge, clone, SEAM } = WIKI, E = WIKI.E();
+  const root = document.getElementById("root");
+  const K = WIKI.mount(root);
+  ISO.guides(root);
+  // Heroes in the ledger order, each on its naming word (swaps are instant).
+  const heroAt = (t) => t < CUE.agents ? null : t < CUE.clean ? "pages" : t < CUE.curated ? "board"
+    : t < CUE.janitor ? "case" : t < T.still ? "janitor" : null;
+  function S(t) {
+    if (t >= T.still) return clone(SEAM[1]);                     // the hold: SEAM[1] exactly
+    const a = SEAM[0], b = SEAM[1], u = t / T.still;            // fill creeps while they write
+    const s = merge(a, {
+      hero: heroAt(t),
+      pen: t * 1.6,
+      write: 1 - E.io(seg(t, T.wOff, T.still)),
+      fill: [a.fill[0] + (b.fill[0] - a.fill[0]) * u, a.fill[1] + (b.fill[1] - a.fill[1]) * u],
+    });
+    // one broom sweep on "up to date", back to rest
+    const p = pulse(seg(t, CUE.up, CUE.up + T.sweep));
+    s.jan = Object.assign({}, a.jan, { lean: 9 * p, armR: a.jan.armR + 14 * p });
+    return s;
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, (t) => K.draw(S(t)));
+})();
+    </script>
+  </body>
+</html>

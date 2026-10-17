@@ -158,6 +158,7 @@
       CAST.hero(board, h === "board");
       vitFrame.setAttribute("stroke", h === "case" ? PAL.hero : PAL.glass);
       vitFrame.setAttribute("stroke-opacity", h === "case" ? 1 : 0.6);
+      vitFrame.setAttribute("stroke-width", h === "case" ? 16 : 6);       // thin glass reads faint at phone size when lit
       CAST.hero(vit.items.rules, h === "rules");
       inkFig(jan, h === "janitor");
       [jan.broom.handle, jan.broom.head].forEach((el) => el.setAttribute("stroke", h === "broom" ? PAL.hero : PAL.dim));
@@ -177,10 +178,10 @@
       });
       // the wall pages: three always, the 4th and 5th fade in as wall goes 3 → 5
       wall.forEach((p, i) => CAST.show(p, i < 3 ? 1 : clamp01(S.wall - i)));
-      // the old pages, swept left and out
+      // the old pages, swept right (away from the janitor and the ladder) and out
       old.forEach((p, i) => {
-        const u = clamp01(S.old * 1.4 - i * 0.4);
-        p.el.setAttribute("transform", `translate(${POS.old[i][0] - 120 * u} ${POS.old[i][1] + 30 * u}) rotate(${-24 * u}) scale(${S_PAGE.wall})`);
+        const u = clamp01(S.old * 1.4 - (1 - i) * 0.4);
+        p.el.setAttribute("transform", `translate(${POS.old[i][0] + 90 * u} ${POS.old[i][1] + 20 * u}) rotate(${18 * u}) scale(${S_PAGE.wall})`);
         CAST.show(p, 1 - u);
       });
       // the conflict: page B first, then its copy on page A; swept fades both
