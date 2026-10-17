@@ -1,6 +1,6 @@
 # Recording script: all five episodes (v2, 2026-10-17)
 
-Read each episode as its own take, with a pause of a few seconds between episodes. *(if time:)* lines are optional: read them, and they get cut at tighten if the take runs long. Save as `epNN-*/vo_raw.m4a` per episode, or as one file at the series root (`vo_raw_all.m4a`), and Claude will split it at the pauses.
+Record all five in one file, in this order. Before each episode say "Episode N: title" (the `##` heading), pause ~2 s, then read the script; pause ~3 s between episodes. *(if time:)* lines are optional: read them, and they get cut at tighten if the take runs long. Hand Claude the file's path, and it splits the file into `epNN-*/vo_raw.m4a` (`agents/series.md`, steps 3–4).
 
 ---
 

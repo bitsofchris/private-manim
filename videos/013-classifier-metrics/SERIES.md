@@ -146,7 +146,7 @@ pulls in the movie soundtrack).
 
 ## Checklist
 
-All five are storyboarded (v1, 10/16). VO for all five is read in one session from `RECORDING-SCRIPT.md`.
+All five are storyboarded (v1, 10/16). VO for all five is read in one session from `SCRIPTS.md`.
 
 - [ ] ep01: storyboard v1 → record → build
 - [ ] ep02: storyboard v1 → record → build
