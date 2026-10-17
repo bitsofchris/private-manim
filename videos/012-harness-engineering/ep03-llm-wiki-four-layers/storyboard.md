@@ -78,7 +78,35 @@ the stage runs to y 1330. Coordinates are frame pixels.
 | 5 | Janitor | And then you need the janitor. This looks to catch conflicting rules in your agent notes before they spread. And it cleans up old material so the human layer stays useful. | "the janitor": the janitor goes magenta and climbs down the ladder into the basement. "conflicting rules": a line on agent B's page turns magenta; "before they spread": a copy starts to draw on agent A's page, and the broom sweeps both out (the broom is the hero). "old material": the two old dashed pages are swept off the floor. "human layer stays useful": the board upstairs settles, clean. | the janitor, then the conflict |
 | 6 | Close | This is how I structure all of my repos these days. With all four layers, you can build a strong agentic knowledge base. | The janitor climbs back to the landing; the whole building at rest. "all four layers": the four light once each in the ledger order, quickly, and return to rest. Still frame by the end. | each in turn, then none |
 
-## Final beats (the contract)
+## Final beats (the contract; `vo_final.wav` 58.82 s, master seconds)
 
-To be written after the cut list is approved: master start, length,
-folder, VO, from `words.json`.
+Beat brief for the agents: `BRIEF.md` (seam states `WIKI.SEAM` in
+`_kit/wiki.js`). Word times: `words.json` (master seconds; spellings fixed
+against `transcript_final_text.txt`). Captions anchored bottom, so the
+stage runs to y 1330.
+
+| # | Folder | Start | Length | VO |
+|---|---|---:|---:|---|
+| 1 | `01_four_layers` | 0.00 | 13.55 | A good LLM wiki needs four layers. A place where agents can write for agents, a clean surface for humans to read, a curated layer of slowly changing context and rules that you review, and a janitor that keeps it all up to date and consistent. |
+| 2 | `02_agent_layer` | 13.55 | 11.80 | The agent layer is written by agents for other agents. Agents can be as verbose as they need to be. These can include details that they need to resume a task later, like hashes, branches, commits. You never need to read it or go here. |
+| 3 | `03_human_layer` | 25.35 | 12.20 | The human layer is the clean, distilled view that you link out and that goes to these detailed agent notes when necessary. Think of a dashboard or a Kanban board. It's less about reviewing what the agent's up to and more about managing your own context. |
+| 4 | `04_curated_layer` | 37.55 | 7.50 | The curated layer, this is the slowly changing context that you need to handle with care. These are the skills and rules, the conventions of your repo. |
+| 5 | `05_janitor` | 45.05 | 8.00 | And then you need the janitor. This looks to catch conflicting rules in your agent notes before they spread. And it cleans up old material so the human layer stays useful. |
+| 6 | `06_close` | 53.05 | 5.77 | This is how I structure all of my repos these days. With all four layers, you can build a strong agentic knowledge base. |
+
+## Cut list (approved by Chris, 10/17; applied)
+
+No phrase cuts (the content cut was done and approved before this
+session). `tools/enhance_vo.sh` → `vo_clean.wav` (63.9 s), then:
+
+| # | Change | Saves |
+|---|---|---:|
+| 1 | `tighten_vo.py --max-gap 0.25 --noise=-40dB --min-silence 0.3` (pauses capped; −40 dB keeps word tails) | 3.9 s |
+| 2 | `atempo=1.02`, then loudnorm −14 LUFS / −1.5 dBTP again | 1.2 s |
+
+63.9 s → **58.82 s**. `timemap.json` maps `vo_clean` → the tightened file
+*before* the 1.02 tempo (divide its new times by 1.02 for `vo_final`).
+The five tight joins from script.md (after "commits", "here", "repo",
+"useful", "base") were checked by ear by Chris: fine. Recognizers hear
+"These can include" (script.md: "This"); Parakeet's "agent nodes" is
+"notes". Captions follow the audio.
