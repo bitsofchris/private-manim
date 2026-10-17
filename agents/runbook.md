@@ -291,10 +291,22 @@ tools/word_times.py transcript_final.json vo_final.wav -o words.json
 
 `words.json` is `[{"t", "end", "word", "seg"}]`, master seconds. Fix its
 spellings against `transcript_final_text.txt` (Parakeet) now: the captions
-are built from it in step 7, so one fix serves both.
+are built from it in step 7, so one fix serves both. `tools/fix_words.py`
+does it in one line per fix: `--join "agent's MD," "AGENTS.md,"` (merged
+words), `--sub harnesses "harness is"`, and `--break-after WORD` where the
+recognizer ran two segments together; `WORD@SECONDS` picks one occurrence.
 
-Then rewrite `storyboard.md` with the final beat table: master start,
-length, scene file, VO. Beat lengths are the contract for step 6.
+Then the final beat table: `tools/beat_cuts.py words.json vo_final.wav
+01_hook 02_context=Context 03_tools=Tools ...` puts each cut mid-pause
+before the beat's first word (at least 80 ms before it), writes
+`beats.json` and prints the table (start, length, folder, VO) for
+`storyboard.md`. Beat lengths are the contract for step 6.
+
+Under it, a **seam-states table**: every cut, and what is on screen there
+(each shared part's state, which labels are on, where things sit). The
+agents on either side of a cut both build to that row, so the cut matches
+without either seeing the other's render (012 ep01: five of six cuts
+pixel-identical on the first render).
 
 ## 6. Generate the beats (Claude, parallel agents, ~10 min)
 
@@ -306,13 +318,19 @@ length, scene file, VO. Beat lengths are the contract for step 6.
   (Manim) or `agents/beat-brief-hyperframes.md` (HyperFrames), plus its
   beat's lines: file and class (or folder), `BEAT_SECONDS`, VO with
   master times, the visual brief, the hero. Group beats that share a
-  visual onto one agent; write any local part (`_parts.py`) before
-  spawning so every agent imports the same one. Check `agents/parts.md` first.
+  visual onto one agent, and give one agent both sides of a cut that a
+  beat-only prop crosses (012 ep01's tool icons, beats 3 → 4: exact). Write
+  any local part (`_parts.py`, or a HyperFrames kit like `_kit/`) before
+  spawning so every agent draws the same one. Check `agents/parts.md` first.
 - **Show Chris the canonical frame before spawning agents** when the look
   is new to the repo: render `00_layout/` (the shared parts at rest) and
   send it. ep01 and ep02 each built and assembled a whole Short in a look
   Chris then rejected (the isometric floor; a 3D lattice); one frame
-  settles it in one exchange.
+  settles it in one exchange. Send two or three different takes on the
+  hero image side by side in one PNG, not one: 012 ep01's single rig was
+  rejected and cost a round; three stills settled it in the next message.
+  Render it while the cut list waits, and send the cut list and the frame
+  together, so one reply approves both.
 - Name two or three finished beats that resemble each agent's brief as
   worked examples (same part, same kind of motion). Examples from our own
   passing scenes do more than rule lists.
@@ -345,7 +363,7 @@ stroke-only VMobject fills it. No LaTeX on this machine: `Text` only.
 
 ```
 tools/captions_from_transcript.py words.json captions.json   # ≤3 words each, timed by their words
-# beats.json: ordered {clip, end} per beat; ends must sum to the VO length
+# beats.json (tools/beat_cuts.py, step 5): ordered {clip, end} per beat; ends sum to the VO length
 #   clip is media/videos/<file>/1920p30/<Class>.mp4 (Manim) or media/hf/<beat>.mp4 (HyperFrames)
 tools/assemble.py beats.json --vo vo_final.wav --captions captions.json \
     -o media/short.mp4
@@ -359,7 +377,8 @@ medium weight with no pill, so the two kinds of text never collide even
 when a caption sits under white diagram text. One caption source per Short: burned from the VO, never
 also drawn in scenes.
 
-Read the generated `captions.json` once: Whisper writes "NX" for N× and
+A caption never crosses a sentence end (. ? !), even where the recognizer
+put two sentences in one segment. Read the generated `captions.json` once: Whisper writes "NX" for N× and
 "NN module" for nn.Module. Spellings are fixed in `words.json` (step 5),
 so a wrong word here means a fix missed there: fix it there and rebuild. A scene
 element in the band too (a code card): `agents/style.md`, "Share the band
@@ -367,11 +386,13 @@ with a scene element".
 
 ## 8. Review (Claude, then Chris)
 
-- `tools/review_frames.sh media/short.mp4` for contact sheets; or three
+- `tools/review_frames.sh media/short.mp4` for contact sheets (the last
+  tile is always the final frame; `--at 1.48,2.54` adds tiles at cue
+  times); or three
   20 s sheets at 300 px wide, one frame every 2 s, which shows the whole
   Short on one screen each.
 - Check at that size: text legible, nothing in the dead zones, one magenta
-  hero per beat, first frame moving, last frame still and clean, captions
+  hero at a time, first frame moving, last frame still and clean, captions
   never two lines for more than a beat.
 - Dead-zone proof: overlay a caption PNG on a real frame and `drawbox`
   the four zones at 25 % red. If text touches red, fix the constant.
@@ -475,14 +496,23 @@ stayed %, relative retention, at end, subs and shares per 1K. Then:
 
 ## Tools (all under `tools/`, tests under `tests/`)
 
+Commands in this runbook name tools from the repo root and run from the
+video folder. In a series episode the folder is a level deeper
+(`videos/NNN-series/epNN-slug/`), so call them as
+`"$(git rev-parse --show-toplevel)"/tools/NAME` rather than counting `../`.
+The Python tools are executable; `uv run --no-sync python tools/NAME.py`
+also works.
+
 | Tool | Does | Tested |
 |---|---|---|
 | `enhance_vo.sh` | high-pass + loudnorm to −14 LUFS; `--denoise` adds a floor-matched denoise and de-ess | manual |
 | `vo_floor.py` | a take's noise floor in dB (10th-percentile 50 ms RMS) | yes |
 | `tighten_vo.py` | range cuts, pause capping, time map; `--noise auto`, `--level`, `--map-in` | yes |
 | `captions_from_transcript.py` | `words.json` (or a MacWhisper .json / .txt) → captions.json | yes |
+| `fix_words.py` | `words.json` spellings and caption breaks: `--join`, `--sub`, `--break-after` | yes |
+| `beat_cuts.py` | cuts mid-pause before each beat's first word → `beats.json` + the final beat table | yes |
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
-| `review_frames.sh` | contact sheets at phone size | manual |
+| `review_frames.sh` | contact sheets at phone size, ending on the final frame; `--at` adds cue times | manual |
 | `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs | yes |
 | `word_times.py` | each word's start: the recognizer's (WhisperKit JSON) out of the silence, or estimated from the envelope → `words.json` | yes |
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |

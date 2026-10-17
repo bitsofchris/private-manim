@@ -29,7 +29,7 @@ clean").
 | The Linear Algebra for AI Engineers series (2D plane look) | `videos/002-linear-algebra-basics/` | `SERIES.md` (arc, checklist, series rules), `EPISODE_PROMPT.md` (one session per episode), the plane kit is shared: `videos/_shared/web/vec/vec.js`, starter `prototypes/hyperframes/vec-plane/` |
 | Line-drawn agents and knowledge bases (human, agent with 1 and 0 eyes, janitor, layer props) | `videos/_shared/web/cast/cast.js` | the cast kit; starter and sign-off frame `prototypes/hyperframes/cast/`; rules in `agents/style.md` "Agents and knowledge bases" |
 | The Harness Engineering series (four Shorts: the harness, the map, the four-layer knowledge base, not keeping agents busy) | `videos/012-harness-engineering/` | `SERIES.md` (the episodes, what was cut, checklist), `TRANSCRIPT.md` (the full take), each `epNN/script.md` (what was said, cut times); the dropped plan is in `_archive/` |
-| Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
+| Audio and assembly tools | `tools/` | tighten, word fixes, beat cuts, captions, assemble, contact sheets, seam check |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
 | Evidence behind the rules | `agents/research/` | digests with sources: shorts craft and hooks; what other LLM-to-Manim pipelines learned |
@@ -100,7 +100,7 @@ orchestrator does the judgment work and farms out the parallel work:
 |---|---|---|
 | Preflight + storyboard | orchestrator | the preflight from runbook step 0 (the question, who asks, the one-sentence answer), then `storyboard.md` from the runbook step 1, starting with the `ENGINE:` line. Chris edits the VO in his words. |
 | Record | Chris | one take, `vo_raw.m4a` into the video folder |
-| Clean, transcribe, cut | orchestrator | runbook steps 3–5; Chris approves the cut list |
+| Clean, transcribe, cut | orchestrator | runbook steps 3–5; Chris approves the cut list and, for a new look, the canonical frame, in one message (runbook step 6) |
 | Build beats | subagents (one per 1–2 beats) | each gets the brief for its beat's engine + its beat's VO and visual brief; renders and reviews its own contact sheet |
 | Assemble + review | orchestrator | sequential clean re-render, assemble, contact sheets, fix what the sheets show |
 | Iterate | Chris + orchestrator | Chris watches on a phone and says what's off; every change request is material for the update pass |

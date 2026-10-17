@@ -97,16 +97,16 @@ Where this episode stands:
 
 Do, in runbook order:
 1. Write FOLDER/storyboard.md (step 1): the ENGINE line first, chosen by AGENTS.md "Which engine"; the preflight lines; the ledger from SERIES.md, used identically in every beat; a beat | VO | visual table built from script.md.
-2. Clean, transcribe, tighten (steps 3–5). Bring me the cut list and wait for my approval before building beats. Flag any flubbed or repeated phrase in the take.
-3. Render FOLDER/00_layout (the canonical frame) and send it to me; build beats only after I OK the look.
-4. Build the beats (step 6) with parallel agents, each briefed with the matching beat brief. Each renders and reviews its own contact sheet. Then check every cut (last frame of beat N beside the first frame of beat N+1).
+2. Clean, transcribe, tighten (steps 3–5). Flag any flubbed or repeated phrase in the take. Write the final beat table and the seam-states table into the storyboard.
+3. Render FOLDER/00_layout (the canonical frame) while the cut list waits: two or three takes on the hero image side by side in one PNG. Send me the cut list and the frame together, and build beats only after I approve both.
+4. Build the beats (step 6) with parallel agents, each briefed with the matching beat brief; one agent owns both sides of a cut that a beat-only prop crosses. Each renders and reviews its own contact sheet. Then check every cut (last frame of beat N beside the first frame of beat N+1).
 5. Captions, assembly, review (steps 7–8): sequential clean re-render, assemble, contact sheets, fix what the sheets show. Then tell me the media/short.mp4 path to watch on my phone, and iterate on what I say.
 6. Write FOLDER/publish.md (step 9) with the title from SERIES.md; description line 1 contains the search phrase. Send the hand-off pack (step 10) when I say done.
 
 This series: SERIES-SPECIFIC LOOK, CONVENTIONS AND SHARED KIT.
 
 Traps:
-- Episode folders are one level deeper than a normal videos/NNN-slug/. Manim scene shim: parents[3], not parents[2]. HyperFrames symlinks: ../../../_shared/web/vendor (and any other shared kit). Render from inside FOLDER (or the beat folder, for HyperFrames), never from the repo root, never two renders at once in one folder.
+- Episode folders are one level deeper than a normal videos/NNN-slug/. Manim scene shim: parents[3], not parents[2]. HyperFrames symlinks: ../../../_shared/web/vendor (and any other shared kit). Call tools as "$(git rev-parse --show-toplevel)"/tools/NAME. Render from inside FOLDER (or the beat folder, for HyperFrames), never from the repo root, never two renders at once in one folder.
 - No LaTeX: Text only.
 
 Other sessions are building other episodes at the same time, so:

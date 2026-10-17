@@ -24,8 +24,9 @@ includes `videos/_shared/web/vendor/`).
    `agents/parts.md` ("HyperFrames prototypes") says which piece of which
    file to copy. Copy, do not rewrite.
 3. The video's `storyboard.md`: the "Final beats" table is the contract
-   (start, length, folder, VO); the beats table and the ledger above it
-   are the visual brief. Names, example values and choices come from the
+   (start, length, folder, VO), and its seam-states row for each of your
+   cuts is what your first and last frames show; the beats table and the
+   ledger above it are the visual brief. Names, example values and choices come from the
    ledger, never invented in the beat.
 
 ## Where a beat lives
@@ -45,6 +46,10 @@ cd videos/NNN-slug
 mkdir NN_beat && ln -s ../../_shared/web/vendor NN_beat/vendor
 cp ../../prototypes/hyperframes/ironies/index.html NN_beat/index.html   # or quiz/
 ```
+
+In a series episode (`videos/NNN-series/epNN-slug/`) every link is one
+`../` deeper: `ln -s ../../../_shared/web/vendor NN_beat/vendor`. The
+episode prompt lists the links the series needs.
 
 `index.html` plus `vendor/` is a complete HyperFrames project; no
 `package.json`, `hyperframes.json` or `node_modules`. Do **not** run
@@ -67,7 +72,7 @@ cd videos/NNN-slug/NN_beat
 export HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1
 npx --yes --prefer-offline hyperframes@0.8.115 check
 npx --yes --prefer-offline hyperframes@0.8.115 render -o ../media/hf/NN_beat.mp4
-cd .. && ../../tools/review_frames.sh media/hf/NN_beat.mp4 4
+cd .. && "$(git rev-parse --show-toplevel)"/tools/review_frames.sh --at CUE1,CUE2 media/hf/NN_beat.mp4 4
 ffprobe -v error -show_entries format=duration:stream=width,height -of csv=p=0 media/hf/NN_beat.mp4
 ```
 
@@ -118,6 +123,10 @@ The `beats.json` row for the beat: `{"clip": "media/hf/NN_beat.mp4", "end": BEAT
   millisecond; the render rounds up to whole frames (4.37 s → 132 frames
   = 4.40 s) and `assemble.py` trims to `end`.
 - Frame 0 has the beat's content on screen and something already moving.
+  Moving means something from the previous beat's last frame carrying on,
+  or a new element growing in from nothing over ~0.2 s, never a new
+  element at full size: 012 ep01's loop dot appeared whole at frame 0 and
+  broke the cut (222/255) until it grew in.
   The last frame is still: every motion, including the line boil and any
   drift, stops before the end (both prototypes freeze at a `HOLD_FROM` /
   `T.still` constant).
@@ -235,8 +244,10 @@ narrower and lighter).
 Frame 0 must be the previous beat's last frame. If its render exists
 (`media/hf/<previous>.mp4`), grab the last frame and compare it with yours
 side by side; if it does not exist yet, build from the brief and say in the
-report which end state you assumed. For a pixel diff, run
-`tools/seam_check.py beats.json` from the video folder (it compares
+report which end state you assumed. Once a neighbour's render exists, run
+`"$(git rev-parse --show-toplevel)"/tools/seam_check.py beats.json` from
+the video folder and report every cut it flags, yours or not (012 ep01's
+beat 3–4 agent caught the 4 → 5 cut this way). It compares
 `hyperframes snapshot` PNGs, not mp4 frames: h264 noise around text reads as
 a difference of up to ~60/255 where there is none, ep03).
 

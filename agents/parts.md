@@ -57,6 +57,7 @@ Paths in this table are relative to `videos/`.
 | paper-figure cross-fade + zoom | `006-diagram-grammar/02_grammar.py` | real figure in, zoom to a region, our diagram over it | 006 | 1 |
 | plane-kit wishes not yet in `web/vec/` | ep01–ep04 beats | `compass()`; a card slot `swell`; a card that grows and wraps (ep01 `listCard`); fit-to-width text (ep01 `fitSize`); label offsets per view that avoid the band and the left dead zone; a recipe drawer with hop ticks (ep03 `tick`, `hops`); a ring of vectors (ep03 beats 7–8) | ep01, ep03 | 1 each |
 | 3D basis kit (HyperFrames) | `002-linear-algebra-basics/ep02-change-of-basis/_kit/basis.js` | floor-and-route world (`BK.world`, `route`, `floorGrid`, `coordsAt`), the address readout `makeReadout` (ticking numbers, one colour per basis vector), `makeBasisLabels` | ep02 | 1 |
+| Agent wearing its harness (HyperFrames, on the cast kit) | `012-harness-engineering/ep01-what-is-a-harness/_kit/rig.js` | `RIG.make` (agent whose head is the model, drawn dim; context pages above, terminal in the right hand, drawer in the left, loop arrow round the feet; `missing` parts dashed), `part(rig, i, u, pop)` teal→magenta with its label, `place`, `follow` (held parts track `CAST.pose`), `partAt` / `headAt` / `loopAt`, verdicts `check` / `circling` + `spin` | 012 ep01 | 1 |
 
 ## HyperFrames prototypes (copy, do not import)
 

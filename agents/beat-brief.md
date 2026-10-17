@@ -63,7 +63,7 @@ contact sheet, report. You never edit `videos/_shared/`.
 
 ```
 cd videos/NNN-slug && uv run --no-sync manim -qh --disable_caching FILE.py Class
-../../tools/review_frames.sh media/videos/FILE/1920p30/Class.mp4 4
+"$(git rev-parse --show-toplevel)"/tools/review_frames.sh --at CUE1,CUE2 media/videos/FILE/1920p30/Class.mp4 4
 ffprobe -v error -show_entries format=duration -of csv=p=0 media/videos/FILE/1920p30/Class.mp4
 ```
 
