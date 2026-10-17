@@ -1,0 +1,287 @@
+[
+ {
+  "start": 0.45,
+  "end": 1.42,
+  "text": "This model's ROC"
+ },
+ {
+  "start": 1.48,
+  "end": 2.13,
+  "text": "area under the"
+ },
+ {
+  "start": 2.19,
+  "end": 3.66,
+  "text": "curve is 0.985"
+ },
+ {
+  "start": 3.72,
+  "end": 4.84,
+  "text": "nearly perfect, but"
+ },
+ {
+  "start": 4.9,
+  "end": 5.26,
+  "text": "most of"
+ },
+ {
+  "start": 5.32,
+  "end": 5.48,
+  "text": "what it"
+ },
+ {
+  "start": 5.6,
+  "end": 6.3,
+  "text": "flags is wrong."
+ },
+ {
+  "start": 6.74,
+  "end": 7.24,
+  "text": "It's a prompt"
+ },
+ {
+  "start": 7.3,
+  "end": 8.18,
+  "text": "injection detector."
+ },
+ {
+  "start": 8.72,
+  "end": 9.27,
+  "text": "AUC is for"
+ },
+ {
+  "start": 9.33,
+  "end": 10.26,
+  "text": "comparing models."
+ },
+ {
+  "start": 10.78,
+  "end": 11.26,
+  "text": "A coin flip"
+ },
+ {
+  "start": 11.32,
+  "end": 12.16,
+  "text": "is 0.5."
+ },
+ {
+  "start": 12.62,
+  "end": 12.9,
+  "text": "You pick a"
+ },
+ {
+  "start": 12.96,
+  "end": 13.54,
+  "text": "random attack and"
+ },
+ {
+  "start": 13.6,
+  "end": 14.12,
+  "text": "a random user"
+ },
+ {
+  "start": 14.18,
+  "end": 15.64,
+  "text": "and 98.5% of"
+ },
+ {
+  "start": 15.7,
+  "end": 16.12,
+  "text": "the time the"
+ },
+ {
+  "start": 16.18,
+  "end": 17.4,
+  "text": "attack scores higher."
+ },
+ {
+  "start": 17.92,
+  "end": 18.18,
+  "text": "Now look at"
+ },
+ {
+  "start": 18.24,
+  "end": 18.64,
+  "text": "this point."
+ },
+ {
+  "start": 19.18,
+  "end": 20.0,
+  "text": "False positive rate"
+ },
+ {
+  "start": 20.06,
+  "end": 21.6,
+  "text": "2.3%. Sounds small."
+ },
+ {
+  "start": 22.1,
+  "end": 23.34,
+  "text": "It's 233 real"
+ },
+ {
+  "start": 23.4,
+  "end": 24.46,
+  "text": "users blocked just"
+ },
+ {
+  "start": 24.52,
+  "end": 24.76,
+  "text": "to catch"
+ },
+ {
+  "start": 24.82,
+  "end": 25.76,
+  "text": "44 attacks."
+ },
+ {
+  "start": 26.3,
+  "end": 26.82,
+  "text": "So swap the"
+ },
+ {
+  "start": 26.88,
+  "end": 27.61,
+  "text": "false positive rate"
+ },
+ {
+  "start": 27.67,
+  "end": 28.1,
+  "text": "for precision."
+ },
+ {
+  "start": 28.7,
+  "end": 29.47,
+  "text": "Precision doesn't use"
+ },
+ {
+  "start": 29.53,
+  "end": 30.12,
+  "text": "true negatives."
+ },
+ {
+  "start": 30.76,
+  "end": 31.79,
+  "text": "Recall goes across"
+ },
+ {
+  "start": 31.85,
+  "end": 33.02,
+  "text": "precision goes up"
+ },
+ {
+  "start": 33.08,
+  "end": 33.48,
+  "text": "and the same"
+ },
+ {
+  "start": 33.54,
+  "end": 34.5,
+  "text": "model's curve drops."
+ },
+ {
+  "start": 35.06,
+  "end": 35.57,
+  "text": "Now the good"
+ },
+ {
+  "start": 35.63,
+  "end": 35.91,
+  "text": "corner is"
+ },
+ {
+  "start": 35.97,
+  "end": 36.34,
+  "text": "top right."
+ },
+ {
+  "start": 36.86,
+  "end": 37.14,
+  "text": "And the coin"
+ },
+ {
+  "start": 37.2,
+  "end": 37.6,
+  "text": "flip here"
+ },
+ {
+  "start": 37.66,
+  "end": 38.76,
+  "text": "isn't 0.5."
+ },
+ {
+  "start": 39.25,
+  "end": 40.58,
+  "text": "It's 0.005, the"
+ },
+ {
+  "start": 40.64,
+  "end": 41.1,
+  "text": "attack rate."
+ },
+ {
+  "start": 41.54,
+  "end": 42.24,
+  "text": "This model's precision"
+ },
+ {
+  "start": 42.3,
+  "end": 43.03,
+  "text": "recall area under"
+ },
+ {
+  "start": 43.09,
+  "end": 43.28,
+  "text": "the curve"
+ },
+ {
+  "start": 43.34,
+  "end": 44.32,
+  "text": "is 0.56."
+ },
+ {
+  "start": 44.92,
+  "end": 45.52,
+  "text": "It's low looking"
+ },
+ {
+  "start": 45.58,
+  "end": 46.16,
+  "text": "but over 100"
+ },
+ {
+  "start": 46.22,
+  "end": 46.72,
+  "text": "times better"
+ },
+ {
+  "start": 46.78,
+  "end": 47.32,
+  "text": "than chance."
+ },
+ {
+  "start": 47.84,
+  "end": 48.48,
+  "text": "When positives are"
+ },
+ {
+  "start": 48.54,
+  "end": 49.08,
+  "text": "rare, we want"
+ },
+ {
+  "start": 49.14,
+  "end": 49.88,
+  "text": "to compare models"
+ },
+ {
+  "start": 49.94,
+  "end": 50.78,
+  "text": "on the precision"
+ },
+ {
+  "start": 50.84,
+  "end": 51.52,
+  "text": "recall curve."
+ }
+]
