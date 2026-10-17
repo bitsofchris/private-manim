@@ -1,0 +1,34 @@
+00:00.240-00:07.440
+Recall is asking of all the positives my model classified how sorry, redo
+
+00:08.220-00:12.460
+Recall is asking, of all the positives, how many did I actually catch?
+
+00:12.460-00:16.460
+If there were 50 attacks and we only caught 40, recall is about 80%.
+
+00:16.460-00:19.660
+We caught 40 out of the 50 that are possible.
+
+00:19.200-00:26.080
+Now precision is saying of the ones that I did predict were positive, how many actually were positive?
+
+00:26.320-00:30.000
+We flagged 100, 40 were attacks, precision is 40%
+
+00:30.619-00:32.940
+Neither one uses the true negatives.
+
+00:32.940-00:35.020
+In this case there's almost ten thousand of them.
+
+00:35.020-00:37.340
+That's why they still work when the attacks are rare.
+
+00:37.340-00:42.699
+Recall is all about what you missed, these are the attacks that got through, and precision is about what you wasted.
+
+00:42.699-00:45.260
+These are real users that you ended up blocking.
+
+
