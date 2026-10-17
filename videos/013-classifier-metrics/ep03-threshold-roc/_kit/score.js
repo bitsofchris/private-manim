@@ -204,7 +204,7 @@
   function makeRocLabels(root) {
     const c = `font-size:60px;line-height:66px;color:${rgba(COL.dim)};`;
     const tpr = el(root, c + `left:${PLOT.x0 + 22}px;top:846px;`, "TPR");
-    el(root, c + `left:${PLOT.x0 - 52}px;top:${PLOT.y1 - 30}px;`, "1");
+    el(root, c + `left:${PLOT.x0 - 68}px;top:${PLOT.y1 - 30}px;`, "1");
     el(root, c + `left:${PLOT.x0 - 52}px;top:1262px;`, "0");
     const fpr = el(root, c + `left:${(PLOT.x0 + PLOT.x1) / 2 - 80}px;width:160px;text-align:center;top:1262px;`, "FPR");
     el(root, c + `left:${PLOT.x1 - 18}px;top:1262px;`, "1");
@@ -259,7 +259,7 @@
       if (!(p.a > 0)) return;
       const q = box(p.t);
       g.fillStyle = rgba(mixc(COL.hero, COL.text, p.dim || 0), p.a);
-      g.beginPath(); g.arc(PX(q.fpr), PY(q.tpr), 10, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.arc(PX(q.fpr), PY(q.tpr), 14, 0, Math.PI * 2); g.fill();
     });
     // the threshold's dot (one hero group with the line)
     const dt = Object.assign({ alpha: 1, dim: 0 }, o.dot || {});
@@ -320,12 +320,14 @@
     const code = makeCode(root), bx = makeBox(root), rl = makeRocLabels(root), st = makeScoreTag(root);
     guides(root);
     function draw(g, S) {
-      const t = S.t == null ? T_BOX : S.t, counts = box(t);
+      // counts, lit dots, the ROC dot and the code number all read the threshold the code shows (2 dp);
+      // the line itself moves smoothly
+      const tl = S.t == null ? T_BOX : S.t, t = Math.round(tl * 100) / 100, counts = box(t);
       ground(g); axis(g);
       bx.draw(g, { hi: S.boxHi });
       dots(g, t, { userPulse: S.userPulse, missRing: S.missRing, attackRing: S.attackRing });
       st.draw(g, S.scoreTag);
-      threshold(g, t, S.thr || {});
+      threshold(g, tl, S.thr || {});
       roc(g, { t, curve: S.curve, dot: S.dot, points: S.points, guide: S.guide, corner: S.corner });
       tag.set({ bright: S.tagBright || 0 });
       code.set(Object.assign({ opacity: 0 }, S.code || {}, { t }));
