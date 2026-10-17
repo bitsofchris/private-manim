@@ -223,11 +223,10 @@
   const SEAM = {
     0: { flow: 2.0, stream: 1, pile0: 4, sheet: { ink: 1 }, write: 1 },
     1: { flow: 4.8, stream: 1, pile0: 4, sheet: { ink: 1 }, write: 1 },
-    // beats 1b and 2: the desk is hidden behind the two meters (its state there only has to match beat 3's start)
-    "1b": { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" }, scene: 0,
+    // beat 1b: the desk is hidden behind the two meters; its state there is beat 2's opening
+    "1b": { flow: 5.8, stream: 1, pile0: 4, sheet: { ink: 2 }, write: 0, scene: 0,
             meters: { a: 1, out: 0.55, und: 0.4, hero: 1 } },
-    2: { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" }, scene: 0,
-         meters: { a: 1, out: 1, und: 0.4, hero: 0 } },
+    2: { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" } },
     3: { flow: 24.8, stream: 1, pile0: 4, pileHero: 1, sheet: { ink: 2, dim: 1 }, human: { lean: -8, tilt: -6, face: "frown" } },
     4: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3, hero: 1 }, write: 1 },
     5: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3 }, write: 1,

@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- Harness ep 4, beat 2 (02_obsidian), master 5.50–10.00. Opens on DESK.SEAM["1b"], ends on DESK.SEAM[2].
-         "A while back I made a video about how I use Obsidian to keep agents working for me." The two
-         meters only: understood back to ink; on "keep agents working" the output bar shoots to the top
-         while understood stays put. No hero. -->
+         "A while back I made a video about how I use Obsidian to keep agents working for me." On "A while
+         back" the meters give way to the desk, agents still throwing; on "Obsidian" the stacking speeds up;
+         on "keep agents working" the human turns to the pile, face flat. No hero. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="cast/cast.js"></script>
@@ -32,24 +32,34 @@
   const { seg, lerp, E, SEAM } = DESK;
   const A = SEAM["1b"], B = SEAM[BEAT];
   const CUE = {
-    obsidian: 7.94 - T0,    /* "Obsidian" 2.44 */
-    keep: 8.55 - T0,        /* "keep" 3.05: the output bar shoots up */
-    working: 9.06 - T0,     /* "working" 3.56 */
+    back: 5.72 - T0,        /* "A while back" 0.22: straight back to the desk */
+    obsidian: 7.94 - T0,    /* "Obsidian" 2.44: the stacking speeds up */
+    keep: 8.55 - T0,        /* "keep" 3.05: the human turns to the pile */
+    working: 9.06 - T0,     /* "working" 3.56: face flat */
   };
   const HOLD_FROM = BEAT_SECONDS - 0.4;                          // 4.10
+  const V = (SEAM[1].flow - SEAM[0].flow) / (DESK.START["1b"] - DESK.START[1]);   // beat 1's rate, 1.12/s
+  // flow: beat 1's rate until "Obsidian", then a Hermite rush to B.flow landing at rest on HOLD_FROM
+  const T1 = CUE.obsidian, P1 = A.flow + V * T1, D = HOLD_FROM - T1;
+  function flowAt(t) {
+    if (t <= T1) return A.flow + V * t;
+    const s = Math.min(1, (t - T1) / D), m0 = V * D;
+    const h10 = s * s * s - 2 * s * s + s, h01 = -2 * s * s * s + 3 * s * s;
+    return P1 + h10 * m0 + h01 * (B.flow - P1);
+  }
   const root = document.getElementById("root");
   const scene = DESK.mount(root);
   ISO.guides(root);
   function render(t) {
-    // the desk stays hidden in beat 3's opening state; only the meters move
-    const creep = 0.06 * E.io(seg(t, 0, CUE.keep));               // output keeps creeping up while he talks
-    const shoot = E.io(seg(t, CUE.keep, CUE.working + 0.45));     // then shoots to the top
-    const meters = {
-      a: 1, und: A.meters.und,
-      out: lerp(A.meters.out + creep, B.meters.out, shoot),
-      hero: lerp(A.meters.hero, 0, E.io(seg(t, 0, 0.5))),        // understood back to ink, early
-    };
-    scene.draw(Object.assign({}, A, { meters }), T0 + Math.min(t, HOLD_FROM));
+    const swap = E.io(seg(t, CUE.back - 0.05, CUE.back + 0.3));  // meters out, desk in
+    const turn = E.io(seg(t, CUE.keep, CUE.keep + 0.7));
+    scene.draw({
+      flow: t >= HOLD_FROM ? B.flow : flowAt(t), stream: 1, pile0: 4,
+      sheet: { ink: 2 }, write: 0, wiggle: 0,
+      human: { tilt: lerp(0, B.human.tilt, turn), face: t >= CUE.working ? B.human.face : "smile" },
+      scene: swap,
+      meters: Object.assign({}, A.meters, { a: 1 - swap }),
+    }, T0 + t);
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);

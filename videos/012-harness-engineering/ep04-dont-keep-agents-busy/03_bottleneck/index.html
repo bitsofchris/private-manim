@@ -48,9 +48,6 @@
       human: { armR: 22, armL: 22, lean: lerp(0, B.human.lean, back), tilt: lerp(A.human.tilt, B.human.tilt, back),
                face: t < CUE.review ? A.human.face : B.human.face },
       write: 0, wiggle: 0, agents: { rest: 0 },
-      // back from the meters: the desk returns with the tall pile, the bars sink away (0-0.35 s)
-      scene: E.io(seg(t, 0, 0.35)),
-      meters: Object.assign({}, A.meters, { a: 1 - E.io(seg(t, 0, 0.35)) }),
     };
     scene.draw(S, T0 + t);                                        // master time
   }

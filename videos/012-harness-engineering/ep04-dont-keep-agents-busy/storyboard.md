@@ -47,7 +47,7 @@ VO is `script.md` (what Chris said), not reworded.
   struggling (beat 6), smiles at the end.
 - Order of the heroes: the understood bar (1b) → the pile (3) → the sheet (4) → the
   core line (5–6) → the sheet (7) → the blocked slot (8–9). One at a time.
-- **The meters** (beats 1b–2, Chris 10/17: the pile ran 13 s straight): two bars on a baseline, "output" (teal) at x 330 and "understood" (ink; magenta as hero) at x 690, base y 1000, full height 680. The desk is hidden while they're up.
+- **The meters** (beat 1b only, Chris 10/17: the pile ran 13 s straight): two bars on a baseline, "output" (teal) at x 330 and "understood" (ink; magenta as hero) at x 690, base y 1000, full height 680. The desk is hidden while they're up.
 - No other text on screen besides the meter labels, the code card and "today": captions carry the words.
 
 ## Layout
@@ -61,8 +61,8 @@ Caption band y 1100–1536 stays empty (`assemble.py` burns the captions).
 |---|---|---|---|---|
 | 1 | `01_hook` | The goal is not to keep agents busy. | Frame 0, already moving: both agents throwing pages onto a small pile beside the human, who writes on their sheet. The stream runs through the cut. | none |
 | 1b | `01b_meters` | It's to maximize the rate at which you can understand things. | The desk fades back; two bars take the stage on one baseline: "output" (teal, already tall) and "understood" (short). "understand things": the understood bar climbs and turns magenta. | the understood bar |
-| 2 | `02_obsidian` | A while back I made a video about how I use Obsidian to keep agents working for me. | The meters only. Understood back to ink. "keep agents working for me": the output bar shoots to the top; understood stays put. | none |
-| 3 | `03_bottleneck` | But the bottleneck has become me reviewing and understanding everything. | The bars sink and the desk returns with the tall pile (0.35 s). "bottleneck": the pile turns magenta and towers (top y ~310); the human leans back, frowns; the sheet goes muted. | the pile |
+| 2 | `02_obsidian` | A while back I made a video about how I use Obsidian to keep agents working for me. | "A while back": straight back to the desk, the agents still throwing (Chris 10/17). "Obsidian": the stacking speeds up, the pile climbs past the human's head. "keep agents working for me": the human turns to it, face flat. | none |
+| 3 | `03_bottleneck` | But the bottleneck has become me reviewing and understanding everything. | "bottleneck": the pile turns magenta and towers (top y ~310); the human leans back, frowns; the sheet goes muted. | the pile |
 | 4 | `04_two_speeds` | Now, sometimes it's useful to optimize for output, but other times you want to go slow so you can deliberately understand things. | "optimize for output": the pile goes teal, the stream runs. "go slow": the stream stops, the agents lower their arms, the pile slides off the desk and fades. "deliberately understand": the sheet comes back and turns magenta; the human writes. | the sheet |
 | 5 | `05_karpathy` | When I'm working through Karpathy's LLM lecture course, the agent writes the plumbing, but I write the core idea myself. That's the part I want to understand. | The code card drops in at the top; the sheet back to ink. "the agent writes the plumbing": agent A raises an arm and line 1 types in, teal. "I write the core idea myself": line 2 writes in left to right in magenta while the human writes. "the part I want to understand": line 2 pulses once. | the core line |
 | 6 | `06_fast_slow` | So go fast on the parts that teach you nothing, but go slow on the core part that you're meant to struggle with. | "go fast": line 1 flicks quickly through the three plumbing lines. "go slow on the core": an underline draws slowly under line 2. "struggle with": the human tilts their head, face flat, hand to head. | the core line |
