@@ -1,0 +1,337 @@
+[
+ {
+  "start": 0.51,
+  "end": 0.86,
+  "text": "The goal is"
+ },
+ {
+  "start": 0.92,
+  "end": 1.57,
+  "text": "not to keep"
+ },
+ {
+  "start": 1.63,
+  "end": 2.3,
+  "text": "agents busy."
+ },
+ {
+  "start": 2.68,
+  "end": 3.46,
+  "text": "It's to maximize"
+ },
+ {
+  "start": 3.52,
+  "end": 4.06,
+  "text": "the rate at"
+ },
+ {
+  "start": 4.12,
+  "end": 4.46,
+  "text": "which you can"
+ },
+ {
+  "start": 4.52,
+  "end": 5.22,
+  "text": "understand things."
+ },
+ {
+  "start": 5.72,
+  "end": 6.25,
+  "text": "A while back"
+ },
+ {
+  "start": 6.31,
+  "end": 6.58,
+  "text": "I made a"
+ },
+ {
+  "start": 6.64,
+  "end": 7.64,
+  "text": "video about how"
+ },
+ {
+  "start": 7.7,
+  "end": 8.32,
+  "text": "I use Obsidian"
+ },
+ {
+  "start": 8.38,
+  "end": 9.0,
+  "text": "to keep agents"
+ },
+ {
+  "start": 9.06,
+  "end": 9.72,
+  "text": "working for me."
+ },
+ {
+  "start": 10.14,
+  "end": 10.59,
+  "text": "But the bottleneck"
+ },
+ {
+  "start": 10.65,
+  "end": 11.24,
+  "text": "has become me"
+ },
+ {
+  "start": 11.3,
+  "end": 11.9,
+  "text": "reviewing and"
+ },
+ {
+  "start": 11.96,
+  "end": 12.86,
+  "text": "understanding everything."
+ },
+ {
+  "start": 13.3,
+  "end": 13.86,
+  "text": "Now, sometimes it's"
+ },
+ {
+  "start": 13.92,
+  "end": 14.5,
+  "text": "useful to optimize"
+ },
+ {
+  "start": 14.56,
+  "end": 14.92,
+  "text": "for output"
+ },
+ {
+  "start": 15.46,
+  "end": 15.92,
+  "text": "but other times"
+ },
+ {
+  "start": 15.98,
+  "end": 16.28,
+  "text": "you want to"
+ },
+ {
+  "start": 16.34,
+  "end": 17.08,
+  "text": "go slow so"
+ },
+ {
+  "start": 17.14,
+  "end": 17.72,
+  "text": "you can deliberately"
+ },
+ {
+  "start": 17.78,
+  "end": 18.58,
+  "text": "understand things."
+ },
+ {
+  "start": 19.08,
+  "end": 19.44,
+  "text": "When I'm working"
+ },
+ {
+  "start": 19.5,
+  "end": 20.6,
+  "text": "through Karpathy's LLM"
+ },
+ {
+  "start": 20.66,
+  "end": 21.3,
+  "text": "lecture course"
+ },
+ {
+  "start": 21.74,
+  "end": 22.28,
+  "text": "the agent writes"
+ },
+ {
+  "start": 22.34,
+  "end": 22.92,
+  "text": "the plumbing, but"
+ },
+ {
+  "start": 22.98,
+  "end": 23.52,
+  "text": "I write the"
+ },
+ {
+  "start": 23.58,
+  "end": 24.34,
+  "text": "core idea myself."
+ },
+ {
+  "start": 25.0,
+  "end": 25.56,
+  "text": "That's the part"
+ },
+ {
+  "start": 25.62,
+  "end": 25.84,
+  "text": "I want"
+ },
+ {
+  "start": 25.9,
+  "end": 26.46,
+  "text": "to understand."
+ },
+ {
+  "start": 27.0,
+  "end": 27.48,
+  "text": "So go fast"
+ },
+ {
+  "start": 27.54,
+  "end": 27.91,
+  "text": "on the parts"
+ },
+ {
+  "start": 27.97,
+  "end": 28.24,
+  "text": "that teach"
+ },
+ {
+  "start": 28.3,
+  "end": 28.64,
+  "text": "you nothing"
+ },
+ {
+  "start": 28.64,
+  "end": 29.44,
+  "text": "but go slow"
+ },
+ {
+  "start": 29.5,
+  "end": 30.44,
+  "text": "on the core"
+ },
+ {
+  "start": 30.5,
+  "end": 31.0,
+  "text": "part that you're"
+ },
+ {
+  "start": 31.06,
+  "end": 31.38,
+  "text": "meant to"
+ },
+ {
+  "start": 31.44,
+  "end": 31.94,
+  "text": "struggle with."
+ },
+ {
+  "start": 32.419,
+  "end": 33.0,
+  "text": "Now, AI can't"
+ },
+ {
+  "start": 33.06,
+  "end": 33.5,
+  "text": "make you smarter"
+ },
+ {
+  "start": 33.56,
+  "end": 34.02,
+  "text": "on its own."
+ },
+ {
+  "start": 34.08,
+  "end": 34.42,
+  "text": "You have to"
+ },
+ {
+  "start": 34.48,
+  "end": 35.0,
+  "text": "do that work."
+ },
+ {
+  "start": 35.5,
+  "end": 36.02,
+  "text": "Keeping them busy"
+ },
+ {
+  "start": 36.08,
+  "end": 37.08,
+  "text": "is not the goal."
+ },
+ {
+  "start": 37.26,
+  "end": 37.63999999999999,
+  "text": "Make sure you"
+ },
+ {
+  "start": 37.66,
+  "end": 38.04,
+  "text": "carve out"
+ },
+ {
+  "start": 38.1,
+  "end": 38.52,
+  "text": "time for your"
+ },
+ {
+  "start": 38.58,
+  "end": 39.08,
+  "text": "own growth."
+ },
+ {
+  "start": 39.62,
+  "end": 40.18,
+  "text": "Block a slot"
+ },
+ {
+  "start": 40.24,
+  "end": 40.56,
+  "text": "on your day"
+ },
+ {
+  "start": 40.62,
+  "end": 41.22,
+  "text": "where you do"
+ },
+ {
+  "start": 41.24,
+  "end": 41.95,
+  "text": "the work,"
+ },
+ {
+  "start": 42.02,
+  "end": 42.529999999999994,
+  "text": "where you write"
+ },
+ {
+  "start": 42.55,
+  "end": 43.34,
+  "text": "something by hand"
+ },
+ {
+  "start": 43.63,
+  "end": 44.28,
+  "text": "read it slowly"
+ },
+ {
+  "start": 44.34,
+  "end": 44.68,
+  "text": "do the deep"
+ },
+ {
+  "start": 44.74,
+  "end": 45.1,
+  "text": "thinking, and are"
+ },
+ {
+  "start": 45.16,
+  "end": 45.76,
+  "text": "not just trying"
+ },
+ {
+  "start": 45.82,
+  "end": 46.02,
+  "text": "to keep"
+ },
+ {
+  "start": 46.08,
+  "end": 46.7,
+  "text": "agents busy."
+ }
+]
