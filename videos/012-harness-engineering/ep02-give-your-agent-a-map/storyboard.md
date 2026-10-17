@@ -80,3 +80,24 @@ AGENTS.md map, from beat 1 and again 6–8.
 take has nothing more to say, and padding the VO would break "say each
 thing once". No *(if time)* beat: every beat is the one contrast or the
 one how.
+
+## Final beats (the contract; master = vo_final.wav seconds, 37.713 s)
+
+Approved cut (Chris, 10/17): no phrase cuts; loudnorm only (the take is
+already clean, −72 dB in pauses); pauses capped (`--max-gap 0.3`, 0.55 s
+kept before "Having", 0.45 s before "But"). 38.9 → 37.7 s.
+
+Each beat starts on `W.set(EP2.SEAM[n-1])` and ends still on
+`W.set(EP2.SEAM[n])` (`_kit/ep02.js`); beat 1 starts from `EP2.MAP` with
+the arrows drawing.
+
+| # | Folder | Start | Length | VO |
+|---|---|---|---|---|
+| 1 | `01_hook` | 0.00 | 3.25 | Context engineering is just giving your agent a map. |
+| 2 | `02_explore` | 3.25 | 5.45 | Humans search when they know what they're looking for, but we turn to agents when we're not really sure what we need, so they end up exploring more. |
+| 3 | `03_stuff` | 8.70 | 3.90 | The obvious fix is to stuff everything into the context window, but that'll backfire. |
+| 4 | `04_rot` | 12.60 | 3.95 | The model doesn't really find what you're looking for. This is known as context rot. |
+| 5 | `05_giant` | 16.55 | 7.25 | Having one giant AGENTS.md file does not work. When everything is important, nothing is. It can't cut through the noise to find what really matters. |
+| 6 | `06_map` | 23.80 | 6.15 | But by creating a simple map, a map in Markdown or an index in a database, you hold pointers to files. |
+| 7 | `07_navigate` | 29.95 | 3.45 | You concisely let the agent navigate where it needs to go. |
+| 8 | `08_drill` | 33.40 | 4.313 | The agent reads the map and drills into only what it needs to, retrieving that part. |

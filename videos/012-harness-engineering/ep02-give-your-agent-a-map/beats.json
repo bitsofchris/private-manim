@@ -1,0 +1,36 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 3.25
+  },
+  {
+   "clip": "media/hf/02_explore.mp4",
+   "end": 5.45
+  },
+  {
+   "clip": "media/hf/03_stuff.mp4",
+   "end": 3.9
+  },
+  {
+   "clip": "media/hf/04_rot.mp4",
+   "end": 3.95
+  },
+  {
+   "clip": "media/hf/05_giant.mp4",
+   "end": 7.25
+  },
+  {
+   "clip": "media/hf/06_map.mp4",
+   "end": 6.15
+  },
+  {
+   "clip": "media/hf/07_navigate.mp4",
+   "end": 3.45
+  },
+  {
+   "clip": "media/hf/08_drill.mp4",
+   "end": 4.313
+  }
+ ]
+}

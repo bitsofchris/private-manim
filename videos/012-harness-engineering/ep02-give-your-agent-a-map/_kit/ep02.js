@@ -37,9 +37,9 @@
   const fileIndex = (c, r) => r * GRID.cols + c;
   const AUTH = fileIndex(0, 2);                        // the file the agent drills into
   const TARGET_FILES = TARGETS.map((t) => fileIndex(t.c, t.r));
-  // Where auth.md sits once retrieved into the window (beside the card is full;
-  // it lands over the card's lower right, the card shrinks left to make room).
-  const AUTH_IN_WIN = { x: 700, y: 870 };
+  // Where auth.md sits once retrieved into the window: top right, beside the
+  // card, which shrinks left to scale 0.72 to make room.
+  const AUTH_IN_WIN = { x: 752, y: 700 };
 
   // ---- defaults: the empty world (beat 2's opening) ----
   const EMPTY = {
@@ -61,6 +61,30 @@
   };
   // The canonical frame: the map in the window, arrows out to its three files.
   const MAP = { files: "ghost", card: 1, arrows: [1, 1, 1] };
+
+  // The stuffed window (beat 3): every file piled into the window, fixed
+  // offsets. SPILL is the same pile after "backfire": it bulges past the
+  // window's edges (still inside the safe area).
+  const PILE = Array.from({ length: 16 }, (_, i) => [WIN.x + 20 + (i % 4) * 118 + ((i * 37) % 23), WIN.y + 30 + Math.floor(i / 4) * 78 + ((i * 53) % 29)]);
+  const SPILL = PILE.map(([x, y], i) => {
+    const c = i % 4, r = Math.floor(i / 4);
+    return [x + (c - 1.5) * 34 + ((i * 29) % 17) - 8, y + (r - 1.5) * 40 - (r === 0 ? 40 : 0) + ((i * 41) % 13)];
+  });
+
+  // Seam states: SEAM[n] is the last frame of beat n and the first of beat
+  // n + 1. Beats start from W.set(SEAM[n - 1]) and end on W.set(SEAM[n]).
+  const SEAM = {
+    1: Object.assign({}, MAP, { cardHero: 1 }),
+    2: { win: 0.3, labelAlpha: 0.3, point: 1, trail: 1, trailHero: 1,
+         agent: { x: AGENT_BESIDE.x }, human: { alpha: 1, armR: 140, tilt: -6 } },
+    3: { fileXY: SPILL, winHero: 1, agent: { lean: -8, blink: 1 } },
+    4: { fileXY: SPILL, rot: 1, label: "context rot", labelHero: 1, agent: { lean: -8, blink: 1 } },
+    5: { files: "muted", page: 1, pageTop: 250, pageLines: 22, pageMute: 1, agent: { tilt: 10 } },
+    6: Object.assign({}, MAP, { cardHero: 1 }),
+    7: Object.assign({}, MAP, { cardHero: 1, agent: { armR: 115, tilt: -8 } }),
+  };
+  // Beat 8's end: the card shrinks left (scale 0.72, anchored top-left) and
+  // auth.md sits at AUTH_IN_WIN, open, magenta, beside it.
 
   function build(root, o = {}) {
     const svg = CAST.layer(root);
@@ -263,5 +287,5 @@
   }
 
   window.EP2 = { GRID, cell, LANES, WIN, CARD, LABEL, AGENT, HUMAN, AGENT_BESIDE, MAP_LINES, TARGETS, AUTH, TARGET_FILES,
-                 AUTH_IN_WIN, fileIndex, EMPTY, MAP, build, mixHex, lerp, clamp01 };
+                 AUTH_IN_WIN, fileIndex, EMPTY, MAP, PILE, SPILL, SEAM, build, mixHex, lerp, clamp01 };
 })();
