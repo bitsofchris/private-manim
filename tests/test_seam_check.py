@@ -56,3 +56,16 @@ class Verdict(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Touching(unittest.TestCase):
+    PAIRS = [("01_a", "02_b"), ("02_b", "03_c"), ("03_c", "04_d")]
+
+    def test_no_beats_keeps_every_cut(self):
+        self.assertEqual(SC.touching(self.PAIRS, []), self.PAIRS)
+
+    def test_a_beat_keeps_its_cut_in_and_out(self):
+        self.assertEqual(SC.touching(self.PAIRS, ["02_b"]), [("01_a", "02_b"), ("02_b", "03_c")])
+
+    def test_first_beat_has_only_a_cut_out(self):
+        self.assertEqual(SC.touching(self.PAIRS, ["01_a"]), [("01_a", "02_b")])

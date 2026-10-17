@@ -2,12 +2,14 @@
 """Check every cut of a HyperFrames Short: beat N's last frame against beat N+1's first.
 
 Usage (from the video folder, the one holding beats.json):
-    uv run --no-sync python ../../tools/seam_check.py beats.json [--out media/seams]
+    uv run --no-sync python ../../tools/seam_check.py beats.json [--out media/seams] [--beat 03_x ...]
 
 For each pair of neighbouring beats whose clip is `media/hf/<beat>.mp4` and
 whose folder `<beat>/index.html` exists, it takes a `hyperframes snapshot`
 of the end of beat N and of t = 0 of beat N+1, pixel-diffs them, and writes
-a side-by-side PNG per cut. Snapshots, not mp4 frames: h264 noise around
+a side-by-side PNG per cut. `--beat NAME` limits it to the cuts into and
+out of that beat, so a beat agent checks its own cuts as soon as a
+neighbour's folder exists, without snapshotting the whole Short. Snapshots, not mp4 frames: h264 noise around
 text reads as differences up to ~60/255 where there are none (ep03).
 Manim beats are skipped. Snapshots run with `--describe false`, so no frame
 is ever sent to a vision API.
@@ -40,6 +42,11 @@ def hf_pairs(beats: dict, base: Path) -> list[tuple[str, str]]:
     return [(a, b) for a, b in zip(names, names[1:]) if a and b]
 
 
+def touching(pairs: list[tuple[str, str]], beats: list[str]) -> list[tuple[str, str]]:
+    """Only the cuts into or out of the named beats (all cuts when none are named)."""
+    return [p for p in pairs if not beats or p[0] in beats or p[1] in beats]
+
+
 def duration(html: str) -> float:
     """The composition's length, from the root's data-duration."""
     m = DURATION.search(html)
@@ -66,10 +73,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("beats")
     ap.add_argument("--out", default="media/seams")
     ap.add_argument("--tol", type=int, default=8, help="largest allowed per-pixel difference (0-255)")
+    ap.add_argument("--beat", action="append", default=[],
+                    help="check only the cuts into and out of this beat folder (repeatable)")
     args = ap.parse_args(argv)
     path = Path(args.beats).resolve()
     base, out = path.parent, (path.parent / args.out)
-    pairs = hf_pairs(json.loads(path.read_text()), base)
+    pairs = touching(hf_pairs(json.loads(path.read_text()), base), args.beat)
     fails = 0
     for a, b in pairs:
         end = duration((base / a / "index.html").read_text()) - 0.02
