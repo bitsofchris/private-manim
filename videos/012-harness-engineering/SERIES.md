@@ -73,7 +73,7 @@ harnesses daily. This repo, OpenAugi over his vault, and AugiCraft
 
 | Act | Episodes | The viewer leaves able to say |
 |---|---|---|
-| 1. What and why | 1–2 | Agent = model + harness. Changing the harness alone can move results a lot, because the model only acts on what the harness shows it. |
+| 1. What and why | 1 (2 dropped 10/17) | A harness is everything but the model: context, tools, memory and the loop. When the agent fails, ask which piece was missing. |
 | 2. Build yours | 3–7 (with 3a–3c) | My repo's knowledge base, checks and cleanup are a harness. My agent needs a map, not a search box. Context grows by small edits. Skills are saved procedures. The check is the pipe that matters most, and whoever owns it owns the loop. |
 | 3. The frontier | 8–10 | An agent can improve its own harness from its traces, and more harness isn't better. Many agents can build on one shared record. Language feedback can sometimes beat RL, which tells me when to edit context and when to train, and the human still supplies the reframes. |
 
@@ -140,7 +140,10 @@ highlights. **New 10/13** marks an episode added from the vault pass.
   agent makes a mistake, you take the time to engineer a solution such
   that the agent never makes that mistake again".
 
-### 2. Same model, different harness
+### 2. Same model, different harness (dropped 2026-10-17, Chris)
+
+Not made. Kept below for the research only; the folder was deleted (it's in git history before this commit).
+
 
 - **Question:** Does the harness matter as much as the model?
 - **Answer (revised 10/17):** a model does its best work in the harness
@@ -639,7 +642,7 @@ record.
 | # | Folder | Working title | State |
 |---|---|---|---|
 | 1 | `ep01-what-is-a-harness/` | What is an agent harness? | scripted · key points (Short) |
-| 2 | `ep02-same-model-different-harness/` | Same model, different harness | scripted · key points (Short + companion); Astra hook verified |
+| 2 | — | Same model, different harness | **dropped 10/17** |
 | 3 | `ep03-harness-101/` | Harness 101: build your own (tries KB Short D) | scripted · key points (Short + companion) |
 | 3a | (plan: `agents/plans/agentic-kb-shorts.md`) | The four layers an LLM wiki needs | scripted (agreed), pending read-aloud |
 | 3b | (plan) | Your system needs a janitor | scripted, needs one line in your words |

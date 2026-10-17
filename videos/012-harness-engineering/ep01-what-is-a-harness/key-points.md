@@ -68,7 +68,7 @@ Companion: Next time your agent gets something wrong, don't just correct it in c
 
 ## Bridge
 
-"So the harness is everything except the model. But how much can it really move the result? Next: same model, different harness, and a 45-point swing."
+"Those are the four parts. Next: how to build yours, starting with your repo. That's Harness 101." (Ep 2 was dropped 10/17.)
 
 ## Extra material (for a long cut or a written companion)
 
