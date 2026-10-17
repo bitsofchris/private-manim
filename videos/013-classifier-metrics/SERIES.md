@@ -119,7 +119,24 @@ The attacks need a second accent color, and the user dots stay teal at
 rest. The engine is decided per beat at storyboard time: HyperFrames by
 default, Manim if the ROC/PR plots need real plotted axes.
 
-## The arc
+## Context in every episode (Chris, 10/17)
+
+Each Short is found on its own, so eps 2–5 say what the model is, the
+same way ep 1 does:
+
+- **VO:** splice ep 1's own line in right after VO line 1 (never before
+  it; the answer comes first). Both clips are from the one take, so tone
+  and level match:
+  - `vo_context_short.m4a` (1.65 s): "It's a prompt injection detector."
+    Eps 3–5.
+  - `vo_context_long.m4a` (4.15 s): "…10,000 requests come in, but only
+    50 are attacks." Ep 2, which opens on "50 attacks" with no setup.
+  Ep 4's raw take is 59.8 s, so it pays for the splice with a cut (the
+  random-pair line first).
+- **On screen:** frame 0 of every episode labels the score line with a
+  short tag, "prompt-injection detector · 10,000 requests · 50 attacks",
+  so muted viewers have it too.
+
 
 | # | Folder | Question (viewer's words) | The viewer leaves able to say |
 |---|---|---|---|
