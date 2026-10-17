@@ -6,8 +6,9 @@ in Chris's own words on 2026-10-17: what a harness is, why the agent
 needs a map, the four layers of an agentic knowledge base, and why the
 goal is your understanding rather than busy agents.
 **When to use:** at the start of any session on this series. Pick the
-next unticked episode from the checklist and build it through
-`agents/runbook.md` from step 3, in its folder.
+next unticked episode from the checklist and paste `EPISODE_PROMPT.md`
+(with `FOLDER` set) into a fresh session; it runs `agents/runbook.md` in
+that folder.
 **How it works:** there is no script. What Chris said is the VO. The
 full take is `~/Creating/012-harness-engineering-series.m4a` (492 s),
 transcribed in `TRANSCRIPT.md`. Each episode folder has its cut
@@ -36,6 +37,27 @@ harness", "agent harness"; "context engineering", "context engineering
 for agents"; "llm wiki" (results are about Karpathy's LLM Wiki); "is ai
 making us dumber". Backup title for 3: `Claude Code Best Practices: A
 Self-Improving Repo`.
+
+## The look (locked 2026-10-17)
+
+`ENGINE: hyperframes` for every episode. The cast kit is
+`videos/_shared/web/cast/cast.js`; its rules are `agents/style.md`
+"Agents and knowledge bases", and the sign-off frame is
+`prototypes/hyperframes/cast/`. One stick-figure body: the human has a
+round head, the agent a rectangle head with 1 and 0 eyes; the janitor is
+an agent with a broom. Teal is what agents write, magenta is the one thing
+the beat points at, ink is people and structure.
+
+| # | Scene (frame 0 already moving) | The hero moves |
+|---|---|---|
+| 1 | The model blob with its four pipes (`CAST.blob`), the human beside it | one pipe per part as it's named: context, tools, memory, the loop; on "which piece was missing" the four light in turn |
+| 2 | An agent at a long column of files, then the map card (`CAST.mapCard`) whose arrows point to just three | the stuffed window, then the map, then the one file it drills into |
+| 3 | The building in cross-section: agents writing pages in the basement, the human at one board upstairs, the glass case on the stairs, the janitor between floors | each layer as it's named, in the opener's order; then the janitor's broom on the conflicting rule |
+| 4 | The human at a desk while agents stream finished pages at them | the pile (the bottleneck), then the human writing the core alone while an agent does the plumbing |
+
+Code beat: none is planned. Each session decides in its storyboard
+whether one line on screen earns its place (Ep 2 could show a short
+`AGENTS.md` map).
 
 ## What was cut from the take
 
