@@ -44,6 +44,7 @@
   const TX = X(T);
   const MID_X = 507;                      // centre of the safe width (65–950)
   const USER_R = 1.7, ATK_R = 6.5;
+  const TAG_X = 80;   // the tag's second line runs ~850 px; at x 120 (ep 1) it crossed the right safe edge, 950
   const LEDGER = { n: 10000, attacks: 50, users: 9950, tp: 40, fp: 60, fn: 10, tn: 9890, flagged: 100,
                    recall: "80%", precision: "40%" };
 
@@ -109,9 +110,9 @@
   // Frame-0 tag (SERIES.md "Context in every episode"), on from frame 0 to the end.
   // o.bright 0..1 lights line 1; o.atk 0..1 lights "50 attacks".
   function makeTag(root) {
-    const l1 = el(root, `left:${X0}px;top:240px;font-size:60px;line-height:66px;color:${rgba(COL.dim)};`,
+    const l1 = el(root, `left:${TAG_X}px;top:240px;font-size:60px;line-height:66px;color:${rgba(COL.dim)};`,
       "prompt-injection detector");
-    const l2 = el(root, `left:${X0}px;top:306px;font-size:60px;line-height:66px;color:${rgba(COL.dim)};`,
+    const l2 = el(root, `left:${TAG_X}px;top:306px;font-size:60px;line-height:66px;color:${rgba(COL.dim)};`,
       `10,000 requests · <span style="color:${rgba(COL.attack)}">50 attacks</span>`);
     const n = l2.querySelector("span");
     return {
