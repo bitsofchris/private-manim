@@ -1,0 +1,43 @@
+00:00.001-00:02.720
+You can change what your classifier does without retraining it.
+
+00:02.720-00:04.720
+It's a prompt injection detector.
+
+00:04.720-00:06.400
+You just move this line.
+
+00:06.400-00:09.920
+An ROC curve shows every place that you could put it.
+
+00:09.680-00:12.880
+The model doesn't say yes or no, it gives every request a score.
+
+00:12.880-00:15.920
+And this threshold is what turns that score into a yes.
+
+00:15.920-00:18.480
+You slide it to the left and we can catch every attack.
+
+00:18.480-00:20.960
+But we end up blocking most of our users.
+
+00:20.660-00:25.380
+If you slide it to the right, almost nobody gets blocked, but half of the attacks get through.
+
+00:25.380-00:29.779
+Every threshold gives a new confusion matrix, and each one is a point.
+
+00:29.779-00:33.700
+The true positive rate up, false positive rate across.
+
+00:33.820-00:35.820
+Top left is the sweet spot.
+
+00:38.860-00:41.100
+Now ROC is for picking thresholds.
+
+00:41.100-00:47.180
+You decide whether you'd rather avoid false positives or get all the false positives depending on the problem you're solving
+
+
