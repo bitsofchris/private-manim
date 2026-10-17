@@ -37,9 +37,9 @@
   const fileIndex = (c, r) => r * GRID.cols + c;
   const AUTH = fileIndex(0, 2);                        // the file the agent drills into
   const TARGET_FILES = TARGETS.map((t) => fileIndex(t.c, t.r));
-  // Where auth.md sits once retrieved into the window: top right, beside the
+  // Where auth.md sits once retrieved into the window: lower right, beside the
   // card, which shrinks left to scale 0.72 to make room.
-  const AUTH_IN_WIN = { x: 752, y: 700 };
+  const AUTH_IN_WIN = { x: 752, y: 880 };
 
   // ---- defaults: the empty world (beat 2's opening) ----
   const EMPTY = {
