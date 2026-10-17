@@ -15,7 +15,7 @@
 //   axis           y 590       score 0 at x 120, 1 at x 920
 //   attack pile    y 602–673   gold, below the axis
 //   axis labels    y 690–756
-//   middle         y 790–1320  bars (beats 1–3), cost cards (4), target + readout (5–7)
+//   middle         y 790–1320  bars (beats 1–3), formula (2b), cost cards (4), target + readout (5–7)
 (function () {
   const D = window.SCORE_DOTS;
   const lerp = (a, b, u) => a + (b - a) * u;
@@ -250,6 +250,34 @@
     };
   }
 
+  // ---- The formula (beat 2b): F1 = 2·P·R / (P + R), then the example plugged in ----
+  // Two stacked fractions centred at FORM.cx; "F1 =" left of the first, "= 0.18" right of the second.
+  const FORM = { cx: 470, labY: 800, aY: 975, bY: 1205, ruleW: 330 };
+  function makeFormula(root) {
+    const t = (css, html) => el(root, `text-align:center;color:${rgba(COL.text)};` + css, html);
+    const frac = (y, num, den, fs, w) => {
+      const lh = Math.round(fs * 1.1);
+      return [t(`left:${FORM.cx - 300}px;width:600px;top:${y - lh - 8}px;font-size:${fs}px;line-height:${lh}px;`, num),
+              el(root, `left:${FORM.cx - w / 2}px;top:${y - 3}px;width:${w}px;height:6px;border-radius:3px;background:${rgba(COL.text)};`),
+              t(`left:${FORM.cx - 300}px;width:600px;top:${y + 10}px;font-size:${fs}px;line-height:${lh}px;`, den)];
+    };
+    const lab = t(`left:${MID_X - 440}px;width:880px;top:${FORM.labY}px;font-size:60px;line-height:66px;color:${rgba(COL.dim)};`, "harmonic mean");
+    const f1 = el(root, `left:65px;width:215px;text-align:right;top:${FORM.aY - 40}px;font-size:72px;line-height:80px;`, "F1 =");
+    const A = frac(FORM.aY, "2 · P · R", "P + R", 72, FORM.ruleW);
+    const B = frac(FORM.bY, "2 · 0.9 · 0.1", "0.9 + 0.1", 64, 440);
+    const res = el(root, `left:${FORM.cx + 235}px;top:${FORM.bY - 36}px;font-size:64px;line-height:72px;`, "= 0.18");
+    return {
+      // o: {opacity, plug 0..1 (the example row; the hero passes from "F1" to its 0.18)}
+      set(o = {}) {
+        const op = o.opacity == null ? 0 : o.opacity, pl = o.plug || 0;
+        [lab, ...A].forEach((e) => show(e, op));
+        show(f1, op); f1.style.color = rgba(mixc(COL.hero, COL.text, pl));
+        B.forEach((e) => show(e, op * pl));
+        show(res, op * pl); res.style.color = rgba(COL.hero);
+      },
+    };
+  }
+
   function guides(root) {
     if (!/[?&]guides/.test(location.search)) return;
     [[0, 0, 1080, 230], [0, 1536, 1080, 384], [950, 230, 130, 1306], [0, 230, 65, 1306]].forEach(([l, t, w, h]) => {
@@ -270,13 +298,14 @@
   //   bars {opacity, p, r, f1, pText, rText, f1Text, mean, pulseP, pulseR, f1Pulse}
   //   cards {opacity, lit:{fp, fn}}
   //   target {opacity, tokens, rate, rule, ruleHero, rulePulse, readout, caughtPulse}
+  //   formula {opacity, plug}   (beat 2b only; off everywhere else)
   const BARS_EX = { opacity: 1, p: LEDGER.ex.p, r: LEDGER.ex.r, f1: LEDGER.ex.f1,
                     pText: "0.9", rText: "0.1", f1Text: "F1 0.18", mean: 0 };
   const BARS_A = { opacity: 1, p: LEDGER.a.p, r: LEDGER.a.r, f1: LEDGER.a.f1,
                    pText: "40%", rText: "80%", f1Text: "F1 0.53", mean: 0 };
   function mount(root) {
     const tag = makeTag(root); makeAxisLabels(root);
-    const bars = makeBars(root), cards = makeCards(root), target = makeTarget(root);
+    const bars = makeBars(root), cards = makeCards(root), target = makeTarget(root), formula = makeFormula(root);
     guides(root);
     function draw(g, S) {
       const thrS = S.thrS == null ? T_A : S.thrS;
@@ -289,9 +318,9 @@
                 fpRing: S.fpRing, fnRing: S.fnRing });
       threshold(g, S.thr || 0, thrS, S.thrHero || 0, S.thrPulse || 0);
       tag.set({ bright: S.tagBright || 0 });
-      bars.set(B); cards.set(C); target.set(T);
+      bars.set(B); cards.set(C); target.set(T); formula.set(S.formula || {});
     }
-    return { draw, tag, bars, cards, target };
+    return { draw, tag, bars, cards, target, formula };
   }
 
   const TARGET_ON = { opacity: 1, tokens: 1, rate: 1, rule: 1, ruleHero: 1, readout: 1 };
@@ -318,6 +347,6 @@
                      back: gsap.parseEase("back.out(1.4)"), sine: gsap.parseEase("sine.inOut") });
 
   window.SC = { D, COL, LEDGER, W, H, X0, X1, X, AXIS_Y, MID_X, T_A, T_END, BARS, BY, CARDS, TGT, BARS_EX, BARS_A,
-                counts, ground, axis, dots, threshold, makeTag, makeAxisLabels, makeBars, makeCards, makeTarget,
+                counts, ground, axis, dots, threshold, makeTag, makeAxisLabels, makeBars, makeCards, makeTarget, makeFormula, FORM,
                 guides, mount, SEAM, E, lerp, clamp01, seg, hash, pulse, rgba, mixc };
 })();
