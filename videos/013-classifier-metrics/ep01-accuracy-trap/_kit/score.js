@@ -330,8 +330,9 @@
   const SEAM = {
     // end of beat 1 = start of beat 2: the hook at rest
     1: { counter: { value: LEDGER.accNever, caught: 0 } },
-    // end of beat 2: compact counter + code card, output shown, no line lit
-    2: { counter: { value: LEDGER.accNever, caught: 0, compact: 1 }, code: { opacity: 1, lit: [0, 0, 0, 0], out: 1 } },
+    // end of beat 2 ("only 50 are attacks"): the hook at rest again. The code card
+    // (makeCode) left the Short with Chris's second cut; it stays in the kit unused.
+    2: { counter: { value: LEDGER.accNever, caught: 0 } },
     // end of beat 3: Model A — threshold in (hero), flagged lit, counter 99.3% / 40
     3: { thr: 1, flag: 1, counter: { value: LEDGER.accA, caught: 40 } },
     // end of beat 4: box up, tp + fp in their cells, fp lit; threshold dimmed
