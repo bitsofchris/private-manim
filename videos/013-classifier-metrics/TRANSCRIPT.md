@@ -1,6 +1,6 @@
 # 013-classifier metrics
 
-The full take, as transcribed. Each episode's cut and its text are in `epNN-*/script.md`. The line at 2:09 ("This model detects prompt injection behavior…") sits between episodes 2 and 3 and belongs to neither yet; it is saved as `vo_extra_line.m4a` (129.20–137.10 s).
+The full take, as transcribed. Each episode's cut and its text are in `epNN-*/script.md`. The line at 2:09 ("This model detects prompt injection behavior…") sits between episodes 2 and 3 and is left out of every episode (Chris, 10/17).
 
 [00:00:00] [00:00:01] [00:00:02] Episode one: [00:00:03] Confusion [00:00:04] Matrix Explained. [00:00:05] [00:00:06] [00:00:07] This [00:00:08] model is [00:00:09] 99.5% [00:00:10] accurate, but it's never [00:00:11] caught a single [00:00:12] attack [00:00:13] [00:00:14] It's a prompt [00:00:15] injection detector. [00:00:16] 10,000 requests come [00:00:17] in, but only 50 are [00:00:18] attacks. It [00:00:19] never flags anything, [00:00:20] and you're still right [00:00:21] 99.5% of the [00:00:22] time. [00:00:23] Now, here's your real model. [00:00:24] It flags 100 [00:00:25] requests and catches 40 [00:00:26] of the 50 attacks, [00:00:27] but its [00:00:28] accuracy goes down to [00:00:29] [00:00:30] 99.3%.[00:00:31]
 
