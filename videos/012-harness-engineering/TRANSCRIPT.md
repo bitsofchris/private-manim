@@ -1,49 +1,61 @@
-# Harness Engineering: the take
+# 012-harness-engineering-series
 
-**Name:** harness-engineering-transcript
-**Description:** What Chris said in the series recording, with timestamps,
-as he pasted it on 2026-10-17. This is the VO; there is no script.
-**When to use:** cutting each episode's `vo_raw.m4a` and writing its
-`script.md` (`agents/series.md` step 4). The cut lists are in `SERIES.md`.
-**How it works:** timestamps are into the recording file. Episode
-announcements ("Episode one", "Episode three", "Episode 3A", "Episode
-four") are the recording's labels; `SERIES.md` maps them to the published
-episodes.
+[00:00:00] ​
 
----
+[00:00:05] [00:00:06] [00:00:07] Episode [00:00:08] one: What is an agent [00:00:09] harness? [00:00:10] [00:00:11] An agent harness [00:00:12] is everything except [00:00:13] the model. It [00:00:14] decides what the model [00:00:15] sees, what it can do, [00:00:16] what it remembers, and when it's [00:00:17] [00:00:18] done. Context is what goes [00:00:19] into the model on this [00:00:20] turn. It's your instructions, [00:00:21] the files it opened, the last [00:00:22] error
 
-[00:00:05] Episode one: What is an agent harness? An agent harness is everything except the model. It decides what the model sees, what it can do, what it remembers, and when it's done. Context is what goes into the model on this turn. It's your instructions, the files it opened, the last error
+[00:00:22] tools are what it [00:00:23] can touch. Read a [00:00:24] file, run a command, search [00:00:25] the [00:00:26] web. Memory is what [00:00:27] carries over when the session [00:00:28] ends. Notes, [00:00:29] rules, like an agent's [00:00:30] MD, they're loaded back in [00:00:31] next time. [00:00:32] And the loop runs the [00:00:33] model, runs the [00:00:34] tool, feeds the result [00:00:35] back, and checks the [00:00:36] work.
 
-[00:00:22] tools are what it can touch. Read a file, run a command, search the web. Memory is what carries over when the session ends. Notes, rules, like an agent's MD, they're loaded back in next time. And the loop runs the model, runs the tool, feeds the result back, and checks the work.
+[00:00:36] Try again [00:00:37] or stop, and it can [00:00:38] even save rules to [00:00:39] recursively [00:00:40] [00:00:41] self-improve.
 
-[00:00:36] Try again or stop, and it can even save rules to recursively self-improve.
+[00:00:41] The model [00:00:42] can be the same The [00:00:43] harness is why one [00:00:44] agent fixes your bug and [00:00:45] another might keep going in [00:00:46] circles. So when [00:00:47] your agent fails, don't [00:00:48] blame the model at [00:00:49] first.
 
-[00:00:41] The model can be the same The harness is why one agent fixes your bug and another might keep going in circles. So when your agent fails, don't blame the model at first.
+[00:00:49] Ask [00:00:50] which piece was missing, [00:00:51] the context, the tool, [00:00:52] the memory, or the [00:00:53] [00:00:54] [00:00:55] [00:00:56] check
 
-[00:00:49] Ask which piece was missing, the context, the tool, the memory, or the check
+[00:00:56] [00:00:57] [00:00:58] [00:00:59] [00:01:00] [00:01:01] Episode three, [00:01:02] Harness [00:01:03] 101 [00:01:04] [00:01:05] Agents [00:01:06] need good [00:01:07] primitives[00:01:08] [00:01:09] [00:01:10] [00:01:11] [00:01:12] [00:01:13] [00:01:14]
 
-[00:00:56] Episode three, Harness 101 Agents need good primitives
+[00:01:14] Every project [00:01:15] can be a [00:01:16] recursively self-improving [00:01:17] loop for [00:01:18] agents[00:01:19] [00:01:20] [00:01:21] [00:01:22] [00:01:23] [00:01:24] [00:01:25] [00:01:26] [00:01:27] [00:01:28] [00:01:29] [00:01:30] [00:01:31] [00:01:32] [00:01:33] [00:01:34] [00:01:35] [00:01:36] [00:01:37] [00:01:38] [00:01:39] [00:01:40] [00:01:41] [00:01:42] [00:01:43] [00:01:44] [00:01:45] [00:01:46] [00:01:47] [00:01:48] [00:01:49] [00:01:50] [00:01:51] [00:01:52] [00:01:53] [00:01:54] [00:01:55] [00:01:56] [00:01:57] [00:01:58] [00:01:59]
 
-[00:01:14] Every project can be a recursively self-improving loop for agents
+[00:01:59] To get the most out [00:02:00] of agents, you need to [00:02:01] continually [00:02:02] self-improve. And the way [00:02:03] to do that is to [00:02:04] have good primitives and [00:02:05] let your agents do [00:02:06] things [00:02:07] [00:02:08] [00:02:09] Anytime they do [00:02:10] something wrong or could do it [00:02:11] better, it needs to be saved [00:02:12] in your [00:02:13] repository, and you can do it [00:02:14] in one of three ways. [00:02:15] [00:02:16] Keep everything as a [00:02:17] file, your [00:02:18] plan, your rules, your notes.[00:02:19]
 
-[00:01:59] To get the most out of agents, you need to continually self-improve. And the way to do that is to have good primitives and let your agents do things Anytime they do something wrong or could do it better, it needs to be saved in your repository, and you can do it in one of three ways. Keep everything as a file, your plan, your rules, your notes.
+[00:02:19] The agents will read them [00:02:20] every session and [00:02:21] keep your agent's MD [00:02:22] short [00:02:23] and have a map that [00:02:24] points to the rest of the [00:02:25] notes[00:02:26] [00:02:27] [00:02:28] [00:02:29] [00:02:30] [00:02:31] [00:02:32] [00:02:33] [00:02:34] [00:02:35] [00:02:36] [00:02:37] [00:02:38]
 
-[00:02:19] The agents will read them every session and keep your agent's MD short and have a map that points to the rest of the notes
+[00:02:38] And then [00:02:39] add a test or a [00:02:40] linter that will fail out [00:02:41] loud so you can quickly fix [00:02:42] things. [00:02:43] This [00:02:44] is how I structure all of my [00:02:45] repos these days. I have a [00:02:46] map in my [00:02:47] agents.md, a [00:02:48] CLI for most of the [00:02:49] steps[00:02:50] [00:02:51] [00:02:52] [00:02:53]
 
-[00:02:38] And then add a test or a linter that will fail out loud so you can quickly fix things. This is how I structure all of my repos these days. I have a map in my agents.md, a CLI for most of the steps
+[00:02:53] [00:02:54] And a quick janitor [00:02:55] script that runs to make sure [00:02:56] there's consistency among [00:02:57] my notes and rules[00:02:58] [00:02:59] [00:03:00] [00:03:01]
 
-[00:02:53] And a quick janitor script that runs to make sure there's consistency among my notes and rules
+[00:03:01] Let [00:03:02] your agents recursively [00:03:03] self-improve by giving them [00:03:04] access to these [00:03:05] primitives so they can continually get [00:03:06] [00:03:07] [00:03:08] [00:03:09] [00:03:10] better
 
-[00:03:01] Let your agents recursively self-improve by giving them access to these primitives so they can continually get better
+[00:03:10] Episode [00:03:11] 3A: The four layers [00:03:12] an LLM wiki needs. [00:03:13] A [00:03:14] good agentic knowledge [00:03:15] base or LLM wiki [00:03:16] needs four things. [00:03:17] [00:03:18] First is [00:03:19] the agent layer. This is a [00:03:20] place where agents write [00:03:21] for other agents. [00:03:22] Includes [00:03:23] details that are needed to [00:03:24] resume a task later, like [00:03:25] hashes, branches, certain [00:03:26] commits. You [00:03:27] never have to read this [00:03:28] part.
 
-[00:03:10] Episode 3A: The four layers an LLM wiki needs. A good agentic knowledge base or LLM wiki needs four things. First is the agent layer. This is a place where agents write for other agents. Includes details that are needed to resume a task later, like hashes, branches, certain commits. You never have to read this part.
+[00:03:28] [00:03:29] Then two, you need the [00:03:30] human layer. This is [00:03:31] the clean, distilled [00:03:32] view that links out to the [00:03:33] more detailed agent [00:03:34] notes but allows [00:03:35] you to get a quick [00:03:36] overview like a dashboard [00:03:37] or a Kanban board or a [00:03:38] map of the [00:03:39] underlying information. [00:03:40] [00:03:41] Then three is the [00:03:42] curated layer. [00:03:43] This is the agent [00:03:44] context and rules that the [00:03:45] humans need [00:03:46] visible.
 
-[00:03:28] Then two, you need the human layer. This is the clean, distilled view that links out to the more detailed agent notes but allows you to get a quick overview like a dashboard or a Kanban board or a map of the underlying information. Then three is the curated layer. This is the agent context and rules that the humans need visible.
+[00:03:46] This is the [00:03:47] slowly changing context that [00:03:48] you need to maintain [00:03:49] carefully to keep things up to [00:03:50] date. [00:03:51] And fourth, you need a [00:03:52] janitor. As you iterate and [00:03:53] change the system, [00:03:54] something has to keep it [00:03:55] clean and remove any [00:03:56] inconsistencies. [00:03:57] With all four layers, [00:03:58] you can set up any [00:03:59] repository as a strong [00:04:00] agentic knowledge [00:04:01] [00:04:02] [00:04:03] [00:04:04] [00:04:05] base
 
-[00:03:46] This is the slowly changing context that you need to maintain carefully to keep things up to date. And fourth, you need a janitor. As you iterate and change the system, something has to keep it clean and remove any inconsistencies. With all four layers, you can set up any repository as a strong agentic knowledge base
+[00:04:05] [00:04:06] Episode four: [00:04:07] Give your agents a [00:04:08] map. [00:04:09] [00:04:10] Context [00:04:11] engineering is just giving your [00:04:12] agent a map. [00:04:13] Today, agents are [00:04:14] using [00:04:15] a magnifying glass to [00:04:16] search. Oh my God, that's [00:04:17] fucking stupid. [00:04:18] [00:04:19] Humans search when they know what [00:04:20] they're looking for, but we [00:04:21] turn to agents when we're not [00:04:22] really sure what we need, so they [00:04:23] end up exploring more.[00:04:24]
 
-[00:04:05] Episode four: Give your agents a map. Context engineering is just giving your agent a map. Today, agents are using a magnifying glass to search. Oh my God, that's fucking stupid. Humans search when they know what they're looking for, but we turn to agents when we're not really sure what we need, so they end up exploring more.
+[00:04:24] The [00:04:25] obvious fix is to stuff [00:04:26] everything into the [00:04:27] context window, but that'll [00:04:28] backfire. The [00:04:29] model doesn't really find what you're [00:04:30] looking for. [00:04:31] This is known as context [00:04:32] rot. [00:04:33] Having [00:04:34] one giant [00:04:35] agents.md file does [00:04:36] not work. When everything [00:04:37] is important, nothing is. [00:04:38] It can't cut through the [00:04:39] noise to find what really [00:04:40] matters.[00:04:41]
 
-[00:04:24] The obvious fix is to stuff everything into the context window, but that'll backfire. The model doesn't really find what you're looking for. This is known as context rot. Having one giant agents.md file does not work. When everything is important, nothing is. It can't cut through the noise to find what really matters.
+[00:04:41] But by creating a [00:04:42] simple map, a map [00:04:43] in Markdown or an [00:04:44] index in a [00:04:45] database, you hold [00:04:46] pointers to [00:04:47] files. You [00:04:48] concisely let the [00:04:49] agent [00:04:50] navigate where it needs to go. the [00:04:51] agent reads the map and [00:04:52] drills into only what it [00:04:53] needs to, [00:04:54] retrieving that [00:04:55] [00:04:56] [00:04:57] [00:04:58] [00:04:59] [00:05:00] [00:05:01] [00:05:02] part
 
-[00:04:41] But by creating a simple map, a map in Markdown or an index in a database, you hold pointers to files. You concisely let the agent navigate where it needs to go. the agent reads the map and drills into only what it needs to, retrieving that part
+[00:05:02] [00:05:03] This is just [00:05:04] me reading the four [00:05:05] rules for agentic [00:05:06] knowledge bases. [00:05:07] [00:05:08] Four rules for [00:05:09] agentic knowledge [00:05:10] bases. [00:05:11] A good LLM [00:05:12] wiki needs four layers: [00:05:13] a place where [00:05:14] agents can write for [00:05:15] agents, a clean [00:05:16] surface for humans [00:05:17] to read, [00:05:18] a curated layer [00:05:19] of slowly [00:05:20] changing context and rules [00:05:21] that you review, [00:05:22] and a janitor [00:05:23] that keeps it all up to [00:05:24] date and consistent[00:05:25] [00:05:26] [00:05:27] [00:05:28]
+
+[00:05:28] The agent [00:05:29] layer is written [00:05:30] by agents for other [00:05:31] agents. [00:05:32] Agents can be as verbose [00:05:33] as they need to be. [00:05:34] This can include [00:05:35] details that they need to resume [00:05:36] a task later, like [00:05:37] hashes, branches, [00:05:38] commits, table names, et [00:05:39] cetera. The point [00:05:40] is to save [00:05:41] context for layers to make it [00:05:42] easy to reproduce [00:05:43] and resume. [00:05:44] You [00:05:45] never need to read it or go [00:05:46] here.
+
+[00:05:46] This is the agent's [00:05:47] own memory of what's worth [00:05:48] keeping. [00:05:49] The [00:05:50] human layer [00:05:51] is the clean, [00:05:52] distilled view that you [00:05:53] link out and that [00:05:54] goes to these [00:05:55] detailed agent notes when [00:05:56] necessary. It's the [00:05:57] interface for [00:05:58] humans to interact with all the [00:05:59] data. Think of a [00:06:00] dashboard or a Kanban [00:06:01] board. This is the [00:06:02] map that you use [00:06:03] to navigate.[00:06:04]
+
+[00:06:04] [00:06:05] It's helpful to keep [00:06:06] track of what's going on, [00:06:07] maintain your context, and [00:06:08] see the big picture. [00:06:09] It's less about [00:06:10] reviewing what the agent's up to and [00:06:11] more about managing your [00:06:12] own context[00:06:13] [00:06:14] [00:06:15] [00:06:16]
+
+[00:06:16] The curated [00:06:17] layer, this is the [00:06:18] slowly changing context that [00:06:19] you need to handle with [00:06:20] care. These are the [00:06:21] things you maintain [00:06:22] carefully, keep [00:06:23] it visible, and [00:06:24] edit to keep accurate. [00:06:25] These are the skills [00:06:26] and rules, the [00:06:27] conventions of your [00:06:28] repo, the things that are slowly [00:06:29] improving over time. [00:06:30] It's the map of [00:06:31] the territory, the [00:06:32] sources that you pull data [00:06:33] from, [00:06:34] the bigger [00:06:35] threads and problems, [00:06:36] the slowly changing [00:06:37] dimensions like the [00:06:38] values, the objective, the [00:06:39] OKRs[00:06:40] [00:06:41] [00:06:42] [00:06:43] [00:06:44] [00:06:45]
+
+[00:06:45] And then you [00:06:46] need the janitor. As [00:06:47] you iterate and change the [00:06:48] system, something has to [00:06:49] keep it clean and [00:06:50] consistent. This looks to [00:06:51] catch conflicting [00:06:52] rules in your agent [00:06:53] nodes before they [00:06:54] spread. It keeps the [00:06:55] sources of truth up to [00:06:56] date. It makes [00:06:57] sure the maps and, and [00:06:58] other files are linking [00:06:59] correctly. [00:07:00] And it [00:07:01] cleans up old material [00:07:02] so the human layer stays [00:07:03] useful, it keeps the [00:07:04] curated layer up to date, [00:07:05] and there's no [00:07:06] inconsistencies in the [00:07:07] agent layer.[00:07:08]
+
+[00:07:08] With all four [00:07:09] layers, you can build a [00:07:10] strong agentic knowledge [00:07:11] base for research, [00:07:12] personal growth, project work, or [00:07:13] anything else. [00:07:14] You can apply this to [00:07:15] the [00:07:16] [00:07:17] repo
+
+[00:07:17] [00:07:18] [00:07:19] The goal is not [00:07:20] to keep agents [00:07:21] busy. It's to [00:07:22] maximize the rate at [00:07:23] which you can understand [00:07:24] things. A [00:07:25] while back, I made a [00:07:26] video about how I [00:07:27] use Obsidian to keep [00:07:28] agents working for me, [00:07:29] but the [00:07:30] bottleneck has become me [00:07:31] reviewing and [00:07:32] understanding everything. [00:07:33] Now, sometimes it's useful to [00:07:34] optimize for output, [00:07:35] but other times you [00:07:36] wanna go slow so you [00:07:37] can deliberately [00:07:38] understand things.[00:07:39]
+
+[00:07:39] When I'm working through [00:07:40] Karpathy's LLM [00:07:41] lecture course, [00:07:42] the agent writes the [00:07:43] plumbing, but I write the [00:07:44] core idea myself. [00:07:45] That's the [00:07:46] part I wanna [00:07:47] understand. [00:07:48] So go fast on the [00:07:49] parts that teach you nothing, but [00:07:50] go slow [00:07:51] on the core [00:07:52] part that you're meant to struggle [00:07:53] with. Now, [00:07:54] AI can't make you smarter [00:07:55] on its own.
+
+[00:07:55] You have to do [00:07:56] that work. [00:07:57] [00:07:58] Keeping them busy [00:07:59] is not the goal. [00:08:00] Make sure you carve out [00:08:01] time for your own [00:08:02] growth. Block a [00:08:03] slot on your day where [00:08:04] you do the work, [00:08:05] where you write something by [00:08:06] hand, read it [00:08:07] slowly, do the deep thinking, [00:08:08] and are not just trying to [00:08:09] keep agents [00:08:10] [00:08:11] [00:08:12] busy
+
+/Users/chris/Creating/012-harness-engineering-series.m4a
