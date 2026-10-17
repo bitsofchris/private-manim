@@ -136,6 +136,29 @@ clearly helps that video, and say why in its storyboard. The code is
 | a big tensor (a batch, an embedding) | at most about 4 × 4 numbers, then `⋯`, with the shape saying the size |
 | a row and its geometry | the row's colour on its arrow from the origin on the plane, so "rows are where input directions land" is visible |
 
+## Agents and knowledge bases (HyperFrames Shorts)
+
+From the Harness Engineering series (`videos/012-harness-engineering/`,
+look locked by Chris 2026-10-17). Line-drawn people and flat outlined
+props on the house background. The code is `videos/_shared/web/cast/cast.js`
+(linked into a beat as `cast/`, after `iso/`); start a beat from
+`prototypes/hyperframes/cast/index.html`.
+
+| When you want | Use |
+|---|---|
+| a person | `CAST.human`: the quiz stick figure, round head, dot eyes, a face (`smile` / `flat` / `frown`) |
+| an agent | `CAST.agent`: the same body with a rectangle head and `1` and `0` for eyes, the only teal on it; never a robot icon or a new body |
+| cleanup, the janitor | `CAST.janitor`: an agent with a broom, not a new character |
+| what agents write | `CAST.page`: a teal page, a hash on top, dense lines; it reads as "not for you" |
+| what the human reads | `CAST.board`: one ink board of cards (the human layer) |
+| rules, the map, goals | `CAST.vitrine`: the glass case; make one item the hero with `CAST.hero(part.items.map, true)` |
+| an index that points | `CAST.mapCard`: a short card with arrows to teal files; dashed muted files are the ones it does not point to |
+| the model and its harness | `CAST.blob`: the magenta blob with four teal pipes in `CAST.PIPES` order (context, tools, memory, loop); light one pipe per beat |
+| motion | poses as numbers in `render(t)` (`CAST.pose`: arm angles from straight down, `lean`, `tilt`); every move lands on its word and stops before the hold |
+
+Colour jobs stay the house ones: teal is what agents write and data,
+magenta is the one thing the beat points at, ink is people and structure.
+
 ## Two-hero rule
 
 The rule is `AGENTS.md` hard rule 2: one magenta hero on screen at a time. If everything is hero, nothing is. The rest is teal (data), muted (construction), or FG_DIM (labels).

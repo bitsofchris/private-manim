@@ -36,6 +36,7 @@ add a test under `tests/`, update this table. Retired parts go to
 | `build_block` (transformer diagram) | `transformer.py` | Embed → [Attention → ⊕ → FFN → ⊕] N× → Linear, named parts; `GPT_SOURCE` + `MARK_LINES` | 006, 007, 008 |
 | `label`, `op_box`, `flow_arrow`, `add_node` | `transformer.py` | phone-size label, diagram box, teal arrow, ⊕ node | 006–008 |
 | 2D number plane kit (HyperFrames) | `web/vec/vec.js`, linked as `vec/` | camera `view(A, B, u)`; `floor`, `axes` (ticks from the view's extents), `guides`, `arrow` (thin), `line`, `puck`, `spot` (landing ring), `lattice` (a matrix's grid); row-vector `map` / `basisTo` / `comb`; DOM `label` / `place`, `vecCard`, `grid` + `brackets` (matrix notation), `cell`, `hbox`, `codeCard`, `code`. Starter: `prototypes/hyperframes/vec-plane/`. Tests: `tests/test_vec_kit.py` | ep01, ep03, ep04 (each shipped with its own copy) |
+| Agent and knowledge-base cast (HyperFrames) | `web/cast/cast.js`, linked as `cast/` | SVG `layer`; figures `human`, `agent` (1 and 0 eyes), `janitor` (agent + broom) with `pose` / `hand` / `face` / `blink`; props `page` (agent notes), `board` (human layer), `vitrine` (curated case: `items.rules / map / goal`), `mapCard`, `blob` (the model + four `PIPES`); `hero(part, on)`, `place`, `show`. Starter: `prototypes/hyperframes/cast/`. Tests: `tests/test_cast_kit.py` | 012 (built for the series, 2026-10-17) |
 
 ## Local, candidates for promotion (second use promotes)
 

@@ -27,6 +27,7 @@ clean").
 | HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes; `stack-styles/`, one beat in ten visual styles plus the house-style control |
 | A whole Short in HyperFrames, and its isometric kit | `videos/009-transformer-short-iso/` | `videos/_shared/web/iso/iso.js` (world, tray, card, slabs, palette), `00_layout/` (the canonical frame), `BRIEF.md` (the beat contract) |
 | The Linear Algebra for AI Engineers series (2D plane look) | `videos/002-linear-algebra-basics/` | `SERIES.md` (arc, checklist, series rules), `EPISODE_PROMPT.md` (one session per episode), the plane kit is shared: `videos/_shared/web/vec/vec.js`, starter `prototypes/hyperframes/vec-plane/` |
+| Line-drawn agents and knowledge bases (human, agent with 1 and 0 eyes, janitor, layer props) | `videos/_shared/web/cast/cast.js` | the cast kit; starter and sign-off frame `prototypes/hyperframes/cast/`; rules in `agents/style.md` "Agents and knowledge bases" |
 | The Harness Engineering series (four Shorts: the harness, the map, the four-layer knowledge base, not keeping agents busy) | `videos/012-harness-engineering/` | `SERIES.md` (the episodes, what was cut, checklist), `TRANSCRIPT.md` (the full take), each `epNN/script.md` (what was said, cut times); the dropped plan is in `_archive/` |
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |

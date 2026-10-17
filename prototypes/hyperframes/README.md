@@ -21,6 +21,7 @@ motion must be a tween or a pure function of time (no clocks, no random).
 | `ironies/` | Bainbridge's "Ironies of Automation" | one operator, one desk: AUTO takes the levers, the hard knot lands in their lap, the 1983 panel becomes a 2026 chat, a SKILL bar drains until "YOUR TURN" | 31 s |
 | `stack-styles/` | which visual styles are possible | one beat (the transformer stack) in ten styles plus the house-style control; its own README | 5 s each |
 | `vec-plane/` | the starting file for a beat on the shared 2D plane kit | ep03's canonical frame rebuilt on `videos/_shared/web/vec/vec.js`: a camera view, e1 and e2 swinging to the rows of W, landing spots, W in the series' matrix notation, a code card | 2 s |
+| `cast/` | the starting file for a beat on the shared cast kit, and the look's sign-off frame | `videos/_shared/web/cast/cast.js`: the human, the agent and the janitor on one floor, the three layer props, the model with its four pipes, the map card | 2 s |
 
 ```
 cd prototypes/hyperframes/quiz
