@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_slide_left: 013 ep03 beat 5. Opens on SC.SEAM[4], ends on SC.SEAM[5]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.55" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.55;
+  const MASTER = 15.60;
+  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const CUE = {
+    slide: 0.38,   /* "slide"    (15.98; voiced onset 16.06) the line starts left */
+    every: 1.62,   /* "every"    (17.22) the line has landed on 0.20 */
+    attack: 1.82,  /* "attack"   (17.42) TP 50 + every attack ringed */
+    most: 3.44,    /* "most"     (19.04) FP 5,055 + the user pile */
+    users: 3.98,   /* "users"    (19.58) */
+  };
+  const STILL = 4.25;   // S(t >= STILL) is SEAM[5] itself
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
+  const K = SC.mount(root);
+  function S(t) {
+    if (t <= 0) return SEAM[4];
+    if (t >= STILL) return SEAM[5];
+    const th = lerp(0.7, 0.2, E.io(seg(t, CUE.slide - 0.02, CUE.every)));   // 1.26 s, eased
+    const tp = pulse(t, CUE.every - 0.1, 1.0);                              // peaks on "attack"
+    const fp = pulse(t, CUE.most - 0.14, STILL - (CUE.most - 0.14));        // peaks between "most" and "users"
+    return { t: th, code: { opacity: 1 }, boxHi: { tp, fp }, attackRing: tp, userPulse: fp };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

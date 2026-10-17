@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 07_each_point: "Every threshold gives a new confusion matrix, and each one is a point.
+         The true positive rate up, false positive rate across."
+         The line steps through the five stops, the box recounting at each; each stop leaves a
+         magenta point on the plot (a ring bursts and the TP / FP cells it is made of flash);
+         then the axes are read: TPR up (TP cell, guide, an arrow up the y-axis), FPR across
+         (FP cell, an arrow along the x-axis). Opens SEAM[6], ends SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.5;
+  const MASTER = 24.35;
+  const CUE = {                 // beat-local s (master − 24.35), checked on the RMS envelope
+    every: 0.25,                /* "Every" 24.60 */
+    threshold: 0.45,            /* "threshold" 24.80 */
+    matrix: 2.09,               /* "matrix" 26.44 */
+    each: 2.65,                 /* "each" 27.00 */
+    point: 3.52,                /* "point" 27.82 (the p burst at ~27.87) */
+    tru: 4.35,                  /* "true" 28.70 ("The" 28.60, burst 28.62; vowel 28.80) */
+    up: 5.31,                   /* "up" 29.66 */
+    fals: 5.85,                 /* "false" 30.20 (f from ~30.12, vowel 30.27; words.json 30.34) */
+    across: 6.81,               /* "across" 31.16 */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM, STOPS, PX, PY, PLOT, COL, rgba, box } = SC, E = SC.E();
+  const K = SC.mount(root);
+
+  // The line's stops: [from, to, start, end] legs, eased; held between.
+  const LEGS = [
+    [0.85, 0.20, 0.20, 0.95],   // "Every threshold": far left first (lands ~"threshold" end)
+    [0.20, 0.40, 1.15, 1.75],   // "gives a new"
+    [0.40, 0.55, 1.95, 2.55],   // "confusion matrix" (held through "each")
+    [0.55, 0.70, 2.80, 3.40],
+    [0.70, 0.85, 3.85, 4.40],   // all five on before "true"
+  ];
+  // When each stop's point pops (index into STOPS: 0.20, 0.40, 0.55, 0.70, 0.85).
+  // The current stop pops as the line sits on it; the two passed on the way pop on "point".
+  const POP = [CUE.point + 0.03, CUE.point + 0.18, CUE.each, 3.43, 4.43];
+  const POP_W = 0.18;           // a: 0 -> 1
+  const BURST_W = 0.55;         // the ring burst after it
+  const CUR = { 2: true, 3: true, 4: true };   // pops at the line's own stop flash TP + FP
+
+  const STILL = 7.2;            // still from here to the end (SEAM[7])
+
+  function thrAt(t) {
+    let v = LEGS[0][0];
+    for (const [a, b, s, e] of LEGS) { if (t >= s) v = lerp(a, b, E.io(seg(t, s, e))); }
+    return v;
+  }
+  const hump = (t, a, b, c, d) => Math.min(E.io(seg(t, a, b)), 1 - E.io(seg(t, c, d)));
+
+  function S(t) {
+    if (t >= STILL) t = BEAT_SECONDS;      // the last 0.3 s is SEAM[7] exactly
+    const th = thrAt(t);
+    const points = STOPS.map((s, k) => ({ t: s, a: E.out(seg(t, POP[k], POP[k] + POP_W)) }));
+    // the curve: dim in the first 0.5 s, back to rest in the last ~0.6 s
+    const dim = 0.7 * E.io(seg(t, 0, 0.5)) * (1 - E.io(seg(t, 6.6, 7.2)));
+    // the ROC dot pulses with each pop at its own stop
+    let dp = 0;
+    [2, 3, 4].forEach((k) => { dp = Math.max(dp, pulse(t, POP[k], 0.5)); });
+    // the box: the cells the new point is made of (TP up, FP across) flash as it lands;
+    // then TP with "true positive rate up", FP with "false positive rate across"
+    let tp = 0, fp = 0;
+    [2, 3, 4].forEach((k) => { const p = 0.7 * pulse(t, POP[k], 0.55); tp = Math.max(tp, p); fp = Math.max(fp, p); });
+    tp = Math.max(tp, hump(t, CUE.tru - 0.05, CUE.tru + 0.25, CUE.up + 0.05, CUE.up + 0.45));
+    fp = Math.max(fp, hump(t, CUE.fals, CUE.fals + 0.3, CUE.across + 0.05, CUE.across + 0.35));
+    const tprL = hump(t, CUE.tru - 0.05, CUE.tru + 0.25, CUE.up + 0.05, CUE.up + 0.45);
+    const fprL = hump(t, CUE.fals, CUE.fals + 0.3, CUE.across + 0.05, CUE.across + 0.35);
+    const guide = hump(t, CUE.tru, CUE.tru + 0.35, 6.6, 7.0);
+    const o = { t: th, code: { opacity: 1 }, points, curve: { dim }, dot: { pulse: dp },
+                boxHi: { tp, fp }, rocLabels: { tpr: tprL, fpr: fprL }, guide };
+    return o;
+  }
+
+  // ---- local helpers (drawn after K.draw) ----
+  // 1. The pop: a magenta ring bursting out of each point as it lands, and the point swelling.
+  function bursts(t) {
+    STOPS.forEach((s, k) => {
+      const u = seg(t, POP[k], POP[k] + BURST_W);
+      if (u <= 0 || u >= 1) return;
+      const q = box(s), x = PX(q.fpr), y = PY(q.tpr);
+      g.strokeStyle = rgba(COL.hero, 1 - u); g.lineWidth = 5;
+      g.beginPath(); g.arc(x, y, 12 + 34 * E.out(u), 0, Math.PI * 2); g.stroke();
+      const sw = Math.sin(Math.PI * Math.min(1, u * 1.6));
+      if (!CUR[k] && sw > 0) {            // passed stops have no ROC dot over them: swell the point itself
+        g.fillStyle = rgba(COL.hero, 1);
+        g.beginPath(); g.arc(x, y, 10 + 6 * sw, 0, Math.PI * 2); g.fill();
+      }
+    });
+  }
+  // 2. Reading the axes: a white arrow grows up the y-axis ("up") and along the x-axis ("across").
+  function arrow(x0, y0, x1, y1, a) {
+    if (a <= 0) return;
+    g.strokeStyle = rgba(COL.text, a); g.fillStyle = rgba(COL.text, a); g.lineWidth = 6; g.lineCap = "round";
+    g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke();
+    const ang = Math.atan2(y1 - y0, x1 - x0), h = 22;
+    g.beginPath(); g.moveTo(x1 + Math.cos(ang) * 6, y1 + Math.sin(ang) * 6);
+    g.lineTo(x1 - Math.cos(ang - 0.5) * h, y1 - Math.sin(ang - 0.5) * h);
+    g.lineTo(x1 - Math.cos(ang + 0.5) * h, y1 - Math.sin(ang + 0.5) * h); g.closePath(); g.fill();
+  }
+  function axisArrows(t) {
+    const up = E.io(seg(t, CUE.tru + 0.1, CUE.up)), upA = 1 - E.io(seg(t, CUE.up + 0.1, CUE.up + 0.5));
+    if (up > 0 && upA > 0) arrow(PLOT.x0 - 16, PLOT.y0, PLOT.x0 - 16, lerp(PLOT.y0, PLOT.y1 + 45, up), upA);   // clear of the "1" label
+    const ac = E.io(seg(t, CUE.fals + 0.1, CUE.across)), acA = 1 - E.io(seg(t, CUE.across + 0.05, CUE.across + 0.35));
+    if (ac > 0 && acA > 0) arrow(PLOT.x0, PLOT.y0, lerp(PLOT.x0, PLOT.x1, ac), PLOT.y0, acA);                  // on the axis, above "FPR"
+  }
+
+  function render(t) {
+    const tt = t >= STILL ? BEAT_SECONDS : t;
+    K.draw(g, S(tt));
+    bursts(tt); axisArrows(tt);
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

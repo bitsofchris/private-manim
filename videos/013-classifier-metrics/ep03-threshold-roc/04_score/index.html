@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_score: line still at 0.70; a real attack gets its score tag, the line pulses, the code line fades in. SEAM[3] -> SEAM[4]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.95" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.95;
+  const MASTER = 9.65;
+  const CUE = {
+    request: 1.73,   /* "request"   11.38 */
+    a: 2.11,         /* "a"         11.76 */
+    score: 2.27,     /* "score."    11.92 */
+    threshold: 3.61, /* "threshold" 13.26 */
+    turns: 4.37,     /* "turns"     14.02 */
+    score2: 4.89,    /* "score"     14.54 */
+    yes: 5.47,       /* "yes."      15.12 */
+  };
+  const STILL = 5.65;                    // last 0.30 s still, equal to SEAM[4]
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
+  const K = SC.mount(root);
+  function S(t) {
+    if (t <= 0) return SEAM[3];
+    if (t >= STILL) return SEAM[4];
+    // "every request": the user pile brightens once
+    const up = pulse(t, CUE.request - 0.2, 0.8);
+    // "a score": the tagged attack's own score; off before the still
+    const tagA = E.out(seg(t, CUE.a - 0.05, CUE.score + 0.1)) * (1 - E.io(seg(t, CUE.yes - 0.1, STILL)));
+    // "this threshold": one pulse, peak on the word
+    const thrPulse = pulse(t, CUE.threshold - 0.15, 0.6);
+    // "turns that score into a yes": the code line fades in, "> 0.70" lit; off after "yes"
+    const codeOn = E.io(seg(t, CUE.turns - 0.07, CUE.score2));
+    const lit = codeOn * (1 - E.io(seg(t, CUE.yes, STILL)));
+    return {
+      t: SC.T_BOX,
+      userPulse: up,
+      scoreTag: { i: SC.TAG_I, a: tagA },
+      thr: { pulse: thrPulse, dim: 0.6 * lit },
+      dot: { dim: 0.6 * lit },
+      code: { opacity: codeOn, hero: lit },
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_slide_right: 013 ep03 beat 6. Opens on SC.SEAM[5], ends on SC.SEAM[6]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.20" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.20;
+  const MASTER = 20.15;
+  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const CUE = {
+    slide: 0.47,   /* "slide"    (20.62; voiced onset 20.72) the line starts right */
+    right: 1.05,   /* "right"    (21.20; onset 21.00) */
+    nobody: 1.59,  /* "nobody"   (21.74) FP 28 */
+    blocked: 2.19, /* "blocked"  (22.34) */
+    half: 2.67,    /* "half"     (22.82) FN 29 + the unflagged gold dots ringed */
+    attacks: 3.19, /* "attacks"  (23.34) */
+    through: 3.79, /* "through"  (23.94) */
+  };
+  const STILL = 3.90;   // S(t >= STILL) is SEAM[6] itself
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
+  const K = SC.mount(root);
+  function S(t) {
+    if (t <= 0) return SEAM[5];
+    if (t >= STILL) return SEAM[6];
+    const th = lerp(0.2, 0.85, E.io(seg(t, CUE.slide - 0.02, CUE.nobody + 0.11)));   // 1.25 s, eased, lands on "nobody"
+    const fp = pulse(t, CUE.nobody, CUE.half - 0.1 - CUE.nobody);           // "nobody gets blocked"
+    // "half of the attacks": FN and the misses ring up, hold through "attacks", gone by STILL
+    const miss = seg(t, CUE.half - 0.05, CUE.half + 0.25) * (1 - E.io(seg(t, CUE.through - 0.25, STILL)));
+    return { t: th, code: { opacity: 1 }, boxHi: { fp, fn: miss }, missRing: miss };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

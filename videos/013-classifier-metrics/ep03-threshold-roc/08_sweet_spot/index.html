@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 08_sweet_spot: "Top left is the sweet spot."
+         On "Top left" the corner (FPR 0, TPR 1) glows and takes the hero; the line, its dot and
+         the five points go to rest. TPR and FPR swell once (top = TPR 1, left = FPR 0).
+         Opens SEAM[7], ends SEAM[8]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1.9" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 1.9;
+  const MASTER = 31.85;
+  const CUE = {                 // beat-local s (master − 31.85), checked on the RMS envelope
+    top: 0.34,                  /* "Top" 32.19 on the envelope (words.json 32.30) */
+    left: 0.53,                 /* "left" 32.38 */
+    sweet: 0.99,                /* "sweet" 32.84 */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, SEAM, STOPS } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const STILL = 1.5;            // still from here (SEAM[8])
+
+  function S(t) {
+    if (t >= STILL) t = BEAT_SECONDS;
+    const c = E.io(seg(t, CUE.top - 0.04, CUE.top + 0.66));       // corner in, >= 0.6 s, lands before "sweet"
+    const r = E.io(seg(t, CUE.top - 0.04, CUE.top + 0.56));       // hero group to rest alongside
+    const lab = Math.min(E.io(seg(t, CUE.top - 0.04, CUE.top + 0.26)), 1 - E.io(seg(t, CUE.sweet - 0.1, CUE.sweet + 0.3)));
+    return { t: 0.85, code: { opacity: 1 }, points: STOPS.map((s) => ({ t: s, a: 1, dim: r })),
+             thr: { dim: r }, dot: { dim: r }, corner: c, rocLabels: { tpr: 0.6 * lab, fpr: 0.6 * lab } };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
