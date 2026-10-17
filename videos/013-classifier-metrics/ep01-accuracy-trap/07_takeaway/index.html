@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 07_takeaway (last beat of the Short): "When positives are rare, we don't want to read the
+         accuracy. We want to look at the confusion matrix." The gold dots ring on "rare"; on
+         "read the accuracy" the box returns to rest (split 0.22 -> 0.5), every cell labelled,
+         nothing lit. Still from ~4.6 s. SEAM[6] -> SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.25" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.25;
+  const MASTER = 42.55;
+  const CUE = {
+    positives: 0.31,  /* "positives" 42.86 */
+    rare: 1.31,       /* "rare"      43.86 — the ring peaks */
+    read: 2.79,       /* "read"      45.34 — "of 9,930" out */
+    accuracy: 3.11,   /* "accuracy"  45.66 — the box starts back to rest */
+    confusion: 4.57,  /* "confusion" 47.12 — box at rest, hold */
+  };
+  const RING = [CUE.rare - 0.6, 1.2];                  // pulse(start, width): peaks on "rare"
+  const SUB_OUT = [CUE.read, CUE.read + 0.3];
+  const UNSWELL = [CUE.accuracy + 0.1, CUE.accuracy + 1.3]; // split 0.22 -> 0.5
+  const UNLIT = [UNSWELL[0], UNSWELL[0] + 0.6];        // lit.tn -> 0
+  const LABELS_IN = [UNSWELL[1] - 0.3, UNSWELL[1] + 0.15]; // tp/fp/fn labels + row labels, once the cells are wide
+  const STILL = LABELS_IN[1];
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
+  const K = SC.mount(root);
+  function S(t) {
+    if (t >= STILL) return SEAM[7];
+    const ring = pulse(t, RING[0], RING[1]);
+    if (t <= SUB_OUT[0]) return ring > 0 ? Object.assign({}, SEAM[6], { attackRing: ring }) : SEAM[6];
+    const sp = lerp(0.22, 0.5, E.io(seg(t, UNSWELL[0], UNSWELL[1])));
+    const lab = seg(t, LABELS_IN[0], LABELS_IN[1]);
+    const sub = 1 - seg(t, SUB_OUT[0], SUB_OUT[1]);
+    return {
+      thr: 1, thrDim: 1, flag: 1, counter: { opacity: 0 }, fly: { tp: 1, fp: 1, fn: 1, tn: 1 }, attackRing: ring,
+      box: { opacity: 1, split: { cx: sp, cy: sp }, show: { tp: lab, fp: lab, fn: lab, tn: 1 },
+             lit: { tn: 1 - E.io(seg(t, UNLIT[0], UNLIT[1])) }, sub: { tn: ["of 9,930", sub] }, rowOpacity: lab },
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

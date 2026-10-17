@@ -150,15 +150,16 @@
       lab, val, sub,
       set(o = {}) {
         const k = o.compact || 0, op = o.opacity == null ? 1 : o.opacity;
-        show(lab, op * (1 - k));
+        show(lab, op * (1 - seg(k, 0, 0.15)));   // gone before the value lifts into its place
         show(val, op);
-        val.style.transform = `translateY(${-90 * k}px) scale(${lerp(1, 0.62, k)})`;
+        const kv = seg(k, 0.15, 1);
+        val.style.transform = `translateY(${-90 * kv}px) scale(${lerp(1, 0.62, kv)})`;
         if (o.value != null) val.textContent = o.value;
         val.style.color = rgba(o.valueColor || COL.text);
         const caught = o.caught == null ? 0 : o.caught, p = o.pulseCaught || 0;
         sub.innerHTML = `attacks caught <span style="color:${rgba(mixc(COL.attack, COL.text, p))}">${caught} / 50</span>`;
         sub.style.transform = `scale(${1 + 0.12 * p})`;
-        show(sub, op * (1 - k) * (o.subOpacity == null ? 1 : o.subOpacity));
+        show(sub, op * (1 - seg(k, 0, 0.15)) * (o.subOpacity == null ? 1 : o.subOpacity));
       },
     };
   }
@@ -217,7 +218,7 @@
     const pad = c.h < 120 ? 10 : 16, rx = c.x + pad, ry = c.y + Math.max(pad, top), rw = c.w - 2 * pad;
     const rh = Math.max(12, c.y + c.h - pad - ry);
     const big = group === "tp" || group === "fn";
-    const pitch = Math.min(big ? 15 : 6, Math.sqrt((rw * rh) / n));
+    const pitch = Math.min(big ? 15 : group === "fp" ? 10 : 6, Math.sqrt((rw * rh) / n));   // fp: 60 dots, not a line
     const cols = Math.max(1, Math.floor(rw / pitch));
     const col = rank % cols, row = Math.floor(rank / cols);
     return [rx + pitch / 2 + col * pitch, ry + pitch / 2 + row * pitch];

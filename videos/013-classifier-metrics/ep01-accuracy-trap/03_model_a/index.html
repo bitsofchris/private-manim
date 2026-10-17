@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_model_a: "Now, here's a real model. It flags 100 requests and catches 40 of the 50 attacks,
+         but its accuracy goes down to 99.3%." Opens on SC.SEAM[2], ends on SC.SEAM[3]. Hero: the threshold. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.5;
+  const MASTER = 13.30;
+  // beat-local seconds (words.json master − 13.30), checked on the vo_final.wav RMS envelope
+  const CUE = {
+    now: 0.15,      /* "Now," (onset 13.45) */
+    real: 0.48,     /* "real model" */
+    flags: 1.29,    /* "flags 100" */
+    catches: 2.37,  /* "catches" (envelope onset ~15.67) */
+    attacks: 3.95,  /* end of "50 attacks," (17.25) */
+    down: 5.58,     /* "down" (envelope onset ~18.91) */
+    acc: 5.91,      /* "99.3%." (envelope onset ~19.21) */
+  };
+  const HOLD = 6.4;  // still from here; S(t) === SEAM[3]
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+  function S(t) {
+    if (t <= 0) return SEAM[2];
+    if (t >= HOLD) return SEAM[3];
+    const cardOut = E.io(seg(t, 0, 0.24));                    // code card leaves first
+    const compact = 1 - E.io(seg(t, 0.06, 0.66));             // counter back to full size (0.6 s)
+    const thr = E.out(seg(t, CUE.real, CUE.real + 0.7));      // threshold drops in on "real model"
+    const flag = E.io(seg(t, CUE.flags, CUE.flags + 0.6));    // the 100 right of it light up
+    const caught = Math.floor(40 * E.out(seg(t, CUE.catches, CUE.attacks)) + 1e-9);
+    const value = t >= CUE.acc ? LEDGER.accA : t >= CUE.down ? "99.4%" : LEDGER.accNever;
+    return {
+      thr, flag,
+      counter: { value, caught, compact, pulseCaught: 0.6 * pulse(t, CUE.attacks, 0.5) },
+      code: { opacity: 1 - cardOut, lit: [0, 0, 0, 0], out: 1 },
+    };
+  }
+  // Local helper (not in the kit): while the counter un-compacts, its value box (translated up)
+  // overlaps the "accuracy" label until compact < ~0.13, so the label waits for that.
+  function render(t) {
+    const st = S(t); K.draw(g, st);
+    const k = (st.counter && st.counter.compact) || 0;
+    if (k > 0 && k < 1) { const a = seg(1 - k, 0.87, 1); K.counter.lab.style.opacity = a; K.counter.lab.style.visibility = a > 0.001 ? "visible" : "hidden"; }
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

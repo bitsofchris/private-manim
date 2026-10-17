@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_box_flags (master 20.80, 10.40 s): "So we look at the confusion matrix instead. A true positive is
+         I said there was an attack, and it was genuinely an attack. A false positive is the model predicted
+         attack, but it was a real user." Opens on SC.SEAM[3], ends on SC.SEAM[4]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.4" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 10.40;
+  const MASTER = 20.80;
+  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const CUE = {
+    look: 0.38,      /* "look"      (21.18) the counter starts to go */
+    confusion: 0.79, /* "confusion" (21.59, onset 21.59 on the envelope) the box lands */
+    truePos: 2.57,   /* "true"      (23.38, onset 23.37) TP lit, the 40 gold dots fly */
+    falsePos: 7.06,  /* "false"     (27.86, onset 27.87) FP lit, the 60 teal dots fly */
+  };
+  const STILL = 9.40;  // everything settled well before this; S(t ≥ STILL) is SEAM[4] itself
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+
+  function S(t) {
+    if (t <= 0) return SEAM[3];
+    if (t >= STILL) return SEAM[4];
+    // counter out first, then the box in on "confusion" (no overlap of their text)
+    const cOut = E.io(seg(t, CUE.look - 0.05, CUE.confusion));
+    const boxIn = E.out(seg(t, CUE.confusion, CUE.confusion + 0.6));
+    const thrDim = E.io(seg(t, CUE.confusion, CUE.confusion + 0.8));
+    // TP: lit on the word, dots fly (1.4 s), "TP 40" lands as they arrive
+    const tpOn = seg(t, CUE.truePos - 0.05, CUE.truePos + 0.15);
+    const flyTp = seg(t, CUE.truePos, CUE.truePos + 1.4);
+    const showTp = E.out(seg(t, CUE.truePos + 0.7, CUE.truePos + 1.3));
+    // FP: the hero moves from TP to FP (TP out before FP is half lit), dots fly, "FP 60" lands
+    const tpOff = seg(t, CUE.falsePos - 0.1, CUE.falsePos + 0.1);
+    const fpOn = seg(t, CUE.falsePos, CUE.falsePos + 0.2);
+    const flyFp = seg(t, CUE.falsePos, CUE.falsePos + 1.4);
+    const showFp = E.out(seg(t, CUE.falsePos + 0.7, CUE.falsePos + 1.3));
+    return {
+      thr: 1, thrDim, flag: 1,
+      counter: { value: LEDGER.accA, caught: 40, opacity: 1 - cOut },
+      fly: { tp: flyTp, fp: flyFp },
+      box: { opacity: boxIn, show: { tp: showTp, fp: showFp }, lit: { tp: tpOn * (1 - tpOff), fp: fpOn } },
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

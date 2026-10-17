@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 01_hook (master 0.00–5.20): "This model is 99.5% accurate, but it's never caught a single attack."
+         Frame 0 is the finished picture (SEAM[1]) with the counter ticking 99.0% -> 99.5%. Ends on SEAM[1]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.20;
+  const MASTER = 0.00;
+  const CUE = {
+    acc: 1.16,     /* "99.5%" (master 1.16, onset on the envelope 1.16) */
+    never: 3.37,   /* "never" (master 3.37, onset 3.38) of "never caught" */
+    still: 4.90,   /* hold SEAM[1] from here */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, pulse, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+
+  // Frame 0 is the finished picture (the hook rule): the counter already reads 99.5%.
+  // The motion: the user pile pulses once from frame 0, and the value pops on "99.5%".
+  function S(t) {
+    if (t >= CUE.still) return clone(SEAM[1]);
+    const s = clone(SEAM[1]);
+    s.userPulse = pulse(t, 0, 0.9);
+    s.counter.pulseCaught = pulse(t, CUE.never, 0.8);   // "never caught": the 0 / 50 swells
+    return s;
+  }
+  // Local helper (not in the kit): a small pop on the value as it lands.
+  function landPop(t) {
+    const p = pulse(t, CUE.acc, 0.4);
+    if (p > 0) K.counter.val.style.transform = `translateY(${-4 * p}px) scale(${1 + 0.04 * p})`;   // grows about its middle, clear of the caught line
+  }
+  function render(t) { K.draw(g, S(t)); landPop(t); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
