@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout: the canonical frame and the three middle looks. Not in the Short.
+         0–2 s hook (counter, no threshold) · 2–4 s code card (beat 2) · 4–6 s threshold + box (beats 3–7). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg } = SC, E = SC.E();
+  const tag = SC.makeTag(root);
+  SC.makeAxisLabels(root);
+  const counter = SC.makeCounter(root), code = SC.makeCode(root), box = SC.makeBox(root);
+  SC.guides(root);
+  function render(t) {
+    const codeOn = seg(t, 2, 2.3) * (1 - seg(t, 3.8, 4));
+    const boxOn = seg(t, 4, 4.3);
+    const flag = boxOn;
+    // flagged/missed dots sit in their cells in the box look
+    const fly = E.io(seg(t, 4.1, 4.6));
+    const G = SC.geom();
+    const place = (kind, i, hx, hy) => {
+      if (fly <= 0) return null;
+      const d = kind === "user" ? SC.D.users : SC.D.attacks;
+      const [x, y] = SC.slot(d.g[i], d.r[i], G);
+      return [SC.lerp(hx, x, fly), SC.lerp(hy, y, fly)];
+    };
+    SC.ground(g);
+    SC.axis(g);
+    box.draw(g, { opacity: boxOn, lit: { tp: 1 } });
+    SC.dots(g, { flag, ghost: 0.55 * fly, place: fly > 0 ? place : null });
+    SC.threshold(g, boxOn);
+    tag.set({});
+    counter.set({ opacity: 1 - boxOn, compact: codeOn, value: SC.LEDGER.accNever, caught: 0 });
+    code.set({ opacity: codeOn, lit: [0, 0, 1, 0], out: codeOn });
+    box.set({ opacity: boxOn, show: { tp: 1, fp: 1, fn: 1, tn: 1 }, lit: { tp: 1 } });
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
