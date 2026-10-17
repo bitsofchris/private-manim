@@ -37,9 +37,10 @@
   const fileIndex = (c, r) => r * GRID.cols + c;
   const AUTH = fileIndex(0, 2);                        // the file the agent drills into
   const TARGET_FILES = TARGETS.map((t) => fileIndex(t.c, t.r));
-  // Where auth.md sits once retrieved into the window: lower right, beside the
-  // card, which shrinks left to scale 0.72 to make room.
-  const AUTH_IN_WIN = { x: 752, y: 880 };
+  // Where auth.md sits once retrieved into the window: under the card, at the
+  // window's lower left, clear of the label. The card keeps its size (scaled,
+  // its 60 px text fell below the floor).
+  const AUTH_IN_WIN = { x: 340, y: 998 };
 
   // ---- defaults: the empty world (beat 2's opening) ----
   const EMPTY = {
@@ -83,8 +84,8 @@
     6: Object.assign({}, MAP, { cardHero: 1 }),
     7: Object.assign({}, MAP, { cardHero: 1, agent: { armR: 115, tilt: -8 } }),
   };
-  // Beat 8's end: the card shrinks left (scale 0.72, anchored top-left) and
-  // auth.md sits at AUTH_IN_WIN, open, magenta, beside it.
+  // Beat 8's end: the card at full size, its auth arrow retracted, and
+  // auth.md at AUTH_IN_WIN under it, open, magenta.
 
   function build(root, o = {}) {
     const svg = CAST.layer(root);
@@ -95,7 +96,7 @@
 
     // the human's pointing line and the agent's wander trail (under the files)
     W.pointLine = line(svg, 0, 0, 0, 0, { stroke: PAL.ink, "stroke-width": 6, "stroke-linecap": "round" });
-    W.trail = node("path", { d: trailPath(), fill: "none", stroke: PAL.data, "stroke-width": 6, "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+    W.trail = node("path", { d: trailPath(), fill: "none", stroke: PAL.data, "stroke-width": 8, "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
     W.trailLen = 2600;
 
     // the 16 files
@@ -106,6 +107,9 @@
       const lines = [0, 1, 2].map((k) => line(g, 18, 0, 18, 0, { stroke: PAL.data, "stroke-width": 5, "stroke-linecap": "round", "stroke-opacity": 0.7 }));
       W.files.push({ g, rect, lines, c, r, home: cell(c, r) });
     }
+
+    // the trail runs over the files (drawn under them it showed only in the gaps)
+    svg.appendChild(W.trail);
 
     // the giant AGENTS.md page (beat 5): an SVG sheet + DOM title
     W.pageG = node("g", {}, svg);

@@ -29,7 +29,7 @@ the same pixels. The canonical frame is `00_layout/`.
   165 × 62 px, x 120–900. 16 files, never more, never moved except in
   beat 3 (into the window) and beat 8 (auth.md into the window).
 - **The three files the map points to**, by grid cell (col, row):
-  `auth.md` (0, 1), `api.md` (2, 0), `deploy.md` (3, 2). The file the
+  `auth.md` (0, 2), `api.md` (1, 0), `deploy.md` (3, 1). The file the
   agent drills into: **`auth.md`**.
 - **The context window** (bottom right, x 380–920, y 700–1080): a `--panel`
   rectangle with an ink outline, label **`context`** above it in `--dim`,
@@ -71,7 +71,7 @@ the same pixels. The canonical frame is `00_layout/`.
 | 5 | "Having one giant AGENTS.md file does not work. When everything is important, nothing is. It can't cut through the noise to find what really matters." (17.8–24.4) | The pile becomes one tall `AGENTS.md` page rising out of the window over the (muted) repo, 22 dense lines. On "everything is important" every line goes magenta at once; on "nothing is" they all go muted. "Cut through the noise": a scan bar runs down the page and finds nothing; the agent tilts its head. |
 | 6 | "But by creating a simple map, a map in Markdown or an index in a database, you hold pointers to files." (25.7–31.3) | On "simple map" the giant page shrinks into the short map card in the window (magenta). Its four lines type in on "Markdown". The repo comes back to teal. On "pointers to files" the three arrows draw from the card's lines to auth.md, api.md, deploy.md; the other 13 go dashed muted. |
 | 7 | "You concisely let the agent navigate where it needs to go." (31.7–35.1) | The agent turns to the card and points at it; on "navigate" its gaze runs up the three arrows in turn, each file pulsing teal as it's reached. Card stays magenta. |
-| 8 | "The agent reads the map and drills into only what it needs to, retrieving that part." (35.1–38.8) | "reads the map": the card's `auth.md` line underlines. On "drills into" the hero passes to the auth.md arrow and file (magenta), the card back to ink. On "retrieving" auth.md slides down into the window beside the card and opens to a few teal lines. Last frame still: the window holds the map and one file, mostly empty, the contrast with beat 3. |
+| 8 | "The agent reads the map and drills into only what it needs to, retrieving that part." (35.1–38.8) | "reads the map": the card's `auth.md` line underlines. On "drills into" the hero passes to the auth.md arrow and file (magenta), the card back to ink. On "retrieving" auth.md slides down into the window under the card and opens to a few lines. Last frame still: the window holds the map and one file, mostly empty, the contrast with beat 3. |
 
 **Code on screen:** the map card is the code beat, a real (shortened)
 AGENTS.md map, from beat 1 and again 6–8.
