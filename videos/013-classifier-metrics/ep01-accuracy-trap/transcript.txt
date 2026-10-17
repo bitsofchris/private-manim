@@ -1,0 +1,58 @@
+00:00.001-00:01.680
+This model is 99.
+
+00:01.680-00:05.120
+5% accurate, but it's never caught a single attack.
+
+00:06.480-00:08.400
+It's a prompt injection detector.
+
+00:08.400-00:11.360
+10,000 requests come in, but only 50 are attacks.
+
+00:11.059-00:13.780
+It never flags anything, and you're still right 99.
+
+00:13.780-00:15.059
+5% of the time.
+
+00:15.059-00:16.340
+Now here's a real model.
+
+00:16.340-00:22.099
+It flags 100 requests and catches 40 of the 50 attacks, but its accuracy goes down to 99.
+
+00:22.099-00:23.300
+3%.
+
+00:23.340-00:26.060
+So we look at the confusion matrix instead.
+
+00:26.060-00:30.940
+A true positive is I said there was an attack and it was generally an attack.
+
+00:30.940-00:35.580
+A false positive is the model predicted attack, but it was a real user in this case.
+
+00:35.340-00:38.940
+A false negative, I said user, but it was an attack.
+
+00:38.940-00:43.180
+And a true negative, I said user, and it was a user, not an attack.
+
+00:43.180-00:45.019
+Now look where the accuracy comes from.
+
+00:45.019-00:46.940
+Almost all of it is true negatives.
+
+00:46.940-00:48.620
+These are the easy ones.
+
+00:48.620-00:52.700
+When positives are rare, we don't want to read the accuracy.
+
+00:52.700-00:54.700
+We want to look at the confusion matrix
+
+
