@@ -111,6 +111,17 @@ outro, no call to action.
 
 ## 1. Storyboard from the post (Claude, 5 min)
 
+- **Draft from Chris's own notes, with his writing skills.** Run
+  `content-preflight` (the question, who's asking, the answer in one
+  sentence), then `notes-to-post` (the reader's wrong belief, one idea,
+  one action, Chris's story as the proof, no watering down his words),
+  then `effective-writing` for the line edit. The skills live in
+  `~/.claude/skills/`. One idea, one action the viewer takes after. A
+  paper is one evidence beat at most, never the spine: research notes
+  (a series' `key-points.md`) supply evidence, not the script's shape.
+  Harness series 012 drafted eps 2, 3, 5, 8, 9 and 10 evidence-first as
+  paper tours; Chris threw out ep 2 and they were rebuilt from his notes
+  (2026-10-17).
 - Pick the 5–8 concepts the post already animates in your head. One idea
   per Short.
 - **Pick the engine** by the rule in `AGENTS.md` ("Which engine") and make
