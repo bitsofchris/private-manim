@@ -5,10 +5,6 @@
    "end": 6.5
   },
   {
-   "clip": "media/hf/02_context.mp4",
-   "end": 2.0
-  },
-  {
    "clip": "media/hf/03_what_auc.mp4",
    "end": 9.2
   },
@@ -30,7 +26,7 @@
   },
   {
    "clip": "media/hf/08_takeaway.mp4",
-   "end": 4.788
+   "end": 4.841
   }
  ]
 }

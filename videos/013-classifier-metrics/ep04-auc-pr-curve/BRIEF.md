@@ -1,8 +1,8 @@
 # Beat brief: 013 ep04, ROC AUC vs PR AUC
 
 **Name:** classifier-ep04-beat-brief
-**Description:** The contract for the eight HyperFrames beats of
-"Precision recall curve explained (PR AUC vs ROC AUC)" (52.4 s). Every
+**Description:** The contract for the seven HyperFrames beats (beat 2 was cut; beat 3 opens on `SEAM[2]`, which equals `SEAM[1]`) of
+"Precision recall curve explained (PR AUC vs ROC AUC)" (50.4 s). Every
 beat draws with the episode kit `_kit/score.js` through one call,
 `K.draw(g, S)`, where `S` is a state object; each beat opens on
 `SC.SEAM[n-1]` and ends on `SC.SEAM[n]`, so cuts are exact by
@@ -89,13 +89,12 @@ Cue times are beat-local seconds (master − start), word starts from
 | # | Folder | Master start | `BEAT_SECONDS` | Opens on | Ends on | Hero |
 |---|---|---:|---:|---|---|---|
 | 1 | `01_hook` | 0.00 | 6.50 | `SEAM[0]` (first frame of the Short) | `SEAM[1]` | the ROC area, then the threshold |
-| 2 | `02_context` | 6.50 | 2.00 | `SEAM[1]` | `SEAM[2]` | the threshold (unchanged) |
-| 3 | `03_what_auc` | 8.50 | 9.20 | `SEAM[2]` | `SEAM[3]` | the ROC area |
-| 4 | `04_the_point` | 17.70 | 8.30 | `SEAM[3]` | `SEAM[4]` | the threshold and its point |
-| 5 | `05_swap` | 26.00 | 10.60 | `SEAM[4]` | `SEAM[5]` | the curve |
-| 6 | `06_baseline` | 36.60 | 4.70 | `SEAM[5]` | `SEAM[6]` | the baseline |
-| 7 | `07_pr_auc` | 41.30 | 6.30 | `SEAM[6]` | `SEAM[7]` | the PR area |
-| 8 | `08_takeaway` | 47.60 | 4.80 | `SEAM[7]` | `SEAM[8]` (last frame, still) | the code card's lit line |
+| 3 | `03_what_auc` | 6.50 | 9.20 | `SEAM[2]` | `SEAM[3]` | the ROC area |
+| 4 | `04_the_point` | 15.70 | 8.30 | `SEAM[3]` | `SEAM[4]` | the threshold and its point |
+| 5 | `05_swap` | 24.00 | 10.60 | `SEAM[4]` | `SEAM[5]` | the curve |
+| 6 | `06_baseline` | 34.60 | 4.70 | `SEAM[5]` | `SEAM[6]` | the baseline |
+| 7 | `07_pr_auc` | 39.30 | 6.30 | `SEAM[6]` | `SEAM[7]` | the PR area |
+| 8 | `08_takeaway` | 45.60 | 4.85 | `SEAM[7]` | `SEAM[8]` (last frame, still) | the code card's lit line |
 
 **1 Hook** (6.50 s) — "This model's ROC area under the curve is 0.985,
 nearly perfect, but most of what it flags is wrong." Cues: ROC 1.06,
@@ -110,10 +109,7 @@ magenta), then `fpLit` 0→1 (the 60 flagged users brighten, ≥ 0.6 s), and
 `notes.sub` lines "60 of 100 flags" / "are real users" fade in by
 "wrong". Hold the last ~0.3 s on `SEAM[1]`.
 
-**2 Context** (2.00 s) — "It's a prompt injection detector." Cues:
-prompt 0.45, injection 0.80, detector 1.22. `tag.bright` 0→1 by
-"prompt", hold, back to 0 by ~1.7. Nothing else moves. Ends `SEAM[2]`
-(= `SEAM[1]`).
+**2 Context** — cut after the first watch (Chris, 10/17).
 
 **3 What AUC is** (9.20 s) — "AUC is for comparing models. A coin flip
 is 0.5. You pick a random attack and a random user, and 98.5% of the time

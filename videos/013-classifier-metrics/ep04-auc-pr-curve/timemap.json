@@ -5,68 +5,63 @@
   "new_start": 0.3
  },
  {
-  "old_start": 7.009187,
-  "old_end": 8.705562,
+  "old_start": 8.709125,
+  "old_end": 10.574229,
   "new_start": 6.625
  },
  {
-  "old_start": 10.359125,
-  "old_end": 12.224229,
-  "new_start": 8.571
+  "old_start": 10.932792,
+  "old_end": 12.520604,
+  "new_start": 8.74
  },
  {
-  "old_start": 12.582792,
-  "old_end": 14.170604,
-  "new_start": 10.686
+  "old_start": 13.146312,
+  "old_end": 18.197312999999998,
+  "new_start": 10.578
  },
  {
-  "old_start": 14.796312,
-  "old_end": 19.847312,
-  "new_start": 12.524
+  "old_start": 19.457063,
+  "old_end": 23.357854,
+  "new_start": 15.879
  },
  {
-  "old_start": 21.107062000000003,
-  "old_end": 25.007854,
-  "new_start": 17.825
+  "old_start": 24.951396000000003,
+  "old_end": 28.890978999999998,
+  "new_start": 20.03
  },
  {
-  "old_start": 26.601396,
-  "old_end": 30.540978999999997,
-  "new_start": 21.976
+  "old_start": 29.625437,
+  "old_end": 33.700624999999995,
+  "new_start": 24.219
  },
  {
-  "old_start": 31.275437,
-  "old_end": 35.350625,
-  "new_start": 26.166
+  "old_start": 34.154958,
+  "old_end": 38.301729,
+  "new_start": 28.544
  },
  {
-  "old_start": 35.804958,
-  "old_end": 39.951729,
-  "new_start": 30.491
+  "old_start": 38.664062,
+  "old_end": 40.305437,
+  "new_start": 32.941
  },
  {
-  "old_start": 40.314062,
-  "old_end": 41.955436999999996,
-  "new_start": 34.888
+  "old_start": 41.466229,
+  "old_end": 45.883728999999995,
+  "new_start": 34.833
  },
  {
-  "old_start": 43.116229000000004,
-  "old_end": 47.533729,
-  "new_start": 36.779
+  "old_start": 49.005958,
+  "old_end": 52.147875,
+  "new_start": 39.5
  },
  {
-  "old_start": 50.655958,
-  "old_end": 53.797875,
-  "new_start": 41.446
+  "old_start": 52.499563,
+  "old_end": 55.131063,
+  "new_start": 42.892
  },
  {
-  "old_start": 54.149563,
-  "old_end": 56.781062,
-  "new_start": 44.838
- },
- {
-  "old_start": 57.233771000000004,
-  "old_end": 61.4,
-  "new_start": 47.72
+  "old_start": 55.583771,
+  "old_end": 59.75,
+  "new_start": 45.773
  }
 ]

@@ -50,353 +50,338 @@
   "text": "wrong."
  },
  {
-  "start": 6.74,
+  "start": 6.76,
   "end": 7.24,
-  "text": "It's a prompt"
- },
- {
-  "start": 7.3,
-  "end": 7.72,
-  "text": "injection"
- },
- {
-  "start": 7.72,
-  "end": 8.18,
-  "text": "detector."
- },
- {
-  "start": 8.72,
-  "end": 9.27,
   "text": "AUC is for"
  },
  {
-  "start": 9.33,
-  "end": 9.84,
+  "start": 7.3,
+  "end": 7.9,
   "text": "comparing"
  },
  {
-  "start": 9.84,
-  "end": 10.26,
+  "start": 7.9,
+  "end": 8.3,
   "text": "models."
  },
  {
-  "start": 10.78,
-  "end": 11.26,
+  "start": 8.84,
+  "end": 9.31,
   "text": "A coin flip"
  },
  {
-  "start": 11.32,
-  "end": 12.16,
+  "start": 9.37,
+  "end": 10.2,
   "text": "is 0.5."
  },
  {
-  "start": 12.62,
-  "end": 12.9,
+  "start": 10.68,
+  "end": 10.96,
   "text": "You pick a"
  },
  {
-  "start": 12.96,
-  "end": 13.22,
+  "start": 11.02,
+  "end": 11.26,
   "text": "random"
  },
  {
-  "start": 13.22,
-  "end": 13.54,
+  "start": 11.26,
+  "end": 11.6,
   "text": "attack and"
  },
  {
-  "start": 13.6,
-  "end": 14.12,
+  "start": 11.66,
+  "end": 12.28,
   "text": "a random user"
  },
  {
-  "start": 14.18,
-  "end": 15.64,
+  "start": 12.34,
+  "end": 13.68,
   "text": "and 98.5% of"
  },
  {
-  "start": 15.7,
-  "end": 16.12,
+  "start": 13.74,
+  "end": 14.14,
   "text": "the time the"
  },
  {
-  "start": 16.18,
-  "end": 17.12,
+  "start": 14.2,
+  "end": 15.02,
   "text": "attack scores"
  },
  {
-  "start": 17.12,
-  "end": 17.4,
+  "start": 15.02,
+  "end": 15.46,
   "text": "higher."
  },
  {
-  "start": 17.92,
-  "end": 18.18,
+  "start": 15.98,
+  "end": 16.239,
   "text": "Now look at"
  },
  {
-  "start": 18.24,
-  "end": 18.64,
+  "start": 16.299,
+  "end": 16.68,
   "text": "this point."
  },
  {
-  "start": 19.18,
-  "end": 19.38,
+  "start": 17.32,
+  "end": 17.42,
   "text": "False"
  },
  {
-  "start": 19.38,
-  "end": 20.0,
+  "start": 17.42,
+  "end": 17.96,
   "text": "positive rate"
  },
  {
-  "start": 20.06,
-  "end": 21.24,
+  "start": 18.02,
+  "end": 19.3,
   "text": "2.3%. Sounds"
  },
  {
-  "start": 21.24,
-  "end": 21.6,
+  "start": 19.3,
+  "end": 19.62,
   "text": "small."
  },
  {
-  "start": 22.1,
-  "end": 23.34,
+  "start": 20.14,
+  "end": 21.38,
   "text": "It's 233 real"
  },
  {
-  "start": 23.4,
-  "end": 23.74,
+  "start": 21.44,
+  "end": 21.91,
   "text": "users"
  },
  {
-  "start": 23.74,
-  "end": 24.46,
+  "start": 21.91,
+  "end": 22.51,
   "text": "blocked just"
  },
  {
-  "start": 24.52,
-  "end": 24.76,
+  "start": 22.57,
+  "end": 22.93,
   "text": "to catch"
  },
  {
-  "start": 24.82,
-  "end": 25.76,
+  "start": 22.99,
+  "end": 23.82,
   "text": "44 attacks."
  },
  {
-  "start": 26.3,
-  "end": 26.82,
+  "start": 24.36,
+  "end": 24.87,
   "text": "So swap the"
  },
  {
-  "start": 26.88,
-  "end": 27.16,
+  "start": 24.93,
+  "end": 25.21,
   "text": "false"
  },
  {
-  "start": 27.16,
-  "end": 27.61,
+  "start": 25.21,
+  "end": 25.66,
   "text": "positive rate"
  },
  {
-  "start": 27.67,
-  "end": 28.1,
+  "start": 25.72,
+  "end": 26.16,
   "text": "for precision."
  },
  {
-  "start": 28.7,
-  "end": 28.71,
+  "start": 26.38,
+  "end": 26.72,
   "text": "Precision"
  },
  {
-  "start": 28.71,
-  "end": 29.47,
+  "start": 26.72,
+  "end": 27.52,
   "text": "doesn't use"
  },
  {
-  "start": 29.53,
-  "end": 29.66,
+  "start": 27.58,
+  "end": 27.72,
   "text": "true"
  },
  {
-  "start": 29.66,
-  "end": 30.12,
+  "start": 27.72,
+  "end": 28.16,
   "text": "negatives."
  },
  {
-  "start": 30.76,
-  "end": 30.92,
+  "start": 28.96,
+  "end": 28.98,
   "text": "Recall"
  },
  {
-  "start": 30.92,
-  "end": 31.79,
+  "start": 28.98,
+  "end": 29.84,
   "text": "goes across"
  },
  {
-  "start": 31.85,
-  "end": 32.279,
+  "start": 29.9,
+  "end": 30.26,
   "text": "precision"
  },
  {
-  "start": 32.279,
-  "end": 33.02,
+  "start": 30.26,
+  "end": 31.08,
   "text": "goes up"
  },
  {
-  "start": 33.08,
-  "end": 33.48,
+  "start": 31.14,
+  "end": 31.54,
   "text": "and the same"
  },
  {
-  "start": 33.54,
-  "end": 33.92,
+  "start": 31.6,
+  "end": 31.86,
   "text": "model's"
  },
  {
-  "start": 33.92,
-  "end": 34.5,
+  "start": 31.86,
+  "end": 32.56,
   "text": "curve drops."
  },
  {
-  "start": 35.06,
-  "end": 35.57,
+  "start": 33.12,
+  "end": 33.62,
   "text": "Now the good"
  },
  {
-  "start": 35.63,
-  "end": 35.91,
+  "start": 33.68,
+  "end": 33.97,
   "text": "corner is"
  },
  {
-  "start": 35.97,
-  "end": 36.34,
+  "start": 34.03,
+  "end": 34.4,
   "text": "top right."
  },
  {
-  "start": 36.86,
-  "end": 37.14,
+  "start": 34.94,
+  "end": 35.2,
   "text": "And the coin"
  },
  {
-  "start": 37.2,
-  "end": 37.6,
+  "start": 35.26,
+  "end": 35.66,
   "text": "flip here"
  },
  {
-  "start": 37.66,
-  "end": 38.76,
+  "start": 35.72,
+  "end": 36.8,
   "text": "isn't 0.5."
  },
  {
-  "start": 39.25,
-  "end": 39.36,
+  "start": 37.3,
+  "end": 37.42,
   "text": "It's"
  },
  {
-  "start": 39.36,
-  "end": 40.58,
+  "start": 37.42,
+  "end": 38.62,
   "text": "0.005, the"
  },
  {
-  "start": 40.64,
-  "end": 41.1,
+  "start": 38.68,
+  "end": 39.14,
   "text": "attack rate."
  },
  {
-  "start": 41.54,
-  "end": 42.02,
+  "start": 39.6,
+  "end": 40.07,
   "text": "This model's"
  },
  {
-  "start": 42.02,
-  "end": 42.24,
+  "start": 40.07,
+  "end": 40.3,
   "text": "precision"
  },
  {
-  "start": 42.3,
-  "end": 42.68,
+  "start": 40.36,
+  "end": 40.7,
   "text": "recall"
  },
  {
-  "start": 42.68,
-  "end": 43.03,
+  "start": 40.7,
+  "end": 41.02,
   "text": "area under"
  },
  {
-  "start": 43.09,
-  "end": 43.28,
+  "start": 41.08,
+  "end": 41.34,
   "text": "the curve"
  },
  {
-  "start": 43.34,
-  "end": 44.32,
+  "start": 41.4,
+  "end": 42.36,
   "text": "is 0.56."
  },
  {
-  "start": 44.92,
-  "end": 45.24,
+  "start": 42.96,
+  "end": 43.3,
   "text": "It's low"
  },
  {
-  "start": 45.24,
-  "end": 45.52,
+  "start": 43.3,
+  "end": 43.58,
   "text": "looking"
  },
  {
-  "start": 45.58,
-  "end": 46.16,
+  "start": 43.64,
+  "end": 44.22,
   "text": "but over 100"
  },
  {
-  "start": 46.22,
-  "end": 46.72,
+  "start": 44.28,
+  "end": 44.78,
   "text": "times better"
  },
  {
-  "start": 46.78,
-  "end": 47.32,
+  "start": 44.84,
+  "end": 45.38,
   "text": "than chance."
  },
  {
-  "start": 47.84,
-  "end": 47.92,
+  "start": 45.88,
+  "end": 45.98,
   "text": "When"
  },
  {
-  "start": 47.92,
-  "end": 48.48,
+  "start": 45.98,
+  "end": 46.52,
   "text": "positives are"
  },
  {
-  "start": 48.54,
-  "end": 49.08,
+  "start": 46.58,
+  "end": 47.14,
   "text": "rare, we want"
  },
  {
-  "start": 49.14,
-  "end": 49.56,
+  "start": 47.2,
+  "end": 47.62,
   "text": "to compare"
  },
  {
-  "start": 49.56,
-  "end": 49.88,
+  "start": 47.62,
+  "end": 48.11,
   "text": "models"
  },
  {
-  "start": 49.94,
-  "end": 50.48,
+  "start": 48.17,
+  "end": 48.53,
   "text": "on the"
  },
  {
-  "start": 50.48,
-  "end": 50.78,
+  "start": 48.53,
+  "end": 48.82,
   "text": "precision"
  },
  {
-  "start": 50.84,
-  "end": 51.52,
+  "start": 48.88,
+  "end": 49.58,
   "text": "recall curve."
  }
 ]

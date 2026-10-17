@@ -86,7 +86,6 @@ card's lit line (8).
 | # | Beat | VO (as recorded) | Visual (9:16) | Hero |
 |---|------|---|---|---|
 | 1 | Hook | This model's ROC area under the curve is 0.985, nearly perfect, but most of what it flags is wrong. | Frame 0, already working: tag + score line on top (threshold at 0.70, its 100 flagged dots ringed), the ROC curve below with its area filled and **ROC AUC 0.985** in the bottom-right corner. "nearly perfect": the area glows. "most of what it flags": the 60 teal dots right of the line brighten, and "60 of 100 flags are real users" lands under the AUC. | the area, then the threshold |
-| 2 | Context (spliced) | It's a prompt injection detector. | The tag brightens and settles. Nothing else moves. | none |
 | 3 | What AUC is | AUC is for comparing models. A coin flip is 0.5. You pick a random attack and a random user, and 98.5% of the time the attack scores higher. | "comparing models": the AUC readout pulses. "coin flip": the dashed diagonal draws, its triangle labelled **0.5**. "random attack … random user": one gold dot and one teal dot on the score line ring, the gold one to the right. "98.5%": "98.5% of pairs" under the readout. | the area |
 | 4 | Count the point | Now look at this point. False positive rate 2.3 percent. Sounds small. It's 233 real users blocked just to catch 44 attacks. | "this point": the threshold slides 0.70 → 0.55 (≥ 1 s) and the point runs down the curve with it, then rings. "2.3 percent": "FPR 2.3%" by the point. "233 real users": the 233 teal dots right of the line light; "233 blocked" in the corner. "44 attacks": "44 caught" under it. | the threshold and its point |
 | 5 | Swap the axis | So swap the false positive rate for precision. Precision doesn't use true negatives. Recall goes across, precision goes up, and the same model's curve drops. Now the good corner is top right. | "swap": "false positive rate" turns into "precision". "doesn't use true negatives": the teal pile left of the line dims. "Recall goes across": the y label becomes "recall" and slides to the x axis. "precision goes up": "precision" slides to the y axis. "curve drops": every point slides to (recall, precision), ≥ 1.5 s; the 0.55 point lands at (0.88, 0.16). "top right": the corner glows. | the PR curve |
@@ -94,42 +93,44 @@ card's lit line (8).
 | 7 | PR AUC | This model's precision-recall area under the curve is 0.56. It's low looking, but over a hundred times better than chance. | "area under the curve": the PR area fills (step-wise, as average precision is). "0.56": **PR AUC 0.556** in the top-right corner. "hundred times": "≈ 111× the coin flip" under it. | the PR area |
 | 8 | Takeaway | When positives are rare, we want to compare models on the precision-recall curve. | "rare": the 50 gold dots pulse once. Then the score line gives way to the code card: `roc_auc_score(y, s)` → `0.985`, `average_precision_score(y, s)` → `0.556`, the second line lit. Still for the last ~1 s. | the code card's lit line |
 
-## Final beats (the contract; `vo_final.wav` 52.39 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 50.44 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md`. Captions are anchored bottom
 (`assemble.py --captions-anchor bottom`), so the stage runs to y 1330.
+Beat 2 (the spliced context line) was cut after the first watch (Chris,
+10/17); the frame-0 tag still names the detector. Every word after line 1
+moved by the same 1.94 s, so the beats kept their local cue times; starts
+are rounded to 0.1 s, so cues from beat 3 on land ~60 ms early.
 
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
 | 1 | `01_hook` | 0.00 | 6.50 | This model's ROC area under the curve is 0.985, nearly perfect, but most of what it flags is wrong. |
-| 2 | `02_context` | 6.50 | 2.00 | It's a prompt injection detector. |
-| 3 | `03_what_auc` | 8.50 | 9.20 | AUC is for comparing models. A coin flip is 0.5. You pick a random attack and a random user, and 98.5% of the time the attack scores higher. |
-| 4 | `04_the_point` | 17.70 | 8.30 | Now look at this point. False positive rate 2.3 percent. Sounds small. It's 233 real users blocked just to catch 44 attacks. |
-| 5 | `05_swap` | 26.00 | 10.60 | So swap the false positive rate for precision. Precision doesn't use true negatives. Recall goes across, precision goes up, and the same model's curve drops. Now the good corner is top right. |
-| 6 | `06_baseline` | 36.60 | 4.70 | And the coin flip here isn't 0.5. It's 0.005, the attack rate. |
-| 7 | `07_pr_auc` | 41.30 | 6.30 | This model's precision-recall area under the curve is 0.56. It's low looking, but over a hundred times better than chance. |
-| 8 | `08_takeaway` | 47.60 | 4.80 | When positives are rare, we want to compare models on the precision-recall curve. |
+| 3 | `03_what_auc` | 6.50 | 9.20 | AUC is for comparing models. A coin flip is 0.5. You pick a random attack and a random user, and 98.5% of the time the attack scores higher. |
+| 4 | `04_the_point` | 15.70 | 8.30 | Now look at this point. False positive rate 2.3 percent. Sounds small. It's 233 real users blocked just to catch 44 attacks. |
+| 5 | `05_swap` | 24.00 | 10.60 | So swap the false positive rate for precision. Precision doesn't use true negatives. Recall goes across, precision goes up, and the same model's curve drops. Now the good corner is top right. |
+| 6 | `06_baseline` | 34.60 | 4.70 | And the coin flip here isn't 0.5. It's 0.005, the attack rate. |
+| 7 | `07_pr_auc` | 39.30 | 6.30 | This model's precision-recall area under the curve is 0.56. It's low looking, but over a hundred times better than chance. |
+| 8 | `08_takeaway` | 45.60 | 4.84 | When positives are rare, we want to compare models on the precision-recall curve. |
 
 ## Cut list (approved by Chris, 10/17; applied)
 
-Raw take 59.8 s → **52.4 s**.
+Raw take 59.8 s → **50.4 s**.
 
-| # | Edit | Range | Effect | Why |
+| # | Edit | Range (vo_clean) | Effect | Why |
 |---|---|---|---:|---|
-| 1 | Splice `../vo_context_short.m4a` ("It's a prompt injection detector.", cleaned with the same chain) in after line 1 | inserted at vo_clean 7.00 (inside the 2.8 s pause) → `vo_spliced.wav` | +1.65 s | SERIES.md "Context in every episode" |
-| 2 | Restart "This model's PR…" | vo_spliced 48.40–50.68 (= vo_clean 46.75–49.03) | −2.3 s | false start; script.md flags it |
-| 3 | Pauses capped at 0.25 s (`--noise=-45dB`, as ep01) | everywhere | −8.4 s | |
+| 1 | Restart "This model's PR…" | 46.75–49.03 | −2.3 s | false start; script.md flags it |
+| 2 | Pauses capped at 0.25 s (`--noise=-45dB`, as ep01) | everywhere | −7.1 s | |
 
-Kept: the random-pair line (the planned first cut, not needed at 52.4 s).
+Dropped after the first watch: the `../vo_context_short.m4a` splice after
+line 1 (SERIES.md "Context in every episode"). Chris: the spliced line
+sounded bad. Kept: the random-pair line.
 
-Command: `tools/tighten_vo.py vo_spliced.wav --out vo_final.wav --map
-timemap.json --max-gap 0.25 --noise=-45dB --remove 48.40-50.68`.
+Command: `tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map
+timemap.json --max-gap 0.25 --noise=-45dB --remove 46.75-49.03`.
 
-Spellings fixed in `words.json` (Parakeet / script.md): number tokens
-merged (0.985, 0.5, 98.5%, 2.3%, 0.005, 0.56); "in a random user" →
-"and". Line 1's number: both recognizers hear "0.95" in the take, even
-in isolation; script.md and the ledger say 0.985. Captions and the
-screen show **0.985**; Chris to confirm by ear.
+Spellings fixed in `words.json`: number tokens merged (0.985, 0.5,
+98.5%, 2.3%, 0.005, 0.56); "in a random user" → "and". Line 1 is 0.985
+(Chris, by ear; both recognizers hear "0.95").
 
 ## Not in this Short (on purpose)
 
