@@ -1,0 +1,272 @@
+[
+ {
+  "start": 0.52,
+  "end": 1.06,
+  "text": "The F1 score"
+ },
+ {
+  "start": 1.12,
+  "end": 1.76,
+  "text": "is precision and"
+ },
+ {
+  "start": 1.82,
+  "end": 2.46,
+  "text": "recall in one"
+ },
+ {
+  "start": 2.52,
+  "end": 3.23,
+  "text": "number, and it"
+ },
+ {
+  "start": 3.29,
+  "end": 4.28,
+  "text": "punishes whichever"
+ },
+ {
+  "start": 4.34,
+  "end": 5.02,
+  "text": "is worse."
+ },
+ {
+  "start": 5.56,
+  "end": 6.07,
+  "text": "It's a prompt"
+ },
+ {
+  "start": 6.13,
+  "end": 7.02,
+  "text": "injection detector."
+ },
+ {
+  "start": 7.68,
+  "end": 8.58,
+  "text": "Average 0.9 and"
+ },
+ {
+  "start": 8.64,
+  "end": 9.4,
+  "text": "0.1 and you"
+ },
+ {
+  "start": 9.46,
+  "end": 10.6,
+  "text": "get 0.5."
+ },
+ {
+  "start": 11.05,
+  "end": 11.86,
+  "text": "F1 will give"
+ },
+ {
+  "start": 11.92,
+  "end": 12.84,
+  "text": "you 0.18."
+ },
+ {
+  "start": 13.46,
+  "end": 13.66,
+  "text": "It's a"
+ },
+ {
+  "start": 13.72,
+  "end": 14.5,
+  "text": "harmonic mean."
+ },
+ {
+  "start": 14.94,
+  "end": 15.94,
+  "text": "Our model, 40%"
+ },
+ {
+  "start": 16.0,
+  "end": 17.39,
+  "text": "precision, 80% recall"
+ },
+ {
+  "start": 17.45,
+  "end": 18.58,
+  "text": "scores 0.53."
+ },
+ {
+  "start": 19.16,
+  "end": 19.95,
+  "text": "But F1 treats"
+ },
+ {
+  "start": 20.01,
+  "end": 20.72,
+  "text": "both mistakes the"
+ },
+ {
+  "start": 20.78,
+  "end": 21.18,
+  "text": "same, and here"
+ },
+ {
+  "start": 21.24,
+  "end": 21.62,
+  "text": "they aren't."
+ },
+ {
+  "start": 22.06,
+  "end": 22.96,
+  "text": "A false positive"
+ },
+ {
+  "start": 23.02,
+  "end": 23.44,
+  "text": "blocks a real"
+ },
+ {
+  "start": 23.5,
+  "end": 23.96,
+  "text": "user who can"
+ },
+ {
+  "start": 24.02,
+  "end": 24.52,
+  "text": "try again."
+ },
+ {
+  "start": 24.98,
+  "end": 25.74,
+  "text": "A false negative"
+ },
+ {
+  "start": 25.8,
+  "end": 26.2,
+  "text": "would let an"
+ },
+ {
+  "start": 26.26,
+  "end": 27.22,
+  "text": "attack hijack your"
+ },
+ {
+  "start": 27.28,
+  "end": 27.75,
+  "text": "agent and leak"
+ },
+ {
+  "start": 27.81,
+  "end": 28.14,
+  "text": "your data."
+ },
+ {
+  "start": 28.72,
+  "end": 29.1,
+  "text": "So say we'll"
+ },
+ {
+  "start": 29.16,
+  "end": 29.9,
+  "text": "accept two blocked"
+ },
+ {
+  "start": 29.96,
+  "end": 30.4,
+  "text": "users for every"
+ },
+ {
+  "start": 30.46,
+  "end": 31.22,
+  "text": "attack we stop."
+ },
+ {
+  "start": 31.6,
+  "end": 31.9,
+  "text": "That means at"
+ },
+ {
+  "start": 31.96,
+  "end": 32.62,
+  "text": "least one flag"
+ },
+ {
+  "start": 32.68,
+  "end": 33.64,
+  "text": "in three has"
+ },
+ {
+  "start": 33.7,
+  "end": 33.92,
+  "text": "to be a"
+ },
+ {
+  "start": 33.98,
+  "end": 34.5,
+  "text": "real attack."
+ },
+ {
+  "start": 34.94,
+  "end": 35.26,
+  "text": "Now move the"
+ },
+ {
+  "start": 35.32,
+  "end": 35.9,
+  "text": "line down as"
+ },
+ {
+  "start": 35.96,
+  "end": 36.12,
+  "text": "far as"
+ },
+ {
+  "start": 36.18,
+  "end": 36.56,
+  "text": "that allows."
+ },
+ {
+  "start": 37.14,
+  "end": 37.72,
+  "text": "41 of 50"
+ },
+ {
+  "start": 37.78,
+  "end": 38.38,
+  "text": "attacks caught."
+ },
+ {
+  "start": 38.88,
+  "end": 39.22,
+  "text": "You don't ship"
+ },
+ {
+  "start": 39.28,
+  "end": 39.78,
+  "text": "an F1 score"
+ },
+ {
+  "start": 39.84,
+  "end": 40.07,
+  "text": "you ship"
+ },
+ {
+  "start": 40.13,
+  "end": 40.7,
+  "text": "a threshold."
+ },
+ {
+  "start": 41.28,
+  "end": 41.92,
+  "text": "Decide what a"
+ },
+ {
+  "start": 41.98,
+  "end": 42.56,
+  "text": "mistake costs and"
+ },
+ {
+  "start": 42.62,
+  "end": 42.98,
+  "text": "then put the"
+ },
+ {
+  "start": 43.04,
+  "end": 43.52,
+  "text": "line there."
+ }
+]
