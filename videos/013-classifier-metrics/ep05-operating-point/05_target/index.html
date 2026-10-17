@@ -26,13 +26,13 @@
     <script>
 (() => {
   const BEAT_SECONDS = 6.35;
-  const MASTER = 26.80;
+  const MASTER = 28.00;
   // beat-local seconds (words.json master − 28.50), checked on the vo_final.wav RMS envelope
   const CUE = {
-    so: 0.29,     /* "So say" (words 27.12, onset ~0.03 earlier) */
-    two: 1.17,    /* "two blocked users" (27.97) */
-    one: 3.72,    /* "one flag in three" (30.52) */
-    real: 5.60,   /* "real attack" (32.40) */
+    so: 0.29,     /* "So say" (words 28.32, onset ~0.03 earlier) */
+    two: 1.17,    /* "two blocked users" (29.17) */
+    one: 3.72,    /* "one flag in three" (31.72) */
+    real: 5.60,   /* "real attack" (33.60) */
   };
   const HOLD = 6.05;  // still from here; S(t) === SEAM[5]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");

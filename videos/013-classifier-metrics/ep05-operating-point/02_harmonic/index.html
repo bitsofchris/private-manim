@@ -21,12 +21,12 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="7.45" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 7.45;
+  const BEAT_SECONDS = 6.00;
   const MASTER = 5.30;
   // beat-local = master − MASTER. words.json lumps "zero" into the word before it here
   // ("Average" 7.68, "0.9" 7.80); the 20 ms RMS envelope puts each number's "zero" just after
@@ -36,9 +36,8 @@
     one: 1.46,      /* "0.1" (words 6.66 +0.10) */
     five: 2.56,     /* "0.5" (words 7.76 +0.10) */
     f118: 4.88,     /* "0.18" (words 10.08 +0.10) */
-    harm: 6.46,     /* "harmonic" (11.76) */
   };
-  const STILL = 7.10;  // S(t ≥ STILL) is SEAM[2] itself
+  const STILL = 5.60;  // S(t ≥ STILL) is SEAM[2] itself
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, pulse, SEAM } = SC, E = SC.E();
   const K = SC.mount(root);
@@ -48,11 +47,10 @@
     if (t <= 0) return clone(SEAM[1]);
     if (t >= STILL) return clone(SEAM[2]);
     const s = clone(SEAM[1]);
-    const harm = pulse(t, CUE.harm, 0.6);
     s.bars.pulseP = 0.5 * pulse(t, CUE.nine, 0.6);                         // "0.9": precision bar, small
-    s.bars.pulseR = Math.max(0.5 * pulse(t, CUE.one, 0.6), harm);          // "0.1" small; "harmonic" full
+    s.bars.pulseR = 0.5 * pulse(t, CUE.one, 0.6);                         // "0.1": recall bar, small
     s.bars.mean = E.out(seg(t, CUE.five, CUE.five + 0.8));                // "0.5": dashed mean draws left → right
-    s.bars.f1Pulse = Math.max(pulse(t, CUE.f118, 0.6), 0.6 * harm);       // "0.18"; smaller on "harmonic"
+    s.bars.f1Pulse = pulse(t, CUE.f118, 0.6);                              // "0.18" ("harmonic mean" is beat 2b)
     return s;
   }
   function render(t) { K.draw(g, S(t)); }

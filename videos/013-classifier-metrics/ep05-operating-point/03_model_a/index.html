@@ -27,13 +27,13 @@
     <script>
 (() => {
   const BEAT_SECONDS = 4.3;
-  const MASTER = 12.75;
+  const MASTER = 13.95;
   // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav 20 ms RMS envelope)
   const CUE = {
-    our: 0.29,     /* "Our model" (13.04) threshold drops in, mean fades */
-    forty: 0.92,   /* "40 percent" (13.67) precision 0.9 -> 0.40 */
-    eighty: 1.87,  /* "80 percent" (14.62) recall 0.1 -> 0.80 */
-    f1: 2.93,      /* "0.53" (15.68) F1 0.18 -> 0.53 */
+    our: 0.29,     /* "Our model" (14.24) threshold drops in, mean fades */
+    forty: 0.92,   /* "40 percent" (14.87) precision 0.9 -> 0.40 */
+    eighty: 1.87,  /* "80 percent" (15.82) recall 0.1 -> 0.80 */
+    f1: 2.93,      /* "0.53" (16.88) F1 0.18 -> 0.53 */
   };
   const HOLD = 3.60;  // F1 lands by 3.5; S(t >= HOLD) is SEAM[3] itself
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");

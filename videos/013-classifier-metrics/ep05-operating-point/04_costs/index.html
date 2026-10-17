@@ -28,12 +28,12 @@
     <script>
 (() => {
   const BEAT_SECONDS = 9.75;
-  const MASTER = 17.05;
+  const MASTER = 18.25;
   // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav 20 ms RMS envelope)
   const CUE = {
-    butF1: 0.29,   /* "But F1" (17.34) bars out, then the cards in */
-    fp: 3.39,      /* "false positive" (20.44) fp card lit, flagged users ring */
-    fn: 6.43,      /* "false negative" (23.48) hero moves to the fn card, missed attacks ring */
+    butF1: 0.29,   /* "But F1" (18.54) bars out, then the cards in */
+    fp: 3.39,      /* "false positive" (21.64) fp card lit, flagged users ring */
+    fn: 6.43,      /* "false negative" (24.68) hero moves to the fn card, missed attacks ring */
   };
   const STILL = 7.50;  // last ring ends at 7.21; S(t >= STILL) is SEAM[4] itself
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
