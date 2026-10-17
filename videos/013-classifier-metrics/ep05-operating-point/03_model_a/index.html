@@ -21,21 +21,21 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="4.2" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.3" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 4.20;
-  const MASTER = 14.70;
+  const BEAT_SECONDS = 4.3;
+  const MASTER = 12.75;
   // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav 20 ms RMS envelope)
   const CUE = {
-    our: 0.24,     /* "Our model" (14.94; envelope onset 14.92) threshold drops in, mean fades */
-    forty: 0.87,   /* "40 percent" (15.57; onset 15.56) precision 0.9 -> 0.40 */
-    eighty: 1.84,  /* "80 percent" (16.54; onset 16.54) recall 0.1 -> 0.80 */
-    f1: 2.88,      /* "0.53" (17.58, after "scores" 17.45) F1 0.18 -> 0.53 */
+    our: 0.29,     /* "Our model" (13.04) threshold drops in, mean fades */
+    forty: 0.92,   /* "40 percent" (13.67) precision 0.9 -> 0.40 */
+    eighty: 1.87,  /* "80 percent" (14.62) recall 0.1 -> 0.80 */
+    f1: 2.93,      /* "0.53" (15.68) F1 0.18 -> 0.53 */
   };
-  const HOLD = 3.55;  // F1 lands by 3.5; S(t >= HOLD) is SEAM[3] itself
+  const HOLD = 3.60;  // F1 lands by 3.5; S(t >= HOLD) is SEAM[3] itself
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, lerp, SEAM, BARS_A } = SC, E = SC.E();
   const K = SC.mount(root);

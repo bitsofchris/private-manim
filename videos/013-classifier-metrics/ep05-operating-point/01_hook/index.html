@@ -21,22 +21,19 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="7.4" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.3" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 7.40;
+  const BEAT_SECONDS = 5.3;
   const MASTER = 0.00;
   // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav 20 ms RMS envelope)
   const CUE = {
-    one: 2.32,      /* "one number" (2.32; "in one number" voiced 2.10–2.66) */
-    which: 4.04,    /* "whichever" (4.04, onset 4.04) through "worse" (4.76) */
-    prompt: 5.80,   /* "prompt" (5.78, onset 5.84 after the p closure) */
-    inject: 6.13,   /* "injection" (6.13, onset 6.14) */
-    detector: 6.56, /* "detector" (6.56, onset 6.52; speech ends 7.12) */
+    one: 2.30,      /* "one number" (2.30) */
+    which: 3.88,    /* "whichever" (3.88) through "worse" (4.66) */
   };
-  const STILL = 7.00;  // S(t ≥ STILL) is SEAM[1] itself
+  const STILL = 4.90;  // S(t ≥ STILL) is SEAM[1] itself
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, pulse, SEAM } = SC, E = SC.E();
   const K = SC.mount(root);
@@ -50,11 +47,6 @@
     const one = pulse(t, CUE.one, 0.6);                     // "one number": the F1 line once
     s.bars.f1Pulse = Math.max(swell, one);
     s.bars.pulseR = pulse(t, CUE.which, 0.8);               // "whichever is worse": the 0.1 bar
-    const up = E.io(seg(t, CUE.prompt - 0.1, CUE.prompt + 0.15));
-    const down = E.io(seg(t, CUE.detector, CUE.detector + 0.4));
-    s.tagBright = up * (1 - down);                          // the tag, across "prompt injection detector"
-    s.userPulse = pulse(t, CUE.prompt, 0.6);                // the teal pile once
-    s.attackRing = pulse(t, CUE.inject, 0.6);               // the 50 gold dots once
     return s;
   }
   function render(t) { K.draw(g, S(t)); }

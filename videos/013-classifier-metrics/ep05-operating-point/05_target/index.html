@@ -20,21 +20,21 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6.2" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.35" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.2;
-  const MASTER = 28.50;
+  const BEAT_SECONDS = 6.35;
+  const MASTER = 26.80;
   // beat-local seconds (words.json master − 28.50), checked on the vo_final.wav RMS envelope
   const CUE = {
-    so: 0.19,     /* "So say" (words 28.72; envelope onset ~28.69) */
-    two: 1.10,    /* "two blocked users" (words 29.56; envelope onset ~29.61) */
-    one: 3.60,    /* "one flag in three" (words 32.10; envelope onset ~32.10) */
-    real: 5.45,   /* "real attack" (words 33.98) */
+    so: 0.29,     /* "So say" (words 27.12, onset ~0.03 earlier) */
+    two: 1.17,    /* "two blocked users" (27.97) */
+    one: 3.72,    /* "one flag in three" (30.52) */
+    real: 5.60,   /* "real attack" (32.40) */
   };
-  const HOLD = 5.88;  // still from here; S(t) === SEAM[5]
+  const HOLD = 6.05;  // still from here; S(t) === SEAM[5]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
   const K = SC.mount(root);

@@ -21,17 +21,17 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="5.65" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.807" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 5.65;           // final beats table
-  const MASTER = 38.70;                // master start
+  const BEAT_SECONDS = 5.807;           // final beats table
+  const MASTER = 37.10;                // master start
   const CUE = {
-    threshold: 1.58,   /* "threshold" 40.28 (voiced onset ~40.34 on vo_final.wav) */
-    costs: 3.51,       /* "costs" 42.21 */
-    put: 4.04,         /* "put the line there" 42.74–43.52: hold */
+    threshold: 1.62,   /* "threshold" (38.72) */
+    costs: 3.57,       /* "costs" (40.67) */
+    put: 4.16,         /* "put the line there" (41.26-41.78): hold */
   };
   const LEAD = 0.08;                   // a swell starts just before its word so its peak sits on it
   const SWELL = 0.7;                   // one pulse, up and down

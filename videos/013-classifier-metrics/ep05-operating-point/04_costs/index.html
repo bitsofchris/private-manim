@@ -22,20 +22,20 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="9.6" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.75" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 9.60;
-  const MASTER = 18.90;
+  const BEAT_SECONDS = 9.75;
+  const MASTER = 17.05;
   // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav 20 ms RMS envelope)
   const CUE = {
-    butF1: 0.26,   /* "But F1" (19.16; envelope onset 19.16) bars out, then the cards in */
-    fp: 3.33,      /* "false positive" (22.23; onset 22.24) fp card lit, flagged users ring */
-    fn: 6.21,      /* "false negative" (25.11; onset 25.12) hero moves to the fn card, missed attacks ring */
+    butF1: 0.29,   /* "But F1" (17.34) bars out, then the cards in */
+    fp: 3.39,      /* "false positive" (20.44) fp card lit, flagged users ring */
+    fn: 6.43,      /* "false negative" (23.48) hero moves to the fn card, missed attacks ring */
   };
-  const STILL = 7.40;  // last ring ends at 7.21; S(t >= STILL) is SEAM[4] itself
+  const STILL = 7.50;  // last ring ends at 7.21; S(t >= STILL) is SEAM[4] itself
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, pulse, SEAM, BARS_A } = SC, E = SC.E();
   const K = SC.mount(root);
