@@ -55,11 +55,13 @@ multimedia principles, Heer & Robertson on animated transitions, Grant
 Sanderson and Kurzgesagt on process). The rules that changed how we build:
 
 - Animate a change only when the narration names it. Otherwise nothing moves.
-- One kind of change per `play`. Moves the viewer must track get ≥ 1 s.
+- One kind of change per `play`. Moves the viewer must track get ≥ `S.BEAT`
+  (0.6 s), staged steps ~1 s (`agents/animation-rules.md` rule 9).
 - A mobject that stands for a thing keeps its identity: `Transform` it,
   never fade-swap it for a lookalike.
 - Make the visual change land on the word that names it.
-- Never put the narration on screen. Captions are 2–4 key words.
+- Never put the narration on screen as text blocks: the only words from
+  the VO on screen are the burned captions, ≤ 3 words at a time (step 7).
 
 **YouTube Shorts UI safe zones** (multiple 2026 sources, values vary; we
 took the conservative envelope): top 120–380 px, bottom 300–380 px,
@@ -72,7 +74,7 @@ words, 48–70 px, err larger. Ours (in `style.py`):
 | `SHORT_SAFE_BOTTOM` | 0.20 | 384 |
 | `SHORT_SAFE_RIGHT` | 0.12 | 130 |
 | `SHORT_SAFE_LEFT` | 0.06 | 65 |
-| `SHORT_CAPTION_SCALE` | 1.3 | ~72 px caps; 3-word captions fit one line |
+| `SHORT_CAPTION_SCALE` | 1.3 | ~72 px caps; ≤ 15 characters fit one line |
 | `SHORT_LABEL_SCALE` | 1.3 | ~1/20 of frame height, the phone-legible floor |
 
 Verified by compositing rendered captions over a real frame with the dead
@@ -131,7 +133,8 @@ outro, no call to action.
   and which brief the beat agents get.
 - Write `videos/NNN-slug/storyboard.md`: a table `beat | VO | visual`.
 - **VO line 1 is THE ANSWER from the preflight, not THE QUESTION.** The
-  question lives in the on-screen band and is never spoken. Line 1 is the
+  question is never spoken (and with VO it isn't on screen either: step
+  0). Line 1 is the
   answer in plain words plus why it matters: "A vector is just a list of
   numbers, and it's the key to the math behind AI." Check before handing
   the script to Chris: if line 1 ends in "?" or starts with What / How /
@@ -408,8 +411,8 @@ with a scene element".
   20 s sheets at 300 px wide, one frame every 2 s, which shows the whole
   Short on one screen each.
 - Check at that size: text legible, nothing in the dead zones, one magenta
-  hero at a time, first frame moving, last frame still and clean, captions
-  never two lines for more than a beat.
+  hero at a time, first frame moving, last frame still and clean, every
+  caption on one line.
 - Dead-zone proof: overlay a caption PNG on a real frame and `drawbox`
   the four zones at 25 % red. If text touches red, fix the constant.
 - **Check every cut:** the last frame of beat N beside the first frame of
