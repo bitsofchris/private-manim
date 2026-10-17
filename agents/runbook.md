@@ -202,16 +202,18 @@ outro, no call to action.
 tools/enhance_vo.sh vo_raw.m4a vo_clean.wav
 ```
 
-High-pass 80 Hz → FFT denoise → de-ess → 3:1 compressor → loudnorm to
-−14 LUFS / −1.5 dBTP (YouTube's target). Covers ~90 % of what Descript's
-Studio Sound does; it will not remove reverb or a barking dog.
+High-pass 80 Hz → loudnorm to −14 LUFS / −1.5 dBTP (YouTube's target).
+That is the whole default, for a raw take and for a Descript Studio Sound
+take alike: Chris picked it by ear on 013 ep01 over the old chain, whose
+fixed denoise (`afftdn nf=-25`, ~30 dB above a quiet room) and 3:1
+compressor smeared the voice.
 
-If the take already went through Descript Studio Sound, skip the chain
-and only normalize (a second denoise/compress pass dulls it):
-
-```
-ffmpeg -i vo_raw.m4a -af "loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1 vo_clean.wav
-```
+Denoise only when the room is audible (a fan, hiss) and never on a Studio
+Sound take: `tools/enhance_vo.sh --denoise vo_raw.m4a vo_clean.wav` sets
+the denoiser's floor from the take (`tools/vo_floor.py vo_raw.m4a` prints
+it; a quiet room reads −55 to −70 dB) and adds a de-esser. Listen to both
+and keep the default unless the noise is plainly worse. It will not remove
+reverb or a barking dog.
 
 ## 4. Transcribe (Claude, 30 s)
 
@@ -254,11 +256,18 @@ Gotchas:
 
 ```
 tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
-    --max-gap 0.25 --remove 22.8-26.45 --remove 41.2-43.8 ...
+    --max-gap 0.25 --noise auto --level -14 --remove 22.8-26.45 --remove 41.2-43.8 ...
 ```
 
-   Drops the ranges, pads each kept piece 80 ms, caps every pause, 8 ms
-   fades at each join, writes an old→new time map.
+   Drops the ranges, pads each kept piece 80 ms (never back into a removed
+   range, so a mid-phrase cut stays cut), caps every pause, 8 ms fades at
+   each join, writes an old→new time map, then levels the result to −14
+   LUFS (cutting pauses moves it: 013 ep01 went to −15.9). `--noise auto`
+   puts the pause threshold 12 dB above the take's noise floor; a fixed
+   `-35dB` clipped word tails on 013 ep01 ("attacks" → "attacked").
+   A cut inside a phrase: put its edges at the envelope dips around the
+   words, not at the recognizer's word times (013 ep01: "flags" started
+   30 ms before its WhisperKit time, and "here's" lost its "h" at 20 ms).
 4. **Verify by re-transcribing `vo_final.wav`** with Parakeet
    (`-o transcript_final_text.txt`). Fragments show up as odd words
    ("'cause we then", "with work", "or that"). Nudge the boundary 50–200 ms
@@ -266,6 +275,10 @@ tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
    for step 7.
 5. Still over? `atempo=1.03` is inaudible and buys 3 %. Re-run loudnorm
    after it.
+6. Re-cleaning after the beats are built (a different chain): re-apply
+   the same time map, so every beat, caption and word time keeps its
+   timing: `tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map-in
+   timemap.json --level -14`.
 
 Then the timing transcript and word times, once, for every beat agent and
 for the captions:
@@ -464,8 +477,9 @@ stayed %, relative retention, at end, subs and shares per 1K. Then:
 
 | Tool | Does | Tested |
 |---|---|---|
-| `enhance_vo.sh` | ffmpeg voice cleanup chain to −14 LUFS | manual |
-| `tighten_vo.py` | range cuts, pause capping, time map | yes |
+| `enhance_vo.sh` | high-pass + loudnorm to −14 LUFS; `--denoise` adds a floor-matched denoise and de-ess | manual |
+| `vo_floor.py` | a take's noise floor in dB (10th-percentile 50 ms RMS) | yes |
+| `tighten_vo.py` | range cuts, pause capping, time map; `--noise auto`, `--level`, `--map-in` | yes |
 | `captions_from_transcript.py` | `words.json` (or a MacWhisper .json / .txt) → captions.json | yes |
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
 | `review_frames.sh` | contact sheets at phone size | manual |

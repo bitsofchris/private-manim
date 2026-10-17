@@ -65,7 +65,9 @@ timestamped transcript if there is one.
    `ffmpeg -ss START -to END -i ALL.m4a -ac 1 -c:a aac -b:a 160k epNN-slug/vo_raw.m4a`
 4. Write `epNN-slug/script.md`: the title, the duration, the source cut
    times ("cut from ALL.m4a at 132.16–182.73 s, announcement removed"), a
-   pointer to `../SCRIPTS.md`, and an **As recorded** section with what
+   pointer to `../SCRIPTS.md`, how it was recorded (QuickTime raw, or
+   Descript with Studio Sound: ask Chris if you don't know; runbook step 3
+   never denoises a Studio Sound take), and an **As recorded** section with what
    was actually said. Fix only mishearings (check them against the
    planned script); keep Chris's departures from it.
 5. Report one line per episode: duration, and where the take leaves the
