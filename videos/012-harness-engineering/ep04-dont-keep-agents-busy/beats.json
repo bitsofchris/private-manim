@@ -2,7 +2,11 @@
  "beats": [
   {
    "clip": "media/hf/01_hook.mp4",
-   "end": 5.5
+   "end": 2.5
+  },
+  {
+   "clip": "media/hf/01b_meters.mp4",
+   "end": 3.0
   },
   {
    "clip": "media/hf/02_obsidian.mp4",

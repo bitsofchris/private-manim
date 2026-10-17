@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- Harness ep 4, beat 2 (02_obsidian), master 5.50–10.00. Opens on DESK.SEAM[1], ends on DESK.SEAM[2].
-         The sheet goes back to ink early; on "keep agents working for me" the stream speeds up, the pile
-         climbs past the human's head and the human turns to it (head tilt, flat face). No magenta hero. -->
+    <!-- Harness ep 4, beat 2 (02_obsidian), master 5.50–10.00. Opens on DESK.SEAM["1b"], ends on DESK.SEAM[2].
+         "A while back I made a video about how I use Obsidian to keep agents working for me." The two
+         meters only: understood back to ink; on "keep agents working" the output bar shoots to the top
+         while understood stays put. No hero. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="cast/cast.js"></script>
@@ -29,38 +30,26 @@
   const BEAT = 2, BEAT_SECONDS = 4.50;
   const T0 = DESK.START[BEAT];                                   // 5.50
   const { seg, lerp, E, SEAM } = DESK;
-  const A = SEAM[BEAT - 1], B = SEAM[BEAT];
+  const A = SEAM["1b"], B = SEAM[BEAT];
   const CUE = {
-    obsidian: 7.94 - T0,    /* "Obsidian" — the stream starts to speed up */
-    keep: 8.55 - T0,        /* "keep" — the human starts turning to the pile */
-    working: 9.06 - T0,     /* "working" — the face goes flat mid-turn */
+    obsidian: 7.94 - T0,    /* "Obsidian" 2.44 */
+    keep: 8.55 - T0,        /* "keep" 3.05: the output bar shoots up */
+    working: 9.06 - T0,     /* "working" 3.56 */
   };
   const HOLD_FROM = BEAT_SECONDS - 0.4;                          // 4.10
-  // flow: the same cruise rate beat 1 ran at, then from "Obsidian" a Hermite rush to B.flow that
-  // starts at the cruise rate and lands at rest on HOLD_FROM (most of it after "keep", 8.55).
-  const V = 5.5 / (4.4 + 0.35);                                  // beat 1's cruise rate, pages/s
-  const T1 = CUE.obsidian + 0.26;                                // 2.70 (master 8.20)
-  const P1 = A.flow + V * T1, D = HOLD_FROM - T1;
-  function flowAt(t) {
-    if (t <= T1) return A.flow + V * t;
-    const s = Math.min(1, (t - T1) / D), m0 = V * D;
-    const h10 = s * s * s - 2 * s * s + s, h01 = -2 * s * s * s + 3 * s * s;
-    return P1 + h10 * m0 + h01 * (B.flow - P1);
-  }
   const root = document.getElementById("root");
   const scene = DESK.mount(root);
   ISO.guides(root);
   function render(t) {
-    const hero = lerp(A.sheet.hero, 0, E.io(seg(t, 0, 0.4)));               // back to ink, early
-    const turn = E.io(seg(t, CUE.keep, CUE.keep + 0.7));                    // 0.7 s head turn
-    const S = {
-      flow: t >= HOLD_FROM ? B.flow : flowAt(t),
-      stream: 1, pile0: 4,
-      sheet: { ink: 2, hero },
-      write: 0, wiggle: 0,
-      human: { tilt: lerp(0, B.human.tilt, turn), face: t >= CUE.working ? B.human.face : "smile" },
+    // the desk stays hidden in beat 3's opening state; only the meters move
+    const creep = 0.06 * E.io(seg(t, 0, CUE.keep));               // output keeps creeping up while he talks
+    const shoot = E.io(seg(t, CUE.keep, CUE.working + 0.45));     // then shoots to the top
+    const meters = {
+      a: 1, und: A.meters.und,
+      out: lerp(A.meters.out + creep, B.meters.out, shoot),
+      hero: lerp(A.meters.hero, 0, E.io(seg(t, 0, 0.5))),        // understood back to ink, early
     };
-    scene.draw(S, T0 + t);
+    scene.draw(Object.assign({}, A, { meters }), T0 + Math.min(t, HOLD_FROM));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);

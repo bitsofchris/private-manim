@@ -22,6 +22,9 @@
 //   agents {rest 0..1}  1: arms down, no tossing
 //   code {a, plumb 0..1, variant, core 0..1, coreHero 0..1, under 0..1, pulse 0..1}
 //   day {a, slot 0..1}
+//   scene 0..1      the desk scene's opacity (1 by default); it shrinks a little as it fades
+//   meters {a, out 0..1, und 0..1, hero 0..1}  two bars on their own: "output"
+//                   (teal) and "understood" (ink, magenta as hero); beats 1b–3
 (function () {
   const { PAL } = CAST;
   const clamp01 = (u) => Math.max(0, Math.min(1, u));
@@ -43,6 +46,7 @@
   const TRAVEL = 1.6;                          // flow units a page spends in the air
   const CODE = { left: 72, top: 252, width: 872, plumb: ["train(model, data)", "dl = DataLoader(ds)", "log(step, loss)"],
                  core: "softmax(q @ k.T)" };
+  const METER = { base: 1000, max: 680, w: 170, out: 330, und: 690 };
   const DAY = { x: 700, y: 336, w: 230, slots: 5, slotH: 56, gap: 6, pick: 1 };
   const HUMAN_REST = { armR: 22, armL: 22, tilt: 0, lean: 0, face: "smile" };
   const WRITE_ARM = 50;                        // 00_layout's fixed writing angle (beats use writeArm)
@@ -112,6 +116,23 @@
       slotEls.push(N("rect", { x: DAY.x + 14, y: DAY.y + DAY.gap + 4 + i * (DAY.slotH + DAY.gap), width: DAY.w - 28, height: DAY.slotH - 8, rx: 8,
                               fill: PAL.hero, "fill-opacity": 0, stroke: PAL.muted, "stroke-width": 5 }, dayG));
 
+    // the two meters (DOM, so check sees the labels): output vs understood
+    const meterBox = document.createElement("div");
+    meterBox.style.cssText = "position:absolute;left:0;top:0;width:1080px;height:1920px;";
+    const baseLine = document.createElement("div");
+    baseLine.style.cssText = `position:absolute;left:150px;top:${METER.base}px;width:720px;height:8px;border-radius:4px;background:${PAL.ink};`;
+    const bar = (cx) => { const d = document.createElement("div");
+      d.style.cssText = `position:absolute;left:${cx - METER.w / 2}px;top:${METER.base - METER.max}px;width:${METER.w}px;height:${METER.max}px;` +
+        `border-radius:14px 14px 0 0;border:7px solid;border-bottom:none;transform-origin:50% 100%;`;
+      meterBox.appendChild(d); return d; };
+    const outBar = bar(METER.out), undBar = bar(METER.und);
+    const mlab = (txt, cx) => { const d = document.createElement("div"); d.textContent = txt;
+      d.style.cssText = `position:absolute;left:${cx - 210}px;top:${METER.base + 24}px;width:420px;text-align:center;font-size:60px;line-height:70px;`;
+      meterBox.appendChild(d); return d; };
+    const outLab = mlab("output", METER.out), undLab = mlab("understood", METER.und);
+    meterBox.appendChild(baseLine);
+    root.appendChild(meterBox);
+
     function draw(S, t) {
       const st = S.stream || 0, flow = S.flow || 0, rest = (S.agents && S.agents.rest) || 0;
       // ---- pile ----
@@ -169,6 +190,20 @@
       const d = Object.assign({ a: 0, slot: 0 }, S.day || {});
       dayG.setAttribute("opacity", d.a); dayLab.style.opacity = d.a;
       dayG.setAttribute("transform", `translate(${(1 - d.a) * 60} 0)`);
+      // ---- scene fade and meters ----
+      const sceneA = S.scene == null ? 1 : S.scene;
+      svg.style.opacity = sceneA;
+      svg.style.transformOrigin = "540px 800px";
+      svg.style.transform = `scale(${0.9 + 0.1 * sceneA})`;
+      const m = Object.assign({ a: 0, out: 0, und: 0, hero: 0 }, S.meters || {});
+      meterBox.style.opacity = m.a;
+      meterBox.style.transform = `translateY(${(1 - m.a) * 40}px)`;
+      outBar.style.transform = `scaleY(${Math.max(0.001, m.out)})`;
+      outBar.style.borderColor = PAL.data; outBar.style.background = mixc(PAL.panel, PAL.data, 0.25);
+      undBar.style.transform = `scaleY(${Math.max(0.001, m.und)})`;
+      const uc = mixc(PAL.ink, PAL.hero, m.hero);
+      undBar.style.borderColor = uc; undBar.style.background = mixc(PAL.panel, uc, 0.25);
+      outLab.style.color = PAL.data; undLab.style.color = uc;
       slotEls.forEach((el, i) => {
         const on = i === DAY.pick ? d.slot : 0;
         el.setAttribute("stroke", mixc(PAL.muted, PAL.hero, on)); el.setAttribute("fill-opacity", 0.55 * on);
@@ -184,11 +219,15 @@
   // start + t). wiggle is 0 in every seam, so the hold is still and the
   // cut matches; a beat ramps it up while the human writes.
   // Beat starts (master s): START[n] for beat n.
-  const START = { 1: 0, 2: 5.50, 3: 10.00, 4: 13.10, 5: 18.85, 6: 26.75, 7: 32.20, 8: 37.05, 9: 41.80, end: 47.486 };
+  const START = { 1: 0, "1b": 2.50, 2: 5.50, 3: 10.00, 4: 13.10, 5: 18.85, 6: 26.75, 7: 32.20, 8: 37.05, 9: 41.80, end: 47.486 };
   const SEAM = {
     0: { flow: 2.0, stream: 1, pile0: 4, sheet: { ink: 1 }, write: 1 },
-    1: { flow: 7.8, stream: 1, pile0: 4, sheet: { ink: 2, hero: 1 }, write: 0 },
-    2: { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" } },
+    1: { flow: 4.8, stream: 1, pile0: 4, sheet: { ink: 1 }, write: 1 },
+    // beats 1b and 2: the desk is hidden behind the two meters (its state there only has to match beat 3's start)
+    "1b": { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" }, scene: 0,
+            meters: { a: 1, out: 0.55, und: 0.4, hero: 1 } },
+    2: { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" }, scene: 0,
+         meters: { a: 1, out: 1, und: 0.4, hero: 0 } },
     3: { flow: 24.8, stream: 1, pile0: 4, pileHero: 1, sheet: { ink: 2, dim: 1 }, human: { lean: -8, tilt: -6, face: "frown" } },
     4: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3, hero: 1 }, write: 1 },
     5: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3 }, write: 1,
@@ -200,6 +239,6 @@
     9: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 5 }, write: 0, day: { a: 1, slot: 1 } },
   };
 
-  window.DESK = { FLOOR, HUMAN, AG, DESK, SHEET, PILE, TRAVEL, CODE, DAY, HUMAN_REST, WRITE_ARM, SEAM, START,
+  window.DESK = { METER, FLOOR, HUMAN, AG, DESK, SHEET, PILE, TRAVEL, CODE, DAY, HUMAN_REST, WRITE_ARM, SEAM, START,
                   mount, E, clamp01, seg, lerp, hash, mixc, pulse };
 })();

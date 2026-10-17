@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 4, beat 1b (01b_meters), master 2.50–5.50. Opens on DESK.SEAM[1], ends on DESK.SEAM["1b"].
+         "It's to maximize the rate at which you can understand things." The desk fades back, two bars take
+         the stage: "output" (teal, already tall) and "understood" (short). On "understand things" the
+         understood bar climbs and turns magenta. Hero: the understood bar. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/desk.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.00" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT = "1b", BEAT_SECONDS = 3.00;
+  const T0 = DESK.START[BEAT];                                   // 2.50
+  const { seg, lerp, E, SEAM } = DESK;
+  const A = SEAM[1], B = SEAM["1b"];
+  const CUE = {
+    maximize: 2.88 - T0,     /* "maximize" 0.38: the bars are up by here */
+    understand: 4.52 - T0,   /* "understand" 2.02: the understood bar climbs, turns magenta */
+    things: 4.90 - T0,       /* "things" 2.40 */
+  };
+  const HOLD_FROM = 2.70;
+  const V = (A.flow - SEAM[0].flow) / (DESK.START["1b"] - DESK.START[1]);   // beat 1's page rate
+  const FADE = 0.45;                                             // the desk is gone by here
+  const root = document.getElementById("root");
+  const scene = DESK.mount(root);
+  ISO.guides(root);
+  function render(t) {
+    const out = E.io(seg(t, 0, FADE));
+    // the desk keeps its beat-1 motion while it fades, then (invisible) takes beat 3's opening state
+    const desk = t < FADE ? Object.assign({}, A, { flow: A.flow + V * t, wiggle: 0 }) : Object.assign({}, B);
+    const climb = E.io(seg(t, CUE.understand - 0.1, CUE.things + 0.2));
+    const meters = {
+      a: E.io(seg(t, 0.1, 0.55)),
+      out: B.meters.out,
+      und: lerp(0.08, B.meters.und, climb),
+      hero: E.io(seg(t, CUE.understand, CUE.understand + 0.4)),
+    };
+    scene.draw(Object.assign(desk, { scene: t < FADE ? 1 - out : 0, meters }), T0 + Math.min(t, HOLD_FROM));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

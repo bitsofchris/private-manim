@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- Harness ep 4, beat 1 (01_hook), master 0.00–5.50. Opens on DESK.SEAM[0], ends on DESK.SEAM[1].
-         Agents throw pages onto the small pile while the human writes; on "understand things" the sheet
-         turns magenta as its 2nd line writes in; the writing stops before the hold. Hero: the sheet. -->
+    <!-- Harness ep 4, beat 1 (01_hook), master 0.00–2.50. Opens on DESK.SEAM[0], ends on DESK.SEAM[1].
+         "The goal is not to keep agents busy." Agents throw pages onto the small pile while the human
+         writes; the stream runs through the cut into 01b_meters. No hero. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="cast/cast.js"></script>
@@ -22,44 +22,24 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="5.50" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.50" data-fps="30" data-width="1080" data-height="1920">
     </div>
     <script>
 (() => {
-  const BEAT = 1, BEAT_SECONDS = 5.50;
+  const BEAT = 1, BEAT_SECONDS = 2.50;
   const T0 = DESK.START[BEAT];                                   // 0.00
   const { seg, lerp, E, SEAM } = DESK;
   const A = SEAM[BEAT - 1], B = SEAM[BEAT];
-  const CUE = {
-    busy: 2.06 - T0,        /* "busy" — the stream keeps coming (no change, it never stops) */
-    understand: 4.52 - T0,  /* "understand" — the sheet starts turning magenta */
-    things: 4.90 - T0,      /* "things" — magenta full, the 2nd line nearly written */
-  };
-  const HOLD_FROM = BEAT_SECONDS - 0.4;                          // 5.10
-  // flow: constant rate from frame 0, decelerating to rest over the last DECEL s before the hold.
-  const DECEL = 0.7, CRUISE = HOLD_FROM - DECEL;
-  const V = (B.flow - A.flow) / (CRUISE + DECEL / 2);           // pages per second while cruising
-  function flowAt(t) {
-    if (t <= CRUISE) return A.flow + V * t;
-    const s = Math.min(t, HOLD_FROM) - CRUISE;
-    return A.flow + V * CRUISE + V * s - (V / (2 * DECEL)) * s * s;
-  }
+  const CUE = { busy: 2.06 - T0 /* "busy" — agent B's toss lands about here */ };
+  // flow runs at one rate straight through the cut (01b_meters keeps it while the desk fades)
+  const V = (B.flow - A.flow) / BEAT_SECONDS;                    // 1.12 pages/s
   const root = document.getElementById("root");
   const scene = DESK.mount(root);
   ISO.guides(root);
   function render(t) {
-    const hero = E.io(seg(t, CUE.understand, CUE.things));                 // 0 -> 1 on "understand"
-    const ink = A.sheet.ink + E.io(seg(t, CUE.understand - 0.12, CUE.things + 0.05)) * (B.sheet.ink - A.sheet.ink);
-    const wiggle = E.io(seg(t, 0, 0.25)) * (1 - E.io(seg(t, 4.85, 5.05)));  // up from frame 0, down before the hold
-    const write = lerp(A.write, B.write, E.io(seg(t, 4.70, HOLD_FROM)));     // pencil off the sheet
-    const S = {
-      flow: t >= HOLD_FROM ? B.flow : flowAt(t),
-      stream: 1, pile0: 4,
-      sheet: { ink: t >= HOLD_FROM ? B.sheet.ink : ink, hero: t >= HOLD_FROM ? B.sheet.hero : hero },
-      write: t >= HOLD_FROM ? B.write : write,
-      wiggle: t >= HOLD_FROM ? 0 : wiggle,
-    };
-    scene.draw(S, T0 + t);
+    const wiggle = E.io(seg(t, 0, 0.25)) * (1 - E.io(seg(t, BEAT_SECONDS - 0.35, BEAT_SECONDS - 0.05)));
+    scene.draw({ flow: t >= BEAT_SECONDS ? B.flow : A.flow + V * t, stream: 1, pile0: 4,
+                 sheet: { ink: 1 }, write: 1, wiggle }, T0 + t);
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
