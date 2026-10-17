@@ -1,0 +1,43 @@
+00:00.240-00:03.120
+An agent harness is everything except the model.
+
+00:03.120-00:06.880
+It decides what the model sees, what it can do, what it remembers, and when it's done.
+
+00:06.880-00:09.040
+Context is what goes into the model on this turn.
+
+00:09.040-00:11.280
+It's your instructions, the files that opened the last hour.
+
+00:11.280-00:12.400
+Tools are what it can touch.
+
+00:12.400-00:14.800
+Read a file, run a command, search the web.
+
+00:14.400-00:16.720
+Memory is what carries over when the session ends.
+
+00:16.720-00:20.080
+Notes, rules, like an agent's MD, they're loaded back in next time.
+
+00:20.080-00:24.880
+And the loop runs the model, runs the tool, feeds the result back, and checks the work.
+
+00:24.560-00:28.480
+Try again or stop, and it can even save rules to recursively self-improve.
+
+00:28.480-00:33.680
+The model can be the same harness is why one agent fixes your bug and another might keep going in circles.
+
+00:33.500-00:36.300
+So when your agent fails, don't blame the model at first.
+
+00:36.300-00:37.660
+Ask which piece was missing.
+
+00:37.660-00:40.140
+The context, the tool, the memory, or the check
+
+

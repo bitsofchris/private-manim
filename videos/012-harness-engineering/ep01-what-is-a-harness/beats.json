@@ -1,0 +1,32 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 6.85
+  },
+  {
+   "clip": "media/hf/02_context.mp4",
+   "end": 4.28
+  },
+  {
+   "clip": "media/hf/03_tools.mp4",
+   "end": 3.28
+  },
+  {
+   "clip": "media/hf/04_memory.mp4",
+   "end": 5.66
+  },
+  {
+   "clip": "media/hf/05_loop.mp4",
+   "end": 8.41
+  },
+  {
+   "clip": "media/hf/06_same_model.mp4",
+   "end": 5.04
+  },
+  {
+   "clip": "media/hf/07_ask.mp4",
+   "end": 6.862
+  }
+ ]
+}

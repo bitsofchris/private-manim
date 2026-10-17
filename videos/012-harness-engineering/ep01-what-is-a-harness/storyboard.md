@@ -78,3 +78,40 @@ what the caption already says; ep 2 owns the `AGENTS.md` card.
 Cuts: every beat starts on the previous beat's last frame (same rig, same
 labels, same part lit). `_kit/rig.js` owns the rig, the labels and the
 part states so parallel beats match.
+
+## Seam states (what every cut must match)
+
+Every beat starts and ends with: the rig at home (`RIG.make(svg, root)`,
+no arguments) except beat 6's end and beat 7's start; the agent's arms at
+58° (`RIG.make` default; any arm move returns there before the hold);
+eyes open (`1 0`); no dot, icon, card or verdict on screen; the loop's
+dot appears only while it runs and fades out before the hold.
+
+| cut | part states `[context, tools, memory, loop]` | labels |
+|---|---|---|
+| start of 01 | `[0, 0, 0, 0]` | only **model** (part labels at opacity 0) |
+| 01 → 02 | `[0, 0, 0, 1]` | all on |
+| 02 → 03 | `[1, 0, 0, 0]` | all on |
+| 03 → 04 | `[0, 1, 0, 0]`, the three tool icons still on | all on |
+| 04 → 05 | `[0, 0, 1, 0]` | all on |
+| 05 → 06 | `[0, 0, 0, 1]` | all on |
+| 06 → 07 | rig at (290, 1010) s 0.65, `[0, 0, 0, 0]`; second rig `missing: [1, 2]` with its parts `[0, 1, 1, 0]`; ✓ at (290, 450); ↻ at (760, 450) at rest angle 0 | part labels and **model** at 0 |
+| end of 07 | home, `[0, 0, 0, 1]` | all on |
+
+## Final beats (master times in `vo_final.wav`, 40.382 s; the contract for step 6)
+
+Cuts sit in the pauses (`words.json`, WhisperKit Large v2; spellings fixed
+against Parakeet). Beat-local cue = master − start.
+
+| beat | start | length | folder | VO |
+|---|---|---|---|---|
+| 1 | 0.000 | 6.850 | `01_hook` | An agent harness is everything except the model. It decides what the model sees, what it can do, what it remembers, and when it's done. |
+| 2 | 6.850 | 4.280 | `02_context` | Context is what goes into the model on this turn. It's your instructions, the files that opened the last error. |
+| 3 | 11.130 | 3.280 | `03_tools` | Tools are what it can touch. Read a file, run a command, search the web. |
+| 4 | 14.410 | 5.660 | `04_memory` | Memory is what carries over when the session ends. Notes, rules, like an AGENTS.md, they're loaded back in next time. |
+| 5 | 20.070 | 8.410 | `05_loop` | And the loop runs the model, runs the tool, feeds the result back, and checks the work. Try again or stop, and it can even save rules to recursively self-improve. |
+| 6 | 28.480 | 5.040 | `06_same_model` | The model can be the same, but the harness is why one agent fixes your bug and another might keep going in circles. |
+| 7 | 33.520 | 6.862 | `07_ask` | So when your agent fails, don't blame the model at first. Ask which piece was missing: the context, the tool, the memory, or the check. |
+
+Captions follow what is audible (Chris, 10/17): "the files that opened",
+"but the harness".

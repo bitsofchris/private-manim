@@ -1,0 +1,904 @@
+{
+  "segments" : [
+    {
+      "end" : 2800,
+      "id" : "7AA6EEF0-0DB1-4DF8-90F5-87989DD8C251",
+      "start" : 360,
+      "text" : "An agent harnesses everything except the model.",
+      "words" : [
+        {
+          "end" : 720,
+          "start" : 360,
+          "text" : "An"
+        },
+        {
+          "end" : 940,
+          "start" : 720,
+          "text" : "agent"
+        },
+        {
+          "end" : 1480,
+          "start" : 940,
+          "text" : "harnesses"
+        },
+        {
+          "end" : 1940,
+          "start" : 1480,
+          "text" : "everything"
+        },
+        {
+          "end" : 2400,
+          "start" : 1940,
+          "text" : "except"
+        },
+        {
+          "end" : 2540,
+          "start" : 2400,
+          "text" : "the"
+        },
+        {
+          "end" : 2800,
+          "start" : 2540,
+          "text" : "model."
+        }
+      ]
+    },
+    {
+      "end" : 6620,
+      "id" : "8A43B4F2-FB2C-4C0C-930C-EBE0866C09F1",
+      "start" : 3280,
+      "text" : "It decides what the model sees, what it can do, what it remembers, and when it's done.",
+      "words" : [
+        {
+          "end" : 3340,
+          "start" : 3280,
+          "text" : "It"
+        },
+        {
+          "end" : 3720,
+          "start" : 3340,
+          "text" : "decides"
+        },
+        {
+          "end" : 3820,
+          "start" : 3720,
+          "text" : "what"
+        },
+        {
+          "end" : 3960,
+          "start" : 3820,
+          "text" : "the"
+        },
+        {
+          "end" : 4120,
+          "start" : 3960,
+          "text" : "model"
+        },
+        {
+          "end" : 4560,
+          "start" : 4120,
+          "text" : "sees,"
+        },
+        {
+          "end" : 4760,
+          "start" : 4700,
+          "text" : "what"
+        },
+        {
+          "end" : 4860,
+          "start" : 4760,
+          "text" : "it"
+        },
+        {
+          "end" : 4960,
+          "start" : 4860,
+          "text" : "can"
+        },
+        {
+          "end" : 5220,
+          "start" : 4960,
+          "text" : "do,"
+        },
+        {
+          "end" : 5420,
+          "start" : 5320,
+          "text" : "what"
+        },
+        {
+          "end" : 5440,
+          "start" : 5420,
+          "text" : "it"
+        },
+        {
+          "end" : 5840,
+          "start" : 5440,
+          "text" : "remembers,"
+        },
+        {
+          "end" : 6100,
+          "start" : 6000,
+          "text" : "and"
+        },
+        {
+          "end" : 6200,
+          "start" : 6100,
+          "text" : "when"
+        },
+        {
+          "end" : 6360,
+          "start" : 6200,
+          "text" : "it's"
+        },
+        {
+          "end" : 6620,
+          "start" : 6360,
+          "text" : "done."
+        }
+      ]
+    },
+    {
+      "end" : 8880,
+      "id" : "4796D7D8-20F9-4ABE-B238-6EFC62A5177A",
+      "start" : 7080,
+      "text" : "Context is what goes into the model on this turn.",
+      "words" : [
+        {
+          "end" : 7440,
+          "start" : 7080,
+          "text" : "Context"
+        },
+        {
+          "end" : 7540,
+          "start" : 7440,
+          "text" : "is"
+        },
+        {
+          "end" : 7660,
+          "start" : 7540,
+          "text" : "what"
+        },
+        {
+          "end" : 7840,
+          "start" : 7660,
+          "text" : "goes"
+        },
+        {
+          "end" : 7980,
+          "start" : 7840,
+          "text" : "into"
+        },
+        {
+          "end" : 8160,
+          "start" : 7980,
+          "text" : "the"
+        },
+        {
+          "end" : 8360,
+          "start" : 8160,
+          "text" : "model"
+        },
+        {
+          "end" : 8520,
+          "start" : 8360,
+          "text" : "on"
+        },
+        {
+          "end" : 8640,
+          "start" : 8520,
+          "text" : "this"
+        },
+        {
+          "end" : 8880,
+          "start" : 8640,
+          "text" : "turn."
+        }
+      ]
+    },
+    {
+      "end" : 12280,
+      "id" : "8844D9A2-7505-4227-82EC-2A5DE63E83EC",
+      "start" : 9120,
+      "text" : "It's your instructions, the files that opened the last error, tools are what it can touch.",
+      "words" : [
+        {
+          "end" : 9200,
+          "start" : 9120,
+          "text" : "It's"
+        },
+        {
+          "end" : 9280,
+          "start" : 9200,
+          "text" : "your"
+        },
+        {
+          "end" : 9760,
+          "start" : 9280,
+          "text" : "instructions,"
+        },
+        {
+          "end" : 10020,
+          "start" : 9900,
+          "text" : "the"
+        },
+        {
+          "end" : 10240,
+          "start" : 10020,
+          "text" : "files"
+        },
+        {
+          "end" : 10320,
+          "start" : 10240,
+          "text" : "that"
+        },
+        {
+          "end" : 10520,
+          "start" : 10320,
+          "text" : "opened"
+        },
+        {
+          "end" : 10640,
+          "start" : 10520,
+          "text" : "the"
+        },
+        {
+          "end" : 10820,
+          "start" : 10640,
+          "text" : "last"
+        },
+        {
+          "end" : 11080,
+          "start" : 10820,
+          "text" : "error,"
+        },
+        {
+          "end" : 11460,
+          "start" : 11140,
+          "text" : "tools"
+        },
+        {
+          "end" : 11620,
+          "start" : 11460,
+          "text" : "are"
+        },
+        {
+          "end" : 11760,
+          "start" : 11620,
+          "text" : "what"
+        },
+        {
+          "end" : 11880,
+          "start" : 11760,
+          "text" : "it"
+        },
+        {
+          "end" : 11960,
+          "start" : 11880,
+          "text" : "can"
+        },
+        {
+          "end" : 12280,
+          "start" : 11960,
+          "text" : "touch."
+        }
+      ]
+    },
+    {
+      "end" : 14160,
+      "id" : "3AD882FE-D76E-4545-AB1A-3590D71F6D77",
+      "start" : 12460,
+      "text" : "Read a file, run a command, search the web.",
+      "words" : [
+        {
+          "end" : 12600,
+          "start" : 12460,
+          "text" : "Read"
+        },
+        {
+          "end" : 12660,
+          "start" : 12600,
+          "text" : "a"
+        },
+        {
+          "end" : 13000,
+          "start" : 12660,
+          "text" : "file,"
+        },
+        {
+          "end" : 13160,
+          "start" : 13020,
+          "text" : "run"
+        },
+        {
+          "end" : 13200,
+          "start" : 13160,
+          "text" : "a"
+        },
+        {
+          "end" : 13480,
+          "start" : 13200,
+          "text" : "command,"
+        },
+        {
+          "end" : 13780,
+          "start" : 13540,
+          "text" : "search"
+        },
+        {
+          "end" : 13880,
+          "start" : 13780,
+          "text" : "the"
+        },
+        {
+          "end" : 14160,
+          "start" : 13880,
+          "text" : "web."
+        }
+      ]
+    },
+    {
+      "end" : 16520,
+      "id" : "48E54DE4-B714-400A-8483-DB7FCF49166B",
+      "start" : 14660,
+      "text" : "Memory is what carries over when the session ends.",
+      "words" : [
+        {
+          "end" : 14900,
+          "start" : 14660,
+          "text" : "Memory"
+        },
+        {
+          "end" : 15100,
+          "start" : 14900,
+          "text" : "is"
+        },
+        {
+          "end" : 15180,
+          "start" : 15100,
+          "text" : "what"
+        },
+        {
+          "end" : 15520,
+          "start" : 15180,
+          "text" : "carries"
+        },
+        {
+          "end" : 15840,
+          "start" : 15520,
+          "text" : "over"
+        },
+        {
+          "end" : 15980,
+          "start" : 15840,
+          "text" : "when"
+        },
+        {
+          "end" : 16080,
+          "start" : 15980,
+          "text" : "the"
+        },
+        {
+          "end" : 16299,
+          "start" : 16080,
+          "text" : "session"
+        },
+        {
+          "end" : 16520,
+          "start" : 16299,
+          "text" : "ends."
+        }
+      ]
+    },
+    {
+      "end" : 19860,
+      "id" : "F5C87868-EF4D-4B93-9A61-D75728C39FA6",
+      "start" : 16660,
+      "text" : "Notes, rules, like an agent's MD, they're loaded back in next time.",
+      "words" : [
+        {
+          "end" : 16940,
+          "start" : 16660,
+          "text" : "Notes,"
+        },
+        {
+          "end" : 17460,
+          "start" : 17140,
+          "text" : "rules,"
+        },
+        {
+          "end" : 17780,
+          "start" : 17720,
+          "text" : "like"
+        },
+        {
+          "end" : 17860,
+          "start" : 17780,
+          "text" : "an"
+        },
+        {
+          "end" : 18140,
+          "start" : 17860,
+          "text" : "agent's"
+        },
+        {
+          "end" : 18360,
+          "start" : 18140,
+          "text" : "MD,"
+        },
+        {
+          "end" : 18820,
+          "start" : 18740,
+          "text" : "they're"
+        },
+        {
+          "end" : 19060,
+          "start" : 18820,
+          "text" : "loaded"
+        },
+        {
+          "end" : 19320,
+          "start" : 19060,
+          "text" : "back"
+        },
+        {
+          "end" : 19440,
+          "start" : 19320,
+          "text" : "in"
+        },
+        {
+          "end" : 19660,
+          "start" : 19440,
+          "text" : "next"
+        },
+        {
+          "end" : 19860,
+          "start" : 19660,
+          "text" : "time."
+        }
+      ]
+    },
+    {
+      "end" : 24260,
+      "id" : "2C26924B-9088-4151-A46A-0980B2DF1442",
+      "start" : 20280,
+      "text" : "And the loop runs the model, runs the tool, feeds the result back, and checks the work.",
+      "words" : [
+        {
+          "end" : 20400,
+          "start" : 20280,
+          "text" : "And"
+        },
+        {
+          "end" : 20460,
+          "start" : 20400,
+          "text" : "the"
+        },
+        {
+          "end" : 20720,
+          "start" : 20460,
+          "text" : "loop"
+        },
+        {
+          "end" : 21020,
+          "start" : 20720,
+          "text" : "runs"
+        },
+        {
+          "end" : 21180,
+          "start" : 21020,
+          "text" : "the"
+        },
+        {
+          "end" : 21460,
+          "start" : 21180,
+          "text" : "model,"
+        },
+        {
+          "end" : 21860,
+          "start" : 21700,
+          "text" : "runs"
+        },
+        {
+          "end" : 21980,
+          "start" : 21860,
+          "text" : "the"
+        },
+        {
+          "end" : 22340,
+          "start" : 21980,
+          "text" : "tool,"
+        },
+        {
+          "end" : 22660,
+          "start" : 22500,
+          "text" : "feeds"
+        },
+        {
+          "end" : 22740,
+          "start" : 22660,
+          "text" : "the"
+        },
+        {
+          "end" : 23020,
+          "start" : 22740,
+          "text" : "result"
+        },
+        {
+          "end" : 23340,
+          "start" : 23020,
+          "text" : "back,"
+        },
+        {
+          "end" : 23540,
+          "start" : 23420,
+          "text" : "and"
+        },
+        {
+          "end" : 23820,
+          "start" : 23540,
+          "text" : "checks"
+        },
+        {
+          "end" : 23960,
+          "start" : 23820,
+          "text" : "the"
+        },
+        {
+          "end" : 24260,
+          "start" : 23960,
+          "text" : "work."
+        }
+      ]
+    },
+    {
+      "end" : 28240,
+      "id" : "0FCE5275-659B-437A-A5D9-5B6CF05705E5",
+      "start" : 24720,
+      "text" : "Try again or stop, and it can even save rules to recursively self-improve.",
+      "words" : [
+        {
+          "end" : 24840,
+          "start" : 24720,
+          "text" : "Try"
+        },
+        {
+          "end" : 25060,
+          "start" : 24840,
+          "text" : "again"
+        },
+        {
+          "end" : 25180,
+          "start" : 25060,
+          "text" : "or"
+        },
+        {
+          "end" : 25540,
+          "start" : 25180,
+          "text" : "stop,"
+        },
+        {
+          "end" : 25720,
+          "start" : 25620,
+          "text" : "and"
+        },
+        {
+          "end" : 25800,
+          "start" : 25720,
+          "text" : "it"
+        },
+        {
+          "end" : 25880,
+          "start" : 25800,
+          "text" : "can"
+        },
+        {
+          "end" : 26220,
+          "start" : 25880,
+          "text" : "even"
+        },
+        {
+          "end" : 26740,
+          "start" : 26220,
+          "text" : "save"
+        },
+        {
+          "end" : 26940,
+          "start" : 26740,
+          "text" : "rules"
+        },
+        {
+          "end" : 27060,
+          "start" : 26940,
+          "text" : "to"
+        },
+        {
+          "end" : 27580,
+          "start" : 27060,
+          "text" : "recursively"
+        },
+        {
+          "end" : 27860,
+          "start" : 27580,
+          "text" : "self"
+        },
+        {
+          "end" : 28240,
+          "start" : 27860,
+          "text" : "-improve."
+        }
+      ]
+    },
+    {
+      "end" : 32300,
+      "id" : "B46C1887-3DF5-4777-B72C-1B78581A90F1",
+      "start" : 28720,
+      "text" : "The model can be the same, but the harness is why one agent fixes your bug and another",
+      "words" : [
+        {
+          "end" : 28760,
+          "start" : 28720,
+          "text" : "The"
+        },
+        {
+          "end" : 29000,
+          "start" : 28760,
+          "text" : "model"
+        },
+        {
+          "end" : 29120,
+          "start" : 29000,
+          "text" : "can"
+        },
+        {
+          "end" : 29240,
+          "start" : 29120,
+          "text" : "be"
+        },
+        {
+          "end" : 29440,
+          "start" : 29240,
+          "text" : "the"
+        },
+        {
+          "end" : 29660,
+          "start" : 29440,
+          "text" : "same,"
+        },
+        {
+          "end" : 29720,
+          "start" : 29660,
+          "text" : "but"
+        },
+        {
+          "end" : 29780,
+          "start" : 29720,
+          "text" : "the"
+        },
+        {
+          "end" : 30180,
+          "start" : 29780,
+          "text" : "harness"
+        },
+        {
+          "end" : 30440,
+          "start" : 30180,
+          "text" : "is"
+        },
+        {
+          "end" : 30600,
+          "start" : 30440,
+          "text" : "why"
+        },
+        {
+          "end" : 30940,
+          "start" : 30600,
+          "text" : "one"
+        },
+        {
+          "end" : 31260,
+          "start" : 30940,
+          "text" : "agent"
+        },
+        {
+          "end" : 31540,
+          "start" : 31260,
+          "text" : "fixes"
+        },
+        {
+          "end" : 31660,
+          "start" : 31540,
+          "text" : "your"
+        },
+        {
+          "end" : 31880,
+          "start" : 31660,
+          "text" : "bug"
+        },
+        {
+          "end" : 31960,
+          "start" : 31880,
+          "text" : "and"
+        },
+        {
+          "end" : 32300,
+          "start" : 31960,
+          "text" : "another"
+        }
+      ]
+    },
+    {
+      "end" : 33220,
+      "id" : "E2F5CC17-6BB4-46D3-B4E3-B23790A6959F",
+      "start" : 32310,
+      "text" : "might keep going in circles.",
+      "words" : [
+        {
+          "end" : 32419,
+          "start" : 32310,
+          "text" : "might"
+        },
+        {
+          "end" : 32599,
+          "start" : 32419,
+          "text" : "keep"
+        },
+        {
+          "end" : 32800,
+          "start" : 32599,
+          "text" : "going"
+        },
+        {
+          "end" : 32900,
+          "start" : 32800,
+          "text" : "in"
+        },
+        {
+          "end" : 33220,
+          "start" : 32900,
+          "text" : "circles."
+        }
+      ]
+    },
+    {
+      "end" : 35940,
+      "id" : "FF87FA43-C6A0-495D-887C-44C9543A57D5",
+      "start" : 33820,
+      "text" : "So when your agent fails, don't blame the model at first.",
+      "words" : [
+        {
+          "end" : 33880,
+          "start" : 33820,
+          "text" : "So"
+        },
+        {
+          "end" : 33980,
+          "start" : 33880,
+          "text" : "when"
+        },
+        {
+          "end" : 34100,
+          "start" : 33980,
+          "text" : "your"
+        },
+        {
+          "end" : 34380,
+          "start" : 34100,
+          "text" : "agent"
+        },
+        {
+          "end" : 34720,
+          "start" : 34380,
+          "text" : "fails,"
+        },
+        {
+          "end" : 34960,
+          "start" : 34830,
+          "text" : "don't"
+        },
+        {
+          "end" : 35140,
+          "start" : 34960,
+          "text" : "blame"
+        },
+        {
+          "end" : 35300,
+          "start" : 35140,
+          "text" : "the"
+        },
+        {
+          "end" : 35500,
+          "start" : 35300,
+          "text" : "model"
+        },
+        {
+          "end" : 35640,
+          "start" : 35500,
+          "text" : "at"
+        },
+        {
+          "end" : 35940,
+          "start" : 35640,
+          "text" : "first."
+        }
+      ]
+    },
+    {
+      "end" : 39640,
+      "id" : "AE7AB644-BA7B-4E4C-870C-A547C738FA79",
+      "start" : 36420,
+      "text" : "Ask which piece was missing—the context, the tool, the memory, or the check.",
+      "words" : [
+        {
+          "end" : 36640,
+          "start" : 36420,
+          "text" : "Ask"
+        },
+        {
+          "end" : 36780,
+          "start" : 36640,
+          "text" : "which"
+        },
+        {
+          "end" : 37020,
+          "start" : 36780,
+          "text" : "piece"
+        },
+        {
+          "end" : 37160,
+          "start" : 37020,
+          "text" : "was"
+        },
+        {
+          "end" : 37560,
+          "start" : 37160,
+          "text" : "missing"
+        },
+        {
+          "end" : 37740,
+          "start" : 37560,
+          "text" : "—the"
+        },
+        {
+          "end" : 38060,
+          "start" : 37740,
+          "text" : "context,"
+        },
+        {
+          "end" : 38380,
+          "start" : 38260,
+          "text" : "the"
+        },
+        {
+          "end" : 38560,
+          "start" : 38380,
+          "text" : "tool,"
+        },
+        {
+          "end" : 38780,
+          "start" : 38680,
+          "text" : "the"
+        },
+        {
+          "end" : 39000,
+          "start" : 38780,
+          "text" : "memory,"
+        },
+        {
+          "end" : 39240,
+          "start" : 39110,
+          "text" : "or"
+        },
+        {
+          "end" : 39400,
+          "start" : 39240,
+          "text" : "the"
+        },
+        {
+          "end" : 39640,
+          "start" : 39400,
+          "text" : "check."
+        }
+      ]
+    }
+  ],
+  "text" : "An agent harnesses everything except the model.\nIt decides what the model sees, what it can do, what it remembers, and when it's done.\nContext is what goes into the model on this turn.\nIt's your instructions, the files that opened the last error, tools are what it can touch.\nRead a file, run a command, search the web.\nMemory is what carries over when the session ends.\nNotes, rules, like an agent's MD, they're loaded back in next time.\nAnd the loop runs the model, runs the tool, feeds the result back, and checks the work.\nTry again or stop, and it can even save rules to recursively self-improve.\nThe model can be the same, but the harness is why one agent fixes your bug and another\nmight keep going in circles.\nSo when your agent fails, don't blame the model at first.\nAsk which piece was missing—the context, the tool, the memory, or the check."
+}
