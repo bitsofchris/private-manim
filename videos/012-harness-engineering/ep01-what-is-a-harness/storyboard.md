@@ -23,8 +23,8 @@ what the caption already says; ep 2 owns the `AGENTS.md` card.
 
 - **The rig.** One `CAST.blob` (the model) with its four pipes in
   `CAST.PIPES` order and direction: **context up, tools right, memory
-  down, loop left**. Rig centre **(507, 600)**, scale **0.85**, pipe
-  length **120** (`pipe: 120`). Same place in every beat except beat 6.
+  down, loop left**. Rig centre **(480, 640)**, scale **0.95**, pipe
+  length **150** (`RIG.HOME` in `_kit/rig.js`). Same place in every beat except beat 6.
 - **The model stays at rest.** The blob body is drawn `--dim` (stroke
   `--dim`, fill `--dim` at 0.12) in every beat: this Short is about
   everything except the model, so magenta goes to the pipe being named,
@@ -38,7 +38,7 @@ what the caption already says; ep 2 owns the `AGENTS.md` card.
   **memory** below the down pipe, **loop** left of the left pipe. They pop
   in during beat 1 on the word for each part and stay to the end. When a
   pipe is the hero its label turns magenta with it.
-- **The human:** `CAST.human`, feet at **(170, 1080)**, scale **0.5**,
+- **The human:** `CAST.human`, feet at **(140, 1090)**, scale **0.6** (`RIG.HUMAN`),
   face `smile`, facing the rig. Present in every beat.
 - **The three things on each pipe** (icons, no text: the captions carry
   the words):
@@ -66,7 +66,7 @@ what the caption already says; ep 2 owns the `AGENTS.md` card.
 | 03_tools (11.6–15.0) | Tools are what it can touch. Read a file, run a command, search the web. | Hero → tools pipe on "Tools". The three tool icons pop out at the pipe's end on "file", "command", "web", stacked to the right of the "tools" label (stage right, y 450–750). Ends: tools magenta, icons on. |
 | 04_memory (15.0–21.0) | Memory is what carries over when the session ends. Notes, rules, like an AGENTS.md, they're loaded back in next time. | Hero → memory pipe on "Memory". Tool icons fade. On "session ends" the human blinks (a new session); on "AGENTS.md" the `AGENTS.md` card drops out of the memory pipe and rests below its label; on "loaded back in" it rides back up the pipe into the blob. Ends: memory magenta, card gone. |
 | 05_loop (21.0–30.4) | And the loop runs the model, runs the tool, feeds the result back, and checks the work. Try again or stop, and it can even save rules to recursively self-improve. | Hero → loop pipe on "loop". The teal dot: "runs the model" pulses the blob, "runs the tool" runs out the tools pipe, "feeds the result back" comes back in, "checks the work" a ✓ by the loop label. "Try again" the dot goes round once more; "stop" the dot halts. "save rules" a small rule card leaves the loop pipe and slides into the memory pipe ("self-improve"). Ends: loop magenta. |
-| 06_same_model (30.4–35.7) | The model can be the same, but the harness is why one agent fixes your bug and another might keep going in circles. | The rig shrinks and slides left (centre (300, 600), scale 0.5, labels go); a second rig with the same dim blob appears right (centre (720, 600)) with only two pipes, the missing two dashed `--muted`. On "fixes your bug" a ✓ under the left rig; on "going in circles" a ↻ under the right rig spins, and the two missing pipes go magenta (the hero: what differs). Human stays. Ends: ↻ still, missing pipes magenta. |
+| 06_same_model (30.4–35.7) | The model can be the same, but the harness is why one agent fixes your bug and another might keep going in circles. | The rig shrinks and slides left (centre (340, 600), scale 0.6, labels go); a second rig with the same dim blob appears right (centre (770, 600), scale 0.6) with only two pipes, the missing two dashed `--muted`. On "fixes your bug" a ✓ under the left rig (340, 860); on "going in circles" a ↻ under the right rig (770, 860) spins, and the two missing pipes go magenta (the hero: what differs). Human stays. Ends: ↻ still, missing pipes magenta. |
 | 07_ask (35.7–42.4) | So when your agent fails, don't blame the model at first. Ask which piece was missing: the context, the tool, the memory, or the check. | The right rig and ✓ fade; the left rig grows back to the ledger place, labels return, all pipes teal. On "fails" the human frowns; on "don't blame the model" the blob shakes once (still dim). On "the context", "the tool", "the memory", "the check" each pipe goes magenta in turn, the previous back to teal. The human tilts to each. Last frame still: the loop pipe magenta, the human `flat`. |
 
 Cuts: every beat starts on the previous beat's last frame (same rig,
