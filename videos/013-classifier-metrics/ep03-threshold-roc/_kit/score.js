@@ -336,9 +336,29 @@
     return { draw };
   }
 
+  // ---- Seams: beat n opens on SEAM[n-1] and ends on SEAM[n] ----
+  const TAG_I = 16;   // beat 4's tagged attack: score 0.8374 ("0.84"), top row, right of 0.70
+  const pts = (o = {}) => STOPS.map((t) => Object.assign({ t, a: 1 }, o));
+  const SEAM = {
+    // ends of beats 1–3: rest at the ledger box, no code line
+    1: { t: T_BOX }, 2: { t: T_BOX }, 3: { t: T_BOX },
+    // end of beat 4: the code line is on (it stays to the end)
+    4: { t: T_BOX, code: { opacity: 1 } },
+    // end of beat 5: slid left
+    5: { t: 0.2, code: { opacity: 1 } },
+    // end of beat 6: slid right
+    6: { t: 0.85, code: { opacity: 1 } },
+    // end of beat 7: the five stop points on the plot (magenta, with the line), curve back at rest
+    7: { t: 0.85, code: { opacity: 1 }, points: pts() },
+    // end of beat 8: the corner is the hero; line, dot and points at rest
+    8: { t: 0.85, code: { opacity: 1 }, points: pts({ dim: 1 }), thr: { dim: 1 }, dot: { dim: 1 }, corner: 1 },
+    // end of beat 9 (the last frame): back at the ledger box, points and corner gone
+    9: { t: T_BOX, code: { opacity: 1 } },
+  };
+
   const E = () => ({ io: gsap.parseEase("power2.inOut"), out: gsap.parseEase("power2.out"), inn: gsap.parseEase("power2.in"),
                      back: gsap.parseEase("back.out(1.4)"), sine: gsap.parseEase("sine.inOut") });
 
   window.SC = { D, COL, W, H, X0, X1, X, AXIS_Y, MID_X, BOX, PLOT, PX, PY, ROC, STOPS, T_BOX, CELLS,
-                box, fmt, fmtT, ground, axis, dots, threshold, roc, mount, E, lerp, clamp01, seg, hash, pulse, rgba, mixc, show };
+                box, fmt, fmtT, SEAM, TAG_I, ground, axis, dots, threshold, roc, mount, E, lerp, clamp01, seg, hash, pulse, rgba, mixc, show };
 })();

@@ -1,0 +1,38 @@
+[
+ {
+  "clip": "media/hf/01_hook.mp4",
+  "end": 3.0
+ },
+ {
+  "clip": "media/hf/02_context.mp4",
+  "end": 3.5
+ },
+ {
+  "clip": "media/hf/03_every_place.mp4",
+  "end": 3.15
+ },
+ {
+  "clip": "media/hf/04_score.mp4",
+  "end": 5.95
+ },
+ {
+  "clip": "media/hf/05_slide_left.mp4",
+  "end": 4.55
+ },
+ {
+  "clip": "media/hf/06_slide_right.mp4",
+  "end": 4.2
+ },
+ {
+  "clip": "media/hf/07_each_point.mp4",
+  "end": 7.5
+ },
+ {
+  "clip": "media/hf/08_sweet_spot.mp4",
+  "end": 1.9
+ },
+ {
+  "clip": "media/hf/09_takeaway.mp4",
+  "end": 8.35
+ }
+]
