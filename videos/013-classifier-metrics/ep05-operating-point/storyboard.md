@@ -87,7 +87,7 @@ runs to 1330) holds one thing at a time:
 | 6 | Move the line | Now move the line down as far as that allows, 41 of 50 attacks caught. | "move the line": the threshold turns magenta and slides left from 0.70 to 0.656 (≥ 1.5 s); dots it passes light up; the readout ticks from the dots ("123 flags, 41 real"). "41 of 50": "caught 41 / 50" pulses. | the threshold |
 | 7 | Takeaway | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. | "ship a threshold": the threshold pulses. "what a mistake costs": the "1 in 3" line pulses (dim, not magenta). "put the line there": hold. Still for the last ~1 s. | the threshold |
 
-## Final beats (the contract; `vo_final.wav` 42.91 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 44.11 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`;
 its cue numbers are from the first cut, the beats' `CUE` blocks hold the current ones).
@@ -97,17 +97,27 @@ the stage runs to y 1330, and every caption is one line (≤ 15 characters).
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
 | 1 | `01_hook` | 0.00 | 5.30 | The F1 score is precision and recall in one number, and it punishes whichever is worse. |
-| 2 | `02_harmonic` | 5.30 | 7.45 | Average 0.9 and 0.1 and you get 0.5. F1 will give you 0.18. It's a harmonic mean. |
-| 3 | `03_model_a` | 12.75 | 4.30 | Our model, 40 percent precision, 80 percent recall, scores 0.53. |
-| 4 | `04_costs` | 17.05 | 9.75 | But F1 treats both mistakes the same, and here they aren't. A false positive blocks a real user who can try again. A false negative would let an attack hijack your agent and leak your data. |
-| 5 | `05_target` | 26.80 | 6.35 | So say we'll accept two blocked users for every attack we stop. That means at least one flag in three has to be a real attack. |
-| 6 | `06_move_line` | 33.15 | 3.95 | Now move the line down as far as that allows, 41 of 50 attacks caught. |
-| 7 | `07_takeaway` | 37.10 | 5.81 | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. |
+| 2 | `02_harmonic` | 5.30 | 6.00 | Average 0.9 and 0.1 and you get 0.5. F1 will give you 0.18. |
+| 2b | `02b_formula` | 11.30 | 2.65 | It's a harmonic mean. *(+ 1.2 s pause)* |
+| 3 | `03_model_a` | 13.95 | 4.30 | Our model, 40 percent precision, 80 percent recall, scores 0.53. |
+| 4 | `04_costs` | 18.25 | 9.75 | But F1 treats both mistakes the same, and here they aren't. A false positive blocks a real user who can try again. A false negative would let an attack hijack your agent and leak your data. |
+| 5 | `05_target` | 28.00 | 6.35 | So say we'll accept two blocked users for every attack we stop. That means at least one flag in three has to be a real attack. |
+| 6 | `06_move_line` | 34.35 | 3.95 | Now move the line down as far as that allows, 41 of 50 attacks caught. |
+| 7 | `07_takeaway` | 38.30 | 5.81 | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. |
+
+**2b, the formula** (Chris, 10/17: "quick show F1, then go back"). On "It's a",
+the bars step aside; on "harmonic", "harmonic mean" and F1 = 2·P·R / (P + R)
+come in ("F1" magenta); on "mean", the example row 2·0.9·0.1 / (0.9 + 0.1)
+= 0.18 (the 0.18 takes the hero). In the pause the formula leaves and the
+bars return, so 2b opens and ends on `SEAM[2]`. The kit's `makeFormula`
+draws it. To give the eye time to read it, `vo_final.wav` has 1.2 s of
+silence inserted at master 12.75 (after "mean"), and every later word
+time moved by +1.2 s. Total **44.11 s**.
 
 ## Cut list (approved by Chris, 10/17; revised after his first watch)
 
 Raw take 44.85 s, clean (no flubs; the F-beta line was never said).
-Pauses capped at 0.25 s (`--noise=-45dB`), no phrase cuts: **42.9 s.**
+Pauses capped at 0.25 s (`--noise=-45dB`), no phrase cuts: **42.9 s**, then the 1.2 s formula pause (beat 2b): **44.1 s.**
 
 After the first watch (Chris, 10/17):
 - **The context line is out** ("It's a prompt injection detector"). The
