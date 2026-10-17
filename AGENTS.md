@@ -16,6 +16,7 @@ clean").
 | You want | Go to | Owns |
 |---|---|---|
 | The process for a Short, start to hand-off | `agents/runbook.md` | steps 0–12, tools, what to hand Chris |
+| The process for a series: arc, scripts, one recording split per episode, one session per episode | `agents/series.md` | the series-level steps and the episode-prompt template; each episode then runs the runbook |
 | The brief a beat-building subagent gets | `agents/beat-brief.md` (Manim) / `agents/beat-brief-hyperframes.md` (HyperFrames) | the contract every beat must meet |
 | Tokens: colors, type, durations, strokes, safe areas | `videos/_shared/style.py` | the only place a constant lives |
 | How to use the tokens; what to use for X; Manim traps | `agents/style.md` | the "want X, use Y" tables |

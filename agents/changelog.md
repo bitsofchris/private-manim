@@ -5,6 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-17
 
+- `agents/series.md`: the series process as the standard for any new series (arc in `SERIES.md`, all scripts in `SCRIPTS.md`, one recording with "Episode N: title" announcements, split into `epNN-slug/vo_raw.m4a` + `script.md`, a generic `EPISODE_PROMPT.md` template, one session per episode, one update pass at the end). AGENTS.md map and runbook step 2 point to it. (Chris, from the linear algebra series 002)
 - Runbook step 1, "Say each thing once, and get to it fast": ten script checks (answer in line 1's first clause, one new thing per beat, closer is the viewer's next move, detours to the companion, no hedges, lists on screen, story detail only for the payoff, one home Short per sentence, title matches script). The *(if time)* mark moves from the last line, which is the takeaway, to the detour beat. (harness series 012, script tightening)
 
 ## 2026-10-11

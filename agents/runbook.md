@@ -182,6 +182,8 @@ outro, no call to action.
 - Read the script in one pass. Pause ~1 s between beats. Flub? Pause and
   re-read the sentence; the cut step handles it.
 - Save as `vo_raw.m4a` in the video folder. Do not re-record for length.
+- In a series, record every episode in one file and split it per episode
+  (`agents/series.md`, steps 3–4).
 
 ## 3. Clean the audio (Claude, 10 s)
 
