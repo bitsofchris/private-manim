@@ -1,0 +1,287 @@
+[
+ {
+  "start": 0.61,
+  "end": 1.42,
+  "text": "An agent harness is"
+ },
+ {
+  "start": 1.48,
+  "end": 2.39,
+  "text": "everything except"
+ },
+ {
+  "start": 2.45,
+  "end": 2.8,
+  "text": "the model."
+ },
+ {
+  "start": 3.28,
+  "end": 3.76,
+  "text": "It decides what"
+ },
+ {
+  "start": 3.82,
+  "end": 4.64,
+  "text": "the model sees"
+ },
+ {
+  "start": 4.7,
+  "end": 4.9,
+  "text": "what it can"
+ },
+ {
+  "start": 4.96,
+  "end": 5.38,
+  "text": "do, what it"
+ },
+ {
+  "start": 5.44,
+  "end": 6.14,
+  "text": "remembers, and when"
+ },
+ {
+  "start": 6.2,
+  "end": 6.62,
+  "text": "it's done."
+ },
+ {
+  "start": 7.08,
+  "end": 7.6,
+  "text": "Context is what"
+ },
+ {
+  "start": 7.66,
+  "end": 8.1,
+  "text": "goes into the"
+ },
+ {
+  "start": 8.16,
+  "end": 8.46,
+  "text": "model on"
+ },
+ {
+  "start": 8.52,
+  "end": 8.88,
+  "text": "this turn."
+ },
+ {
+  "start": 9.12,
+  "end": 9.84,
+  "text": "It's your instructions"
+ },
+ {
+  "start": 9.9,
+  "end": 10.26,
+  "text": "the files that"
+ },
+ {
+  "start": 10.32,
+  "end": 10.58,
+  "text": "opened the"
+ },
+ {
+  "start": 10.64,
+  "end": 11.08,
+  "text": "last error."
+ },
+ {
+  "start": 11.21,
+  "end": 11.7,
+  "text": "Tools are what"
+ },
+ {
+  "start": 11.76,
+  "end": 12.28,
+  "text": "it can touch."
+ },
+ {
+  "start": 12.46,
+  "end": 12.96,
+  "text": "Read a file"
+ },
+ {
+  "start": 13.02,
+  "end": 13.48,
+  "text": "run a command"
+ },
+ {
+  "start": 13.54,
+  "end": 14.16,
+  "text": "search the web."
+ },
+ {
+  "start": 14.66,
+  "end": 15.17,
+  "text": "Memory is what"
+ },
+ {
+  "start": 15.23,
+  "end": 15.92,
+  "text": "carries over when"
+ },
+ {
+  "start": 15.98,
+  "end": 16.52,
+  "text": "the session ends."
+ },
+ {
+  "start": 16.66,
+  "end": 17.72,
+  "text": "Notes, rules, like"
+ },
+ {
+  "start": 17.78,
+  "end": 18.76,
+  "text": "an AGENTS.md, they're"
+ },
+ {
+  "start": 18.82,
+  "end": 19.38,
+  "text": "loaded back in"
+ },
+ {
+  "start": 19.44,
+  "end": 19.86,
+  "text": "next time."
+ },
+ {
+  "start": 20.28,
+  "end": 20.67,
+  "text": "And the loop"
+ },
+ {
+  "start": 20.73,
+  "end": 21.64,
+  "text": "runs the model"
+ },
+ {
+  "start": 21.7,
+  "end": 22.45,
+  "text": "runs the tool"
+ },
+ {
+  "start": 22.51,
+  "end": 23.0,
+  "text": "feeds the result"
+ },
+ {
+  "start": 23.06,
+  "end": 23.76,
+  "text": "back, and checks"
+ },
+ {
+  "start": 23.82,
+  "end": 24.26,
+  "text": "the work."
+ },
+ {
+  "start": 24.72,
+  "end": 25.12,
+  "text": "Try again or"
+ },
+ {
+  "start": 25.18,
+  "end": 25.74,
+  "text": "stop, and it"
+ },
+ {
+  "start": 25.8,
+  "end": 26.68,
+  "text": "can even save"
+ },
+ {
+  "start": 26.74,
+  "end": 27.0,
+  "text": "rules to"
+ },
+ {
+  "start": 27.06,
+  "end": 28.24,
+  "text": "recursively self-improve."
+ },
+ {
+  "start": 28.72,
+  "end": 29.06,
+  "text": "The model can"
+ },
+ {
+  "start": 29.12,
+  "end": 29.6,
+  "text": "be the same"
+ },
+ {
+  "start": 29.66,
+  "end": 30.12,
+  "text": "but the harness"
+ },
+ {
+  "start": 30.18,
+  "end": 30.88,
+  "text": "is why one"
+ },
+ {
+  "start": 30.94,
+  "end": 31.6,
+  "text": "agent fixes your"
+ },
+ {
+  "start": 31.66,
+  "end": 32.3,
+  "text": "bug and another"
+ },
+ {
+  "start": 32.31,
+  "end": 32.74,
+  "text": "might keep going"
+ },
+ {
+  "start": 32.8,
+  "end": 33.22,
+  "text": "in circles."
+ },
+ {
+  "start": 33.82,
+  "end": 34.04,
+  "text": "So when your"
+ },
+ {
+  "start": 34.1,
+  "end": 34.9,
+  "text": "agent fails, don't"
+ },
+ {
+  "start": 34.96,
+  "end": 35.44,
+  "text": "blame the model"
+ },
+ {
+  "start": 35.5,
+  "end": 35.94,
+  "text": "at first."
+ },
+ {
+  "start": 36.42,
+  "end": 36.96,
+  "text": "Ask which piece"
+ },
+ {
+  "start": 37.02,
+  "end": 37.68,
+  "text": "was missing: the"
+ },
+ {
+  "start": 37.74,
+  "end": 38.62,
+  "text": "context, the tool"
+ },
+ {
+  "start": 38.68,
+  "end": 39.18,
+  "text": "the memory, or"
+ },
+ {
+  "start": 39.24,
+  "end": 39.64,
+  "text": "the check."
+ }
+]
