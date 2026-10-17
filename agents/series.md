@@ -82,6 +82,15 @@ approves each cut list where the episode is built.
 
 ## 5. Episode prompt (Claude)
 
+**First, when the series has a recurring image** (`SERIES.md`), build it
+once at the series root before any episode session starts: `_kit/` (the
+drawing code and its data, seam states included) and `00_layout/` (the
+canonical frame), approved by Chris. The prompt then tells each episode to
+link it (`ln -s ../../_kit NN_beat/kit` from the episode folder) and to put
+episode-only helpers in its own folder. 013 skipped this: five parallel
+sessions each wrote their own `score.js` (about 1,850 lines for one image),
+with five layouts of the same box.
+
 `EPISODE_PROMPT.md` at the series root is the prompt Chris pastes into a
 fresh session per episode, with `FOLDER` replaced. Start from the template
 below and fill the series slot from `SERIES.md` (look, conventions,

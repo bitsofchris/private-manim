@@ -152,6 +152,11 @@ outro, no call to action.
   handing the script to Chris (from tightening the harness series, 012):
   - Line 1 lands the answer in its first clause. Ep 9's 27-word line 1
     reached "share one notebook" too late; split it.
+  - The thing the title names is on screen and said within ~8 s. Setup
+    that frame 0 already shows (a tag, the counts) is not spoken. 013
+    ep01 shipped only after two late cuts moved "confusion matrix" from
+    20.8 s to 6.4 s (48.8 → 34.1 s): the context line, the setup line and
+    the restated hook all went.
   - Each beat adds a new fact, example or step. If cutting it loses
     nothing, cut it. No second definition of the term (ep 1 had three,
     ep 4 had three "map" lines).
@@ -366,7 +371,7 @@ stroke-only VMobject fills it. No LaTeX on this machine: `Text` only.
 ## 7. Captions and assembly (Claude, 1 min)
 
 ```
-tools/captions_from_transcript.py words.json captions.json   # ≤3 words each, timed by their words
+tools/captions_from_transcript.py words.json captions.json   # ≤3 words and ≤15 characters (one line), timed by their words
 # beats.json (tools/beat_cuts.py, step 5): ordered {clip, end} per beat; ends sum to the VO length
 #   clip is media/videos/<file>/1920p30/<Class>.mp4 (Manim) or media/hf/<beat>.mp4 (HyperFrames)
 tools/assemble.py beats.json --vo vo_final.wav --captions captions.json \
@@ -416,6 +421,15 @@ with a scene element".
 - A rework of several beats: resume the same agents by name with a brief
   that lists only what changed. It cost ep02 a third of a fresh spawn, and
   the agents kept their audio-derived cue times.
+- A line cut after assembly ("too long before X"): cut the finished VO,
+  not the take, so every beat after the cut keeps its audio to the sample:
+  `tools/cut_vo.py vo_final.wav --out vo_final.wav --words words.json
+  --cut A-B[:silence] ...`. Cut whole beats where you can (a beat that
+  starts in silence can simply be dropped, and `--cut 0-T` drops an
+  opening), give the shortened beats new cues, rebuild captions and
+  beats.json, re-transcribe to check the joins. 013 ep01: two late cuts,
+  beats 4–7 untouched.
+- Re-cleaning the voice after assembly: `tighten_vo.py --map-in` (step 5).
 
 ## 9. Publish (Chris, 2 min)
 
@@ -512,6 +526,7 @@ also works.
 | `enhance_vo.sh` | high-pass + loudnorm to −14 LUFS; `--denoise` adds a floor-matched denoise and de-ess | manual |
 | `vo_floor.py` | a take's noise floor in dB (10th-percentile 50 ms RMS) | yes |
 | `tighten_vo.py` | range cuts, pause capping, time map; `--noise auto`, `--level`, `--map-in` | yes |
+| `cut_vo.py` | cut phrases out of a finished `vo_final.wav`, shift `words.json` (late cuts, step 8) | yes |
 | `captions_from_transcript.py` | `words.json` (or a MacWhisper .json / .txt) → captions.json | yes |
 | `fix_words.py` | `words.json` spellings and caption breaks: `--join`, `--sub`, `--break-after` | yes |
 | `beat_cuts.py` | cuts mid-pause before each beat's first word → `beats.json` + the final beat table | yes |

@@ -30,7 +30,7 @@ Subclass `BocShortScene` (1080x1920 @ 30 fps, frame 9 x 16 units, 1 unit = 120 p
 | Where text / the hero may go | `self.safe` | YouTube UI covers top 12%, bottom 20%, right 12%; 4% left gutter |
 | Where the visual goes | `self.stage` | upper two thirds of `safe`; `.move_to(self.stage)`, `scale_to_fit_width(self.stage.width)` |
 | Caption (Short without VO) | `self.show_caption("2-4 words")`; with VO, captions are burned in by `tools/assemble.py` and scenes draw none | lower third of `safe` (`self.band`), `S.SHORT_CAPTION_SCALE`, bold on a dark pill (`S.CAPTION_PILL_*`) so it never reads as a diagram label; too wide -> two lines |
-| Share the band with a scene element | element at the band top (bottom edge ≤ y 1330), `assemble.py --captions-anchor bottom` | burned captions sit just above the safe bottom (007, ep03 code cards). While the element is up every caption must fit one line: a two-line caption grows upward into it (ep03 split "the input direction") |
+| Share the band with a scene element | element at the band top (bottom edge ≤ y 1330), `assemble.py --captions-anchor bottom` | burned captions sit just above the safe bottom (007, ep03 code cards). While the element is up every caption must fit one line: a two-line caption grows upward into it (ep03 split "the input direction"). `captions_from_transcript.py` keeps every caption to 15 characters, one line (013) |
 | Label next to a thing | `Text(...).scale(S.SHORT_LABEL_SCALE)` | the floor: ~98 px line height |
 | Data dot | `data_dot(p, radius=S.DOT_SHORT)` | ~50 px across |
 | Code on screen | `code_block(src, highlight=None)` | Menlo on BG_PANEL, literals teal, ~27 columns fit the safe width |

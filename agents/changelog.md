@@ -5,6 +5,10 @@ that forced it. Newest first.
 
 ## 2026-10-17
 
+- `agents/series.md` step 5: build a series' recurring image once at the series root (`_kit/`, `00_layout/`) before the episode sessions; 013's five sessions each wrote their own `score.js`. `agents/parts.md`: the score line + confusion box kit (5 uses). AGENTS.md map: the 013 series. (013 update pass)
+- Runbook step 1: the thing the title names is on screen and said within ~8 s, and setup frame 0 already shows is not spoken. Step 8: a late line cut goes through `tools/cut_vo.py` (new, tested) on the finished VO so later beats keep their audio. (Chris, 013 ep01: two late cuts, "confusion matrix" from 20.8 s to 6.4 s)
+- `captions_from_transcript.py --max-chars 15` (default) and a flash report; `agents/style.md` band row points to it. (013: ep01, ep02, ep05 each kept captions to one line by hand)
+
 - Update pass from 012 eps 2–4 (useful lessons only): frame 0 moves in the hook beat; later beats move only what the VO names and may hold still until the first cue (`agents/style.md` Shorts rules, HyperFrames brief, `agents/animation-rules.md` rule 1 "in practice"; Chris, ep03: the agents writing in the basement through every beat); one visual action ≤ ~6–8 s (rule 3; Chris, ep04: a 13 s pile); end every kept piece where the take's sentence ends (runbook step 5, `agents/series.md` split; Chris, ep03: "knowledge base" sounded cut off); `sweep_static` also fails colour-only beats, monospace fits ~22 characters at 60 px, and seam states live in the kit as data (`SEAM` / `START`, third use: 013, ep02, ep04) (HyperFrames brief). (012 eps 2–4)
 - `CAST.hand` follows `lean` (the upper body rotates about the hip); test added. (012 ep04: a pencil floated off a leaning hand)
 - 012 `SERIES.md`: all four episodes ticked shipped (10/17), day-10 and day-30 read dates. (012)
