@@ -71,6 +71,10 @@
       g.fillStyle = rgba(lit ? mixc(ucol, COL.text, lit) : ucol, 0.8 + 0.2 * lit);
       const r = USER_R + 1.6 * lit + 1.4 * rg;
       g.fillRect(U.x[i] - r, U.y[i] - r, 2 * r, 2 * r);
+      if (rg > 0) {   // a ringed user (fp) gets a teal halo, so the 60 read as a group
+        g.strokeStyle = rgba(COL.data, rg); g.lineWidth = 2.5;
+        g.beginPath(); g.arc(U.x[i], U.y[i], r + 4 * rg, 0, Math.PI * 2); g.stroke();
+      }
     }
     for (let i = 0; i < A.x.length; i++) {
       const x = A.x[i], y = A.y[i], k = A.g[i];
@@ -187,8 +191,8 @@
           show(tag, fade * (1 - al));
           if (alt) { show(alt, al); alt.style.color = rgba(mixc(ALT[k][1], COL.hero, lit)); }
           show(num, fade);
-          num.style.transformOrigin = "0 50%";
-          num.style.transform = `scale(${1 + 0.12 * br})`;
+          num.style.transformOrigin = "0 0";   // grows down, away from the tag above it
+          num.style.transform = `scale(${1 + 0.1 * br})`;
         });
       },
       // Canvas part: cell frames; a lit cell gets the magenta frame; a ghosted one a strike.
