@@ -38,7 +38,7 @@
   // The state every beat fills. Numbers only (plus hero / face strings).
   const BASE = {
     hero: null,               // one of HEROES
-    write: 1,                 // 0..1 amplitude of the agents' writing (0 = still)
+    write: 0,                 // 0..1 amplitude of the agents' writing (0 = still; only while the VO is on the agent layer)
     pen: 0,                   // writing phase in cycles (drive it from t; only matters while write > 0)
     fill: [0.55, 0.35],       // how much of each held page is written, 0..1 (A, B)
     wall: 3,                  // pinned pages on the basement wall, 3..5 (fractional fades the next one in)
@@ -67,10 +67,10 @@
   SEAM[0] = merge(BASE, {});
   SEAM[1] = merge(BASE, { write: 0, pen: 0, fill: [0.7, 0.5] });
   SEAM[2] = merge(SEAM[1], { wall: 5, fill: [0.9, 0.75] });
-  SEAM[3] = merge(SEAM[2], { hero: "board", link: 1, kanban: 1, human: { armR: 100, tilt: 6 } });
-  SEAM[4] = merge(SEAM[3], { hero: "rules", link: 0, human: { armR: 22, tilt: 0 } });
+  SEAM[3] = merge(SEAM[2], { hero: "board", link: 1, kanban: 1 });
+  SEAM[4] = merge(SEAM[3], { hero: "rules", link: 0 });
   SEAM[5] = merge(SEAM[4], { hero: null, conflict: [1, 1], swept: 1, old: 1, jan: { x: 700, y: B.floor, lean: 0, armR: 24, tilt: 0 } });
-  SEAM[6] = merge(SEAM[5], { jan: { x: POS.jan[0], y: POS.jan[1] } });
+  SEAM[6] = merge(SEAM[5], {});                      // the janitor stays where it swept (Chris: only the part being discussed moves)
 
   // ---- mount: build every part once ----
   function mount(root) {

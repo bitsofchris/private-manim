@@ -7,7 +7,8 @@
          "janitor": it goes magenta, side-steps left along the landing onto the ladder and climbs down rung by rung,
          then steps off right · "conflicting": a magenta line on page B · "before they spread": its copy draws on
          page A and the broom sweeps both out · "old material": a step right, a second sweep, the old pages go ·
-         "human layer stays useful": the board pulses teal once · hold.
+         "human layer stays useful": the board pulses teal once · hold. Only the janitor and what it sweeps move
+         (the agents do not write). The second sweep strokes right, the way the kit sweeps the old pages.
          Local helpers (the kit lacks them): feet() + legs() place each foot on the landing / a rung / the floor,
          grip() works the left hand on the rail and slides the broom up its own handle while climbing. -->
     <script src="vendor/gsap.min.js"></script>
@@ -95,19 +96,18 @@
   // two broom sweeps: backswing right, stroke left toward page B, recover
   const sw = (t0) => [[t0, 0], [t0 + 0.26, 1], [t0 + 0.62, 2], [t0 + 1.12, 0]];
   const SWEEP1 = CUE.before, SWEEP2 = CUE.old + 0.42;
-  const LEAN = { 0: 0, 1: 5, 2: -14 }, ARM = { 0: 24, 1: 34, 2: -24 };
-  const sweepKeys = (map) => sw(SWEEP1).concat(sw(SWEEP2)).map(([tt, k]) => [tt, map[k]]);
-  const LEANK = sweepKeys(LEAN), ARMK = sweepKeys(ARM);
+  const LEAN = { 0: 0, 1: 5, 2: -14 }, ARM = { 0: 24, 1: 34, 2: -24 };          // sweep 1: stroke left, toward page B
+  const LEAN2 = { 0: 0, 1: -6, 2: 12 }, ARM2 = { 0: 24, 1: 4, 2: 44 };           // sweep 2: stroke right, old pages go right
+  const sweepKeys = (map, map2) => sw(SWEEP1).map(([tt, k]) => [tt, map[k]]).concat(sw(SWEEP2).map(([tt, k]) => [tt, map2[k]]));
+  const LEANK = sweepKeys(LEAN, LEAN2), ARMK = sweepKeys(ARM, ARM2);
   // climbing: grip envelope (left hand up on the rail, broom carried higher)
   const grip = (t) => E.io(seg(t, CLIMB[0] - 0.25, CLIMB[0])) * (1 - E.io(seg(t, CLIMB[1] - 0.05, CLIMB[1] + 0.3)));
 
   function S(t) {
     if (t >= HOLD_FROM) return merge(SEAM[5], {});
-    const write = E.out(seg(t, 0, 0.3)) * (1 - E.io(seg(t, 7.0, 7.6)));
     const P = feet(t), g = grip(t);
     const wob = g * Math.sin(2 * Math.PI * (t - CLIMB[0]) / (2 * STEP));
     const s = merge(SEAM[4], {
-      write, pen: write > 0 ? t * 1.6 : 0,
       conflict: [E.out(seg(t, CUE.conflicting, CUE.conflicting + 0.42)), E.out(seg(t, CUE.before, CUE.spread + 0.1))],
       swept: E.io(seg(t, CUE.spread - 0.03, CUE.spread + 0.5)),
       old: E.io(seg(t, SWEEP2 + 0.15, SWEEP2 + 0.97)),

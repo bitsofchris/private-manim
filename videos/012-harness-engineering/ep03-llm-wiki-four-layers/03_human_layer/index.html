@@ -6,7 +6,7 @@
     <!-- 03_human_layer (12.20 s, master 25.35): "The human layer is the clean, distilled view that you
          link out and that goes to these detailed agent notes when necessary. Think of a dashboard or a
          Kanban board. It's less about reviewing what the agent's up to and more about managing your own
-         context." Opens on WIKI.SEAM[2], ends on WIKI.SEAM[3] (board hero, link 1, kanban 1, human pointing). -->
+         context." Opens on WIKI.SEAM[2], ends on WIKI.SEAM[3] (board hero, link 1, kanban 1, human at rest). The basement stays still. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="cast/cast.js"></script>
@@ -40,7 +40,7 @@
     managing: 10.85, /* "managing" 36.20 */
     context: 11.49,  /* "context." 36.84 */
   };
-  const HOLD = 11.5;                  // still from here to the end (SEAM[3])
+  const HOLD = 11.9;                  // still from here to the end (SEAM[3])
   const { seg, merge, SEAM } = WIKI, E = WIKI.E();
   const root = document.getElementById("root");
   const K = WIKI.mount(root);
@@ -49,10 +49,7 @@
   const look = (t) => E.io(seg(t, CUE.reviewing - 0.1, CUE.reviewing + 0.4)) * (1 - E.io(seg(t, CUE.upto - 0.25, CUE.upto + 0.35)));
   function S(t) {
     const s = merge(SEAM[2], {});
-    // the agents write from frame 0, stop before the hold. fill stays at SEAM[2] = SEAM[3]
-    // (the seams pin it, so it cannot creep and still end equal).
-    s.write = E.out(seg(t, 0, 0.3)) * (1 - E.io(seg(t, 10.9, HOLD)));
-    s.pen = s.write > 0 ? t * 1.6 : 0;
+    // the basement stays still in this beat (only the layer the VO discusses moves): write 0, pen 0, fill as SEAM[2]
     // "human layer": the board is the hero for the rest of the beat
     if (t >= CUE.human) s.hero = "board";
     // "link out" → "agent notes": the dashed link draws down to page B, which pulses teal on "notes"
@@ -61,10 +58,11 @@
     // "Kanban": one card slides from column 1 to column 2
     s.kanban = E.io(seg(t, CUE.kanban, CUE.kanban + 0.7));
     const glance = look(t);
-    // "managing your own context": point at the board
-    const point = E.io(seg(t, CUE.managing, HOLD));
+    // "managing your own context": point at the board (arm up by ~11.3), then back to rest by HOLD
+    const point = E.io(seg(t, CUE.managing, CUE.managing + 0.45)) * (1 - E.io(seg(t, 11.45, HOLD)));
     s.human = Object.assign({}, s.human, { armR: 22 + 78 * point, tilt: 6 * point - 12 * glance });
     if (glance === 0) s.human.tilt = 6 * point;          // no −0 at the ends
+    if (point === 0) s.human.armR = 22;
     return s;
   }
   // Local helper (the kit has no eye direction): the human's eyes drop while it glances down.
