@@ -21,7 +21,7 @@ whisper.cpp does not):
                    "words": [{"start": 580, "end": 900, "text": "A"}, ...]}]}
 
 Each segment's words are chunked into groups of at most --max-words. With
-word times, a chunk runs from its first word's start to the next chunk's
+word times, chunks never cross a sentence end (. ? !), and a chunk runs from its first word's start to the next chunk's
 start (minus a small gap). Without them, the segment's span is divided among
 the chunks in proportion to their character length (a decent proxy for
 spoken duration). A small gap is left between chunks so they visibly change.
@@ -62,15 +62,19 @@ def parse_mw_json(text: str) -> list[dict]:
 
 
 def segments_from_words(words: list[dict]) -> list[dict]:
-    """words.json (tools/word_times.py) back into word-timed segments, by its "seg" index."""
-    segs: dict[int, dict] = {}
+    """words.json (tools/word_times.py) back into word-timed segments: each run of
+    consecutive words with the same "seg" index is one segment, in file order (the
+    index only marks where one segment ends, so a hand-edited or out-of-order index
+    never moves words)."""
+    out, prev = [], object()
     for w in words:
-        seg = segs.setdefault(w.get("seg", 0), {"words": []})
-        seg["words"].append((w["t"], w.get("end") or w["t"], w["word"]))
-    out = []
-    for k in sorted(segs):
-        ws = segs[k]["words"]
-        out.append({"start": ws[0][0], "end": ws[-1][1], "text": " ".join(w for _, _, w in ws), "words": ws})
+        k = w.get("seg", 0)
+        if k != prev:
+            out.append({"words": []}); prev = k
+        out[-1]["words"].append((w["t"], w.get("end") or w["t"], w["word"]))
+    for seg in out:
+        ws = seg["words"]
+        seg.update(start=ws[0][0], end=ws[-1][1], text=" ".join(w for _, _, w in ws))
     return out
 
 
@@ -85,11 +89,31 @@ def load_segments(path: str) -> list[dict]:
     return [{"start": s, "end": e, "text": t, "words": []} for s, e, t in parse_transcript(text)]
 
 
+SENTENCE_END = re.compile(r"[.?!][\"')\]]*$")
+
+
+def sentences(words: list[tuple[float, float, str]]) -> list[list[tuple[float, float, str]]]:
+    """Split word-timed words after each word that ends a sentence (. ? !), so no
+    caption spans two sentences when the recognizer put them in one segment
+    ("last error. Tools are", 012 ep01). "AGENTS.md," and "0.70" don't end one."""
+    out, cur = [], []
+    for w in words:
+        cur.append(w)
+        if SENTENCE_END.search(w[2]):
+            out.append(cur); cur = []
+    if cur:
+        out.append(cur)
+    return out
+
+
 def captions_for_words(words: list[tuple[float, float, str]], max_words: int) -> list[dict]:
-    """Chunks timed by their words: start at the first word, end at the next chunk's start (minus GAP)."""
-    chunks, i = [], 0
-    for size in [len(c) for c in chunk_words([w for _, _, w in words], max_words)]:
-        chunks.append(words[i:i + size]); i += size
+    """Chunks timed by their words: start at the first word, end at the next chunk's start (minus GAP).
+    Chunks never cross a sentence end."""
+    chunks = []
+    for sent in sentences(words):
+        i = 0
+        for size in [len(c) for c in chunk_words([w for _, _, w in sent], max_words)]:
+            chunks.append(sent[i:i + size]); i += size
     out = []
     for k, c in enumerate(chunks):
         end = chunks[k + 1][0][0] - GAP if k + 1 < len(chunks) else c[-1][1]

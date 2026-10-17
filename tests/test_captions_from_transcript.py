@@ -90,5 +90,34 @@ class MacWhisperJson(unittest.TestCase):
         self.assertEqual(caps[-1]["start"], 3.4)
 
 
+def _w(t, word, seg=0):
+    return {"t": t, "end": t + 0.2, "word": word, "seg": seg}
+
+
+class SentencesAndSegments(unittest.TestCase):
+    def test_caption_never_crosses_a_sentence_end(self):
+        # 012 ep01: the recognizer put "...last error." and "Tools are..." in one segment.
+        words = [_w(0.0, "the"), _w(0.3, "last"), _w(0.6, "error."), _w(1.0, "Tools"), _w(1.3, "are"), _w(1.6, "what")]
+        caps = cft.build_captions(cft.segments_from_words(words), 3)
+        self.assertEqual([c["text"] for c in caps], ["the last error.", "Tools are what"])
+
+    def test_dotted_names_and_decimals_do_not_end_a_sentence(self):
+        words = [_w(0.0, "like"), _w(0.3, "an"), _w(0.6, "AGENTS.md,"), _w(1.0, "at"), _w(1.3, "0.70"), _w(1.6, "now")]
+        sents = cft.sentences([(w["t"], w["end"], w["word"]) for w in words])
+        self.assertEqual(len(sents), 1)
+
+    def test_question_and_quote_end_a_sentence(self):
+        sents = cft.sentences([(0, 0.1, "why?"), (0.2, 0.3, 'said "go."'), (0.4, 0.5, "ok")])
+        self.assertEqual([len(s) for s in sents], [1, 1, 1])
+
+    def test_segments_follow_file_order_not_index_order(self):
+        # A hand-split segment numbered 100 stays where it is in the file.
+        words = [_w(0.0, "one.", 3), _w(1.0, "two", 100), _w(2.0, "three", 4)]
+        segs = cft.segments_from_words(words)
+        self.assertEqual([s["text"] for s in segs], ["one.", "two", "three"])
+        caps = cft.build_captions(segs, 3)
+        self.assertEqual([c["start"] for c in caps], sorted(c["start"] for c in caps))
+
+
 if __name__ == "__main__":
     unittest.main()
