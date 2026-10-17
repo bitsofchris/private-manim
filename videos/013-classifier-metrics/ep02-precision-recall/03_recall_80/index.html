@@ -22,23 +22,23 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="4.35" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.25" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 4.35;
-  const MASTER = 8.55;
-  // beat-local seconds (words.json master − 8.55), checked on the vo_final.wav RMS envelope
+  const BEAT_SECONDS = 4.25;
+  const MASTER = 6.90;
+  // beat-local seconds (words.json master − 6.90), v2 VO, checked on the vo_final.wav RMS envelope
   const CUE = {
-    fifty: 0.49,    /* "50" (9.04) */
-    attacks: 0.85,  /* "attacks" (envelope onset ~9.38) */
-    caught: 1.73,   /* "caught" (10.28) */
-    forty: 1.93,    /* "40," (10.48; voiced onset ~10.64) */
-    recall: 2.77,   /* "recall" (envelope onset ~11.32) */
-    eighty: 3.39,   /* "80%." (11.94) */
+    fifty: 0.44,    /* "50" (7.34) */
+    attacks: 0.82,  /* "attacks" (envelope onset ~7.68) */
+    caught: 1.66,   /* "caught" (8.56) */
+    forty: 1.86,    /* "40," (8.76; voiced onset ~8.94) */
+    recall: 2.73,   /* "recall" (9.63; envelope onset ~9.62) */
+    eighty: 3.32,   /* "80%." (10.22; ends 10.84) */
   };
-  const HOLD = 4.05;  // still from here; S(t) === SEAM[3]
+  const HOLD = 3.95;  // still from here; S(t) === SEAM[3]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
   const K = SC.mount(root);
@@ -55,9 +55,9 @@
     const F0 = CUE.caught, F1 = CUE.caught + 0.75;                    // the 40 flies (0.75 s)
     const fly = seg(t, F0, F1);
     const num = E.out(seg(t, F1 - 0.12, F1 + 0.15));
-    const lit = E.out(seg(t, CUE.recall, CUE.recall + 0.3)) * (1 - E.io(seg(t, HOLD - 0.6, HOLD)));
-    const pct = E.out(seg(t, CUE.eighty, CUE.eighty + 0.3));
-    const pctHero = 1 - E.io(seg(t, HOLD - 0.6, HOLD));
+    const lit = E.out(seg(t, CUE.recall, CUE.recall + 0.3)) * (1 - E.io(seg(t, HOLD - 0.4, HOLD)));
+    const pct = E.out(seg(t, CUE.eighty, CUE.eighty + 0.25));
+    const pctHero = 1 - E.io(seg(t, HOLD - 0.4, HOLD));   // 80% magenta 3.32–3.55, then back (0.4 s)
     return {
       ring: { tp: col, fn: col },
       box: { lit: { tp: col, fn: col } },

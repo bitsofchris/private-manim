@@ -23,34 +23,34 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6.2" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.35" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.20;
-  const MASTER = 22.95;
-  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const BEAT_SECONDS = 6.35;
+  const MASTER = 21.45;
+  // beat-local = master − MASTER (v2 VO; words.json, onsets checked on the vo_final.wav RMS envelope)
   const CUE = {
-    neither: 0.15,   /* "Neither"   (23.15, onset 23.09) both row labels pulse once, half lit */
-    tru: 1.00,       /* "true"      (23.92, onset ~23.95) TN lights */
-    negatives: 1.15, /* "negatives" (24.10, onset 24.06) */
-    tenK: 3.10,      /* "10,000"    (26.05, onset 26.06) the 9,890 swells */
-    them: 3.77,      /* end of "them." (26.72) TN ghosts and is struck through */
-    rare: 5.67,      /* "rare."     (28.62; "are rare" runs together from 28.56) the 50 gold dots ring */
+    neither: 0.17,   /* "Neither"   (21.62, onset 21.55) both row labels pulse once, half lit */
+    tru: 0.93,       /* "true"      (22.38, "t" from ~22.40, vowel 22.52) TN lights */
+    negatives: 1.11, /* "negatives" (22.56, onset 22.52) */
+    tenK: 3.06,      /* "10,000"    (24.51, onset 24.56) the 9,890 swells */
+    them: 3.77,      /* end of "them." (25.22) TN ghosts and is struck through */
+    rare: 5.71,      /* "rare."     (27.16, onset 27.10, ends 27.46) the 50 gold dots ring */
   };
-  const HOLD = 5.90;  // still from here; S(t >= HOLD) is SEAM[6]
+  const HOLD = 6.05;  // still from here (VO ends 6.01); S(t >= HOLD) is SEAM[6]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, pulse, SEAM } = SC;
   const K = SC.mount(root);
   function S(t) {
     if (t <= 0) return SEAM[5];
     if (t >= HOLD) return SEAM[6];
-    const both = 0.5 * pulse(t, 0.05, 0.85);                   // "Neither one": both labels, down by 0.90
+    const both = 0.5 * pulse(t, 0.05, 0.80);                   // "Neither one": both labels, down by 0.85
     const on = seg(t, CUE.tru - 0.05, CUE.tru + 0.25);         // TN lit (0.3 s)
-    const out = seg(t, CUE.them - 0.07, 4.35);                 // lit off, ghost and strike in (0.65 s)
+    const out = seg(t, CUE.them - 0.07, CUE.them + 0.58);                 // lit off, ghost and strike in (0.65 s)
     return {
-      attackRing: pulse(t, CUE.rare - 0.27, 0.5),              // peaks on "rare", gone by 5.90
+      attackRing: pulse(t, CUE.rare - 0.26, 0.55),             // peaks on "rare", gone by 6.00
       box: { lit: { tn: on * (1 - out) }, bright: { tn: pulse(t, CUE.tenK - 0.05, 0.6) },
              ghost: { tn: out }, strike: { tn: out } },
       bars: { r: { num: 1, den: 1, pct: 1, lit: both }, p: { num: 1, den: 1, pct: 1, lit: both } },

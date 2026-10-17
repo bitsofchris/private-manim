@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 01_recall_q (beat 1, master 0.00–4.30): "Recall is asking, of all the positives, how many did I actually catch?"
+    <!-- 01_recall_q (beat 1, master 0.00–4.35, v2 VO): "Recall is asking, of all the positives, how many did I actually catch?"
          Opens on SEAM[0] (first frame of the Short), ends still on SEAM[1]. Hero: the attack column. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/dots.js"></script>
@@ -21,20 +21,20 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="4.3" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.35" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 4.30;
+  const BEAT_SECONDS = 4.35;
   const MASTER = 0.00;
   // beat-local seconds (words.json master − 0.00), checked on the vo_final.wav RMS envelope
   const CUE = {
-    recall: 0.38,     /* "Recall" (envelope onset 0.38) */
-    positives: 1.88,  /* "positives" (envelope onset 1.88) */
-    catch_: 3.78,     /* "catch?" (3.78–4.16) */
+    recall: 0.40,     /* "Recall" (envelope onset 0.40) */
+    positives: 1.92,  /* "positives" (envelope onset 1.90) */
+    catch_: 3.80,     /* "catch?" (3.80–4.18) */
   };
-  const HOLD = 4.0;   // still from here; S(t) === SEAM[1]
+  const HOLD = 4.02;  // still from here (0.33 s); S(t) === SEAM[1]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
   const K = SC.mount(root);

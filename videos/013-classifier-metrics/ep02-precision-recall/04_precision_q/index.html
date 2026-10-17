@@ -21,21 +21,21 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6.4" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.5" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.40;
-  const MASTER = 12.90;
-  // beat-local seconds (words.json master − 12.90), checked on the vo_final.wav RMS envelope
+  const BEAT_SECONDS = 6.50;
+  const MASTER = 11.15;
+  // beat-local seconds (words.json master − 11.15), v2 VO, checked on the vo_final.wav RMS envelope
   const CUE = {
-    now: 0.18,        /* "Now" (13.08) */
-    precision: 0.32,  /* "precision" (envelope onset ~13.22) */
-    predict: 2.72,    /* "predict" (15.62) */
-    positive: 3.35,   /* "positive," (16.25) */
-    actually: 4.74,   /* "actually" (17.64) */
-    end: 6.02,        /* end of "positive?" (18.92) */
+    now: 0.15,        /* "Now" (11.30) */
+    precision: 0.31,  /* "precision" (11.46; envelope onset ~11.44) */
+    predict: 2.69,    /* "predict" (13.84) */
+    positive: 3.21,   /* "positive," (14.36) */
+    actually: 4.75,   /* "actually" (15.90) */
+    end: 6.01,        /* end of "positive?" (17.16) */
   };
   const HOLD = 6.10;  // still from here; S(t) === SEAM[4]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
@@ -48,8 +48,7 @@
     const lit = E.out(seg(t, CUE.now + 0.1, CUE.precision + 0.3));    // "precision" label lights
     const row = E.io(seg(t, CUE.predict, CUE.predict + 0.4));         // the flagged row frames
     const ring = E.io(seg(t, CUE.predict + 0.1, CUE.positive + 0.35)); // its 100 dots ring / grow
-    // TP's 40 swells and settles; peak 0.85 (scale 1.10), since at 1.12 its line box touches the "TP" tag (content_overlap)
-    const br = 0.85 * pulse(t, CUE.actually, 0.8);
+    const br = pulse(t, CUE.actually, 0.8);                           // TP's 40 swells and settles
     return {
       ring: { tp: ring, fp: ring },
       box: { lit: { tp: row, fp: row }, bright: { tp: br } },

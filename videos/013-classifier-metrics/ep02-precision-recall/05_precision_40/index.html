@@ -22,35 +22,35 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="3.65" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.8" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 3.65;
-  const MASTER = 19.30;
-  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const BEAT_SECONDS = 3.80;
+  const MASTER = 17.65;
+  // beat-local = master − MASTER (v2 VO; words.json, onsets checked on the vo_final.wav RMS envelope)
   const CUE = {
-    we: 0.14,        /* "We"        (19.48, onset 19.44) the lift starts at once */
-    hundred: 0.62,   /* "100,"      (19.90, onset ~19.92 after the "flagged" tail) the lift lands */
-    forty: 1.11,     /* "40"        (20.41, onset 20.42) TP's 40 flies */
-    precision: 2.00, /* "precision" (21.31, onset 21.30) */
-    pct: 2.70,       /* "40%."      (22.01, onset 22.00) the 40% lands magenta */
+    we: 0.20,        /* "We"        (17.82, onset 17.85) the lift starts at once */
+    hundred: 0.65,   /* "100,"      (18.30) the lift lands */
+    forty: 1.07,     /* "40"        (18.72, "f" from 18.72, vowel 18.84) TP's 40 flies */
+    precision: 2.07, /* "precision" (19.72, onset 19.72) */
+    pct: 2.77,       /* "40%."      (20.30; "is" ends 20.26, onset 20.42) the 40% lands magenta */
   };
-  const HOLD = 3.30;  // still from here; S(t >= HOLD) is SEAM[5]
+  const HOLD = 3.50;  // still from here (VO ends 3.47); S(t >= HOLD) is SEAM[5]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, SEAM } = SC;
   const K = SC.mount(root);
   function S(t) {
     if (t <= 0) return SEAM[4];
     if (t >= HOLD) return SEAM[5];
-    const u = seg(t, 0.10, 0.80);                              // the row lifts (0.7 s), lands on "100"
-    const den = seg(t, 0.70, 0.95);                            // 100 drops in as it lands
-    const a = 1 - seg(t, 0.85, 1.10);                          // then the lift frame goes
+    const u = seg(t, 0.15, 0.85);                              // the row lifts (0.7 s), lands on "100"
+    const den = seg(t, 0.75, 1.00);                            // 100 drops in as it lands
+    const a = 1 - seg(t, 0.90, 1.15);                          // then the lift frame goes
     const f = seg(t, CUE.forty - 0.03, CUE.forty + 0.57);      // the 40 flies (0.6 s)
     const num = seg(t, CUE.forty + 0.45, CUE.forty + 0.65);    // and lands as the numerator
     const pct = seg(t, CUE.pct - 0.05, CUE.pct + 0.20);
-    const off = 1 - seg(t, 3.00, HOLD);                        // pctHero and "precision" back to rest
+    const off = 1 - seg(t, 3.20, HOLD);                        // pctHero and "precision" back to rest
     return {
       ring: { tp: 1 - u, fp: 1 - u },
       box: { lit: { tp: 1 - u, fp: 1 - u } },

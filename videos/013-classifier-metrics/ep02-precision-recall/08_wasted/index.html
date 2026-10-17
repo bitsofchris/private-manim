@@ -22,21 +22,21 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="4.922" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.732" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 4.922;
-  const MASTER = 32.20;
-  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const BEAT_SECONDS = 4.732;
+  const MASTER = 31.06;
+  // beat-local = master − MASTER (words.json v2 VO; onsets checked on the vo_final.wav RMS envelope)
   const CUE = {
-    precision: 0.38, /* "precision" (32.58, onset 32.56) precision's label pulses up, down before "wasted" */
-    wasted: 1.44,    /* "wasted"    (33.64, onset ~33.56) FP lit, "FP" crossfades to "wasted" */
-    real: 2.56,      /* "real"      (34.76, onset ~34.68) the 60 teal dots right of the threshold grow */
-    blocking: 3.75,  /* "blocking"  (35.95; VO ends 36.28, silent from 36.35) FP and its dots back to rest */
+    precision: 0.16, /* "precision" (31.22, onset 31.20) precision's label pulses up, down before "wasted" */
+    wasted: 1.22,    /* "wasted"    (32.28) FP lit, "FP" crossfades to "wasted" */
+    real: 2.34,      /* "real"      (33.40) the 60 ringed users right of the threshold get their halo */
+    blocking: 3.53,  /* "blocking"  (34.59; VO ends 34.94) FP and its dots back to rest */
   };
-  const HOLD = 4.20;   // 36.40 master: still from here to the end, S(t) === SEAM[8]
+  const HOLD = 4.04;   // 35.10 master: still from here to the end, S(t) === SEAM[8]
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, SEAM } = SC, E = SC.E();
   const K = SC.mount(root);
@@ -46,9 +46,9 @@
     if (t <= 0) return SEAM[7];
     if (t >= HOLD) return SEAM[8];
     // first: FN and its rings to rest ("missed" stays)
-    const fnOff = 1 - E.io(seg(t, 0.0, 0.35));
+    const fnOff = 1 - E.io(seg(t, 0.0, 0.24));
     // one hero at a time: "precision" up on the word, down before the cell lights
-    const pUp = E.io(seg(t, 0.36, 0.62)), pDn = E.io(seg(t, 1.05, 1.35));
+    const pUp = E.io(seg(t, 0.20, 0.48)), pDn = E.io(seg(t, 0.85, 1.15));
     const fpOn = E.io(seg(t, CUE.wasted - 0.05, CUE.wasted + 0.35));
     const ringOn = E.out(seg(t, CUE.real - 0.1, CUE.real + 0.4));
     // "blocking": hold through the word, then everything back to rest
