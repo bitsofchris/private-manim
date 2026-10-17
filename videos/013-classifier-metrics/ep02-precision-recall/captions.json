@@ -1,0 +1,227 @@
+[
+ {
+  "start": 0.38,
+  "end": 1.26,
+  "text": "Recall is asking"
+ },
+ {
+  "start": 1.32,
+  "end": 1.82,
+  "text": "of all the"
+ },
+ {
+  "start": 1.88,
+  "end": 3.14,
+  "text": "positives, how many"
+ },
+ {
+  "start": 3.2,
+  "end": 3.42,
+  "text": "did I"
+ },
+ {
+  "start": 3.48,
+  "end": 4.16,
+  "text": "actually catch?"
+ },
+ {
+  "start": 4.48,
+  "end": 4.98,
+  "text": "It's a prompt"
+ },
+ {
+  "start": 5.04,
+  "end": 5.92,
+  "text": "injection detector."
+ },
+ {
+  "start": 6.2,
+  "end": 6.98,
+  "text": "10,000 requests come"
+ },
+ {
+  "start": 7.04,
+  "end": 7.44,
+  "text": "in, but only"
+ },
+ {
+  "start": 7.5,
+  "end": 8.4,
+  "text": "50 are attacks."
+ },
+ {
+  "start": 8.72,
+  "end": 8.98,
+  "text": "If there were"
+ },
+ {
+  "start": 9.04,
+  "end": 9.96,
+  "text": "50 attacks and"
+ },
+ {
+  "start": 10.02,
+  "end": 10.42,
+  "text": "we only caught"
+ },
+ {
+  "start": 10.48,
+  "end": 11.7,
+  "text": "40, recall is"
+ },
+ {
+  "start": 11.76,
+  "end": 12.54,
+  "text": "about 80%."
+ },
+ {
+  "start": 13.08,
+  "end": 13.92,
+  "text": "Now precision is"
+ },
+ {
+  "start": 13.98,
+  "end": 14.76,
+  "text": "saying, of the"
+ },
+ {
+  "start": 14.82,
+  "end": 15.34,
+  "text": "ones that I"
+ },
+ {
+  "start": 15.4,
+  "end": 16.01,
+  "text": "did predict"
+ },
+ {
+  "start": 16.07,
+  "end": 16.68,
+  "text": "were positive"
+ },
+ {
+  "start": 17.21,
+  "end": 18.28,
+  "text": "how many actually"
+ },
+ {
+  "start": 18.34,
+  "end": 18.92,
+  "text": "were positive?"
+ },
+ {
+  "start": 19.48,
+  "end": 20.35,
+  "text": "We flagged 100"
+ },
+ {
+  "start": 20.41,
+  "end": 21.25,
+  "text": "40 were attacks"
+ },
+ {
+  "start": 21.31,
+  "end": 22.16,
+  "text": "precision is 40%."
+ },
+ {
+  "start": 23.15,
+  "end": 23.74,
+  "text": "Neither one uses"
+ },
+ {
+  "start": 23.8,
+  "end": 24.52,
+  "text": "the true negatives."
+ },
+ {
+  "start": 25.15,
+  "end": 25.62,
+  "text": "In this case"
+ },
+ {
+  "start": 25.68,
+  "end": 26.38,
+  "text": "there's almost 10,000"
+ },
+ {
+  "start": 26.44,
+  "end": 26.72,
+  "text": "of them."
+ },
+ {
+  "start": 27.18,
+  "end": 27.48,
+  "text": "That's why they"
+ },
+ {
+  "start": 27.54,
+  "end": 28.08,
+  "text": "still work when"
+ },
+ {
+  "start": 28.14,
+  "end": 28.46,
+  "text": "the attacks"
+ },
+ {
+  "start": 28.52,
+  "end": 28.92,
+  "text": "are rare."
+ },
+ {
+  "start": 29.36,
+  "end": 29.86,
+  "text": "Recall is all"
+ },
+ {
+  "start": 29.92,
+  "end": 30.32,
+  "text": "about what you"
+ },
+ {
+  "start": 30.38,
+  "end": 31.36,
+  "text": "missed. These are"
+ },
+ {
+  "start": 31.42,
+  "end": 31.98,
+  "text": "the attacks that"
+ },
+ {
+  "start": 32.04,
+  "end": 32.36,
+  "text": "got through"
+ },
+ {
+  "start": 32.48,
+  "end": 33.06,
+  "text": "and precision is"
+ },
+ {
+  "start": 33.12,
+  "end": 33.58,
+  "text": "about what you"
+ },
+ {
+  "start": 33.64,
+  "end": 34.7,
+  "text": "wasted. These are"
+ },
+ {
+  "start": 34.76,
+  "end": 35.49,
+  "text": "real users that"
+ },
+ {
+  "start": 35.55,
+  "end": 35.72,
+  "text": "you ended"
+ },
+ {
+  "start": 35.78,
+  "end": 36.28,
+  "text": "up blocking."
+ }
+]
