@@ -124,14 +124,14 @@ Kept on purpose:
 ### Second cut (Chris, 10/17, after the first assembly): get to the matrix sooner
 
 "We spend too much time before the confusion matrix." Cut from the
-approved `vo_final.wav` itself (`cut_vo.py`, so beats 4–7 stay
+approved `vo_final.wav` itself (now `tools/cut_vo.py`, so beats 4–7 stay
 sample-identical, shifted −6.845 s): line 2 "It's a prompt injection
 detector." (the frame-0 tag still names it), line 4 "It never flags
 anything, and you're still right 99.5% of the time." (and with it the
 code card), and "Now," + "flags 100 requests and" from line 5. 48.80 →
 41.96 s; the matrix is named at 14.2 s instead of 20.8 s.
 
-The VO was also re-cleaned with the minimal chain (`recut_vo.py`): the full
+The VO was also re-cleaned with the minimal chain (re-applying the time map; now `tools/tighten_vo.py --map-in`): the full
 `enhance_vo.sh` chain's denoise (`afftdn nf=-25`) smeared this take, whose
 noise floor is about −54 dB.
 
