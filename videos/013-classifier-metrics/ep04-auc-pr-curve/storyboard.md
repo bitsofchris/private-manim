@@ -116,6 +116,12 @@ are rounded to 0.1 s, so cues from beat 3 on land ~60 ms early.
 
 Raw take 59.8 s → **50.4 s**.
 
+Audio: `vo_clean.wav` is **loudnorm only** (`ffmpeg -i vo_raw.m4a -af
+"loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1`); Chris heard the
+`enhance_vo.sh` chain as over-processed (10/17). `vo_final.wav` is cut
+with the v2 time map (`timemap.json`, unchanged, via `tighten_vo.build_ffmpeg`),
+then +1.9 dB with a −1.5 dBTP limiter → −14.6 LUFS.
+
 | # | Edit | Range (vo_clean) | Effect | Why |
 |---|---|---|---:|---|
 | 1 | Restart "This model's PR…" | 46.75–49.03 | −2.3 s | false start; script.md flags it |
