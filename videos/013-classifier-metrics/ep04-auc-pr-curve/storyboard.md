@@ -81,7 +81,7 @@ threshold (1, on "flags") → the area (3) → the threshold and its point
 (4) → the PR curve (5) → the baseline (6) → the PR area (7) → the code
 card's lit line (8).
 
-## Beats (VO from script.md; times from the trial cut, finals after approval)
+## Beats (VO from script.md; the visual brief)
 
 | # | Beat | VO (as recorded) | Visual (9:16) | Hero |
 |---|------|---|---|---|
@@ -93,6 +93,43 @@ card's lit line (8).
 | 6 | The baseline | And the coin flip here isn't 0.5. It's 0.005, the attack rate. | "isn't 0.5": a dashed line at precision 0.5 labelled **0.5**. "0.005": it drops to the floor, labelled **0.005 = attack rate**. | the baseline |
 | 7 | PR AUC | This model's precision-recall area under the curve is 0.56. It's low looking, but over a hundred times better than chance. | "area under the curve": the PR area fills (step-wise, as average precision is). "0.56": **PR AUC 0.556** in the top-right corner. "hundred times": "≈ 111× the coin flip" under it. | the PR area |
 | 8 | Takeaway | When positives are rare, we want to compare models on the precision-recall curve. | "rare": the 50 gold dots pulse once. Then the score line gives way to the code card: `roc_auc_score(y, s)` → `0.985`, `average_precision_score(y, s)` → `0.556`, the second line lit. Still for the last ~1 s. | the code card's lit line |
+
+## Final beats (the contract; `vo_final.wav` 52.39 s, master seconds)
+
+Beat brief for the agents: `BRIEF.md`. Captions are anchored bottom
+(`assemble.py --captions-anchor bottom`), so the stage runs to y 1330.
+
+| # | Folder | Start | Length | VO |
+|---|---|---:|---:|---|
+| 1 | `01_hook` | 0.00 | 6.50 | This model's ROC area under the curve is 0.985, nearly perfect, but most of what it flags is wrong. |
+| 2 | `02_context` | 6.50 | 2.00 | It's a prompt injection detector. |
+| 3 | `03_what_auc` | 8.50 | 9.20 | AUC is for comparing models. A coin flip is 0.5. You pick a random attack and a random user, and 98.5% of the time the attack scores higher. |
+| 4 | `04_the_point` | 17.70 | 8.30 | Now look at this point. False positive rate 2.3 percent. Sounds small. It's 233 real users blocked just to catch 44 attacks. |
+| 5 | `05_swap` | 26.00 | 10.60 | So swap the false positive rate for precision. Precision doesn't use true negatives. Recall goes across, precision goes up, and the same model's curve drops. Now the good corner is top right. |
+| 6 | `06_baseline` | 36.60 | 4.70 | And the coin flip here isn't 0.5. It's 0.005, the attack rate. |
+| 7 | `07_pr_auc` | 41.30 | 6.30 | This model's precision-recall area under the curve is 0.56. It's low looking, but over a hundred times better than chance. |
+| 8 | `08_takeaway` | 47.60 | 4.80 | When positives are rare, we want to compare models on the precision-recall curve. |
+
+## Cut list (approved by Chris, 10/17; applied)
+
+Raw take 59.8 s → **52.4 s**.
+
+| # | Edit | Range | Effect | Why |
+|---|---|---|---:|---|
+| 1 | Splice `../vo_context_short.m4a` ("It's a prompt injection detector.", cleaned with the same chain) in after line 1 | inserted at vo_clean 7.00 (inside the 2.8 s pause) → `vo_spliced.wav` | +1.65 s | SERIES.md "Context in every episode" |
+| 2 | Restart "This model's PR…" | vo_spliced 48.40–50.68 (= vo_clean 46.75–49.03) | −2.3 s | false start; script.md flags it |
+| 3 | Pauses capped at 0.25 s (`--noise=-45dB`, as ep01) | everywhere | −8.4 s | |
+
+Kept: the random-pair line (the planned first cut, not needed at 52.4 s).
+
+Command: `tools/tighten_vo.py vo_spliced.wav --out vo_final.wav --map
+timemap.json --max-gap 0.25 --noise=-45dB --remove 48.40-50.68`.
+
+Spellings fixed in `words.json` (Parakeet / script.md): number tokens
+merged (0.985, 0.5, 98.5%, 2.3%, 0.005, 0.56); "in a random user" →
+"and". Line 1's number: both recognizers hear "0.95" in the take, even
+in isolation; script.md and the ledger say 0.985. Captions and the
+screen show **0.985**; Chris to confirm by ear.
 
 ## Not in this Short (on purpose)
 
