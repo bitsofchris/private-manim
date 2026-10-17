@@ -20,20 +20,18 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="3.50" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.06" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
     </div>
     <script>
 (() => {
-  const BEAT_SECONDS = 3.50;
+  const BEAT_SECONDS = 2.06;
   const MASTER = 3.00;
-  const CUE = {                 // beat-local = master − 3.00 (words.json, checked on the envelope)
-    prompt: 0.38,      /* "prompt" (master 3.38; vowel 3.46) */
-    detector: 1.16,    /* "detector." (master 4.16–4.62) */
-    you: 2.07,         /* "You just" (master 5.07; onset 5.08) */
-    move: 2.35,        /* "move" (master 5.35; onset 5.36) */
-    line: 2.90,        /* "line." (master 5.90) */
-    still: 3.20,       /* hold SEAM[2] from here */
+  const CUE = {                 // beat-local = master − 3.00 (words.json; shifted −1.44 s when the context line was cut)
+    you: 0.63,         /* "You just" (master 3.63) */
+    move: 0.91,        /* "move" (master 3.91) */
+    line: 1.46,        /* "line." (master 4.46) */
+    still: 1.76,       /* hold SEAM[2] from here */
   };
   const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
   const { seg, lerp, pulse, SEAM } = SC, E = SC.E();
@@ -44,8 +42,6 @@
   function S(t) {
     if (t >= CUE.still) return clone(SEAM[2]);
     const s = clone(SEAM[1]);
-    // "prompt injection detector": the tag's first line brightens, back by master ~4.9
-    s.tagBright = E.io(seg(t, CUE.prompt, CUE.prompt + 0.3)) * (1 - E.io(seg(t, CUE.detector + 0.3, CUE.detector + 0.7)));
     // "move this line": out to 0.62 and back, each leg eased, the box and dot following
     s.t = lerp(lerp(SC.T_BOX, NUDGE, E.io(seg(t, L1[0], L1[1]))), SC.T_BOX, E.io(seg(t, L2[0], L2[1])));
     s.thr = { pulse: pulse(t, CUE.line - 0.2, 0.45) };   // on "line", done by the still

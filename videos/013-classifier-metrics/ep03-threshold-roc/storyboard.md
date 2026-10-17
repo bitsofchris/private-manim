@@ -84,19 +84,20 @@ five stop points (7), the top-left corner (8).
 | # | Folder | Start | Length | VO (as recorded) | Visual (9:16) | Hero |
 |---|---|---:|---:|---|---|---|
 | 1 | `01_hook` | 0.00 | 3.00 | You can change what your classifier does without retraining it. | Frame 0, already working: every panel up, the line mid-slide (from ~0.55 toward 0.70), the box counts ticking, the ROC dot riding the curve. Lands on 0.70 by "retraining". | the line + dot |
-| 2 | `02_context` | 3.00 | 3.50 | It's a prompt injection detector. You just move this line. | "prompt injection detector": the tag brightens, then back. "move this line": the line nudges (0.70 → ~0.62 → 0.70, ≥ 0.6 s each way), box and dot following. | the line + dot |
-| 3 | `03_every_place` | 6.50 | 3.15 | An ROC curve shows every place that you could put it. | "ROC curve": the curve lights. "every place": the line sweeps right → left across the scores and back to 0.70, the dot tracing the whole curve. | the curve |
-| 4 | `04_score` | 9.65 | 5.95 | The model doesn't say yes or no. It gives every request a score. And this threshold is what turns that score into a yes. | Line still at 0.70. "a score": one real attack dot right of the line gets a tag with its own score (2 dp, from `dots.js`). "this threshold": the line pulses. "into a yes": the code line fades in, `pred = scores > 0.70`, and the tagged dot rings as flagged. | the line, then `> 0.70` |
-| 5 | `05_slide_left` | 15.60 | 4.55 | You slide it to the left and we can catch every attack. But we end up blocking most of our users. | "slide it to the left": the line slides to 0.20 (≥ 1 s), the code ticks to 0.20, the box recounts, the dot climbs to (0.51, 1). "every attack": TP 50 pulses. "most of our users": FP 5,055 pulses; the teal pile lights up to the line. | the line + dot |
-| 6 | `06_slide_right` | 20.15 | 4.20 | If you slide it to the right, almost nobody gets blocked, but half of the attacks get through. | "slide it to the right": to 0.85 (≥ 1 s), code 0.85, box recounts, the dot drops to (0.003, 0.42). "nobody gets blocked": FP 28 pulses. "half of the attacks": FN 29 pulses, the unflagged gold dots left of the line ring. | the line + dot |
-| 7 | `07_each_point` | 24.35 | 7.50 | Every threshold gives a new confusion matrix, and each one is a point. The true positive rate up, false positive rate across. | The curve dims. "Every threshold": the line steps through the five stops (0.20, 0.40, 0.55, 0.70, 0.85), the box recounting at each. "each one is a point": from there each stop leaves a magenta point on the plot. "true positive rate up": the TPR label and a vertical guide from the current point to the x-axis light. "false positive rate across": the FPR label. Then the curve comes back up through the points. | the stop points |
-| 8 | `08_sweet_spot` | 31.85 | 1.90 | Top left is the sweet spot. | The points and the line go to rest; the top-left corner (0, 1) glows. | the corner |
-| 9 | `09_takeaway` | 33.75 | 8.35 | Now ROC is for picking thresholds. You decide whether you'd rather avoid false positives or get all the positives depending on the problem you're solving. | Corner fades. "picking thresholds": the line and dot take the hero back. "avoid false positives": the line slides right toward 0.85 (FP falls). "get all the positives": left toward 0.20 (TP 50). "problem you're solving": it settles at 0.70, the ledger box. Still for the last ~1 s. | the line + dot |
+| 2 | `02_move_line` | 3.00 | 2.06 | You just move this line. | "move this line": the line nudges (0.70 → ~0.62 → 0.70, ≥ 0.6 s each way), box and dot following. | the line + dot |
+| 3 | `03_every_place` | 5.06 | 3.15 | An ROC curve shows every place that you could put it. | "ROC curve": the curve lights. "every place": the line sweeps right → left across the scores and back to 0.70, the dot tracing the whole curve. | the curve |
+| 4 | `04_score` | 8.21 | 5.95 | The model doesn't say yes or no. It gives every request a score. And this threshold is what turns that score into a yes. | Line still at 0.70. "a score": one real attack dot right of the line gets a tag with its own score (2 dp, from `dots.js`). "this threshold": the line pulses. "into a yes": the code line fades in, `pred = scores > 0.70`, and the tagged dot rings as flagged. | the line, then `> 0.70` |
+| 5 | `05_slide_left` | 14.16 | 4.55 | You slide it to the left and we can catch every attack. But we end up blocking most of our users. | "slide it to the left": the line slides to 0.20 (≥ 1 s), the code ticks to 0.20, the box recounts, the dot climbs to (0.51, 1). "every attack": TP 50 pulses. "most of our users": FP 5,055 pulses; the teal pile lights up to the line. | the line + dot |
+| 6 | `06_slide_right` | 18.71 | 4.20 | If you slide it to the right, almost nobody gets blocked, but half of the attacks get through. | "slide it to the right": to 0.85 (≥ 1 s), code 0.85, box recounts, the dot drops to (0.003, 0.42). "nobody gets blocked": FP 28 pulses. "half of the attacks": FN 29 pulses, the unflagged gold dots left of the line ring. | the line + dot |
+| 7 | `07_each_point` | 22.91 | 7.50 | Every threshold gives a new confusion matrix, and each one is a point. The true positive rate up, false positive rate across. | The curve dims. "Every threshold": the line steps through the five stops (0.20, 0.40, 0.55, 0.70, 0.85), the box recounting at each. "each one is a point": from there each stop leaves a magenta point on the plot. "true positive rate up": the TPR label and a vertical guide from the current point to the x-axis light. "false positive rate across": the FPR label. Then the curve comes back up through the points. | the stop points |
+| 8 | `08_sweet_spot` | 30.41 | 1.90 | Top left is the sweet spot. | The points and the line go to rest; the top-left corner (0, 1) glows. | the corner |
+| 9 | `09_takeaway` | 32.31 | 8.35 | Now ROC is for picking thresholds. You decide whether you'd rather avoid false positives or get all the positives depending on the problem you're solving. | Corner fades. "picking thresholds": the line and dot take the hero back. "avoid false positives": the line slides right toward 0.85 (FP falls). "get all the positives": left toward 0.20 (TP 50). "problem you're solving": it settles at 0.70, the ledger box. Still for the last ~1 s. | the line + dot |
 
-Total 42.10 s. Lengths are from the trial cut and become the contract once
-the cut is approved.
+Total 40.66 s (`vo_final.wav`). The contract for the beats; `BRIEF.md`'s table is the
+pre-change version (beat 2 was 3.50 s with the context line; every later beat
+starts 1.44 s earlier, its local cues unchanged).
 
-## Cut list (proposed 10/17; waiting for Chris)
+## Cut list (approved by Chris, 10/17; applied)
 
 Raw take 45.3 s → context line spliced in → 46.9 s → **42.1 s**.
 
@@ -114,6 +115,9 @@ Kept on purpose:
   move, which the runbook wants as the last line.
 - "most of our users": the ledger's 0.20 stop blocks 51%. The visual
   shows 5,055 of 9,950, so the screen is exact even where the VO rounds.
+
+After the first full cut Chris removed edit 1 (10/17): the context line is out,
+so the Short is 40.66 s. The frame-0 tag still names the detector on screen.
 
 If the "false" splice sounds wrong to Chris: end on "…for picking
 thresholds." (−6 s, 36.1 s total), losing the closer.

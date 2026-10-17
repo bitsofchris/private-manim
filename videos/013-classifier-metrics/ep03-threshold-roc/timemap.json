@@ -1,52 +1,57 @@
 [
  {
   "old_start": 0.0,
-  "old_end": 6.101312,
+  "old_end": 2.7800000000000002,
   "new_start": 0.3
+ },
+ {
+  "old_start": 4.47,
+  "old_end": 6.101312,
+  "new_start": 3.33
  },
  {
   "old_start": 6.575312,
   "old_end": 9.430146,
-  "new_start": 6.651
+  "new_start": 5.211
  },
  {
   "old_start": 9.960604,
   "old_end": 15.776187,
-  "new_start": 9.756
+  "new_start": 8.316
  },
  {
   "old_start": 16.160146,
   "old_end": 20.445853999999997,
-  "new_start": 15.822
+  "new_start": 14.382
  },
  {
   "old_start": 20.889458,
   "old_end": 24.803103999999998,
-  "new_start": 20.357
+  "new_start": 18.917
  },
  {
   "old_start": 25.621771000000003,
   "old_end": 29.375103999999997,
-  "new_start": 24.521
+  "new_start": 23.081
  },
  {
   "old_start": 29.965437,
   "old_end": 33.233396,
-  "new_start": 28.524
+  "new_start": 27.084
  },
  {
   "old_start": 33.894187,
   "old_end": 35.438292,
-  "new_start": 32.042
+  "new_start": 30.602
  },
  {
   "old_start": 39.082604,
   "old_end": 44.47,
-  "new_start": 34.036
+  "new_start": 32.596
  },
  {
   "old_start": 44.755,
   "old_end": 46.9,
-  "new_start": 39.454
+  "new_start": 38.014
  }
 ]
