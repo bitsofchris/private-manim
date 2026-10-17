@@ -45,6 +45,9 @@ const h = C.human(svg, { x: 200, y: 700, s: 0.5 });
 C.pose(h, { armR: 90 });
 out.handR = C.hand(h, 1).map((v) => Math.round(v * 10) / 10);
 out.transform = h.el.getAttribute("transform");
+const h2 = C.human(svg, { x: 0, y: 0, s: 1 });
+C.pose(h2, { armR: 0, lean: 90 });
+out.handLean = C.hand(h2, 1).map((v) => Math.round(v * 10) / 10);
 const a = C.agent(svg, {});
 out.eyes = a.face.eyes.map((t) => t.textContent);
 out.eyeFont = a.face.eyes[0].style.fontFamily;
@@ -83,6 +86,11 @@ class CastKitTest(unittest.TestCase):
         # shoulder at (0, -345), arm 155 straight out to the right, then
         # scaled by 0.5 about the feet at (200, 700)
         self.assertEqual(self.out["handR"], [277.5, 527.5])
+
+    def test_hand_follows_the_lean(self):
+        # Arm straight down ends at (0, -190); leaning 90 deg about the hip (y -170)
+        # swings it to (20, -170), where the drawn hand is (012 ep04).
+        self.assertEqual(self.out["handLean"], [20, -170])
         self.assertEqual(self.out["transform"], "translate(200 700) rotate(0) scale(0.5)")
 
     def test_agent_has_one_and_zero_eyes_in_monospace(self):

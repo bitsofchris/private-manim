@@ -96,10 +96,14 @@
     part.handL = l; part.handR = r;
     if (part.broom) broomTo(part);
   }
-  // The hand in frame coordinates (for props held or pointed at).
+  // The hand in frame coordinates (for props held or pointed at), after the
+  // lean: the upper body rotates about the hip (012 ep04: a pencil held while
+  // leaning floated off the hand).
   function hand(part, side = 1) {
     const h = side < 0 ? part.handL : part.handR;
-    return [part.x + h[0] * part.s, part.y + h[1] * part.s];
+    const a = (part.pose.lean || 0) * Math.PI / 180, dy = h[1] - BODY.hip;
+    const x = h[0] * Math.cos(a) - dy * Math.sin(a), y = BODY.hip + h[0] * Math.sin(a) + dy * Math.cos(a);
+    return [part.x + x * part.s, part.y + y * part.s];
   }
 
   function human(svg, o = {}) {
