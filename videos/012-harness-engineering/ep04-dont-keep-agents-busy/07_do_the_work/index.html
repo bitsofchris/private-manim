@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 4, beat 7 "do the work": the code card fades, the human relaxes; the agents blink at rest;
+         "do that work": the sheet turns magenta and its 4th line writes in while the human writes. Hero: the sheet. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/desk.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0; --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.85" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT = 7, BEAT_SECONDS = 4.85;
+  const T0 = DESK.START[BEAT];                                   // 32.20
+  const { seg, lerp, E, SEAM } = DESK;
+  const A = SEAM[BEAT - 1], B = SEAM[BEAT];
+  const CUE = {
+    ai:      32.66 - T0 /* "AI" */,
+    cant:    32.72 - T0 /* "can't" */,
+    smarter: 33.24 - T0 /* "smarter" */,
+    doo:     34.48 - T0 /* "do" */,
+    work:    34.74 - T0 /* "work." */,
+    keeping: 35.50 - T0 /* "Keeping" */,
+    busy:    35.90 - T0 /* "busy" */,
+    goal:    36.68 - T0 /* "goal." */,
+  };
+  const HOLD_FROM = BEAT_SECONDS - 0.4;                          // 4.45
+  const BLINK = 0.14;                                            // ~4 frames, eyes shut
+  const blinkAt = (t, c) => (t >= c && t < c + BLINK ? 1 : 0);
+  const HA = Object.assign({}, DESK.HUMAN_REST, A.human), HB = Object.assign({}, DESK.HUMAN_REST, B.human);
+  const root = document.getElementById("root");
+  const scene = DESK.mount(root);
+  ISO.guides(root);
+
+  function render(t) {
+    // the code card fades out by "can't"; core colour and underline go with it
+    const out = E.io(seg(t, 0, CUE.cant + 0.04));
+    const gone = out >= 1;
+    const code = gone
+      ? { a: 0, plumb: 0, variant: 0, core: 0, coreHero: 0, under: 0 }   // B's (absent) code, once invisible
+      : { a: 1 - out, plumb: 1, variant: A.code.variant, core: 1, coreHero: 1 - out, under: 1 - out };
+    // the head-scratch relaxes back to rest; smile on "AI"
+    const rel = E.io(seg(t, 0.05, 0.85));
+    const human = {
+      armR: lerp(HA.armR, HB.armR, rel), armL: lerp(HA.armL, HB.armL, rel),
+      tilt: lerp(HA.tilt, HB.tilt, rel), lean: lerp(HA.lean, HB.lean, rel),
+      face: t < CUE.ai ? HA.face : HB.face,
+    };
+    // agents at rest, a staggered blink on "AI" / "smarter", one more pair on "busy"
+    const blink = [blinkAt(t, CUE.ai) || blinkAt(t, CUE.busy),
+                   blinkAt(t, CUE.smarter) || blinkAt(t, CUE.busy + 0.22)];
+    // "do that work": the sheet turns magenta, the arm goes to it, the 4th line writes in
+    const hero = E.io(seg(t, CUE.doo - 0.3, CUE.work));
+    const write = E.io(seg(t, CUE.doo - 0.45, CUE.doo + 0.05));
+    const ink = lerp(A.sheet.ink, B.sheet.ink, E.io(seg(t, CUE.doo, CUE.keeping + 0.5)));
+    const wiggle = seg(t, CUE.doo - 0.2, CUE.doo + 0.1) * (1 - seg(t, CUE.busy + 0.15, HOLD_FROM - 0.1));
+    const S = {
+      flow: A.flow, stream: 0, pile0: 4, pileOut: 1,
+      agents: { rest: 1, blink },
+      sheet: { ink, hero },
+      human, write, wiggle, code,
+    };
+    scene.draw(S, T0 + t);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

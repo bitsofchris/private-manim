@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 4, beat 9 (09_by_hand), 5.686 s, master 41.80. The last beat.
+         Opens on DESK.SEAM[8], ends on DESK.SEAM[9]; still for the last ~0.8 s.
+         "write something by hand": line 5 writes in. "read it slowly": pencil down, the human leans to the sheet.
+         "deep thinking": left hand to chin (local bent-arm helper, chinArm). "not just trying to keep agents busy":
+         the agents blink at rest, the human back to rest, smiling. Hero: the slot (stays magenta). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/desk.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.686" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT = 9, BEAT_SECONDS = 5.686;
+  const T0 = DESK.START[BEAT];                         // 41.80
+  const { seg, lerp, E, SEAM, HUMAN_REST } = DESK;
+  const A = SEAM[BEAT - 1], B = SEAM[BEAT];
+  const CUE = {
+    write:  42.26 - T0,  /* "write" (something by hand) */
+    hand:   43.00 - T0,  /* "hand" */
+    read:   43.63 - T0,  /* "read" (it slowly) */
+    slowly: 43.92 - T0,  /* "slowly" */
+    deep:   44.54 - T0,  /* "deep" */
+    think:  44.74 - T0,  /* "thinking" */
+    not:    45.16 - T0,  /* "not" (just trying to keep agents busy) */
+    agents: 46.08 - T0,  /* "agents" */
+    busy:   46.36 - T0,  /* "busy" */
+  };
+  const HOLD_FROM = BEAT_SECONDS - 0.8;                // 4.886: still from here, S equals SEAM[9]
+  const root = document.getElementById("root");
+  const scene = DESK.mount(root);
+  ISO.guides(root);
+
+  // ---- local helper: chinArm, a bent left arm (hand to chin) the cast kit has no pose for ----
+  // u 0: the kit's straight rest arm (armL 22); u 1: upper arm out and down, forearm up, hand under the chin.
+  // Drawn in the figure's upper-body group, so lean and scale apply. Overrides the kit's armL after draw.
+  const { BODY } = CAST;
+  const SEG_L = BODY.arm / 2;
+  const forearm = CAST.line(scene.human.upper, 0, 0, 0, 0, CAST.ink());
+  const CHIN = { up: 65, fore: -145.5 };             // degrees from straight down, left side
+  function chinArm(u) {
+    if (u <= 0) { forearm.setAttribute("opacity", 0); return; }
+    const a1 = lerp(HUMAN_REST.armL, CHIN.up, u), a2 = lerp(HUMAN_REST.armL, CHIN.fore, u);
+    const [ex, ey] = CAST.limb(0, BODY.shoulder, SEG_L, a1, -1);
+    const [hx, hy] = CAST.limb(ex, ey, SEG_L, a2, -1);
+    scene.human.armL.setAttribute("x2", ex); scene.human.armL.setAttribute("y2", ey);
+    forearm.setAttribute("x1", ex); forearm.setAttribute("y1", ey);
+    forearm.setAttribute("x2", hx); forearm.setAttribute("y2", hy);
+    forearm.setAttribute("opacity", 1);
+  }
+
+  function S(t) {
+    const ink   = E.io(seg(t, CUE.write, CUE.write + 0.95));           // line 5 writes in
+    const wig   = E.out(seg(t, 0, 0.2)) * (1 - E.io(seg(t, CUE.read - 0.4, CUE.read - 0.05)));
+    const down  = E.io(seg(t, CUE.read - 0.25, CUE.read + 0.4));         // pencil down
+    const lean  = E.io(seg(t, CUE.read, CUE.read + 0.7))                 // lean to the sheet
+                - E.io(seg(t, CUE.not + 0.1, CUE.not + 1.0));            // back to rest
+    const chin  = E.io(seg(t, CUE.deep - 0.15, CUE.think + 0.3))         // hand to chin
+                - E.io(seg(t, CUE.not + 0.1, CUE.not + 1.0));
+    const face  = t >= CUE.deep && t < CUE.not + 0.3 ? "flat" : "smile";
+    return {
+      flow: A.flow, stream: 0, pile0: 4, pileOut: 1,
+      agents: { rest: 1, blink: [t >= CUE.agents && t < CUE.agents + 0.14 ? 1 : 0,
+                                 t >= CUE.busy && t < CUE.busy + 0.14 ? 1 : 0] },
+      sheet: { ink: lerp(A.sheet.ink, B.sheet.ink, ink) },
+      write: lerp(A.write, B.write, down), wiggle: wig,
+      human: { armR: HUMAN_REST.armR, armL: HUMAN_REST.armL, lean: 7 * lean, tilt: 12 * lean, face },
+      day: { a: 1, slot: 1 },
+      _chin: chin,
+    };
+  }
+  function render(t) { const s = S(t); scene.draw(s, T0 + t); chinArm(s._chin); }
+  window.__beatS = S;                                   // for the seam self-check
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

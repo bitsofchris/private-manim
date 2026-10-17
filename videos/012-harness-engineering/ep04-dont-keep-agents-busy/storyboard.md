@@ -38,7 +38,7 @@ VO is `script.md` (what Chris said), not reworded.
   The pile count is driven by one global `flow` number, continuous across cuts.
 - **The code card** (beats 5–6 only): top of the stage, x 72–944, y 252–466.
   Line 1, teal, typed by the agent: `train(model, data)` (the plumbing;
-  in beat 6 it flicks through `loader = DataLoader(ds)` and `log(step, loss)`).
+  in beat 6 it flicks through `dl = DataLoader(ds)` and `log(step, loss)`).
   Line 2, handwritten in by the human: `softmax(q @ k.T)` (the core idea,
   attention, from Karpathy's course). Monospace set from the script.
 - **The day strip** (beats 8–9 only): top right, "today" over five slots;

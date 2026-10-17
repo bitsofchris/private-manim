@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 4, beat 6 (06_fast_slow): go fast on the plumbing (line 1 flicks through its
+         variants), slow on the core (an underline draws under line 2); the human struggles.
+         Opens on DESK.SEAM[5], ends on DESK.SEAM[6]. Hero: the core line. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/desk.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.45" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT = 6, BEAT_SECONDS = 5.45;
+  const T0 = DESK.START[BEAT];                           // 26.75 master
+  const { seg, lerp, E, SEAM, HUMAN_REST } = DESK;
+  const A = SEAM[BEAT - 1], B = SEAM[BEAT];              // open on A, end on B
+  const CUE = {                                          // beat-local = master - 26.75
+    go: 27.06 - T0,        /* "go"       0.31: line 1 flicks to variant 1 */
+    fast: 27.20 - T0,      /* "fast"     0.45 */
+    parts: 27.78 - T0,     /* "parts"    1.03: flicks to variant 2 */
+    nothing: 28.44 - T0,   /* "nothing"  1.69: variant 2 fully typed before here */
+    slow: 28.98 - T0,      /* "slow"     2.23: underline starts drawing */
+    core: 30.29 - T0,      /* "core"     3.54: underline nearly done */
+    meant: 31.06 - T0,     /* "meant"    4.31: hand leaves the sheet, rises to the head */
+    struggle: 31.44 - T0   /* "struggle" 4.69: face flat, hand at the head */
+  };
+  const HOLD_FROM = BEAT_SECONDS - 0.4;                  // 5.05: still from here
+  const H6 = Object.assign({}, HUMAN_REST, B.human);     // the struggle pose: armL 150, tilt 10, flat
+  const root = document.getElementById("root");
+  const scene = DESK.mount(root);
+  ISO.guides(root);
+
+  // Line 1: variant 0 (as beat 5 left it) -> 1 retyped at "go" -> 2 retyped at "parts".
+  function line1(t) {
+    if (t < CUE.go) return { variant: 0, plumb: 1 };
+    if (t < CUE.parts) return { variant: 1, plumb: seg(t, CUE.go, CUE.go + 0.35) };
+    return { variant: 2, plumb: seg(t, CUE.parts, CUE.parts + 0.4) };
+  }
+  // S(t): every field at t = 0 equals SEAM[5]; from HOLD_FROM on, SEAM[6].
+  function state(t) {
+    const u = (a, b, e = E.io) => e(seg(t, a, b));
+    const lift = u(CUE.meant - 0.1, CUE.meant + 0.6);    // 4.21 -> 4.91: hand from sheet to head
+    const l1 = line1(t);
+    return {
+      flow: A.flow, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 },
+      sheet: { ink: 3 },
+      write: 1 - lift,
+      wiggle: u(0.0, 0.25) * (1 - u(CUE.core + 0.3, CUE.core + 0.6)),   // writes slowly through "go slow on the core"
+      human: {
+        armR: HUMAN_REST.armR, lean: HUMAN_REST.lean,
+        armL: lerp(HUMAN_REST.armL, H6.armL, lift),
+        tilt: lerp(HUMAN_REST.tilt, H6.tilt, lift),
+        face: t >= CUE.struggle - 0.15 ? H6.face : HUMAN_REST.face,
+      },
+      code: { a: 1, plumb: l1.plumb, variant: l1.variant, core: 1, coreHero: 1,
+              under: u(CUE.slow, CUE.slow + 1.5, E.out) },  // slow underline, 2.23 -> 3.73
+    };
+  }
+  function render(t) { scene.draw(state(t), T0 + t); }   // master time
+  window.__beatState = state;                            // for seam checks from a console
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 4, beat 5 (05_karpathy): the code card. The agent types the plumbing
+         (line 1, teal); the human writes the core idea (line 2, magenta) and it pulses.
+         Opens on DESK.SEAM[4], ends on DESK.SEAM[5]. Hero: the core line. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/desk.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.9" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT = 5, BEAT_SECONDS = 7.90;
+  const T0 = DESK.START[BEAT];                           // 18.85 master
+  const { seg, lerp, E, SEAM, pulse } = DESK;
+  const A = SEAM[BEAT - 1], B = SEAM[BEAT];              // open on A, end on B
+  const CUE = {                                          // beat-local = master - 18.85
+    course: 20.94 - T0,    /* "course"   2.09: card is in by here */
+    agent: 21.86 - T0,     /* "agent"    3.01: agent A raises an arm */
+    writes: 22.14 - T0,    /* "writes"   3.29: line 1 types in */
+    plumbing: 22.51 - T0,  /* "plumbing" 3.66 */
+    I: 22.98 - T0,         /* "I"        4.13: core line turns magenta, pencil moves */
+    write: 23.24 - T0,     /* "write"    4.39: line 2 writes in */
+    core: 23.58 - T0,      /* "core"     4.73 */
+    myself: 23.94 - T0,    /* "myself"   5.09 (ends 24.34 = 5.49) */
+    thats: 25.00 - T0,     /* "That's"   6.15: line 2 pulses */
+    understand: 25.96 - T0 /* "understand" 7.11 */
+  };
+  const HOLD_FROM = BEAT_SECONDS - 0.4;                  // 7.50: still from here
+  const AGENT_ARM_UP = 140;                              // local: agent A's raised left arm (deg)
+  const root = document.getElementById("root");
+  const scene = DESK.mount(root);
+  ISO.guides(root);
+
+  // S(t): every field at t = 0 equals SEAM[4]; from HOLD_FROM on, SEAM[5].
+  function state(t) {
+    const u = (a, b, e = E.io) => e(seg(t, a, b));
+    return {
+      flow: A.flow, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 },
+      sheet: { ink: 3, hero: 1 - u(0.0, 0.6) },          // sheet back to ink as the card drops in
+      write: 1,
+      wiggle: u(CUE.I, CUE.I + 0.3) * (1 - u(CUE.myself + 0.45, CUE.myself + 0.8)),
+      code: {
+        a: u(CUE.agent - 0.8, CUE.agent, E.out),         // drops in after "course", in by "agent" (no empty card)
+        plumb: seg(t, CUE.writes, CUE.writes + 0.7),     // typed by the agent, "writes the plumbing"
+        variant: 0,
+        core: seg(t, CUE.I + 0.1, CUE.myself + 0.35),    // written left to right, "I write the core idea myself"
+        coreHero: u(CUE.I, CUE.I + 0.4),
+        pulse: pulse(t, CUE.thats, CUE.thats + 0.8),     // once, "That's the part"
+      },
+    };
+  }
+  // Local pose helper: agent A raises its left arm for "the agent writes the plumbing".
+  // Applied after draw, a pure function of t; 0 outside the move, so the seams are the kit's own pose.
+  function agentArm(t) {
+    return E.io(seg(t, CUE.agent - 0.15, CUE.agent + 0.45)) * (1 - E.io(seg(t, CUE.plumbing + 0.6, CUE.plumbing + 1.25)));
+  }
+  function render(t) {
+    scene.draw(state(t), T0 + t);                        // master time
+    const up = agentArm(t);
+    if (up > 0) CAST.pose(scene.agents[0], { armL: lerp(24, AGENT_ARM_UP, up), lean: -4 * up });
+  }
+  window.__beatState = state;                            // for seam checks from a console
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

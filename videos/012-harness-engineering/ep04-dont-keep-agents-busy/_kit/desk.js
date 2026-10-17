@@ -41,12 +41,23 @@
   const SHEET = { x: 300, y: 566, w: 166, h: 248 };
   const PILE = { cx: 575, w: 150, slab: 14, pitch: 18, max: 28 };
   const TRAVEL = 1.6;                          // flow units a page spends in the air
-  const CODE = { left: 72, top: 252, width: 872, plumb: ["train(model, data)", "loader = DataLoader(ds)", "log(step, loss)"],
+  const CODE = { left: 72, top: 252, width: 872, plumb: ["train(model, data)", "dl = DataLoader(ds)", "log(step, loss)"],
                  core: "softmax(q @ k.T)" };
   const DAY = { x: 700, y: 336, w: 230, slots: 5, slotH: 56, gap: 6, pick: 1 };
   const HUMAN_REST = { armR: 22, armL: 22, tilt: 0, lean: 0, face: "smile" };
-  const WRITE_ARM = 50;                        // armR angle that puts the pencil on the sheet
+  const WRITE_ARM = 50;                        // 00_layout's fixed writing angle (beats use writeArm)
 
+  // The writing arm aims the hand at the line being written: while line n
+  // writes (ink n..n+1) the hand sits on line n, gliding there from line
+  // n-1 over the first tenth; at rest (ink an integer) it is on the last line
+  // written. Continuous in ink, so seams stay exact.
+  const lineY = (i) => SHEET.y + 46 + Math.max(0, Math.min(4, i)) * 42;
+  function writeArm(sh) {
+    const ink = sh && sh.ink != null ? sh.ink : 1, n = Math.floor(ink), f = ink - n;
+    const y = lerp(lineY(n - 1), lineY(n), Math.min(1, f / 0.1)) + 8;   // hand just under the line
+    const sy = FLOOR + CAST.BODY.shoulder * HUMAN.s, len = CAST.BODY.arm * HUMAN.s;
+    return Math.acos(Math.max(-1, Math.min(1, (y - sy) / len))) * 180 / Math.PI;
+  }
   function mount(root) {
     const svg = CAST.layer(root);
     const N = CAST.node, L = CAST.line;
@@ -76,6 +87,8 @@
                              rx: 4, fill: PAL.panel, stroke: PAL.data, "stroke-width": 5 }, pileG));
     // pages in the air: a small pool of agent pages
     const flyers = [0, 1, 2].map(() => CAST.page(svg, { s: 0.24, lines: 5 }));
+    // pages fly past the agents' eyes on purpose: waive the overlap on both texts
+    flyers.concat(agents).forEach((p) => p.el.querySelectorAll("text").forEach((el) => el.setAttribute("data-layout-allow-overlap", "")));
     // the code card (DOM text, so check sees it)
     const card = document.createElement("div");
     card.style.cssText = `position:absolute;left:${CODE.left}px;top:${CODE.top}px;width:${CODE.width}px;height:214px;border-radius:20px;` +
@@ -128,7 +141,7 @@
       // ---- the human ----
       const H = Object.assign({}, HUMAN_REST, S.human || {});
       const w = S.write || 0;
-      const armR = H.armR + w * (WRITE_ARM - H.armR) + (S.wiggle || 0) * 4 * Math.sin(t * 13);
+      const armR = H.armR + w * (writeArm(S.sheet) - H.armR) + (S.wiggle || 0) * 4 * Math.sin(t * 13);
       CAST.pose(human, { armR, armL: H.armL, tilt: H.tilt, lean: H.lean });
       CAST.face(human, H.face);
       const [px, py] = CAST.hand(human, 1);
@@ -174,9 +187,9 @@
   const START = { 1: 0, 2: 5.50, 3: 10.00, 4: 13.10, 5: 18.85, 6: 26.75, 7: 32.20, 8: 37.05, 9: 41.80, end: 47.486 };
   const SEAM = {
     0: { flow: 2.0, stream: 1, pile0: 4, sheet: { ink: 1 }, write: 1 },
-    1: { flow: 7.5, stream: 1, pile0: 4, sheet: { ink: 2, hero: 1 }, write: 0 },
-    2: { flow: 16.5, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" } },
-    3: { flow: 24.0, stream: 1, pile0: 4, pileHero: 1, sheet: { ink: 2, dim: 1 }, human: { lean: -8, tilt: -6, face: "frown" } },
+    1: { flow: 7.8, stream: 1, pile0: 4, sheet: { ink: 2, hero: 1 }, write: 0 },
+    2: { flow: 16.8, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" } },
+    3: { flow: 24.8, stream: 1, pile0: 4, pileHero: 1, sheet: { ink: 2, dim: 1 }, human: { lean: -8, tilt: -6, face: "frown" } },
     4: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3, hero: 1 }, write: 1 },
     5: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3 }, write: 1,
          code: { a: 1, plumb: 1, variant: 0, core: 1, coreHero: 1 } },
