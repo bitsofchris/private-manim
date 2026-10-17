@@ -1,58 +1,55 @@
 00:00.160-00:05.360
 The F1 score is precision and recall in one number, and it punishes whichever is worse.
 
-00:05.360-00:07.360
-It's a prompt injection detector.
-
-00:07.360-00:08.320
+00:05.360-00:06.320
 Average 0.
 
-00:08.320-00:09.120
+00:06.320-00:07.120
 9 and 0.
 
-00:09.120-00:10.400
+00:07.120-00:08.480
 1 and you get 0.
 
-00:10.400-00:11.200
+00:08.480-00:08.960
 5.
 
-00:11.019-00:12.620
+00:09.040-00:10.640
 F1 will give you 0.
 
-00:12.620-00:13.180
+00:10.640-00:11.280
 18.
 
-00:13.260-00:14.780
+00:11.280-00:12.880
 It's a harmonic me.
 
-00:14.780-00:18.300
+00:12.880-00:16.400
 Our model, 40% precision, 80% recall, scores 0.
 
-00:18.300-00:19.020
+00:16.400-00:17.360
 53.
 
-00:18.900-00:21.939
+00:17.000-00:20.280
 But F1 treats both mistakes the same and here they aren't.
 
-00:21.939-00:24.820
+00:20.280-00:23.160
 A false positive blocks a real user who can try again.
 
-00:24.820-00:28.820
+00:23.160-00:27.160
 A false negative would let an attack hijack your agent and leak your data.
 
-00:28.400-00:31.439
+00:26.800-00:29.919
 So say we'll accept two blocked users for every attack we stop.
 
-00:31.439-00:34.720
+00:29.919-00:33.120
 That means at least one flag in three has to be a real attack.
 
-00:34.720-00:38.640
+00:33.120-00:37.120
 Now move the line down as far as that allows, 41 of 50 attacks caught.
 
-00:38.640-00:41.360
+00:37.120-00:39.920
 You don't ship an F1 score, you ship a threshold.
 
-00:41.060-00:44.260
-Decide what a mistake costs and then put the line there.
+00:39.580-00:42.540
+Decide what a mistake costs and then put the line there
 
 

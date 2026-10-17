@@ -23,8 +23,8 @@ doesn't say that beat (nor the code beat), so nothing here needs plotted
 axes. Bars, cards and the score line are a canvas and DOM text.
 
 Series context: `../SERIES.md` (ledger, images, Chris's words). The VO is
-`script.md` (what Chris said) plus ep 1's context line spliced after line
-1 (`../vo_context_short.m4a`), not the planned script in `../SCRIPTS.md`.
+`script.md` (what Chris said), not the planned script in `../SCRIPTS.md`.
+No spoken context line (Chris, 10/17): the frame-0 tag carries it.
 
 ## Ledger (copied from SERIES.md and `../_data/ledger.json`; every beat uses exactly these)
 
@@ -79,7 +79,7 @@ runs to 1330) holds one thing at a time:
 
 | # | Beat | VO (as recorded) | Visual (9:16) | Hero |
 |---|------|---|---|---|
-| 1 | Hook | The F1 score is precision and recall in one number, and it punishes whichever is worse. It's a prompt injection detector. | Frame 0, already working: the score line with its tag (no threshold), the bars at 0.9 and 0.1, the magenta F1 line at 0.18 labelled "F1 0.18". "one number": the F1 line pulses. "whichever is worse": the recall bar (0.1) pulses. "prompt injection detector": the tag brightens, the teal pile and the gold dots pulse once. | the F1 line |
+| 1 | Hook | The F1 score is precision and recall in one number, and it punishes whichever is worse. | Frame 0, already working: the score line with its tag (no threshold), the bars at 0.9 and 0.1, the magenta F1 line at 0.18 labelled "F1 0.18". "one number": the F1 line pulses. "whichever is worse": the recall bar (0.1) pulses. | the F1 line |
 | 2 | Why harmonic | Average 0.9 and 0.1 and you get 0.5. F1 will give you 0.18. It's a harmonic mean. | "you get 0.5": the dashed mean line draws in at 0.5, "mean 0.5". "F1 … 0.18": the F1 line pulses at 0.18 under it. "harmonic mean": the recall bar pulses again, the F1 line hugging it. | the F1 line |
 | 3 | Model A | Our model, 40 percent precision, 80 percent recall, scores 0.53. | "Our model": the threshold drops in at 0.70 (dim, not magenta) and the 100 flagged dots ring; the mean line fades. "40 percent": the precision bar falls to 0.40 ("40%"). "80 percent": the recall bar rises to 0.80 ("80%"). "0.53": the F1 line rises to 0.53, "F1 0.53". | the F1 line |
 | 4 | Costs | But F1 treats both mistakes the same, and here they aren't. A false positive blocks a real user who can try again. A false negative would let an attack hijack your agent and leak your data. | "But F1": the bars fade out, the two cost cards fade in, same size. "false positive": its card lit, the 60 flagged teal dots ring. "false negative": its card lit, the 10 gold dots left of the line ring. | the card being named |
@@ -87,32 +87,37 @@ runs to 1330) holds one thing at a time:
 | 6 | Move the line | Now move the line down as far as that allows, 41 of 50 attacks caught. | "move the line": the threshold turns magenta and slides left from 0.70 to 0.656 (≥ 1.5 s); dots it passes light up; the readout ticks from the dots ("123 flags, 41 real"). "41 of 50": "caught 41 / 50" pulses. | the threshold |
 | 7 | Takeaway | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. | "ship a threshold": the threshold pulses. "what a mistake costs": the "1 in 3" line pulses (dim, not magenta). "put the line there": hold. Still for the last ~1 s. | the threshold |
 
-## Final beats (the contract; `vo_final.wav` 44.35 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 42.91 s, master seconds)
 
-Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`).
+Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`;
+its cue numbers are from the first cut, the beats' `CUE` blocks hold the current ones).
 Captions are anchored bottom (`assemble.py --captions-anchor bottom`), so
-the stage runs to y 1330.
+the stage runs to y 1330, and every caption is one line (≤ 15 characters).
 
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
-| 1 | `01_hook` | 0.00 | 7.40 | The F1 score is precision and recall in one number, and it punishes whichever is worse. It's a prompt injection detector. |
-| 2 | `02_harmonic` | 7.40 | 7.30 | Average 0.9 and 0.1 and you get 0.5. F1 will give you 0.18. It's a harmonic mean. |
-| 3 | `03_model_a` | 14.70 | 4.20 | Our model, 40 percent precision, 80 percent recall, scores 0.53. |
-| 4 | `04_costs` | 18.90 | 9.60 | But F1 treats both mistakes the same, and here they aren't. A false positive blocks a real user who can try again. A false negative would let an attack hijack your agent and leak your data. |
-| 5 | `05_target` | 28.50 | 6.20 | So say we'll accept two blocked users for every attack we stop. That means at least one flag in three has to be a real attack. |
-| 6 | `06_move_line` | 34.70 | 4.00 | Now move the line down as far as that allows, 41 of 50 attacks caught. |
-| 7 | `07_takeaway` | 38.70 | 5.65 | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. |
+| 1 | `01_hook` | 0.00 | 5.30 | The F1 score is precision and recall in one number, and it punishes whichever is worse. |
+| 2 | `02_harmonic` | 5.30 | 7.45 | Average 0.9 and 0.1 and you get 0.5. F1 will give you 0.18. It's a harmonic mean. |
+| 3 | `03_model_a` | 12.75 | 4.30 | Our model, 40 percent precision, 80 percent recall, scores 0.53. |
+| 4 | `04_costs` | 17.05 | 9.75 | But F1 treats both mistakes the same, and here they aren't. A false positive blocks a real user who can try again. A false negative would let an attack hijack your agent and leak your data. |
+| 5 | `05_target` | 26.80 | 6.35 | So say we'll accept two blocked users for every attack we stop. That means at least one flag in three has to be a real attack. |
+| 6 | `06_move_line` | 33.15 | 3.95 | Now move the line down as far as that allows, 41 of 50 attacks caught. |
+| 7 | `07_takeaway` | 37.10 | 5.81 | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. |
 
-## Cut list (approved by Chris, 10/17; applied)
+## Cut list (approved by Chris, 10/17; revised after his first watch)
 
-Raw take 44.85 s, clean (script.md: no flubs; the F-beta line was never
-said). With the context line spliced in after line 1 (a 0.42 s pause
-before it, 0.82 s after): 46.4 s. Pauses capped at 0.25 s (`--noise=-45dB`,
-as ep 1): **44.4 s, no phrase cuts.** Trial-cut and re-transcribed: every
-join reads clean.
+Raw take 44.85 s, clean (no flubs; the F-beta line was never said).
+Pauses capped at 0.25 s (`--noise=-45dB`), no phrase cuts: **42.9 s.**
 
-Trial beat lengths: 1 hook 7.4 · 2 harmonic 7.4 · 3 Model A 4.1 · 4
-costs 9.5 · 5 target 6.3 · 6 move 3.9 · 7 takeaway 5.7.
+After the first watch (Chris, 10/17):
+- **The context line is out.** "It's a prompt injection detector" made the
+  open sound spliced; the frame-0 tag still says it for every viewer.
+  (A departure from SERIES.md "Context in every episode": noted for the
+  update pass.)
+- **Loudness normalization only, no `enhance_vo.sh`.** The take's noise
+  floor is −67 dB (already processed); the denoise + de-ess + 3:1
+  compressor chain on top made it sound bad (runbook step 3, the
+  Studio Sound case).
 
 ## Not in this Short (on purpose)
 

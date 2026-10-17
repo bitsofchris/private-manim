@@ -1,322 +1,307 @@
 [
  {
-  "start": 0.52,
-  "end": 1.06,
+  "start": 0.5,
+  "end": 1.04,
   "text": "The F1 score"
  },
  {
-  "start": 1.12,
-  "end": 1.62,
+  "start": 1.1,
+  "end": 1.6,
   "text": "is precision"
  },
  {
-  "start": 1.68,
-  "end": 1.76,
+  "start": 1.66,
+  "end": 1.74,
   "text": "and"
  },
  {
-  "start": 1.82,
-  "end": 2.46,
+  "start": 1.8,
+  "end": 2.42,
   "text": "recall in one"
  },
  {
-  "start": 2.52,
-  "end": 3.23,
+  "start": 2.48,
+  "end": 3.2,
   "text": "number, and it"
  },
  {
-  "start": 3.29,
-  "end": 3.98,
+  "start": 3.26,
+  "end": 3.82,
   "text": "punishes"
  },
  {
-  "start": 4.04,
-  "end": 4.28,
+  "start": 3.88,
+  "end": 4.26,
   "text": "whichever"
  },
  {
-  "start": 4.34,
-  "end": 5.02,
+  "start": 4.32,
+  "end": 4.98,
   "text": "is worse."
  },
  {
-  "start": 5.56,
-  "end": 6.07,
-  "text": "It's a prompt"
- },
- {
-  "start": 6.13,
-  "end": 6.5,
-  "text": "injection"
- },
- {
-  "start": 6.56,
-  "end": 7.02,
-  "text": "detector."
- },
- {
-  "start": 7.5,
-  "end": 8.66,
+  "start": 5.7,
+  "end": 6.6,
   "text": "Average 0.9 and"
  },
  {
-  "start": 8.72,
-  "end": 9.4,
+  "start": 6.66,
+  "end": 7.4,
   "text": "0.1 and you"
  },
  {
-  "start": 9.46,
-  "end": 10.6,
+  "start": 7.46,
+  "end": 8.62,
   "text": "get 0.5."
  },
  {
-  "start": 11.05,
-  "end": 11.86,
+  "start": 9.2,
+  "end": 9.94,
   "text": "F1 will give"
  },
  {
-  "start": 11.92,
-  "end": 12.84,
+  "start": 10.0,
+  "end": 10.86,
   "text": "you 0.18."
  },
  {
-  "start": 13.46,
-  "end": 13.66,
+  "start": 11.46,
+  "end": 11.7,
   "text": "It's a"
  },
  {
-  "start": 13.72,
-  "end": 14.5,
+  "start": 11.76,
+  "end": 12.54,
   "text": "harmonic mean."
  },
  {
-  "start": 14.94,
-  "end": 15.94,
+  "start": 13.04,
+  "end": 14.04,
   "text": "Our model, 40%"
  },
  {
-  "start": 16.0,
-  "end": 16.48,
+  "start": 14.1,
+  "end": 14.56,
   "text": "precision,"
  },
  {
-  "start": 16.54,
-  "end": 17.39,
+  "start": 14.62,
+  "end": 15.48,
   "text": "80% recall"
  },
  {
-  "start": 17.45,
-  "end": 18.58,
+  "start": 15.54,
+  "end": 16.68,
   "text": "scores 0.53."
  },
  {
-  "start": 19.16,
-  "end": 19.95,
+  "start": 17.34,
+  "end": 18.02,
   "text": "But F1 treats"
  },
  {
-  "start": 20.01,
-  "end": 20.17,
+  "start": 18.08,
+  "end": 18.35,
   "text": "both"
  },
  {
-  "start": 20.23,
-  "end": 20.72,
+  "start": 18.41,
+  "end": 18.86,
   "text": "mistakes the"
  },
  {
-  "start": 20.78,
-  "end": 21.18,
+  "start": 18.92,
+  "end": 19.36,
   "text": "same, and here"
  },
  {
-  "start": 21.24,
-  "end": 21.62,
+  "start": 19.42,
+  "end": 19.86,
   "text": "they aren't."
  },
  {
-  "start": 22.06,
-  "end": 22.39,
+  "start": 20.36,
+  "end": 20.7,
   "text": "A false"
  },
  {
-  "start": 22.45,
-  "end": 22.96,
+  "start": 20.76,
+  "end": 21.12,
   "text": "positive"
  },
  {
-  "start": 23.02,
-  "end": 23.44,
+  "start": 21.18,
+  "end": 21.76,
   "text": "blocks a real"
  },
  {
-  "start": 23.5,
-  "end": 23.96,
+  "start": 21.82,
+  "end": 22.26,
   "text": "user who can"
  },
  {
-  "start": 24.02,
-  "end": 24.52,
+  "start": 22.32,
+  "end": 22.82,
   "text": "try again."
  },
  {
-  "start": 24.98,
-  "end": 25.27,
+  "start": 23.36,
+  "end": 23.64,
   "text": "A false"
  },
  {
-  "start": 25.33,
-  "end": 25.74,
+  "start": 23.7,
+  "end": 24.12,
   "text": "negative"
  },
  {
-  "start": 25.8,
-  "end": 26.2,
+  "start": 24.18,
+  "end": 24.58,
   "text": "would let an"
  },
  {
-  "start": 26.26,
-  "end": 26.64,
+  "start": 24.64,
+  "end": 25.0,
   "text": "attack"
  },
  {
-  "start": 26.7,
-  "end": 27.22,
+  "start": 25.06,
+  "end": 25.6,
   "text": "hijack your"
  },
  {
-  "start": 27.28,
-  "end": 27.75,
+  "start": 25.66,
+  "end": 26.13,
   "text": "agent and leak"
  },
  {
-  "start": 27.81,
-  "end": 28.14,
+  "start": 26.19,
+  "end": 26.52,
   "text": "your data."
  },
  {
-  "start": 28.72,
-  "end": 29.1,
+  "start": 27.12,
+  "end": 27.52,
   "text": "So say we'll"
  },
  {
-  "start": 29.16,
-  "end": 29.62,
+  "start": 27.58,
+  "end": 28.04,
   "text": "accept two"
  },
  {
-  "start": 29.68,
-  "end": 29.9,
+  "start": 28.1,
+  "end": 28.32,
   "text": "blocked"
  },
  {
-  "start": 29.96,
-  "end": 30.4,
+  "start": 28.38,
+  "end": 28.82,
   "text": "users for every"
  },
  {
-  "start": 30.46,
-  "end": 31.22,
+  "start": 28.88,
+  "end": 29.64,
   "text": "attack we stop."
  },
  {
-  "start": 31.6,
-  "end": 31.9,
+  "start": 30.02,
+  "end": 30.3,
   "text": "That means at"
  },
  {
-  "start": 31.96,
-  "end": 32.62,
+  "start": 30.36,
+  "end": 31.04,
   "text": "least one flag"
  },
  {
-  "start": 32.68,
-  "end": 33.64,
+  "start": 31.1,
+  "end": 31.98,
   "text": "in three has"
  },
  {
-  "start": 33.7,
-  "end": 33.92,
+  "start": 32.04,
+  "end": 32.34,
   "text": "to be a"
  },
  {
-  "start": 33.98,
-  "end": 34.5,
+  "start": 32.4,
+  "end": 32.92,
   "text": "real attack."
  },
  {
-  "start": 34.94,
-  "end": 35.26,
+  "start": 33.4,
+  "end": 33.7,
   "text": "Now move the"
  },
  {
-  "start": 35.32,
-  "end": 35.9,
+  "start": 33.76,
+  "end": 34.26,
   "text": "line down as"
  },
  {
-  "start": 35.96,
-  "end": 36.12,
+  "start": 34.32,
+  "end": 34.56,
   "text": "far as"
  },
  {
-  "start": 36.18,
-  "end": 36.56,
+  "start": 34.62,
+  "end": 35.02,
   "text": "that allows."
  },
  {
-  "start": 37.14,
-  "end": 37.72,
+  "start": 35.6,
+  "end": 36.16,
   "text": "41 of 50"
  },
  {
-  "start": 37.78,
-  "end": 38.38,
+  "start": 36.22,
+  "end": 36.88,
   "text": "attacks caught."
  },
  {
-  "start": 38.88,
-  "end": 39.22,
+  "start": 37.3,
+  "end": 37.68,
   "text": "You don't ship"
  },
  {
-  "start": 39.28,
-  "end": 39.78,
+  "start": 37.74,
+  "end": 38.24,
   "text": "an F1 score"
  },
  {
-  "start": 39.84,
-  "end": 40.07,
+  "start": 38.3,
+  "end": 38.53,
   "text": "you ship"
  },
  {
-  "start": 40.13,
-  "end": 40.7,
+  "start": 38.59,
+  "end": 39.18,
   "text": "a threshold."
  },
  {
-  "start": 41.28,
-  "end": 41.92,
+  "start": 39.8,
+  "end": 40.3,
   "text": "Decide what a"
  },
  {
-  "start": 41.98,
-  "end": 42.15,
+  "start": 40.36,
+  "end": 40.61,
   "text": "mistake"
  },
  {
-  "start": 42.21,
-  "end": 42.56,
+  "start": 40.67,
+  "end": 41.1,
   "text": "costs and"
  },
  {
-  "start": 42.62,
-  "end": 42.98,
+  "start": 41.16,
+  "end": 41.48,
   "text": "then put the"
  },
  {
-  "start": 43.04,
-  "end": 43.52,
+  "start": 41.54,
+  "end": 42.06,
   "text": "line there."
  }
 ]

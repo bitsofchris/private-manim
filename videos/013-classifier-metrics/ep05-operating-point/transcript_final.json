@@ -1,8 +1,8 @@
 {
   "segments" : [
     {
-      "end" : 5020,
-      "id" : "1BF5931E-CC4A-4A7B-B0F6-C0710A2997D3",
+      "end" : 4980,
+      "id" : "56307845-6EC1-49D7-8E17-E2D733D641F9",
       "start" : 1,
       "text" : "The F1 score is precision and recall in one number, and it punishes whichever is worse.",
       "words" : [
@@ -12,869 +12,836 @@
           "text" : "The"
         },
         {
-          "end" : 880,
+          "end" : 860,
           "start" : 600,
           "text" : "F1"
         },
         {
-          "end" : 1120,
-          "start" : 880,
+          "end" : 1100,
+          "start" : 860,
           "text" : "score"
         },
         {
-          "end" : 1260,
-          "start" : 1120,
+          "end" : 1220,
+          "start" : 1100,
           "text" : "is"
         },
         {
-          "end" : 1680,
-          "start" : 1260,
+          "end" : 1660,
+          "start" : 1220,
           "text" : "precision"
         },
         {
-          "end" : 1820,
-          "start" : 1680,
+          "end" : 1800,
+          "start" : 1660,
           "text" : "and"
         },
         {
-          "end" : 2200,
-          "start" : 1820,
+          "end" : 2180,
+          "start" : 1800,
           "text" : "recall"
         },
         {
-          "end" : 2320,
-          "start" : 2200,
+          "end" : 2300,
+          "start" : 2180,
           "text" : "in"
         },
         {
-          "end" : 2520,
-          "start" : 2320,
+          "end" : 2480,
+          "start" : 2300,
           "text" : "one"
         },
         {
-          "end" : 2800,
-          "start" : 2520,
+          "end" : 2780,
+          "start" : 2480,
           "text" : "number,"
         },
         {
-          "end" : 3120,
-          "start" : 3060,
+          "end" : 3080,
+          "start" : 2910,
           "text" : "and"
         },
         {
-          "end" : 3220,
-          "start" : 3120,
+          "end" : 3200,
+          "start" : 3080,
           "text" : "it"
         },
         {
-          "end" : 3920,
-          "start" : 3220,
+          "end" : 3880,
+          "start" : 3200,
           "text" : "punishes"
         },
         {
-          "end" : 4340,
-          "start" : 3920,
+          "end" : 4320,
+          "start" : 3880,
           "text" : "whichever"
         },
         {
-          "end" : 4680,
-          "start" : 4340,
+          "end" : 4660,
+          "start" : 4320,
           "text" : "is"
         },
         {
-          "end" : 5020,
-          "start" : 4680,
+          "end" : 4980,
+          "start" : 4660,
           "text" : "worse."
         }
       ]
     },
     {
-      "end" : 7020,
-      "id" : "EDAAA1F7-BB5E-4BD2-9C85-118A99AFEC71",
-      "start" : 5560,
-      "text" : "It's a prompt injection detector.",
-      "words" : [
-        {
-          "end" : 5660,
-          "start" : 5560,
-          "text" : "It's"
-        },
-        {
-          "end" : 5780,
-          "start" : 5660,
-          "text" : "a"
-        },
-        {
-          "end" : 6120,
-          "start" : 5780,
-          "text" : "prompt"
-        },
-        {
-          "end" : 6560,
-          "start" : 6120,
-          "text" : "injection"
-        },
-        {
-          "end" : 7020,
-          "start" : 6560,
-          "text" : "detector."
-        }
-      ]
-    },
-    {
-      "end" : 10600,
-      "id" : "02B02095-9243-49DA-86D4-EA1D8FDBF1CD",
-      "start" : 7680,
+      "end" : 8620,
+      "id" : "2A335044-77FE-4203-9D9B-96BC4D403483",
+      "start" : 5700,
       "text" : "Average 0.9 and 0.1 and you get 0.5.",
       "words" : [
         {
-          "end" : 7800,
-          "start" : 7680,
+          "end" : 5840,
+          "start" : 5700,
           "text" : "Average"
         },
         {
-          "end" : 8060,
-          "start" : 7800,
+          "end" : 6080,
+          "start" : 5840,
           "text" : "0"
         },
         {
-          "end" : 8580,
-          "start" : 8060,
+          "end" : 6600,
+          "start" : 6080,
           "text" : ".9"
         },
         {
-          "end" : 8640,
-          "start" : 8580,
+          "end" : 6660,
+          "start" : 6600,
           "text" : "and"
         },
         {
-          "end" : 8900,
-          "start" : 8640,
+          "end" : 6920,
+          "start" : 6660,
           "text" : "0"
         },
         {
-          "end" : 9260,
-          "start" : 8900,
+          "end" : 7280,
+          "start" : 6920,
           "text" : ".1"
         },
         {
-          "end" : 9360,
-          "start" : 9260,
+          "end" : 7380,
+          "start" : 7280,
           "text" : "and"
         },
         {
-          "end" : 9460,
-          "start" : 9360,
+          "end" : 7460,
+          "start" : 7380,
           "text" : "you"
         },
         {
-          "end" : 9740,
-          "start" : 9460,
+          "end" : 7760,
+          "start" : 7460,
           "text" : "get"
         },
         {
-          "end" : 10080,
-          "start" : 9740,
+          "end" : 8040,
+          "start" : 7760,
           "text" : "0"
         },
         {
-          "end" : 10600,
-          "start" : 10080,
+          "end" : 8620,
+          "start" : 8040,
           "text" : ".5."
         }
       ]
     },
     {
-      "end" : 12840,
-      "id" : "84A5401A-0176-4581-82AC-1542FDB1EC59",
-      "start" : 10980,
+      "end" : 10860,
+      "id" : "5FFEEB4D-D3E1-4953-B29C-B823EBB67F23",
+      "start" : 9200,
       "text" : "F1 will give you 0.18.",
       "words" : [
         {
-          "end" : 11540,
-          "start" : 10980,
+          "end" : 9540,
+          "start" : 9200,
           "text" : "F1"
         },
         {
-          "end" : 11720,
-          "start" : 11540,
+          "end" : 9740,
+          "start" : 9540,
           "text" : "will"
         },
         {
-          "end" : 11920,
-          "start" : 11720,
+          "end" : 10000,
+          "start" : 9740,
           "text" : "give"
         },
         {
-          "end" : 12060,
-          "start" : 11920,
+          "end" : 10080,
+          "start" : 10000,
           "text" : "you"
         },
         {
-          "end" : 12400,
-          "start" : 12060,
+          "end" : 10420,
+          "start" : 10080,
           "text" : "0"
         },
         {
-          "end" : 12840,
-          "start" : 12400,
+          "end" : 10860,
+          "start" : 10420,
           "text" : ".18."
         }
       ]
     },
     {
-      "end" : 14500,
-      "id" : "EB5ED5A6-A632-425B-BF7D-83D6B591F090",
-      "start" : 13460,
+      "end" : 12540,
+      "id" : "147FC9A2-BA37-48FF-A28D-40BA3E682DDB",
+      "start" : 11220,
       "text" : "It's a harmonic mean.",
       "words" : [
         {
-          "end" : 13600,
-          "start" : 13460,
+          "end" : 11640,
+          "start" : 11220,
           "text" : "It's"
         },
         {
-          "end" : 13720,
-          "start" : 13600,
+          "end" : 11760,
+          "start" : 11640,
           "text" : "a"
         },
         {
-          "end" : 14260,
-          "start" : 13720,
+          "end" : 12320,
+          "start" : 11760,
           "text" : "harmonic"
         },
         {
-          "end" : 14500,
-          "start" : 14260,
+          "end" : 12540,
+          "start" : 12320,
           "text" : "mean."
         }
       ]
     },
     {
-      "end" : 18580,
-      "id" : "1E487398-C1F6-4972-9084-158BB142DCAD",
-      "start" : 14940,
+      "end" : 16680,
+      "id" : "66EE1E81-F38E-4325-ACAE-5855F1864546",
+      "start" : 13040,
       "text" : "Our model, 40% precision, 80% recall, scores 0.53.",
       "words" : [
         {
-          "end" : 15040,
-          "start" : 14940,
+          "end" : 13140,
+          "start" : 13040,
           "text" : "Our"
         },
         {
-          "end" : 15360,
-          "start" : 15040,
+          "end" : 13440,
+          "start" : 13140,
           "text" : "model,"
         },
         {
-          "end" : 15740,
-          "start" : 15480,
+          "end" : 13840,
+          "start" : 13580,
           "text" : "40"
         },
         {
-          "end" : 16000,
-          "start" : 15740,
+          "end" : 14100,
+          "start" : 13840,
           "text" : "%"
         },
         {
-          "end" : 16360,
-          "start" : 16000,
+          "end" : 14460,
+          "start" : 14100,
           "text" : "precision,"
         },
         {
-          "end" : 16640,
-          "start" : 16540,
+          "end" : 14720,
+          "start" : 14620,
           "text" : "80"
         },
         {
-          "end" : 16940,
-          "start" : 16640,
+          "end" : 15020,
+          "start" : 14720,
           "text" : "%"
         },
         {
-          "end" : 17240,
-          "start" : 16940,
+          "end" : 15340,
+          "start" : 15020,
           "text" : "recall,"
         },
         {
-          "end" : 17580,
-          "start" : 17420,
+          "end" : 15680,
+          "start" : 15520,
           "text" : "scores"
         },
         {
-          "end" : 17960,
-          "start" : 17580,
+          "end" : 16059,
+          "start" : 15680,
           "text" : "0"
         },
         {
-          "end" : 18580,
-          "start" : 17960,
+          "end" : 16680,
+          "start" : 16059,
           "text" : ".53."
         }
       ]
     },
     {
-      "end" : 21620,
-      "id" : "DF9A27B3-2E91-467B-BBAF-D658BA5B4E02",
-      "start" : 19160,
+      "end" : 19860,
+      "id" : "171DDE03-BC79-4D93-A241-F53F1AAA1B49",
+      "start" : 17340,
       "text" : "But F1 treats both mistakes the same, and here they aren't.",
       "words" : [
         {
-          "end" : 19280,
-          "start" : 19160,
+          "end" : 17460,
+          "start" : 17340,
           "text" : "But"
         },
         {
-          "end" : 19620,
-          "start" : 19280,
+          "end" : 17800,
+          "start" : 17460,
           "text" : "F1"
         },
         {
-          "end" : 19900,
-          "start" : 19620,
+          "end" : 18080,
+          "start" : 17800,
           "text" : "treats"
         },
         {
-          "end" : 20200,
-          "start" : 19900,
+          "end" : 18380,
+          "start" : 18080,
           "text" : "both"
         },
         {
-          "end" : 20560,
-          "start" : 20200,
+          "end" : 18740,
+          "start" : 18380,
           "text" : "mistakes"
         },
         {
-          "end" : 20740,
-          "start" : 20560,
+          "end" : 18920,
+          "start" : 18740,
           "text" : "the"
         },
         {
-          "end" : 20980,
-          "start" : 20740,
+          "end" : 19160,
+          "start" : 18920,
           "text" : "same,"
         },
         {
-          "end" : 21080,
-          "start" : 20980,
+          "end" : 19260,
+          "start" : 19160,
           "text" : "and"
         },
         {
-          "end" : 21240,
-          "start" : 21080,
+          "end" : 19420,
+          "start" : 19260,
           "text" : "here"
         },
         {
-          "end" : 21380,
-          "start" : 21240,
+          "end" : 19540,
+          "start" : 19420,
           "text" : "they"
         },
         {
-          "end" : 21620,
-          "start" : 21380,
+          "end" : 19860,
+          "start" : 19540,
           "text" : "aren't."
         }
       ]
     },
     {
-      "end" : 24520,
-      "id" : "79045646-F5E1-404D-A856-7576BFA4138D",
-      "start" : 22060,
+      "end" : 22820,
+      "id" : "1B02D2E2-2E1E-4434-AD76-B2AD4DC04545",
+      "start" : 20360,
       "text" : "A false positive blocks a real user who can try again.",
       "words" : [
         {
-          "end" : 22200,
-          "start" : 22060,
+          "end" : 20440,
+          "start" : 20360,
           "text" : "A"
         },
         {
-          "end" : 22440,
-          "start" : 22200,
+          "end" : 20760,
+          "start" : 20440,
           "text" : "false"
         },
         {
-          "end" : 22920,
-          "start" : 22440,
+          "end" : 21180,
+          "start" : 20760,
           "text" : "positive"
         },
         {
-          "end" : 23260,
-          "start" : 22920,
+          "end" : 21560,
+          "start" : 21180,
           "text" : "blocks"
         },
         {
-          "end" : 23380,
-          "start" : 23260,
+          "end" : 21680,
+          "start" : 21560,
           "text" : "a"
         },
         {
-          "end" : 23500,
-          "start" : 23380,
+          "end" : 21820,
+          "start" : 21680,
           "text" : "real"
         },
         {
-          "end" : 23760,
-          "start" : 23500,
+          "end" : 22080,
+          "start" : 21820,
           "text" : "user"
         },
         {
-          "end" : 23880,
-          "start" : 23760,
+          "end" : 22200,
+          "start" : 22080,
           "text" : "who"
         },
         {
-          "end" : 24020,
-          "start" : 23880,
+          "end" : 22320,
+          "start" : 22200,
           "text" : "can"
         },
         {
-          "end" : 24220,
-          "start" : 24020,
+          "end" : 22520,
+          "start" : 22320,
           "text" : "try"
         },
         {
-          "end" : 24520,
-          "start" : 24220,
+          "end" : 22820,
+          "start" : 22520,
           "text" : "again."
         }
       ]
     },
     {
-      "end" : 28140,
-      "id" : "9DD68BA3-3544-4BAF-9EC5-F34653AA5DA4",
-      "start" : 24980,
+      "end" : 26520,
+      "id" : "C0E0BD32-23FA-4070-9795-076A96484C92",
+      "start" : 23360,
       "text" : "A false negative would let an attack hijack your agent and leak your data.",
       "words" : [
         {
-          "end" : 25100,
-          "start" : 24980,
+          "end" : 23480,
+          "start" : 23360,
           "text" : "A"
         },
         {
-          "end" : 25320,
-          "start" : 25100,
+          "end" : 23700,
+          "start" : 23480,
           "text" : "false"
         },
         {
-          "end" : 25800,
-          "start" : 25320,
+          "end" : 24180,
+          "start" : 23700,
           "text" : "negative"
         },
         {
-          "end" : 25960,
-          "start" : 25800,
+          "end" : 24340,
+          "start" : 24180,
           "text" : "would"
         },
         {
-          "end" : 26160,
-          "start" : 25960,
+          "end" : 24520,
+          "start" : 24340,
           "text" : "let"
         },
         {
-          "end" : 26260,
-          "start" : 26160,
+          "end" : 24640,
+          "start" : 24520,
           "text" : "an"
         },
         {
-          "end" : 26660,
-          "start" : 26260,
+          "end" : 25040,
+          "start" : 24640,
           "text" : "attack"
         },
         {
-          "end" : 27140,
-          "start" : 26660,
+          "end" : 25520,
+          "start" : 25040,
           "text" : "hijack"
         },
         {
-          "end" : 27280,
-          "start" : 27140,
+          "end" : 25660,
+          "start" : 25520,
           "text" : "your"
         },
         {
-          "end" : 27500,
-          "start" : 27280,
+          "end" : 25880,
+          "start" : 25660,
           "text" : "agent"
         },
         {
-          "end" : 27660,
-          "start" : 27500,
+          "end" : 26040,
+          "start" : 25880,
           "text" : "and"
         },
         {
-          "end" : 27780,
-          "start" : 27660,
+          "end" : 26160,
+          "start" : 26040,
           "text" : "leak"
         },
         {
-          "end" : 27940,
-          "start" : 27780,
+          "end" : 26320,
+          "start" : 26160,
           "text" : "your"
         },
         {
-          "end" : 28140,
-          "start" : 27940,
+          "end" : 26520,
+          "start" : 26320,
           "text" : "data."
         }
       ]
     },
     {
-      "end" : 31220,
-      "id" : "671EE0F0-F608-4FF2-83C2-1005E5017FD5",
-      "start" : 28720,
+      "end" : 29640,
+      "id" : "A8F2E372-949A-4362-AC7D-ED5AD65AB6D4",
+      "start" : 27120,
       "text" : "So say we'll accept two blocked users for every attack we stop.",
       "words" : [
         {
-          "end" : 28760,
-          "start" : 28720,
+          "end" : 27160,
+          "start" : 27120,
           "text" : "So"
         },
         {
-          "end" : 28980,
-          "start" : 28760,
+          "end" : 27380,
+          "start" : 27160,
           "text" : "say"
         },
         {
-          "end" : 29160,
-          "start" : 28980,
+          "end" : 27580,
+          "start" : 27380,
           "text" : "we'll"
         },
         {
-          "end" : 29520,
-          "start" : 29160,
+          "end" : 27920,
+          "start" : 27580,
           "text" : "accept"
         },
         {
-          "end" : 29680,
-          "start" : 29520,
+          "end" : 28100,
+          "start" : 27920,
           "text" : "two"
         },
         {
-          "end" : 29960,
-          "start" : 29680,
+          "end" : 28380,
+          "start" : 28100,
           "text" : "blocked"
         },
         {
-          "end" : 30160,
-          "start" : 29960,
+          "end" : 28580,
+          "start" : 28380,
           "text" : "users"
         },
         {
-          "end" : 30300,
-          "start" : 30160,
+          "end" : 28720,
+          "start" : 28580,
           "text" : "for"
         },
         {
-          "end" : 30460,
-          "start" : 30300,
+          "end" : 28880,
+          "start" : 28720,
           "text" : "every"
         },
         {
-          "end" : 30780,
-          "start" : 30460,
+          "end" : 29200,
+          "start" : 28880,
           "text" : "attack"
         },
         {
-          "end" : 30880,
-          "start" : 30780,
+          "end" : 29300,
+          "start" : 29200,
           "text" : "we"
         },
         {
-          "end" : 31220,
-          "start" : 30880,
+          "end" : 29640,
+          "start" : 29300,
           "text" : "stop."
         }
       ]
     },
     {
-      "end" : 34500,
-      "id" : "24A8D489-47AD-433D-9DE3-0CEDA87B3B44",
-      "start" : 31600,
+      "end" : 32920,
+      "id" : "B42F80CA-6531-4AF1-8BD1-377997EA80E5",
+      "start" : 30020,
       "text" : "That means at least one flag in three has to be a real attack.",
       "words" : [
         {
-          "end" : 31660,
-          "start" : 31600,
+          "end" : 30080,
+          "start" : 30020,
           "text" : "That"
         },
         {
-          "end" : 31820,
-          "start" : 31660,
+          "end" : 30240,
+          "start" : 30080,
           "text" : "means"
         },
         {
-          "end" : 31960,
-          "start" : 31820,
+          "end" : 30360,
+          "start" : 30240,
           "text" : "at"
         },
         {
-          "end" : 32099,
-          "start" : 31960,
+          "end" : 30520,
+          "start" : 30360,
           "text" : "least"
         },
         {
-          "end" : 32340,
-          "start" : 32099,
+          "end" : 30760,
+          "start" : 30520,
           "text" : "one"
         },
         {
-          "end" : 32680,
-          "start" : 32340,
+          "end" : 31100,
+          "start" : 30760,
           "text" : "flag"
         },
         {
-          "end" : 32780,
-          "start" : 32680,
+          "end" : 31200,
+          "start" : 31100,
           "text" : "in"
         },
         {
-          "end" : 33160,
-          "start" : 32780,
+          "end" : 31580,
+          "start" : 31200,
           "text" : "three"
         },
         {
-          "end" : 33620,
-          "start" : 33160,
+          "end" : 32040,
+          "start" : 31580,
           "text" : "has"
         },
         {
-          "end" : 33740,
-          "start" : 33620,
+          "end" : 32160,
+          "start" : 32040,
           "text" : "to"
         },
         {
-          "end" : 33860,
-          "start" : 33740,
+          "end" : 32279,
+          "start" : 32160,
           "text" : "be"
         },
         {
-          "end" : 33980,
-          "start" : 33860,
+          "end" : 32400,
+          "start" : 32279,
           "text" : "a"
         },
         {
-          "end" : 34140,
-          "start" : 33980,
+          "end" : 32540,
+          "start" : 32400,
           "text" : "real"
         },
         {
-          "end" : 34500,
-          "start" : 34140,
+          "end" : 32920,
+          "start" : 32540,
           "text" : "attack."
         }
       ]
     },
     {
-      "end" : 36560,
-      "id" : "C8238F01-4A32-4953-8C22-7E6D2E51CD40",
-      "start" : 34940,
+      "end" : 35020,
+      "id" : "FAD77FB0-F3D3-4428-A837-36B5984574AC",
+      "start" : 33400,
       "text" : "Now move the line down as far as that allows.",
       "words" : [
         {
-          "end" : 35020,
-          "start" : 34940,
+          "end" : 33460,
+          "start" : 33400,
           "text" : "Now"
         },
         {
-          "end" : 35200,
-          "start" : 35020,
+          "end" : 33660,
+          "start" : 33460,
           "text" : "move"
         },
         {
-          "end" : 35320,
-          "start" : 35200,
+          "end" : 33760,
+          "start" : 33660,
           "text" : "the"
         },
         {
-          "end" : 35480,
-          "start" : 35320,
+          "end" : 33920,
+          "start" : 33760,
           "text" : "line"
         },
         {
-          "end" : 35700,
-          "start" : 35480,
+          "end" : 34140,
+          "start" : 33920,
           "text" : "down"
         },
         {
-          "end" : 35880,
-          "start" : 35700,
+          "end" : 34320,
+          "start" : 34140,
           "text" : "as"
         },
         {
-          "end" : 36060,
-          "start" : 35880,
+          "end" : 34500,
+          "start" : 34320,
           "text" : "far"
         },
         {
-          "end" : 36180,
-          "start" : 36060,
+          "end" : 34620,
+          "start" : 34500,
           "text" : "as"
         },
         {
-          "end" : 36280,
-          "start" : 36180,
+          "end" : 34720,
+          "start" : 34620,
           "text" : "that"
         },
         {
-          "end" : 36560,
-          "start" : 36280,
+          "end" : 35020,
+          "start" : 34720,
           "text" : "allows."
         }
       ]
     },
     {
-      "end" : 38380,
-      "id" : "3671A367-9FC7-4383-99D0-FA5FDC69A258",
-      "start" : 37140,
+      "end" : 36880,
+      "id" : "E9F174C1-E443-4566-AC77-70F5E7A848FB",
+      "start" : 35600,
       "text" : "41 of 50 attacks caught.",
       "words" : [
         {
-          "end" : 37340,
-          "start" : 37140,
+          "end" : 35800,
+          "start" : 35600,
           "text" : "41"
         },
         {
-          "end" : 37560,
-          "start" : 37340,
+          "end" : 36000,
+          "start" : 35800,
           "text" : "of"
         },
         {
-          "end" : 37780,
-          "start" : 37560,
+          "end" : 36220,
+          "start" : 36000,
           "text" : "50"
         },
         {
-          "end" : 38140,
-          "start" : 37780,
+          "end" : 36580,
+          "start" : 36220,
           "text" : "attacks"
         },
         {
-          "end" : 38380,
-          "start" : 38140,
+          "end" : 36880,
+          "start" : 36580,
           "text" : "caught."
         }
       ]
     },
     {
-      "end" : 40700,
-      "id" : "34F757C8-1089-4118-8B38-3803CA61DAB7",
-      "start" : 38880,
+      "end" : 39180,
+      "id" : "908B05DD-25F5-41EE-B731-7D74EF66CC2A",
+      "start" : 37250,
       "text" : "You don't ship an F1 score, you ship a threshold.",
       "words" : [
         {
-          "end" : 38940,
-          "start" : 38880,
+          "end" : 37380,
+          "start" : 37250,
           "text" : "You"
         },
         {
-          "end" : 39080,
-          "start" : 38940,
+          "end" : 37540,
+          "start" : 37380,
           "text" : "don't"
         },
         {
-          "end" : 39280,
-          "start" : 39080,
+          "end" : 37740,
+          "start" : 37540,
           "text" : "ship"
         },
         {
-          "end" : 39380,
-          "start" : 39280,
+          "end" : 37840,
+          "start" : 37740,
           "text" : "an"
         },
         {
-          "end" : 39620,
-          "start" : 39380,
+          "end" : 38080,
+          "start" : 37840,
           "text" : "F1"
         },
         {
-          "end" : 39840,
-          "start" : 39620,
+          "end" : 38300,
+          "start" : 38080,
           "text" : "score,"
         },
         {
-          "end" : 39940,
-          "start" : 39840,
+          "end" : 38400,
+          "start" : 38300,
           "text" : "you"
         },
         {
-          "end" : 40120,
-          "start" : 39940,
+          "end" : 38580,
+          "start" : 38400,
           "text" : "ship"
         },
         {
-          "end" : 40200,
-          "start" : 40120,
+          "end" : 38660,
+          "start" : 38580,
           "text" : "a"
         },
         {
-          "end" : 40700,
-          "start" : 40200,
+          "end" : 39180,
+          "start" : 38660,
           "text" : "threshold."
         }
       ]
     },
     {
-      "end" : 43520,
-      "id" : "685A35ED-DAA2-4464-8955-85F117DA968D",
-      "start" : 41280,
+      "end" : 42060,
+      "id" : "B85E5E37-0F03-4B3D-995B-66688A62C8A9",
+      "start" : 39800,
       "text" : "Decide what a mistake costs and then put the line there.",
       "words" : [
         {
-          "end" : 41640,
-          "start" : 41280,
+          "end" : 40160,
+          "start" : 39800,
           "text" : "Decide"
         },
         {
-          "end" : 41760,
-          "start" : 41640,
+          "end" : 40280,
+          "start" : 40160,
           "text" : "what"
         },
         {
-          "end" : 41940,
-          "start" : 41760,
+          "end" : 40360,
+          "start" : 40280,
           "text" : "a"
         },
         {
-          "end" : 42080,
-          "start" : 41940,
+          "end" : 40620,
+          "start" : 40360,
           "text" : "mistake"
         },
         {
-          "end" : 42460,
-          "start" : 42080,
+          "end" : 41000,
+          "start" : 40620,
           "text" : "costs"
         },
         {
-          "end" : 42620,
-          "start" : 42460,
+          "end" : 41160,
+          "start" : 41000,
           "text" : "and"
         },
         {
-          "end" : 42740,
-          "start" : 42620,
+          "end" : 41260,
+          "start" : 41160,
           "text" : "then"
         },
         {
-          "end" : 42880,
-          "start" : 42740,
+          "end" : 41440,
+          "start" : 41260,
           "text" : "put"
         },
         {
-          "end" : 43040,
-          "start" : 42880,
+          "end" : 41540,
+          "start" : 41440,
           "text" : "the"
         },
         {
-          "end" : 43260,
-          "start" : 43040,
+          "end" : 41780,
+          "start" : 41540,
           "text" : "line"
         },
         {
-          "end" : 43520,
-          "start" : 43260,
+          "end" : 42060,
+          "start" : 41780,
           "text" : "there."
         }
       ]
     }
   ],
-  "text" : "The F1 score is precision and recall in one number, and it punishes whichever is worse.\nIt's a prompt injection detector.\nAverage 0.9 and 0.1 and you get 0.5.\nF1 will give you 0.18.\nIt's a harmonic mean.\nOur model, 40% precision, 80% recall, scores 0.53.\nBut F1 treats both mistakes the same, and here they aren't.\nA false positive blocks a real user who can try again.\nA false negative would let an attack hijack your agent and leak your data.\nSo say we'll accept two blocked users for every attack we stop.\nThat means at least one flag in three has to be a real attack.\nNow move the line down as far as that allows.\n41 of 50 attacks caught.\nYou don't ship an F1 score, you ship a threshold.\nDecide what a mistake costs and then put the line there."
+  "text" : "The F1 score is precision and recall in one number, and it punishes whichever is worse.\nAverage 0.9 and 0.1 and you get 0.5.\nF1 will give you 0.18.\nIt's a harmonic mean.\nOur model, 40% precision, 80% recall, scores 0.53.\nBut F1 treats both mistakes the same, and here they aren't.\nA false positive blocks a real user who can try again.\nA false negative would let an attack hijack your agent and leak your data.\nSo say we'll accept two blocked users for every attack we stop.\nThat means at least one flag in three has to be a real attack.\nNow move the line down as far as that allows.\n41 of 50 attacks caught.\nYou don't ship an F1 score, you ship a threshold.\nDecide what a mistake costs and then put the line there."
 }
