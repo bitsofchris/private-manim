@@ -122,7 +122,9 @@ default, Manim if the ROC/PR plots need real plotted axes.
 ## Context in every episode (Chris, 10/17)
 
 Each Short is found on its own, so eps 2–5 say what the model is, the
-same way ep 1 does:
+same way ep 1 does. (Ep 1 as shipped no longer says it: Chris's late cuts
+start it on "Here's a real model", and its frame-0 tag carries the
+context. The two `vo_context_*` clips were cut from its take.)
 
 - **VO:** splice ep 1's own line in right after VO line 1 (never before
   it; the answer comes first). Both clips are from the one take, so tone
@@ -163,13 +165,13 @@ pulls in the movie soundtrack).
 
 ## Checklist
 
-All five are storyboarded (v1, 10/16) and recorded in one take (10/17, `TRANSCRIPT.md`), split into each folder's `vo_raw.m4a` + `script.md`. Build each with `EPISODE_PROMPT.md`, one session per folder.
+All five are storyboarded (v1, 10/16) and recorded in one take (10/17, `TRANSCRIPT.md`), split into each folder's `vo_raw.m4a` + `script.md`. Build each with `EPISODE_PROMPT.md`, one session per folder. All five built 10/17; update pass done the same day.
 
-- [ ] ep01: storyboard v1 → recorded → build
-- [ ] ep02: storyboard v1 → recorded → build
-- [ ] ep03: storyboard v1 → recorded → build
-- [ ] ep04: storyboard v1 → recorded → build
-- [ ] ep05: storyboard v1 → recorded → build
+- [x] ep01: storyboard v1 → recorded → build (34.1 s after two late cuts; `publish.md`)
+- [x] ep02: storyboard v1 → recorded → build (`publish.md`)
+- [x] ep03: storyboard v1 → recorded → build (`publish.md`)
+- [x] ep04: storyboard v1 → recorded → build (`publish.md`)
+- [x] ep05: storyboard v1 → recorded → build (`publish.md`)
 - [ ] optional: stitch 1–5 into one 16:9 explainer after all five ship
 
 ## Sources

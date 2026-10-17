@@ -139,7 +139,7 @@ noise floor is about −54 dB.
 
 The Short opens on beat 3. `vo_final.wav` is the second cut from 7.85 s
 (digital silence; "Here's" at 0.09). Beats 1–2 (`01_hook`, `02_only_fifty`)
-are out of the Short; beats 3–7 are unchanged. Frame 0 is the score line
+were deleted in the update pass (last in commit 7818069); beats 3–7 are unchanged. Frame 0 is the score line
 with the counter at 99.5%, "attacks caught 0 / 50" and the tag, so "goes
 down to 99.3%" has a visible start. 34.11 s; the matrix is named at 6.4 s.
 
