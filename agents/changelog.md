@@ -3,6 +3,10 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-17
+
+- Runbook step 1, "Say each thing once, and get to it fast": ten script checks (answer in line 1's first clause, one new thing per beat, closer is the viewer's next move, detours to the companion, no hedges, lists on screen, story detail only for the payoff, one home Short per sentence, title matches script). The *(if time)* mark moves from the last line, which is the takeaway, to the detour beat. (harness series 012, script tightening)
+
 ## 2026-10-11
 
 - Linear algebra series: titles 6, 7, 10 and the trailer changed after a YouTube autocomplete check (6 and 10 matched another meaning, 7 and T matched nothing); every episode section in `SERIES.md` now has a search phrase and a code beat, the episode prompt passes both on, and 1–4 get a day-10 read before 7–10 ship. (series 5–T, from the analytics)

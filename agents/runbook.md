@@ -133,8 +133,35 @@ outro, no call to action.
   retention of the ML Shorts). If line 1 would fit in a glossary, rewrite
   it. Say the search phrase in line 1 when it fits naturally.
 - **VO uses the author's own sentences.** Cut and reorder; never reword.
-  Target 130–150 spoken words for ~55 s. Mark the last line "if time":
-  takes run long and the tail is what gets dropped.
+  Target 130–150 spoken words for ~55 s. Mark one beat *(if time)*, the
+  detour the viewer would not miss, because takes run long. Never mark
+  the closer, the only "how" beat, or a contrast that stops a wrong
+  takeaway (harness ep 4's map → drill → retrieve, ep 6's expert skills).
+- **Say each thing once, and get to it fast.** Check every beat before
+  handing the script to Chris (from tightening the harness series, 012):
+  - Line 1 lands the answer in its first clause. Ep 9's 27-word line 1
+    reached "share one notebook" too late; split it.
+  - Each beat adds a new fact, example or step. If cutting it loses
+    nothing, cut it. No second definition of the term (ep 1 had three,
+    ep 4 had three "map" lines).
+  - The closer is the viewer's next move, not line 1 again: line 1 says
+    what's true, the last line says what to do (ep 3, 5, 6, 10 restated
+    line 1). One takeaway, not two (ep 7).
+  - A good line that answers a different question goes to the written
+    companion: an aside, a hand-off to the next episode (ep 2's "my
+    read", ep 3's janitor teaser, 3b's "start simple").
+  - Skip what the audience uses daily; start at what they don't know
+    (ep 2's "a model can't see your repo").
+  - No hedges in the VO. Narrow the claim until it's true; caveats go in
+    the notes and the companion (ep 2's "partly, it ran out of room").
+  - Steps, lists and code go on screen, not in the VO (ep 6's skill
+    steps became its code beat).
+  - In a story, keep only the detail the payoff needs; times, counts
+    and asides go (ep 9's door story).
+  - In a series, each sentence has one home Short (the janitor line was
+    in ep 3, 3a and 3b).
+  - The title promises what the script delivers (ep 3's "AGENTS.md best
+    practices" has one AGENTS.md beat).
 - The visual column names parts from `agents/parts.md` to reuse, the one
   magenta hero, and where things sit (top / middle / bottom of the stage,
   and a rough row count, so the layout is decided before any code).
