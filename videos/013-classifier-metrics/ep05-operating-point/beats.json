@@ -1,30 +1,32 @@
-[
- {
-  "clip": "media/hf/01_hook.mp4",
-  "end": 7.4
- },
- {
-  "clip": "media/hf/02_harmonic.mp4",
-  "end": 7.3
- },
- {
-  "clip": "media/hf/03_model_a.mp4",
-  "end": 4.2
- },
- {
-  "clip": "media/hf/04_costs.mp4",
-  "end": 9.6
- },
- {
-  "clip": "media/hf/05_target.mp4",
-  "end": 6.2
- },
- {
-  "clip": "media/hf/06_move_line.mp4",
-  "end": 4.0
- },
- {
-  "clip": "media/hf/07_takeaway.mp4",
-  "end": 5.65
- }
-]
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 7.4
+  },
+  {
+   "clip": "media/hf/02_harmonic.mp4",
+   "end": 7.3
+  },
+  {
+   "clip": "media/hf/03_model_a.mp4",
+   "end": 4.2
+  },
+  {
+   "clip": "media/hf/04_costs.mp4",
+   "end": 9.6
+  },
+  {
+   "clip": "media/hf/05_target.mp4",
+   "end": 6.2
+  },
+  {
+   "clip": "media/hf/06_move_line.mp4",
+   "end": 4.0
+  },
+  {
+   "clip": "media/hf/07_takeaway.mp4",
+   "end": 5.65
+  }
+ ]
+}

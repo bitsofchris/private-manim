@@ -6,8 +6,13 @@
  },
  {
   "start": 1.12,
+  "end": 1.62,
+  "text": "is precision"
+ },
+ {
+  "start": 1.68,
   "end": 1.76,
-  "text": "is precision and"
+  "text": "and"
  },
  {
   "start": 1.82,
@@ -21,8 +26,13 @@
  },
  {
   "start": 3.29,
+  "end": 3.98,
+  "text": "punishes"
+ },
+ {
+  "start": 4.04,
   "end": 4.28,
-  "text": "punishes whichever"
+  "text": "whichever"
  },
  {
   "start": 4.34,
@@ -36,16 +46,21 @@
  },
  {
   "start": 6.13,
-  "end": 7.02,
-  "text": "injection detector."
+  "end": 6.5,
+  "text": "injection"
  },
  {
-  "start": 7.68,
-  "end": 8.58,
+  "start": 6.56,
+  "end": 7.02,
+  "text": "detector."
+ },
+ {
+  "start": 7.5,
+  "end": 8.66,
   "text": "Average 0.9 and"
  },
  {
-  "start": 8.64,
+  "start": 8.72,
   "end": 9.4,
   "text": "0.1 and you"
  },
@@ -81,8 +96,13 @@
  },
  {
   "start": 16.0,
+  "end": 16.48,
+  "text": "precision,"
+ },
+ {
+  "start": 16.54,
   "end": 17.39,
-  "text": "precision, 80% recall"
+  "text": "80% recall"
  },
  {
   "start": 17.45,
@@ -96,8 +116,13 @@
  },
  {
   "start": 20.01,
+  "end": 20.17,
+  "text": "both"
+ },
+ {
+  "start": 20.23,
   "end": 20.72,
-  "text": "both mistakes the"
+  "text": "mistakes the"
  },
  {
   "start": 20.78,
@@ -111,8 +136,13 @@
  },
  {
   "start": 22.06,
+  "end": 22.39,
+  "text": "A false"
+ },
+ {
+  "start": 22.45,
   "end": 22.96,
-  "text": "A false positive"
+  "text": "positive"
  },
  {
   "start": 23.02,
@@ -131,8 +161,13 @@
  },
  {
   "start": 24.98,
+  "end": 25.27,
+  "text": "A false"
+ },
+ {
+  "start": 25.33,
   "end": 25.74,
-  "text": "A false negative"
+  "text": "negative"
  },
  {
   "start": 25.8,
@@ -141,8 +176,13 @@
  },
  {
   "start": 26.26,
+  "end": 26.64,
+  "text": "attack"
+ },
+ {
+  "start": 26.7,
   "end": 27.22,
-  "text": "attack hijack your"
+  "text": "hijack your"
  },
  {
   "start": 27.28,
@@ -161,8 +201,13 @@
  },
  {
   "start": 29.16,
+  "end": 29.62,
+  "text": "accept two"
+ },
+ {
+  "start": 29.68,
   "end": 29.9,
-  "text": "accept two blocked"
+  "text": "blocked"
  },
  {
   "start": 29.96,
@@ -256,8 +301,13 @@
  },
  {
   "start": 41.98,
+  "end": 42.15,
+  "text": "mistake"
+ },
+ {
+  "start": 42.21,
   "end": 42.56,
-  "text": "mistake costs and"
+  "text": "costs and"
  },
  {
   "start": 42.62,
