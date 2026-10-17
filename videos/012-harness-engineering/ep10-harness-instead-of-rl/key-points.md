@@ -24,6 +24,16 @@ fine-tune vs prompt (guess)
 Points 5–6, the series close, and the extra material make a 16:9 long cut
 or a written companion.
 
+
+## The Short, as rewritten 2026-10-17 (Chris)
+
+Rebuilt from Chris's own notes using his writing guidance (content-preflight, notes-to-post, effective-writing). Where this block and the points below disagree, this block wins for the Short; the points below are companion material. Script: `SCRIPTS.md`.
+
+- **Question:** Should I fine-tune, or just prompt?
+- **Answer:** "Prompt a big model first - establish a baseline, then distill" (Chris, [[2026-09-06 - Post Training, Loss functions, verifiable]]); train the weights when you need better judgement on one thing, or speed.
+- **What the viewer does after:** Before you train anything, prompt the biggest model you can and measure it. That number is what training has to beat.
+- **Built from:** Chris's 9/6 rule and "nothing you intend matters, only what the gradient rewards"; GEPA as one beat; AugiCraft's slow hunting bot and the distill plan as the proof. The long cut keeps the GEPA detail and the human-in-the-harness ending.
+
 ## Hook options
 
 1. "A prompt that rewrote itself by reading its own mistakes beat RL
@@ -198,7 +208,9 @@ or a written companion.
 
 ## The takeaway
 
-Before you fine-tune anything, run one reflection loop: save 20 failing
+Short (10/17): Before you train anything, prompt the biggest model you can and measure it. That number is what training has to beat.
+
+Companion: Before you fine-tune anything, run one reflection loop: save 20 failing
 traces with the grader's actual messages, have a strong model rewrite the
 instruction from them, and keep the rewrite only if it scores higher on
 held-out examples. Train weights only when that plateaus, or when you need

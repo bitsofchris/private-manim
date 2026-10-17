@@ -60,34 +60,37 @@ Status: draft, 2026-10-16; tightened 2026-10-17 (repeats and lines that delay th
 
 ---
 
-## Ep 3. Harness 101: build your own
+## Ep 3. Harness 101: good primitives
 
-**Title:** `How to Write AGENTS.md: Fix the Repo, Not the Chat`
-**Backup:** `AGENTS.md Best Practices Made Simple`
-**Searched as:** "how to write agents.md", "agents.md best practices" (autocomplete ✓ 10/17). ✗ "how to set up agents.md".
-**Words:** 130 (~54 s); 91 without the two Short D beats
+**Title:** `Claude Code Best Practices: Files, Tools, Checks`
+**Backup:** `How to Write AGENTS.md: Fix the Repo, Not the Chat`
+**Searched as:** "claude code best practices", "how to write agents.md", "agents.md best practices" (autocomplete ✓ 10/17).
+**Question:** How do I set up my repo so Claude Code stops making the same mistakes?
+**Who's asking:** someone who corrects their agent in chat and sees the same mistake next session.
+**Answer:** "Have good primitives, then let the agents do things": files, small CLIs, checks.
+**Words:** 170 (~71 s)
 
-> Your agent isn't the problem. Your repo is underspecified. AGENTS.md is where the fix starts.
+> Have good primitives, then let the agents do things. That's how you set up a repo for Claude Code.
 >
-> When the agent gets something wrong, don't retype the correction. Ask what was missing, and have the agent add it to the repo.
+> You correct your agent in chat. Next session, the chat is gone and the mistake is back.
 >
-> Keep AGENTS.md short: a map that points to your docs, not a manual.
+> Put the fix in the repo instead, as one of three primitives.
 >
-> A rule in a doc is a suggestion. A rule in a linter is a wall. Write the error message as the fix, and every failure teaches the agent.
+> One: everything is a file. Your plan, your rules, your notes. The agent reads them every session. Keep AGENTS.md short, a map that points to the rest.
 >
-> I run the repo that makes these videos this way. After every Short, the agent finds every correction I made and writes each one into the repo.
+> Two: small tools chained together. Lots of little CLIs, specific to your work. Then it's easier for the agent to do stuff.
 >
-> One font bug showed up twice. Now it's a rule, with a changelog line.
+> Three: checks. A test or a linter that fails loud, with an error message that says how to fix it.
 >
-> Have good primitives, then let the agents do things.
+> This repo makes my videos. AGENTS.md is the map. There's a CLI for every step: clean the audio, cut it, burn in the captions. A font bug that showed up twice is now a rule.
+>
+> Next time you type the same correction twice, turn it into a file, a tool, or a check.
 
-**Notes for Chris** (max 5 bullets)
-- **From Short D (cut these two first if the take runs long, or if D gets its own Short):** "I run the repo that makes these videos this way…" and "One font bug showed up twice…". Without them the script is 91 words and still lands. The font bug is real: `agents/changelog.md`, "Beat brief trap: monospace… rendered in Inter", logged at ep01 and again at ep03, then made a rule. "Into the repo" simplifies runbook step 11 ("into its one home", then a janitor step); say "its one home" if you'd rather.
-- **Your own words:** "Have good primitives and then let the agents do things" ([[2026-06-02 - Good Primitives]]), trimmed for the last line. "Fix the repo, not the chat" was cut from the closer; beat 2 already says it.
-- **Title:** retitled 10/17 to "How to Write AGENTS.md: Fix the Repo, Not the Chat". The old "AGENTS.md Best Practices" promised more about the file than the script has. "Best practices" is now the backup, and ep 5 owns the CLAUDE.md version.
-- **Line 1 is adapted from OpenAI's post**, not yours: "not because Codex was incapable, but because the environment was underspecified." If you want to credit it, say "OpenAI's team found…".
-- **Doc vs linter beat** carries Böckeler's guides-vs-sensors framing (martinfowler.com, Apr 2026); the separate "docs steer, checks catch" line was cut as a repeat. The error-message-as-fix idea is OpenAI's custom lints. Don't call ~100 lines a rule if you ad-lib a number for AGENTS.md.
-- **The janitor hand-off to 3b was cut**: it gave this Short's viewer nothing. The map beat still hands off to ep 4; the bridge to 3a happens in the visuals.
+**Notes for Chris**
+- Rewritten 10/17 from your notes, around one answer: good primitives. Your words: "Have good primitives and then let the agents do things" ([[2026-06-02 - Good Primitives]]), "Everything is a file" and "small tools chained together - making lots of CLIs - specific to your use case, then it's easier for agent to do stuff" ([[2026-01-21 - Unix philosophy - cli for agents]]). The rest is drafted; say it your way.
+- The receipt is this repo: `AGENTS.md` (the map), `tools/` (`enhance_vo.sh` cleans the audio, tighten cuts it, `assemble.py` burns in captions), and the font bug: `agents/changelog.md`, "Beat brief trap: monospace… rendered in Inter", logged at ep01 and ep03, then made a rule.
+- "An error message that says how to fix it" is OpenAI's custom-lint idea (Lopopolo, 11 Feb 2026), in plain words.
+- Out of this Short: OpenAI's "underspecified" opening, the doc-vs-linter line, and the changelog idea (ep 5 owns it). Ep 1's closer diagnoses ("which piece was missing?"); this one builds ("a file, a tool, or a check").
 
 ---
 
@@ -166,7 +169,7 @@ which needs your words.
 >
 > The map holds pointers, not data. The agent reads the map, drills in, then retrieves only what it needs.
 >
-> Ask one question: does your agent read a map before it retrieves? If not, that's your bottleneck. Not the model. Not the prompt. The index.
+> Ask one question: does your agent read a map before it retrieves? If not, that's your bottleneck: the index.
 
 **Notes for Chris**
 - Your own lines, from *Context Engineering is Index Design for Agents*: the magnifying glass and warehouse, "Humans search when…/We turn to agents when…", Map → Assess → Drill → Retrieve, cut down to map, drill, retrieve (the only "how" beat, so it's no longer *(if time)*), and the closing test question, nearly word for word. Cut as repeats of line 1: "Agents need a map. An index…" and "data engineering where the consumer is an agent" (a second definition just before the closer); both fit the companion.
@@ -175,38 +178,37 @@ which needs your words.
 - OpenAI: their post (Feb 2026) came before your essay (Mar 2026), and you got there independently. Say "landed in the same place", not "copied" or "called it first". "When everything is important, nothing is" is a paraphrase of their line, not your own words.
 - No Long cut. The key points call for a Short, and the essay is the written companion.
 
+- Closer changed 10/17 from "Not the model. Not the prompt. The index." to "that's your bottleneck: the index" (effective-writing bans the "it's not X, it's Y" pattern).
 ---
 
-## Ep 5. Context as a Playbook (ACE)
+## Ep 5. Context as a Playbook
 
 **Title:** `CLAUDE.md Best Practices: Don't Rewrite It`
 **Backup:** `How to Write CLAUDE.md (Don't Rewrite It)`
 **Searched as:** "claude.md best practices", "how to write claude.md" (autocomplete ✓ 10/17). "agents.md best practices" now belongs to ep 3.
-**Words:** 159 (~66 s; 143 without the *(if time)* beat)
+**Question:** How do I keep my CLAUDE.md from turning into a mess?
+**Who's asking:** someone who ends sessions with "update CLAUDE.md with what we learned."
+**Answer:** grow it one line at a time, one place per rule, and never let the agent rewrite the whole file.
+**Words:** 151 (~63 s)
 
-> Don't let your agent rewrite its CLAUDE.md. Have it make small, labeled edits, or it throws lessons away.
+> Your CLAUDE.md stays useful when it grows one line at a time. Let the agent rewrite it, and it throws away the lessons that mattered.
 >
-> A paper called ACE watched this happen. At step sixty, the agent's notes were eighteen thousand tokens. One rewrite later, a hundred and twenty-two.
+> You end a session and say "update CLAUDE.md with what we learned." The agent rewrites the file. It comes back shorter and cleaner, and the quirk that saved you an hour is gone.
 >
-> The agent did worse than with no notes at all. That's context collapse.
+> A paper called ACE measured this. One rewrite took an agent's notes from eighteen thousand tokens to a hundred and twenty-two. Then it did worse than with no notes at all.
 >
-> *(if time)* Rewrites also drift toward short, generic advice. The tool quirks that saved you get cut first.
+> The fix is a playbook. Each lesson is one bullet. The agent adds bullets. It doesn't rewrite them.
 >
-> ACE's fix: the context is a list of bullets. Each is one lesson, with a helped-or-hurt count. The model only adds bullets.
+> My video repo runs on two rules. One home per rule: never state the same rule in two files, link instead. And one changelog line for every change, with the video that forced it.
 >
-> Same system, same test. Full rewrites gained three point six points over the baseline. Small edits gained seventeen.
->
-> My video repo and my notes vault landed on the same shape. One home per rule. One changelog line per change. A weekly janitor flags rules that repeat or conflict. It reports. I tick what gets fixed.
->
-> **[your words]** Next time your agent learns something, have it add one bullet.
+> Next time your agent learns something: one line, one place.
 
-**Notes for Chris** (max 5 bullets)
-- None of the lines are verbatim from your notes. The receipt beat paraphrases your repo's `AGENTS.md` / runbook step 11 and the OpenAugi janitor ("Drift is proposed, never fixed"). If you want your own words in there, swap the janitor line for "the janitor for agents to de-dupe and have fewer things to maintain" ([[2026-09-13]]).
+**Notes for Chris**
+- Rewritten 10/17: your system leads, ACE is one beat. The two rules are this repo's (`AGENTS.md`, "Keeping the system clean": "Never state the same rule in two files. Link instead."; `agents/changelog.md`: "One line per change … with the video that forced it"). The sentences are drafted; say them your way.
+- The "quirk that saved you an hour" scene is a second-person example of ACE's *brevity bias* (rewrites drop domain detail for concision), not a story from your sessions. If you have a real one, use it as "I".
 - Collapse numbers: step 60 was 18,282 tokens; step 61 was 122 tokens, at 57.1% vs a 63.7% no-notes baseline (AppWorld, Dynamic Cheatsheet's full-rewrite mode). "Eighteen thousand" is rounded.
-- "Three point six vs seventeen" are percentage points over the ReAct baseline (ACE ablation, AppWorld, DeepSeek-V3.1). Don't say "percent".
-- "The model only adds bullets" is true of ACE's public code (the curator is ADD-only; update/delete are TODO). Don't say it updates or deletes bullets.
-- Your systems do edit single rules in place, so the script says "same shape", not "never rewrites". If you ad-lib, don't claim you had the idea first.
-- The closer is drafted, not yours: it replaced "Don't rewrite the file. Add one small, labeled lesson at a time", which restated line 1. It should be the viewer's next move; say it your way.
+- "The agent adds bullets" is true of ACE's public code (the curator is ADD-only). Your systems do edit single rules in place, so don't say yours never rewrite.
+- Out: the 3.6-vs-17 ablation, the helped-or-hurt count, and the janitor (3b owns it).
 
 ---
 
@@ -277,96 +279,97 @@ which needs your words.
 
 ---
 
-## Ep 8. A Harness That Improves Itself
+## Ep 8. A Self-Improving Agent
 
 **Title:** `Self-Improving AI Agents Made Simple`
 **Backup:** `Self-Improving Agent: Harness That Edits Itself`
 **Searched as:** "self improving ai agents", "self improving agents" (autocomplete ✓ 10/17). Results lead with Stanford's CS329A course: on topic.
-**Words:** 173 (~77 s; ~154 and ~69 s without the *(if time)* beat)
+**Question:** How do I make an agent loop improve instead of going in circles?
+**Who's asking:** someone who has let an agent loop run and come back to churn.
+**Answer:** your four ingredients: visibility, an objective that fights back, lessons that persist, space to step outside.
+**Words:** 175 (~73 s)
 
-> A self-improving agent is a loop where every change it makes to itself must predict what it fixes.
+> A self-improving agent needs four things: visibility, an objective that fights back, lessons that persist, and space to step outside the loop. Miss one, and it circles.
 >
-> A 2026 paper, Agentic Harness Engineering, gave a coding agent one shell tool and nothing else.
+> A prompt plus a retry can run all night and end where it started.
 >
-> Every part of the harness was a file. A second agent read the run logs and edited them.
+> Visibility: you can see what changed and why. Metrics, logs, the raw traces.
 >
-> Each edit named what it should fix and what it might break. Next round, if the prediction missed, the edit got reverted.
+> An objective that fights back: a check the agent can't talk its way past. Tests it hasn't seen. A judge that gets stricter as the agent gets better.
 >
-> Ten rounds took Terminal-Bench 2 from sixty-nine point seven percent to seventy-seven, past the hand-built Codex harness.
+> Lessons that persist: what worked gets written down as notes, skills and tools, so round two starts ahead of round one.
 >
-> They added each new piece alone. Memory helped most. So did a better shell tool, and a hook forcing one last real check.
+> Space to step outside: someone looks at the loop itself and asks if it's headed the right way.
 >
-> But the agent's seventy-nine lines of prompt advice, added alone to the bare harness, cost two point three points.
+> My data loader loop had the first three, and it still got stuck. The agent only read one file at a time and never considered just scanning rows. I had to step in. That's the fourth.
 >
-> *(if time)* The agent kept deleting its own correct output. Prompt advice didn't stop it. A guard in the shell tool did.
->
-> Make every harness edit predict what it fixes, revert the misses, and keep the lessons in tools, hooks and memory.
+> Before you let your agent loop overnight, check all four. The one you're missing is where it'll circle.
 
 **Notes for Chris**
-- No line here is your verbatim wording; none of your key-point lines fit the loop-plus-twist arc in under 170 words. Your published closer, "The loop can do more of the improving now. But it still cannot decide what improvement is for," belongs to the regression-blindness point (7), which this Short skips. Use it in the companion.
-- "Alone" appears twice in the twist on purpose. If you ad-lib, keep it: only the prompt swapped in by itself scored worse (67.4 vs 69.7). A prompt edit was part of a winning round, so never say "prompts hurt".
-- "Past the hand-built Codex harness" means the paper's own run (Codex 71.9%, GPT-5.4 high, same infrastructure), not a leaderboard. It trails Codex on the Hard tier, so don't say "beat Codex on everything".
-- The Pi / "less harness" beat is left out: adding it (four tools, under a thousand tokens, "You don't need ten thousand tokens to tell them you're a coding agent") pushes the take past 90 s. It goes in the companion, framed as "start minimal, let each piece earn its place", not "less harness wins".
-- The guard beat (Appendix C, path-tracing) is the first cut. Without it, the takeaway's "tools, hooks and memory" still follows from the ablation beat.
+- Rewritten 10/17 on your published *The Anatomy of a Self-Improving Loop* (bitsofchris.com, 14 Jun 2026): the four ingredients as published ("visibility, an objective that fights back, lessons that persist, and space to step outside the loop"). Draft in [[2026-06-12 - Draft - Self-Improving Loops and AutoResearch]].
+- "Tests it hasn't seen" is LangChain Better-Harness's holdout sets; "a judge that gets stricter" is Recursive's evaluator arms race. Both are in your post.
+- The stuck beat is your 6/11 note in [[PMOC - AutoDataEng - Loops and Recursive Self Improvement]]: "It got stuck to this idea of only reading a single a file and never considered just scanning rows from a file." Ep 7 uses the same project's vague-goal and lying-gauge beats; this is a different slice. Keep it generic: no internal format name, no colleagues.
+- Out: AHE (Terminal-Bench numbers, the 79-line prompt twist) and Pi / "less harness". Both go to the companion.
 
 ---
 
-## Ep 9. Agents That Share a Notebook (GitSwarm)
+## Ep 9. Agents That Share a Notebook
 
-**Title:** `Parallel Claude Code Agents: Share One Git Repo`
+**Title:** `Parallel Claude Code Agents: Share One Notebook`
 **Backup:** `Multi-Agent Coding Made Simple (Shared Git Repo)`
-**Searched as:** "parallel claude code", "parallel coding agents", "multi agent coding", "agent swarm" (autocomplete ✓ 10/17). Results are mostly git worktrees; the shared-repo angle is the difference.
-**Words:** 178 (~74 s); 158 without the *(if time)* beat
+**Searched as:** "parallel claude code", "parallel coding agents", "multi agent coding", "agent swarm" (autocomplete ✓ 10/17). Results are mostly git worktrees; the shared-notebook angle is the difference.
+**Question:** How do I run several agents without them redoing each other's work?
+**Who's asking:** someone running parallel Claude Code agents.
+**Answer:** give them one shared record where each agent writes what it learned and what it built on.
+**Words:** 198 (~82 s)
 
-> Parallel coding agents should share one notebook. A git repo where every attempt gets committed, even the failures.
+> Parallel coding agents get better together when they share one notebook: a place where every agent writes what it learned and what it built on.
 >
-> Run ten agents and each one starts from zero. When its session ends, what it learned is gone.
+> Run agents in parallel without one, and each starts from zero. When a session ends, what it learned is gone.
 >
-> A 2026 paper called GitSwarm adds three rules. Keep everything. Allow branches. Say what you built on.
+> I built agents to play Minecraft. The first one started badly. Agents don't know how to play Minecraft. They generate text. So I let it learn and take notes for itself, until it mined diamonds and brought them back to a chest.
 >
-> A new agent reads the log, opens a few commits, and picks a gap. If the work is already done, it steps aside.
+> Once one worked, it was easy to add more. I spawned four agents, each with its own job, all reading the same notes.
 >
-> On ProgramBench, a coding benchmark, about ninety-five percent of what the agents committed got built on later.
+> Hours later, a new bot that had never seen our front door loaded the door skill the first bot saved. When pillagers showed up, it retreated through that door.
 >
-> *(if time)* The swarm scored seventy-nine percent there. One Codex agent, told to keep working, got sixty-five. That's on a fifty-task subset.
+> A paper called GitSwarm does this with a git repo. Every attempt gets committed, even the failures, and every agent says what it built on. On a coding benchmark, about ninety-five percent of the work got built on later.
 >
-> My Minecraft bots share one knowledge folder. My bot Augi couldn't get through its own front door. It fixed that and saved a skill.
->
-> Hours later, a new worker bot that had never seen that door loaded the skill. When pillagers showed up, it retreated through that door.
->
-> Give parallel agents one git repo, commit every attempt, and make them say what they built on.
+> Give your parallel agents one shared record. Have each one write what it learned, and say what it built on.
 
-**Notes for Chris** (max 5 bullets)
-- None of these sentences are quoted from your notes; your only lines on this (the orchestrator line from 1/26, "couldnt open the door" from your 10/12 AugiCraft journal) didn't fit a Short. Say the door beats your own way.
-- "About ninety-five percent" is 94.7%, ProgramBench only. On the proof benchmark it's 44.4%, so don't drop "On ProgramBench".
-- The 65 is one Codex (GPT-5.5-High) agent re-prompted with "Keep working...", best checkpoint, on 50 of ProgramBench's 200 tasks. If you cut that beat, cut it whole; never say 79 vs 65 without who the 65 is.
-- Door timeline (10/12, UTC): skill validated 17:05, worker AugiDiamonds used it to retreat from pillagers at 20:50. "Loaded the skill" comes from its episode log, which lists the knowledge-search tools and the skill under `skills_used`. That's the bot reporting on itself.
-- Avoid saying the shared repo *caused* the gains: the paper shows reuse, not causation.
+**Notes for Chris**
+- Rewritten 10/17 from your AugiCraft journal ([[2026-10-11 - LLM Plays Minecraft - AugiCraft]]): the 10/17 entry ("had to let it learn and take notes for itself", "agents don't know how to play Minecraft they generate text", "once we had one working it was easy to add more") and 10/12 ("spawned an army of 4 agents… gave each their own jobs", diamonds returned with a chest). Say it your way.
+- Door timeline (10/12, UTC): skill validated 17:05; worker AugiDiamonds used it to retreat from pillagers at 20:50. "Loaded the skill" comes from its episode log (`skills_used`), the bot reporting on itself. Ep 6 tells how the skill was made; this beat only shows reuse.
+- GitSwarm (Shah et al., arXiv 2610.04862): "about ninety-five percent" is 94.7% on ProgramBench ("a coding benchmark"); on the proof benchmark it's 44.4%, so keep "coding". The paper shows reuse, not that the shared repo caused the gains.
+- Out: the 79-vs-65 comparison and the three-rules list.
 
 ---
 
-## Ep 10. Harness Instead of RL? (+ the human in the harness)
+## Ep 10. Prompt or Train? (+ the human in the harness, long cut)
 
-**Title:** `Prompt Optimization Can Beat RL (GEPA Explained)`
-**Backup:** `GEPA Prompt Optimization Made Simple`
-**Searched as:** "prompt optimization", "gepa prompt optimization", "dspy gepa" (autocomplete ✓ 10/17). ✗ "prompt optimization vs reinforcement learning", "when to fine tune vs prompt".
-**Words:** 156 (~65 s)
+**Title:** `When to Fine-Tune an LLM: Prompt a Big Model First`
+**Backup:** `When Should You Fine-Tune an LLM? Prompt First`
+**Searched as:** "when to fine tune llm", "prompt optimization", "gepa prompt optimization" (autocomplete ✓ 10/17). ✗ "prompt optimization vs reinforcement learning", "when to fine tune vs prompt".
+**Question:** Should I fine-tune, or just prompt?
+**Who's asking:** an engineer weighing fine-tuning or RL for an agent task.
+**Answer:** "Prompt a big model first - establish a baseline, then distill."
+**Words:** 203 (~85 s)
 
-> You can often match reinforcement learning without training anything. Let a model read its own mistakes and rewrite its own prompt. That's prompt optimization.
+> Prompt a big model first. Establish a baseline. Then decide if training is worth it.
 >
-> A paper called GEPA runs your agent, then hands a second model the whole trace: what it did, what the grader said, even the compiler error.
+> Training feels like the serious move. But with training, nothing you intend matters. Only what the gradient rewards.
 >
-> That model writes a better instruction. Keep it if it scores higher. Repeat.
+> And a prompt can go a long way. A paper called GEPA has a model read its own traces, what it did and what the grader said, and rewrite its own prompt. On a small open model, that beat RL training on five of six tasks, with up to thirty-five times fewer rollouts.
 >
-> On a small open model, that beat RL training on five of six tasks. About six points on average, up to nineteen, with up to thirty-five times fewer rollouts.
+> So when do you train the weights? When you need better judgement on one thing. Or when it has to be fast.
 >
-> It works because RL squeezes a whole attempt into one number. The trace says why it failed.
+> My Minecraft bots hit that wall. A big model figured out the skills: get through a door, hunt an animal. But it was slow at every step. It would hit, stop, look, see the animal moved, plan a step, plan another hit. The animal got away.
 >
-> *(if time)* The catch: the harness learned it, the model didn't. Take the prompt away, and the model is no better.
+> So here's what I'm trying next. The big model writes the tools and the rules. A small, fast classifier learns which one to use. Prompt first, then distill.
 >
-> Fix the prompt from your traces first. Train the weights when you need better judgement on one thing, or when it has to be cheap, fast, or private.
+> Before you train anything, prompt the biggest model you can and measure it. That number is what training has to beat.
 
-**Long cut** (604 words, ~4.5 min). **Title:** `When to Fine-Tune an LLM vs Optimize the Prompt` ("when to fine tune llm" ✓ 10/17)
+**Long cut** (604 words, ~4.5 min). **Title:** `Prompt Optimization Can Beat RL (GEPA Explained)` ("prompt optimization", "gepa prompt optimization" ✓ 10/17). Not yet rebuilt on the Short's rule; revisit after the Short.
 
 > You can often match reinforcement learning without training anything. Let a model read its own mistakes and rewrite its own prompt.
 >
@@ -413,10 +416,9 @@ which needs your words.
 > Let the harness learn, and let the weights learn from it. The step-back and steer is the part that stays human.
 
 **Notes for Chris**
-- "That's prompt optimization" (line 1, drafted) says the search phrase; "prompt optimization vs reinforcement learning" isn't something people type. The Short and the long cut now have different titles: the long cut covers when to train, so it takes "when to fine tune llm".
-- In the Short, "My rule: prompt a big model first" and the "train the weights when…" beat merged into one traces-first closer; the rule had been said twice. "Prompt a big model first" stays in the long cut.
-- Your own words: "Nothing you intend matters, only what the gradient rewards" and "Prompt a big model first", plus the weights-vs-loop pair (9/6 note). The Minecraft hit-observe-plan story and "big model writes the action rules and tools, small classifier decides" are from your 10/12 AugiCraft journal. "Capable interns… nudge them when stuck" is your 6/13 draft. "On my loop, every reframe that unstuck progress came from me", "The step-back was human, every time" and "The step-back and steer is the part that stays human" are from your published post *The Anatomy of a Self-Improving Loop*.
-- Rule beat: "cheap, fast, private, off-distribution" is the idea from the 9/6 "They're not successive…" line, which isn't yours. It's reworded here, not quoted. Say it your own way.
+- The Short was rewritten 10/17 around your rule from [[2026-09-06 - Post Training, Loss functions, verifiable]]: "Prompt a big model first - establish a baseline, then distill". Also yours: "Nothing you intend matters, only what the gradient rewards", "train when need better judgement on the thing", and the AugiCraft hit-observe-plan story and big-model-writes-tools / small-classifier idea (10/12 journal). Connecting lines are drafted; say them your way.
+- "Or when it has to be fast" replaces "cheap, fast, or private": that list is from the 9/6 "They're not successive…" line, a pasted AI reply, not yours. Your bots are the fast case.
+- GEPA is one beat. "Five of six tasks" on Qwen3 8B against GRPO; RL won on AIME. Thirty-five times is rollouts on one task (IFBench), not cost.
+- Long cut: unchanged and still GEPA-led, with the human-in-the-harness ending. "Capable interns… nudge them when stuck" is your 6/13 draft; "every reframe that unstuck progress came from me" and "the step-back was human, every time" are from your published *The Anatomy of a Self-Improving Loop*. "I train models for a living" is your standing, not a line from your notes.
 - Numbers: six points is v2 of the paper (v1 said 10 percent, so older blog posts will disagree). Nineteen is HotpotQA. Thirty-five times is rollouts on one task (IFBench), not cost. The small open model is Qwen3 8B, mostly LoRA, with a fixed 24,000 RL rollouts.
 - The distillation hasn't been run. Keep it as "what I'm trying next", never "I trained". The big model wrote and validated the door and hunting skills on 10/12. The self-defense skill was deprecated, so don't name it.
-- "I train models for a living" is hook option 2, your standing, not a sentence from your notes. Swap it for your own phrasing if it feels off.

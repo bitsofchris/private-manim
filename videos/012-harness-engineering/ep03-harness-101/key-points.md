@@ -12,6 +12,16 @@
 
 **Overlap with ep 1.** Ep 1's key points already use Hashimoto's rule ("anytime you find an agent makes a mistake…"), the OpenAI receipt (zero hand-written code), and the takeaway "ask what was missing and add a line, a script or a check." Ep 3 shouldn't re-explain that. Open on the rule in one line as the thing ep 1 promised, then spend the episode on *what you actually build*.
 
+
+## The Short, as rewritten 2026-10-17 (Chris)
+
+Rebuilt from Chris's own notes using his writing guidance (content-preflight, notes-to-post, effective-writing). Where this block and the points below disagree, this block wins for the Short; the points below are companion material. Script: `SCRIPTS.md`.
+
+- **Question:** How do I set up my repo so Claude Code stops making the same mistakes?
+- **Answer:** "Have good primitives, then let the agents do things" (Chris, [[2026-06-02 - Good Primitives]]): everything is a file, small tools chained together, checks.
+- **What the viewer does after:** Next time you type the same correction twice, turn it into a file, a tool, or a check.
+- **Built from:** Chris's primitives line and his 1/21 Unix-philosophy note; this repo as the receipt (AGENTS.md map, `tools/` CLIs, the font-bug rule). OpenAI's "underspecified" framing, Böckeler's groups and Hashimoto go to the companion.
+
 ## Hook options
 
 1. "Your agent isn't the problem. Your repo is underspecified." This adapts OpenAI's own line: "Early progress was slower than we expected, not because Codex was incapable, but because the environment was underspecified." (Not Chris's sentence.)
@@ -66,7 +76,9 @@
 
 ## The takeaway
 
-This week, open your AGENTS.md (or CLAUDE.md). If it's long, cut it to a map that points to docs. Then pick the last mistake your agent made twice, have the agent turn it into a check whose error message says how to fix it, and log the change in one line.
+Short (10/17): Next time you type the same correction twice, turn it into a file, a tool, or a check.
+
+Companion: This week, open your AGENTS.md (or CLAUDE.md). If it's long, cut it to a map that points to docs. Then pick the last mistake your agent made twice, have the agent turn it into a check whose error message says how to fix it, and log the change in one line.
 
 ## Bridge
 

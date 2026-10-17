@@ -7,6 +7,16 @@
 **Search phrase:** self-improving agent (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The Short is the AHE loop plus the "79 lines cost 2.3 points" twist (points 1–5). The "less harness" beat with Pi (point 6) fits only if the Short runs near 90 s. Otherwise it goes in the companion. Chris's published post "The Anatomy of a Self-Improving Loop" is the companion for the loop half.
 
+
+## The Short, as rewritten 2026-10-17 (Chris)
+
+Rebuilt from Chris's own notes using his writing guidance (content-preflight, notes-to-post, effective-writing). Where this block and the points below disagree, this block wins for the Short; the points below are companion material. Script: `SCRIPTS.md`.
+
+- **Question:** How do I make an agent loop improve instead of going in circles?
+- **Answer:** A self-improving agent needs four things: visibility, an objective that fights back, lessons that persist, and space to step outside the loop (Chris, *The Anatomy of a Self-Improving Loop*, 14 Jun 2026).
+- **What the viewer does after:** Before you let your agent loop overnight, check all four; the one you're missing is where it'll circle.
+- **Built from:** Chris's published four ingredients, with his data-loader loop (stuck on reading one file at a time, never scanning rows) as the step-outside proof. AHE (all points below) and Pi go to the companion.
+
 ## Hook options
 
 1. "An agent rewrote its own harness for 32 hours and beat Codex. The 79 lines of advice it wrote for itself made things worse when used alone."
@@ -59,7 +69,9 @@
 
 ## The takeaway
 
-Treat your harness like code under test. Keep AGENTS.md, tools and hooks in git. For each change, write one line on what it should fix and what it might break, re-run your check, and revert what didn't pay off. When the agent ignores a rule twice, move the rule from prose into a tool or hook (in Claude Code, for example, a Stop hook that runs the tests). That last example is our translation, not the paper's.
+Short (10/17): Before you let your agent loop overnight, check all four; the one you're missing is where it'll circle.
+
+Companion: Treat your harness like code under test. Keep AGENTS.md, tools and hooks in git. For each change, write one line on what it should fix and what it might break, re-run your check, and revert what didn't pay off. When the agent ignores a rule twice, move the rule from prose into a tool or hook (in Claude Code, for example, a Stop hook that runs the tests). That last example is our translation, not the paper's.
 
 ## Bridge
 

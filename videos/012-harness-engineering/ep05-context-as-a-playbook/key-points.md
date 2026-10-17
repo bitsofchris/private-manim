@@ -7,6 +7,16 @@
 **Search phrase:** how to write CLAUDE.md / AGENTS.md best practices (guess). Alt: "context engineering" (guess; ep 4 may own it). **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The core (rewrite vs. small edits, with one number) fits 60–75 s. The three-role loop, dedupe details and the comparison with Chris's two systems need the companion.
 
+
+## The Short, as rewritten 2026-10-17 (Chris)
+
+Rebuilt from Chris's own notes using his writing guidance (content-preflight, notes-to-post, effective-writing). Where this block and the points below disagree, this block wins for the Short; the points below are companion material. Script: `SCRIPTS.md`.
+
+- **Question:** How do I keep my CLAUDE.md from turning into a mess?
+- **Answer:** Grow it one line at a time, one place per rule; never let the agent rewrite the whole file.
+- **What the viewer does after:** Next time your agent learns something: one line, one place.
+- **Built from:** This repo's two rules (one home per rule; one changelog line per change) lead; ACE's 18,282 → 122-token collapse is the one evidence beat. The ablation numbers, the three-role loop and the janitor (3b) go elsewhere.
+
 ## Hook options
 
 1. "At step 60, the agent's playbook was eighteen thousand tokens. One rewrite later it was a hundred and twenty-two, and the agent did worse than with no playbook at all." (ACE, §2.2. The strongest. A real number, and it's the viewer's fear.)
@@ -70,7 +80,9 @@ None of these are Chris's own sentences. His closest is "Avoid context rot/ drif
 
 ## The takeaway
 
-Next time you ask your agent to update CLAUDE.md or AGENTS.md, forbid a rewrite. Have it return a short list of additions or single-item edits, each with the file and section it belongs in and the evidence that it worked, and log one line per change. Then diff: if the file got shorter and you didn't ask for a deletion, something was lost.
+Short (10/17): Next time your agent learns something: one line, one place.
+
+Companion: Next time you ask your agent to update CLAUDE.md or AGENTS.md, forbid a rewrite. Have it return a short list of additions or single-item edits, each with the file and section it belongs in and the evidence that it worked, and log one line per change. Then diff: if the file got shorter and you didn't ask for a deletion, something was lost.
 
 ## Bridge
 

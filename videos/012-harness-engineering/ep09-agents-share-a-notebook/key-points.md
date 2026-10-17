@@ -11,11 +11,21 @@ sessions in parallel and watches them redo each other's work.
 **Answer in one sentence:** Give parallel agents one shared git repo where
 every attempt, including the failures, is committed with a note on what it
 built on, and their work starts to compound instead of repeat.
-**Search phrase:** multi-agent coding / agent swarm / parallel claude code **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
-agents (guess)
+**Search phrase:** multi-agent coding / agent swarm / parallel claude code
+agents (guess) **Superseded:** checked against autocomplete 2026-10-17; the checked phrase and title are in `SCRIPTS.md`.
 **Length:** Short + companion. The Short carries one paper, one number, and
 one Minecraft moment. The design details (the commit format, the three
 actions, the controlled tests) fit a written companion.
+
+
+## The Short, as rewritten 2026-10-17 (Chris)
+
+Rebuilt from Chris's own notes using his writing guidance (content-preflight, notes-to-post, effective-writing). Where this block and the points below disagree, this block wins for the Short; the points below are companion material. Script: `SCRIPTS.md`.
+
+- **Question:** How do I run several agents without them redoing each other's work?
+- **Answer:** Give them one shared record where each agent writes what it learned and what it built on.
+- **What the viewer does after:** Give your parallel agents one shared record; have each one write what it learned and say what it built on.
+- **Built from:** Chris's AugiCraft journal leads (10/17: "had to let it learn and take notes for itself… once we had one working it was easy to add more"; 10/12: four agents with their own jobs; the door-skill reuse). GitSwarm is one beat (94.7% built on, ProgramBench).
 
 ## Hook options
 
@@ -203,7 +213,9 @@ actions, the controlled tests) fit a written companion.
 
 ## The takeaway
 
-When you run agents in parallel, have them share one git repo. Add three
+Short (10/17): Give your parallel agents one shared record; have each one write what it learned and say what it built on.
+
+Companion: When you run agents in parallel, have them share one git repo. Add three
 rules to your AGENTS.md: read `git log` before you start, commit every
 attempt (failed ones too) with a short notes file, and list the commits
 you built on in the commit message (`informed_by=<sha>`). Tell them to
