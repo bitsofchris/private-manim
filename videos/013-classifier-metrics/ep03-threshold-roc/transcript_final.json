@@ -1,0 +1,850 @@
+{
+  "segments" : [
+    {
+      "end" : 2780,
+      "id" : "91381DA1-0CBC-4E0C-A513-532B71B9BCD0",
+      "start" : 1,
+      "text" : "You can change what your classifier does without retraining it.",
+      "words" : [
+        {
+          "end" : 520,
+          "start" : 0,
+          "text" : "You"
+        },
+        {
+          "end" : 660,
+          "start" : 520,
+          "text" : "can"
+        },
+        {
+          "end" : 960,
+          "start" : 660,
+          "text" : "change"
+        },
+        {
+          "end" : 1060,
+          "start" : 960,
+          "text" : "what"
+        },
+        {
+          "end" : 1220,
+          "start" : 1060,
+          "text" : "your"
+        },
+        {
+          "end" : 1700,
+          "start" : 1220,
+          "text" : "classifier"
+        },
+        {
+          "end" : 1920,
+          "start" : 1700,
+          "text" : "does"
+        },
+        {
+          "end" : 2180,
+          "start" : 1920,
+          "text" : "without"
+        },
+        {
+          "end" : 2620,
+          "start" : 2180,
+          "text" : "retraining"
+        },
+        {
+          "end" : 2780,
+          "start" : 2620,
+          "text" : "it."
+        }
+      ]
+    },
+    {
+      "end" : 4620,
+      "id" : "24558B76-BEED-4CD3-AD4B-81F50E104A3C",
+      "start" : 3180,
+      "text" : "It's a prompt injection detector.",
+      "words" : [
+        {
+          "end" : 3280,
+          "start" : 3180,
+          "text" : "It's"
+        },
+        {
+          "end" : 3380,
+          "start" : 3280,
+          "text" : "a"
+        },
+        {
+          "end" : 3720,
+          "start" : 3380,
+          "text" : "prompt"
+        },
+        {
+          "end" : 4160,
+          "start" : 3720,
+          "text" : "injection"
+        },
+        {
+          "end" : 4620,
+          "start" : 4160,
+          "text" : "detector."
+        }
+      ]
+    },
+    {
+      "end" : 6200,
+      "id" : "4F950961-11B1-480A-A3AB-D623A7B276BC",
+      "start" : 4990,
+      "text" : "You just move this line.",
+      "words" : [
+        {
+          "end" : 5120,
+          "start" : 4990,
+          "text" : "You"
+        },
+        {
+          "end" : 5340,
+          "start" : 5120,
+          "text" : "just"
+        },
+        {
+          "end" : 5620,
+          "start" : 5340,
+          "text" : "move"
+        },
+        {
+          "end" : 5900,
+          "start" : 5620,
+          "text" : "this"
+        },
+        {
+          "end" : 6200,
+          "start" : 5900,
+          "text" : "line."
+        }
+      ]
+    },
+    {
+      "end" : 9440,
+      "id" : "CAC71184-9385-4353-9DC2-06F36D22B755",
+      "start" : 6670,
+      "text" : "An ROC curve shows every place that you could put it.",
+      "words" : [
+        {
+          "end" : 6820,
+          "start" : 6670,
+          "text" : "An"
+        },
+        {
+          "end" : 7200,
+          "start" : 6820,
+          "text" : "ROC"
+        },
+        {
+          "end" : 7460,
+          "start" : 7200,
+          "text" : "curve"
+        },
+        {
+          "end" : 8120,
+          "start" : 7460,
+          "text" : "shows"
+        },
+        {
+          "end" : 8480,
+          "start" : 8120,
+          "text" : "every"
+        },
+        {
+          "end" : 8800,
+          "start" : 8480,
+          "text" : "place"
+        },
+        {
+          "end" : 8920,
+          "start" : 8800,
+          "text" : "that"
+        },
+        {
+          "end" : 9020,
+          "start" : 8920,
+          "text" : "you"
+        },
+        {
+          "end" : 9120,
+          "start" : 9020,
+          "text" : "could"
+        },
+        {
+          "end" : 9340,
+          "start" : 9120,
+          "text" : "put"
+        },
+        {
+          "end" : 9440,
+          "start" : 9340,
+          "text" : "it."
+        }
+      ]
+    },
+    {
+      "end" : 12300,
+      "id" : "4CDBF59E-C605-47CB-8D89-163305C568AA",
+      "start" : 9840,
+      "text" : "The model doesn't say yes or no. It gives every request a score.",
+      "words" : [
+        {
+          "end" : 9920,
+          "start" : 9840,
+          "text" : "The"
+        },
+        {
+          "end" : 10140,
+          "start" : 9920,
+          "text" : "model"
+        },
+        {
+          "end" : 10300,
+          "start" : 10140,
+          "text" : "doesn't"
+        },
+        {
+          "end" : 10460,
+          "start" : 10300,
+          "text" : "say"
+        },
+        {
+          "end" : 10640,
+          "start" : 10460,
+          "text" : "yes"
+        },
+        {
+          "end" : 10780,
+          "start" : 10640,
+          "text" : "or"
+        },
+        {
+          "end" : 10880,
+          "start" : 10780,
+          "text" : "no."
+        },
+        {
+          "end" : 10960,
+          "start" : 10880,
+          "text" : "It"
+        },
+        {
+          "end" : 11160,
+          "start" : 10960,
+          "text" : "gives"
+        },
+        {
+          "end" : 11380,
+          "start" : 11160,
+          "text" : "every"
+        },
+        {
+          "end" : 11760,
+          "start" : 11380,
+          "text" : "request"
+        },
+        {
+          "end" : 11920,
+          "start" : 11760,
+          "text" : "a"
+        },
+        {
+          "end" : 12300,
+          "start" : 11920,
+          "text" : "score."
+        }
+      ]
+    },
+    {
+      "end" : 15360,
+      "id" : "8F0D8E1B-3F30-4E0A-A037-67BA768453E0",
+      "start" : 12740,
+      "text" : "And this threshold is what turns that score into a yes.",
+      "words" : [
+        {
+          "end" : 13000,
+          "start" : 12740,
+          "text" : "And"
+        },
+        {
+          "end" : 13160,
+          "start" : 13000,
+          "text" : "this"
+        },
+        {
+          "end" : 13720,
+          "start" : 13160,
+          "text" : "threshold"
+        },
+        {
+          "end" : 13840,
+          "start" : 13720,
+          "text" : "is"
+        },
+        {
+          "end" : 13960,
+          "start" : 13840,
+          "text" : "what"
+        },
+        {
+          "end" : 14360,
+          "start" : 13960,
+          "text" : "turns"
+        },
+        {
+          "end" : 14540,
+          "start" : 14360,
+          "text" : "that"
+        },
+        {
+          "end" : 14760,
+          "start" : 14540,
+          "text" : "score"
+        },
+        {
+          "end" : 14920,
+          "start" : 14760,
+          "text" : "into"
+        },
+        {
+          "end" : 15120,
+          "start" : 14920,
+          "text" : "a"
+        },
+        {
+          "end" : 15360,
+          "start" : 15120,
+          "text" : "yes."
+        }
+      ]
+    },
+    {
+      "end" : 17800,
+      "id" : "57E6A71F-9687-4958-BCD3-F32D6FA0BE46",
+      "start" : 15760,
+      "text" : "You slide it to the left and we can catch every attack.",
+      "words" : [
+        {
+          "end" : 15980,
+          "start" : 15760,
+          "text" : "You"
+        },
+        {
+          "end" : 16240,
+          "start" : 15980,
+          "text" : "slide"
+        },
+        {
+          "end" : 16340,
+          "start" : 16240,
+          "text" : "it"
+        },
+        {
+          "end" : 16400,
+          "start" : 16340,
+          "text" : "to"
+        },
+        {
+          "end" : 16500,
+          "start" : 16400,
+          "text" : "the"
+        },
+        {
+          "end" : 16680,
+          "start" : 16500,
+          "text" : "left"
+        },
+        {
+          "end" : 16820,
+          "start" : 16680,
+          "text" : "and"
+        },
+        {
+          "end" : 16900,
+          "start" : 16820,
+          "text" : "we"
+        },
+        {
+          "end" : 17000,
+          "start" : 16900,
+          "text" : "can"
+        },
+        {
+          "end" : 17220,
+          "start" : 17000,
+          "text" : "catch"
+        },
+        {
+          "end" : 17420,
+          "start" : 17220,
+          "text" : "every"
+        },
+        {
+          "end" : 17800,
+          "start" : 17420,
+          "text" : "attack."
+        }
+      ]
+    },
+    {
+      "end" : 19860,
+      "id" : "A6FCF59D-581F-4350-B4C9-445343541C3E",
+      "start" : 18320,
+      "text" : "But we end up blocking most of our users.",
+      "words" : [
+        {
+          "end" : 18380,
+          "start" : 18320,
+          "text" : "But"
+        },
+        {
+          "end" : 18460,
+          "start" : 18380,
+          "text" : "we"
+        },
+        {
+          "end" : 18560,
+          "start" : 18460,
+          "text" : "end"
+        },
+        {
+          "end" : 18700,
+          "start" : 18560,
+          "text" : "up"
+        },
+        {
+          "end" : 19040,
+          "start" : 18700,
+          "text" : "blocking"
+        },
+        {
+          "end" : 19360,
+          "start" : 19040,
+          "text" : "most"
+        },
+        {
+          "end" : 19460,
+          "start" : 19360,
+          "text" : "of"
+        },
+        {
+          "end" : 19580,
+          "start" : 19460,
+          "text" : "our"
+        },
+        {
+          "end" : 19860,
+          "start" : 19580,
+          "text" : "users."
+        }
+      ]
+    },
+    {
+      "end" : 22660,
+      "id" : "12038480-5980-4E7A-99F8-AE7EDEEFE5C5",
+      "start" : 20420,
+      "text" : "If you slide it to the right, almost nobody gets blocked,",
+      "words" : [
+        {
+          "end" : 20560,
+          "start" : 20420,
+          "text" : "If"
+        },
+        {
+          "end" : 20620,
+          "start" : 20560,
+          "text" : "you"
+        },
+        {
+          "end" : 20860,
+          "start" : 20620,
+          "text" : "slide"
+        },
+        {
+          "end" : 20980,
+          "start" : 20860,
+          "text" : "it"
+        },
+        {
+          "end" : 21040,
+          "start" : 20980,
+          "text" : "to"
+        },
+        {
+          "end" : 21200,
+          "start" : 21040,
+          "text" : "the"
+        },
+        {
+          "end" : 21360,
+          "start" : 21200,
+          "text" : "right,"
+        },
+        {
+          "end" : 21740,
+          "start" : 21460,
+          "text" : "almost"
+        },
+        {
+          "end" : 22100,
+          "start" : 21740,
+          "text" : "nobody"
+        },
+        {
+          "end" : 22340,
+          "start" : 22100,
+          "text" : "gets"
+        },
+        {
+          "end" : 22660,
+          "start" : 22340,
+          "text" : "blocked,"
+        }
+      ]
+    },
+    {
+      "end" : 24100,
+      "id" : "0B8C0C93-0E0D-42BD-9D5E-7F6DFAED4C5C",
+      "start" : 22740,
+      "text" : "but half of the attacks get through.",
+      "words" : [
+        {
+          "end" : 22820,
+          "start" : 22740,
+          "text" : "but"
+        },
+        {
+          "end" : 23140,
+          "start" : 22820,
+          "text" : "half"
+        },
+        {
+          "end" : 23240,
+          "start" : 23140,
+          "text" : "of"
+        },
+        {
+          "end" : 23340,
+          "start" : 23240,
+          "text" : "the"
+        },
+        {
+          "end" : 23700,
+          "start" : 23340,
+          "text" : "attacks"
+        },
+        {
+          "end" : 23880,
+          "start" : 23700,
+          "text" : "get"
+        },
+        {
+          "end" : 24100,
+          "start" : 23880,
+          "text" : "through."
+        }
+      ]
+    },
+    {
+      "end" : 26740,
+      "id" : "1CCDB5D2-CDA5-4A1A-AB0C-600354F23419",
+      "start" : 24520,
+      "text" : "Every threshold gives a new confusion matrix,",
+      "words" : [
+        {
+          "end" : 24800,
+          "start" : 24520,
+          "text" : "Every"
+        },
+        {
+          "end" : 25280,
+          "start" : 24800,
+          "text" : "threshold"
+        },
+        {
+          "end" : 25660,
+          "start" : 25280,
+          "text" : "gives"
+        },
+        {
+          "end" : 25840,
+          "start" : 25660,
+          "text" : "a"
+        },
+        {
+          "end" : 26040,
+          "start" : 25840,
+          "text" : "new"
+        },
+        {
+          "end" : 26440,
+          "start" : 26040,
+          "text" : "confusion"
+        },
+        {
+          "end" : 26740,
+          "start" : 26440,
+          "text" : "matrix,"
+        }
+      ]
+    },
+    {
+      "end" : 28140,
+      "id" : "14E92848-8F59-4AE2-B7F9-B0C1ED5EE1FA",
+      "start" : 26850,
+      "text" : "and each one is a point.",
+      "words" : [
+        {
+          "end" : 27000,
+          "start" : 26850,
+          "text" : "and"
+        },
+        {
+          "end" : 27300,
+          "start" : 27000,
+          "text" : "each"
+        },
+        {
+          "end" : 27540,
+          "start" : 27300,
+          "text" : "one"
+        },
+        {
+          "end" : 27680,
+          "start" : 27540,
+          "text" : "is"
+        },
+        {
+          "end" : 27820,
+          "start" : 27680,
+          "text" : "a"
+        },
+        {
+          "end" : 28140,
+          "start" : 27820,
+          "text" : "point."
+        }
+      ]
+    },
+    {
+      "end" : 34880,
+      "id" : "0C6B08D8-1567-426E-BA06-E0B8C2A33111",
+      "start" : 29000,
+      "text" : "positive rate up, false positive rate across. Top left is the sweet spot. Now ROC is for",
+      "words" : [
+        {
+          "end" : 29320,
+          "start" : 29000,
+          "text" : "positive"
+        },
+        {
+          "end" : 29660,
+          "start" : 29320,
+          "text" : "rate"
+        },
+        {
+          "end" : 29840,
+          "start" : 29660,
+          "text" : "up,"
+        },
+        {
+          "end" : 30420,
+          "start" : 30340,
+          "text" : "false"
+        },
+        {
+          "end" : 30820,
+          "start" : 30420,
+          "text" : "positive"
+        },
+        {
+          "end" : 31120,
+          "start" : 30820,
+          "text" : "rate"
+        },
+        {
+          "end" : 31420,
+          "start" : 31120,
+          "text" : "across."
+        },
+        {
+          "end" : 32380,
+          "start" : 32300,
+          "text" : "Top"
+        },
+        {
+          "end" : 32560,
+          "start" : 32380,
+          "text" : "left"
+        },
+        {
+          "end" : 32740,
+          "start" : 32560,
+          "text" : "is"
+        },
+        {
+          "end" : 32840,
+          "start" : 32740,
+          "text" : "the"
+        },
+        {
+          "end" : 33100,
+          "start" : 32840,
+          "text" : "sweet"
+        },
+        {
+          "end" : 33460,
+          "start" : 33100,
+          "text" : "spot."
+        },
+        {
+          "end" : 34240,
+          "start" : 34140,
+          "text" : "Now"
+        },
+        {
+          "end" : 34640,
+          "start" : 34240,
+          "text" : "ROC"
+        },
+        {
+          "end" : 34740,
+          "start" : 34640,
+          "text" : "is"
+        },
+        {
+          "end" : 34880,
+          "start" : 34740,
+          "text" : "for"
+        }
+      ]
+    },
+    {
+      "end" : 39420,
+      "id" : "8A3301F3-4D14-4233-9BD7-F4889921099B",
+      "start" : 35000,
+      "text" : "picking thresholds. You decide whether you'd rather avoid false positives or get all the",
+      "words" : [
+        {
+          "end" : 35240,
+          "start" : 35000,
+          "text" : "picking"
+        },
+        {
+          "end" : 35880,
+          "start" : 35240,
+          "text" : "thresholds."
+        },
+        {
+          "end" : 36120,
+          "start" : 35960,
+          "text" : "You"
+        },
+        {
+          "end" : 36540,
+          "start" : 36120,
+          "text" : "decide"
+        },
+        {
+          "end" : 36780,
+          "start" : 36540,
+          "text" : "whether"
+        },
+        {
+          "end" : 37080,
+          "start" : 36780,
+          "text" : "you'd"
+        },
+        {
+          "end" : 37540,
+          "start" : 37080,
+          "text" : "rather"
+        },
+        {
+          "end" : 38100,
+          "start" : 37540,
+          "text" : "avoid"
+        },
+        {
+          "end" : 38360,
+          "start" : 38100,
+          "text" : "false"
+        },
+        {
+          "end" : 38840,
+          "start" : 38360,
+          "text" : "positives"
+        },
+        {
+          "end" : 38980,
+          "start" : 38840,
+          "text" : "or"
+        },
+        {
+          "end" : 39160,
+          "start" : 38980,
+          "text" : "get"
+        },
+        {
+          "end" : 39360,
+          "start" : 39160,
+          "text" : "all"
+        },
+        {
+          "end" : 39420,
+          "start" : 39360,
+          "text" : "the"
+        }
+      ]
+    },
+    {
+      "end" : 41300,
+      "id" : "FD8EE5F4-C02B-44FA-948C-B6F5C23A8AF9",
+      "start" : 39620,
+      "text" : "positives depending on the problem you're solving.",
+      "words" : [
+        {
+          "end" : 39780,
+          "start" : 39620,
+          "text" : "positives"
+        },
+        {
+          "end" : 40160,
+          "start" : 39780,
+          "text" : "depending"
+        },
+        {
+          "end" : 40360,
+          "start" : 40160,
+          "text" : "on"
+        },
+        {
+          "end" : 40460,
+          "start" : 40360,
+          "text" : "the"
+        },
+        {
+          "end" : 40780,
+          "start" : 40460,
+          "text" : "problem"
+        },
+        {
+          "end" : 40980,
+          "start" : 40780,
+          "text" : "you're"
+        },
+        {
+          "end" : 41300,
+          "start" : 40980,
+          "text" : "solving."
+        }
+      ]
+    }
+  ],
+  "text" : "You can change what your classifier does without retraining it.\nIt's a prompt injection detector.\nYou just move this line.\nAn ROC curve shows every place that you could put it.\nThe model doesn't say yes or no. It gives every request a score.\nAnd this threshold is what turns that score into a yes.\nYou slide it to the left and we can catch every attack.\nBut we end up blocking most of our users.\nIf you slide it to the right, almost nobody gets blocked,\nbut half of the attacks get through.\nEvery threshold gives a new confusion matrix,\nand each one is a point.\npositive rate up, false positive rate across. Top left is the sweet spot. Now ROC is for\npicking thresholds. You decide whether you'd rather avoid false positives or get all the\npositives depending on the problem you're solving."
+}
