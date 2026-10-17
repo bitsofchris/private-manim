@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 2 (explore, master 3.25, 5.45 s): "Humans search when
+         they know what they're looking for, but we turn to agents when we're not
+         really sure what we need, so they end up exploring more." Starts on
+         EP2.SEAM[1]; the map clears, the human points straight to auth.md, the
+         agent's trail wanders the grid (hero); ends still on EP2.SEAM[2]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+    <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.45" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.45;                 // master 3.25 – 8.70
+  // Cues, beat-local seconds (= master − 3.25), checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    humans:    0.15,  /* "Humans"    master 3.40 (onset 3.40 on the envelope) */
+    know:      0.99,  /* "know"      master 4.24 */
+    looking:   1.31,  /* "looking"   master 4.56 */
+    agents:    2.45,  /* "agents"    master 5.70 (dip 5.66, onset 5.70) */
+    exploring: 4.35,  /* "exploring" master 7.62 (onset 7.60 on the envelope) */
+    more:      4.85,  /* "more."     master 8.10; voice gone by 8.30 */
+  };
+  const T = {
+    clearEnd: 0.50,                          // card, arrows fade; files teal; window + label to 0.3
+    slideEnd: 0.70,                          // agent slides AGENT.x -> AGENT_BESIDE.x (0.70 s, fast start)
+    humanEnd: CUE.humans + 0.45,             // slow start, so the human is faint while the agent clears its spot
+    armIn: CUE.know - 0.12, armEnd: CUE.know + 0.25,
+    pointIn: CUE.know + 0.05, pointEnd: CUE.looking + 0.40,
+    trailIn: CUE.agents, trailEnd: CUE.more + 0.10,
+    heroIn: CUE.exploring, heroEnd: CUE.exploring + 0.30,
+    still: 5.05,                             // last 0.40 s exactly EP2.SEAM[2]
+  };
+  const { seg } = ISO;
+  const E = ISO.E();
+  const { lerp, AGENT, AGENT_BESIDE, TARGET_FILES, PAL } = Object.assign({ PAL: CAST.PAL }, EP2);
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  const GHOSTS = W.files.map((f, i) => i).filter((i) => !TARGET_FILES.includes(i));
+  function render(t) {
+    if (t >= T.still) { W.set(EP2.SEAM[2]); return; }
+    const c = E.io(seg(t, 0, T.clearEnd));                         // the map clears
+    const s = E.out(seg(t, 0, T.slideEnd));                         // the agent slides beside
+    const hu = E.inn(seg(t, CUE.humans, T.humanEnd));              // the human fades in on "Humans"
+    const arm = E.out(seg(t, T.armIn, T.armEnd));                  // raises its right arm on "know"
+    const pt = E.io(seg(t, T.pointIn, T.pointEnd));                // straight line to auth.md
+    const tr = E.io(seg(t, T.trailIn, T.trailEnd));                // the wander, "agents" -> "more"
+    const th = E.io(seg(t, T.heroIn, T.heroEnd));                  // magenta on "exploring"
+    W.set({
+      files: "teal",
+      win: lerp(1, 0.3, c), labelAlpha: lerp(1, 0.3, c),
+      card: 1 - c, cardHero: 1, arrows: c < 1 ? [1, 1, 1] : [0, 0, 0], arrowAlpha: 1 - c,
+      point: pt, trail: tr, trailHero: th,
+      agent: { x: lerp(AGENT.x, AGENT_BESIDE.x, s) },
+      human: { alpha: hu, armR: lerp(22, 140, arm), tilt: lerp(0, -6, arm) },
+    });
+    // Local: the 13 ghost files ease from dashed muted back to solid teal (the kit
+    // switches modes discretely); the dash gap closes as the colour turns.
+    if (c < 1) GHOSTS.forEach((i) => {
+      const r = W.files[i].rect;
+      r.setAttribute("stroke", EP2.mixHex(PAL.muted, PAL.data, c));
+      r.setAttribute("stroke-dasharray", `10 ${(10 * (1 - c)).toFixed(2)}`);
+      r.setAttribute("stroke-width", lerp(5, 6, c));
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

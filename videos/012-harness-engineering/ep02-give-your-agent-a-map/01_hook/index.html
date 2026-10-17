@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 1 (hook, master 0.00, 3.25 s): "Context engineering is
+         just giving your agent a map." Frame 0 is EP2.MAP with the arrows at 0.15,
+         drawing out; on "map" the card goes magenta; ends still on EP2.SEAM[1]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+    <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.25" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.25;                 // master 0.00 – 3.25
+  // Cues, beat-local seconds (= master − 0.00), checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    map: 2.70,    /* "map." words.json 2.84; envelope: "a map" voiced from 2.70, peak 2.74–2.88 */
+  };
+  const T = { arrowsEnd: 1.20, heroIn: CUE.map, heroEnd: CUE.map + 0.25, still: 2.95 };
+  const { seg } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  function render(t) {
+    if (t >= T.still) { W.set(EP2.SEAM[1]); return; }
+    const a = EP2.lerp(0.15, 1, E.out(seg(t, 0, T.arrowsEnd)));   // arrows draw out from 0.15
+    const h = E.io(seg(t, T.heroIn, T.heroEnd));                   // the card turns magenta on "map"
+    W.set(Object.assign({}, EP2.MAP, { arrows: [a, a, a], cardHero: h }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

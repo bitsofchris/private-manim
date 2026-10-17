@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 3 (stuff): the human and its trail leave, all 16 files fly into
+         the window (outline magenta), and on "backfire" the pile spills; the agent leans back. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.90" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.90;          // master 8.70 -> 12.60
+  // Cues, beat-local (master - 8.70); checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    fix: 0.60,        /* "fix"        master 9.30 (f 9.26, vowel 9.38) */
+    stuff: 1.14,      /* "stuff"      master 9.84 (s 9.84, vowel 9.90) */
+    every: 1.40,      /* "everything" master 10.10 */
+    backfire: 3.09,   /* "backfire."  master 11.79 (b after the dip at 11.78) */
+  };
+  const T = { still: 3.55 };          // last 0.35 s exactly SEAM[3]
+  const { seg, lerp } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  const S2 = EP2.SEAM[2], A = EP2.AGENT, B = EP2.AGENT_BESIDE;
+  const HOME = W.files.map((f) => [f.home.x, f.home.y]);
+  // fly order: bottom row first (nearest the window), then up; 0.05 s apart
+  const ORDER = W.files.map((f, i) => i).sort((a, b) => (Math.floor(b / 4) - Math.floor(a / 4)) || (a - b));
+  const FLY = { t0: CUE.stuff - 0.04, gap: 0.05, dur: 0.7 };
+  const SPILL = { t0: 3.00, t1: T.still };
+  function render(t) {
+    if (t >= T.still) { W.set(EP2.SEAM[3]); return; }
+    // 1) the human, its line and the trail leave; the agent steps back; the window returns
+    const c = E.io(seg(t, 0, 0.65));
+    const fade = E.out(seg(t, 0, 0.55));
+    // 2) all 16 files fly into the window
+    const xy = HOME.map((h, i) => {
+      const k = ORDER.indexOf(i), u = E.io(seg(t, FLY.t0 + k * FLY.gap, FLY.t0 + k * FLY.gap + FLY.dur));
+      const p = EP2.PILE[i], q = EP2.SPILL[i];
+      const s = E.out(seg(t, SPILL.t0, SPILL.t1));
+      const end = [lerp(p[0], q[0], s), lerp(p[1], q[1], s)];
+      return [lerp(h[0], end[0], u), lerp(h[1], end[1], u) - 70 * Math.sin(Math.PI * u)];
+    });
+    const hero = E.out(seg(t, CUE.stuff, CUE.stuff + 0.4));
+    // 3) backfire: the agent leans back and blinks
+    const lean = E.out(seg(t, CUE.backfire - 0.05, CUE.backfire + 0.4));
+    const blink = E.io(seg(t, CUE.backfire, CUE.backfire + 0.18));
+    const gone = fade >= 1;
+    W.set({
+      fileXY: xy, winHero: hero,
+      win: lerp(S2.win, 1, c), labelAlpha: lerp(S2.labelAlpha, 1, c),
+      point: gone ? 0 : 1, trail: gone ? 0 : 1, trailHero: 1, trailAlpha: 1 - fade,
+      agent: { x: lerp(B.x, A.x, c), lean: -8 * lean, blink },
+      human: gone ? {} : { alpha: 1 - fade, armR: lerp(140, 22, fade), tilt: lerp(-6, 0, fade) },
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

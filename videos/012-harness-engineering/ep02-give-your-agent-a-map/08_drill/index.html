@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 8 (08_drill), the last beat: the card's auth.md line underlines;
+         on "drills" the hero passes to the auth.md arrow and file; on "retrieving" auth.md
+         slides over the card's left edge into the window's lower left, under the card, and opens. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.313" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.313;           // master 33.40 -> 37.713
+  // Cues, beat-local (master - 33.40), checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    reads: 0.49,     /* "reads"      (words.json 33.84; envelope onset 33.89) */
+    map: 0.82,       /* "map"        (34.22) */
+    drills: 1.08,    /* "drills"     (34.46; envelope onset 34.47) */
+    retr: 2.81,      /* "retrieving" (words.json 36.34; envelope onset 36.21) */
+    part: 3.50,      /* "part."      (36.90; envelope onset 36.91) */
+  };
+  const HOLD_FROM = 3.88;               // last 0.43 s still
+  const SLIDE = 0.72;                   // auth.md's move into the window
+  const { seg } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  const { lerp, mixHex, AUTH, AUTH_IN_WIN } = EP2;
+  const PAL = CAST.PAL;
+  // auth.md crosses other files and the (DOM) card on its way down: draw it in a
+  // local SVG overlay added after the card, so it stays on top all the way
+  const over = CAST.node("svg", { width: 1080, height: 1920, viewBox: "0 0 1080 1920" });
+  over.style.cssText = "position:absolute;left:0;top:0;pointer-events:none;";
+  root.appendChild(over);
+  over.appendChild(W.files[AUTH].g);
+  const home = W.files[AUTH].home;
+  const MODES = W.files.map((f, i) => (i === AUTH ? "hero" : "ghost"));   // ghost -> targets stay teal
+
+  const S7 = EP2.SEAM[7];
+  function render(t) {
+    t = Math.min(t, HOLD_FROM);
+    const ul = E.io(seg(t, CUE.reads, CUE.map + 0.1));             // "reads the map": underline auth.md
+    const pass = E.io(seg(t, CUE.drills, CUE.drills + 0.22));      // "drills": hero card -> arrow + file
+    const r = seg(t, CUE.retr, CUE.retr + SLIDE);                  // "retrieving"
+    const back = E.io(seg(t, CUE.retr, CUE.retr + 0.4));           // auth arrow retracts
+    const open = E.io(seg(t, CUE.retr + 0.5, CUE.retr + 1.05));    // auth.md opens
+    const ulFade = 1 - E.io(seg(t, CUE.retr + 0.45, CUE.retr + SLIDE));   // fades as auth.md lands
+    // auth.md: a little right first (clear of the agent's head), then down over
+    // the card's left edge to its place under the card
+    const px = E.io(seg(r, 0, 0.7)), py = E.io(seg(r, 0.15, 1));
+    const xy = [lerp(home.x, AUTH_IN_WIN.x, px), lerp(home.y, AUTH_IN_WIN.y, py)];
+    const fileXY = W.files.map((f, i) => (i === AUTH ? xy : null));
+    W.set(Object.assign({}, S7, {
+      agent: { armR: lerp(115, 30, E.out(seg(t, 0, 0.9))), tilt: -8 },   // lowers its arm and reads
+      underline: 0, underlineU: ul > 0 && ulFade > 0 ? ul : 0,
+      cardHero: 1 - pass,
+      arrowHero: pass >= 1 ? 0 : -1, arrows: [1 - back, 1, 1],
+      fileMode: pass >= 1 ? MODES : null, fileXY, authOpen: open,
+    }));
+    // the hero colour passes smoothly (the kit's arrowHero / fileMode are on/off)
+    if (pass > 0 && pass < 1) {
+      const ac = mixHex(PAL.dim, PAL.hero, pass), fc = mixHex(PAL.data, PAL.hero, pass);
+      W.arrows[0].p.setAttribute("stroke", ac); W.arrows[0].head.setAttribute("fill", ac);
+      W.files[AUTH].rect.setAttribute("stroke", fc);
+    }
+    // the underline is part of the card's hero: it goes ink with the card, then fades
+    W.underline.style.background = mixHex(PAL.hero, PAL.ink, pass);
+    W.underline.style.opacity = ul > 0 ? ulFade : 0;
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

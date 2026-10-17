@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 5 (05_giant): the pile goes home, one giant AGENTS.md page rises out of
+         the window; every line magenta on "everything is important", muted on "nothing is"; a scan
+         bar finds nothing and the agent tilts its head. Starts on EP2.SEAM[4], ends on EP2.SEAM[5]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.25" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.25;                 // master 16.55 -> 23.80
+  // Cues, beat-local (master - 16.55), from words.json; RMS-checked.
+  const CUE = {
+    having: 0.17,      /* "Having"     16.72 */
+    giant: 0.89,       /* "giant"      17.44 */
+    everything: 3.21,  /* "everything" 19.76 (hero: the lines go magenta) */
+    nothing: 4.23,     /* "nothing"    20.78 ("th" dip at 20.88 on the envelope) */
+    cut: 4.98,         /* "cut"        21.53 (stop closure 21.46-21.50, burst 21.52) */
+    noise: 5.43,       /* "noise"      21.98 */
+    matters: 6.37,     /* "matters."   22.92 (ends 23.34 = 6.79) */
+  };
+  const HOLD = 6.90;                         // still from here: exactly SEAM[5]
+  const { seg, lerp } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  const S4 = EP2.SEAM[4], S5 = EP2.SEAM[5];
+  const HOMES = W.files.map((f) => [f.home.x, f.home.y]);
+
+  function render(t) {
+    if (t < 1 / 120) { W.set(S4); return; }
+    if (t >= HOLD) { W.set(S5); return; }
+    // the pile slides home, muted (teal at rot 1 == muted); fixed stagger
+    const fileXY = EP2.SPILL.map(([x, y], i) => {
+      const a = ((i * 7) % 16) / 16 * 0.12, u = E.io(seg(t, a, a + 0.8));
+      return [lerp(x, HOMES[i][0], u), lerp(y, HOMES[i][1], u)];
+    });
+    // the label: "context rot" magenta fades out, comes back "context" dim
+    const back = t >= CUE.having + 0.25;
+    const labelAlpha = back ? seg(t, CUE.having + 0.25, CUE.having + 0.55) : 1 - seg(t, CUE.having, CUE.having + 0.25);
+    // the giant page rises out of the window
+    const pu = E.io(seg(t, CUE.giant, CUE.giant + 1.15));
+    const pageTop = lerp(1060, 250, pu);
+    const page = seg(t, CUE.giant, CUE.giant + 0.3);
+    const pageHero = E.out(seg(t, CUE.everything, CUE.everything + 0.25));
+    const pageMute = E.io(seg(t, CUE.nothing, CUE.nothing + 0.35));
+    const scan = t < CUE.cut ? -1 : E.sine(seg(t, CUE.cut, CUE.matters - 0.05));
+    W.set({
+      files: "muted", fileXY,
+      label: back ? "context" : "context rot", labelAlpha, labelHero: back ? 0 : 1,
+      page, pageTop, pageLines: 22, pageHero: pageMute >= 1 ? 0 : pageHero, pageMute, scan,
+      agent: { lean: lerp(-8, 0, E.io(seg(t, CUE.having, CUE.having + 0.6))),
+               blink: 1 - seg(t, CUE.having, CUE.having + 0.3),
+               tilt: 10 * E.io(seg(t, CUE.noise, CUE.matters)) },
+    });
+    // local: keep the title out of the caption band while the page is still low
+    W.pageTitle.style.opacity = page * Math.max(0, Math.min(1, (1000 - pageTop) / 100));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

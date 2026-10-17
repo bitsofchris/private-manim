@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 6 (06_map): the giant page shrinks into the map card (magenta), its lines
+         type in on "Markdown", the repo comes back and goes dashed except the three targets, and the
+         arrows draw out on "pointers to files". Starts on EP2.SEAM[5], ends on EP2.SEAM[6]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.15" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.15;                 // master 23.80 -> 29.95
+  // Cues, beat-local (master - 23.80), from words.json; RMS-checked.
+  const CUE = {
+    but: 0.20,         /* "But"      24.00 */
+    simple: 0.82,      /* "simple"   24.62 (hero: the map card) */
+    map: 1.04,         /* "map,"     24.84 */
+    markdown: 1.92,    /* "Markdown" 25.72 */
+    pointers: 4.58,    /* "pointers" 28.34 in words.json; /p/ burst at 28.38-28.42 on the envelope */
+    files: 5.34,       /* "files."   29.14 */
+  };
+  const HOLD = 5.80;                         // still from here: exactly SEAM[6]
+  const { seg, lerp } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  const S5 = EP2.SEAM[5], S6 = EP2.SEAM[6];
+  W.pageTitle.setAttribute("data-layout-allow-overlap", "");   // the page title cross-fades into the card title on purpose
+  // the three map lines type in, one by one, from "Markdown"
+  const TYPE = [CUE.markdown + 0.03, CUE.markdown + 0.43, CUE.markdown + 0.83], TYPE_LEN = 0.35;
+  const FULL = W.cardRows.map((d) => d.textContent);
+  function typeRows(t) {
+    W.cardRows.forEach((d, i) => {
+      if (!i) return;
+      const n = Math.round(FULL[i].length * seg(t, TYPE[i - 1], TYPE[i - 1] + TYPE_LEN));
+      d.textContent = t >= HOLD ? FULL[i] : FULL[i].slice(0, Math.max(1, n));
+    });
+  }
+  // the 13 files the map does not point to go dashed, one after another
+  const ORDER = W.files.map((f, i) => ((i * 5) % 16) / 16);
+
+  function render(t) {
+    typeRows(t);
+    if (t < 1 / 120) { W.set(S5); W.card.style.transformOrigin = "0 0"; return; }
+    if (t >= HOLD) { W.set(S6); W.card.style.transformOrigin = "0 0"; return; }
+    // the giant page sinks into the window and fades as the card appears
+    const pu = E.io(seg(t, CUE.simple, CUE.simple + 0.7));
+    const page = 1 - E.inn(seg(t, CUE.simple + 0.15, CUE.simple + 0.7));
+    const card = E.out(seg(t, CUE.simple + 0.1, CUE.simple + 0.6));
+    const cardScale = lerp(0.6, 1, E.back(seg(t, CUE.simple + 0.1, CUE.simple + 0.8)));
+    const cardLines = 1 + TYPE.filter((s) => t >= s).length;
+    // the repo comes back: muted -> teal, then dashed on "pointers"
+    const rot = 1 - E.io(seg(t, CUE.map + 0.1, CUE.map + 0.9));
+    const fileMode = ORDER.map((o) => (t >= CUE.pointers - 0.1 + o * 0.4 ? "ghost" : "teal"));
+    const arrows = [0, 1, 2].map((i) => E.out(seg(t, CUE.pointers + i * 0.25, CUE.pointers + i * 0.25 + 0.65)));
+    W.set({
+      files: "teal", fileMode, rot,
+      page, pageTop: lerp(250, EP2.CARD.y, pu), pageLines: 22, pageMute: 1,
+      card, cardScale, cardHero: 1, cardLines, arrows,
+      agent: { tilt: 10 * (1 - E.io(seg(t, 0, CUE.map + 0.3))) },
+    });
+    W.card.style.transformOrigin = cardScale === 1 ? "0 0" : "50% 50%";
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

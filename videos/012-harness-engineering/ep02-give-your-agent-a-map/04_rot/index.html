@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Harness ep 2, beat 4 (rot): the rot spreads up the pile, auth.md last; on "rot" the
+         hero passes from the window outline to the label "context rot". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/ep02.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.95" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.95;          // master 12.60 -> 16.55
+  // Cues, beat-local (master - 12.60); checked on a 20 ms RMS envelope of vo_final.wav.
+  const CUE = {
+    model: 0.24,      /* "model"   master 12.84 (inside "The model", onset 12.76) */
+    looking: 1.32,    /* "looking" master 13.92 */
+    context: 2.68,    /* "context" master 15.28 (k release after the 15.22-15.28 closure) */
+    rot: 3.07,        /* "rot."    master 15.67 (after the "-xt" dip at 15.62) */
+  };
+  const T = { still: 3.55 };          // last 0.40 s exactly SEAM[4]
+  const { seg, lerp } = ISO;
+  const E = ISO.E();
+  const PAL = CAST.PAL;
+  const root = document.getElementById("root");
+  const W = EP2.build(root);
+  ISO.guides(root);
+  // The rot spreads up the pile: bottom pile row first, auth.md (EP2.AUTH) last.
+  // rank 0..15; each file fades teal -> muted over ROT.dur, the last ending on "context".
+  const ROT = { t0: 0.0, dur: 0.8 };
+  const rows = W.files.map((f, i) => i).filter((i) => i !== EP2.AUTH)
+    .sort((a, b) => (Math.floor(b / 4) - Math.floor(a / 4)) || (((a * 7) % 5) - ((b * 7) % 5)) || (a - b));
+  const RANK = []; rows.forEach((i, k) => { RANK[i] = k; }); RANK[EP2.AUTH] = 15;
+  const STEP = (CUE.context - ROT.dur - ROT.t0) / 15;
+  function render(t) {
+    if (t >= T.still) { W.set(EP2.SEAM[4]); return; }
+    const pass = E.io(seg(t, CUE.rot, CUE.rot + 0.4));
+    W.set(Object.assign({}, EP2.SEAM[3], {
+      rot: 0, winHero: 1 - pass,
+      label: t >= CUE.rot ? "context rot" : "context", labelHero: pass,
+    }));
+    // the local stagger: override each file's stroke after W.set
+    W.files.forEach((f, i) => {
+      const a = ROT.t0 + RANK[i] * STEP;
+      const u = E.io(seg(t, a, a + ROT.dur));
+      f.rect.setAttribute("stroke", EP2.mixHex(PAL.data, PAL.muted, u));
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
