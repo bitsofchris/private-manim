@@ -1,8 +1,8 @@
 {
   "segments" : [
     {
-      "end" : 4160,
-      "id" : "41FFD63D-3D8D-4ABC-8A8A-76BD84D82F34",
+      "end" : 4180,
+      "id" : "EB6EF9AE-6D27-40BC-8591-35D4F239D37D",
       "start" : 1,
       "text" : "Recall is asking, of all the positives, how many did I actually catch?",
       "words" : [
@@ -12,710 +12,685 @@
           "text" : "Recall"
         },
         {
-          "end" : 800,
+          "end" : 820,
           "start" : 720,
           "text" : "is"
         },
         {
           "end" : 1180,
-          "start" : 800,
+          "start" : 820,
           "text" : "asking,"
         },
         {
-          "end" : 1380,
-          "start" : 1320,
+          "end" : 1400,
+          "start" : 1340,
           "text" : "of"
         },
         {
-          "end" : 1680,
-          "start" : 1380,
+          "end" : 1700,
+          "start" : 1400,
           "text" : "all"
         },
         {
-          "end" : 1880,
-          "start" : 1680,
+          "end" : 1920,
+          "start" : 1700,
           "text" : "the"
         },
         {
-          "end" : 2400,
-          "start" : 1880,
+          "end" : 2420,
+          "start" : 1920,
           "text" : "positives,"
         },
         {
-          "end" : 2940,
-          "start" : 2840,
+          "end" : 2960,
+          "start" : 2860,
           "text" : "how"
         },
         {
-          "end" : 3200,
-          "start" : 2940,
+          "end" : 3220,
+          "start" : 2960,
           "text" : "many"
         },
         {
-          "end" : 3340,
-          "start" : 3200,
+          "end" : 3360,
+          "start" : 3220,
           "text" : "did"
         },
         {
-          "end" : 3480,
-          "start" : 3340,
+          "end" : 3460,
+          "start" : 3360,
           "text" : "I"
         },
         {
-          "end" : 3780,
-          "start" : 3480,
+          "end" : 3800,
+          "start" : 3460,
           "text" : "actually"
         },
         {
-          "end" : 4160,
-          "start" : 3780,
+          "end" : 4180,
+          "start" : 3800,
           "text" : "catch?"
         }
       ]
     },
     {
-      "end" : 5920,
-      "id" : "D402CA35-55BB-4E22-BE02-7216B0DAED6B",
-      "start" : 4480,
-      "text" : "It's a prompt injection detector.",
-      "words" : [
-        {
-          "end" : 4580,
-          "start" : 4480,
-          "text" : "It's"
-        },
-        {
-          "end" : 4700,
-          "start" : 4580,
-          "text" : "a"
-        },
-        {
-          "end" : 5040,
-          "start" : 4700,
-          "text" : "prompt"
-        },
-        {
-          "end" : 5460,
-          "start" : 5040,
-          "text" : "injection"
-        },
-        {
-          "end" : 5920,
-          "start" : 5460,
-          "text" : "detector."
-        }
-      ]
-    },
-    {
-      "end" : 8400,
-      "id" : "8AADBC1A-812A-4A62-8D9D-F45F24122709",
-      "start" : 6200,
+      "end" : 6700,
+      "id" : "C1554A86-3F00-4EED-9848-A2D4A72F7F89",
+      "start" : 4500,
       "text" : "10,000 requests come in, but only 50 are attacks.",
       "words" : [
         {
-          "end" : 6300,
-          "start" : 6200,
+          "end" : 4660,
+          "start" : 4500,
           "text" : "10"
         },
         {
-          "end" : 6580,
-          "start" : 6300,
+          "end" : 4880,
+          "start" : 4660,
           "text" : ",000"
         },
         {
-          "end" : 6860,
-          "start" : 6580,
+          "end" : 5160,
+          "start" : 4880,
           "text" : "requests"
         },
         {
-          "end" : 7040,
-          "start" : 6860,
+          "end" : 5360,
+          "start" : 5160,
           "text" : "come"
         },
         {
-          "end" : 7180,
-          "start" : 7040,
+          "end" : 5500,
+          "start" : 5360,
           "text" : "in,"
         },
         {
-          "end" : 7360,
-          "start" : 7280,
+          "end" : 5660,
+          "start" : 5580,
           "text" : "but"
         },
         {
-          "end" : 7500,
-          "start" : 7360,
+          "end" : 5800,
+          "start" : 5660,
           "text" : "only"
         },
         {
-          "end" : 7880,
-          "start" : 7500,
+          "end" : 6160,
+          "start" : 5800,
           "text" : "50"
         },
         {
-          "end" : 8000,
-          "start" : 7880,
+          "end" : 6300,
+          "start" : 6160,
           "text" : "are"
         },
         {
-          "end" : 8400,
-          "start" : 8000,
+          "end" : 6700,
+          "start" : 6300,
           "text" : "attacks."
         }
       ]
     },
     {
-      "end" : 12540,
-      "id" : "5AE9E5C6-ECB4-412B-BB43-B3C8243C3A25",
-      "start" : 8720,
+      "end" : 10840,
+      "id" : "0F909300-149B-47A3-9E0C-FA2B7211C63B",
+      "start" : 7060,
       "text" : "If there were 50 attacks and we only caught 40, recall is about 80%.",
       "words" : [
         {
-          "end" : 8820,
-          "start" : 8720,
+          "end" : 7120,
+          "start" : 7060,
           "text" : "If"
         },
         {
-          "end" : 8960,
-          "start" : 8820,
+          "end" : 7260,
+          "start" : 7120,
           "text" : "there"
         },
         {
-          "end" : 9040,
-          "start" : 8960,
+          "end" : 7340,
+          "start" : 7260,
           "text" : "were"
         },
         {
-          "end" : 9420,
-          "start" : 9040,
+          "end" : 7720,
+          "start" : 7340,
           "text" : "50"
         },
         {
-          "end" : 9920,
-          "start" : 9420,
+          "end" : 8200,
+          "start" : 7720,
           "text" : "attacks"
         },
         {
-          "end" : 10020,
-          "start" : 9920,
+          "end" : 8320,
+          "start" : 8200,
           "text" : "and"
         },
         {
-          "end" : 10100,
-          "start" : 10020,
+          "end" : 8400,
+          "start" : 8320,
           "text" : "we"
         },
         {
-          "end" : 10280,
-          "start" : 10100,
+          "end" : 8560,
+          "start" : 8400,
           "text" : "only"
         },
         {
-          "end" : 10480,
-          "start" : 10280,
+          "end" : 8760,
+          "start" : 8560,
           "text" : "caught"
         },
         {
-          "end" : 10880,
-          "start" : 10480,
+          "end" : 9180,
+          "start" : 8760,
           "text" : "40,"
         },
         {
-          "end" : 11640,
-          "start" : 11280,
+          "end" : 9940,
+          "start" : 9580,
           "text" : "recall"
         },
         {
-          "end" : 11760,
-          "start" : 11640,
+          "end" : 10040,
+          "start" : 9940,
           "text" : "is"
         },
         {
-          "end" : 11940,
-          "start" : 11760,
+          "end" : 10220,
+          "start" : 10040,
           "text" : "about"
         },
         {
-          "end" : 12540,
-          "start" : 11940,
+          "end" : 10840,
+          "start" : 10220,
           "text" : "80%."
         }
       ]
     },
     {
-      "end" : 16680,
-      "id" : "37EA72B9-BD56-48E1-A0F5-A09DBABAFD8B",
-      "start" : 13080,
-      "text" : "Now precision is saying, of the ones that I did predict were positive,",
+      "end" : 14900,
+      "id" : "3D2F212F-263B-46EB-8E01-87E8CF700429",
+      "start" : 11300,
+      "text" : "Now, precision is saying, of the ones that I did predict were positive,",
       "words" : [
         {
-          "end" : 13240,
-          "start" : 13080,
-          "text" : "Now"
+          "end" : 11460,
+          "start" : 11300,
+          "text" : "Now,"
         },
         {
-          "end" : 13640,
-          "start" : 13240,
+          "end" : 11860,
+          "start" : 11460,
           "text" : "precision"
         },
         {
-          "end" : 13980,
-          "start" : 13640,
+          "end" : 12200,
+          "start" : 11860,
           "text" : "is"
         },
         {
-          "end" : 14160,
-          "start" : 13980,
+          "end" : 12380,
+          "start" : 12200,
           "text" : "saying,"
         },
         {
-          "end" : 14580,
-          "start" : 14500,
+          "end" : 12780,
+          "start" : 12720,
           "text" : "of"
         },
         {
-          "end" : 14820,
-          "start" : 14580,
+          "end" : 13040,
+          "start" : 12780,
           "text" : "the"
         },
         {
-          "end" : 15120,
-          "start" : 14820,
+          "end" : 13340,
+          "start" : 13040,
           "text" : "ones"
         },
         {
-          "end" : 15300,
-          "start" : 15120,
+          "end" : 13520,
+          "start" : 13340,
           "text" : "that"
         },
         {
-          "end" : 15400,
-          "start" : 15300,
+          "end" : 13620,
+          "start" : 13520,
           "text" : "I"
         },
         {
-          "end" : 15620,
-          "start" : 15400,
+          "end" : 13840,
+          "start" : 13620,
           "text" : "did"
         },
         {
-          "end" : 15980,
-          "start" : 15620,
+          "end" : 14200,
+          "start" : 13840,
           "text" : "predict"
         },
         {
-          "end" : 16139,
-          "start" : 15980,
+          "end" : 14360,
+          "start" : 14200,
           "text" : "were"
         },
         {
-          "end" : 16680,
-          "start" : 16139,
+          "end" : 14900,
+          "start" : 14360,
           "text" : "positive,"
         }
       ]
     },
     {
-      "end" : 18920,
-      "id" : "299F44F8-4B28-4B17-ACF8-907FE44BC710",
-      "start" : 17210,
+      "end" : 17160,
+      "id" : "C92495DC-D6E2-4BC3-9DCE-C5713D6F4998",
+      "start" : 15440,
       "text" : "how many actually were positive?",
       "words" : [
         {
-          "end" : 17360,
-          "start" : 17210,
+          "end" : 15580,
+          "start" : 15440,
           "text" : "how"
         },
         {
-          "end" : 17640,
-          "start" : 17360,
+          "end" : 15900,
+          "start" : 15580,
           "text" : "many"
         },
         {
-          "end" : 18340,
-          "start" : 17640,
+          "end" : 16580,
+          "start" : 15900,
           "text" : "actually"
         },
         {
-          "end" : 18540,
-          "start" : 18340,
+          "end" : 16760,
+          "start" : 16580,
           "text" : "were"
         },
         {
-          "end" : 18920,
-          "start" : 18540,
+          "end" : 17160,
+          "start" : 16760,
           "text" : "positive?"
         }
       ]
     },
     {
-      "end" : 22160,
-      "id" : "43F4B247-3355-4B6E-ADDF-9F7425096699",
-      "start" : 19480,
+      "end" : 21120,
+      "id" : "9A60BFE2-10DE-4385-83F1-2170162BE02C",
+      "start" : 17820,
       "text" : "We flagged 100, 40 were attacks, precision is 40%.",
       "words" : [
         {
-          "end" : 19540,
-          "start" : 19480,
+          "end" : 17960,
+          "start" : 17820,
           "text" : "We"
         },
         {
-          "end" : 19900,
-          "start" : 19540,
+          "end" : 18300,
+          "start" : 17960,
           "text" : "flagged"
         },
         {
-          "end" : 20140,
-          "start" : 19900,
+          "end" : 18560,
+          "start" : 18300,
           "text" : "100,"
         },
         {
-          "end" : 20600,
-          "start" : 20320,
+          "end" : 19020,
+          "start" : 18720,
           "text" : "40"
         },
         {
-          "end" : 20740,
-          "start" : 20600,
+          "end" : 19160,
+          "start" : 19020,
           "text" : "were"
         },
         {
-          "end" : 21160,
-          "start" : 20740,
+          "end" : 19580,
+          "start" : 19160,
           "text" : "attacks,"
         },
         {
-          "end" : 21660,
-          "start" : 21300,
+          "end" : 20080,
+          "start" : 19720,
           "text" : "precision"
         },
         {
-          "end" : 21880,
-          "start" : 21660,
+          "end" : 20300,
+          "start" : 20080,
           "text" : "is"
         },
         {
-          "end" : 22160,
-          "start" : 21880,
+          "end" : 21120,
+          "start" : 20300,
           "text" : "40%."
         }
       ]
     },
     {
-      "end" : 24520,
-      "id" : "6D873796-6F72-472E-A129-11C826FD36AD",
-      "start" : 23150,
+      "end" : 22980,
+      "id" : "F32626B4-B47A-4B74-A111-A90B6D7AF5AB",
+      "start" : 21620,
       "text" : "Neither one uses the true negatives.",
       "words" : [
         {
-          "end" : 23280,
-          "start" : 23150,
+          "end" : 21740,
+          "start" : 21620,
           "text" : "Neither"
         },
         {
-          "end" : 23500,
-          "start" : 23280,
+          "end" : 21960,
+          "start" : 21740,
           "text" : "one"
         },
         {
-          "end" : 23800,
-          "start" : 23500,
+          "end" : 22260,
+          "start" : 21960,
           "text" : "uses"
         },
         {
-          "end" : 23920,
-          "start" : 23800,
+          "end" : 22380,
+          "start" : 22260,
           "text" : "the"
         },
         {
-          "end" : 24100,
-          "start" : 23920,
+          "end" : 22560,
+          "start" : 22380,
           "text" : "true"
         },
         {
-          "end" : 24520,
-          "start" : 24100,
+          "end" : 22980,
+          "start" : 22560,
           "text" : "negatives."
         }
       ]
     },
     {
-      "end" : 26720,
-      "id" : "1381C578-217A-4C67-9026-06BD9486F337",
-      "start" : 25110,
+      "end" : 25220,
+      "id" : "C4BB595F-ACAA-44AB-9B11-8E667FB5BFFC",
+      "start" : 23620,
       "text" : "In this case, there's almost 10,000 of them.",
       "words" : [
         {
-          "end" : 25240,
-          "start" : 25110,
+          "end" : 23740,
+          "start" : 23620,
           "text" : "In"
         },
         {
-          "end" : 25460,
-          "start" : 25240,
+          "end" : 23960,
+          "start" : 23740,
           "text" : "this"
         },
         {
-          "end" : 25600,
-          "start" : 25460,
+          "end" : 24120,
+          "start" : 23960,
           "text" : "case,"
         },
         {
-          "end" : 25780,
-          "start" : 25680,
+          "end" : 24280,
+          "start" : 24180,
           "text" : "there's"
         },
         {
-          "end" : 25980,
-          "start" : 25780,
+          "end" : 24480,
+          "start" : 24280,
           "text" : "almost"
         },
         {
-          "end" : 26180,
-          "start" : 25980,
+          "end" : 24680,
+          "start" : 24480,
           "text" : "10"
         },
         {
-          "end" : 26440,
-          "start" : 26180,
+          "end" : 24940,
+          "start" : 24680,
           "text" : ",000"
         },
         {
-          "end" : 26580,
-          "start" : 26440,
+          "end" : 25080,
+          "start" : 24940,
           "text" : "of"
         },
         {
-          "end" : 26720,
-          "start" : 26580,
+          "end" : 25220,
+          "start" : 25080,
           "text" : "them."
         }
       ]
     },
     {
-      "end" : 28920,
-      "id" : "CB81C0A5-A43A-4AD0-9D2D-A74702956131",
-      "start" : 27180,
+      "end" : 27460,
+      "id" : "F8AF21C5-3169-4ECD-A260-06F96ADC0C84",
+      "start" : 25720,
       "text" : "That's why they still work when the attacks are rare.",
       "words" : [
         {
-          "end" : 27320,
-          "start" : 27180,
+          "end" : 25860,
+          "start" : 25720,
           "text" : "That's"
         },
         {
-          "end" : 27440,
-          "start" : 27320,
+          "end" : 25980,
+          "start" : 25860,
           "text" : "why"
         },
         {
-          "end" : 27540,
-          "start" : 27440,
+          "end" : 26080,
+          "start" : 25980,
           "text" : "they"
         },
         {
-          "end" : 27760,
-          "start" : 27540,
+          "end" : 26300,
+          "start" : 26080,
           "text" : "still"
         },
         {
-          "end" : 28040,
-          "start" : 27760,
+          "end" : 26580,
+          "start" : 26300,
           "text" : "work"
         },
         {
-          "end" : 28140,
-          "start" : 28040,
+          "end" : 26680,
+          "start" : 26580,
           "text" : "when"
         },
         {
-          "end" : 28300,
-          "start" : 28140,
+          "end" : 26840,
+          "start" : 26680,
           "text" : "the"
         },
         {
-          "end" : 28520,
-          "start" : 28300,
+          "end" : 27060,
+          "start" : 26840,
           "text" : "attacks"
         },
         {
-          "end" : 28620,
-          "start" : 28520,
+          "end" : 27160,
+          "start" : 27060,
           "text" : "are"
         },
         {
-          "end" : 28920,
-          "start" : 28620,
+          "end" : 27460,
+          "start" : 27160,
           "text" : "rare."
         }
       ]
     },
     {
-      "end" : 32360,
-      "id" : "F44B79DB-CEBC-44B5-9AAA-1D4B080529C3",
-      "start" : 29200,
-      "text" : "Recall is all about what you missed. These are the attacks that got through.",
+      "end" : 29360,
+      "id" : "9801E82E-1877-4E7B-B2DC-298499985995",
+      "start" : 28000,
+      "text" : "Recall is all about what you missed.",
       "words" : [
         {
-          "end" : 29700,
-          "start" : 29200,
+          "end" : 28300,
+          "start" : 28000,
           "text" : "Recall"
         },
         {
-          "end" : 29800,
-          "start" : 29700,
+          "end" : 28420,
+          "start" : 28300,
           "text" : "is"
         },
         {
-          "end" : 29920,
-          "start" : 29800,
+          "end" : 28520,
+          "start" : 28420,
           "text" : "all"
         },
         {
-          "end" : 30120,
-          "start" : 29920,
+          "end" : 28720,
+          "start" : 28520,
           "text" : "about"
         },
         {
-          "end" : 30280,
-          "start" : 30120,
+          "end" : 28900,
+          "start" : 28720,
           "text" : "what"
         },
         {
-          "end" : 30380,
-          "start" : 30280,
+          "end" : 28980,
+          "start" : 28900,
           "text" : "you"
         },
         {
-          "end" : 30740,
-          "start" : 30380,
+          "end" : 29360,
+          "start" : 28980,
           "text" : "missed."
-        },
-        {
-          "end" : 31320,
-          "start" : 31240,
-          "text" : "These"
-        },
-        {
-          "end" : 31420,
-          "start" : 31320,
-          "text" : "are"
-        },
-        {
-          "end" : 31520,
-          "start" : 31420,
-          "text" : "the"
-        },
-        {
-          "end" : 31860,
-          "start" : 31520,
-          "text" : "attacks"
-        },
-        {
-          "end" : 32040,
-          "start" : 31860,
-          "text" : "that"
-        },
-        {
-          "end" : 32160,
-          "start" : 32040,
-          "text" : "got"
-        },
-        {
-          "end" : 32360,
-          "start" : 32160,
-          "text" : "through."
         }
       ]
     },
     {
-      "end" : 36280,
-      "id" : "6C70E8E1-BF9A-46BB-94CC-27775BB95FD2",
-      "start" : 32480,
-      "text" : "And precision is about what you wasted. These are real users that you ended up blocking.",
+      "end" : 32680,
+      "id" : "C620971F-1F87-4600-9369-596E830926EF",
+      "start" : 29680,
+      "text" : "These are the attacks I got through, and precision is about what you wasted.",
       "words" : [
         {
-          "end" : 32580,
-          "start" : 32480,
-          "text" : "And"
-        },
-        {
-          "end" : 32920,
-          "start" : 32580,
-          "text" : "precision"
-        },
-        {
-          "end" : 33120,
-          "start" : 32920,
-          "text" : "is"
-        },
-        {
-          "end" : 33320,
-          "start" : 33120,
-          "text" : "about"
-        },
-        {
-          "end" : 33520,
-          "start" : 33320,
-          "text" : "what"
-        },
-        {
-          "end" : 33640,
-          "start" : 33520,
-          "text" : "you"
-        },
-        {
-          "end" : 34020,
-          "start" : 33640,
-          "text" : "wasted."
-        },
-        {
-          "end" : 34660,
-          "start" : 34540,
+          "end" : 29980,
+          "start" : 29680,
           "text" : "These"
         },
         {
-          "end" : 34760,
-          "start" : 34660,
+          "end" : 30060,
+          "start" : 29980,
           "text" : "are"
         },
         {
-          "end" : 35000,
-          "start" : 34760,
-          "text" : "real"
+          "end" : 30180,
+          "start" : 30060,
+          "text" : "the"
         },
         {
-          "end" : 35280,
-          "start" : 35000,
-          "text" : "users"
+          "end" : 30540,
+          "start" : 30180,
+          "text" : "attacks"
         },
         {
-          "end" : 35500,
-          "start" : 35280,
-          "text" : "that"
+          "end" : 30680,
+          "start" : 30540,
+          "text" : "I"
         },
         {
-          "end" : 35600,
-          "start" : 35500,
+          "end" : 30800,
+          "start" : 30680,
+          "text" : "got"
+        },
+        {
+          "end" : 31020,
+          "start" : 30800,
+          "text" : "through,"
+        },
+        {
+          "end" : 31220,
+          "start" : 31120,
+          "text" : "and"
+        },
+        {
+          "end" : 31560,
+          "start" : 31220,
+          "text" : "precision"
+        },
+        {
+          "end" : 31780,
+          "start" : 31560,
+          "text" : "is"
+        },
+        {
+          "end" : 31980,
+          "start" : 31780,
+          "text" : "about"
+        },
+        {
+          "end" : 32180,
+          "start" : 31980,
+          "text" : "what"
+        },
+        {
+          "end" : 32279,
+          "start" : 32180,
           "text" : "you"
         },
         {
-          "end" : 35780,
-          "start" : 35600,
+          "end" : 32680,
+          "start" : 32279,
+          "text" : "wasted."
+        }
+      ]
+    },
+    {
+      "end" : 34940,
+      "id" : "6838F94B-3774-4152-8016-E898213079DE",
+      "start" : 33200,
+      "text" : "These are real users that you ended up blocking.",
+      "words" : [
+        {
+          "end" : 33320,
+          "start" : 33200,
+          "text" : "These"
+        },
+        {
+          "end" : 33400,
+          "start" : 33320,
+          "text" : "are"
+        },
+        {
+          "end" : 33660,
+          "start" : 33400,
+          "text" : "real"
+        },
+        {
+          "end" : 33980,
+          "start" : 33660,
+          "text" : "users"
+        },
+        {
+          "end" : 34140,
+          "start" : 33980,
+          "text" : "that"
+        },
+        {
+          "end" : 34240,
+          "start" : 34140,
+          "text" : "you"
+        },
+        {
+          "end" : 34420,
+          "start" : 34240,
           "text" : "ended"
         },
         {
-          "end" : 35940,
-          "start" : 35780,
+          "end" : 34580,
+          "start" : 34420,
           "text" : "up"
         },
         {
-          "end" : 36280,
-          "start" : 35940,
+          "end" : 34940,
+          "start" : 34580,
           "text" : "blocking."
         }
       ]
     }
   ],
-  "text" : "Recall is asking, of all the positives, how many did I actually catch?\nIt's a prompt injection detector.\n10,000 requests come in, but only 50 are attacks.\nIf there were 50 attacks and we only caught 40, recall is about 80%.\nNow precision is saying, of the ones that I did predict were positive,\nhow many actually were positive?\nWe flagged 100, 40 were attacks, precision is 40%.\nNeither one uses the true negatives.\nIn this case, there's almost 10,000 of them.\nThat's why they still work when the attacks are rare.\nRecall is all about what you missed. These are the attacks that got through.\nAnd precision is about what you wasted. These are real users that you ended up blocking."
+  "text" : "Recall is asking, of all the positives, how many did I actually catch?\n10,000 requests come in, but only 50 are attacks.\nIf there were 50 attacks and we only caught 40, recall is about 80%.\nNow, precision is saying, of the ones that I did predict were positive,\nhow many actually were positive?\nWe flagged 100, 40 were attacks, precision is 40%.\nNeither one uses the true negatives.\nIn this case, there's almost 10,000 of them.\nThat's why they still work when the attacks are rare.\nRecall is all about what you missed.\nThese are the attacks I got through, and precision is about what you wasted.\nThese are real users that you ended up blocking."
 }

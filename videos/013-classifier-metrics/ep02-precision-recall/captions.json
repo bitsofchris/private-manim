@@ -1,272 +1,257 @@
 [
  {
-  "start": 0.38,
-  "end": 0.74,
+  "start": 0.4,
+  "end": 0.76,
   "text": "Recall is"
  },
  {
-  "start": 0.8,
-  "end": 1.62,
+  "start": 0.82,
+  "end": 1.64,
   "text": "asking, of all"
  },
  {
-  "start": 1.68,
-  "end": 2.78,
+  "start": 1.7,
+  "end": 2.8,
   "text": "the positives,"
  },
  {
-  "start": 2.84,
-  "end": 3.28,
+  "start": 2.86,
+  "end": 3.3,
   "text": "how many did"
  },
  {
-  "start": 3.34,
-  "end": 3.72,
+  "start": 3.36,
+  "end": 3.74,
   "text": "I actually"
  },
  {
-  "start": 3.78,
-  "end": 4.42,
+  "start": 3.8,
+  "end": 4.44,
   "text": "catch?"
  },
  {
-  "start": 4.48,
-  "end": 4.98,
-  "text": "It's a prompt"
- },
- {
-  "start": 5.04,
-  "end": 5.4,
-  "text": "injection"
- },
- {
-  "start": 5.46,
-  "end": 6.14,
-  "text": "detector."
- },
- {
-  "start": 6.2,
-  "end": 6.8,
+  "start": 4.5,
+  "end": 5.1,
   "text": "10,000 requests"
  },
  {
-  "start": 6.86,
-  "end": 7.3,
+  "start": 5.16,
+  "end": 5.6,
   "text": "come in, but"
  },
  {
-  "start": 7.36,
-  "end": 7.94,
+  "start": 5.66,
+  "end": 6.24,
   "text": "only 50 are"
  },
  {
-  "start": 8.0,
-  "end": 8.66,
+  "start": 6.3,
+  "end": 7.0,
   "text": "attacks."
  },
  {
-  "start": 8.72,
-  "end": 8.98,
+  "start": 7.06,
+  "end": 7.28,
   "text": "If there were"
  },
  {
-  "start": 9.04,
-  "end": 9.96,
+  "start": 7.34,
+  "end": 8.26,
   "text": "50 attacks and"
  },
  {
-  "start": 10.02,
-  "end": 10.42,
+  "start": 8.32,
+  "end": 8.7,
   "text": "we only caught"
  },
  {
-  "start": 10.48,
-  "end": 11.7,
+  "start": 8.76,
+  "end": 9.98,
   "text": "40, recall is"
  },
  {
-  "start": 11.76,
-  "end": 12.54,
+  "start": 10.04,
+  "end": 10.84,
   "text": "about 80%."
  },
  {
-  "start": 13.08,
-  "end": 13.58,
-  "text": "Now precision"
+  "start": 11.3,
+  "end": 11.8,
+  "text": "Now, precision"
  },
  {
-  "start": 13.64,
-  "end": 14.52,
+  "start": 11.86,
+  "end": 12.72,
   "text": "is saying, of"
  },
  {
-  "start": 14.58,
-  "end": 15.24,
+  "start": 12.78,
+  "end": 13.46,
   "text": "the ones that"
  },
  {
-  "start": 15.3,
-  "end": 16.01,
+  "start": 13.52,
+  "end": 14.22,
   "text": "I did predict"
  },
  {
-  "start": 16.07,
-  "end": 16.68,
+  "start": 14.28,
+  "end": 14.9,
   "text": "were positive,"
  },
  {
-  "start": 17.21,
-  "end": 17.58,
+  "start": 15.44,
+  "end": 15.84,
   "text": "how many"
  },
  {
-  "start": 17.64,
-  "end": 18.48,
+  "start": 15.9,
+  "end": 16.7,
   "text": "actually were"
  },
  {
-  "start": 18.54,
-  "end": 19.04,
+  "start": 16.76,
+  "end": 17.26,
   "text": "positive?"
  },
  {
-  "start": 19.48,
-  "end": 20.35,
+  "start": 17.82,
+  "end": 18.66,
   "text": "We flagged 100,"
  },
  {
-  "start": 20.41,
-  "end": 20.68,
+  "start": 18.72,
+  "end": 19.1,
   "text": "40 were"
  },
  {
-  "start": 20.74,
-  "end": 21.25,
+  "start": 19.16,
+  "end": 19.66,
   "text": "attacks,"
  },
  {
-  "start": 21.31,
-  "end": 21.95,
+  "start": 19.72,
+  "end": 20.24,
   "text": "precision is"
  },
  {
-  "start": 22.01,
-  "end": 22.51,
+  "start": 20.3,
+  "end": 21.12,
   "text": "40%."
  },
  {
-  "start": 23.15,
-  "end": 23.44,
+  "start": 21.62,
+  "end": 21.9,
   "text": "Neither one"
  },
  {
-  "start": 23.5,
-  "end": 24.04,
+  "start": 21.96,
+  "end": 22.5,
   "text": "uses the true"
  },
  {
-  "start": 24.1,
-  "end": 24.6,
+  "start": 22.56,
+  "end": 23.06,
   "text": "negatives."
  },
  {
-  "start": 25.15,
-  "end": 25.62,
+  "start": 23.62,
+  "end": 24.12,
   "text": "In this case,"
  },
  {
-  "start": 25.68,
-  "end": 25.99,
+  "start": 24.18,
+  "end": 24.45,
   "text": "there's almost"
  },
  {
-  "start": 26.05,
-  "end": 26.72,
+  "start": 24.51,
+  "end": 25.22,
   "text": "10,000 of them."
  },
  {
-  "start": 27.18,
-  "end": 27.48,
+  "start": 25.72,
+  "end": 26.02,
   "text": "That's why they"
  },
  {
-  "start": 27.54,
-  "end": 28.08,
+  "start": 26.08,
+  "end": 26.62,
   "text": "still work when"
  },
  {
-  "start": 28.14,
-  "end": 28.56,
+  "start": 26.68,
+  "end": 27.1,
   "text": "the attacks are"
  },
  {
-  "start": 28.62,
-  "end": 29.3,
+  "start": 27.16,
+  "end": 27.66,
   "text": "rare."
  },
  {
-  "start": 29.36,
-  "end": 29.86,
+  "start": 28.0,
+  "end": 28.46,
   "text": "Recall is all"
  },
  {
-  "start": 29.92,
-  "end": 30.32,
+  "start": 28.52,
+  "end": 28.92,
   "text": "about what you"
  },
  {
-  "start": 30.38,
-  "end": 30.88,
+  "start": 28.98,
+  "end": 29.48,
   "text": "missed."
  },
  {
-  "start": 31.24,
-  "end": 31.46,
+  "start": 29.86,
+  "end": 30.12,
   "text": "These are the"
  },
  {
-  "start": 31.52,
-  "end": 31.98,
+  "start": 30.18,
+  "end": 30.62,
   "text": "attacks that"
  },
  {
-  "start": 32.04,
-  "end": 32.42,
+  "start": 30.68,
+  "end": 31.06,
   "text": "got through,"
  },
  {
-  "start": 32.48,
-  "end": 32.86,
+  "start": 31.12,
+  "end": 31.5,
   "text": "and precision"
  },
  {
-  "start": 32.92,
-  "end": 33.48,
+  "start": 31.56,
+  "end": 32.12,
   "text": "is about what"
  },
  {
-  "start": 33.54,
-  "end": 34.04,
+  "start": 32.18,
+  "end": 32.68,
   "text": "you wasted."
  },
  {
-  "start": 34.55,
-  "end": 34.94,
+  "start": 33.2,
+  "end": 33.6,
   "text": "These are real"
  },
  {
-  "start": 35.0,
-  "end": 35.54,
+  "start": 33.66,
+  "end": 34.18,
   "text": "users that you"
  },
  {
-  "start": 35.6,
-  "end": 35.89,
+  "start": 34.24,
+  "end": 34.53,
   "text": "ended up"
  },
  {
-  "start": 35.95,
-  "end": 36.45,
+  "start": 34.59,
+  "end": 35.09,
   "text": "blocking."
  }
 ]

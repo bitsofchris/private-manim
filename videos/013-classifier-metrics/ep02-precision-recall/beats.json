@@ -2,35 +2,35 @@
  "beats": [
   {
    "clip": "media/hf/01_recall_q.mp4",
-   "end": 4.3
-  },
-  {
-   "clip": "media/hf/02_context.mp4",
-   "end": 4.25
-  },
-  {
-   "clip": "media/hf/03_recall_80.mp4",
    "end": 4.35
   },
   {
+   "clip": "media/hf/02_context.mp4",
+   "end": 2.55
+  },
+  {
+   "clip": "media/hf/03_recall_80.mp4",
+   "end": 4.25
+  },
+  {
    "clip": "media/hf/04_precision_q.mp4",
-   "end": 6.4
+   "end": 6.5
   },
   {
    "clip": "media/hf/05_precision_40.mp4",
-   "end": 3.65
+   "end": 3.8
   },
   {
    "clip": "media/hf/06_no_tn.mp4",
-   "end": 6.2
+   "end": 6.35
   },
   {
    "clip": "media/hf/07_missed.mp4",
-   "end": 3.05
+   "end": 3.26
   },
   {
    "clip": "media/hf/08_wasted.mp4",
-   "end": 4.922
+   "end": 4.732
   }
  ]
 }

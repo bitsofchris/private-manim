@@ -75,7 +75,7 @@ the same 200 px. Promote-later note in the hand-off.
 | # | Beat | ~s | VO (as recorded) | Visual (9:16) | Hero |
 |---|------|---:|---|---|---|
 | 1 | Recall, the question | 4.3 | Recall is asking, of all the positives, how many did I actually catch? | Frame 0, already working: ep 1's end state (tag, score line, box with TP 40 / FP 60 / FN 10 / TN 9,890), the box already shortened, the two empty bars faint under it. "Recall": the left bar's label "recall" lights. "all the positives": the attack column (TP + FN) lights magenta and the 50 gold dots ring on the score line, both sides of the threshold. "catch": TP 40 brightens. | the attack column |
-| 2 | Context | 4.4 | It's a prompt injection detector. 10,000 requests come in, but only 50 are attacks. | The column dims to rest. "prompt injection detector": the tag brightens. "10,000 requests": the teal pile pulses. "only 50": the 50 gold dots ring once (and the tag's "50 attacks"). | the tag (white, no magenta) |
+| 2 | Context | 2.6 | 10,000 requests come in, but only 50 are attacks. | The column dims to rest. "10,000 requests": the tag's line 2 brightens and: the teal pile pulses. "only 50": the 50 gold dots ring once (and the tag's "50 attacks"). | the tag (white, no magenta) |
 | 3 | Recall = 80% | 4.0 | If there were 50 attacks and we only caught 40, recall is about 80%. | "50 attacks": the attack column lifts out of the box and drops into the left bar as the denominator **50** (40 + 10). "caught 40": TP's 40 flies up as the numerator **40**. "80%": **80%** lands beside the fraction. | the left bar |
 | 4 | Precision, the question | 6.1 | Now precision is saying of the ones that I did predict were positive, how many actually were positive? | The left bar returns to rest (teal). "precision": the right bar's label lights. "predict were positive": the flagged row (TP + FP) lights magenta and the 100 dots right of the threshold ring (40 gold, 60 teal). "actually were": TP 40 brightens inside the row. | the flagged row |
 | 5 | Precision = 40% | 3.8 | We flagged 100, 40 were attacks, precision is 40%. | "flagged 100": the row lifts out and drops into the right bar as the denominator **100** (40 + 60). "40 were attacks": TP's 40 flies up as the numerator **40**. "40%": **40%** lands. Both bars now filled. | the right bar |
@@ -83,44 +83,55 @@ the same 200 px. Promote-later note in the hand-off.
 | 7 | What you missed | 3.2 | Recall is all about what you missed. These are the attacks that got through, | "missed": the FN cell (10) lights and the recall bar's 50 shows its 10 part; "got through": the 10 gold dots left of the threshold ring on the score line, and "10 got through" appears under the recall bar. | the FN cell |
 | 8 | What you wasted | 4.3 | and precision is about what you wasted. These are real users that you ended up blocking. | "wasted": FN to rest, the FP cell (60) lights; "real users": the 60 teal dots right of the threshold ring, and "60 users blocked" appears under the precision bar. Settles still: both bars, both notes, nothing lit. | the FP cell, then none |
 
-## Final beats (the contract; `vo_final.wav` 37.12 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 35.79 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`).
 
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
-| 1 | `01_recall_q` | 0.00 | 4.30 | Recall is asking, of all the positives, how many did I actually catch? |
-| 2 | `02_context` | 4.30 | 4.25 | It's a prompt injection detector. 10,000 requests come in, but only 50 are attacks. |
-| 3 | `03_recall_80` | 8.55 | 4.35 | If there were 50 attacks and we only caught 40, recall is about 80%. |
-| 4 | `04_precision_q` | 12.90 | 6.40 | Now precision is saying, of the ones that I did predict were positive, how many actually were positive? |
-| 5 | `05_precision_40` | 19.30 | 3.65 | We flagged 100, 40 were attacks, precision is 40%. |
-| 6 | `06_no_tn` | 22.95 | 6.20 | Neither one uses the true negatives. In this case, there's almost 10,000 of them. That's why they still work when the attacks are rare. |
-| 7 | `07_missed` | 29.15 | 3.05 | Recall is all about what you missed. These are the attacks that got through, |
-| 8 | `08_wasted` | 32.20 | 4.922 | and precision is about what you wasted. These are real users that you ended up blocking. |
+| 1 | `01_recall_q` | 0.00 | 4.35 | Recall is asking, of all the positives, how many did I actually catch? |
+| 2 | `02_context` | 4.35 | 2.55 | 10,000 requests come in, but only 50 are attacks. |
+| 3 | `03_recall_80` | 6.90 | 4.25 | If there were 50 attacks and we only caught 40, recall is about 80%. |
+| 4 | `04_precision_q` | 11.15 | 6.50 | Now precision is saying, of the ones that I did predict were positive, how many actually were positive? |
+| 5 | `05_precision_40` | 17.65 | 3.80 | We flagged 100, 40 were attacks, precision is 40%. |
+| 6 | `06_no_tn` | 21.45 | 6.35 | Neither one uses the true negatives. In this case, there's almost 10,000 of them. That's why they still work when the attacks are rare. |
+| 7 | `07_missed` | 27.80 | 3.26 | Recall is all about what you missed. These are the attacks that got through, |
+| 8 | `08_wasted` | 31.06 | 4.732 | and precision is about what you wasted. These are real users that you ended up blocking. |
 
-## Cut list (approved by Chris, 10/17; applied)
+## Cut list (approved by Chris, 10/17; v2 after his first watch, applied)
 
-Raw take 45.0 s. The long context clip (`../vo_context_long.m4a`, 4.15 s,
-"It's a prompt injection detector. 10,000 requests come in, but only 50
-are attacks.") is spliced into the raw take in the silence after VO line
-1 (raw 12.45 s), and the joined take goes through `enhance_vo.sh` once,
-so the two match in level. Pauses capped at 0.25 s (`--noise=-45dB`).
+Raw take 45.0 s, already clean (room tone about −70 dB), so no denoise or
+compression: high-pass 80 Hz and loudnorm only. The first build ran
+`enhance_vo.sh`, and Chris said it sounded bad. Context: the tail of the
+long clip, "10,000 requests come in, but only 50 are attacks."
+(`../vo_context_long.m4a` from 1.72 s; Chris cut "It's a prompt injection
+detector", since frame 0's tag says it), spliced into the raw take in the
+silence after VO line 1 (raw 12.45 s).
+
+`tighten_vo.py` fills the gaps with digital silence, so the take's own room
+tone (vo_clean 7.45–7.95 s, looped, −5 dB) is mixed under it, then
+two-pass linear loudnorm. Result −14.5 LUFS (true-peak bound), −1.5 dBTP.
 
 ```
-ffmpeg -i vo_raw.m4a -i ../vo_context_long.m4a -filter_complex "[0:a]atrim=0:12.45,…[a];[1:a]…[b];[0:a]atrim=start=12.45,…[c];[a][b][c]concat=n=3:v=0:a=1" vo_joined.wav
-tools/enhance_vo.sh vo_joined.wav vo_clean.wav
-tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json --max-gap 0.25 --noise=-45dB --remove 0-8.40 --remove 20.75-23.10
+ffmpeg -i vo_raw.m4a -i ../vo_context_long.m4a -filter_complex "[0:a]atrim=0:12.45,…[a];[1:a]atrim=start=1.72,…[b];[0:a]atrim=start=12.45,…[c];[a][b][c]concat=n=3:v=0:a=1" vo_joined.wav
+ffmpeg -i vo_joined.wav -af "highpass=f=80,loudnorm=I=-14:TP=-1.5:LRA=9" -ar 48000 -ac 1 vo_clean.wav
+tools/tighten_vo.py vo_clean.wav --out vo_tight.wav --map timemap.json --max-gap 0.25 --noise=-45dB --remove 0-8.40 --remove 18.93-21.38
+ffmpeg -i vo_tight.wav -stream_loop -1 -i tone.wav -filter_complex "[1:a]atrim=0:D,volume=-5dB[t];[0:a][t]amix=inputs=2:normalize=0:duration=first" vo_bed.wav
+ffmpeg -i vo_bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=11:measured_…:linear=true" vo_final.wav   # two-pass
 ```
 
 | # | Cut | vo_clean range | Saves | Why |
 |---|---|---|---:|---|
 | 1 | "Recall is asking of all the positives my model classified, how… Sorry. Redo." | 0–8.40 | 8.4 s | the flub and restart; script.md flags it |
-| 2 | "We caught 40 out of the 50 that are possible." | 20.75–23.10 | 2.4 s | repeats the line before it; script.md flags it |
-| — | (splice) the context line after VO line 1 | — | +4.15 s | SERIES.md "Context in every episode" |
+| 2 | "We caught 40 out of the 50 that are possible." | 18.93–21.38 | 2.4 s | repeats the line before it; script.md flags it. Starts 80 ms before "percent" ends, because the tool pads each kept piece 80 ms: v1 started at the word end, and the pad kept the onset of "We" (Chris heard a blip after "80%") |
+| — | (splice) "10,000 requests come in, but only 50 are attacks." after VO line 1 | — | +2.43 s | SERIES.md "Context in every episode" |
 
-Result **37.1 s**, re-transcribed with Parakeet (`transcript_final_text.txt`):
-every join reads clean. Words in `words.json` (WhisperKit, spellings
-fixed: "10" + ",000" merged to "10,000"; "through." → "through,").
+Result **35.8 s**, re-transcribed with Parakeet (`transcript_final_text.txt`):
+every join reads clean, and the envelope at the "80%" join falls straight
+to room tone. Words in `words.json` (WhisperKit, spellings fixed: "10" +
+",000" merged; "through." → "through,"; "40?" → "40,"; "attacks I got" →
+"attacks that got"). Captions: `split_captions.py` (one line each; see
+its docstring).
 
 Kept on purpose:
 - VO line 1 is the recall definition, not "precision versus recall", so
