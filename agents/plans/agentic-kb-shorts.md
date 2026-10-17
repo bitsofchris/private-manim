@@ -13,6 +13,12 @@ when the series is published or dropped.
 `ENGINE: hyperframes`. VO uses Chris's own sentences (cut and reorder,
 never reword); every VO line below names the note it was cut from. Lines
 marked *(needs his words)* have no source sentence yet.
+**Part of:** the harness engineering series (Chris, 2026-10-13). These are
+A–C are its episodes 3a–3c, the knowledge-base part of episode 3, and they
+keep this building set as their own recurring image. D gets tried inside
+episode 3's script, and what stays is decided at script time. Recording is
+in series order, audio first. Arc and sources:
+`videos/012-harness-engineering/SERIES.md`. The scripts stay here.
 
 Sources, all in the vault (`~/Documents/ZK Home`):
 
@@ -43,7 +49,7 @@ thing the beat points at.
 
 | | Short | Status |
 |---|---|---|
-| A | The four layers an LLM wiki needs | script draft below, not agreed |
+| A | The four layers an LLM wiki needs | script agreed 2026-10-11, pending a read-aloud |
 | B | Your system needs a janitor | script draft below, not agreed |
 | C | Let your agent write notes you never read | script draft below, not agreed |
 | D | The same four layers in any repo | outline only: his words are two sentences |
@@ -55,19 +61,26 @@ Search phrases are guesses, not checked against YouTube autocomplete
 
 - THE QUESTION: What does an LLM wiki need to stay useful?
 - WHO IS ASKING: an engineer who pointed an agent at a folder of notes and watched it turn into a mess
-- THE ANSWER IN ONE SENTENCE: Four layers: a place where agents write for agents, a clean surface for humans, a curated layer of slow-changing rules and context, and a janitor.
+- THE ANSWER IN ONE SENTENCE: Four layers: a place where agents write for agents, a clean surface for humans, the agent's rules and context kept where the human can see them, and a janitor.
 - THE SEARCH PHRASE: llm wiki (guess)
 
-| beat | VO (from the 10/2 note) | visual |
-|---|---|---|
-| 1 | "A good LLM wiki needs four layers." | the whole building already running |
-| 2 | "A place where agents write for agents. They include the details needed to resume a task later: hashes, branches, commits. You never have to read it." | basement; robot stacks pages. Hero: the pages |
-| 3 | "A clean, distilled view that links out to the detailed agent nodes. A dashboard, a Kanban board, a map." | upstairs; one board, threads drop down. Hero: the board |
-| 4 | "The things you maintain carefully, keep visible, and edit to keep accurate. Skills and rules. Slow-changing context." | the glass case, three items placed one at a time. Hero: the case |
-| 5 | "As you iterate and change the system, something has to keep it clean. It catches conflicting rule sets before they spread." | two signs point opposite ways; the janitor takes one down. Hero: the janitor |
-| 6 | "With all four layers you get a strong agentic knowledge base." | all four lit |
+Decided 2026-10-11 in chat: open on "LLM wiki", close on "agentic knowledge
+base" (the switch is on purpose). Each layer is named as the first words of
+its beat; the number sits on screen, not in the VO. The curated layer is
+one layer, framed his way: the agent's context and rules, kept visible to
+the human. Sources: N = the 10/2 note, C = his chat answer 2026-10-11.
 
-~110 words. Room for about 30 more.
+| beat | VO | src | visual |
+|---|---|---|---|
+| 1 | "A good LLM wiki needs four layers." | N | the whole building already running; "What does an LLM wiki need?" in the band |
+| 2 | "The agent layer. A place where agents write for agents. They include the details needed to resume a task later: hashes, branches, commits. You never have to read it." | N | basement; robot stacks dense pages. Hero: the pages. "1" on screen |
+| 3 | "One place for agents to write, one place for humans. That needs to be separate." | C | the floor slab between basement and upstairs draws in. Hero: the slab |
+| 4 | "The human layer. A clean, distilled view that links out to the detailed agent nodes. A dashboard, a Kanban board, a map." | N | upstairs; one board, threads drop through the slab to basement pages. Hero: the board. "2" |
+| 5 | "The curated layer. Agent context and rules the human needs visible. The map, the rules, slowly changing context. The things you maintain carefully and edit to keep accurate." | C + N | a glass case on the stairs between floors: the robot looks up at it before writing, the figure opens it and edits one item. Hero: the case. "3" |
+| 6 | "The janitor. As you iterate and change the system, something has to keep it clean. It catches conflicting rule sets before they spread." | N | two signs in the case point opposite ways; the janitor takes one down. Hero: the janitor. "4" |
+| 7 | "With all four layers you get a strong agentic knowledge base." | N | all four lit, held. Takeaway line, no outro |
+
+~135 words. Status: script agreed pending Chris reading it aloud once.
 
 ### B. Your system needs a janitor
 
@@ -121,9 +134,7 @@ the update pass as the janitor. Not enough of his sentences for a VO yet.
 
 ## Open questions for Chris
 
-1. A: is "LLM wiki" the name he wants to lead with, or "agentic knowledge base"?
 2. B: tell the queue story in his words (beat 3).
 3. C: how rule 1 fits the 9/13 "visible seam" rule.
 4. D: say the answer out loud once; then it has a script.
-5. His own open question from the note: is the curated layer one layer or two?
 6. Order: A first (it builds the set), then B?

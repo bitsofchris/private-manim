@@ -26,6 +26,7 @@ clean").
 | HyperFrames worked examples | `prototypes/hyperframes/` | two silent Shorts with field notes; `stack-styles/`, one beat in ten visual styles plus the house-style control |
 | A whole Short in HyperFrames, and its isometric kit | `videos/009-transformer-short-iso/` | `videos/_shared/web/iso/iso.js` (world, tray, card, slabs, palette), `00_layout/` (the canonical frame), `BRIEF.md` (the beat contract) |
 | The Linear Algebra for AI Engineers series (2D plane look) | `videos/002-linear-algebra-basics/` | `SERIES.md` (arc, checklist, series rules), `EPISODE_PROMPT.md` (one session per episode), the plane kit is shared: `videos/_shared/web/vec/vec.js`, starter `prototypes/hyperframes/vec-plane/` |
+| The Harness Engineering series (what wraps the model, and the research on it) | `videos/012-harness-engineering/` | `SERIES.md` (audience, arc, per-episode question, answer, sources, learn-first step, open decisions) |
 | Audio and assembly tools | `tools/` | tighten, captions, assemble, contact sheets |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
