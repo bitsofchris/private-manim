@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 07_missed: beat 7 of 013 ep02, "Recall is all about what you missed. These are the
+         attacks that got through," Opens on SEAM[6], ends still on SEAM[7]. Hero: the FN cell. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.05" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.05;
+  const MASTER = 29.15;
+  // beat-local = master − MASTER (words.json; onsets checked on the vo_final.wav RMS envelope)
+  const CUE = {
+    recall: 0.21,   /* "Recall"  (29.36, onset 29.35) recall's label pulses up, down before "missed" */
+    missed: 1.23,   /* "missed"  (30.38, onset ~30.32) FN lit, "FN" crossfades to "missed" */
+    these: 2.09,    /* "These"   (31.24, onset 31.21) */
+    attacks: 2.37,  /* "attacks" (31.52) the 10 gold dots left of the threshold ring */
+  };
+  // "through" is at 3.01 local, at the cut, so the rings land on "attacks" and the beat
+  // holds its last 0.33 s still (the brief's ~32.6 master is past this beat's end, 32.20).
+  const HOLD = 2.72;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, SEAM } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const FULL = { num: 1, den: 1, pct: 1 };
+
+  function S(t) {
+    if (t <= 0) return SEAM[6];
+    if (t >= HOLD) return SEAM[7];
+    // one hero at a time: "recall" up on the word, back down before the cell lights
+    const rUp = E.io(seg(t, 0.03, 0.33)), rDn = E.io(seg(t, 0.85, 1.15));
+    const fn = E.io(seg(t, CUE.missed - 0.05, CUE.missed + 0.35));
+    const ring = E.out(seg(t, CUE.attacks - 0.12, CUE.attacks + 0.33));
+    return {
+      ring: { fn: ring },
+      box: { ghost: { tn: 1 }, strike: { tn: 1 }, lit: { fn }, alt: { fn } },
+      bars: { r: { ...FULL, lit: rUp * (1 - rDn) }, p: FULL },
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
