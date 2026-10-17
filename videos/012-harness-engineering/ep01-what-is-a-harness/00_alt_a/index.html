@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Alt A: a harness frame around the model, four modules docked inside -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2;
+  const { seg } = ISO, E = ISO.E();
+  const { PAL, node, line, ink } = CAST;
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const lab = (t, cx, top, col) => ISO.label(root, t, { size: 60, left: cx - 170, top, width: 340, color: col || PAL.ink });
+  // the model: CAST.blob drawn dim, pipes hidden
+  function model(x, y, s) {
+    const b = CAST.blob(svg, { x, y, s });
+    b.pipes.forEach((p) => p.setAttribute("opacity", 0));
+    b.body.setAttribute("stroke", PAL.dim); b.body.setAttribute("fill", PAL.dim); b.body.setAttribute("fill-opacity", 0.12);
+    return b;
+  }
+  function cards(x, y, s, col) {            // a stack of three pages (context)
+    const g = node("g", { transform: `translate(${x} ${y}) scale(${s})` }, svg);
+    [[-24, -24], [-12, -12], [0, 0]].forEach(([dx, dy]) => {
+      node("rect", { x: dx - 60, y: dy - 75, width: 120, height: 150, rx: 10, fill: PAL.panel, stroke: col, "stroke-width": 7 }, g);
+    });
+    [-35, -12, 11, 34].forEach((yy, i) => line(g, -36, yy, i % 2 ? 22 : 36, yy, ink(6, col)));
+    return g;
+  }
+  function term(x, y, s, col) {             // a terminal card (tools)
+    const g = node("g", { transform: `translate(${x} ${y}) scale(${s})` }, svg);
+    node("rect", { x: -80, y: -58, width: 160, height: 116, rx: 12, fill: PAL.panel, stroke: col, "stroke-width": 7 }, g);
+    line(g, -80, -26, 80, -26, ink(5, col));
+    const t = node("text", { x: -50, y: 34, "font-size": 56, "font-weight": 800, fill: col }, g);
+    t.textContent = ">_"; t.style.fontFamily = "monospace";
+    return g;
+  }
+  function drawer(x, y, s, col) {           // a two-drawer cabinet (memory)
+    const g = node("g", { transform: `translate(${x} ${y}) scale(${s})` }, svg);
+    node("rect", { x: -75, y: -65, width: 150, height: 130, rx: 10, fill: PAL.panel, stroke: col, "stroke-width": 7 }, g);
+    line(g, -75, 0, 75, 0, ink(6, col));
+    line(g, -20, -32, 20, -32, ink(7, col)); line(g, -20, 33, 20, 33, ink(7, col));
+    return g;
+  }
+  function circArrow(x, y, r, col, w = 12) { // a circling arrow (loop)
+    const g = node("g", { transform: `translate(${x} ${y})` }, svg);
+    const a1 = -100 * Math.PI / 180, a2 = 220 * Math.PI / 180;
+    const p = (a) => [r * Math.cos(a), r * Math.sin(a)];
+    const [x1, y1] = p(a1), [x2, y2] = p(a2);
+    node("path", Object.assign({ d: `M ${x1} ${y1} A ${r} ${r} 0 1 1 ${x2} ${y2}` }, ink(w, col)), g);
+    const tx = -Math.sin(a2), ty = Math.cos(a2), h = r * 0.42;      // arrowhead along the tangent
+    const wing = (sg) => [x2 - h * tx + sg * h * 0.6 * -ty, y2 - h * ty + sg * h * 0.6 * tx];
+    const [ax, ay] = wing(1), [bx, by] = wing(-1);
+    node("path", Object.assign({ d: `M ${ax} ${ay} L ${x2} ${y2} L ${bx} ${by}` }, ink(w, col)), g);
+    return g;
+  }
+  // A: the harness is a frame around the model; four modules docked inside it.
+  const C = [490, 640];
+  node("rect", { x: 95, y: 280, width: 800, height: 740, rx: 44, fill: "none", stroke: PAL.ink, "stroke-width": 8 }, svg);
+  lab("the harness", 495, 1030, PAL.dim);
+  const spokes = [[490, 470], [690, 640], [490, 820], [300, 640]];
+  spokes.forEach(([x, y]) => line(svg, C[0], C[1], x, y, { stroke: PAL.data, "stroke-width": 14, "stroke-linecap": "round" }));
+  const m = model(C[0], C[1], 0.85);
+  cards(490, 390, 0.75, PAL.hero);  lab("context", 760, 355, PAL.hero);
+  term(790, 640, 0.85, PAL.data);   lab("tools", 790, 715);
+  drawer(490, 890, 0.85, PAL.data); lab("memory", 745, 860);
+  circArrow(215, 640, 62, PAL.data); lab("loop", 215, 715);
+  lab("model", 255, 400, PAL.dim);
+  function render(t) { m.el.setAttribute("transform", `translate(${C[0]} ${C[1]}) scale(${0.85 * (1 + 0.03 * Math.sin(Math.PI * seg(t, 0, 1.2)))})`); }
+
+  ISO.guides(root);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

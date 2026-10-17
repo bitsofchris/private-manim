@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- 00_layout: ep 1's canonical frame. Not in the Short.
-         0–3 s the rig at its ledger place, context named (beats 1–5, 7) ·
-         3–6 s two rigs, same model, two pipes missing (beat 6). -->
+         0–3 s the agent wearing the harness at its ledger place, context named (beats 1–5, 7) ·
+         3–6 s two agents, same model, one missing tools and memory (beat 6). -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="cast/cast.js"></script>
@@ -32,20 +32,17 @@
   const svg = CAST.layer(root);
   const H = RIG.HOME;
   const rig = RIG.make(svg, root);
-  const twin = RIG.make(svg, root, { x: 770, y: 600, s: 0.6, missing: [2, 3], labels: false });
-  const human = RIG.human(svg);
-  const ok = RIG.check(svg, 340, 860), loop = RIG.circling(svg, 770, 860);
+  const twin = RIG.make(svg, root, { x: 760, y: 1010, s: 0.65, missing: [1, 2], labels: false });
+  const ok = RIG.check(svg, 290, 450), loop = RIG.circling(svg, 760, 450);
   ISO.guides(root);
   function render(t) {
     const split = E.io(seg(t, 3, 3.6));
-    RIG.place(rig, ISO.lerp(H.x, 340, split), ISO.lerp(H.y, 600, split), ISO.lerp(H.s, 0.6, split), 1 - split);
+    RIG.place(rig, ISO.lerp(H.x, 290, split), ISO.lerp(H.y, 1010, split), ISO.lerp(H.s, 0.65, split), 1 - split);
     twin.g.setAttribute("opacity", split); ok.el.setAttribute("opacity", split); loop.el.setAttribute("opacity", split);
-    RIG.pipes(rig, [1 - split, 0, 0, 0]);
-    RIG.pipes(twin, [0, 0, split, split]);
-    RIG.flow(rig, Math.min(t, 2.5)); RIG.flow(twin, Math.min(t, 5.5));
+    RIG.parts(rig, [1 - split, 0, 0, 0]);
+    RIG.parts(twin, [0, split, split, 0]);
     RIG.spin(loop, -360 * E.io(seg(t, 3.6, 5.5)));
-    CAST.pose(human, { armR: 22 + 70 * E.io(seg(t, 0.2, 0.9)), tilt: 8 });
-    CAST.face(human, t < 3 ? "smile" : "flat");
+    CAST.blink(rig.agent, seg(t, 1.0, 1.1) > 0 && seg(t, 1.0, 1.1) < 1 ? 1 : 0);
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
