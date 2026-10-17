@@ -62,6 +62,33 @@ class PlanCuts(unittest.TestCase):
         self.assertGreaterEqual(b.old_start, a.old_end)
 
 
+class PadNeverReentersARemoval(unittest.TestCase):
+    """013 ep01: --remove 16.50-17.62 inside a phrase came back as "It flies and catches"."""
+
+    def test_pad_stops_at_removal_edges(self):
+        lo, hi = tv.pad_limits(1.0, 2.0, [(0.95, 0.98), (2.03, 3.0)])
+        self.assertAlmostEqual(lo, 0.98)
+        self.assertAlmostEqual(hi, 2.03)
+
+    def test_full_pad_when_no_removal_is_near(self):
+        lo, hi = tv.pad_limits(1.0, 2.0, [(5.0, 6.0)])
+        self.assertAlmostEqual(lo, 1.0 - tv.PAD)
+        self.assertAlmostEqual(hi, 2.0 + tv.PAD)
+
+    def test_mid_phrase_cut_stays_cut(self):
+        removes = [(1.5, 2.5)]
+        speech = tv.apply_removals([(1.0, 3.0)], removes)
+        a, b = tv.plan_cuts(speech, max_gap=0.4, total=10.0, removes=removes)
+        self.assertAlmostEqual(a.old_end, 1.5)
+        self.assertAlmostEqual(b.old_start, 2.5)
+
+
+class Level(unittest.TestCase):
+    def test_gain_to_target(self):
+        self.assertAlmostEqual(tv.level_gain(-15.9, -14.0), 1.9)
+        self.assertAlmostEqual(tv.level_gain(-12.5, -14.0), -1.5)
+
+
 class Remap(unittest.TestCase):
     def setUp(self):
         self.pieces = tv.plan_cuts([(1.0, 2.0), (5.0, 6.0)], max_gap=0.4, total=10.0)
