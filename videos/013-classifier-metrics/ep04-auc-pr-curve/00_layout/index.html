@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout: the canonical frame and the four looks of ep04. Not in the Short.
+         0–1.5 s frame 0 (ROC, area) · 1.5–3 s the 0.55 point (beat 4) · 3–4.5 s mid-morph · 4.5–6 s PR (beat 7) · 6–7.5 s code (beat 8). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.5;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const K = SC.mount(root), SEAM = SC.SEAM;
+  const MID = Object.assign({}, SEAM[5], { m: 0.5, corner: 0, curve: { hero: 1 },
+    names: { aText: 1, aMove: 0.5, bText: 1, bMove: 0.5 } });
+  function S(t) {
+    if (t < 1.5) return SEAM[0];
+    if (t < 3) return SEAM[4];
+    if (t < 4.5) return MID;
+    if (t < 6) return SEAM[7];
+    return SEAM[8];
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
