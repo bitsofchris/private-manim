@@ -122,8 +122,11 @@ The `beats.json` row for the beat: `{"clip": "media/hf/NN_beat.mp4", "end": BEAT
 - 1080 × 1920 at 30 fps. `data-duration` is `BEAT_SECONDS` to the
   millisecond; the render rounds up to whole frames (4.37 s → 132 frames
   = 4.40 s) and `assemble.py` trims to `end`.
-- Frame 0 has the beat's content on screen and something already moving.
-  Moving means something from the previous beat's last frame carrying on,
+- Frame 0 has the beat's content on screen. In the hook beat something is
+  already moving; a later beat moves only what its VO names
+  (`agents/animation-rules.md` rule 1) and may hold still until its first
+  cue (012 ep03). Whatever moves at a cut is something from the previous
+  beat's last frame carrying on,
   or a new element growing in from nothing over ~0.2 s, never a new
   element at full size: 012 ep01's loop dot appeared whole at frame 0 and
   broke the cut (222/255) until it grew in.
@@ -184,9 +187,10 @@ and `videos/009-transformer-short-iso/`.
 - **`window.__timelines` registered inside a shared script** fails the
   static lint (`missing_timeline_registry`). The literal
   `window.__timelines["main"] = ...` must be in the beat's own `index.html`.
-- **A beat drawn only on a canvas** fails with `sweep_static` ("Timeline
-  did not advance under seek"): the audit fingerprints DOM geometry and
-  opacity, not pixels. Give it one honest DOM change (a label that swells
+- **A beat drawn only on a canvas, or one where only SVG colours change,**
+  fails with `sweep_static` ("Timeline did not advance under seek"): the
+  audit fingerprints DOM geometry and opacity, not pixels or colours (012
+  ep03 beat 6). Give it one honest DOM change (a label that swells
   when its part is named).
 - **Canvas text is invisible to `check`** (contrast reports 0/0). Text that
   must be read is DOM text; if it has to be canvas, judge it on the sheet.
@@ -215,7 +219,8 @@ and `videos/009-transformer-short-iso/`.
   cause not confirmed).
 - **Layout budget:** Inter ExtraBold at 60 px is about 140 px per `+0.4`.
   Count rows and widths before drawing; nine numbers plus three words is
-  already a 546 x 258 px card.
+  already a 546 x 258 px card. Monospace at 60 px fits about 22 characters
+  across the safe width (012 ep04 shortened `loader = DataLoader(ds)`).
 
 ## One driver, and a shared kit when a video has one look
 
@@ -230,6 +235,12 @@ script in the video folder and link it into each beat as `vendor` is linked
 ends on, which is what lets beats be built in parallel and still cut
 cleanly. Beat agents do not edit the kit; they write local helpers and name
 them in the report.
+
+Put the storyboard's seam-states table in the kit as data (`SEAM`, plus
+`START` for the first frame), and have each beat draw its first and last
+frame from it, so a cut matches by construction: 013's `SC.SEAM`, 012
+ep02's world kit and ep04's `DESK.SEAM`. A beat that only reads the table
+in prose rebuilds its neighbour's state by hand and drifts.
 
 ## Review
 

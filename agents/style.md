@@ -46,7 +46,7 @@ Subclass `BocShortScene` (1080x1920 @ 30 fps, frame 9 x 16 units, 1 unit = 120 p
 
 Rules that are specific to Shorts:
 
-- Something is on screen at frame 0 and something is moving by frame 1. No title card, no empty dark opener.
+- The Short's frame 0 (the hook beat): something is on screen and something is moving by frame 1. No title card, no empty dark opener. Later beats follow `agents/animation-rules.md` rule 1: only what the VO names moves, and a beat may hold still until its first cue (012 ep03).
 - Readable text has one floor per engine, both passed on a phone: Manim, nothing smaller than `SHORT_LABEL_SCALE` (~1/20 of frame height, ~96 px line height); HyperFrames, 60 px font-size, weight 800 (`agents/beat-brief-hyperframes.md`, "Layout, in pixels").
 - One caption at a time, 2 to 4 words, always in the band. Burned-in VO captions from `tools/assemble.py` use the same band, so a beat uses scene captions or VO captions, not both.
 

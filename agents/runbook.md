@@ -268,6 +268,10 @@ tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
    A cut inside a phrase: put its edges at the envelope dips around the
    words, not at the recognizer's word times (013 ep01: "flags" started
    30 ms before its WhisperKit time, and "here's" lost its "h" at 20 ms).
+   End the Short, and every kept piece, where the sentence ends in the
+   take: check the next word in the master transcript. 012 ep03 stopped at
+   "knowledge base" where the take went on "for research…"; the voice
+   never fell and Chris heard it as cut off.
 4. **Verify by re-transcribing `vo_final.wav`** with Parakeet
    (`-o transcript_final_text.txt`). Fragments show up as odd words
    ("'cause we then", "with work", "or that"). Nudge the boundary 50–200 ms

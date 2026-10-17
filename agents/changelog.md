@@ -5,6 +5,9 @@ that forced it. Newest first.
 
 ## 2026-10-17
 
+- Update pass from 012 eps 2–4 (useful lessons only): frame 0 moves in the hook beat; later beats move only what the VO names and may hold still until the first cue (`agents/style.md` Shorts rules, HyperFrames brief, `agents/animation-rules.md` rule 1 "in practice"; Chris, ep03: the agents writing in the basement through every beat); one visual action ≤ ~6–8 s (rule 3; Chris, ep04: a 13 s pile); end every kept piece where the take's sentence ends (runbook step 5, `agents/series.md` split; Chris, ep03: "knowledge base" sounded cut off); `sweep_static` also fails colour-only beats, monospace fits ~22 characters at 60 px, and seam states live in the kit as data (`SEAM` / `START`, third use: 013, ep02, ep04) (HyperFrames brief). (012 eps 2–4)
+- `CAST.hand` follows `lean` (the upper body rotates about the hip); test added. (012 ep04: a pencil floated off a leaning hand)
+- 012 `SERIES.md`: all four episodes ticked shipped (10/17), day-10 and day-30 read dates. (012)
 - `tools/captions_from_transcript.py`: a caption never crosses a sentence end (. ? !), and words.json segments follow file order, not their index. Tests added. (012 ep01: "last error. Tools are"; a hand-split segment's captions sorted to the end)
 - New `tools/fix_words.py` (`--join`, `--sub`, `--break-after`, `WORD@SECONDS`) for words.json spellings and caption breaks, and `tools/beat_cuts.py` (cuts mid-pause before each beat's first word, ≥ 80 ms lead → `beats.json` + the final beat table). Runbook step 5 and tools table; tests `tests/test_fix_words.py`, `tests/test_beat_cuts.py`. Python tools are executable. (012 ep01: both were ad hoc Python; beat_cuts reproduces its beats.json)
 - `tools/review_frames.sh`: the last tile is always the final frame; `--at T1,T2` adds tiles at cue times. Runbook step 8, both beat briefs. (012 ep01: every beat agent pulled these by hand)

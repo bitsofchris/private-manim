@@ -10,10 +10,12 @@
 
 1. **Animate a change only when the narration is naming that change right now. If the idea isn't changing, nothing moves.**
    *Why:* Grant: "Every movement on the screen should be deliberate, with an identifiable purpose" (3b1b About). Tversky's congruence principle says the display's structure should match the concept's structure.
+   *In practice:* no ambient motion on parts the VO isn't about. 012 ep03's agents kept writing in the basement through every beat, and Chris asked for only the discussed part to move.
 2. **Open on a concrete example, such as one neuron or one data point. Do not open on a definition or a general formula. The general form arrives last.**
    *Why:* 3b1b About: "Concrete before abstract" and "Never start with definitions."
 3. **Use motion for what really varies (a parameter sweep, a transform, a gradient step). Show static facts as still frames.**
    *Why:* Tversky et al. (2002) found that animation helps only when change over time is the concept. Otherwise a static graphic does as well.
+   *In practice:* one visual action runs at most ~6–8 s; give the next clause its own image. 012 ep04's pile ran 13 s across three beats and Chris asked for a new beat in the intro.
 4. **Cut every mobject and motion that isn't the point: no decorative flourishes, and no equations or text sliding around for show.**
    *Why:* Mayer's coherence principle is that people learn more when extraneous material is left out. Grant warns against Manim "overuse and abuse" (3b1b About).
 

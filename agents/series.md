@@ -60,7 +60,8 @@ timestamped transcript if there is one.
 2. Find each "Episode N" announcement. An episode runs from the end of
    its announcement's pause to the start of the next announcement, with
    lead and tail silence trimmed. Listen to (or re-transcribe) each
-   boundary: a cut must not clip the first or last word.
+   boundary: a cut must not clip the first or last word, and must not end
+   where the take carries on the sentence (runbook step 5, 3).
 3. Cut each one into its folder, announcement removed:
    `ffmpeg -ss START -to END -i ALL.m4a -ac 1 -c:a aac -b:a 160k epNN-slug/vo_raw.m4a`
 4. Write `epNN-slug/script.md`: the title, the duration, the source cut
