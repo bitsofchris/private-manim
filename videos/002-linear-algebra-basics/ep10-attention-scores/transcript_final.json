@@ -1,0 +1,908 @@
+{
+  "segments" : [
+    {
+      "end" : 5240,
+      "id" : "066C4706-92BF-43DE-80C0-82A806BDA23F",
+      "start" : 1,
+      "text" : "An attention score is just a dot product between one token's query and another token's key.",
+      "words" : [
+        {
+          "end" : 680,
+          "start" : 0,
+          "text" : "An"
+        },
+        {
+          "end" : 960,
+          "start" : 680,
+          "text" : "attention"
+        },
+        {
+          "end" : 1340,
+          "start" : 960,
+          "text" : "score"
+        },
+        {
+          "end" : 1500,
+          "start" : 1340,
+          "text" : "is"
+        },
+        {
+          "end" : 1700,
+          "start" : 1500,
+          "text" : "just"
+        },
+        {
+          "end" : 1900,
+          "start" : 1700,
+          "text" : "a"
+        },
+        {
+          "end" : 2080,
+          "start" : 1900,
+          "text" : "dot"
+        },
+        {
+          "end" : 2400,
+          "start" : 2080,
+          "text" : "product"
+        },
+        {
+          "end" : 2860,
+          "start" : 2400,
+          "text" : "between"
+        },
+        {
+          "end" : 3220,
+          "start" : 2860,
+          "text" : "one"
+        },
+        {
+          "end" : 3580,
+          "start" : 3220,
+          "text" : "token's"
+        },
+        {
+          "end" : 3920,
+          "start" : 3580,
+          "text" : "query"
+        },
+        {
+          "end" : 4200,
+          "start" : 3920,
+          "text" : "and"
+        },
+        {
+          "end" : 4440,
+          "start" : 4200,
+          "text" : "another"
+        },
+        {
+          "end" : 4940,
+          "start" : 4440,
+          "text" : "token's"
+        },
+        {
+          "end" : 5240,
+          "start" : 4940,
+          "text" : "key."
+        }
+      ]
+    },
+    {
+      "end" : 7160,
+      "id" : "582D071D-9000-451F-B1EB-B02D1E97B532",
+      "start" : 5720,
+      "text" : "Every token starts as a vector.",
+      "words" : [
+        {
+          "end" : 5880,
+          "start" : 5720,
+          "text" : "Every"
+        },
+        {
+          "end" : 6140,
+          "start" : 5880,
+          "text" : "token"
+        },
+        {
+          "end" : 6640,
+          "start" : 6140,
+          "text" : "starts"
+        },
+        {
+          "end" : 6780,
+          "start" : 6640,
+          "text" : "as"
+        },
+        {
+          "end" : 6860,
+          "start" : 6780,
+          "text" : "a"
+        },
+        {
+          "end" : 7160,
+          "start" : 6860,
+          "text" : "vector."
+        }
+      ]
+    },
+    {
+      "end" : 12960,
+      "id" : "518653BF-E4DD-4A81-9A82-FFA30ED57A6A",
+      "start" : 7660,
+      "text" : "A learned matrix, WQ, moves each one into a query, which is the question this token",
+      "words" : [
+        {
+          "end" : 7780,
+          "start" : 7660,
+          "text" : "A"
+        },
+        {
+          "end" : 7980,
+          "start" : 7780,
+          "text" : "learned"
+        },
+        {
+          "end" : 8420,
+          "start" : 7980,
+          "text" : "matrix,"
+        },
+        {
+          "end" : 9060,
+          "start" : 8620,
+          "text" : "WQ,"
+        },
+        {
+          "end" : 10040,
+          "start" : 9280,
+          "text" : "moves"
+        },
+        {
+          "end" : 10440,
+          "start" : 10040,
+          "text" : "each"
+        },
+        {
+          "end" : 10780,
+          "start" : 10440,
+          "text" : "one"
+        },
+        {
+          "end" : 10980,
+          "start" : 10780,
+          "text" : "into"
+        },
+        {
+          "end" : 11240,
+          "start" : 10980,
+          "text" : "a"
+        },
+        {
+          "end" : 11500,
+          "start" : 11240,
+          "text" : "query,"
+        },
+        {
+          "end" : 12080,
+          "start" : 11930,
+          "text" : "which"
+        },
+        {
+          "end" : 12160,
+          "start" : 12080,
+          "text" : "is"
+        },
+        {
+          "end" : 12300,
+          "start" : 12160,
+          "text" : "the"
+        },
+        {
+          "end" : 12580,
+          "start" : 12300,
+          "text" : "question"
+        },
+        {
+          "end" : 12760,
+          "start" : 12580,
+          "text" : "this"
+        },
+        {
+          "end" : 12960,
+          "start" : 12760,
+          "text" : "token"
+        }
+      ]
+    },
+    {
+      "end" : 13380,
+      "id" : "5FC0D252-7F93-4A40-9001-169056EF24EE",
+      "start" : 13060,
+      "text" : "asks.",
+      "words" : [
+        {
+          "end" : 13380,
+          "start" : 13060,
+          "text" : "asks."
+        }
+      ]
+    },
+    {
+      "end" : 17400,
+      "id" : "2503EFEA-ECC3-42B9-941A-815845B5BD04",
+      "start" : 13960,
+      "text" : "Another matrix, WK, moves each one into a key.",
+      "words" : [
+        {
+          "end" : 14180,
+          "start" : 13960,
+          "text" : "Another"
+        },
+        {
+          "end" : 14640,
+          "start" : 14180,
+          "text" : "matrix,"
+        },
+        {
+          "end" : 15340,
+          "start" : 14940,
+          "text" : "WK,"
+        },
+        {
+          "end" : 16080,
+          "start" : 15880,
+          "text" : "moves"
+        },
+        {
+          "end" : 16540,
+          "start" : 16080,
+          "text" : "each"
+        },
+        {
+          "end" : 16800,
+          "start" : 16540,
+          "text" : "one"
+        },
+        {
+          "end" : 16960,
+          "start" : 16800,
+          "text" : "into"
+        },
+        {
+          "end" : 17200,
+          "start" : 16960,
+          "text" : "a"
+        },
+        {
+          "end" : 17400,
+          "start" : 17200,
+          "text" : "key."
+        }
+      ]
+    },
+    {
+      "end" : 20120,
+      "id" : "9E28325E-9B41-4D14-B666-8F35E97F9DDF",
+      "start" : 17920,
+      "text" : "What question can this token help answer?",
+      "words" : [
+        {
+          "end" : 18020,
+          "start" : 17920,
+          "text" : "What"
+        },
+        {
+          "end" : 18600,
+          "start" : 18020,
+          "text" : "question"
+        },
+        {
+          "end" : 19200,
+          "start" : 18600,
+          "text" : "can"
+        },
+        {
+          "end" : 19380,
+          "start" : 19200,
+          "text" : "this"
+        },
+        {
+          "end" : 19620,
+          "start" : 19380,
+          "text" : "token"
+        },
+        {
+          "end" : 19840,
+          "start" : 19620,
+          "text" : "help"
+        },
+        {
+          "end" : 20120,
+          "start" : 19840,
+          "text" : "answer?"
+        }
+      ]
+    },
+    {
+      "end" : 25040,
+      "id" : "8F8D75C8-1318-4FB2-BF41-065E9D127669",
+      "start" : 20590,
+      "text" : "To score one pair, you take one token's query and another token's key and do the dot product.",
+      "words" : [
+        {
+          "end" : 20780,
+          "start" : 20590,
+          "text" : "To"
+        },
+        {
+          "end" : 21040,
+          "start" : 20780,
+          "text" : "score"
+        },
+        {
+          "end" : 21200,
+          "start" : 21040,
+          "text" : "one"
+        },
+        {
+          "end" : 21440,
+          "start" : 21200,
+          "text" : "pair,"
+        },
+        {
+          "end" : 21560,
+          "start" : 21440,
+          "text" : "you"
+        },
+        {
+          "end" : 21780,
+          "start" : 21560,
+          "text" : "take"
+        },
+        {
+          "end" : 22100,
+          "start" : 21780,
+          "text" : "one"
+        },
+        {
+          "end" : 22440,
+          "start" : 22100,
+          "text" : "token's"
+        },
+        {
+          "end" : 22720,
+          "start" : 22440,
+          "text" : "query"
+        },
+        {
+          "end" : 22900,
+          "start" : 22720,
+          "text" : "and"
+        },
+        {
+          "end" : 23160,
+          "start" : 22900,
+          "text" : "another"
+        },
+        {
+          "end" : 23520,
+          "start" : 23160,
+          "text" : "token's"
+        },
+        {
+          "end" : 23840,
+          "start" : 23520,
+          "text" : "key"
+        },
+        {
+          "end" : 24280,
+          "start" : 23840,
+          "text" : "and"
+        },
+        {
+          "end" : 24400,
+          "start" : 24280,
+          "text" : "do"
+        },
+        {
+          "end" : 24540,
+          "start" : 24400,
+          "text" : "the"
+        },
+        {
+          "end" : 24660,
+          "start" : 24540,
+          "text" : "dot"
+        },
+        {
+          "end" : 25040,
+          "start" : 24660,
+          "text" : "product."
+        }
+      ]
+    },
+    {
+      "end" : 26740,
+      "id" : "C7A9EA7E-0591-4F42-BD3B-4D09792BBA5A",
+      "start" : 25500,
+      "text" : "High value here means they're aligned.",
+      "words" : [
+        {
+          "end" : 25600,
+          "start" : 25500,
+          "text" : "High"
+        },
+        {
+          "end" : 25880,
+          "start" : 25600,
+          "text" : "value"
+        },
+        {
+          "end" : 26080,
+          "start" : 25880,
+          "text" : "here"
+        },
+        {
+          "end" : 26280,
+          "start" : 26080,
+          "text" : "means"
+        },
+        {
+          "end" : 26440,
+          "start" : 26280,
+          "text" : "they're"
+        },
+        {
+          "end" : 26740,
+          "start" : 26440,
+          "text" : "aligned."
+        }
+      ]
+    },
+    {
+      "end" : 28760,
+      "id" : "111ADFA0-6913-4776-9235-F8C24067C49C",
+      "start" : 26820,
+      "text" : "This token has what the other one is looking for.",
+      "words" : [
+        {
+          "end" : 26940,
+          "start" : 26820,
+          "text" : "This"
+        },
+        {
+          "end" : 27240,
+          "start" : 26940,
+          "text" : "token"
+        },
+        {
+          "end" : 27640,
+          "start" : 27240,
+          "text" : "has"
+        },
+        {
+          "end" : 27760,
+          "start" : 27640,
+          "text" : "what"
+        },
+        {
+          "end" : 27980,
+          "start" : 27760,
+          "text" : "the"
+        },
+        {
+          "end" : 28100,
+          "start" : 27980,
+          "text" : "other"
+        },
+        {
+          "end" : 28200,
+          "start" : 28100,
+          "text" : "one"
+        },
+        {
+          "end" : 28320,
+          "start" : 28200,
+          "text" : "is"
+        },
+        {
+          "end" : 28480,
+          "start" : 28320,
+          "text" : "looking"
+        },
+        {
+          "end" : 28760,
+          "start" : 28480,
+          "text" : "for."
+        }
+      ]
+    },
+    {
+      "end" : 31700,
+      "id" : "B4B74B94-1248-4820-B2AC-2B0B6310B3EA",
+      "start" : 29300,
+      "text" : "Q_at_k transpose does every pair at once.",
+      "words" : [
+        {
+          "end" : 29360,
+          "start" : 29300,
+          "text" : "Q"
+        },
+        {
+          "end" : 29460,
+          "start" : 29360,
+          "text" : "_at"
+        },
+        {
+          "end" : 29660,
+          "start" : 29460,
+          "text" : "_k"
+        },
+        {
+          "end" : 30080,
+          "start" : 29660,
+          "text" : "transpose"
+        },
+        {
+          "end" : 30660,
+          "start" : 30080,
+          "text" : "does"
+        },
+        {
+          "end" : 31080,
+          "start" : 30660,
+          "text" : "every"
+        },
+        {
+          "end" : 31320,
+          "start" : 31080,
+          "text" : "pair"
+        },
+        {
+          "end" : 31440,
+          "start" : 31320,
+          "text" : "at"
+        },
+        {
+          "end" : 31700,
+          "start" : 31440,
+          "text" : "once."
+        }
+      ]
+    },
+    {
+      "end" : 34200,
+      "id" : "F375D9A8-F213-40D3-B4A4-BD7C8475386E",
+      "start" : 32259,
+      "text" : "Three tokens, a 3x3 grid of scores.",
+      "words" : [
+        {
+          "end" : 32340,
+          "start" : 32259,
+          "text" : "Three"
+        },
+        {
+          "end" : 32700,
+          "start" : 32340,
+          "text" : "tokens,"
+        },
+        {
+          "end" : 33060,
+          "start" : 32980,
+          "text" : "a"
+        },
+        {
+          "end" : 33520,
+          "start" : 33060,
+          "text" : "3x3"
+        },
+        {
+          "end" : 33720,
+          "start" : 33520,
+          "text" : "grid"
+        },
+        {
+          "end" : 33840,
+          "start" : 33720,
+          "text" : "of"
+        },
+        {
+          "end" : 34200,
+          "start" : 33840,
+          "text" : "scores."
+        }
+      ]
+    },
+    {
+      "end" : 39180,
+      "id" : "791D9D8F-4A55-4ACA-B82A-F99D0CFC498B",
+      "start" : 34780,
+      "text" : "Then divide by the square root of the head size, and softmax turns each row into weights",
+      "words" : [
+        {
+          "end" : 34920,
+          "start" : 34780,
+          "text" : "Then"
+        },
+        {
+          "end" : 35180,
+          "start" : 34920,
+          "text" : "divide"
+        },
+        {
+          "end" : 35280,
+          "start" : 35180,
+          "text" : "by"
+        },
+        {
+          "end" : 35440,
+          "start" : 35280,
+          "text" : "the"
+        },
+        {
+          "end" : 35640,
+          "start" : 35440,
+          "text" : "square"
+        },
+        {
+          "end" : 36020,
+          "start" : 35640,
+          "text" : "root"
+        },
+        {
+          "end" : 36300,
+          "start" : 36020,
+          "text" : "of"
+        },
+        {
+          "end" : 36440,
+          "start" : 36300,
+          "text" : "the"
+        },
+        {
+          "end" : 36580,
+          "start" : 36440,
+          "text" : "head"
+        },
+        {
+          "end" : 36940,
+          "start" : 36580,
+          "text" : "size,"
+        },
+        {
+          "end" : 37200,
+          "start" : 37060,
+          "text" : "and"
+        },
+        {
+          "end" : 37800,
+          "start" : 37200,
+          "text" : "softmax"
+        },
+        {
+          "end" : 38020,
+          "start" : 37800,
+          "text" : "turns"
+        },
+        {
+          "end" : 38340,
+          "start" : 38020,
+          "text" : "each"
+        },
+        {
+          "end" : 38580,
+          "start" : 38340,
+          "text" : "row"
+        },
+        {
+          "end" : 38820,
+          "start" : 38580,
+          "text" : "into"
+        },
+        {
+          "end" : 39180,
+          "start" : 38820,
+          "text" : "weights"
+        }
+      ]
+    },
+    {
+      "end" : 40080,
+      "id" : "6464EE33-4E6C-4817-A5C5-AEF0B5C13670",
+      "start" : 39280,
+      "text" : "that add up to 1.",
+      "words" : [
+        {
+          "end" : 39360,
+          "start" : 39280,
+          "text" : "that"
+        },
+        {
+          "end" : 39580,
+          "start" : 39360,
+          "text" : "add"
+        },
+        {
+          "end" : 39700,
+          "start" : 39580,
+          "text" : "up"
+        },
+        {
+          "end" : 39840,
+          "start" : 39700,
+          "text" : "to"
+        },
+        {
+          "end" : 40080,
+          "start" : 39840,
+          "text" : "1."
+        }
+      ]
+    },
+    {
+      "end" : 42500,
+      "id" : "1B8439E9-CD72-4ED5-BE75-DAF2E79D0C0F",
+      "start" : 40520,
+      "text" : "Transformers process every position in parallel.",
+      "words" : [
+        {
+          "end" : 41080,
+          "start" : 40520,
+          "text" : "Transformers"
+        },
+        {
+          "end" : 41580,
+          "start" : 41080,
+          "text" : "process"
+        },
+        {
+          "end" : 41740,
+          "start" : 41580,
+          "text" : "every"
+        },
+        {
+          "end" : 42060,
+          "start" : 41740,
+          "text" : "position"
+        },
+        {
+          "end" : 42240,
+          "start" : 42060,
+          "text" : "in"
+        },
+        {
+          "end" : 42500,
+          "start" : 42240,
+          "text" : "parallel."
+        }
+      ]
+    },
+    {
+      "end" : 46200,
+      "id" : "97316ACC-151B-4C2B-A9A3-213E2059D022",
+      "start" : 42800,
+      "text" : "Attention is how tokens decide who to pull information from.",
+      "words" : [
+        {
+          "end" : 43060,
+          "start" : 42800,
+          "text" : "Attention"
+        },
+        {
+          "end" : 43180,
+          "start" : 43060,
+          "text" : "is"
+        },
+        {
+          "end" : 43560,
+          "start" : 43180,
+          "text" : "how"
+        },
+        {
+          "end" : 43940,
+          "start" : 43560,
+          "text" : "tokens"
+        },
+        {
+          "end" : 44360,
+          "start" : 43940,
+          "text" : "decide"
+        },
+        {
+          "end" : 44880,
+          "start" : 44360,
+          "text" : "who"
+        },
+        {
+          "end" : 45080,
+          "start" : 44880,
+          "text" : "to"
+        },
+        {
+          "end" : 45260,
+          "start" : 45080,
+          "text" : "pull"
+        },
+        {
+          "end" : 45760,
+          "start" : 45260,
+          "text" : "information"
+        },
+        {
+          "end" : 46200,
+          "start" : 45760,
+          "text" : "from."
+        }
+      ]
+    },
+    {
+      "end" : 50240,
+      "id" : "1A21E7F8-EFF5-47FB-8703-D64C47B9159D",
+      "start" : 46510,
+      "text" : "And attention scores measure which tokens are aligned under these Lerch projections.",
+      "words" : [
+        {
+          "end" : 46700,
+          "start" : 46510,
+          "text" : "And"
+        },
+        {
+          "end" : 46980,
+          "start" : 46700,
+          "text" : "attention"
+        },
+        {
+          "end" : 47280,
+          "start" : 46980,
+          "text" : "scores"
+        },
+        {
+          "end" : 47860,
+          "start" : 47280,
+          "text" : "measure"
+        },
+        {
+          "end" : 48180,
+          "start" : 47860,
+          "text" : "which"
+        },
+        {
+          "end" : 48500,
+          "start" : 48180,
+          "text" : "tokens"
+        },
+        {
+          "end" : 48640,
+          "start" : 48500,
+          "text" : "are"
+        },
+        {
+          "end" : 49020,
+          "start" : 48640,
+          "text" : "aligned"
+        },
+        {
+          "end" : 49400,
+          "start" : 49020,
+          "text" : "under"
+        },
+        {
+          "end" : 49620,
+          "start" : 49400,
+          "text" : "these"
+        },
+        {
+          "end" : 49780,
+          "start" : 49620,
+          "text" : "Lerch"
+        },
+        {
+          "end" : 50240,
+          "start" : 49780,
+          "text" : "projections."
+        }
+      ]
+    }
+  ],
+  "text" : "An attention score is just a dot product between one token's query and another token's key.\nEvery token starts as a vector.\nA learned matrix, WQ, moves each one into a query, which is the question this token\nasks.\nAnother matrix, WK, moves each one into a key.\nWhat question can this token help answer?\nTo score one pair, you take one token's query and another token's key and do the dot product.\nHigh value here means they're aligned.\nThis token has what the other one is looking for.\nQ_at_k transpose does every pair at once.\nThree tokens, a 3x3 grid of scores.\nThen divide by the square root of the head size, and softmax turns each row into weights\nthat add up to 1.\nTransformers process every position in parallel.\nAttention is how tokens decide who to pull information from.\nAnd attention scores measure which tokens are aligned under these Lerch projections."
+}

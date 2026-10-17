@@ -1,0 +1,872 @@
+{
+  "segments" : [
+    {
+      "end" : 4820,
+      "id" : "DEA4F7C5-2B7A-4273-ADEE-BA45553C8D4A",
+      "start" : 1,
+      "text" : "Without activation functions, a 100-layer neural network is just one matrix.",
+      "words" : [
+        {
+          "end" : 820,
+          "start" : 0,
+          "text" : "Without"
+        },
+        {
+          "end" : 1480,
+          "start" : 820,
+          "text" : "activation"
+        },
+        {
+          "end" : 1980,
+          "start" : 1480,
+          "text" : "functions,"
+        },
+        {
+          "end" : 2320,
+          "start" : 2120,
+          "text" : "a"
+        },
+        {
+          "end" : 2720,
+          "start" : 2320,
+          "text" : "100"
+        },
+        {
+          "end" : 3020,
+          "start" : 2720,
+          "text" : "-layer"
+        },
+        {
+          "end" : 3240,
+          "start" : 3020,
+          "text" : "neural"
+        },
+        {
+          "end" : 3480,
+          "start" : 3240,
+          "text" : "network"
+        },
+        {
+          "end" : 3760,
+          "start" : 3480,
+          "text" : "is"
+        },
+        {
+          "end" : 4120,
+          "start" : 3760,
+          "text" : "just"
+        },
+        {
+          "end" : 4360,
+          "start" : 4120,
+          "text" : "one"
+        },
+        {
+          "end" : 4820,
+          "start" : 4360,
+          "text" : "matrix."
+        }
+      ]
+    },
+    {
+      "end" : 5700,
+      "id" : "CD3BE209-ECC4-4B67-B565-76040FFEFC08",
+      "start" : 5380,
+      "text" : "Here's why.",
+      "words" : [
+        {
+          "end" : 5460,
+          "start" : 5380,
+          "text" : "Here's"
+        },
+        {
+          "end" : 5700,
+          "start" : 5460,
+          "text" : "why."
+        }
+      ]
+    },
+    {
+      "end" : 10140,
+      "id" : "FD925571-C943-4AEA-BDF3-1DE46E791A5B",
+      "start" : 6280,
+      "text" : "Matrices are functions, and multiplying matrices combines those functions.",
+      "words" : [
+        {
+          "end" : 6460,
+          "start" : 6280,
+          "text" : "Matrices"
+        },
+        {
+          "end" : 6800,
+          "start" : 6460,
+          "text" : "are"
+        },
+        {
+          "end" : 7340,
+          "start" : 6800,
+          "text" : "functions,"
+        },
+        {
+          "end" : 7780,
+          "start" : 7700,
+          "text" : "and"
+        },
+        {
+          "end" : 8380,
+          "start" : 7780,
+          "text" : "multiplying"
+        },
+        {
+          "end" : 8820,
+          "start" : 8380,
+          "text" : "matrices"
+        },
+        {
+          "end" : 9600,
+          "start" : 8820,
+          "text" : "combines"
+        },
+        {
+          "end" : 9820,
+          "start" : 9600,
+          "text" : "those"
+        },
+        {
+          "end" : 10140,
+          "start" : 9820,
+          "text" : "functions."
+        }
+      ]
+    },
+    {
+      "end" : 16580,
+      "id" : "E8E215F7-0E99-4F7D-9BBF-62212C598F07",
+      "start" : 10640,
+      "text" : "So if you stack two layers, x at w1, then at w2, the order matters, but it's associative.",
+      "words" : [
+        {
+          "end" : 10840,
+          "start" : 10640,
+          "text" : "So"
+        },
+        {
+          "end" : 10900,
+          "start" : 10840,
+          "text" : "if"
+        },
+        {
+          "end" : 10920,
+          "start" : 10900,
+          "text" : "you"
+        },
+        {
+          "end" : 11260,
+          "start" : 10920,
+          "text" : "stack"
+        },
+        {
+          "end" : 11500,
+          "start" : 11260,
+          "text" : "two"
+        },
+        {
+          "end" : 11900,
+          "start" : 11500,
+          "text" : "layers,"
+        },
+        {
+          "end" : 12240,
+          "start" : 12140,
+          "text" : "x"
+        },
+        {
+          "end" : 12380,
+          "start" : 12240,
+          "text" : "at"
+        },
+        {
+          "end" : 12900,
+          "start" : 12380,
+          "text" : "w1,"
+        },
+        {
+          "end" : 13540,
+          "start" : 13400,
+          "text" : "then"
+        },
+        {
+          "end" : 13800,
+          "start" : 13540,
+          "text" : "at"
+        },
+        {
+          "end" : 14400,
+          "start" : 13800,
+          "text" : "w2,"
+        },
+        {
+          "end" : 14980,
+          "start" : 14860,
+          "text" : "the"
+        },
+        {
+          "end" : 15160,
+          "start" : 14980,
+          "text" : "order"
+        },
+        {
+          "end" : 15480,
+          "start" : 15160,
+          "text" : "matters,"
+        },
+        {
+          "end" : 15740,
+          "start" : 15640,
+          "text" : "but"
+        },
+        {
+          "end" : 15900,
+          "start" : 15740,
+          "text" : "it's"
+        },
+        {
+          "end" : 16580,
+          "start" : 15900,
+          "text" : "associative."
+        }
+      ]
+    },
+    {
+      "end" : 20080,
+      "id" : "53F7BC2B-E213-4614-A744-075E910F0A21",
+      "start" : 17080,
+      "text" : "So that's the same as x at w1 times w2.",
+      "words" : [
+        {
+          "end" : 17180,
+          "start" : 17080,
+          "text" : "So"
+        },
+        {
+          "end" : 17360,
+          "start" : 17180,
+          "text" : "that's"
+        },
+        {
+          "end" : 17540,
+          "start" : 17360,
+          "text" : "the"
+        },
+        {
+          "end" : 17800,
+          "start" : 17540,
+          "text" : "same"
+        },
+        {
+          "end" : 17940,
+          "start" : 17800,
+          "text" : "as"
+        },
+        {
+          "end" : 18200,
+          "start" : 17940,
+          "text" : "x"
+        },
+        {
+          "end" : 18300,
+          "start" : 18200,
+          "text" : "at"
+        },
+        {
+          "end" : 18880,
+          "start" : 18300,
+          "text" : "w1"
+        },
+        {
+          "end" : 19500,
+          "start" : 18880,
+          "text" : "times"
+        },
+        {
+          "end" : 20080,
+          "start" : 19500,
+          "text" : "w2."
+        }
+      ]
+    },
+    {
+      "end" : 22760,
+      "id" : "3CC836BB-F786-49B4-ACE4-37FF7D80CD7C",
+      "start" : 20540,
+      "text" : "And w1 times w2 is just one matrix.",
+      "words" : [
+        {
+          "end" : 20620,
+          "start" : 20540,
+          "text" : "And"
+        },
+        {
+          "end" : 21000,
+          "start" : 20620,
+          "text" : "w1"
+        },
+        {
+          "end" : 21240,
+          "start" : 21000,
+          "text" : "times"
+        },
+        {
+          "end" : 21680,
+          "start" : 21240,
+          "text" : "w2"
+        },
+        {
+          "end" : 21840,
+          "start" : 21680,
+          "text" : "is"
+        },
+        {
+          "end" : 22040,
+          "start" : 21840,
+          "text" : "just"
+        },
+        {
+          "end" : 22280,
+          "start" : 22040,
+          "text" : "one"
+        },
+        {
+          "end" : 22760,
+          "start" : 22280,
+          "text" : "matrix."
+        }
+      ]
+    },
+    {
+      "end" : 27700,
+      "id" : "4CAA9108-E422-4AAC-80D5-9E69FB3116F1",
+      "start" : 23300,
+      "text" : "So two linear layers, or 200, collapse into a single linear transformation.",
+      "words" : [
+        {
+          "end" : 23380,
+          "start" : 23300,
+          "text" : "So"
+        },
+        {
+          "end" : 23560,
+          "start" : 23380,
+          "text" : "two"
+        },
+        {
+          "end" : 23920,
+          "start" : 23560,
+          "text" : "linear"
+        },
+        {
+          "end" : 24300,
+          "start" : 23920,
+          "text" : "layers,"
+        },
+        {
+          "end" : 24500,
+          "start" : 24400,
+          "text" : "or"
+        },
+        {
+          "end" : 24960,
+          "start" : 24500,
+          "text" : "200,"
+        },
+        {
+          "end" : 25720,
+          "start" : 25160,
+          "text" : "collapse"
+        },
+        {
+          "end" : 25860,
+          "start" : 25720,
+          "text" : "into"
+        },
+        {
+          "end" : 26060,
+          "start" : 25860,
+          "text" : "a"
+        },
+        {
+          "end" : 26540,
+          "start" : 26060,
+          "text" : "single"
+        },
+        {
+          "end" : 27060,
+          "start" : 26540,
+          "text" : "linear"
+        },
+        {
+          "end" : 27700,
+          "start" : 27060,
+          "text" : "transformation."
+        }
+      ]
+    },
+    {
+      "end" : 29500,
+      "id" : "54EFF805-F19C-49ED-9446-F8B513BF8623",
+      "start" : 28000,
+      "text" : "The depth here doesn't buy you anything.",
+      "words" : [
+        {
+          "end" : 28360,
+          "start" : 28000,
+          "text" : "The"
+        },
+        {
+          "end" : 28640,
+          "start" : 28360,
+          "text" : "depth"
+        },
+        {
+          "end" : 28760,
+          "start" : 28640,
+          "text" : "here"
+        },
+        {
+          "end" : 28980,
+          "start" : 28760,
+          "text" : "doesn't"
+        },
+        {
+          "end" : 29220,
+          "start" : 28980,
+          "text" : "buy"
+        },
+        {
+          "end" : 29300,
+          "start" : 29220,
+          "text" : "you"
+        },
+        {
+          "end" : 29500,
+          "start" : 29300,
+          "text" : "anything."
+        }
+      ]
+    },
+    {
+      "end" : 33200,
+      "id" : "50DD0D7F-AEAB-411A-8AF7-02BC01DD9C12",
+      "start" : 30000,
+      "text" : "Now a linear map keeps the origin fixed and the grid line straight.",
+      "words" : [
+        {
+          "end" : 30100,
+          "start" : 30000,
+          "text" : "Now"
+        },
+        {
+          "end" : 30200,
+          "start" : 30100,
+          "text" : "a"
+        },
+        {
+          "end" : 30420,
+          "start" : 30200,
+          "text" : "linear"
+        },
+        {
+          "end" : 30700,
+          "start" : 30420,
+          "text" : "map"
+        },
+        {
+          "end" : 30960,
+          "start" : 30700,
+          "text" : "keeps"
+        },
+        {
+          "end" : 31120,
+          "start" : 30960,
+          "text" : "the"
+        },
+        {
+          "end" : 31420,
+          "start" : 31120,
+          "text" : "origin"
+        },
+        {
+          "end" : 31940,
+          "start" : 31420,
+          "text" : "fixed"
+        },
+        {
+          "end" : 32360,
+          "start" : 31940,
+          "text" : "and"
+        },
+        {
+          "end" : 32540,
+          "start" : 32360,
+          "text" : "the"
+        },
+        {
+          "end" : 32660,
+          "start" : 32540,
+          "text" : "grid"
+        },
+        {
+          "end" : 32860,
+          "start" : 32660,
+          "text" : "line"
+        },
+        {
+          "end" : 33200,
+          "start" : 32860,
+          "text" : "straight."
+        }
+      ]
+    },
+    {
+      "end" : 36120,
+      "id" : "C2DD7EFB-03D0-4650-A86E-F8DC3A7B9272",
+      "start" : 33620,
+      "text" : "It can stretch, rotate, and squish, but it can't bend.",
+      "words" : [
+        {
+          "end" : 33780,
+          "start" : 33620,
+          "text" : "It"
+        },
+        {
+          "end" : 33940,
+          "start" : 33780,
+          "text" : "can"
+        },
+        {
+          "end" : 34180,
+          "start" : 33940,
+          "text" : "stretch,"
+        },
+        {
+          "end" : 34520,
+          "start" : 34440,
+          "text" : "rotate,"
+        },
+        {
+          "end" : 34700,
+          "start" : 34600,
+          "text" : "and"
+        },
+        {
+          "end" : 35000,
+          "start" : 34700,
+          "text" : "squish,"
+        },
+        {
+          "end" : 35140,
+          "start" : 35000,
+          "text" : "but"
+        },
+        {
+          "end" : 35260,
+          "start" : 35140,
+          "text" : "it"
+        },
+        {
+          "end" : 35560,
+          "start" : 35260,
+          "text" : "can't"
+        },
+        {
+          "end" : 36120,
+          "start" : 35560,
+          "text" : "bend."
+        }
+      ]
+    },
+    {
+      "end" : 40220,
+      "id" : "0D1541E0-11A5-497B-8895-821042079AA2",
+      "start" : 36480,
+      "text" : "Put a ReLU or a GeLU between the layers, and the collapse stops.",
+      "words" : [
+        {
+          "end" : 36680,
+          "start" : 36480,
+          "text" : "Put"
+        },
+        {
+          "end" : 36820,
+          "start" : 36680,
+          "text" : "a"
+        },
+        {
+          "end" : 37180,
+          "start" : 36820,
+          "text" : "ReLU"
+        },
+        {
+          "end" : 37440,
+          "start" : 37180,
+          "text" : "or"
+        },
+        {
+          "end" : 37560,
+          "start" : 37440,
+          "text" : "a"
+        },
+        {
+          "end" : 37820,
+          "start" : 37560,
+          "text" : "GeLU"
+        },
+        {
+          "end" : 38180,
+          "start" : 37820,
+          "text" : "between"
+        },
+        {
+          "end" : 38360,
+          "start" : 38180,
+          "text" : "the"
+        },
+        {
+          "end" : 38600,
+          "start" : 38360,
+          "text" : "layers,"
+        },
+        {
+          "end" : 39280,
+          "start" : 39200,
+          "text" : "and"
+        },
+        {
+          "end" : 39420,
+          "start" : 39280,
+          "text" : "the"
+        },
+        {
+          "end" : 39740,
+          "start" : 39420,
+          "text" : "collapse"
+        },
+        {
+          "end" : 40220,
+          "start" : 39740,
+          "text" : "stops."
+        }
+      ]
+    },
+    {
+      "end" : 44660,
+      "id" : "F3813DEE-3008-4B16-9A02-87723BCFF565",
+      "start" : 40720,
+      "text" : "Now each layer can bend the path, and stacking actually adds something.",
+      "words" : [
+        {
+          "end" : 41200,
+          "start" : 40720,
+          "text" : "Now"
+        },
+        {
+          "end" : 41460,
+          "start" : 41200,
+          "text" : "each"
+        },
+        {
+          "end" : 41660,
+          "start" : 41460,
+          "text" : "layer"
+        },
+        {
+          "end" : 41860,
+          "start" : 41660,
+          "text" : "can"
+        },
+        {
+          "end" : 42080,
+          "start" : 41860,
+          "text" : "bend"
+        },
+        {
+          "end" : 42180,
+          "start" : 42080,
+          "text" : "the"
+        },
+        {
+          "end" : 42620,
+          "start" : 42180,
+          "text" : "path,"
+        },
+        {
+          "end" : 42960,
+          "start" : 42800,
+          "text" : "and"
+        },
+        {
+          "end" : 43500,
+          "start" : 42960,
+          "text" : "stacking"
+        },
+        {
+          "end" : 44040,
+          "start" : 43500,
+          "text" : "actually"
+        },
+        {
+          "end" : 44320,
+          "start" : 44040,
+          "text" : "adds"
+        },
+        {
+          "end" : 44660,
+          "start" : 44320,
+          "text" : "something."
+        }
+      ]
+    },
+    {
+      "end" : 49720,
+      "id" : "8B4B0CA2-BFFD-443F-945A-F9AAA1C24BCC",
+      "start" : 45040,
+      "text" : "That's why every layer in a model is a matrix multiply followed by some non-linearity.",
+      "words" : [
+        {
+          "end" : 45380,
+          "start" : 45040,
+          "text" : "That's"
+        },
+        {
+          "end" : 45480,
+          "start" : 45380,
+          "text" : "why"
+        },
+        {
+          "end" : 45760,
+          "start" : 45480,
+          "text" : "every"
+        },
+        {
+          "end" : 46040,
+          "start" : 45760,
+          "text" : "layer"
+        },
+        {
+          "end" : 46100,
+          "start" : 46040,
+          "text" : "in"
+        },
+        {
+          "end" : 46240,
+          "start" : 46100,
+          "text" : "a"
+        },
+        {
+          "end" : 46540,
+          "start" : 46240,
+          "text" : "model"
+        },
+        {
+          "end" : 46760,
+          "start" : 46540,
+          "text" : "is"
+        },
+        {
+          "end" : 46940,
+          "start" : 46760,
+          "text" : "a"
+        },
+        {
+          "end" : 47260,
+          "start" : 46940,
+          "text" : "matrix"
+        },
+        {
+          "end" : 47780,
+          "start" : 47260,
+          "text" : "multiply"
+        },
+        {
+          "end" : 48460,
+          "start" : 47780,
+          "text" : "followed"
+        },
+        {
+          "end" : 48680,
+          "start" : 48460,
+          "text" : "by"
+        },
+        {
+          "end" : 48960,
+          "start" : 48680,
+          "text" : "some"
+        },
+        {
+          "end" : 49260,
+          "start" : 48960,
+          "text" : "non"
+        },
+        {
+          "end" : 49720,
+          "start" : 49260,
+          "text" : "-linearity."
+        }
+      ]
+    },
+    {
+      "end" : 52700,
+      "id" : "634EBF8A-D4A7-476F-B71A-591D5B36FA3C",
+      "start" : 50160,
+      "text" : "Without activations, a deep network is just one matrix.",
+      "words" : [
+        {
+          "end" : 50460,
+          "start" : 50160,
+          "text" : "Without"
+        },
+        {
+          "end" : 51020,
+          "start" : 50460,
+          "text" : "activations,"
+        },
+        {
+          "end" : 51240,
+          "start" : 51120,
+          "text" : "a"
+        },
+        {
+          "end" : 51420,
+          "start" : 51240,
+          "text" : "deep"
+        },
+        {
+          "end" : 51660,
+          "start" : 51420,
+          "text" : "network"
+        },
+        {
+          "end" : 51820,
+          "start" : 51660,
+          "text" : "is"
+        },
+        {
+          "end" : 52000,
+          "start" : 51820,
+          "text" : "just"
+        },
+        {
+          "end" : 52220,
+          "start" : 52000,
+          "text" : "one"
+        },
+        {
+          "end" : 52700,
+          "start" : 52220,
+          "text" : "matrix."
+        }
+      ]
+    }
+  ],
+  "text" : "Without activation functions, a 100-layer neural network is just one matrix.\nHere's why.\nMatrices are functions, and multiplying matrices combines those functions.\nSo if you stack two layers, x at w1, then at w2, the order matters, but it's associative.\nSo that's the same as x at w1 times w2.\nAnd w1 times w2 is just one matrix.\nSo two linear layers, or 200, collapse into a single linear transformation.\nThe depth here doesn't buy you anything.\nNow a linear map keeps the origin fixed and the grid line straight.\nIt can stretch, rotate, and squish, but it can't bend.\nPut a ReLU or a GeLU between the layers, and the collapse stops.\nNow each layer can bend the path, and stacking actually adds something.\nThat's why every layer in a model is a matrix multiply followed by some non-linearity.\nWithout activations, a deep network is just one matrix."
+}
