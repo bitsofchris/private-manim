@@ -110,8 +110,8 @@ Raw take 44.85 s, clean (no flubs; the F-beta line was never said).
 Pauses capped at 0.25 s (`--noise=-45dB`), no phrase cuts: **42.9 s.**
 
 After the first watch (Chris, 10/17):
-- **The context line is out.** "It's a prompt injection detector" made the
-  open sound spliced; the frame-0 tag still says it for every viewer.
+- **The context line is out** ("It's a prompt injection detector"). The
+  frame-0 tag still says it for every viewer.
   (A departure from SERIES.md "Context in every episode": noted for the
   update pass.)
 - **Loudness normalization only, no `enhance_vo.sh`.** The take's noise
