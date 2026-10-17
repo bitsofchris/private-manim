@@ -211,9 +211,13 @@
   // Where dot `rank` of `group` sits in its cell: a grid in the cell's lower part.
   function slot(group, rank, G) {
     const c = G[group], n = LEDGER[group];
-    const pad = 16, rx = c.x + pad, ry = c.y + 174, rw = c.w - 2 * pad, rh = Math.max(20, c.h - 174 - pad);
+    // dots sit under the text; a slim cell (beat 6) has no text, so they use all of it;
+    // a tall cell (beat 6's tn) leaves room for the sub line
+    const top = c.h < 230 ? 174 * clamp01((c.h - 80) / 150) : 174 + 70 * clamp01((c.h - 230) / 100);
+    const pad = c.h < 120 ? 10 : 16, rx = c.x + pad, ry = c.y + Math.max(pad, top), rw = c.w - 2 * pad;
+    const rh = Math.max(12, c.y + c.h - pad - ry);
     const big = group === "tp" || group === "fn";
-    const pitch = big ? 15 : Math.min(6, Math.sqrt((rw * rh) / n));
+    const pitch = Math.min(big ? 15 : 6, Math.sqrt((rw * rh) / n));
     const cols = Math.max(1, Math.floor(rw / pitch));
     const col = rank % cols, row = Math.floor(rank / cols);
     return [rx + pitch / 2 + col * pitch, ry + pitch / 2 + row * pitch];
@@ -227,12 +231,13 @@
     CELLS.forEach((k) => {
       const tag = el(root, `font-size:60px;line-height:66px;color:${rgba(COL.dim)};`, TAGS[k]);
       const num = el(root, `font-size:84px;line-height:92px;color:${rgba(COL.text)};`, LEDGER[k].toLocaleString("en-US"));
-      cells[k] = { tag, num };
+      const sub = el(root, `font-size:60px;line-height:66px;color:${rgba(COL.dim)};`, "");
+      cells[k] = { tag, num, sub };
     });
     return {
       cells,
       // DOM part of the box. o.opacity (whole box), o.split, o.show[k] (tag+count), o.lit[k] (0..1 hero)
-      // o.note[k] overrides a count's text (beat 6: "9,890 of 9,930").
+      // o.sub[k] = [text, opacity]: a 60 px line under the count (beat 6: ["of 9,930", u]).
       set(o = {}) {
         const G = geom(o.split), op = o.opacity == null ? 1 : o.opacity;
         const hc = (c) => c.x + c.w / 2 - 150;
@@ -242,12 +247,15 @@
         const ro = op * (o.rowOpacity == null ? 1 : o.rowOpacity); show(rF, ro); show(rN, ro);
         CELLS.forEach((k) => {
           const c = G[k], s = (o.show ? o.show[k] || 0 : 0) * op, lit = o.lit ? o.lit[k] || 0 : 0;
-          const { tag, num } = cells[k];
+          const { tag, num, sub } = cells[k];
           tag.style.left = c.x + 18 + "px"; tag.style.top = c.y + 12 + "px";
           num.style.left = c.x + 18 + "px"; num.style.top = c.y + 76 + "px";
+          sub.style.left = c.x + 18 + "px"; sub.style.top = c.y + 172 + "px";
           show(tag, s); show(num, s);
           tag.style.color = rgba(mixc(COL.dim, COL.hero, lit));
-          num.textContent = o.note && o.note[k] ? o.note[k] : LEDGER[k].toLocaleString("en-US");
+          const sb = o.sub && o.sub[k];
+          if (sb) sub.textContent = sb[0];
+          show(sub, sb ? sb[1] * op : 0);
         });
       },
       // Canvas part: cell frames; a lit cell gets the magenta frame.
@@ -276,10 +284,72 @@
     root.appendChild(d);
   }
 
+  // ---- One state object -> one frame ----
+  // Every beat builds a state S(t) and calls draw(g, S). Seams are exact
+  // because a beat opens on SEAM[n-1] and ends on SEAM[n], the same objects.
+  // S fields (all optional; defaults are the hook's rest state):
+  //   flag 0..1         dots right of the threshold light up
+  //   thr 0..1, thrDim 0..1   threshold dropped in; dimmed (no longer the hero)
+  //   fly {tp,fp,fn,tn} 0..1  each group's dots: home -> their cell slots
+  //   ghost 0..1        flown dots leave a muted copy at home (0.55 at rest)
+  //   userPulse, attackRing 0..1   one-shot accents
+  //   tagBright 0..1
+  //   counter {opacity, compact, value, caught, pulseCaught, subOpacity}
+  //   code {opacity, lit:[4], out, outHero}
+  //   box {opacity, split:{cx,cy}, show:{..}, lit:{..}, sub:{..}, rowOpacity}
+  const STAGGER = 0.6;   // a group's dots leave over the first 60 % of its fly
+  function mount(root) {
+    const tag = makeTag(root); makeAxisLabels(root);
+    const counter = makeCounter(root), code = makeCode(root), box = makeBox(root);
+    guides(root);
+    const ease = gsap.parseEase("power2.inOut");
+    function draw(g, S) {
+      const fly = S.fly || {}, bx = S.box || { opacity: 0 }, G = geom(bx.split);
+      const anyFly = CELLS.some((k) => (fly[k] || 0) > 0);
+      const place = (kind, i, hx, hy) => {
+        const d = kind === "user" ? D.users : D.attacks, k = d.g[i], u = fly[k] || 0;
+        if (u <= 0) return null;
+        const v = ease(clamp01((u * (1 + STAGGER) - STAGGER * hash(d.r[i] + (kind === "user" ? 0 : 7919))) / 1));
+        const [x, y] = slot(k, d.r[i], G);
+        return [lerp(hx, x, v), lerp(hy, y, v)];
+      };
+      ground(g); axis(g);
+      box.draw(g, bx);
+      dots(g, { flag: S.flag || 0, ghost: S.ghost == null ? 0.55 : S.ghost, userPulse: S.userPulse, attackRing: S.attackRing,
+                place: anyFly ? place : null });
+      threshold(g, S.thr || 0, S.thrDim ? { color: mixc(COL.hero, COL.dim, S.thrDim) } : {});
+      tag.set({ bright: S.tagBright || 0 });
+      counter.set(Object.assign({ opacity: 1, compact: 0, value: LEDGER.accNever, caught: 0 }, S.counter || {}));
+      code.set(Object.assign({ opacity: 0 }, S.code || {}));
+      box.set(bx);
+    }
+    return { draw, tag, counter, code, box };
+  }
+  const ALL = { tp: 1, fp: 1, fn: 1, tn: 1 };
+  const SEAM = {
+    // end of beat 1 = start of beat 2: the hook at rest
+    1: { counter: { value: LEDGER.accNever, caught: 0 } },
+    // end of beat 2: compact counter + code card, output shown, no line lit
+    2: { counter: { value: LEDGER.accNever, caught: 0, compact: 1 }, code: { opacity: 1, lit: [0, 0, 0, 0], out: 1 } },
+    // end of beat 3: Model A — threshold in (hero), flagged lit, counter 99.3% / 40
+    3: { thr: 1, flag: 1, counter: { value: LEDGER.accA, caught: 40 } },
+    // end of beat 4: box up, tp + fp in their cells, fp lit; threshold dimmed
+    4: { thr: 1, thrDim: 1, flag: 1, counter: { opacity: 0 }, fly: { tp: 1, fp: 1 },
+         box: { opacity: 1, show: { tp: 1, fp: 1 }, lit: { fp: 1 } } },
+    // end of beat 5: all four cells filled, tn lit
+    5: { thr: 1, thrDim: 1, flag: 1, counter: { opacity: 0 }, fly: ALL, box: { opacity: 1, show: ALL, lit: { tn: 1 } } },
+    // end of beat 6: tn swollen, the others slim and unlabelled, "of 9,930" under 9,890
+    6: { thr: 1, thrDim: 1, flag: 1, counter: { opacity: 0 }, fly: ALL,
+         box: { opacity: 1, split: { cx: 0.22, cy: 0.22 }, show: { tn: 1 }, lit: { tn: 1 },
+                sub: { tn: ["of 9,930", 1] }, rowOpacity: 0 } },
+    // end of beat 7 (the last frame): box at rest, every cell labelled, nothing lit
+    7: { thr: 1, thrDim: 1, flag: 1, counter: { opacity: 0 }, fly: ALL, box: { opacity: 1, show: ALL } },
+  };
+
   const E = () => ({ io: gsap.parseEase("power2.inOut"), out: gsap.parseEase("power2.out"), inn: gsap.parseEase("power2.in"),
                      back: gsap.parseEase("back.out(1.4)"), sine: gsap.parseEase("sine.inOut") });
 
   window.SC = { D, COL, LEDGER, W, H, X0, X1, X, TX, AXIS_Y, MID_X, BOX, CELLS, CODE, CODE_OUT,
                 ground, axis, dots, threshold, makeTag, makeAxisLabels, makeCounter, makeCode, makeBox, geom, slot,
-                guides, E, lerp, clamp01, seg, hash, pulse, rgba, mixc };
+                guides, mount, SEAM, E, lerp, clamp01, seg, hash, pulse, rgba, mixc };
 })();
