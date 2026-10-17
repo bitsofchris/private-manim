@@ -1,72 +1,72 @@
 {
   "segments" : [
     {
-      "end" : 2140,
-      "id" : "A60592D9-D094-4AF7-B170-FD2092ACA40A",
+      "end" : 2120,
+      "id" : "9F77B0E6-D45E-4614-86AD-F797C0400430",
       "start" : 1,
       "text" : "A good LLM wiki needs four layers.",
       "words" : [
         {
-          "end" : 440,
+          "end" : 420,
           "start" : 0,
           "text" : "A"
         },
         {
-          "end" : 680,
-          "start" : 440,
+          "end" : 660,
+          "start" : 420,
           "text" : "good"
         },
         {
-          "end" : 1140,
-          "start" : 680,
+          "end" : 1120,
+          "start" : 660,
           "text" : "LLM"
         },
         {
-          "end" : 1380,
-          "start" : 1140,
+          "end" : 1360,
+          "start" : 1120,
           "text" : "wiki"
         },
         {
-          "end" : 1620,
-          "start" : 1380,
+          "end" : 1600,
+          "start" : 1360,
           "text" : "needs"
         },
         {
-          "end" : 1860,
-          "start" : 1620,
+          "end" : 1840,
+          "start" : 1600,
           "text" : "four"
         },
         {
-          "end" : 2140,
-          "start" : 1860,
+          "end" : 2120,
+          "start" : 1840,
           "text" : "layers."
         }
       ]
     },
     {
-      "end" : 7560,
-      "id" : "1EAD84B0-5C41-4B56-8267-D05F9C01D664",
-      "start" : 2720,
+      "end" : 7540,
+      "id" : "0F90E258-4033-4049-A672-DB608031A787",
+      "start" : 2680,
       "text" : "A place where agents can write for agents, a clean surface for humans to read, a curated",
       "words" : [
         {
-          "end" : 2780,
-          "start" : 2720,
+          "end" : 2740,
+          "start" : 2680,
           "text" : "A"
         },
         {
-          "end" : 3000,
-          "start" : 2780,
+          "end" : 2980,
+          "start" : 2740,
           "text" : "place"
         },
         {
-          "end" : 3200,
-          "start" : 3000,
+          "end" : 3180,
+          "start" : 2980,
           "text" : "where"
         },
         {
           "end" : 3480,
-          "start" : 3200,
+          "start" : 3180,
           "text" : "agents"
         },
         {
@@ -80,111 +80,111 @@
           "text" : "write"
         },
         {
-          "end" : 3980,
+          "end" : 3960,
           "start" : 3840,
           "text" : "for"
         },
         {
-          "end" : 4380,
-          "start" : 3980,
+          "end" : 4360,
+          "start" : 3960,
           "text" : "agents,"
         },
         {
-          "end" : 4920,
-          "start" : 4860,
+          "end" : 4900,
+          "start" : 4840,
           "text" : "a"
         },
         {
-          "end" : 5180,
-          "start" : 4920,
+          "end" : 5160,
+          "start" : 4900,
           "text" : "clean"
         },
         {
           "end" : 5480,
-          "start" : 5180,
+          "start" : 5160,
           "text" : "surface"
         },
         {
-          "end" : 5720,
+          "end" : 5700,
           "start" : 5480,
           "text" : "for"
         },
         {
-          "end" : 6080,
-          "start" : 5720,
+          "end" : 6060,
+          "start" : 5700,
           "text" : "humans"
         },
         {
-          "end" : 6300,
-          "start" : 6080,
+          "end" : 6260,
+          "start" : 6060,
           "text" : "to"
         },
         {
-          "end" : 6500,
-          "start" : 6300,
+          "end" : 6480,
+          "start" : 6260,
           "text" : "read,"
         },
         {
-          "end" : 7000,
-          "start" : 6920,
+          "end" : 6980,
+          "start" : 6900,
           "text" : "a"
         },
         {
-          "end" : 7560,
-          "start" : 7000,
+          "end" : 7540,
+          "start" : 6980,
           "text" : "curated"
         }
       ]
     },
     {
-      "end" : 12040,
-      "id" : "3E5F12E1-49C8-4CB0-94B5-3CD3751EC101",
-      "start" : 7640,
+      "end" : 12020,
+      "id" : "87FB9434-23AA-42DD-870D-CE5E4994DC27",
+      "start" : 7620,
       "text" : "layer of slowly changing context and rules that you review, and a janitor that keeps",
       "words" : [
         {
-          "end" : 7880,
-          "start" : 7640,
+          "end" : 7860,
+          "start" : 7620,
           "text" : "layer"
         },
         {
-          "end" : 8040,
-          "start" : 7880,
+          "end" : 8020,
+          "start" : 7860,
           "text" : "of"
         },
         {
-          "end" : 8560,
-          "start" : 8040,
+          "end" : 8520,
+          "start" : 8020,
           "text" : "slowly"
         },
         {
-          "end" : 8980,
-          "start" : 8560,
+          "end" : 8960,
+          "start" : 8520,
           "text" : "changing"
         },
         {
           "end" : 9420,
-          "start" : 8980,
+          "start" : 8960,
           "text" : "context"
         },
         {
-          "end" : 9620,
+          "end" : 9520,
           "start" : 9420,
           "text" : "and"
         },
         {
-          "end" : 9800,
-          "start" : 9620,
+          "end" : 9780,
+          "start" : 9520,
           "text" : "rules"
         },
         {
-          "end" : 9980,
-          "start" : 9800,
+          "end" : 9960,
+          "start" : 9780,
           "text" : "that"
         },
         {
           "end" : 10100,
-          "start" : 9980,
+          "start" : 9960,
           "text" : "you"
         },
         {
@@ -193,409 +193,409 @@
           "text" : "review,"
         },
         {
-          "end" : 11060,
-          "start" : 10960,
+          "end" : 11040,
+          "start" : 10940,
           "text" : "and"
         },
         {
-          "end" : 11220,
-          "start" : 11060,
+          "end" : 11240,
+          "start" : 11040,
           "text" : "a"
         },
         {
-          "end" : 11580,
-          "start" : 11220,
+          "end" : 11560,
+          "start" : 11240,
           "text" : "janitor"
         },
         {
-          "end" : 11780,
-          "start" : 11580,
+          "end" : 11760,
+          "start" : 11560,
           "text" : "that"
         },
         {
-          "end" : 12040,
-          "start" : 11780,
+          "end" : 12020,
+          "start" : 11760,
           "text" : "keeps"
         }
       ]
     },
     {
       "end" : 13360,
-      "id" : "E0BB75D3-7CC7-46C9-BB1E-3E7230E02A6B",
-      "start" : 12040,
+      "id" : "CE37353C-5BAA-4000-B4C8-521554927C3F",
+      "start" : 12080,
       "text" : "it all up to date and consistent.",
       "words" : [
         {
-          "end" : 12160,
-          "start" : 12040,
+          "end" : 12140,
+          "start" : 12080,
           "text" : "it"
         },
         {
-          "end" : 12300,
-          "start" : 12160,
+          "end" : 12260,
+          "start" : 12140,
           "text" : "all"
         },
         {
-          "end" : 12500,
-          "start" : 12300,
+          "end" : 12480,
+          "start" : 12260,
           "text" : "up"
         },
         {
-          "end" : 12600,
-          "start" : 12500,
+          "end" : 12560,
+          "start" : 12480,
           "text" : "to"
         },
         {
-          "end" : 12720,
-          "start" : 12600,
+          "end" : 12780,
+          "start" : 12560,
           "text" : "date"
         },
         {
-          "end" : 12920,
-          "start" : 12720,
+          "end" : 12900,
+          "start" : 12780,
           "text" : "and"
         },
         {
           "end" : 13360,
-          "start" : 12920,
+          "start" : 12900,
           "text" : "consistent."
         }
       ]
     },
     {
-      "end" : 16580,
-      "id" : "61E6ABE5-4D9F-4A22-8EE5-2448259093F9",
-      "start" : 13820,
+      "end" : 16560,
+      "id" : "E1F8339D-710B-4430-BEF8-0127E622E619",
+      "start" : 13800,
       "text" : "The agent layer is written by agents for other agents.",
       "words" : [
         {
-          "end" : 13960,
-          "start" : 13820,
+          "end" : 13940,
+          "start" : 13800,
           "text" : "The"
         },
         {
           "end" : 14220,
-          "start" : 13960,
+          "start" : 13940,
           "text" : "agent"
         },
         {
-          "end" : 14500,
+          "end" : 14460,
           "start" : 14220,
           "text" : "layer"
         },
         {
-          "end" : 14680,
-          "start" : 14500,
+          "end" : 14660,
+          "start" : 14460,
           "text" : "is"
         },
         {
-          "end" : 14980,
-          "start" : 14680,
+          "end" : 14960,
+          "start" : 14660,
           "text" : "written"
         },
         {
-          "end" : 15260,
-          "start" : 14980,
+          "end" : 15240,
+          "start" : 14960,
           "text" : "by"
         },
         {
           "end" : 15640,
-          "start" : 15260,
+          "start" : 15240,
           "text" : "agents"
         },
         {
-          "end" : 15940,
+          "end" : 15920,
           "start" : 15640,
           "text" : "for"
         },
         {
-          "end" : 16180,
-          "start" : 15940,
+          "end" : 16139,
+          "start" : 15920,
           "text" : "other"
         },
         {
-          "end" : 16580,
-          "start" : 16180,
+          "end" : 16560,
+          "start" : 16139,
           "text" : "agents."
         }
       ]
     },
     {
       "end" : 18960,
-      "id" : "D97F85E5-B81F-4C0D-963C-4F4FDCE33AED",
-      "start" : 16980,
+      "id" : "0BB52881-0037-4A26-9D32-06DB6C7B6BA6",
+      "start" : 16960,
       "text" : "Agents can be as verbose as they need to be.",
       "words" : [
         {
-          "end" : 17240,
-          "start" : 16980,
+          "end" : 17220,
+          "start" : 16960,
           "text" : "Agents"
         },
         {
-          "end" : 17400,
-          "start" : 17240,
+          "end" : 17380,
+          "start" : 17220,
           "text" : "can"
         },
         {
-          "end" : 17520,
-          "start" : 17400,
+          "end" : 17540,
+          "start" : 17380,
           "text" : "be"
         },
         {
-          "end" : 17740,
-          "start" : 17520,
+          "end" : 17720,
+          "start" : 17540,
           "text" : "as"
         },
         {
-          "end" : 18180,
-          "start" : 17740,
+          "end" : 18160,
+          "start" : 17720,
           "text" : "verbose"
         },
         {
-          "end" : 18340,
-          "start" : 18180,
+          "end" : 18320,
+          "start" : 18160,
           "text" : "as"
         },
         {
-          "end" : 18400,
-          "start" : 18340,
+          "end" : 18380,
+          "start" : 18320,
           "text" : "they"
         },
         {
-          "end" : 18580,
-          "start" : 18400,
+          "end" : 18560,
+          "start" : 18380,
           "text" : "need"
         },
         {
-          "end" : 18700,
-          "start" : 18580,
+          "end" : 18680,
+          "start" : 18560,
           "text" : "to"
         },
         {
           "end" : 18960,
-          "start" : 18700,
+          "start" : 18680,
           "text" : "be."
         }
       ]
     },
     {
-      "end" : 22680,
-      "id" : "15321BF7-CFE3-4663-83EB-B620F3379CDC",
-      "start" : 19340,
+      "end" : 22660,
+      "id" : "A2C5E62D-F1B7-4FC2-A062-C3629BF08770",
+      "start" : 19320,
       "text" : "This can include details that they need to resume a task later, like hashes, branches,",
       "words" : [
         {
-          "end" : 19460,
-          "start" : 19340,
+          "end" : 19420,
+          "start" : 19320,
           "text" : "This"
         },
         {
-          "end" : 19600,
-          "start" : 19460,
+          "end" : 19560,
+          "start" : 19420,
           "text" : "can"
         },
         {
-          "end" : 19820,
-          "start" : 19600,
+          "end" : 19800,
+          "start" : 19560,
           "text" : "include"
         },
         {
           "end" : 20320,
-          "start" : 19820,
+          "start" : 19800,
           "text" : "details"
         },
         {
-          "end" : 20540,
+          "end" : 20520,
           "start" : 20320,
           "text" : "that"
         },
         {
-          "end" : 20640,
-          "start" : 20540,
+          "end" : 20660,
+          "start" : 20520,
           "text" : "they"
         },
         {
-          "end" : 20820,
-          "start" : 20640,
+          "end" : 20800,
+          "start" : 20660,
           "text" : "need"
         },
         {
           "end" : 20940,
-          "start" : 20820,
+          "start" : 20800,
           "text" : "to"
         },
         {
-          "end" : 21140,
+          "end" : 21120,
           "start" : 20940,
           "text" : "resume"
         },
         {
-          "end" : 21260,
-          "start" : 21140,
+          "end" : 21220,
+          "start" : 21120,
           "text" : "a"
         },
         {
-          "end" : 21440,
-          "start" : 21260,
+          "end" : 21420,
+          "start" : 21220,
           "text" : "task"
         },
         {
-          "end" : 21700,
-          "start" : 21440,
+          "end" : 21680,
+          "start" : 21420,
           "text" : "later,"
         },
         {
-          "end" : 21940,
-          "start" : 21740,
+          "end" : 21920,
+          "start" : 21720,
           "text" : "like"
         },
         {
-          "end" : 22320,
-          "start" : 21940,
+          "end" : 22300,
+          "start" : 21920,
           "text" : "hashes,"
         },
         {
-          "end" : 22680,
-          "start" : 22420,
+          "end" : 22660,
+          "start" : 22400,
           "text" : "branches,"
         }
       ]
     },
     {
-      "end" : 23100,
-      "id" : "044CA0C6-14D3-4CC8-8907-D131D4FD6ACF",
-      "start" : 22800,
+      "end" : 23080,
+      "id" : "7D1F5D73-66F4-451C-B5C3-E313F3422BE5",
+      "start" : 22780,
       "text" : "commits.",
       "words" : [
         {
-          "end" : 23100,
-          "start" : 22800,
+          "end" : 23080,
+          "start" : 22780,
           "text" : "commits."
         }
       ]
     },
     {
       "end" : 25120,
-      "id" : "949EEF5F-C11B-4AA1-91BF-8FFBA07C5BDB",
-      "start" : 23580,
+      "id" : "5FAD22DF-723F-4EAE-AF89-A0F9096A6520",
+      "start" : 23560,
       "text" : "You never need to read it or go here.",
       "words" : [
         {
-          "end" : 23720,
-          "start" : 23580,
+          "end" : 23700,
+          "start" : 23560,
           "text" : "You"
         },
         {
-          "end" : 24100,
-          "start" : 23720,
+          "end" : 24080,
+          "start" : 23700,
           "text" : "never"
         },
         {
-          "end" : 24280,
-          "start" : 24100,
+          "end" : 24260,
+          "start" : 24080,
           "text" : "need"
         },
         {
-          "end" : 24480,
-          "start" : 24280,
+          "end" : 24440,
+          "start" : 24260,
           "text" : "to"
         },
         {
-          "end" : 24620,
-          "start" : 24480,
+          "end" : 24600,
+          "start" : 24440,
           "text" : "read"
         },
         {
-          "end" : 24720,
-          "start" : 24620,
+          "end" : 24700,
+          "start" : 24600,
           "text" : "it"
         },
         {
-          "end" : 24860,
-          "start" : 24720,
+          "end" : 24840,
+          "start" : 24700,
           "text" : "or"
         },
         {
-          "end" : 24960,
-          "start" : 24860,
+          "end" : 24940,
+          "start" : 24840,
           "text" : "go"
         },
         {
           "end" : 25120,
-          "start" : 24960,
+          "start" : 24940,
           "text" : "here."
         }
       ]
     },
     {
-      "end" : 30460,
-      "id" : "111FB0AC-EC21-4EE0-BE9E-1D43E9C34A95",
-      "start" : 25560,
+      "end" : 30440,
+      "id" : "798E295F-8618-4946-A2FC-EE191B85A5B2",
+      "start" : 25500,
       "text" : "The human layer is the clean, distilled view that you link out and that goes to these detailed",
       "words" : [
         {
-          "end" : 25640,
-          "start" : 25560,
+          "end" : 25600,
+          "start" : 25500,
           "text" : "The"
         },
         {
-          "end" : 25900,
-          "start" : 25640,
+          "end" : 25880,
+          "start" : 25600,
           "text" : "human"
         },
         {
-          "end" : 26200,
-          "start" : 25900,
+          "end" : 26180,
+          "start" : 25880,
           "text" : "layer"
         },
         {
-          "end" : 26800,
-          "start" : 26200,
+          "end" : 26780,
+          "start" : 26180,
           "text" : "is"
         },
         {
-          "end" : 26940,
-          "start" : 26800,
+          "end" : 26880,
+          "start" : 26780,
           "text" : "the"
         },
         {
-          "end" : 27340,
-          "start" : 26940,
+          "end" : 27320,
+          "start" : 26880,
           "text" : "clean,"
         },
         {
-          "end" : 27780,
-          "start" : 27560,
+          "end" : 27760,
+          "start" : 27540,
           "text" : "distilled"
         },
         {
           "end" : 28040,
-          "start" : 27780,
+          "start" : 27760,
           "text" : "view"
         },
         {
-          "end" : 28240,
+          "end" : 28220,
           "start" : 28040,
           "text" : "that"
         },
         {
-          "end" : 28360,
-          "start" : 28240,
+          "end" : 28340,
+          "start" : 28220,
           "text" : "you"
         },
         {
-          "end" : 28660,
-          "start" : 28360,
+          "end" : 28640,
+          "start" : 28340,
           "text" : "link"
         },
         {
-          "end" : 28900,
-          "start" : 28660,
+          "end" : 28880,
+          "start" : 28640,
           "text" : "out"
         },
         {
           "end" : 29160,
-          "start" : 28900,
+          "start" : 28880,
           "text" : "and"
         },
         {
@@ -604,375 +604,375 @@
           "text" : "that"
         },
         {
-          "end" : 29660,
+          "end" : 29640,
           "start" : 29280,
           "text" : "goes"
         },
         {
-          "end" : 29800,
-          "start" : 29660,
+          "end" : 29780,
+          "start" : 29640,
           "text" : "to"
         },
         {
-          "end" : 30020,
-          "start" : 29800,
+          "end" : 30000,
+          "start" : 29780,
           "text" : "these"
         },
         {
-          "end" : 30460,
-          "start" : 30020,
+          "end" : 30440,
+          "start" : 30000,
           "text" : "detailed"
         }
       ]
     },
     {
-      "end" : 31520,
-      "id" : "F24BB3DA-312A-4C40-9F5C-8AB552EC34E3",
-      "start" : 30520,
+      "end" : 31500,
+      "id" : "4485F671-B58A-4B24-AF27-B95C1F2C5B11",
+      "start" : 30480,
       "text" : "agent notes when necessary.",
       "words" : [
         {
-          "end" : 30720,
-          "start" : 30520,
+          "end" : 30700,
+          "start" : 30480,
           "text" : "agent"
         },
         {
-          "end" : 30920,
-          "start" : 30720,
+          "end" : 30900,
+          "start" : 30700,
           "text" : "notes"
         },
         {
-          "end" : 31060,
-          "start" : 30920,
+          "end" : 31040,
+          "start" : 30900,
           "text" : "when"
         },
         {
-          "end" : 31520,
-          "start" : 31060,
+          "end" : 31500,
+          "start" : 31040,
           "text" : "necessary."
         }
       ]
     },
     {
-      "end" : 33580,
-      "id" : "45CA9CAB-A80B-4976-92BE-49B79ABCD0DF",
-      "start" : 31980,
+      "end" : 33560,
+      "id" : "8A677A3F-DA23-4E0D-B788-AF8E1027B3E4",
+      "start" : 31960,
       "text" : "Think of a dashboard or a Kanban board.",
       "words" : [
         {
-          "end" : 32099,
-          "start" : 31980,
+          "end" : 32080,
+          "start" : 31960,
           "text" : "Think"
         },
         {
-          "end" : 32200,
-          "start" : 32099,
+          "end" : 32180,
+          "start" : 32080,
           "text" : "of"
         },
         {
           "end" : 32300,
-          "start" : 32200,
+          "start" : 32180,
           "text" : "a"
         },
         {
-          "end" : 32700,
+          "end" : 32660,
           "start" : 32300,
           "text" : "dashboard"
         },
         {
-          "end" : 32880,
-          "start" : 32700,
+          "end" : 32860,
+          "start" : 32660,
           "text" : "or"
         },
         {
-          "end" : 33000,
-          "start" : 32880,
+          "end" : 32980,
+          "start" : 32860,
           "text" : "a"
         },
         {
-          "end" : 33320,
-          "start" : 33000,
+          "end" : 33300,
+          "start" : 32980,
           "text" : "Kanban"
         },
         {
-          "end" : 33580,
-          "start" : 33320,
+          "end" : 33560,
+          "start" : 33300,
           "text" : "board."
         }
       ]
     },
     {
-      "end" : 37360,
-      "id" : "8FC6B192-E7DC-46C5-A3BE-CEF5983B3650",
-      "start" : 34000,
+      "end" : 37340,
+      "id" : "59CF4ABA-09A0-450B-91F2-B219D3FEECEB",
+      "start" : 33940,
       "text" : "It's less about reviewing what the agent's up to and more about managing your own context.",
       "words" : [
         {
-          "end" : 34300,
-          "start" : 34000,
+          "end" : 34280,
+          "start" : 33940,
           "text" : "It's"
         },
         {
-          "end" : 34540,
-          "start" : 34300,
+          "end" : 34500,
+          "start" : 34280,
           "text" : "less"
         },
         {
-          "end" : 34740,
-          "start" : 34540,
+          "end" : 34720,
+          "start" : 34500,
           "text" : "about"
         },
         {
-          "end" : 35020,
-          "start" : 34740,
+          "end" : 34980,
+          "start" : 34720,
           "text" : "reviewing"
         },
         {
-          "end" : 35140,
-          "start" : 35020,
+          "end" : 35080,
+          "start" : 34980,
           "text" : "what"
         },
         {
-          "end" : 35200,
-          "start" : 35140,
+          "end" : 35180,
+          "start" : 35080,
           "text" : "the"
         },
         {
-          "end" : 35480,
-          "start" : 35200,
+          "end" : 35440,
+          "start" : 35180,
           "text" : "agent's"
         },
         {
-          "end" : 35600,
-          "start" : 35480,
+          "end" : 35580,
+          "start" : 35440,
           "text" : "up"
         },
         {
-          "end" : 35660,
-          "start" : 35600,
+          "end" : 35640,
+          "start" : 35580,
           "text" : "to"
         },
         {
-          "end" : 35760,
-          "start" : 35660,
+          "end" : 35740,
+          "start" : 35640,
           "text" : "and"
         },
         {
-          "end" : 36000,
-          "start" : 35760,
+          "end" : 35980,
+          "start" : 35740,
           "text" : "more"
         },
         {
-          "end" : 36200,
-          "start" : 36000,
+          "end" : 36160,
+          "start" : 35980,
           "text" : "about"
         },
         {
-          "end" : 36560,
-          "start" : 36200,
+          "end" : 36540,
+          "start" : 36160,
           "text" : "managing"
         },
         {
-          "end" : 36720,
-          "start" : 36560,
+          "end" : 36700,
+          "start" : 36540,
           "text" : "your"
         },
         {
-          "end" : 36840,
-          "start" : 36720,
+          "end" : 36820,
+          "start" : 36700,
           "text" : "own"
         },
         {
-          "end" : 37360,
-          "start" : 36840,
+          "end" : 37340,
+          "start" : 36820,
           "text" : "context."
         }
       ]
     },
     {
-      "end" : 41620,
-      "id" : "8576BF73-0269-488F-A180-A4A075982CC3",
-      "start" : 37800,
+      "end" : 41600,
+      "id" : "B5D574E2-CEA6-41C7-98A5-7B1898B97E8D",
+      "start" : 37780,
       "text" : "The curated layer, this is the slowly changing context that you need to handle with care.",
       "words" : [
         {
-          "end" : 37860,
-          "start" : 37800,
+          "end" : 37900,
+          "start" : 37780,
           "text" : "The"
         },
         {
-          "end" : 38360,
-          "start" : 37860,
+          "end" : 38320,
+          "start" : 37900,
           "text" : "curated"
         },
         {
-          "end" : 38680,
-          "start" : 38360,
+          "end" : 38660,
+          "start" : 38320,
           "text" : "layer,"
         },
         {
-          "end" : 38880,
-          "start" : 38730,
+          "end" : 38860,
+          "start" : 38710,
           "text" : "this"
         },
         {
-          "end" : 39000,
-          "start" : 38880,
+          "end" : 38980,
+          "start" : 38860,
           "text" : "is"
         },
         {
-          "end" : 39200,
-          "start" : 39000,
+          "end" : 39180,
+          "start" : 38980,
           "text" : "the"
         },
         {
-          "end" : 39580,
-          "start" : 39200,
+          "end" : 39560,
+          "start" : 39180,
           "text" : "slowly"
         },
         {
-          "end" : 39960,
-          "start" : 39580,
+          "end" : 39940,
+          "start" : 39560,
           "text" : "changing"
         },
         {
-          "end" : 40300,
-          "start" : 39960,
+          "end" : 40280,
+          "start" : 39940,
           "text" : "context"
         },
         {
-          "end" : 40520,
-          "start" : 40300,
+          "end" : 40500,
+          "start" : 40280,
           "text" : "that"
         },
         {
-          "end" : 40660,
-          "start" : 40520,
+          "end" : 40640,
+          "start" : 40500,
           "text" : "you"
         },
         {
-          "end" : 40840,
-          "start" : 40660,
+          "end" : 40800,
+          "start" : 40640,
           "text" : "need"
         },
         {
-          "end" : 40960,
-          "start" : 40840,
+          "end" : 40940,
+          "start" : 40800,
           "text" : "to"
         },
         {
           "end" : 41200,
-          "start" : 40960,
+          "start" : 40940,
           "text" : "handle"
         },
         {
-          "end" : 41360,
+          "end" : 41340,
           "start" : 41200,
           "text" : "with"
         },
         {
-          "end" : 41620,
-          "start" : 41360,
+          "end" : 41600,
+          "start" : 41340,
           "text" : "care."
         }
       ]
     },
     {
-      "end" : 44760,
-      "id" : "EE407C37-31B2-4A5C-9C4E-A1457EB3C71E",
-      "start" : 42060,
+      "end" : 44720,
+      "id" : "B491423B-7376-4764-8FB2-216DBFC7AB3D",
+      "start" : 42020,
       "text" : "These are the skills and rules, the conventions of your repo.",
       "words" : [
         {
           "end" : 42160,
-          "start" : 42060,
+          "start" : 42020,
           "text" : "These"
         },
         {
-          "end" : 42240,
+          "end" : 42220,
           "start" : 42160,
           "text" : "are"
         },
         {
-          "end" : 42420,
-          "start" : 42240,
+          "end" : 42400,
+          "start" : 42220,
           "text" : "the"
         },
         {
-          "end" : 42820,
-          "start" : 42420,
+          "end" : 42800,
+          "start" : 42400,
           "text" : "skills"
         },
         {
-          "end" : 42940,
-          "start" : 42820,
+          "end" : 42920,
+          "start" : 42800,
           "text" : "and"
         },
         {
-          "end" : 43420,
-          "start" : 42940,
+          "end" : 43380,
+          "start" : 42920,
           "text" : "rules,"
         },
         {
-          "end" : 43780,
-          "start" : 43700,
+          "end" : 43760,
+          "start" : 43680,
           "text" : "the"
         },
         {
-          "end" : 44180,
-          "start" : 43780,
+          "end" : 44160,
+          "start" : 43760,
           "text" : "conventions"
         },
         {
-          "end" : 44420,
-          "start" : 44180,
+          "end" : 44400,
+          "start" : 44160,
           "text" : "of"
         },
         {
-          "end" : 44540,
-          "start" : 44420,
+          "end" : 44520,
+          "start" : 44400,
           "text" : "your"
         },
         {
-          "end" : 44760,
-          "start" : 44540,
+          "end" : 44720,
+          "start" : 44520,
           "text" : "repo."
         }
       ]
     },
     {
-      "end" : 46200,
-      "id" : "834287DB-15A8-4E79-AAE2-AAF4C49FF62F",
-      "start" : 45280,
+      "end" : 46180,
+      "id" : "3A9FC7B7-47C1-4239-9AC4-927D4C2AEC3F",
+      "start" : 45240,
       "text" : "And then you need the janitor.",
       "words" : [
         {
           "end" : 45360,
-          "start" : 45280,
+          "start" : 45240,
           "text" : "And"
         },
         {
-          "end" : 45460,
+          "end" : 45440,
           "start" : 45360,
           "text" : "then"
         },
         {
-          "end" : 45520,
-          "start" : 45460,
+          "end" : 45500,
+          "start" : 45440,
           "text" : "you"
         },
         {
-          "end" : 45700,
-          "start" : 45520,
+          "end" : 45680,
+          "start" : 45500,
           "text" : "need"
         },
         {
           "end" : 45860,
-          "start" : 45700,
+          "start" : 45680,
           "text" : "the"
         },
         {
-          "end" : 46200,
+          "end" : 46180,
           "start" : 45860,
           "text" : "janitor."
         }
@@ -980,276 +980,266 @@
     },
     {
       "end" : 50040,
-      "id" : "7F7D787A-BCDD-458E-A3B3-5BD959B60248",
-      "start" : 46680,
+      "id" : "E8A13E5F-7231-470E-A7DF-3616D6F7E46F",
+      "start" : 46660,
       "text" : "This looks to catch conflicting rules in your agent notes before they spread.",
       "words" : [
         {
           "end" : 46800,
-          "start" : 46680,
+          "start" : 46660,
           "text" : "This"
         },
         {
-          "end" : 47000,
+          "end" : 46980,
           "start" : 46800,
           "text" : "looks"
         },
         {
-          "end" : 47120,
-          "start" : 47000,
+          "end" : 47160,
+          "start" : 46980,
           "text" : "to"
         },
         {
-          "end" : 47380,
-          "start" : 47120,
+          "end" : 47360,
+          "start" : 47160,
           "text" : "catch"
         },
         {
-          "end" : 47820,
-          "start" : 47380,
+          "end" : 47800,
+          "start" : 47360,
           "text" : "conflicting"
         },
         {
-          "end" : 48300,
-          "start" : 47820,
+          "end" : 48280,
+          "start" : 47800,
           "text" : "rules"
         },
         {
-          "end" : 48540,
-          "start" : 48300,
+          "end" : 48520,
+          "start" : 48280,
           "text" : "in"
         },
         {
-          "end" : 48680,
-          "start" : 48540,
+          "end" : 48660,
+          "start" : 48520,
           "text" : "your"
         },
         {
-          "end" : 49040,
-          "start" : 48680,
+          "end" : 49020,
+          "start" : 48660,
           "text" : "agent"
         },
         {
-          "end" : 49280,
-          "start" : 49040,
+          "end" : 49260,
+          "start" : 49020,
           "text" : "notes"
         },
         {
-          "end" : 49560,
-          "start" : 49280,
+          "end" : 49540,
+          "start" : 49260,
           "text" : "before"
         },
         {
-          "end" : 49700,
-          "start" : 49560,
+          "end" : 49680,
+          "start" : 49540,
           "text" : "they"
         },
         {
           "end" : 50040,
-          "start" : 49700,
+          "start" : 49680,
           "text" : "spread."
         }
       ]
     },
     {
-      "end" : 52820,
-      "id" : "8AECB700-ACC6-4AC9-BAF5-BC0A451EF700",
-      "start" : 50440,
+      "end" : 52800,
+      "id" : "64A2305A-752E-4CC3-A8F1-BA84832BF9CC",
+      "start" : 50420,
       "text" : "And it cleans up old material so the human layer stays useful.",
       "words" : [
         {
-          "end" : 50500,
-          "start" : 50440,
+          "end" : 50480,
+          "start" : 50420,
           "text" : "And"
         },
         {
-          "end" : 50600,
-          "start" : 50500,
+          "end" : 50580,
+          "start" : 50480,
           "text" : "it"
         },
         {
-          "end" : 50800,
-          "start" : 50600,
+          "end" : 50780,
+          "start" : 50580,
           "text" : "cleans"
         },
         {
-          "end" : 50920,
-          "start" : 50800,
+          "end" : 50900,
+          "start" : 50780,
           "text" : "up"
         },
         {
-          "end" : 51120,
-          "start" : 50920,
+          "end" : 51100,
+          "start" : 50900,
           "text" : "old"
         },
         {
-          "end" : 51520,
-          "start" : 51120,
+          "end" : 51500,
+          "start" : 51100,
           "text" : "material"
         },
         {
-          "end" : 51680,
-          "start" : 51520,
+          "end" : 51660,
+          "start" : 51500,
           "text" : "so"
         },
         {
-          "end" : 51800,
-          "start" : 51680,
+          "end" : 51780,
+          "start" : 51660,
           "text" : "the"
         },
         {
-          "end" : 52060,
-          "start" : 51800,
+          "end" : 52040,
+          "start" : 51780,
           "text" : "human"
         },
         {
-          "end" : 52260,
-          "start" : 52060,
+          "end" : 52240,
+          "start" : 52040,
           "text" : "layer"
         },
         {
-          "end" : 52540,
-          "start" : 52260,
+          "end" : 52520,
+          "start" : 52240,
           "text" : "stays"
         },
         {
-          "end" : 52820,
-          "start" : 52540,
+          "end" : 52800,
+          "start" : 52520,
           "text" : "useful."
         }
       ]
     },
     {
-      "end" : 55100,
-      "id" : "A331B389-9C4F-4E4D-BB90-3FECD172E413",
-      "start" : 53360,
-      "text" : "This is how I structure all of my repos these days.",
+      "end" : 56860,
+      "id" : "574F0B36-FEBA-4EAE-A389-05D028186080",
+      "start" : 53220,
+      "text" : "With all four layers, you can build a strong, agentic knowledge base for research, personal",
       "words" : [
         {
-          "end" : 53440,
-          "start" : 53360,
-          "text" : "This"
+          "end" : 53300,
+          "start" : 53220,
+          "text" : "With"
         },
         {
-          "end" : 53520,
-          "start" : 53440,
-          "text" : "is"
-        },
-        {
-          "end" : 53600,
-          "start" : 53520,
-          "text" : "how"
-        },
-        {
-          "end" : 53720,
-          "start" : 53600,
-          "text" : "I"
-        },
-        {
-          "end" : 54020,
-          "start" : 53720,
-          "text" : "structure"
-        },
-        {
-          "end" : 54220,
-          "start" : 54020,
+          "end" : 53480,
+          "start" : 53300,
           "text" : "all"
         },
         {
-          "end" : 54340,
-          "start" : 54220,
-          "text" : "of"
+          "end" : 53720,
+          "start" : 53480,
+          "text" : "four"
         },
         {
-          "end" : 54440,
-          "start" : 54340,
-          "text" : "my"
+          "end" : 53960,
+          "start" : 53720,
+          "text" : "layers,"
         },
         {
-          "end" : 54780,
-          "start" : 54440,
-          "text" : "repos"
+          "end" : 54100,
+          "start" : 53960,
+          "text" : "you"
         },
         {
-          "end" : 54860,
-          "start" : 54780,
-          "text" : "these"
+          "end" : 54200,
+          "start" : 54100,
+          "text" : "can"
         },
         {
-          "end" : 55100,
-          "start" : 54860,
-          "text" : "days."
+          "end" : 54400,
+          "start" : 54200,
+          "text" : "build"
+        },
+        {
+          "end" : 54500,
+          "start" : 54400,
+          "text" : "a"
+        },
+        {
+          "end" : 54980,
+          "start" : 54500,
+          "text" : "strong,"
+        },
+        {
+          "end" : 55460,
+          "start" : 55180,
+          "text" : "agentic"
+        },
+        {
+          "end" : 55780,
+          "start" : 55460,
+          "text" : "knowledge"
+        },
+        {
+          "end" : 56000,
+          "start" : 55780,
+          "text" : "base"
+        },
+        {
+          "end" : 56160,
+          "start" : 56000,
+          "text" : "for"
+        },
+        {
+          "end" : 56520,
+          "start" : 56160,
+          "text" : "research,"
+        },
+        {
+          "end" : 56860,
+          "start" : 56640,
+          "text" : "personal"
         }
       ]
     },
     {
-      "end" : 58320,
-      "id" : "90DD276D-1044-4F4E-BBB3-BB1990C51DEB",
-      "start" : 55520,
-      "text" : "With all four layers, you can build a strong, agentic knowledge base.",
+      "end" : 58440,
+      "id" : "FE5275BD-5D73-4683-8BF5-6230064B8307",
+      "start" : 56940,
+      "text" : "growth, project work, or anything else.",
       "words" : [
         {
-          "end" : 55620,
-          "start" : 55520,
-          "text" : "With"
+          "end" : 57140,
+          "start" : 56940,
+          "text" : "growth,"
         },
         {
-          "end" : 55820,
-          "start" : 55620,
-          "text" : "all"
+          "end" : 57440,
+          "start" : 57160,
+          "text" : "project"
         },
         {
-          "end" : 56060,
-          "start" : 55820,
-          "text" : "four"
+          "end" : 57600,
+          "start" : 57440,
+          "text" : "work,"
         },
         {
-          "end" : 56280,
-          "start" : 56060,
-          "text" : "layers,"
+          "end" : 57740,
+          "start" : 57660,
+          "text" : "or"
         },
         {
-          "end" : 56440,
-          "start" : 56380,
-          "text" : "you"
+          "end" : 58060,
+          "start" : 57740,
+          "text" : "anything"
         },
         {
-          "end" : 56540,
-          "start" : 56440,
-          "text" : "can"
-        },
-        {
-          "end" : 56720,
-          "start" : 56540,
-          "text" : "build"
-        },
-        {
-          "end" : 56820,
-          "start" : 56720,
-          "text" : "a"
-        },
-        {
-          "end" : 57280,
-          "start" : 56820,
-          "text" : "strong,"
-        },
-        {
-          "end" : 57780,
-          "start" : 57500,
-          "text" : "agentic"
-        },
-        {
-          "end" : 58120,
-          "start" : 57780,
-          "text" : "knowledge"
-        },
-        {
-          "end" : 58320,
-          "start" : 58120,
-          "text" : "base."
+          "end" : 58440,
+          "start" : 58060,
+          "text" : "else."
         }
       ]
     }
   ],
-  "text" : "A good LLM wiki needs four layers.\nA place where agents can write for agents, a clean surface for humans to read, a curated\nlayer of slowly changing context and rules that you review, and a janitor that keeps\nit all up to date and consistent.\nThe agent layer is written by agents for other agents.\nAgents can be as verbose as they need to be.\nThis can include details that they need to resume a task later, like hashes, branches,\ncommits.\nYou never need to read it or go here.\nThe human layer is the clean, distilled view that you link out and that goes to these detailed\nagent notes when necessary.\nThink of a dashboard or a Kanban board.\nIt's less about reviewing what the agent's up to and more about managing your own context.\nThe curated layer, this is the slowly changing context that you need to handle with care.\nThese are the skills and rules, the conventions of your repo.\nAnd then you need the janitor.\nThis looks to catch conflicting rules in your agent notes before they spread.\nAnd it cleans up old material so the human layer stays useful.\nThis is how I structure all of my repos these days.\nWith all four layers, you can build a strong, agentic knowledge base."
+  "text" : "A good LLM wiki needs four layers.\nA place where agents can write for agents, a clean surface for humans to read, a curated\nlayer of slowly changing context and rules that you review, and a janitor that keeps\nit all up to date and consistent.\nThe agent layer is written by agents for other agents.\nAgents can be as verbose as they need to be.\nThis can include details that they need to resume a task later, like hashes, branches,\ncommits.\nYou never need to read it or go here.\nThe human layer is the clean, distilled view that you link out and that goes to these detailed\nagent notes when necessary.\nThink of a dashboard or a Kanban board.\nIt's less about reviewing what the agent's up to and more about managing your own context.\nThe curated layer, this is the slowly changing context that you need to handle with care.\nThese are the skills and rules, the conventions of your repo.\nAnd then you need the janitor.\nThis looks to catch conflicting rules in your agent notes before they spread.\nAnd it cleans up old material so the human layer stays useful.\nWith all four layers, you can build a strong, agentic knowledge base for research, personal\ngrowth, project work, or anything else."
 }

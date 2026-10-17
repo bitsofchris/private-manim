@@ -38,12 +38,9 @@ And then you need the janitor.
 This looks to catch conflicting rules in your agent notes before they spread.
 
 00:50.200-00:53.080
-And it cleans up old material so the human layer stays useful.
+and it cleans up old material so the human layer stays useful.
 
-00:53.080-00:55.400
-This is how I structure all of my repos these days.
-
-00:55.400-00:58.440
-With all four layers you can build a strong agentic knowledge base for
+00:53.080-00:59.000
+With all four layers you can build a strong agentic knowledge base for research, personal growth, project work, or anything else.
 
 

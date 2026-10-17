@@ -14,8 +14,11 @@ The curated layer, this is the slowly changing context that you need to handle w
 
 And then you need the janitor. This looks to catch conflicting rules in your agent notes before they spread. And it cleans up old material so the human layer stays useful.
 
-This is how I structure all of my repos these days. With all four layers, you can build a strong agentic knowledge base.
+With all four layers, you can build a strong agentic knowledge base for research, personal growth, project work, or anything else.
 
 ## Notes
 
 Tightened 2026-10-17 from 81.7 s (Chris approved the cut list). Built from the second reading (5:03–7:17) plus one line from the first take (2:43). Cut from the reading: "table names, et cetera", "save context for layers…" (misspoken), "This is the agent's own memory…", "It's the interface for humans…", "This is the map that you use to navigate", "keep track… big picture", "maintain carefully, keep it visible", "the things that are slowly improving… map of the territory", the sources / threads / OKRs list, "As you iterate and change the system…", "It keeps the sources of truth up to date", "maps and other files are linking", the janitor restated, "for research, personal growth, project work, or anything else", "You can apply this to the repo". Five cuts sit mid-sentence or in near-zero gaps (after "commits", "here", "repo", "useful", "base"); the re-transcription reads each one cleanly, but check them by ear. The take-1 line is about 3 dB quieter than its neighbours; runbook step 3 normalises it.
+
+
+Changed 2026-10-17 after the first assembled cut (Chris): the take-1 line (163.58–165.65) is out, and the last segment now runs to the end of the sentence, 427.95–433.85 s. `vo_raw.m4a` is the original 63.9 s cut; the new ending is spliced in `vo_final.wav` (see `storyboard.md`, "New ending").

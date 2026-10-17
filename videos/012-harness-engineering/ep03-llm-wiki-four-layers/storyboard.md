@@ -80,9 +80,9 @@ the stage runs to y 1330. Coordinates are frame pixels.
 | 3 | Human layer | The human layer is the clean, distilled view that you link out, and that goes to these detailed agent notes when necessary. Think of a dashboard or a Kanban board. It's less about reviewing what the agent's up to and more about managing your own context. | "The human layer": the board goes magenta. "link out … detailed agent notes": the middle card draws the dashed link down to the agent's page (page pulses teal). "Kanban board": a card slides from column 1 to column 2. "less about reviewing what the agent's up to": the human glances down at the basement, then back; "managing your own context": the human points at the board. | the board |
 | 4 | Curated layer | The curated layer, this is the slowly changing context that you need to handle with care. These are the skills and rules, the conventions of your repo. | "curated layer": the case goes magenta, the link fades. "handle with care": the glass glints once. "skills and rules": the rules item inside the case becomes the hero (the case returns to glass); "conventions of your repo": hold. | the case, then its rules |
 | 5 | Janitor | And then you need the janitor. This looks to catch conflicting rules in your agent notes before they spread. And it cleans up old material so the human layer stays useful. | "the janitor": the janitor goes magenta and climbs down the ladder into the basement. "conflicting rules": a line on agent B's page turns magenta; "before they spread": a copy starts to draw on agent A's page, and the broom sweeps both out (the broom is the hero). "old material": the two old dashed pages are swept off the floor. "human layer stays useful": the board upstairs settles, clean. | the janitor, then the conflict |
-| 6 | Close | This is how I structure all of my repos these days. With all four layers, you can build a strong agentic knowledge base. | The janitor climbs back to the landing; the whole building at rest. "all four layers": the four light once each in the ledger order, quickly, and return to rest. Still frame by the end. | each in turn, then none |
+| 6 | Close | With all four layers, you can build a strong agentic knowledge base for research, personal growth, project work, or anything else. | The whole building at rest, the janitor still on the basement floor. "all four layers": the four light once each in the ledger order, quickly, and return to rest. Still to the end. | each in turn, then none |
 
-## Final beats (the contract; `vo_final.wav` 58.82 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 59.12 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md` (seam states `WIKI.SEAM` in
 `_kit/wiki.js`). Word times: `words.json` (master seconds; spellings fixed
@@ -96,7 +96,7 @@ stage runs to y 1330.
 | 3 | `03_human_layer` | 25.35 | 12.20 | The human layer is the clean, distilled view that you link out and that goes to these detailed agent notes when necessary. Think of a dashboard or a Kanban board. It's less about reviewing what the agent's up to and more about managing your own context. |
 | 4 | `04_curated_layer` | 37.55 | 7.50 | The curated layer, this is the slowly changing context that you need to handle with care. These are the skills and rules, the conventions of your repo. |
 | 5 | `05_janitor` | 45.05 | 8.00 | And then you need the janitor. This looks to catch conflicting rules in your agent notes before they spread. And it cleans up old material so the human layer stays useful. |
-| 6 | `06_close` | 53.05 | 5.77 | This is how I structure all of my repos these days. With all four layers, you can build a strong agentic knowledge base. |
+| 6 | `06_close` | 53.05 | 6.07 | With all four layers, you can build a strong agentic knowledge base for research, personal growth, project work, or anything else. |
 
 ## Cut list (approved by Chris, 10/17; applied)
 
@@ -118,3 +118,16 @@ The five tight joins from script.md (after "commits", "here", "repo",
 "useful", "base") were checked by ear by Chris: fine. On the clean audio both
 recognizers hear "This can include", as script.md has it (the processed
 audio read "These"). Captions follow the audio.
+
+## New ending (Chris, 10/17, after watching v2)
+
+The take-2 last line stopped at "…knowledge base" while Chris's voice ran
+on into "for research…", so the Short ended mid-sentence. Chris picked
+option C of three auditions: finish the sentence (master 428.20–433.85,
+"…for research, personal growth, project work, or anything else.") and
+drop the take-1 line "This is how I structure all of my repos these days."
+Spliced into `vo_final.wav` after 53.10 (same gain, limiter and 1.02 tempo
+as the rest); everything before 53.10 is unchanged, so beats 1–5 keep
+their timing. `words.json` keeps the old word times before 53 s and takes
+the new recognition after. 58.82 s → 59.12 s. `vo_raw.m4a`, `vo_clean.wav`
+and `timemap.json` still describe the original cut up to "useful".
