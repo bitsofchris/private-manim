@@ -1,52 +1,40 @@
-00:00.320-00:02.000
-This model is 99.
-
-00:02.000-00:05.040
-5% accurate, but it's never caught a single attack.
-
-00:05.040-00:08.400
-10,000 requests come in, but only 50 are attacks.
-
-00:07.700-00:08.660
+00:00.001-00:00.880
 Here's a real model.
 
-00:08.660-00:13.219
+00:00.880-00:05.360
 It catches 40 of the 50 attacks, but its accuracy goes down to 99.
 
-00:13.219-00:13.940
+00:05.360-00:06.080
 3%.
 
-00:13.940-00:16.500
+00:06.080-00:08.320
 So we look at the confusion matrix instead.
 
-00:16.200-00:20.760
-A true positive is I said there was an attack and it was genuinely an attack.
+00:08.320-00:13.280
+A true positive is I said there was an attack, and it was genuinely an attack.
 
-00:20.760-00:24.440
+00:12.860-00:16.619
 A false positive is the model predicted attack, but it was a real user.
 
-00:24.440-00:25.320
-A false negative
+00:16.619-00:19.980
+A false negative, I said user, but it was an attack.
 
-00:25.500-00:27.740
-I said user, but it was an attack.
+00:19.980-00:22.939
+And a true negative, I said user, and it was a user.
 
-00:27.740-00:30.780
-In a true negative, I said user and it was a user.
-
-00:30.780-00:32.460
+00:22.939-00:24.619
 Now look where the accuracy comes from.
 
-00:32.460-00:34.380
+00:24.619-00:27.099
 Almost all of it is true negatives.
 
-00:34.380-00:35.820
-These are the easy ones
+00:26.560-00:27.920
+These are the easy ones.
 
-00:35.740-00:39.580
-When positives are rare, we don't want to read the accuracy.
+00:27.920-00:31.760
+When positives are rare, we don't want to read the axior C.
 
-00:39.580-00:41.580
+00:31.760-00:33.840
 We want to look at the confusion matrix
 
 

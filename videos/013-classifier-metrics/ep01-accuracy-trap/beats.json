@@ -1,14 +1,6 @@
 {
  "beats": [
   {
-   "clip": "media/hf/01_hook.mp4",
-   "end": 5.2
-  },
-  {
-   "clip": "media/hf/02_only_fifty.mp4",
-   "end": 2.65
-  },
-  {
    "clip": "media/hf/03_model_a.mp4",
    "end": 6.105
   },

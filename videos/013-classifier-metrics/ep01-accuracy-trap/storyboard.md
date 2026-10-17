@@ -82,7 +82,7 @@ end state. `00_layout/` renders the canonical frame.
 | 6 | Where accuracy comes from | Now look where the accuracy comes from. Almost all of it is true negatives. These are the easy ones. | "true negatives": the TN cell swells until it fills most of the grid, the other three shrink to unlabelled slivers; "of 9,930" appears under TN's 9,890. "easy ones": hold. | the TN cell |
 | 7 | Takeaway | When positives are rare, we don't want to read the accuracy. We want to look at the confusion matrix. | "rare": the 50 gold dots on the score line pulse once. The box returns to its normal size, all four cells lit evenly, the score line above it. Still frame by the end. | none (rest) |
 
-## Final beats (the contract; `vo_final.wav` 41.96 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 34.11 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`).
 Captions are anchored bottom (`assemble.py --captions-anchor bottom`), so
@@ -90,13 +90,11 @@ the stage runs to y 1330.
 
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
-| 1 | `01_hook` | 0.00 | 5.20 | This model is 99.5% accurate, but it's never caught a single attack. |
-| 2 | `02_only_fifty` | 5.20 | 2.65 | 10,000 requests come in, but only 50 are attacks. |
-| 3 | `03_model_a` | 7.85 | 6.105 | Here's a real model. It catches 40 of the 50 attacks, but its accuracy goes down to 99.3%. |
-| 4 | `04_box_flags` | 13.955 | 10.40 | So we look at the confusion matrix instead. A true positive is I said there was an attack, and it was genuinely an attack. A false positive is the model predicted attack, but it was a real user. |
-| 5 | `05_box_misses` | 24.355 | 6.50 | A false negative, I said user, but it was an attack. And a true negative, I said user, and it was a user. |
-| 6 | `06_where_accuracy` | 30.855 | 4.85 | Now look where the accuracy comes from. Almost all of it is true negatives. These are the easy ones. |
-| 7 | `07_takeaway` | 35.705 | 6.25 | When positives are rare, we don't want to read the accuracy. We want to look at the confusion matrix. |
+| 3 | `03_model_a` | 0.00 | 6.105 | Here's a real model. It catches 40 of the 50 attacks, but its accuracy goes down to 99.3%. |
+| 4 | `04_box_flags` | 6.105 | 10.40 | So we look at the confusion matrix instead. A true positive is I said there was an attack, and it was genuinely an attack. A false positive is the model predicted attack, but it was a real user. |
+| 5 | `05_box_misses` | 16.505 | 6.50 | A false negative, I said user, but it was an attack. And a true negative, I said user, and it was a user. |
+| 6 | `06_where_accuracy` | 23.005 | 4.85 | Now look where the accuracy comes from. Almost all of it is true negatives. These are the easy ones. |
+| 7 | `07_takeaway` | 27.855 | 6.25 | When positives are rare, we don't want to read the accuracy. We want to look at the confusion matrix. |
 
 ## Cut list (approved by Chris, 10/17; applied)
 
@@ -136,6 +134,14 @@ code card), and "Now," + "flags 100 requests and" from line 5. 48.80 →
 The VO was also re-cleaned with the minimal chain (`recut_vo.py`): the full
 `enhance_vo.sh` chain's denoise (`afftdn nf=-25`) smeared this take, whose
 noise floor is about −54 dB.
+
+### Third cut (Chris, 10/17): start on "Here's a real model"
+
+The Short opens on beat 3. `vo_final.wav` is the second cut from 7.85 s
+(digital silence; "Here's" at 0.09). Beats 1–2 (`01_hook`, `02_only_fifty`)
+are out of the Short; beats 3–7 are unchanged. Frame 0 is the score line
+with the counter at 99.5%, "attacks caught 0 / 50" and the tag, so "goes
+down to 99.3%" has a visible start. 34.11 s; the matrix is named at 6.4 s.
 
 ## Not in this Short (on purpose)
 

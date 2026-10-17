@@ -1,287 +1,237 @@
 [
  {
-  "start": 0.45,
-  "end": 1.1,
-  "text": "This model is"
+  "start": 0.0,
+  "end": 0.67,
+  "text": "Here's a real model."
  },
  {
-  "start": 1.16,
-  "end": 2.42,
-  "text": "99.5%"
- },
- {
-  "start": 2.46,
-  "end": 3.06,
-  "text": "accurate, but"
- },
- {
-  "start": 3.12,
-  "end": 3.92,
-  "text": "it's never caught"
- },
- {
-  "start": 3.98,
-  "end": 4.86,
-  "text": "a single attack."
- },
- {
-  "start": 5.34,
-  "end": 5.7,
-  "text": "10,000"
- },
- {
-  "start": 5.74,
-  "end": 6.12,
-  "text": "requests come"
- },
- {
-  "start": 6.18,
-  "end": 6.58,
-  "text": "in, but only"
- },
- {
-  "start": 6.64,
-  "end": 7.54,
-  "text": "50 are attacks."
- },
- {
-  "start": 7.94,
-  "end": 8.02,
-  "text": "Here's a"
- },
- {
-  "start": 8.08,
-  "end": 8.52,
-  "text": "real model."
- },
- {
-  "start": 8.78,
-  "end": 9.495,
+  "start": 0.93,
+  "end": 1.645,
   "text": "It catches 40"
  },
  {
-  "start": 9.555,
-  "end": 9.765,
+  "start": 1.705,
+  "end": 1.915,
   "text": "of the"
  },
  {
-  "start": 9.825,
-  "end": 10.495,
+  "start": 1.975,
+  "end": 2.645,
   "text": "50 attacks"
  },
  {
-  "start": 10.895,
-  "end": 11.675,
+  "start": 3.045,
+  "end": 3.825,
   "text": "but its accuracy"
  },
  {
-  "start": 11.735,
-  "end": 12.195,
+  "start": 3.885,
+  "end": 4.345,
   "text": "goes down"
  },
  {
-  "start": 12.255,
-  "end": 13.775,
+  "start": 4.405,
+  "end": 5.925,
   "text": "to 99.3%."
  },
  {
-  "start": 14.215,
-  "end": 14.455,
+  "start": 6.365,
+  "end": 6.605,
   "text": "So, we look"
  },
  {
-  "start": 14.515,
-  "end": 15.055,
+  "start": 6.665,
+  "end": 7.205,
   "text": "at the confusion"
  },
  {
-  "start": 15.115,
-  "end": 15.875,
+  "start": 7.265,
+  "end": 8.025,
   "text": "matrix instead."
  },
  {
-  "start": 16.415,
-  "end": 16.955,
+  "start": 8.565,
+  "end": 9.105,
   "text": "A true positive"
  },
  {
-  "start": 17.015,
-  "end": 17.955,
+  "start": 9.165,
+  "end": 10.105,
   "text": "is I said"
  },
  {
-  "start": 18.015,
-  "end": 18.355,
+  "start": 10.165,
+  "end": 10.505,
   "text": "there was an"
  },
  {
-  "start": 18.415,
-  "end": 19.235,
+  "start": 10.565,
+  "end": 11.385,
   "text": "attack, and it"
  },
  {
-  "start": 19.295,
-  "end": 19.955,
+  "start": 11.445,
+  "end": 12.105,
   "text": "was genuinely"
  },
  {
-  "start": 20.015,
-  "end": 20.655,
+  "start": 12.165,
+  "end": 12.805,
   "text": "an attack."
  },
  {
-  "start": 20.875,
-  "end": 21.535,
+  "start": 13.025,
+  "end": 13.685,
   "text": "A false positive"
  },
  {
-  "start": 21.595,
-  "end": 22.195,
+  "start": 13.745,
+  "end": 14.345,
   "text": "is the model"
  },
  {
-  "start": 22.255,
-  "end": 22.535,
+  "start": 14.405,
+  "end": 14.685,
   "text": "predicted"
  },
  {
-  "start": 22.575,
-  "end": 23.415,
+  "start": 14.725,
+  "end": 15.565,
   "text": "attack, but"
  },
  {
-  "start": 23.475,
-  "end": 23.735,
+  "start": 15.625,
+  "end": 15.885,
   "text": "it was a"
  },
  {
-  "start": 23.795,
-  "end": 24.195,
+  "start": 15.945,
+  "end": 16.345,
   "text": "real user."
  },
  {
-  "start": 24.555,
-  "end": 25.714,
+  "start": 16.705,
+  "end": 17.864,
   "text": "A false negative"
  },
  {
-  "start": 25.774,
-  "end": 26.715,
+  "start": 17.924,
+  "end": 18.865,
   "text": "I said user"
  },
  {
-  "start": 26.775,
-  "end": 27.275,
+  "start": 18.925,
+  "end": 19.425,
   "text": "but it was"
  },
  {
-  "start": 27.335,
-  "end": 27.815,
+  "start": 19.485,
+  "end": 19.965,
   "text": "an attack."
  },
  {
-  "start": 27.895,
-  "end": 28.175,
+  "start": 20.045,
+  "end": 20.325,
   "text": "And a true"
  },
  {
-  "start": 28.235,
-  "end": 29.015,
+  "start": 20.385,
+  "end": 21.165,
   "text": "negative, I said"
  },
  {
-  "start": 29.075,
-  "end": 29.895,
+  "start": 21.225,
+  "end": 22.045,
   "text": "user and it"
  },
  {
-  "start": 29.955,
-  "end": 30.715,
+  "start": 22.105,
+  "end": 22.865,
   "text": "was a user."
  },
  {
-  "start": 31.035,
-  "end": 31.255,
+  "start": 23.185,
+  "end": 23.405,
   "text": "Now look where"
  },
  {
-  "start": 31.315,
-  "end": 31.715,
+  "start": 23.465,
+  "end": 23.865,
   "text": "the accuracy"
  },
  {
-  "start": 31.775,
-  "end": 32.295,
+  "start": 23.925,
+  "end": 24.445,
   "text": "comes from."
  },
  {
-  "start": 32.535,
-  "end": 33.015,
+  "start": 24.685,
+  "end": 25.165,
   "text": "Almost all of"
  },
  {
-  "start": 33.075,
-  "end": 33.275,
+  "start": 25.225,
+  "end": 25.425,
   "text": "it is"
  },
  {
-  "start": 33.335,
-  "end": 34.075,
+  "start": 25.485,
+  "end": 26.225,
   "text": "true negatives."
  },
  {
-  "start": 34.495,
-  "end": 34.835,
+  "start": 26.645,
+  "end": 26.985,
   "text": "These are the"
  },
  {
-  "start": 34.895,
-  "end": 35.455,
+  "start": 27.045,
+  "end": 27.605,
   "text": "easy ones."
  },
  {
-  "start": 35.895,
-  "end": 35.975,
+  "start": 28.045,
+  "end": 28.125,
   "text": "When"
  },
  {
-  "start": 36.015,
-  "end": 36.955,
+  "start": 28.165,
+  "end": 29.105,
   "text": "positives are"
  },
  {
-  "start": 37.015,
-  "end": 38.215,
+  "start": 29.165,
+  "end": 30.365,
   "text": "rare, we don't"
  },
  {
-  "start": 38.275,
-  "end": 38.595,
+  "start": 30.425,
+  "end": 30.745,
   "text": "want to read"
  },
  {
-  "start": 38.655,
-  "end": 39.315,
+  "start": 30.805,
+  "end": 31.465,
   "text": "the accuracy."
  },
  {
-  "start": 39.455,
-  "end": 39.775,
+  "start": 31.605,
+  "end": 31.925,
   "text": "We want to"
  },
  {
-  "start": 39.835,
-  "end": 40.215,
+  "start": 31.985,
+  "end": 32.365,
   "text": "look at the"
  },
  {
-  "start": 40.275,
-  "end": 40.595,
+  "start": 32.425,
+  "end": 32.745,
   "text": "confusion"
  },
  {
-  "start": 40.635,
-  "end": 40.915,
+  "start": 32.785,
+  "end": 33.065,
   "text": "matrix."
  }
 ]
