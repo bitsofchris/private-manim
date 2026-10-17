@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_same_model: "The model can be the same, but the harness is why one agent
+         fixes your bug and another might keep going in circles."
+         Rig shrinks left, a second agent (same head, no tools or memory) fades in right;
+         ✓ over the left one, ↻ spins over the right one, its missing parts go magenta. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/rig.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.04" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.04;
+  // Beat-local cues (master − 28.480).
+  const CUE = {
+    model: 0.28,    /* "model" */
+    same: 0.96,     /* "same," */
+    harness: 1.30,  /* "harness" */
+    agent: 2.46,    /* "agent" */
+    fixes: 2.78,    /* "fixes" */
+    bug: 3.18,      /* "bug" */
+    another: 3.48,  /* "another" */
+    going: 4.16,    /* "going" */
+    circles: 4.42,  /* "circles." */
+  };
+  const T = { shrink: 0.9, labelsOut: 0.6, still: 4.80 };
+  const { seg, lerp } = ISO, E = ISO.E();
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const H = RIG.HOME, L = { x: 290, y: 1010, s: 0.65 };
+  const rig = RIG.make(svg, root);
+  const twin = RIG.make(svg, root, { x: 760, y: 1010, s: 0.65, missing: [1, 2], labels: false });
+  const ok = RIG.check(svg, 290, 450), loop = RIG.circling(svg, 760, 450);
+  ISO.guides(root);
+
+  function render(t) {
+    // Shrink and slide left; starts on frame 0 (ease-out: already moving).
+    const u = E.out(seg(t, 0, T.shrink));
+    const a = 1 - E.io(seg(t, 0, T.labelsOut));
+    RIG.place(rig, lerp(H.x, L.x, u), lerp(H.y, L.y, u), lerp(H.s, L.s, u), a);
+    RIG.parts(rig, [0, 0, 0, a]);                       // loop back to teal with the labels
+
+    // "same," — the second agent fades in, same head.
+    twin.g.setAttribute("opacity", E.io(seg(t, CUE.same - 0.06, CUE.same + 0.40)));
+    // "harness" — both heads blink once, in sync.
+    const b = (t >= CUE.harness && t < CUE.harness + 0.14) ? 1 : 0;
+    CAST.blink(rig.agent, b); CAST.blink(twin.agent, b);
+
+    // "fixes your bug" — the teal check pops in over the left agent.
+    const pc = seg(t, CUE.fixes, CUE.fixes + 0.32);
+    ok.el.setAttribute("opacity", Math.min(1, pc * 3));
+    CAST.place(ok, 290, 450, pc > 0 ? E.back(pc) : 0.001);
+
+    // "another … going in circles" — the arrow fades in and spins two whole turns,
+    // ending at angle 0 before the hold; the twin's missing parts go magenta.
+    loop.el.setAttribute("opacity", E.io(seg(t, CUE.another, CUE.another + 0.30)));
+    RIG.spin(loop, -720 * E.io(seg(t, CUE.another + 0.05, T.still)));
+    const m = E.io(seg(t, CUE.going, CUE.circles + 0.10));
+    RIG.parts(twin, [0, m, m, 0]);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 07_ask: "So when your agent fails, don't blame the model at first. Ask which
+         piece was missing: the context, the tool, the memory, or the check."
+         Twin and verdicts fade, the rig grows back home with its labels; eyes dash on
+         "fails", head shakes on "don't blame the model", then each part goes magenta
+         in turn. The Short's last frame: loop magenta, all labels on, still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/rig.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.862" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.862;
+  // Beat-local cues (master − 33.520).
+  const CUE = {
+    fails: 0.86,    /* "fails," */
+    dont: 1.31,     /* "don't" */
+    blame: 1.44,    /* "blame" */
+    model: 1.78,    /* "model" */
+    ask: 2.90,      /* "Ask" */
+    missing: 3.64,  /* "missing:" */
+    context: 4.22,  /* "context," */
+    tool: 4.86,     /* "tool," */
+    memory: 5.26,   /* "memory," */
+    check: 5.88,    /* "check." */
+  };
+  const T = { grow: 0.8, fadeOut: 0.6, eyesOpen: 1.30, shake: 0.6, swap: 0.15, pop: 0.35 };
+  const { seg, lerp } = ISO, E = ISO.E();
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const H = RIG.HOME, L = { x: 290, y: 1010, s: 0.65 };
+  const rig = RIG.make(svg, root);
+  const twin = RIG.make(svg, root, { x: 760, y: 1010, s: 0.65, missing: [1, 2], labels: false });
+  const ok = RIG.check(svg, 290, 450), loop = RIG.circling(svg, 760, 450);
+  ISO.guides(root);
+  const NAMED = [CUE.context, CUE.tool, CUE.memory, CUE.check];
+
+  function render(t) {
+    // Beat 6's end state fades; the rig grows back home (ease-out: moving on frame 0).
+    const f = 1 - E.io(seg(t, 0, T.fadeOut));
+    twin.g.setAttribute("opacity", f); ok.el.setAttribute("opacity", f); loop.el.setAttribute("opacity", f);
+    RIG.parts(twin, [0, 1, 1, 0]);
+    const u = E.out(seg(t, 0, T.grow));
+    RIG.place(rig, lerp(L.x, H.x, u), lerp(L.y, H.y, u), lerp(L.s, H.s, u), E.io(seg(t, 0.1, T.grow)));
+
+    // "fails," — eyes to dashes, open again at ~1.3 s.
+    CAST.blink(rig.agent, t >= CUE.fails && t < T.eyesOpen ? 1 : 0);
+    // "don't blame the model" — one head shake, back to 0; the head stays dim.
+    const sh = seg(t, CUE.blame, CUE.blame + T.shake);
+    CAST.pose(rig.agent, { tilt: 7 * Math.sin(2 * Math.PI * sh) * (1 - sh * 0.3) * (sh < 1 ? 1 : 0) });
+
+    // "the context, the tool, the memory, or the check" — one magenta at a time.
+    NAMED.forEach((c, i) => {
+      const on = E.io(seg(t, c - 0.05, c - 0.05 + T.swap));
+      const next = NAMED[i + 1];
+      const off = next == null ? 0 : E.io(seg(t, next - 0.05, next - 0.05 + T.swap));
+      RIG.part(rig, i, on * (1 - off), seg(t, c - 0.05, c - 0.05 + T.pop));
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

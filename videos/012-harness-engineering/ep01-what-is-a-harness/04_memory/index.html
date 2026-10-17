@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_memory: "Memory is what carries over when the session ends. Notes, rules, like an
+         AGENTS.md, they're loaded back in next time." Tool icons fade; hero tools -> memory
+         on "Memory"; eyes close on "session ends" and reopen (a new session); an AGENTS.md
+         card rises out of the drawer and rides up into the head. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/rig.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #agents-card { position: absolute; left: 0; top: 0; width: 350px; height: 96px; border-radius: 14px;
+                     background: var(--panel); border: 6px solid var(--data); color: var(--data);
+                     font-size: 60px; line-height: 84px; text-align: center; white-space: nowrap;
+                     transform-origin: 50% 50%; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.66" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.66;
+  const CUE = {
+    memory: 0.25,   /* "Memory" */
+    session: 1.67,  /* "session" */
+    ends: 1.89,     /* "ends." */
+    agents: 3.45,   /* "AGENTS.md," */
+    loaded: 4.41,   /* "loaded" */
+    back: 4.65,     /* "back" */
+    time: 5.25,     /* "time." */
+  };
+  const { seg, lerp } = ISO, E = ISO.E();
+  const { PAL, node, line, ink } = CAST;
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const rig = RIG.make(svg, root);
+
+  // Local helper (shared by copy with 04_memory, keep identical): the three tool
+  // icons, stage right above the terminal, clear of the "model" label.
+  // show(icons, i, u, from): u 0..1 pops icon i out of `from` (frame point) to its slot.
+  function toolIcons(svg) {
+    const SLOTS = [[690, 645], [800, 645], [900, 645]];
+    const g = node("g", {}, svg);
+    const items = SLOTS.map((s) => ({ slot: s, el: node("g", {}, g) }));
+    const [pg, tg, mg] = items.map((it) => it.el);
+    // read a file: a page with lines
+    node("rect", { x: -35, y: -45, width: 70, height: 90, rx: 8, fill: PAL.panel, stroke: PAL.data, "stroke-width": 6 }, pg);
+    [-22, -6, 10, 26].forEach((yy, i) => line(pg, -20, yy, i % 2 ? 10 : 20, yy, ink(5, PAL.data)));
+    // run a command: a small terminal card with a >_ cursor
+    node("rect", { x: -50, y: -38, width: 100, height: 76, rx: 10, fill: PAL.panel, stroke: PAL.data, "stroke-width": 6 }, tg);
+    line(tg, -50, -18, 50, -18, ink(4, PAL.data));
+    const prompt = node("text", { x: -34, y: 26, "font-size": 40, "font-weight": 800, fill: PAL.data }, tg);
+    prompt.textContent = ">"; prompt.style.fontFamily = "monospace";
+    const cursor = node("text", { x: -8, y: 26, "font-size": 40, "font-weight": 800, fill: PAL.data }, tg);
+    cursor.textContent = "_"; cursor.style.fontFamily = "monospace";
+    // search the web: a magnifier
+    node("circle", { cx: -8, cy: -8, r: 26, fill: PAL.panel, stroke: PAL.data, "stroke-width": 7 }, mg);
+    line(mg, 11, 11, 34, 34, ink(10, PAL.data));
+    return { g, items, cursor };
+  }
+  function showIcon(icons, i, u, from) {
+    const it = icons.items[i], k = Math.max(0, Math.min(1, u));
+    const b = k <= 0 ? 0 : E.back(k);
+    const x = lerp(from[0], it.slot[0], b), y = lerp(from[1], it.slot[1], b), s = lerp(0.2, 1, b);
+    it.el.setAttribute("transform", `translate(${x} ${y}) scale(${s})`);
+    it.el.setAttribute("opacity", Math.min(1, k * 3));
+  }
+
+  const icons = toolIcons(svg);
+  icons.items.forEach((_, i) => showIcon(icons, i, 1, icons.items[i].slot));   // beat 3's end: all on
+
+  // Local helper: the AGENTS.md card (DOM text, monospace set from script).
+  const CARD = { w: 350, h: 96, slot: [245, 655] };
+  const card = document.createElement("div");
+  card.id = "agents-card"; card.textContent = "AGENTS.md";
+  card.setAttribute("data-layout-allow-overlap", "");   // it enters the head on purpose
+  card.style.fontFamily = "monospace";
+  root.appendChild(card);
+  function placeCard(x, y, s, a) {
+    card.style.transform = `translate(${x - CARD.w / 2}px, ${y - CARD.h / 2}px) scale(${s})`;
+    card.style.opacity = a;
+  }
+
+  function render(t) {
+    // the tool icons fade out (moving from frame 0)
+    icons.g.setAttribute("opacity", 1 - E.io(seg(t, 0, 0.4)));
+    // hero: tools -> memory on "Memory"
+    const h = E.io(seg(t, CUE.memory - 0.08, CUE.memory + 0.2));
+    RIG.part(rig, 0, 0); RIG.part(rig, 3, 0);
+    RIG.part(rig, 1, 1 - h);
+    RIG.part(rig, 2, h, seg(t, CUE.memory, CUE.memory + 0.4));
+    // "session ends": eyes close to dashes, open again (a new session)
+    CAST.blink(rig.agent, t >= CUE.ends && t < CUE.ends + 0.27 ? 1 : 0);
+    // "AGENTS.md": the card rises out of the drawer; "loaded back in": it rides into the head
+    const drawer = RIG.partAt(rig, 2), head = RIG.headAt(rig);
+    const rise = E.out(seg(t, CUE.agents - 0.1, CUE.agents + 0.55));
+    const ride = E.io(seg(t, CUE.loaded, CUE.loaded + 0.7));
+    let x = lerp(drawer[0], CARD.slot[0], rise), y = lerp(drawer[1], CARD.slot[1], rise), s = lerp(0.25, 1, rise);
+    let a = Math.min(1, seg(t, CUE.agents - 0.1, CUE.agents + 0.15));
+    if (ride > 0) {
+      x = lerp(CARD.slot[0], head[0], ride); y = lerp(CARD.slot[1], head[1], ride); s = lerp(1, 0.3, ride);
+      a = 1 - seg(t, CUE.loaded + 0.35, CUE.loaded + 0.7);
+    }
+    placeCard(x, y, s, a);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

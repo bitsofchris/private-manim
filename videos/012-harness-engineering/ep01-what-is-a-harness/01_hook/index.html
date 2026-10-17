@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 01_hook: "An agent harness is everything except the model. It decides what the
+         model sees, what it can do, what it remembers, and when it's done."
+         The agent at home, a dot running round the floor loop; all four parts pulse on
+         "everything", back to teal for "except the model" (the head blinks); then each
+         part goes magenta on its word and its label pops in. Ends [0,0,0,1], all labels. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/rig.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.85" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.85;
+  const CUE = {
+    every: 1.48,   /* "everything" */
+    except: 1.94,  /* "except" */
+    model: 2.54,   /* "model." */
+    sees: 4.12,    /* "sees," */
+    can: 4.96,     /* "do," */
+    rem: 5.44,     /* "remembers," */
+    done: 6.36,    /* "done." */
+  };
+  const HOLD_FROM = 6.6;          // last frame still from here
+  const LAP = 2.2;                // seconds per lap of the loop's dot
+  const SWAP = 0.15;              // colour swap length
+  const POP = 0.24;               // label pop length
+
+  const { seg } = ISO, E = ISO.E();
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const rig = RIG.make(svg, root);
+  // The loop's dot (local: not in the kit).
+  const dot = CAST.node("circle", { r: 14, cx: 0, cy: 0, fill: CAST.PAL.ink }, svg);
+  ISO.guides(root);
+
+  // Each part's word: [part index, cue]. The part lights on its word and goes back to
+  // teal when the next one lights; its label pops in on the same word and stays.
+  const NAMED = [[0, CUE.sees], [1, CUE.can], [2, CUE.rem], [3, CUE.done]];
+
+  function render(tIn) {
+    const t = Math.min(tIn, HOLD_FROM);
+    // "everything": all four parts pulse together; back to teal before "the model".
+    const all = E.out(seg(t, CUE.every, CUE.every + 0.22)) * (1 - E.io(seg(t, CUE.except + 0.05, CUE.except + 0.4)));
+    NAMED.forEach(([i, c], k) => {
+      const next = NAMED[k + 1];
+      const on = E.io(seg(t, c, c + SWAP)) * (next ? 1 - E.io(seg(t, next[1], next[1] + SWAP)) : 1);
+      RIG.part(rig, i, Math.max(all, on), seg(t, c, c + POP));
+      rig.labels[i].style.opacity = E.out(seg(t, c, c + 0.12));
+    });
+    rig.model.style.opacity = 1;
+    // "model.": the head blinks (eyes to dashes and back).
+    const b = seg(t, CUE.model + 0.06, CUE.model + 0.26);
+    CAST.blink(rig.agent, b > 0 && b < 1 ? 1 : 0);
+    // The dot runs round the floor loop from frame 0 and fades out before the hold.
+    const [x, y] = RIG.loopAt(rig, ((t / LAP) % 1) * 1.125);   // 1.125: the full ellipse (loopAt spans 320°)
+    dot.setAttribute("cx", x.toFixed(1)); dot.setAttribute("cy", y.toFixed(1));
+    dot.setAttribute("opacity", (1 - E.io(seg(t, 5.95, 6.35))).toFixed(3));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

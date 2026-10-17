@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_tools: "Tools are what it can touch. Read a file, run a command, search the web."
+         Hero context -> tools on "Tools"; the right arm lifts on "touch."; three tool
+         icons (page, terminal card, magnifier) pop out beside the right hand. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/rig.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.28" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.28;
+  const CUE = {
+    tools: 0.08,    /* "Tools" */
+    touch: 0.83,    /* "touch." */
+    file: 1.53,     /* "file," */
+    command: 2.07,  /* "command," */
+    web: 2.75,      /* "web." */
+  };
+  const { seg, lerp } = ISO, E = ISO.E();
+  const { PAL, node, line, ink } = CAST;
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const rig = RIG.make(svg, root);
+
+  // Local helper (shared by copy with 04_memory, keep identical): the three tool
+  // icons, stage right above the terminal, clear of the "model" label.
+  // show(icons, i, u, from): u 0..1 pops icon i out of `from` (frame point) to its slot.
+  function toolIcons(svg) {
+    const SLOTS = [[690, 645], [800, 645], [900, 645]];
+    const g = node("g", {}, svg);
+    const items = SLOTS.map((s) => ({ slot: s, el: node("g", {}, g) }));
+    const [pg, tg, mg] = items.map((it) => it.el);
+    // read a file: a page with lines
+    node("rect", { x: -35, y: -45, width: 70, height: 90, rx: 8, fill: PAL.panel, stroke: PAL.data, "stroke-width": 6 }, pg);
+    [-22, -6, 10, 26].forEach((yy, i) => line(pg, -20, yy, i % 2 ? 10 : 20, yy, ink(5, PAL.data)));
+    // run a command: a small terminal card with a >_ cursor
+    node("rect", { x: -50, y: -38, width: 100, height: 76, rx: 10, fill: PAL.panel, stroke: PAL.data, "stroke-width": 6 }, tg);
+    line(tg, -50, -18, 50, -18, ink(4, PAL.data));
+    const prompt = node("text", { x: -34, y: 26, "font-size": 40, "font-weight": 800, fill: PAL.data }, tg);
+    prompt.textContent = ">"; prompt.style.fontFamily = "monospace";
+    const cursor = node("text", { x: -8, y: 26, "font-size": 40, "font-weight": 800, fill: PAL.data }, tg);
+    cursor.textContent = "_"; cursor.style.fontFamily = "monospace";
+    // search the web: a magnifier
+    node("circle", { cx: -8, cy: -8, r: 26, fill: PAL.panel, stroke: PAL.data, "stroke-width": 7 }, mg);
+    line(mg, 11, 11, 34, 34, ink(10, PAL.data));
+    return { g, items, cursor };
+  }
+  function showIcon(icons, i, u, from) {
+    const it = icons.items[i], k = Math.max(0, Math.min(1, u));
+    const b = k <= 0 ? 0 : E.back(k);
+    const x = lerp(from[0], it.slot[0], b), y = lerp(from[1], it.slot[1], b), s = lerp(0.2, 1, b);
+    it.el.setAttribute("transform", `translate(${x} ${y}) scale(${s})`);
+    it.el.setAttribute("opacity", Math.min(1, k * 3));
+  }
+
+  const icons = toolIcons(svg);
+  const POP = 0.3;
+
+  function render(t) {
+    // hero: context -> tools on "Tools"
+    const h = E.io(seg(t, 0, CUE.tools + 0.17));
+    RIG.part(rig, 0, 1 - h);
+    RIG.part(rig, 1, h, seg(t, CUE.tools, CUE.tools + 0.4));
+    RIG.part(rig, 2, 0); RIG.part(rig, 3, 0);
+    // "touch.": the right arm lifts a little and settles back to 58
+    const lift = Math.sin(Math.PI * E.sine(seg(t, CUE.touch - 0.05, CUE.touch + 0.6)));
+    CAST.pose(rig.agent, { armL: 58, armR: 58 + 12 * lift });
+    RIG.follow(rig);
+    // the three tool icons pop out of the terminal on their words
+    const from = RIG.partAt(rig, 1);
+    [CUE.file, CUE.command, CUE.web].forEach((c, i) => showIcon(icons, i, seg(t, c - 0.04, c - 0.04 + POP), from));
+    // the >_ cursor blinks once after "command"
+    const b = t - CUE.command;
+    icons.cursor.setAttribute("opacity", b > 0.40 && b < 0.58 ? 0 : 1);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

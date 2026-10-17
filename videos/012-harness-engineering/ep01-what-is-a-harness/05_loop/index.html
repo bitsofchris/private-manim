@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_loop (ep 1, beat 5): the loop is named. Its dot runs the model (head pulse),
+         runs the tool (terminal flash), feeds the result back (terminal → head), checks
+         the work (✓ by the loop label), tries again (one more lap) and stops; on "save
+         rules" a rule card lifts off the floor loop and drops into the memory drawer.
+         Opens [0,0,1,0], ends [0,0,0,1], all labels on. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/rig.js"></script>
+    <style>
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.41" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.41;
+  // Beat-local cues (master − 20.070, words.json).
+  const CUE = {
+    loop: 0.39,    /* "loop" */
+    model: 1.11,   /* "model," */
+    tool: 1.91,    /* "tool," */
+    feeds: 2.44,   /* "feeds" */
+    back: 2.99,    /* "back," */
+    checks: 3.47,  /* "checks" */
+    tryA: 4.65,    /* "Try" */
+    stop: 5.11,    /* "stop," */
+    save: 6.15,    /* "save" */
+    rules: 6.67,   /* "rules" */
+    recur: 6.99,   /* "recursively" */
+    self: 7.51,    /* "self-improve." */
+  };
+  const HOLD_FROM = 8.1;
+  const { seg, lerp } = ISO, E = ISO.E();
+  const { PAL, node, line, ink } = CAST;
+  const root = document.getElementById("root");
+  const svg = CAST.layer(root);
+  const rig = RIG.make(svg, root);
+  const headRect = rig.agent.headG.querySelector("rect");
+  const HEAD = RIG.headAt(rig), TERM = RIG.partAt(rig, 1), DRAWER = RIG.partAt(rig, 2);
+  const LOOP_U = 1.125;                                   // loopAt units in one full turn (360° / 320°)
+
+  // Local helper: the rule card (ink outline, three short lines).
+  function ruleCard(parent) {
+    const g = node("g", {}, parent);
+    node("rect", { x: -45, y: -55, width: 90, height: 110, rx: 10, fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6 }, g);
+    [[-22, 27], [0, 27], [22, 12]].forEach(([y, hw]) => line(g, -27, y, -27 + 2 * hw, y, ink(6, PAL.ink)));
+    return { el: g };
+  }
+  const check = RIG.check(svg, 880, 870);
+  const card = ruleCard(svg);
+  const dot = node("circle", { cx: 0, cy: 0, r: 14, fill: PAL.ink }, svg);
+
+  // Quadratic arc from p to q, bent sideways by `bend` px (positive = left of travel).
+  function arc(p, q, u, bend) {
+    const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2, dx = q[0] - p[0], dy = q[1] - p[1], n = Math.hypot(dx, dy) || 1;
+    const c = [mx + bend * dy / n, my - bend * dx / n];
+    return quad(p, c, q, u);
+  }
+  const quad = (p, c, q, u) => [0, 1].map((k) => (1 - u) * (1 - u) * p[k] + 2 * u * (1 - u) * c[k] + u * u * q[k]);
+  const bell = (u) => Math.sin(Math.PI * Math.max(0, Math.min(1, u)));
+
+  // The dot's path, piece by piece.
+  const RUN0 = 0.70, U_HOP = 0.45;                        // floor run from u 0 to U_HOP, then hop
+  const LOOP_REST = 0.5;                                  // the loop's right end, by its label
+  function dotAt(t) {
+    if (t < RUN0) return { p: RIG.loopAt(rig, U_HOP * t / RUN0), r: 1 };
+    if (t < 1.40) {                                       // hop up into the head ("runs the model")
+      const u = E.io(seg(t, RUN0, 1.25));
+      return { p: arc(RIG.loopAt(rig, U_HOP), HEAD, u, 160), r: 1 - seg(t, 1.15, 1.30) };
+    }
+    if (t < 2.35) {                                       // head → terminal ("runs the tool")
+      const u = E.io(seg(t, 1.40, 1.95));
+      return { p: arc(HEAD, TERM, u, 90), r: Math.min(seg(t, 1.40, 1.52), 1 - seg(t, 1.86, 1.97)) };
+    }
+    if (t < 3.00) {                                       // terminal → head ("feeds the result back")
+      const u = E.io(seg(t, 2.35, 2.95));
+      return { p: arc(TERM, HEAD, u, 90), r: Math.min(seg(t, 2.35, 2.47), 1 - seg(t, 2.86, 2.98)) };
+    }
+    const rest = RIG.loopAt(rig, LOOP_REST);
+    if (t < 3.60) {                                       // head → the loop, beside the check
+      const u = E.io(seg(t, 3.00, 3.55));
+      return { p: arc(HEAD, rest, u, -120), r: seg(t, 3.00, 3.12) };
+    }
+    if (t < 4.45) return { p: rest, r: 1 };
+    const u = E.sine(seg(t, 4.45, CUE.stop));             // "Try again": one more lap, halts on "stop,"
+    return { p: RIG.loopAt(rig, (LOOP_REST + LOOP_U * u) % LOOP_U), r: 1 - E.inn(seg(t, CUE.stop + 0.05, 5.45)) };
+  }
+
+  // The rule card: lifts off the front of the floor loop, arcs up the left, drops into the drawer.
+  const CARD_FROM = RIG.loopAt(rig, 0.94), CARD_PEAK = [250, 600], CARD_CTRL = [60, 900];
+  const CARD_IN = [DRAWER[0], DRAWER[1] - 45];
+  function cardAt(t) {
+    if (t < CUE.save) return null;
+    if (t < 7.00) {
+      const u = E.io(seg(t, CUE.save, 6.85));
+      return { p: quad(CARD_FROM, CARD_CTRL, CARD_PEAK, u), s: lerp(0.4, 1, E.out(seg(t, CUE.save, 6.5))), a: seg(t, CUE.save, 6.3) };
+    }
+    const u = E.inn(seg(t, 7.00, 7.45));
+    return { p: [lerp(CARD_PEAK[0], CARD_IN[0], u), lerp(CARD_PEAK[1], CARD_IN[1], u)], s: lerp(1, 0.5, u), a: 1 - seg(t, 7.30, 7.47) };
+  }
+
+  ISO.guides(root);
+  function render(t0) {
+    const t = Math.min(t0, HOLD_FROM);
+    // Hero: memory → loop on "loop".
+    const h = E.io(seg(t, CUE.loop, CUE.loop + 0.3));
+    RIG.parts(rig, [0, 0, 1 - h, h]);
+    RIG.part(rig, 3, h, seg(t, CUE.loop, CUE.loop + 0.4));
+
+    // Drawer bump as the card lands.
+    RIG.place(rig, RIG.HOME.x, RIG.HOME.y, RIG.HOME.s);
+    const bump = 12 * bell(seg(t, 7.42, 7.80));
+    const mp = rig.parts[2].pos;
+    rig.parts[2].el.setAttribute("transform", `translate(${mp[0]} ${mp[1] + bump})`);
+
+    // Head pulse ("runs the model"; a smaller one as the result comes back). Stroke only, stays dim-ish.
+    const pulse = Math.max(bell(seg(t, 1.10, 1.65)), 0.55 * bell(seg(t, 2.92, 3.30)));
+    headRect.setAttribute("stroke", RIG.mixHex(PAL.dim, PAL.ink, 0.75 * pulse));
+    headRect.setAttribute("stroke-width", 9 + 6 * pulse);
+
+    // Terminal flash ("runs the tool"): teal brightens toward ink, never magenta.
+    const flash = bell(seg(t, 1.90, 2.35));
+    rig.parts[1].inner.querySelectorAll("[data-base]").forEach((el) => {
+      const c = RIG.mixHex(PAL.data, PAL.ink, 0.85 * flash);
+      if (el.getAttribute("stroke")) el.setAttribute("stroke", c);
+      if (el.getAttribute("data-fill")) el.setAttribute("fill", c);
+    });
+
+    // The loop's dot.
+    const d = dotAt(t);
+    dot.setAttribute("cx", d.p[0]); dot.setAttribute("cy", d.p[1]);
+    const grow = E.out(seg(t, 0, 0.2));                                // grows in from the 04 -> 05 cut (no dot at the seam)
+    dot.setAttribute("r", 14 * Math.max(0, d.r) * grow); dot.setAttribute("opacity", d.r * grow > 0.01 ? 1 : 0);
+
+    // The check ("checks the work"), gone by ~4.6 s.
+    const ck = E.back(seg(t, CUE.checks - 0.02, CUE.checks + 0.28));
+    CAST.place(check, 880, 870, Math.max(0.001, ck));
+    check.el.setAttribute("opacity", Math.min(seg(t, CUE.checks - 0.02, CUE.checks + 0.1), 1 - seg(t, 4.20, 4.60)));
+
+    // The rule card.
+    const c = cardAt(t);
+    if (c) { CAST.place(card, c.p[0], c.p[1], c.s); card.el.setAttribute("opacity", c.a); }
+    else card.el.setAttribute("opacity", 0);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
