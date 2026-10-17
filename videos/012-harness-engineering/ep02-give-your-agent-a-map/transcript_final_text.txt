@@ -1,0 +1,34 @@
+00:00.320-00:03.360
+Context engineering is just giving your agent a map.
+
+00:03.360-00:08.960
+Humans search when they know what they're looking for, but we turn to agents when we're not really sure what we need, so they end up exploring more.
+
+00:08.660-00:12.580
+The obvious fix is to stuff everything into the context window, but that'll backfire.
+
+00:12.580-00:14.660
+The model doesn't really find what you're looking for.
+
+00:14.660-00:16.260
+This is known as context ride
+
+00:16.619-00:19.580
+Having one giant agents MD file does not work.
+
+00:19.580-00:21.180
+When everything is important, nothing is.
+
+00:21.180-00:23.740
+It can't cut through the noise to find what really matters.
+
+00:23.740-00:30.060
+But by creating a simple map, a map in Markdown or an index in a database, you hold pointers to files
+
+00:30.039-00:33.399
+You concisely let the agent navigate where it needs to go.
+
+00:33.480-00:37.480
+The agent reads the map and drills into only what it needs to, retrieving that part
+
+

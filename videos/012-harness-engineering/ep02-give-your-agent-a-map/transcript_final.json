@@ -1,0 +1,857 @@
+{
+  "segments" : [
+    {
+      "end" : 2980,
+      "id" : "CC8A8920-2DC3-4D7E-BFCB-8EFBA5CC30A8",
+      "start" : 699,
+      "text" : "Context engineering is just giving your agent a map.",
+      "words" : [
+        {
+          "end" : 1059,
+          "start" : 699,
+          "text" : "Context"
+        },
+        {
+          "end" : 1420,
+          "start" : 1059,
+          "text" : "engineering"
+        },
+        {
+          "end" : 1700,
+          "start" : 1420,
+          "text" : "is"
+        },
+        {
+          "end" : 1900,
+          "start" : 1700,
+          "text" : "just"
+        },
+        {
+          "end" : 2160,
+          "start" : 1900,
+          "text" : "giving"
+        },
+        {
+          "end" : 2360,
+          "start" : 2160,
+          "text" : "your"
+        },
+        {
+          "end" : 2660,
+          "start" : 2360,
+          "text" : "agent"
+        },
+        {
+          "end" : 2840,
+          "start" : 2660,
+          "text" : "a"
+        },
+        {
+          "end" : 2980,
+          "start" : 2840,
+          "text" : "map."
+        }
+      ]
+    },
+    {
+      "end" : 5060,
+      "id" : "5A4A7B28-E260-4556-8800-157473B557EB",
+      "start" : 3400,
+      "text" : "Humans search when they know what they're looking for,",
+      "words" : [
+        {
+          "end" : 3720,
+          "start" : 3400,
+          "text" : "Humans"
+        },
+        {
+          "end" : 4040,
+          "start" : 3720,
+          "text" : "search"
+        },
+        {
+          "end" : 4160,
+          "start" : 4040,
+          "text" : "when"
+        },
+        {
+          "end" : 4240,
+          "start" : 4160,
+          "text" : "they"
+        },
+        {
+          "end" : 4360,
+          "start" : 4240,
+          "text" : "know"
+        },
+        {
+          "end" : 4440,
+          "start" : 4360,
+          "text" : "what"
+        },
+        {
+          "end" : 4560,
+          "start" : 4440,
+          "text" : "they're"
+        },
+        {
+          "end" : 4800,
+          "start" : 4560,
+          "text" : "looking"
+        },
+        {
+          "end" : 5060,
+          "start" : 4800,
+          "text" : "for,"
+        }
+      ]
+    },
+    {
+      "end" : 6020,
+      "id" : "49AA6BE8-4D67-47A1-94B8-E7C2C88B5686",
+      "start" : 5280,
+      "text" : "but we turn to agents",
+      "words" : [
+        {
+          "end" : 5340,
+          "start" : 5280,
+          "text" : "but"
+        },
+        {
+          "end" : 5420,
+          "start" : 5340,
+          "text" : "we"
+        },
+        {
+          "end" : 5620,
+          "start" : 5420,
+          "text" : "turn"
+        },
+        {
+          "end" : 5700,
+          "start" : 5620,
+          "text" : "to"
+        },
+        {
+          "end" : 6020,
+          "start" : 5700,
+          "text" : "agents"
+        }
+      ]
+    },
+    {
+      "end" : 7120,
+      "id" : "411EA052-F857-48B8-A57F-A8DBCEC80C60",
+      "start" : 6020,
+      "text" : "when we're not really sure what we need,",
+      "words" : [
+        {
+          "end" : 6120,
+          "start" : 6020,
+          "text" : "when"
+        },
+        {
+          "end" : 6240,
+          "start" : 6120,
+          "text" : "we're"
+        },
+        {
+          "end" : 6320,
+          "start" : 6240,
+          "text" : "not"
+        },
+        {
+          "end" : 6500,
+          "start" : 6320,
+          "text" : "really"
+        },
+        {
+          "end" : 6720,
+          "start" : 6500,
+          "text" : "sure"
+        },
+        {
+          "end" : 6840,
+          "start" : 6720,
+          "text" : "what"
+        },
+        {
+          "end" : 6940,
+          "start" : 6840,
+          "text" : "we"
+        },
+        {
+          "end" : 7120,
+          "start" : 6940,
+          "text" : "need,"
+        }
+      ]
+    },
+    {
+      "end" : 8340,
+      "id" : "30F92703-07F0-4827-BE2E-87B622C08794",
+      "start" : 7180,
+      "text" : "so they end up exploring more.",
+      "words" : [
+        {
+          "end" : 7260,
+          "start" : 7180,
+          "text" : "so"
+        },
+        {
+          "end" : 7380,
+          "start" : 7260,
+          "text" : "they"
+        },
+        {
+          "end" : 7500,
+          "start" : 7380,
+          "text" : "end"
+        },
+        {
+          "end" : 7620,
+          "start" : 7500,
+          "text" : "up"
+        },
+        {
+          "end" : 8100,
+          "start" : 7620,
+          "text" : "exploring"
+        },
+        {
+          "end" : 8340,
+          "start" : 8100,
+          "text" : "more."
+        }
+      ]
+    },
+    {
+      "end" : 10360,
+      "id" : "E4BC0DF7-9F12-4441-9C27-66602292EA5E",
+      "start" : 8600,
+      "text" : "The obvious fix is to stuff everything",
+      "words" : [
+        {
+          "end" : 8900,
+          "start" : 8600,
+          "text" : "The"
+        },
+        {
+          "end" : 9300,
+          "start" : 8900,
+          "text" : "obvious"
+        },
+        {
+          "end" : 9560,
+          "start" : 9300,
+          "text" : "fix"
+        },
+        {
+          "end" : 9680,
+          "start" : 9560,
+          "text" : "is"
+        },
+        {
+          "end" : 9820,
+          "start" : 9680,
+          "text" : "to"
+        },
+        {
+          "end" : 10020,
+          "start" : 9820,
+          "text" : "stuff"
+        },
+        {
+          "end" : 10360,
+          "start" : 10020,
+          "text" : "everything"
+        }
+      ]
+    },
+    {
+      "end" : 12260,
+      "id" : "7E04AB6E-8196-4B1E-A233-92E4A98E2906",
+      "start" : 10590,
+      "text" : "into the context window, but that'll backfire.",
+      "words" : [
+        {
+          "end" : 10720,
+          "start" : 10590,
+          "text" : "into"
+        },
+        {
+          "end" : 10880,
+          "start" : 10720,
+          "text" : "the"
+        },
+        {
+          "end" : 11220,
+          "start" : 10880,
+          "text" : "context"
+        },
+        {
+          "end" : 11440,
+          "start" : 11220,
+          "text" : "window,"
+        },
+        {
+          "end" : 11560,
+          "start" : 11440,
+          "text" : "but"
+        },
+        {
+          "end" : 11760,
+          "start" : 11560,
+          "text" : "that'll"
+        },
+        {
+          "end" : 12260,
+          "start" : 11760,
+          "text" : "backfire."
+        }
+      ]
+    },
+    {
+      "end" : 14380,
+      "id" : "462F52E4-7EAF-45E4-B4E6-9FA5A46FFE05",
+      "start" : 12760,
+      "text" : "The model isn't really fine what you're looking for.",
+      "words" : [
+        {
+          "end" : 12840,
+          "start" : 12760,
+          "text" : "The"
+        },
+        {
+          "end" : 13100,
+          "start" : 12840,
+          "text" : "model"
+        },
+        {
+          "end" : 13260,
+          "start" : 13100,
+          "text" : "isn't"
+        },
+        {
+          "end" : 13400,
+          "start" : 13260,
+          "text" : "really"
+        },
+        {
+          "end" : 13700,
+          "start" : 13400,
+          "text" : "fine"
+        },
+        {
+          "end" : 13800,
+          "start" : 13700,
+          "text" : "what"
+        },
+        {
+          "end" : 13920,
+          "start" : 13800,
+          "text" : "you're"
+        },
+        {
+          "end" : 14100,
+          "start" : 13920,
+          "text" : "looking"
+        },
+        {
+          "end" : 14380,
+          "start" : 14100,
+          "text" : "for."
+        }
+      ]
+    },
+    {
+      "end" : 15940,
+      "id" : "631B8F61-D6FD-477E-A5DE-FA08EC3030FB",
+      "start" : 14860,
+      "text" : "This is known as context rot.",
+      "words" : [
+        {
+          "end" : 14960,
+          "start" : 14860,
+          "text" : "This"
+        },
+        {
+          "end" : 15020,
+          "start" : 14960,
+          "text" : "is"
+        },
+        {
+          "end" : 15180,
+          "start" : 15020,
+          "text" : "known"
+        },
+        {
+          "end" : 15240,
+          "start" : 15180,
+          "text" : "as"
+        },
+        {
+          "end" : 15700,
+          "start" : 15240,
+          "text" : "context"
+        },
+        {
+          "end" : 15940,
+          "start" : 15700,
+          "text" : "rot."
+        }
+      ]
+    },
+    {
+      "end" : 19460,
+      "id" : "5F3221EA-6CB8-4403-AAE7-1B2CDAB3E1E3",
+      "start" : 16720,
+      "text" : "Having one giant agents MD file does not work.",
+      "words" : [
+        {
+          "end" : 17080,
+          "start" : 16720,
+          "text" : "Having"
+        },
+        {
+          "end" : 17440,
+          "start" : 17080,
+          "text" : "one"
+        },
+        {
+          "end" : 17880,
+          "start" : 17440,
+          "text" : "giant"
+        },
+        {
+          "end" : 18260,
+          "start" : 17880,
+          "text" : "agents"
+        },
+        {
+          "end" : 18460,
+          "start" : 18260,
+          "text" : "MD"
+        },
+        {
+          "end" : 18780,
+          "start" : 18460,
+          "text" : "file"
+        },
+        {
+          "end" : 18940,
+          "start" : 18780,
+          "text" : "does"
+        },
+        {
+          "end" : 19160,
+          "start" : 18940,
+          "text" : "not"
+        },
+        {
+          "end" : 19460,
+          "start" : 19160,
+          "text" : "work."
+        }
+      ]
+    },
+    {
+      "end" : 20620,
+      "id" : "1ED68E46-EAA4-4143-A9E2-62D8AB88D9BD",
+      "start" : 19680,
+      "text" : "When everything is important,",
+      "words" : [
+        {
+          "end" : 19760,
+          "start" : 19680,
+          "text" : "When"
+        },
+        {
+          "end" : 20060,
+          "start" : 19760,
+          "text" : "everything"
+        },
+        {
+          "end" : 20260,
+          "start" : 20060,
+          "text" : "is"
+        },
+        {
+          "end" : 20620,
+          "start" : 20260,
+          "text" : "important,"
+        }
+      ]
+    },
+    {
+      "end" : 22220,
+      "id" : "007CDAD8-375F-4B7F-8023-DACCFC44079E",
+      "start" : 20780,
+      "text" : "nothing is, it can't cut through the noise",
+      "words" : [
+        {
+          "end" : 21020,
+          "start" : 20780,
+          "text" : "nothing"
+        },
+        {
+          "end" : 21160,
+          "start" : 21020,
+          "text" : "is,"
+        },
+        {
+          "end" : 21280,
+          "start" : 21180,
+          "text" : "it"
+        },
+        {
+          "end" : 21520,
+          "start" : 21280,
+          "text" : "can't"
+        },
+        {
+          "end" : 21680,
+          "start" : 21520,
+          "text" : "cut"
+        },
+        {
+          "end" : 21840,
+          "start" : 21680,
+          "text" : "through"
+        },
+        {
+          "end" : 21980,
+          "start" : 21840,
+          "text" : "the"
+        },
+        {
+          "end" : 22220,
+          "start" : 21980,
+          "text" : "noise"
+        }
+      ]
+    },
+    {
+      "end" : 23340,
+      "id" : "43C322EB-D338-4DA4-90D8-B39D8CCC9CF0",
+      "start" : 22280,
+      "text" : "to find what really matters.",
+      "words" : [
+        {
+          "end" : 22400,
+          "start" : 22280,
+          "text" : "to"
+        },
+        {
+          "end" : 22620,
+          "start" : 22400,
+          "text" : "find"
+        },
+        {
+          "end" : 22740,
+          "start" : 22620,
+          "text" : "what"
+        },
+        {
+          "end" : 22920,
+          "start" : 22740,
+          "text" : "really"
+        },
+        {
+          "end" : 23340,
+          "start" : 22920,
+          "text" : "matters."
+        }
+      ]
+    },
+    {
+      "end" : 25220,
+      "id" : "CC43EE9D-5AF7-4213-8D8A-38487E32B618",
+      "start" : 24000,
+      "text" : "But by creating a simple map,",
+      "words" : [
+        {
+          "end" : 24080,
+          "start" : 24000,
+          "text" : "But"
+        },
+        {
+          "end" : 24180,
+          "start" : 24080,
+          "text" : "by"
+        },
+        {
+          "end" : 24460,
+          "start" : 24180,
+          "text" : "creating"
+        },
+        {
+          "end" : 24620,
+          "start" : 24460,
+          "text" : "a"
+        },
+        {
+          "end" : 24840,
+          "start" : 24620,
+          "text" : "simple"
+        },
+        {
+          "end" : 25220,
+          "start" : 24840,
+          "text" : "map,"
+        }
+      ]
+    },
+    {
+      "end" : 27340,
+      "id" : "A07A1458-0497-4F84-8FCF-C9F532884656",
+      "start" : 25320,
+      "text" : "a map in Markdown or an index in a database,",
+      "words" : [
+        {
+          "end" : 25380,
+          "start" : 25320,
+          "text" : "a"
+        },
+        {
+          "end" : 25600,
+          "start" : 25380,
+          "text" : "map"
+        },
+        {
+          "end" : 25720,
+          "start" : 25600,
+          "text" : "in"
+        },
+        {
+          "end" : 26160,
+          "start" : 25720,
+          "text" : "Markdown"
+        },
+        {
+          "end" : 26400,
+          "start" : 26160,
+          "text" : "or"
+        },
+        {
+          "end" : 26520,
+          "start" : 26400,
+          "text" : "an"
+        },
+        {
+          "end" : 26840,
+          "start" : 26520,
+          "text" : "index"
+        },
+        {
+          "end" : 26940,
+          "start" : 26840,
+          "text" : "in"
+        },
+        {
+          "end" : 27060,
+          "start" : 26940,
+          "text" : "a"
+        },
+        {
+          "end" : 27340,
+          "start" : 27060,
+          "text" : "database,"
+        }
+      ]
+    },
+    {
+      "end" : 29600,
+      "id" : "A287927C-E14F-441E-875B-133E3D611B4F",
+      "start" : 28040,
+      "text" : "You hold pointers to files.",
+      "words" : [
+        {
+          "end" : 28140,
+          "start" : 28040,
+          "text" : "You"
+        },
+        {
+          "end" : 28340,
+          "start" : 28140,
+          "text" : "hold"
+        },
+        {
+          "end" : 28820,
+          "start" : 28340,
+          "text" : "pointers"
+        },
+        {
+          "end" : 29140,
+          "start" : 28820,
+          "text" : "to"
+        },
+        {
+          "end" : 29600,
+          "start" : 29140,
+          "text" : "files."
+        }
+      ]
+    },
+    {
+      "end" : 33360,
+      "id" : "6A0BF617-2548-4A35-AFC0-9F6BE5D639C1",
+      "start" : 30010,
+      "text" : "You concisely let the agent navigate where it needs to go.",
+      "words" : [
+        {
+          "end" : 30160,
+          "start" : 30010,
+          "text" : "You"
+        },
+        {
+          "end" : 30720,
+          "start" : 30160,
+          "text" : "concisely"
+        },
+        {
+          "end" : 31200,
+          "start" : 30720,
+          "text" : "let"
+        },
+        {
+          "end" : 31480,
+          "start" : 31200,
+          "text" : "the"
+        },
+        {
+          "end" : 32020,
+          "start" : 31480,
+          "text" : "agent"
+        },
+        {
+          "end" : 32619,
+          "start" : 32020,
+          "text" : "navigate"
+        },
+        {
+          "end" : 32840,
+          "start" : 32619,
+          "text" : "where"
+        },
+        {
+          "end" : 32940,
+          "start" : 32840,
+          "text" : "it"
+        },
+        {
+          "end" : 33080,
+          "start" : 32940,
+          "text" : "needs"
+        },
+        {
+          "end" : 33240,
+          "start" : 33080,
+          "text" : "to"
+        },
+        {
+          "end" : 33360,
+          "start" : 33240,
+          "text" : "go."
+        }
+      ]
+    },
+    {
+      "end" : 35720,
+      "id" : "B39EE617-10CE-4CE0-B1BE-0F32AEA6D09E",
+      "start" : 33420,
+      "text" : "The agent reads the map and drills into only what it needs",
+      "words" : [
+        {
+          "end" : 33600,
+          "start" : 33420,
+          "text" : "The"
+        },
+        {
+          "end" : 33840,
+          "start" : 33600,
+          "text" : "agent"
+        },
+        {
+          "end" : 34120,
+          "start" : 33840,
+          "text" : "reads"
+        },
+        {
+          "end" : 34220,
+          "start" : 34120,
+          "text" : "the"
+        },
+        {
+          "end" : 34380,
+          "start" : 34220,
+          "text" : "map"
+        },
+        {
+          "end" : 34460,
+          "start" : 34380,
+          "text" : "and"
+        },
+        {
+          "end" : 34700,
+          "start" : 34460,
+          "text" : "drills"
+        },
+        {
+          "end" : 34860,
+          "start" : 34700,
+          "text" : "into"
+        },
+        {
+          "end" : 35200,
+          "start" : 34860,
+          "text" : "only"
+        },
+        {
+          "end" : 35400,
+          "start" : 35200,
+          "text" : "what"
+        },
+        {
+          "end" : 35500,
+          "start" : 35400,
+          "text" : "it"
+        },
+        {
+          "end" : 35720,
+          "start" : 35500,
+          "text" : "needs"
+        }
+      ]
+    },
+    {
+      "end" : 37100,
+      "id" : "045B0E95-4340-445A-90C2-B19C280DDDEE",
+      "start" : 35840,
+      "text" : "to, retrieving that part.",
+      "words" : [
+        {
+          "end" : 35940,
+          "start" : 35840,
+          "text" : "to,"
+        },
+        {
+          "end" : 36620,
+          "start" : 36340,
+          "text" : "retrieving"
+        },
+        {
+          "end" : 36820,
+          "start" : 36620,
+          "text" : "that"
+        },
+        {
+          "end" : 37100,
+          "start" : 36820,
+          "text" : "part."
+        }
+      ]
+    }
+  ],
+  "text" : "Context engineering is just giving your agent a map.\nHumans search when they know what they're looking for,\nbut we turn to agents\nwhen we're not really sure what we need,\nso they end up exploring more.\nThe obvious fix is to stuff everything\ninto the context window, but that'll backfire.\nThe model isn't really fine what you're looking for.\nThis is known as context rot.\nHaving one giant agents MD file does not work.\nWhen everything is important,\nnothing is, it can't cut through the noise\nto find what really matters.\nBut by creating a simple map,\na map in Markdown or an index in a database,\nYou hold pointers to files.\nYou concisely let the agent navigate where it needs to go.\nThe agent reads the map and drills into only what it needs\nto, retrieving that part."
+}
