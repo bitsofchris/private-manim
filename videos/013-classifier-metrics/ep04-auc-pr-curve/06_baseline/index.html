@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_baseline: "And the coin flip here isn't 0.5. It's 0.005, the attack rate."
+         The good corner and the curve's magenta let go; the PR coin flip (a dashed level line, the hero)
+         comes in at 0.5 on "coin flip" and drops to 0.005 on "0.005", its label swapping on the way.
+         Still from ~3.6 s. SEAM[5] -> SEAM[6]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.7" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.70;
+  const CUE = {
+    coin: 0.44,     /* "coin"   37.04 — the baseline comes in at 0.5 */
+    isnt: 1.06,     /* "isn't"  37.66 */
+    half: 1.36,     /* "0.5"    37.96 — line and its "0.5" label up */
+    rate: 2.76,     /* "0.005"  39.36 — the line drops */
+    attack: 4.04,   /* "attack" 40.64 — hold */
+  };
+  const HAND = [0.15, 0.6];                       // corner 1->0, curve.hero 1->0
+  const BASE_IN = [CUE.coin - 0.1, CUE.coin + 0.5]; // base.o 0->1 (hero), overlapping the hand-off
+  const DROP = [CUE.rate - 0.1, CUE.rate + 0.85];   // v 0.5 -> 0.005, ease out
+  const STILL = DROP[1];
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const PRN = SEAM[6].names;
+  function S(t) {
+    if (t <= 0) return SEAM[5];
+    if (t >= STILL) return SEAM[6];
+    const h = E.io(seg(t, HAND[0], HAND[1]));
+    const b = E.io(seg(t, BASE_IN[0], BASE_IN[1]));
+    const v = lerp(0.5, SEAM[6].base.v, E.out(seg(t, DROP[0], DROP[1])));
+    return { t: LEDGER.tP, thr: { u: 1, dim: 1 }, fpLit: 1, tnDim: 1, m: 1, curve: { hero: 1 - h },
+             point: { o: 1 }, corner: 1 - h, names: PRN, base: { o: b, v, hero: 1 } };
+  }
+  // Local helper (kit gap): makeNotes draws the baseline's label from notes.base, but draw() passes only
+  // S.notes and the seams keep base at the top level, so the label never shows. Mirror S.base into
+  // notes.base at draw time; S(t) itself still equals the seam states.
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

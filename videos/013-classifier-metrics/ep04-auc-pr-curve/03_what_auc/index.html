@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_what_auc (9.20 s): "AUC is for comparing models. A coin flip is 0.5. You pick a random
+         attack and a random user, and 98.5% of the time the attack scores higher."
+         Opens on SEAM[2], ends on SEAM[3]. Hero: the ROC area. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.2" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.2;
+  // beat-local seconds (words.json master − 8.50), onsets checked on the vo_final.wav RMS envelope
+  const CUE = {
+    auc: 0.22,       /* "AUC" */
+    comparing: 0.83, /* "comparing" */
+    coin: 2.38,      /* "coin" */
+    half: 2.94,      /* "0.5" */
+    random: 4.46,    /* "random" (attack) */
+    attack: 4.72,    /* "attack" */
+    user: 5.40,      /* "user" */
+    pct: 5.82,       /* "98.5%" */
+    attack2: 7.68,   /* "attack" (scores) */
+    higher: 8.62,    /* "higher" */
+  };
+  const HOLD = 8.9;  // still from here; S(t) === SEAM[3]
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const OLD = SEAM[2].notes.sub, NEW = SEAM[3].notes.sub;   // [text, o] pairs from the kit
+  function S(t) {
+    if (t <= 0) return SEAM[2];
+    if (t >= HOLD) return SEAM[3];
+    const hand = E.io(seg(t, 0.12, 0.62));                    // hero hand-off: threshold -> area
+    const unlit = E.io(seg(t, 0, 0.8));                    // the 60 flagged users go back
+    const oldOut = 1 - E.io(seg(t, 0, 0.5));               // "60 of 100 flags / are real users" out
+    const valPulse = 0.6 * pulse(t, CUE.comparing, 0.8);      // the 0.985 pulses on "comparing models"
+    const diag = E.io(seg(t, CUE.coin, CUE.coin + 0.9));      // coin flip diagonal draws in
+    const coinIn = E.io(seg(t, CUE.half - 0.3, CUE.half + 0.1));
+    const pair = E.io(seg(t, CUE.attack - 0.1, CUE.user));    // attack ring and user ring, across "attack … user"
+    const pctIn = E.io(seg(t, CUE.pct - 0.1, CUE.pct + 0.4));
+    // sub text swaps only while both lines are at 0
+    const sub = oldOut > 0 ? [[OLD[0][0], oldOut], [OLD[1][0], oldOut]]
+                           : [[NEW[0][0], pctIn], [NEW[1][0], coinIn]];
+    return {
+      thr: { u: 1, dim: hand },
+      fpLit: 1 - unlit,
+      rocArea: { o: 1, hero: hand },
+      diag, pair,
+      notes: { roc: { o: 1, hero: valPulse }, sub },
+    };
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  window.__S = S;   // for the seam check only
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

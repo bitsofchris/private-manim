@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 01_hook (master 0.00-6.50): "This model's ROC area under the curve is 0.985, nearly perfect,
+         but most of what it flags is wrong." Opens on SEAM[0], ends on SEAM[1]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.5" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.50;
+  const CUE = {
+    area: 1.48,     /* "area" (breath low near here; starts from frame 1) */
+    value: 2.61,    /* "0.985" (the value pops) */
+    nearly: 3.72,   /* "nearly perfect": the good corner glows once */
+    most: 4.90,     /* "most": hero hand-off area -> threshold */
+    flags: 5.60,    /* "flags": flagged users brighten, sub line 1 */
+    wrong: 5.98,    /* "wrong": sub line 2 in by here */
+    still: 6.20,    /* hold SEAM[1] from here */
+  };
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  // Local helper (not in the kit): the ROC value's DOM node, for a small pop on "0.985".
+  const valEl = [...root.querySelectorAll("div")].find((e) => e.textContent === LEDGER.rocAuc && e.style.fontSize === "120px");
+
+  // Frame 0 = SEAM[0] (the finished ROC picture, area the hero). End = SEAM[1].
+  function S(t) {
+    if (t >= CUE.still) return clone(SEAM[1]);
+    const ho = E.io(seg(t, CUE.most - 0.05, CUE.most + 0.35));      // hero hand-off, 0.4 s
+    const lit = E.io(seg(t, 5.20, 5.85));                             // 60 flagged users brighten, 0.65 s
+    const s0 = E.io(seg(t, 5.15, 5.55)), s1 = E.io(seg(t, 5.55, 5.95));
+    const breath = 0.2 * pulse(t, 0.0, 2.6);                          // area 1 -> 0.8 -> 1, low at ~1.3
+    return {
+      t: LEDGER.tA,
+      thr: { u: 1, dim: 1 - ho },
+      fpLit: lit,
+      rocArea: { o: 1 - breath, hero: 1 - ho },
+      corner: 0.6 * pulse(t, CUE.nearly, 0.9),
+      notes: { roc: { o: 1 }, sub: [["60 of 100 flags", s0], ["are real users", s1]] },
+    };
+  }
+  function pop(t) {
+    if (!valEl) return;
+    const p = pulse(t, CUE.value, 0.45);
+    valEl.style.transformOrigin = "right center";
+    valEl.style.transform = p > 0 ? `scale(${1 + 0.05 * p})` : "";
+  }
+  function render(t) { K.draw(g, S(t)); pop(t); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>

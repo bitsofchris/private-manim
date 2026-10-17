@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 07_pr_auc: "This model's precision-recall area under the curve is 0.56. It's low looking,
+         but over a hundred times better than chance." On "area under the curve" the baseline hands the
+         magenta to the PR area, which fills step by step left to right; "PR AUC 0.556" on "0.56";
+         "111× a coin flip" on "hundred". Still from ~4.9 s. SEAM[6] -> SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.3" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.30;
+  const CUE = {
+    precision: 0.72, /* "precision" 42.02 */
+    area: 1.38,      /* "area"      42.68 — the PR area starts filling (hero) */
+    curve: 1.89,     /* "curve"     43.19 */
+    val: 2.16,       /* "0.56"      43.46 — the readout lands */
+    low: 3.77,       /* "low"       45.07 */
+    hundred: 4.54,   /* "100"       45.84 — "111× a coin flip" */
+    times: 4.92,     /* "times"     46.22 */
+    chance: 5.64,    /* "chance"    46.94 — hold */
+  };
+  const HAND = [CUE.area - 0.1, CUE.area + 0.3];      // base.hero 1->0 as the area rises
+  const REVEAL = [CUE.area - 0.1, CUE.val + 0.15];    // prArea.reveal 0->1 (~1.0 s)
+  const PR_IN = [CUE.val - 0.1, CUE.val + 0.3];       // notes.pr.o
+  const SUB_IN = [CUE.hundred - 0.1, CUE.hundred + 0.35]; // notes.prSub
+  const STILL = SUB_IN[1];
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, lerp, pulse, SEAM, LEDGER } = SC, E = SC.E();
+  const K = SC.mount(root);
+  const PRN = SEAM[7].names;
+  function S(t) {
+    if (t <= HAND[0]) return SEAM[6];
+    if (t >= STILL) return SEAM[7];
+    const h = E.io(seg(t, HAND[0], HAND[1]));
+    const r = E.io(seg(t, REVEAL[0], REVEAL[1]));
+    return { t: LEDGER.tP, thr: { u: 1, dim: 1 }, fpLit: 1, tnDim: 1, m: 1, point: { o: 1 }, names: PRN,
+             base: { o: 1, v: SEAM[7].base.v, hero: 1 - h }, prArea: { o: 1, hero: 1, reveal: r },
+             notes: { pr: { o: E.io(seg(t, PR_IN[0], PR_IN[1])) }, prSub: E.io(seg(t, SUB_IN[0], SUB_IN[1])) } };
+  }
+  // Local helper (kit gap): makeNotes draws the baseline's label from notes.base, but draw() passes only
+  // S.notes and the seams keep base at the top level, so the label never shows. Mirror S.base into
+  // notes.base at draw time; S(t) itself still equals the seam states.
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
