@@ -231,7 +231,8 @@
     return part;
   }
   // The model: a blob (origin at its centre) with four pipes out of it, in
-  // PIPES order: up, right, down, left. part.pipes[i] can be made the hero.
+  // PIPES order: up, right, down, left. part.pipes[i] or part.body can be made
+  // the hero, one at a time; the body rests dim.
   const PIPES = ["context", "tools", "memory", "loop"];
   function blob(svg, o = {}) {
     const g = node("g", {}, svg), L = o.pipe || 120;
@@ -240,7 +241,10 @@
       { stroke: PAL.data, "stroke-width": 26, "stroke-linecap": "round" }), PAL.data));
     const D = "M-74 6 C-96 -66 -12 -112 34 -84 C96 -96 128 -20 98 22 C120 80 40 116 6 92 C-56 118 -104 62 -74 6 Z";
     node("path", { d: D, fill: PAL.bg }, g);                          // opaque underlay: the pipes stop at the edge
-    const body = node("path", { d: D, fill: PAL.hero, "fill-opacity": 0.22, stroke: PAL.hero, "stroke-width": 8 }, g);
+    // At rest the model is dim, so a pipe can be the one magenta hero
+    // (agents/style.md "Two-hero rule"); CAST.hero(part.body, true) makes the
+    // model itself the hero.
+    const body = tint(node("path", { d: D, fill: PAL.dim, "fill-opacity": 0.14, stroke: PAL.dim, "stroke-width": 8, "data-fill": 1 }, g), PAL.dim);
     const part = { el: g, kind: "blob", body, pipes, names: PIPES };
     place(part, o.x || 0, o.y || 0, o.s || 1);
     return part;

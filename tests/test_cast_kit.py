@@ -60,6 +60,8 @@ C.hero(p, false); out.heroOff = rect.getAttribute("stroke");
 const b = C.blob(svg, {});
 C.hero(b.pipes[0], true);
 out.pipes = b.pipes.map((l) => l.getAttribute("stroke"));
+out.bodyRest = b.body.getAttribute("stroke");
+C.hero(b.body, true); out.bodyHero = b.body.getAttribute("stroke");
 out.pipeNames = C.PIPES;
 console.log(JSON.stringify(out));
 """
@@ -100,6 +102,11 @@ class CastKitTest(unittest.TestCase):
     def test_blob_pipes_in_harness_order_one_hero(self):
         self.assertEqual(self.out["pipeNames"], ["context", "tools", "memory", "loop"])
         self.assertEqual(self.out["pipes"], ["#C084FC", "#2DD4BF", "#2DD4BF", "#2DD4BF"])
+
+    def test_blob_body_rests_dim_and_can_be_the_hero(self):
+        # A shared part is never magenta at rest (agents/style.md, two-hero rule; 012 ep01).
+        self.assertEqual(self.out["bodyRest"], "#8A8FB0")
+        self.assertEqual(self.out["bodyHero"], "#C084FC")
 
 
 if __name__ == "__main__":

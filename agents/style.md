@@ -153,7 +153,7 @@ props on the house background. The code is `videos/_shared/web/cast/cast.js`
 | what the human reads | `CAST.board`: one ink board of cards (the human layer) |
 | rules, the map, goals | `CAST.vitrine`: the glass case; make one item the hero with `CAST.hero(part.items.map, true)` |
 | an index that points | `CAST.mapCard`: a short card with arrows to teal files; dashed muted files are the ones it does not point to |
-| the model and its harness | `CAST.blob`: the magenta blob with four teal pipes in `CAST.PIPES` order (context, tools, memory, loop); light one pipe per beat |
+| the model and its harness | `CAST.blob`: the model (dim at rest) with four teal pipes in `CAST.PIPES` order (context, tools, memory, loop); light one pipe, or the body, at a time. Or the agent wearing its harness (head = model, the four parts carried): ep01's `_kit/rig.js` |
 | motion | poses as numbers in `render(t)` (`CAST.pose`: arm angles from straight down, `lean`, `tilt`); every move lands on its word and stops before the hold |
 
 Colour jobs stay the house ones: teal is what agents write and data,
@@ -162,6 +162,8 @@ magenta is the one thing the beat points at, ink is people and structure.
 ## Two-hero rule
 
 The rule is `AGENTS.md` hard rule 2: one magenta hero on screen at a time. If everything is hero, nothing is. The rest is teal (data), muted (construction), or FG_DIM (labels).
+
+A shared part is never magenta at rest: the beat makes one thing the hero, so a kit that draws a part magenta by default leaves a second magenta on screen whenever a sub-part is named. 012 ep01 had to redraw `CAST.blob`'s magenta model dim before a pipe could be the hero; the kit's blob now rests dim.
 
 `ACCENT_CYAN` and `ACCENT_PINK` are for transient pulses only — a sweep trail, a one-frame highlight. Never for static elements.
 
