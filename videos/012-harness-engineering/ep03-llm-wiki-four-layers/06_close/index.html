@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_close (beat 6, master 53.05–58.82): the janitor walks back and climbs the ladder to the landing, feet
+         on the rungs (beat 5's climb in reverse, local helpers), while the agents write;
+         on "all four layers" the four light once each in the ledger order (0.45 s each); still on SEAM[6]
+         from 4.95, the last frame of the Short. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="cast/cast.js"></script>
+    <script src="kit/wiki.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.77" data-fps="30" data-width="1080" data-height="1920">
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.77;
+  const MASTER = 53.05;
+  const CUE = {
+    all: 2.57,      /* "all" (four layers), master 55.62 */
+    base: 5.27,     /* "base" ends, master 58.32 */
+  };
+  const LIT = 0.45;                                              // each layer lit this long, ledger order, from "all"
+  const ORDER = ["pages", "board", "case", "janitor"];
+  const T = { wOn: 0.3, wOff: 4.40, still: 4.95 };               // write 0 → 1 → 0; still from `still` (last 0.82 s)
+  const { seg, pulse, merge, clone, lerp, SEAM, LADDER } = WIKI, E = WIKI.E();
+  const root = document.getElementById("root");
+  const K = WIKI.mount(root);
+  ISO.guides(root);
+  const JS = 0.5;                                                // the janitor's scale (kit S_FIG.jan)
+  const heroAt = (t) => { const i = Math.floor((t - CUE.all) / LIT); return t >= CUE.all && i < ORDER.length ? ORDER[i] : null; };
+
+  // ---- feet (local copy of beat 5's helper, run in reverse): each foot is always on the floor, a rung or the landing ----
+  // Floor (700, 1310) → (660, 1310) → feet onto the rails (x 600 / 648) → up the rungs to rung 7 (y 1008)
+  // → step off onto the landing → (716, 1000), done by ~2.27 s (master ~55.3).
+  const R0 = LADDER.x0, R1 = LADDER.x1, FL = WIKI.B.floor;
+  const rung = (k) => LADDER.top + LADDER.rung * k;              // k 7 = 1008 … 13 = 1272
+  const STEP = 0.13, FSTEP = 0.17, LSTEP = 0.14;                 // ladder, floor, landing step lengths
+  const MOVES = [];                                              // [foot, x, y, t0, t1, kind]
+  const mv = (f, x, y, t0, d, kind) => { MOVES.push([f, x, y, t0, t0 + d, kind]); return t0 + d; };
+  let c = 0;
+  c = mv("L", 636, FL, c, FSTEP, "walk"); c = mv("R", 684, FL, c, FSTEP, "walk");        // body (660, 1310)
+  c += 0.04;
+  c = mv("L", R0, FL, c, STEP, "walk"); c = mv("R", R1, FL, c, STEP, "walk");             // feet on the rails
+  c += 0.03;
+  const C0 = c;
+  [["L", 13], ["R", 12], ["L", 11], ["R", 10], ["L", 9], ["R", 8], ["L", 7], ["R", 7]].forEach(([f, k]) => { c = mv(f, f === "L" ? R0 : R1, rung(k), c, STEP, "climb"); });
+  const CLIMB = [C0, c];                                         // first rung move → both feet on rung 7
+  c = mv("R", 694, 1000, c, LSTEP, "walk"); c = mv("L", 646, 1000, c, LSTEP, "walk");     // step off onto the landing
+  c = mv("R", 740, 1000, c, LSTEP, "walk"); c = mv("L", 692, 1000, c, LSTEP, "walk");     // body (716, 1000)
+  const WALK_END = c;
+
+  function feet(t) {
+    const P = { L: [676, FL], R: [724, FL] };                    // SEAM[5] stance: jan (700, 1310)
+    MOVES.forEach(([f, x, y, t0, t1, kind]) => {
+      const u = seg(t, t0, t1);
+      if (u <= 0) return;
+      const a = P[f], e = E.io(u), k = u < 1 ? pulse(u) : 0;
+      const nx = lerp(a[0], x, e), ny = lerp(a[1], y, e);
+      // a walking foot lifts; a climbing foot swings out from its rail as it goes up
+      P[f] = kind === "walk" ? [nx, ny - 12 * k] : [nx + (f === "L" ? -14 : 14) * k, ny];
+      if (u >= 1) P[f] = [x, y];
+    });
+    return P;
+  }
+  // climbing: grip envelope (left hand up on the rail, broom carried higher)
+  const grip = (t) => E.io(seg(t, CLIMB[0] - 0.25, CLIMB[0])) * (1 - E.io(seg(t, CLIMB[1] - 0.05, CLIMB[1] + 0.3)));
+
+  function S(t) {
+    if (t >= T.still) return clone(SEAM[6]);                     // the hold: SEAM[6] exactly, the Short's last frame
+    const s = merge(SEAM[5], {
+      hero: heroAt(t),
+      pen: t * 1.6,
+      write: E.out(seg(t, 0, T.wOn)) * (1 - E.io(seg(t, T.wOff, T.still))),
+    });
+    const P = feet(t), g = grip(t);
+    const wob = g > 0 ? g * Math.sin(2 * Math.PI * (t - CLIMB[0]) / (2 * STEP)) : 0;
+    s.jan = Object.assign({}, SEAM[5].jan, { x: (P.L[0] + P.R[0]) / 2, y: (P.L[1] + P.R[1]) / 2, lean: g > 0 ? 3 * wob : 0 });
+    s._local = { P, g, wob };                                    // for the local helpers only (stripped before draw)
+    return s;
+  }
+  // ---- local helpers on the janitor part (copied from beat 5; the kit does not move legs or the left arm) ----
+  const jan = K.parts.jan, broomG = jan.broom.handle.parentNode;
+  // draw the janitor above the old pages (still below the agents and their pages), as beat 5 does
+  K.svg.insertBefore(jan.el, K.parts.agentA.el);
+  function legs(P, J) {
+    const set = (el, [x, y]) => { el.setAttribute("x2", (x - J.x) / JS); el.setAttribute("y2", (y - J.y) / JS); };
+    set(jan.legL, P.L); set(jan.legR, P.R);
+  }
+  function gripPose(g, wob) {
+    CAST.pose(jan, { armL: 22 + g * (12 + 12 * wob) });     // left hand on the rail, hand over hand with the steps
+    // the broom slides up along its own handle (it stays in the right hand), carried off the rungs
+    const h = jan.broom.handle, x1 = +h.getAttribute("x1"), y1 = +h.getAttribute("y1"), x2 = +h.getAttribute("x2"), y2 = +h.getAttribute("y2");
+    const n = Math.hypot(x1 - x2, y1 - y2) || 1, d = 90 * g;
+    broomG.setAttribute("transform", `translate(${(x1 - x2) / n * d} ${(y1 - y2) / n * d})`);
+  }
+  function frame(t) {
+    const s = S(t);
+    const L = s._local || { P: { L: [s.jan.x - 24, s.jan.y], R: [s.jan.x + 24, s.jan.y] }, g: 0, wob: 0 };
+    delete s._local;
+    K.draw(s);
+    legs(L.P, s.jan);
+    gripPose(L.g, L.wob);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, frame);
+})();
+    </script>
+  </body>
+</html>
