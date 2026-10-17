@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout: the canonical frame for ep 2. Not in the Short.
+         0–2 s frame 0 (SEAM[0]) · 2–4 s the attack column lifts into recall's denominator ·
+         4–6 s the last frame (SEAM[8]). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/dots.js"></script>
+    <script src="kit/score.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      #scene { position: absolute; left: 0; top: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="scene" width="1080" height="1920" data-layout-allow-overflow></canvas>
+    </div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6;
+  const root = document.getElementById("root"), g = document.getElementById("scene").getContext("2d");
+  const { seg, SEAM } = SC;
+  const K = SC.mount(root);
+  function S(t) {
+    if (t < 2) return SEAM[0];
+    if (t < 4) {
+      const u = seg(t, 2.2, 3.4), f = seg(t, 2.6, 3.6);
+      return { ring: { tp: 1, fn: 1 }, box: { lit: { tp: 1 - u, fn: 1 - u } },
+               lift: { kind: "col", u, a: 1 - seg(t, 3.4, 3.7) },
+               bars: { r: { lit: 1, den: seg(t, 3.3, 3.6), num: seg(t, 3.5, 3.7), pct: seg(t, 3.7, 3.9), pctHero: 1 },
+                       flyNum: { row: "r", u: f } } };
+    }
+    return SEAM[8];
+  }
+  function render(t) { K.draw(g, S(t)); }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: BEAT_SECONDS, ease: "none" }, 0);
+  tl.set({}, {}, BEAT_SECONDS);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(tl.time()));
+})();
+    </script>
+  </body>
+</html>
