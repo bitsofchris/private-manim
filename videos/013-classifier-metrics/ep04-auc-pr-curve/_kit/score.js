@@ -109,7 +109,8 @@
       const ux = U.x[PAIR.user], uy = U.y[PAIR.user], ax = A.x[PAIR.attack], ay = A.y[PAIR.attack];
       g.fillStyle = rgba(COL.data, pair * A0); g.beginPath(); g.arc(ux, uy, ATK_R, 0, Math.PI * 2); g.fill();
       g.strokeStyle = rgba(COL.text, pair * A0); g.lineWidth = 4;
-      [[ux, uy], [ax, ay]].forEach(([x, y]) => { g.beginPath(); g.arc(x, y, 16, 0, Math.PI * 2); g.stroke(); });
+      [[ux, uy, 16], [ax, ay, 20]].forEach(([x, y, r]) => { g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.stroke(); });
+      g.lineWidth = 6; g.beginPath(); g.arc(ax, ay, 20, 0, Math.PI * 2); g.stroke();   // the attack's ring is heavier: it sits in the gold pile
     }
   }
 
@@ -134,9 +135,9 @@
   function corner(g, m, glow) {
     if (glow <= 0) return;
     const x = lerp(PL, PR, m), y = PT;
-    const gr = g.createRadialGradient(x, y, 0, x, y, 150);
-    gr.addColorStop(0, rgba(COL.text, 0.45 * glow)); gr.addColorStop(1, rgba(COL.text, 0));
-    g.fillStyle = gr; g.beginPath(); g.arc(x, y, 150, 0, Math.PI * 2); g.fill();
+    const gr = g.createRadialGradient(x, y, 0, x, y, 110);
+    gr.addColorStop(0, rgba(COL.data, 0.75 * glow)); gr.addColorStop(0.35, rgba(COL.data, 0.3 * glow)); gr.addColorStop(1, rgba(COL.data, 0));
+    g.fillStyle = gr; g.beginPath(); g.arc(x, y, 110, 0, Math.PI * 2); g.fill();
   }
   function curvePath(g, m) {
     const P = D.curve;
@@ -292,7 +293,7 @@
         const b = o.base || {}, bo = b.o || 0, y = PY(b.v == null ? 0.5 : b.v);
         const k = seg(b.v == null ? 0.5 : b.v, 0.3, 0.05);   // 0 at 0.5, 1 at the floor
         baseLab.forEach((e) => { e.style.top = y - 76 + "px"; e.style.color = rgba(mixc(COL.dim, COL.hero, b.hero || 0)); });
-        show(baseLab[0], bo * (1 - k)); show(baseLab[1], bo * k);
+        show(baseLab[0], bo * (1 - seg(k, 0, 0.45))); show(baseLab[1], bo * seg(k, 0.55, 1));   // one, then the other
         show(prSub, o.prSub || 0);
       },
     };
@@ -363,6 +364,7 @@
       ax.set(L);
       names.set(S.names);
       const n = Object.assign({}, S.notes);
+      if (S.base && !n.base) n.base = S.base;   // the baseline's label follows the line
       if (n.ptLab && p) n.ptLab = Object.assign({ x: p[0], y: p[1] }, n.ptLab);
       notes.set(n);
       code.set(S.code || {});

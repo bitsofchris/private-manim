@@ -1,34 +1,36 @@
-[
- {
-  "clip": "media/hf/01_hook.mp4",
-  "end": 6.5
- },
- {
-  "clip": "media/hf/02_context.mp4",
-  "end": 2.0
- },
- {
-  "clip": "media/hf/03_what_auc.mp4",
-  "end": 9.2
- },
- {
-  "clip": "media/hf/04_the_point.mp4",
-  "end": 8.3
- },
- {
-  "clip": "media/hf/05_swap.mp4",
-  "end": 10.6
- },
- {
-  "clip": "media/hf/06_baseline.mp4",
-  "end": 4.7
- },
- {
-  "clip": "media/hf/07_pr_auc.mp4",
-  "end": 6.3
- },
- {
-  "clip": "media/hf/08_takeaway.mp4",
-  "end": 4.788
- }
-]
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 6.5
+  },
+  {
+   "clip": "media/hf/02_context.mp4",
+   "end": 2.0
+  },
+  {
+   "clip": "media/hf/03_what_auc.mp4",
+   "end": 9.2
+  },
+  {
+   "clip": "media/hf/04_the_point.mp4",
+   "end": 8.3
+  },
+  {
+   "clip": "media/hf/05_swap.mp4",
+   "end": 10.6
+  },
+  {
+   "clip": "media/hf/06_baseline.mp4",
+   "end": 4.7
+  },
+  {
+   "clip": "media/hf/07_pr_auc.mp4",
+   "end": 6.3
+  },
+  {
+   "clip": "media/hf/08_takeaway.mp4",
+   "end": 4.788
+  }
+ ]
+}
