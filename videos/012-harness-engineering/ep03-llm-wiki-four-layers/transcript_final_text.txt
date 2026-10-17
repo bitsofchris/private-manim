@@ -1,31 +1,28 @@
-00:00.160-00:02.640
+00:00.160-00:02.560
 A good LLM wiki needs four layers.
 
-00:02.640-00:13.920
+00:02.560-00:13.920
 A place where agents can write for agents, a clean surface for humans to read, a curated layer of slowly changing context and rules that you review, and a janitor that keeps it all up to date and consistent
 
 00:13.600-00:16.800
 The agent layer is written by agents for other agents.
 
-00:16.800-00:19.200
+00:16.800-00:19.120
 Agents can be as verbose as they need to be.
 
-00:19.200-00:23.520
-These can include details that they need to resume a task later like hashes, branches, commits.
+00:19.120-00:23.520
+This can include details that they need to resume a task later like hashes, branches, commits.
 
-00:23.520-00:25.440
+00:23.520-00:25.520
 You never need to read it or go here.
 
-00:25.440-00:26.400
-The human layer
+00:25.300-00:31.779
+The human layer is the clean, distilled view that you link out and that goes to these detailed agent notes when necessary.
 
-00:26.500-00:31.780
-is the clean, distilled view that you link out and that goes to these detailed agent notes when necessary.
-
-00:31.780-00:33.940
+00:31.779-00:33.940
 Think of a dashboard or a Kanban board.
 
-00:33.940-00:37.940
+00:33.940-00:37.860
 It's less about reviewing what the agent's up to and more about managing your own context.
 
 00:37.560-00:41.960
@@ -34,19 +31,19 @@ The curated layer, this is the slowly changing context that you need to handle w
 00:41.960-00:45.080
 These are the skills and rules, the conventions of your repo.
 
-00:45.080-00:46.520
+00:45.080-00:46.600
 And then you need the janitor.
 
-00:46.400-00:50.240
-This looks to catch conflicting rules in your agent nodes before they spread.
+00:46.600-00:50.680
+This looks to catch conflicting rules in your agent notes before they spread.
 
-00:50.240-00:53.120
+00:50.200-00:53.080
 And it cleans up old material so the human layer stays useful.
 
-00:53.120-00:55.440
+00:53.080-00:55.400
 This is how I structure all of my repos these days.
 
-00:55.440-00:58.480
-With all four layers, you can build a strong agentic knowledge base.
+00:55.400-00:58.440
+With all four layers you can build a strong agentic knowledge base for
 
 
