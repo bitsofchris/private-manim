@@ -64,9 +64,7 @@ flagged". Each cell holds its count and its two-letter tag. Dots fly from
 the score line into their cells.
 
 Layout (9:16; captions anchored bottom in the band, which belongs to
-`assemble.py`): tag + score line y 240–756; counter, code card or box y
-790–1320. The code card shares the middle with the counter in beat 2
-only.
+`assemble.py`): tag + score line y 240–756; counter or box y 790–1320.
 
 Shared kit: `_kit/score.js` (score line, dots, threshold, box, counter)
 linked into every beat as `kit/`, so every beat opens on its neighbour's
@@ -77,14 +75,14 @@ end state. `00_layout/` renders the canonical frame.
 | # | Beat | VO (as recorded) | Visual (9:16) | Hero |
 |---|------|---|---|---|
 | 1 | Hook | This model is 99.5% accurate, but it's never caught a single attack. | Frame 0, already working: the full score line with all 10,000 dots, the tag above it, no threshold. The counter reads **99.5%**, "attacks caught 0 / 50" under it, the dots settling. On "never caught" the 0 / 50 pulses. | the counter |
-| 2 | Never flag | It's a prompt injection detector. 10,000 requests come in, but only 50 are attacks. It never flags anything, and you're still right 99.5% of the time. | The tag brightens on "prompt injection detector". "10,000 requests": the teal pile pulses. "only 50": the 50 gold dots ring. The counter moves up and the code card fades in below it: the three lines, each highlighted as the VO reaches it ("never flags anything" → `pred = torch.zeros`), and `tensor(0.9950)` lands on "99.5%". | the counter, then the code card's output |
-| 3 | Model A | Now, here's a real model. It flags 100 requests and catches 40 of the 50 attacks, but its accuracy goes down to 99.3%. | The code card leaves. On "real model" the magenta threshold drops onto the score line at 0.70. "flags 100": the 100 dots right of it ring (40 gold, 60 teal). "catches 40": the tag ticks to "attacks caught 40 / 50". "goes down": the counter ticks *down* to **99.3%**. Hold. | the threshold |
+| 2 | Only fifty | 10,000 requests come in, but only 50 are attacks. | "10,000 requests": the teal pile pulses. "only 50": the 50 gold dots ring. Ends on the hook at rest. | the counter |
+| 3 | Model A | Here's a real model. It catches 40 of the 50 attacks, but its accuracy goes down to 99.3%. | On "real model" the magenta threshold drops onto the score line at 0.70. "catches": the 100 dots right of it ring (40 gold, 60 teal) and the tag ticks to "attacks caught 40 / 50". "goes down": the counter ticks *down* to **99.3%**. Hold. | the threshold |
 | 4 | The box, flags | So we look at the confusion matrix instead. A true positive is I said there was an attack, and it was genuinely an attack. A false positive is the model predicted attack, but it was a real user. | "confusion matrix": the counter dissolves into the empty 2×2 (headers in). TP: the 40 gold dots right of the line fly into the top-left cell, "TP 40" lands. FP: the 60 teal dots right of the line fly into the top-right, "FP 60". One cell lit at a time. | the cell being named |
 | 5 | The box, misses | A false negative, I said user, but it was an attack. And a true negative, I said user, and it was a user. | FN: the 10 gold dots left of the line fly into bottom-left, "FN 10". TN: the teal pile streams into bottom-right, "TN 9,890". | the cell being named |
 | 6 | Where accuracy comes from | Now look where the accuracy comes from. Almost all of it is true negatives. These are the easy ones. | "true negatives": the TN cell swells until it fills most of the grid, the other three shrink to unlabelled slivers; "of 9,930" appears under TN's 9,890. "easy ones": hold. | the TN cell |
 | 7 | Takeaway | When positives are rare, we don't want to read the accuracy. We want to look at the confusion matrix. | "rare": the 50 gold dots on the score line pulse once. The box returns to its normal size, all four cells lit evenly, the score line above it. Still frame by the end. | none (rest) |
 
-## Final beats (the contract; `vo_final.wav` 48.80 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 41.96 s, master seconds)
 
 Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`).
 Captions are anchored bottom (`assemble.py --captions-anchor bottom`), so
@@ -93,12 +91,12 @@ the stage runs to y 1330.
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
 | 1 | `01_hook` | 0.00 | 5.20 | This model is 99.5% accurate, but it's never caught a single attack. |
-| 2 | `02_never_flag` | 5.20 | 8.10 | It's a prompt injection detector. 10,000 requests come in, but only 50 are attacks. It never flags anything, and you're still right 99.5% of the time. |
-| 3 | `03_model_a` | 13.30 | 7.50 | Now, here's a real model. It flags 100 requests and catches 40 of the 50 attacks, but its accuracy goes down to 99.3%. |
-| 4 | `04_box_flags` | 20.80 | 10.40 | So we look at the confusion matrix instead. A true positive is I said there was an attack, and it was genuinely an attack. A false positive is the model predicted attack, but it was a real user. |
-| 5 | `05_box_misses` | 31.20 | 6.50 | A false negative, I said user, but it was an attack. And a true negative, I said user, and it was a user. |
-| 6 | `06_where_accuracy` | 37.70 | 4.85 | Now look where the accuracy comes from. Almost all of it is true negatives. These are the easy ones. |
-| 7 | `07_takeaway` | 42.55 | 6.25 | When positives are rare, we don't want to read the accuracy. We want to look at the confusion matrix. |
+| 2 | `02_only_fifty` | 5.20 | 2.65 | 10,000 requests come in, but only 50 are attacks. |
+| 3 | `03_model_a` | 7.85 | 6.105 | Here's a real model. It catches 40 of the 50 attacks, but its accuracy goes down to 99.3%. |
+| 4 | `04_box_flags` | 13.955 | 10.40 | So we look at the confusion matrix instead. A true positive is I said there was an attack, and it was genuinely an attack. A false positive is the model predicted attack, but it was a real user. |
+| 5 | `05_box_misses` | 24.355 | 6.50 | A false negative, I said user, but it was an attack. And a true negative, I said user, and it was a user. |
+| 6 | `06_where_accuracy` | 30.855 | 4.85 | Now look where the accuracy comes from. Almost all of it is true negatives. These are the easy ones. |
+| 7 | `07_takeaway` | 35.705 | 6.25 | When positives are rare, we don't want to read the accuracy. We want to look at the confusion matrix. |
 
 ## Cut list (approved by Chris, 10/17; applied)
 
@@ -124,6 +122,20 @@ Kept on purpose:
 - "genuinely an attack" (one word, and it's Chris's voice).
 - Both recognizers hear "here's **a** real model", not "your" as
   script.md has it. Captions follow the audio.
+
+### Second cut (Chris, 10/17, after the first assembly): get to the matrix sooner
+
+"We spend too much time before the confusion matrix." Cut from the
+approved `vo_final.wav` itself (`cut_vo.py`, so beats 4–7 stay
+sample-identical, shifted −6.845 s): line 2 "It's a prompt injection
+detector." (the frame-0 tag still names it), line 4 "It never flags
+anything, and you're still right 99.5% of the time." (and with it the
+code card), and "Now," + "flags 100 requests and" from line 5. 48.80 →
+41.96 s; the matrix is named at 14.2 s instead of 20.8 s.
+
+The VO was also re-cleaned with the minimal chain (`recut_vo.py`): the full
+`enhance_vo.sh` chain's denoise (`afftdn nf=-25`) smeared this take, whose
+noise floor is about −54 dB.
 
 ## Not in this Short (on purpose)
 

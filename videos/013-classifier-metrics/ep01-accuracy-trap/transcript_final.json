@@ -1,971 +1,835 @@
 {
   "segments" : [
     {
-      "end" : 4860,
-      "id" : "69994759-5218-4FFF-906B-9BA9F884A44A",
+      "end" : 4840,
+      "id" : "46F2EE7E-74E2-44DA-AE51-E118B1D9EE7A",
       "start" : 1,
       "text" : "This model is 99.5% accurate, but it's never caught a single attack.",
       "words" : [
         {
-          "end" : 640,
+          "end" : 620,
           "start" : 0,
           "text" : "This"
         },
         {
-          "end" : 1000,
-          "start" : 640,
+          "end" : 960,
+          "start" : 620,
           "text" : "model"
         },
         {
-          "end" : 1160,
-          "start" : 1000,
+          "end" : 1120,
+          "start" : 960,
           "text" : "is"
         },
         {
-          "end" : 1700,
-          "start" : 1160,
+          "end" : 1680,
+          "start" : 1120,
           "text" : "99"
         },
         {
-          "end" : 2220,
-          "start" : 1700,
+          "end" : 2200,
+          "start" : 1680,
           "text" : ".5"
         },
         {
-          "end" : 2460,
-          "start" : 2220,
+          "end" : 2440,
+          "start" : 2200,
           "text" : "%"
         },
         {
-          "end" : 2840,
-          "start" : 2460,
+          "end" : 2820,
+          "start" : 2440,
           "text" : "accurate,"
         },
         {
-          "end" : 3120,
-          "start" : 3040,
+          "end" : 3100,
+          "start" : 3020,
           "text" : "but"
         },
         {
-          "end" : 3320,
-          "start" : 3120,
+          "end" : 3300,
+          "start" : 3100,
           "text" : "it's"
         },
         {
-          "end" : 3660,
-          "start" : 3320,
+          "end" : 3640,
+          "start" : 3300,
           "text" : "never"
         },
         {
-          "end" : 3980,
-          "start" : 3660,
+          "end" : 3960,
+          "start" : 3640,
           "text" : "caught"
         },
         {
-          "end" : 4140,
-          "start" : 3980,
+          "end" : 4120,
+          "start" : 3960,
           "text" : "a"
         },
         {
-          "end" : 4420,
-          "start" : 4140,
+          "end" : 4400,
+          "start" : 4120,
           "text" : "single"
         },
         {
-          "end" : 4860,
-          "start" : 4420,
+          "end" : 4840,
+          "start" : 4400,
           "text" : "attack."
         }
       ]
     },
     {
-      "end" : 6880,
-      "id" : "E88FC406-9E71-4E1A-A638-AF46300AD61D",
-      "start" : 5300,
-      "text" : "It's a prompt injection detector.",
-      "words" : [
-        {
-          "end" : 5540,
-          "start" : 5300,
-          "text" : "It's"
-        },
-        {
-          "end" : 5640,
-          "start" : 5540,
-          "text" : "a"
-        },
-        {
-          "end" : 5980,
-          "start" : 5640,
-          "text" : "prompt"
-        },
-        {
-          "end" : 6420,
-          "start" : 5980,
-          "text" : "injection"
-        },
-        {
-          "end" : 6880,
-          "start" : 6420,
-          "text" : "detector."
-        }
-      ]
-    },
-    {
-      "end" : 9360,
-      "id" : "578C9BC9-C9B9-4FEF-9F49-22DA860E72B2",
-      "start" : 7160,
+      "end" : 7520,
+      "id" : "E48E626D-63F8-4561-9CB3-73AD34804ADF",
+      "start" : 5320,
       "text" : "10,000 requests come in, but only 50 are attacks.",
       "words" : [
         {
-          "end" : 7260,
-          "start" : 7160,
+          "end" : 5420,
+          "start" : 5320,
           "text" : "10"
         },
         {
-          "end" : 7560,
-          "start" : 7260,
+          "end" : 5700,
+          "start" : 5420,
           "text" : ",000"
         },
         {
-          "end" : 7820,
-          "start" : 7560,
+          "end" : 5980,
+          "start" : 5700,
           "text" : "requests"
         },
         {
-          "end" : 8000,
-          "start" : 7820,
+          "end" : 6160,
+          "start" : 5980,
           "text" : "come"
         },
         {
-          "end" : 8140,
-          "start" : 8000,
+          "end" : 6300,
+          "start" : 6160,
           "text" : "in,"
         },
         {
-          "end" : 8300,
-          "start" : 8220,
+          "end" : 6460,
+          "start" : 6380,
           "text" : "but"
         },
         {
-          "end" : 8460,
-          "start" : 8300,
+          "end" : 6620,
+          "start" : 6460,
           "text" : "only"
         },
         {
-          "end" : 8800,
-          "start" : 8460,
+          "end" : 6980,
+          "start" : 6620,
           "text" : "50"
         },
         {
-          "end" : 8960,
-          "start" : 8800,
+          "end" : 7100,
+          "start" : 6980,
           "text" : "are"
         },
         {
-          "end" : 9360,
-          "start" : 8960,
+          "end" : 7520,
+          "start" : 7100,
           "text" : "attacks."
         }
       ]
     },
     {
-      "end" : 13040,
-      "id" : "A177240E-8552-4D17-B995-9772251CD592",
-      "start" : 9740,
-      "text" : "It never flags anything, and you're still right 99.5% of the time.",
+      "end" : 10460,
+      "id" : "4033FD98-B626-4801-A7F6-3312C43E7AA1",
+      "start" : 7920,
+      "text" : "Here's a real model. It catches 40 of the 50 attacks,",
       "words" : [
         {
-          "end" : 9900,
-          "start" : 9740,
-          "text" : "It"
+          "end" : 8000,
+          "start" : 7920,
+          "text" : "Here's"
         },
         {
-          "end" : 10160,
-          "start" : 9900,
-          "text" : "never"
-        },
-        {
-          "end" : 10500,
-          "start" : 10160,
-          "text" : "flags"
-        },
-        {
-          "end" : 10860,
-          "start" : 10500,
-          "text" : "anything,"
-        },
-        {
-          "end" : 11020,
-          "start" : 10960,
-          "text" : "and"
-        },
-        {
-          "end" : 11100,
-          "start" : 11020,
-          "text" : "you're"
-        },
-        {
-          "end" : 11360,
-          "start" : 11100,
-          "text" : "still"
-        },
-        {
-          "end" : 11620,
-          "start" : 11360,
-          "text" : "right"
-        },
-        {
-          "end" : 11900,
-          "start" : 11620,
-          "text" : "99"
-        },
-        {
-          "end" : 12340,
-          "start" : 11900,
-          "text" : ".5"
-        },
-        {
-          "end" : 12640,
-          "start" : 12340,
-          "text" : "%"
-        },
-        {
-          "end" : 12680,
-          "start" : 12640,
-          "text" : "of"
-        },
-        {
-          "end" : 12780,
-          "start" : 12680,
-          "text" : "the"
-        },
-        {
-          "end" : 13040,
-          "start" : 12780,
-          "text" : "time."
-        }
-      ]
-    },
-    {
-      "end" : 14220,
-      "id" : "4DDA2703-3908-4B8B-B0DF-C306AA8B7C2C",
-      "start" : 13480,
-      "text" : "Now, here's a real model.",
-      "words" : [
-        {
-          "end" : 13540,
-          "start" : 13480,
-          "text" : "Now,"
-        },
-        {
-          "end" : 13720,
-          "start" : 13640,
-          "text" : "here's"
-        },
-        {
-          "end" : 13780,
-          "start" : 13720,
+          "end" : 8060,
+          "start" : 8000,
           "text" : "a"
         },
         {
-          "end" : 13940,
-          "start" : 13780,
+          "end" : 8220,
+          "start" : 8060,
           "text" : "real"
         },
         {
-          "end" : 14220,
-          "start" : 13940,
+          "end" : 8480,
+          "start" : 8220,
           "text" : "model."
-        }
-      ]
-    },
-    {
-      "end" : 17340,
-      "id" : "8D2C43CD-0483-495D-BA50-984EC44BE289",
-      "start" : 14480,
-      "text" : "It flags 100 requests and catches 40 of the 50 attacks,",
-      "words" : [
+        },
         {
-          "end" : 14560,
-          "start" : 14480,
+          "end" : 8780,
+          "start" : 8640,
           "text" : "It"
         },
         {
-          "end" : 14780,
-          "start" : 14560,
-          "text" : "flags"
-        },
-        {
-          "end" : 15140,
-          "start" : 14780,
-          "text" : "100"
-        },
-        {
-          "end" : 15560,
-          "start" : 15140,
-          "text" : "requests"
-        },
-        {
-          "end" : 15640,
-          "start" : 15560,
-          "text" : "and"
-        },
-        {
-          "end" : 15900,
-          "start" : 15640,
+          "end" : 9040,
+          "start" : 8780,
           "text" : "catches"
         },
         {
-          "end" : 16400,
-          "start" : 15900,
+          "end" : 9520,
+          "start" : 9040,
           "text" : "40"
         },
         {
-          "end" : 16540,
-          "start" : 16400,
+          "end" : 9680,
+          "start" : 9520,
           "text" : "of"
         },
         {
-          "end" : 16640,
-          "start" : 16540,
+          "end" : 9780,
+          "start" : 9680,
           "text" : "the"
         },
         {
-          "end" : 16880,
-          "start" : 16640,
+          "end" : 10020,
+          "start" : 9780,
           "text" : "50"
         },
         {
-          "end" : 17340,
-          "start" : 16880,
+          "end" : 10460,
+          "start" : 10020,
           "text" : "attacks,"
         }
       ]
     },
     {
-      "end" : 20620,
-      "id" : "0805D5CE-7EAA-4C32-85E7-05DBC8071CA5",
-      "start" : 17620,
+      "end" : 13760,
+      "id" : "A211B721-B5BA-474F-842F-12DAF7E1FCFC",
+      "start" : 10860,
       "text" : "but its accuracy goes down to 99.3%.",
       "words" : [
         {
-          "end" : 17800,
-          "start" : 17620,
+          "end" : 10940,
+          "start" : 10860,
           "text" : "but"
         },
         {
-          "end" : 17920,
-          "start" : 17800,
+          "end" : 11060,
+          "start" : 10940,
           "text" : "its"
         },
         {
-          "end" : 18580,
-          "start" : 17920,
+          "end" : 11680,
+          "start" : 11060,
           "text" : "accuracy"
         },
         {
-          "end" : 18860,
-          "start" : 18580,
+          "end" : 12000,
+          "start" : 11680,
           "text" : "goes"
         },
         {
-          "end" : 19100,
-          "start" : 18860,
+          "end" : 12240,
+          "start" : 12000,
           "text" : "down"
         },
         {
-          "end" : 19260,
-          "start" : 19100,
+          "end" : 12380,
+          "start" : 12240,
           "text" : "to"
         },
         {
-          "end" : 19680,
-          "start" : 19260,
+          "end" : 12840,
+          "start" : 12380,
           "text" : "99"
         },
         {
-          "end" : 20620,
-          "start" : 19680,
+          "end" : 13760,
+          "start" : 12840,
           "text" : ".3%."
         }
       ]
     },
     {
-      "end" : 22720,
-      "id" : "9BE89438-4B60-44BE-A69E-954A953C8A2D",
-      "start" : 21060,
-      "text" : "So, we look at the confusion matrix instead.",
+      "end" : 15820,
+      "id" : "A49AE1DB-1966-4C01-B32A-1B6BAC7EE458",
+      "start" : 14060,
+      "text" : "So we look at the confusion matrix instead.",
       "words" : [
         {
-          "end" : 21140,
-          "start" : 21060,
-          "text" : "So,"
+          "end" : 14240,
+          "start" : 14060,
+          "text" : "So"
         },
         {
-          "end" : 21180,
-          "start" : 21140,
+          "end" : 14320,
+          "start" : 14240,
           "text" : "we"
         },
         {
-          "end" : 21360,
-          "start" : 21180,
+          "end" : 14500,
+          "start" : 14320,
           "text" : "look"
         },
         {
-          "end" : 21480,
-          "start" : 21360,
+          "end" : 14600,
+          "start" : 14500,
           "text" : "at"
         },
         {
-          "end" : 21580,
-          "start" : 21480,
+          "end" : 14720,
+          "start" : 14600,
           "text" : "the"
         },
         {
-          "end" : 21960,
-          "start" : 21580,
+          "end" : 15140,
+          "start" : 14720,
           "text" : "confusion"
         },
         {
-          "end" : 22300,
-          "start" : 21960,
+          "end" : 15440,
+          "start" : 15140,
           "text" : "matrix"
         },
         {
-          "end" : 22720,
-          "start" : 22300,
+          "end" : 15820,
+          "start" : 15440,
           "text" : "instead."
         }
       ]
     },
     {
-      "end" : 27500,
-      "id" : "9B628BAC-8F13-4FD2-9103-F90BC2A85F20",
-      "start" : 23260,
-      "text" : "A true positive is \"I said there was an attack, and there was generally an attack.\"",
+      "end" : 20580,
+      "id" : "AF7FC684-242D-4293-BD9F-4B8F16AC2260",
+      "start" : 16379,
+      "text" : "A true positive is \"I said there was an attack, and it was genuinely an attack.\"",
       "words" : [
         {
-          "end" : 23380,
-          "start" : 23260,
+          "end" : 16500,
+          "start" : 16379,
           "text" : "A"
         },
         {
-          "end" : 23460,
-          "start" : 23380,
+          "end" : 16580,
+          "start" : 16500,
           "text" : "true"
         },
         {
-          "end" : 23860,
-          "start" : 23460,
+          "end" : 17060,
+          "start" : 16580,
           "text" : "positive"
         },
         {
-          "end" : 24100,
-          "start" : 23860,
+          "end" : 17220,
+          "start" : 17060,
           "text" : "is"
         },
         {
-          "end" : 24620,
-          "start" : 24100,
+          "end" : 17740,
+          "start" : 17220,
           "text" : "\"I"
         },
         {
-          "end" : 24860,
-          "start" : 24620,
+          "end" : 18000,
+          "start" : 17740,
           "text" : "said"
         },
         {
-          "end" : 25020,
-          "start" : 24860,
+          "end" : 18140,
+          "start" : 18000,
           "text" : "there"
         },
         {
-          "end" : 25140,
-          "start" : 25020,
+          "end" : 18280,
+          "start" : 18140,
           "text" : "was"
         },
         {
-          "end" : 25260,
-          "start" : 25140,
+          "end" : 18380,
+          "start" : 18280,
           "text" : "an"
         },
         {
-          "end" : 25620,
-          "start" : 25260,
+          "end" : 18740,
+          "start" : 18380,
           "text" : "attack,"
         },
         {
-          "end" : 26020,
-          "start" : 25920,
+          "end" : 19140,
+          "start" : 19040,
           "text" : "and"
         },
         {
-          "end" : 26140,
-          "start" : 26020,
-          "text" : "there"
+          "end" : 19280,
+          "start" : 19140,
+          "text" : "it"
         },
         {
-          "end" : 26440,
-          "start" : 26140,
+          "end" : 19560,
+          "start" : 19280,
           "text" : "was"
         },
         {
-          "end" : 26860,
-          "start" : 26440,
-          "text" : "generally"
+          "end" : 20040,
+          "start" : 19560,
+          "text" : "genuinely"
         },
         {
-          "end" : 27020,
-          "start" : 26860,
+          "end" : 20160,
+          "start" : 20040,
           "text" : "an"
         },
         {
-          "end" : 27500,
-          "start" : 27020,
+          "end" : 20580,
+          "start" : 20160,
           "text" : "attack.\""
         }
       ]
     },
     {
-      "end" : 31040,
-      "id" : "720BCA17-9774-4932-8011-D15F1CFB9753",
-      "start" : 27500,
-      "text" : "A false positive is the model predicted attack, but it was a real user.",
+      "end" : 24220,
+      "id" : "FC3C71F3-08CF-4032-B7CF-A2D7DBA5D31F",
+      "start" : 20800,
+      "text" : "A false positive is \"The model predicted attack, but it was a real user.\"",
       "words" : [
         {
-          "end" : 27840,
-          "start" : 27500,
+          "end" : 20960,
+          "start" : 20800,
           "text" : "A"
         },
         {
-          "end" : 28040,
-          "start" : 27840,
+          "end" : 21180,
+          "start" : 20960,
           "text" : "false"
         },
         {
-          "end" : 28440,
-          "start" : 28040,
+          "end" : 21580,
+          "start" : 21180,
           "text" : "positive"
         },
         {
-          "end" : 28700,
-          "start" : 28440,
+          "end" : 21820,
+          "start" : 21580,
           "text" : "is"
         },
         {
-          "end" : 28840,
-          "start" : 28700,
-          "text" : "the"
+          "end" : 22020,
+          "start" : 21820,
+          "text" : "\"The"
         },
         {
-          "end" : 29100,
-          "start" : 28840,
+          "end" : 22220,
+          "start" : 22020,
           "text" : "model"
         },
         {
-          "end" : 29420,
-          "start" : 29100,
+          "end" : 22540,
+          "start" : 22220,
           "text" : "predicted"
         },
         {
-          "end" : 29860,
-          "start" : 29420,
+          "end" : 22980,
+          "start" : 22540,
           "text" : "attack,"
         },
         {
-          "end" : 30320,
-          "start" : 30240,
+          "end" : 23460,
+          "start" : 23380,
           "text" : "but"
         },
         {
-          "end" : 30400,
-          "start" : 30320,
+          "end" : 23520,
+          "start" : 23460,
           "text" : "it"
         },
         {
-          "end" : 30540,
-          "start" : 30400,
+          "end" : 23660,
+          "start" : 23520,
           "text" : "was"
         },
         {
-          "end" : 30640,
-          "start" : 30540,
+          "end" : 23780,
+          "start" : 23660,
           "text" : "a"
         },
         {
-          "end" : 30800,
-          "start" : 30640,
+          "end" : 23920,
+          "start" : 23780,
           "text" : "real"
         },
         {
-          "end" : 31040,
-          "start" : 30800,
-          "text" : "user."
+          "end" : 24220,
+          "start" : 23920,
+          "text" : "user.\""
         }
       ]
     },
     {
-      "end" : 34660,
-      "id" : "A6950F2C-7F87-4202-B539-A9AFC8C0C8F8",
-      "start" : 31400,
-      "text" : "A false negative, I said user, but it was an attack.",
+      "end" : 27800,
+      "id" : "7DA841FC-AF53-4F24-8AFF-996076A180F4",
+      "start" : 24480,
+      "text" : "A false negative, \"I said user, but it was an attack.\"",
       "words" : [
         {
-          "end" : 31480,
-          "start" : 31400,
+          "end" : 24600,
+          "start" : 24480,
           "text" : "A"
         },
         {
-          "end" : 31680,
-          "start" : 31480,
+          "end" : 24800,
+          "start" : 24600,
           "text" : "false"
         },
         {
-          "end" : 32040,
-          "start" : 31680,
+          "end" : 25160,
+          "start" : 24800,
           "text" : "negative,"
         },
         {
-          "end" : 32680,
-          "start" : 32619,
-          "text" : "I"
+          "end" : 25820,
+          "start" : 25740,
+          "text" : "\"I"
         },
         {
-          "end" : 32920,
-          "start" : 32680,
+          "end" : 26040,
+          "start" : 25820,
           "text" : "said"
         },
         {
-          "end" : 33240,
-          "start" : 32920,
+          "end" : 26380,
+          "start" : 26040,
           "text" : "user,"
         },
         {
-          "end" : 33700,
-          "start" : 33620,
+          "end" : 26820,
+          "start" : 26640,
           "text" : "but"
         },
         {
-          "end" : 33800,
-          "start" : 33700,
+          "end" : 26940,
+          "start" : 26820,
           "text" : "it"
         },
         {
-          "end" : 34180,
-          "start" : 33800,
+          "end" : 27300,
+          "start" : 26940,
           "text" : "was"
         },
         {
-          "end" : 34320,
-          "start" : 34180,
+          "end" : 27440,
+          "start" : 27300,
           "text" : "an"
         },
         {
-          "end" : 34660,
-          "start" : 34320,
-          "text" : "attack."
+          "end" : 27800,
+          "start" : 27440,
+          "text" : "attack.\""
         }
       ]
     },
     {
-      "end" : 37560,
-      "id" : "4F371BBF-574C-466B-9A4D-6473A8DF9DF2",
-      "start" : 34740,
-      "text" : "And a true negative, I said user and it was a user.",
+      "end" : 30700,
+      "id" : "FF578D75-C5E9-4716-8130-D9DC2DD9A992",
+      "start" : 27800,
+      "text" : "In a true negative, I said user and it was a user.",
       "words" : [
         {
-          "end" : 34800,
-          "start" : 34740,
-          "text" : "And"
+          "end" : 27940,
+          "start" : 27800,
+          "text" : "In"
         },
         {
-          "end" : 34920,
-          "start" : 34800,
+          "end" : 28060,
+          "start" : 27940,
           "text" : "a"
         },
         {
-          "end" : 35080,
-          "start" : 34920,
+          "end" : 28220,
+          "start" : 28060,
           "text" : "true"
         },
         {
-          "end" : 35380,
-          "start" : 35080,
+          "end" : 28500,
+          "start" : 28220,
           "text" : "negative,"
         },
         {
-          "end" : 35680,
-          "start" : 35620,
+          "end" : 28820,
+          "start" : 28740,
           "text" : "I"
         },
         {
-          "end" : 35920,
-          "start" : 35680,
+          "end" : 29060,
+          "start" : 28820,
           "text" : "said"
         },
         {
-          "end" : 36180,
-          "start" : 35920,
+          "end" : 29320,
+          "start" : 29060,
           "text" : "user"
         },
         {
-          "end" : 36420,
-          "start" : 36180,
+          "end" : 29540,
+          "start" : 29320,
           "text" : "and"
         },
         {
-          "end" : 36520,
-          "start" : 36420,
+          "end" : 29660,
+          "start" : 29540,
           "text" : "it"
         },
         {
-          "end" : 37100,
-          "start" : 36520,
+          "end" : 30220,
+          "start" : 29660,
           "text" : "was"
         },
         {
-          "end" : 37320,
-          "start" : 37100,
+          "end" : 30460,
+          "start" : 30220,
           "text" : "a"
         },
         {
-          "end" : 37560,
-          "start" : 37320,
+          "end" : 30700,
+          "start" : 30460,
           "text" : "user."
         }
       ]
     },
     {
-      "end" : 39140,
-      "id" : "922E5488-8658-4238-AD99-60A4C056B27D",
-      "start" : 37800,
+      "end" : 32259,
+      "id" : "F1D5133D-FE1A-4108-B36E-B1A6272A7870",
+      "start" : 31020,
       "text" : "Now look where the accuracy comes from.",
       "words" : [
         {
-          "end" : 37940,
-          "start" : 37800,
+          "end" : 31080,
+          "start" : 31020,
           "text" : "Now"
         },
         {
-          "end" : 38080,
-          "start" : 37940,
+          "end" : 31220,
+          "start" : 31080,
           "text" : "look"
         },
         {
-          "end" : 38160,
-          "start" : 38080,
+          "end" : 31300,
+          "start" : 31220,
           "text" : "where"
         },
         {
-          "end" : 38280,
-          "start" : 38160,
+          "end" : 31420,
+          "start" : 31300,
           "text" : "the"
         },
         {
-          "end" : 38620,
-          "start" : 38280,
+          "end" : 31760,
+          "start" : 31420,
           "text" : "accuracy"
         },
         {
-          "end" : 38960,
-          "start" : 38620,
+          "end" : 32099,
+          "start" : 31760,
           "text" : "comes"
         },
         {
-          "end" : 39140,
-          "start" : 38960,
+          "end" : 32259,
+          "start" : 32099,
           "text" : "from."
         }
       ]
     },
     {
-      "end" : 40920,
-      "id" : "132B7470-C2EB-4FFD-B211-9AC08B367D88",
-      "start" : 39380,
+      "end" : 34060,
+      "id" : "3105BE22-FDC1-4BD3-8C85-4DFE7B5BF201",
+      "start" : 32520,
       "text" : "Almost all of it is true negatives.",
       "words" : [
         {
-          "end" : 39500,
-          "start" : 39380,
+          "end" : 32640,
+          "start" : 32520,
           "text" : "Almost"
         },
         {
-          "end" : 39800,
-          "start" : 39500,
+          "end" : 32940,
+          "start" : 32640,
           "text" : "all"
         },
         {
-          "end" : 39920,
-          "start" : 39800,
+          "end" : 33040,
+          "start" : 32940,
           "text" : "of"
         },
         {
-          "end" : 40020,
-          "start" : 39920,
+          "end" : 33140,
+          "start" : 33040,
           "text" : "it"
         },
         {
-          "end" : 40120,
-          "start" : 40020,
+          "end" : 33240,
+          "start" : 33140,
           "text" : "is"
         },
         {
-          "end" : 40420,
-          "start" : 40120,
+          "end" : 33540,
+          "start" : 33240,
           "text" : "true"
         },
         {
-          "end" : 40920,
-          "start" : 40420,
+          "end" : 34060,
+          "start" : 33540,
           "text" : "negatives."
         }
       ]
     },
     {
-      "end" : 42300,
-      "id" : "A9BEED04-3B0A-45D1-B129-3A03C9E19661",
-      "start" : 41340,
+      "end" : 35420,
+      "id" : "AB6FAFC7-10C6-4C48-93DD-C41BBDBB0FE6",
+      "start" : 34480,
       "text" : "These are the easy ones.",
       "words" : [
         {
-          "end" : 41500,
-          "start" : 41340,
+          "end" : 34660,
+          "start" : 34480,
           "text" : "These"
         },
         {
-          "end" : 41620,
-          "start" : 41500,
+          "end" : 34740,
+          "start" : 34660,
           "text" : "are"
         },
         {
-          "end" : 41740,
-          "start" : 41620,
+          "end" : 34880,
+          "start" : 34740,
           "text" : "the"
         },
         {
-          "end" : 42040,
-          "start" : 41740,
+          "end" : 35180,
+          "start" : 34880,
           "text" : "easy"
         },
         {
-          "end" : 42300,
-          "start" : 42040,
+          "end" : 35420,
+          "start" : 35180,
           "text" : "ones."
         }
       ]
     },
     {
-      "end" : 46160,
-      "id" : "FE12933F-ACE0-4FD5-AABD-8845EFBA23A6",
-      "start" : 42740,
-      "text" : "When positives are rare, we don't want to read the accuracy.",
+      "end" : 37500,
+      "id" : "C7453D63-73F9-4FB8-A4BA-E46C9D63E61E",
+      "start" : 35880,
+      "text" : "When positives are rare,",
       "words" : [
         {
-          "end" : 42860,
-          "start" : 42740,
+          "end" : 36000,
+          "start" : 35880,
           "text" : "When"
         },
         {
-          "end" : 43560,
-          "start" : 42860,
+          "end" : 36680,
+          "start" : 36000,
           "text" : "positives"
         },
         {
-          "end" : 43860,
-          "start" : 43560,
+          "end" : 36980,
+          "start" : 36680,
           "text" : "are"
         },
         {
-          "end" : 44360,
-          "start" : 43860,
+          "end" : 37500,
+          "start" : 36980,
           "text" : "rare,"
-        },
+        }
+      ]
+    },
+    {
+      "end" : 39280,
+      "id" : "A255A9D0-FC8D-4D47-B8E8-765950F67B34",
+      "start" : 37940,
+      "text" : "we don't want to read the accuracy.",
+      "words" : [
         {
-          "end" : 44940,
-          "start" : 44800,
+          "end" : 38080,
+          "start" : 37940,
           "text" : "we"
         },
         {
-          "end" : 45120,
-          "start" : 44940,
+          "end" : 38260,
+          "start" : 38080,
           "text" : "don't"
         },
         {
-          "end" : 45280,
-          "start" : 45120,
+          "end" : 38400,
+          "start" : 38260,
           "text" : "want"
         },
         {
-          "end" : 45340,
-          "start" : 45280,
+          "end" : 38480,
+          "start" : 38400,
           "text" : "to"
         },
         {
-          "end" : 45500,
-          "start" : 45340,
+          "end" : 38640,
+          "start" : 38480,
           "text" : "read"
         },
         {
-          "end" : 45660,
-          "start" : 45500,
+          "end" : 38800,
+          "start" : 38640,
           "text" : "the"
         },
         {
-          "end" : 46160,
-          "start" : 45660,
+          "end" : 39280,
+          "start" : 38800,
           "text" : "accuracy."
         }
       ]
     },
     {
-      "end" : 47760,
-      "id" : "AB9934B9-7E46-47D0-A0F5-7DA6147EB46F",
-      "start" : 46300,
+      "end" : 40920,
+      "id" : "81B6B0F0-AA18-48C4-8591-1B0D72A59E9F",
+      "start" : 39440,
       "text" : "We want to look at the confusion matrix.",
       "words" : [
         {
-          "end" : 46440,
-          "start" : 46300,
+          "end" : 39580,
+          "start" : 39440,
           "text" : "We"
         },
         {
-          "end" : 46600,
-          "start" : 46440,
+          "end" : 39720,
+          "start" : 39580,
           "text" : "want"
         },
         {
-          "end" : 46680,
-          "start" : 46600,
+          "end" : 39820,
+          "start" : 39720,
           "text" : "to"
         },
         {
-          "end" : 46880,
-          "start" : 46680,
+          "end" : 40020,
+          "start" : 39820,
           "text" : "look"
         },
         {
-          "end" : 47000,
-          "start" : 46880,
+          "end" : 40100,
+          "start" : 40020,
           "text" : "at"
         },
         {
-          "end" : 47100,
-          "start" : 47000,
+          "end" : 40240,
+          "start" : 40100,
           "text" : "the"
         },
         {
-          "end" : 47480,
-          "start" : 47100,
+          "end" : 40620,
+          "start" : 40240,
           "text" : "confusion"
         },
         {
-          "end" : 47760,
-          "start" : 47480,
+          "end" : 40920,
+          "start" : 40620,
           "text" : "matrix."
         }
       ]
     }
   ],
-  "text" : "This model is 99.5% accurate, but it's never caught a single attack.\nIt's a prompt injection detector.\n10,000 requests come in, but only 50 are attacks.\nIt never flags anything, and you're still right 99.5% of the time.\nNow, here's a real model.\nIt flags 100 requests and catches 40 of the 50 attacks,\nbut its accuracy goes down to 99.3%.\nSo, we look at the confusion matrix instead.\nA true positive is \"I said there was an attack, and there was generally an attack.\"\nA false positive is the model predicted attack, but it was a real user.\nA false negative, I said user, but it was an attack.\nAnd a true negative, I said user and it was a user.\nNow look where the accuracy comes from.\nAlmost all of it is true negatives.\nThese are the easy ones.\nWhen positives are rare, we don't want to read the accuracy.\nWe want to look at the confusion matrix."
+  "text" : "This model is 99.5% accurate, but it's never caught a single attack.\n10,000 requests come in, but only 50 are attacks.\nHere's a real model. It catches 40 of the 50 attacks,\nbut its accuracy goes down to 99.3%.\nSo we look at the confusion matrix instead.\nA true positive is \"I said there was an attack, and it was genuinely an attack.\"\nA false positive is \"The model predicted attack, but it was a real user.\"\nA false negative, \"I said user, but it was an attack.\"\nIn a true negative, I said user and it was a user.\nNow look where the accuracy comes from.\nAlmost all of it is true negatives.\nThese are the easy ones.\nWhen positives are rare,\nwe don't want to read the accuracy.\nWe want to look at the confusion matrix."
 }

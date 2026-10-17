@@ -2,7 +2,8 @@
 
 **Name:** classifier-ep01-beat-brief
 **Description:** The contract for the seven HyperFrames beats of
-"Confusion matrix explained: the accuracy trap" (48.80 s). Every beat draws
+"Confusion matrix explained: the accuracy trap" (48.80 s as briefed; 41.96 s after
+Chris's second cut, see storyboard.md "Final beats" for the current starts). Every beat draws
 with the episode kit `_kit/score.js` through one call, `K.draw(g, S)`,
 where `S` is a state object; each beat opens on `SC.SEAM[n-1]` and ends on
 `SC.SEAM[n]`, so cuts are exact by construction.
