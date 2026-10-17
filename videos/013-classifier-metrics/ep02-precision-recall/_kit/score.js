@@ -60,33 +60,40 @@
   }
 
   // Every dot, at home on the score line. o.flag 0..1: flagged dots (score > 0.70)
-  // light up. o.ring {tp, fp, fn}: 0..1, ring that group's dots (attacks get a
-  // ring, users brighten and grow). o.userPulse / o.attackRing: one-shot accents
-  // (attackRing rings all 50). o.dimUsers 0..1: unflagged users fade back.
+  // light up. o.ring {tp, fp, fn}: 0..1, highlight that group's dots.
+  // o.userPulse / o.attackRing: one-shot accents (attackRing highlights all 50).
+  //
+  // A highlight is a soft glow drawn under every dot, plus a brighter, slightly
+  // bigger fill: the attack dots sit 13 px apart, so per-dot rings (ep 1's look,
+  // 27 px across) chained into a tangle (Chris, ep 2 v2). Neighbouring glows
+  // merge into one patch, which reads as "this group".
   function dots(g, o = {}) {
     const flag = o.flag || 0, up = o.userPulse || 0, ringAll = o.attackRing || 0, R = o.ring || {};
     const U = D.users, A = D.attacks;
     const ucol = mixc(COL.data, COL.text, 0.35 * up);
+    const hiU = (i) => (U.g[i] === "fp" ? R.fp || 0 : 0);
+    const hiA = (i) => Math.max(R[A.g[i]] || 0, ringAll);
+    // glows first, so no glow covers a dot
     for (let i = 0; i < U.x.length; i++) {
-      const k = U.g[i], lit = k === "fp" ? Math.max(flag, R.fp || 0) : 0, rg = k === "fp" ? R.fp || 0 : 0;
-      g.fillStyle = rgba(lit ? mixc(ucol, COL.text, lit) : ucol, 0.8 + 0.2 * lit);
-      const r = USER_R + 1.6 * lit + 1.4 * rg;
-      g.fillRect(U.x[i] - r, U.y[i] - r, 2 * r, 2 * r);
-      if (rg > 0) {   // a ringed user (fp) gets a teal halo, so the 60 read as a group
-        g.strokeStyle = rgba(COL.data, rg); g.lineWidth = 2.5;
-        g.beginPath(); g.arc(U.x[i], U.y[i], r + 4 * rg, 0, Math.PI * 2); g.stroke();
-      }
+      const h = hiU(i); if (h <= 0) continue;
+      g.fillStyle = rgba(COL.data, 0.16 * h);
+      g.beginPath(); g.arc(U.x[i], U.y[i], 7, 0, Math.PI * 2); g.fill();
     }
     for (let i = 0; i < A.x.length; i++) {
-      const x = A.x[i], y = A.y[i], k = A.g[i];
-      g.fillStyle = rgba(COL.attack);
-      g.beginPath(); g.arc(x, y, ATK_R, 0, Math.PI * 2); g.fill();
-      const lit = k === "tp" ? flag : 0, rg = Math.max(R[k] || 0, ringAll);
-      const rr = Math.max(lit, rg);
-      if (rr > 0) {
-        g.strokeStyle = rgba(COL.text, rr); g.lineWidth = 2.5 + 1.5 * rg;
-        g.beginPath(); g.arc(x, y, ATK_R + 3 + 4 * rg, 0, Math.PI * 2); g.stroke();
-      }
+      const h = hiA(i); if (h <= 0) continue;
+      g.fillStyle = rgba(COL.attack, 0.3 * h);
+      g.beginPath(); g.arc(A.x[i], A.y[i], ATK_R + 7, 0, Math.PI * 2); g.fill();
+    }
+    for (let i = 0; i < U.x.length; i++) {
+      const lit = U.g[i] === "fp" ? flag : 0, h = hiU(i);
+      g.fillStyle = rgba(mixc(lit ? mixc(ucol, COL.text, lit) : ucol, COL.text, h), 0.8 + 0.2 * Math.max(lit, h));
+      const r = USER_R + 1.6 * lit + 0.8 * h;
+      g.fillRect(U.x[i] - r, U.y[i] - r, 2 * r, 2 * r);
+    }
+    for (let i = 0; i < A.x.length; i++) {
+      const lit = A.g[i] === "tp" ? flag : 0, h = hiA(i);
+      g.fillStyle = rgba(mixc(mixc(COL.attack, COL.text, 0.2 * lit), COL.text, 0.45 * h));
+      g.beginPath(); g.arc(A.x[i], A.y[i], ATK_R + 1.2 * h, 0, Math.PI * 2); g.fill();
     }
   }
 
