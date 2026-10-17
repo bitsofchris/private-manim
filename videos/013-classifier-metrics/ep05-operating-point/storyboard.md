@@ -87,7 +87,23 @@ runs to 1330) holds one thing at a time:
 | 6 | Move the line | Now move the line down as far as that allows, 41 of 50 attacks caught. | "move the line": the threshold turns magenta and slides left from 0.70 to 0.656 (≥ 1.5 s); dots it passes light up; the readout ticks from the dots ("123 flags, 41 real"). "41 of 50": "caught 41 / 50" pulses. | the threshold |
 | 7 | Takeaway | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. | "ship a threshold": the threshold pulses. "what a mistake costs": the "1 in 3" line pulses (dim, not magenta). "put the line there": hold. Still for the last ~1 s. | the threshold |
 
-## Cut list (proposed; waiting for Chris)
+## Final beats (the contract; `vo_final.wav` 44.35 s, master seconds)
+
+Beat brief for the agents: `BRIEF.md` (seam states `SC.SEAM` in `_kit/score.js`).
+Captions are anchored bottom (`assemble.py --captions-anchor bottom`), so
+the stage runs to y 1330.
+
+| # | Folder | Start | Length | VO |
+|---|---|---:|---:|---|
+| 1 | `01_hook` | 0.00 | 7.40 | The F1 score is precision and recall in one number, and it punishes whichever is worse. It's a prompt injection detector. |
+| 2 | `02_harmonic` | 7.40 | 7.30 | Average 0.9 and 0.1 and you get 0.5. F1 will give you 0.18. It's a harmonic mean. |
+| 3 | `03_model_a` | 14.70 | 4.20 | Our model, 40 percent precision, 80 percent recall, scores 0.53. |
+| 4 | `04_costs` | 18.90 | 9.60 | But F1 treats both mistakes the same, and here they aren't. A false positive blocks a real user who can try again. A false negative would let an attack hijack your agent and leak your data. |
+| 5 | `05_target` | 28.50 | 6.20 | So say we'll accept two blocked users for every attack we stop. That means at least one flag in three has to be a real attack. |
+| 6 | `06_move_line` | 34.70 | 4.00 | Now move the line down as far as that allows, 41 of 50 attacks caught. |
+| 7 | `07_takeaway` | 38.70 | 5.65 | You don't ship an F1 score, you ship a threshold. Decide what a mistake costs and then put the line there. |
+
+## Cut list (approved by Chris, 10/17; applied)
 
 Raw take 44.85 s, clean (script.md: no flubs; the F-beta line was never
 said). With the context line spliced in after line 1 (a 0.42 s pause
