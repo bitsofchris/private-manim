@@ -1,0 +1,76 @@
+00:00.001-00:02.800
+This model's ROC area under the curve is 0.
+
+00:02.800-00:06.560
+985, nearly perfect, but most of what it flags is wrong.
+
+00:08.420-00:10.740
+AUC is for comparing models.
+
+00:10.740-00:12.020
+A coin flip is 0.
+
+00:12.180-00:12.900
+5.
+
+00:12.900-00:15.780
+You pick a random attack in a random user and 98.
+
+00:15.780-00:18.900
+5% of the time the attack scores higher.
+
+00:19.119-00:20.640
+Now look at this point.
+
+00:20.640-00:22.080
+False positive rate 2.
+
+00:22.080-00:22.720
+3%.
+
+00:22.720-00:23.759
+Sounds small.
+
+00:24.720-00:29.439
+It's 233 real users blocked just to catch 44 attacks.
+
+00:29.340-00:31.820
+So swap the false positive rate for precision.
+
+00:31.820-00:34.060
+Precision doesn't use true negatives.
+
+00:34.060-00:38.620
+Recall goes across, precision goes up, and the same model's curve drops.
+
+00:38.620-00:40.620
+Now the good corner is top right.
+
+00:41.120-00:43.280
+And the coin flip here isn't 0.
+
+00:43.280-00:43.760
+5.
+
+00:43.760-00:44.320
+It's 0.
+
+00:44.320-00:46.480
+005, the attack rate.
+
+00:46.480-00:47.840
+This model's PR
+
+00:48.700-00:51.580
+This model's precision recall area under the curve is 0.
+
+00:51.580-00:52.300
+56.
+
+00:52.300-00:55.420
+It's low-looking, but over a hundred times better than chance.
+
+00:55.420-01:00.060
+When positives are rare, we want to compare models on the precision recall curve.
+
+
