@@ -1,0 +1,43 @@
+00:00.240-00:02.560
+The goal is not to keep agents busy.
+
+00:02.560-00:05.600
+It's to maximize the rate at which you can understand things.
+
+00:05.600-00:10.320
+A while back I made a video about how I use Obsidian to keep agents working for me.
+
+00:09.900-00:13.099
+But the bottleneck has become me reviewing and understanding everything.
+
+00:13.099-00:19.020
+Now sometimes it's useful to optimize for output, but other times you want to go slow so you can deliberately understand things
+
+00:18.700-00:24.860
+When I'm working through a Carpathes LLM lecture course, the agent writes the plumbing, but I write the core idea myself.
+
+00:24.860-00:26.780
+That's the part I want to understand.
+
+00:26.780-00:32.380
+So go fast on the parts that teach you nothing, but go slow on the core part that you're meant to struggle with
+
+00:32.099-00:34.180
+Now AI can't make you smarter on its own.
+
+00:34.180-00:35.300
+You have to do that work.
+
+00:35.300-00:37.059
+Keeping them busy is not the goal.
+
+00:37.219-00:39.460
+Make sure you carve out time for your own growth.
+
+00:39.460-00:42.180
+Block a slot on your day where you do the work.
+
+00:41.800-00:47.239
+Where you write something by hand, read it slowly, do the deep thinking and are not just trying to keep agents busy
+
+

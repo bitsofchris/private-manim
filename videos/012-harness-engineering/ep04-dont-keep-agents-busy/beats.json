@@ -1,0 +1,38 @@
+[
+ {
+  "clip": "media/hf/01_hook.mp4",
+  "end": 5.5
+ },
+ {
+  "clip": "media/hf/02_obsidian.mp4",
+  "end": 4.5
+ },
+ {
+  "clip": "media/hf/03_bottleneck.mp4",
+  "end": 3.1
+ },
+ {
+  "clip": "media/hf/04_two_speeds.mp4",
+  "end": 5.75
+ },
+ {
+  "clip": "media/hf/05_karpathy.mp4",
+  "end": 7.9
+ },
+ {
+  "clip": "media/hf/06_fast_slow.mp4",
+  "end": 5.45
+ },
+ {
+  "clip": "media/hf/07_do_the_work.mp4",
+  "end": 4.85
+ },
+ {
+  "clip": "media/hf/08_block_a_slot.mp4",
+  "end": 4.75
+ },
+ {
+  "clip": "media/hf/09_by_hand.mp4",
+  "end": 5.686
+ }
+]

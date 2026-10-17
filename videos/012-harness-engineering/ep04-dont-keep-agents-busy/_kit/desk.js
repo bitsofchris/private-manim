@@ -17,7 +17,8 @@
 //   pileHero 0..1   the pile turns magenta (the bottleneck)
 //   sheet {hero, dim, ink}  the human's own sheet: magenta / muted; ink 0..5
 //                   handwritten lines drawn so far
-//   human {armR, armL, tilt, lean, face}, write 0..1 (pencil wiggle on)
+//   human {armR, armL, tilt, lean, face}, write 0..1 (arm to the sheet, pencil
+//                   shown), wiggle 0..1 (the pencil moving; 0 at every seam)
 //   agents {rest 0..1}  1: arms down, no tossing
 //   code {a, plumb 0..1, variant, core 0..1, coreHero 0..1, under 0..1, pulse 0..1}
 //   day {a, slot 0..1}
@@ -127,7 +128,7 @@
       // ---- the human ----
       const H = Object.assign({}, HUMAN_REST, S.human || {});
       const w = S.write || 0;
-      const armR = H.armR + w * (WRITE_ARM - H.armR) + w * 4 * Math.sin(t * 13);
+      const armR = H.armR + w * (WRITE_ARM - H.armR) + (S.wiggle || 0) * 4 * Math.sin(t * 13);
       CAST.pose(human, { armR, armL: H.armL, tilt: H.tilt, lean: H.lean });
       CAST.face(human, H.face);
       const [px, py] = CAST.hand(human, 1);
@@ -165,9 +166,27 @@
 
   const E = { io: (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2), out: (u) => 1 - (1 - u) * (1 - u) };
 
-  // Seam states, filled in once the beat table is final (storyboard "Final beats").
-  const SEAM = {};
+  // Seam states: SEAM[n] is the last frame of beat n and the first of beat
+  // n+1 (SEAM[0] is frame 0 of the hook). Pass MASTER time to draw (beat
+  // start + t). wiggle is 0 in every seam, so the hold is still and the
+  // cut matches; a beat ramps it up while the human writes.
+  // Beat starts (master s): START[n] for beat n.
+  const START = { 1: 0, 2: 5.50, 3: 10.00, 4: 13.10, 5: 18.85, 6: 26.75, 7: 32.20, 8: 37.05, 9: 41.80, end: 47.486 };
+  const SEAM = {
+    0: { flow: 2.0, stream: 1, pile0: 4, sheet: { ink: 1 }, write: 1 },
+    1: { flow: 7.5, stream: 1, pile0: 4, sheet: { ink: 2, hero: 1 }, write: 0 },
+    2: { flow: 16.5, stream: 1, pile0: 4, sheet: { ink: 2 }, human: { tilt: 8, face: "flat" } },
+    3: { flow: 24.0, stream: 1, pile0: 4, pileHero: 1, sheet: { ink: 2, dim: 1 }, human: { lean: -8, tilt: -6, face: "frown" } },
+    4: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3, hero: 1 }, write: 1 },
+    5: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3 }, write: 1,
+         code: { a: 1, plumb: 1, variant: 0, core: 1, coreHero: 1 } },
+    6: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 3 }, write: 0,
+         human: { armL: 150, tilt: 10, face: "flat" }, code: { a: 1, plumb: 1, variant: 2, core: 1, coreHero: 1, under: 1 } },
+    7: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 4, hero: 1 }, write: 1 },
+    8: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 4 }, write: 1, day: { a: 1, slot: 1 } },
+    9: { flow: 26.5, stream: 0, pile0: 4, pileOut: 1, agents: { rest: 1 }, sheet: { ink: 5 }, write: 0, day: { a: 1, slot: 1 } },
+  };
 
-  window.DESK = { FLOOR, HUMAN, AG, DESK, SHEET, PILE, TRAVEL, CODE, DAY, HUMAN_REST, WRITE_ARM, SEAM,
+  window.DESK = { FLOOR, HUMAN, AG, DESK, SHEET, PILE, TRAVEL, CODE, DAY, HUMAN_REST, WRITE_ARM, SEAM, START,
                   mount, E, clamp01, seg, lerp, hash, mixc, pulse };
 })();

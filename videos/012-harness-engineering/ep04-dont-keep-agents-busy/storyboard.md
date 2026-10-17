@@ -54,7 +54,7 @@ VO is `script.md` (what Chris said), not reworded.
 Stage y 230–1100: code card / day strip y 252–650, figures and desk y 546–1010.
 Caption band y 1100–1536 stays empty (`assemble.py` burns the captions).
 
-## Beats (VO from script.md; times in the trial cut, final below)
+## Beats (VO from script.md; final times below)
 
 | # | Folder | VO (as recorded) | Visual (9:16) | Hero |
 |---|---|---|---|---|
@@ -71,7 +71,24 @@ Caption band y 1100–1536 stays empty (`assemble.py` burns the captions).
 Code beat: beat 5–6's two lines. The "how" of the episode is "the agent
 writes the plumbing, I write the core", and one line of each shows it.
 
-## Cut list (for Chris's approval)
+## Final beats (the contract; `vo_final.wav` 47.49 s, master seconds)
+
+Beat brief for the agents: `BRIEF.md` (seam states `DESK.SEAM`, starts
+`DESK.START` in `_kit/desk.js`). Word times: `words.json`.
+
+| # | Folder | Start | Length | VO |
+|---|---|---:|---:|---|
+| 1 | `01_hook` | 0.00 | 5.50 | The goal is not to keep agents busy. It's to maximize the rate at which you can understand things. |
+| 2 | `02_obsidian` | 5.50 | 4.50 | A while back I made a video about how I use Obsidian to keep agents working for me. |
+| 3 | `03_bottleneck` | 10.00 | 3.10 | But the bottleneck has become me reviewing and understanding everything. |
+| 4 | `04_two_speeds` | 13.10 | 5.75 | Now, sometimes it's useful to optimize for output, but other times you want to go slow so you can deliberately understand things. |
+| 5 | `05_karpathy` | 18.85 | 7.90 | When I'm working through Karpathy's LLM lecture course, the agent writes the plumbing, but I write the core idea myself. That's the part I want to understand. |
+| 6 | `06_fast_slow` | 26.75 | 5.45 | So go fast on the parts that teach you nothing, but go slow on the core part that you're meant to struggle with. |
+| 7 | `07_do_the_work` | 32.20 | 4.85 | Now, AI can't make you smarter on its own. You have to do that work. Keeping them busy is not the goal. |
+| 8 | `08_block_a_slot` | 37.05 | 4.75 | Make sure you carve out time for your own growth. Block a slot on your day where you do the work, |
+| 9 | `09_by_hand` | 41.80 | 5.686 | where you write something by hand, read it slowly, do the deep thinking, and are not just trying to keep agents busy. |
+
+## Cut list (approved by Chris, 10/17; applied)
 
 Raw take 50.9 s, already clean (noise floor −69 dB, loudness range
 4.2 LU), so step 3 is loudnorm only (−14 LUFS). No phrase cuts: the take
@@ -85,7 +102,7 @@ both hear "Karpathy's", no stray "a").
 Result: **47.5 s**. Trial-cut and re-transcribed with Parakeet: every
 join reads clean.
 
-Flagged, not cut (your call):
+Flagged, not cut (Chris: keep it):
 - "Keeping them busy is not the goal." (≈ 1.9 s) restates line 1 and the
   closer's "not just trying to keep agents busy". Cutting it gives
   ≈ 45.6 s and the closer still lands.

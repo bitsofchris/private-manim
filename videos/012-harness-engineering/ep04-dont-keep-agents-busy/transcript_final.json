@@ -1,0 +1,1045 @@
+{
+  "segments" : [
+    {
+      "end" : 2300,
+      "id" : "92618786-B0DD-497D-B645-B1DFA925E276",
+      "start" : 1,
+      "text" : "The goal is not to keep agents busy.",
+      "words" : [
+        {
+          "end" : 540,
+          "start" : 0,
+          "text" : "The"
+        },
+        {
+          "end" : 780,
+          "start" : 540,
+          "text" : "goal"
+        },
+        {
+          "end" : 920,
+          "start" : 780,
+          "text" : "is"
+        },
+        {
+          "end" : 1140,
+          "start" : 920,
+          "text" : "not"
+        },
+        {
+          "end" : 1360,
+          "start" : 1140,
+          "text" : "to"
+        },
+        {
+          "end" : 1560,
+          "start" : 1360,
+          "text" : "keep"
+        },
+        {
+          "end" : 1960,
+          "start" : 1560,
+          "text" : "agents"
+        },
+        {
+          "end" : 2300,
+          "start" : 1960,
+          "text" : "busy."
+        }
+      ]
+    },
+    {
+      "end" : 5220,
+      "id" : "B90FFD5D-0C4D-464F-90DB-09D4A945F1A5",
+      "start" : 2680,
+      "text" : "It's to maximize the rate at which you can understand things.",
+      "words" : [
+        {
+          "end" : 2780,
+          "start" : 2680,
+          "text" : "It's"
+        },
+        {
+          "end" : 2880,
+          "start" : 2780,
+          "text" : "to"
+        },
+        {
+          "end" : 3520,
+          "start" : 2880,
+          "text" : "maximize"
+        },
+        {
+          "end" : 3780,
+          "start" : 3520,
+          "text" : "the"
+        },
+        {
+          "end" : 4000,
+          "start" : 3780,
+          "text" : "rate"
+        },
+        {
+          "end" : 4120,
+          "start" : 4000,
+          "text" : "at"
+        },
+        {
+          "end" : 4280,
+          "start" : 4120,
+          "text" : "which"
+        },
+        {
+          "end" : 4340,
+          "start" : 4280,
+          "text" : "you"
+        },
+        {
+          "end" : 4520,
+          "start" : 4340,
+          "text" : "can"
+        },
+        {
+          "end" : 4900,
+          "start" : 4520,
+          "text" : "understand"
+        },
+        {
+          "end" : 5220,
+          "start" : 4900,
+          "text" : "things."
+        }
+      ]
+    },
+    {
+      "end" : 9720,
+      "id" : "85014C29-ABDB-441A-BB72-CC176AF1AB4B",
+      "start" : 5720,
+      "text" : "A while back I made a video about how I use Obsidian to keep agents working for me.",
+      "words" : [
+        {
+          "end" : 5800,
+          "start" : 5720,
+          "text" : "A"
+        },
+        {
+          "end" : 6020,
+          "start" : 5800,
+          "text" : "while"
+        },
+        {
+          "end" : 6300,
+          "start" : 6020,
+          "text" : "back"
+        },
+        {
+          "end" : 6380,
+          "start" : 6300,
+          "text" : "I"
+        },
+        {
+          "end" : 6540,
+          "start" : 6380,
+          "text" : "made"
+        },
+        {
+          "end" : 6640,
+          "start" : 6540,
+          "text" : "a"
+        },
+        {
+          "end" : 7040,
+          "start" : 6640,
+          "text" : "video"
+        },
+        {
+          "end" : 7540,
+          "start" : 7040,
+          "text" : "about"
+        },
+        {
+          "end" : 7700,
+          "start" : 7540,
+          "text" : "how"
+        },
+        {
+          "end" : 7800,
+          "start" : 7700,
+          "text" : "I"
+        },
+        {
+          "end" : 7940,
+          "start" : 7800,
+          "text" : "use"
+        },
+        {
+          "end" : 8380,
+          "start" : 7940,
+          "text" : "Obsidian"
+        },
+        {
+          "end" : 8520,
+          "start" : 8380,
+          "text" : "to"
+        },
+        {
+          "end" : 8760,
+          "start" : 8520,
+          "text" : "keep"
+        },
+        {
+          "end" : 9060,
+          "start" : 8760,
+          "text" : "agents"
+        },
+        {
+          "end" : 9360,
+          "start" : 9060,
+          "text" : "working"
+        },
+        {
+          "end" : 9640,
+          "start" : 9360,
+          "text" : "for"
+        },
+        {
+          "end" : 9720,
+          "start" : 9640,
+          "text" : "me."
+        }
+      ]
+    },
+    {
+      "end" : 12860,
+      "id" : "C1BC5043-7590-4B9D-A279-34B32B482835",
+      "start" : 10140,
+      "text" : "But the bottleneck has become me reviewing and understanding everything.",
+      "words" : [
+        {
+          "end" : 10220,
+          "start" : 10140,
+          "text" : "But"
+        },
+        {
+          "end" : 10300,
+          "start" : 10220,
+          "text" : "the"
+        },
+        {
+          "end" : 10640,
+          "start" : 10300,
+          "text" : "bottleneck"
+        },
+        {
+          "end" : 10760,
+          "start" : 10640,
+          "text" : "has"
+        },
+        {
+          "end" : 11060,
+          "start" : 10760,
+          "text" : "become"
+        },
+        {
+          "end" : 11300,
+          "start" : 11060,
+          "text" : "me"
+        },
+        {
+          "end" : 11740,
+          "start" : 11300,
+          "text" : "reviewing"
+        },
+        {
+          "end" : 11960,
+          "start" : 11740,
+          "text" : "and"
+        },
+        {
+          "end" : 12560,
+          "start" : 11960,
+          "text" : "understanding"
+        },
+        {
+          "end" : 12860,
+          "start" : 12560,
+          "text" : "everything."
+        }
+      ]
+    },
+    {
+      "end" : 14920,
+      "id" : "B43018B1-1671-4495-943C-552C811A852A",
+      "start" : 13300,
+      "text" : "Now sometimes it's useful to optimize your output,",
+      "words" : [
+        {
+          "end" : 13380,
+          "start" : 13300,
+          "text" : "Now"
+        },
+        {
+          "end" : 13740,
+          "start" : 13380,
+          "text" : "sometimes"
+        },
+        {
+          "end" : 13920,
+          "start" : 13740,
+          "text" : "it's"
+        },
+        {
+          "end" : 14100,
+          "start" : 13920,
+          "text" : "useful"
+        },
+        {
+          "end" : 14240,
+          "start" : 14100,
+          "text" : "to"
+        },
+        {
+          "end" : 14560,
+          "start" : 14240,
+          "text" : "optimize"
+        },
+        {
+          "end" : 14700,
+          "start" : 14560,
+          "text" : "your"
+        },
+        {
+          "end" : 14920,
+          "start" : 14700,
+          "text" : "output,"
+        }
+      ]
+    },
+    {
+      "end" : 18580,
+      "id" : "ABB67C2E-8382-4B2D-9C63-1F561D754C70",
+      "start" : 15460,
+      "text" : "but other times you want to go slow so you can deliberately understand things.",
+      "words" : [
+        {
+          "end" : 15520,
+          "start" : 15460,
+          "text" : "but"
+        },
+        {
+          "end" : 15740,
+          "start" : 15520,
+          "text" : "other"
+        },
+        {
+          "end" : 15980,
+          "start" : 15740,
+          "text" : "times"
+        },
+        {
+          "end" : 16100,
+          "start" : 15980,
+          "text" : "you"
+        },
+        {
+          "end" : 16299,
+          "start" : 16100,
+          "text" : "want"
+        },
+        {
+          "end" : 16340,
+          "start" : 16299,
+          "text" : "to"
+        },
+        {
+          "end" : 16480,
+          "start" : 16340,
+          "text" : "go"
+        },
+        {
+          "end" : 16860,
+          "start" : 16480,
+          "text" : "slow"
+        },
+        {
+          "end" : 17140,
+          "start" : 16860,
+          "text" : "so"
+        },
+        {
+          "end" : 17260,
+          "start" : 17140,
+          "text" : "you"
+        },
+        {
+          "end" : 17360,
+          "start" : 17260,
+          "text" : "can"
+        },
+        {
+          "end" : 17780,
+          "start" : 17360,
+          "text" : "deliberately"
+        },
+        {
+          "end" : 18280,
+          "start" : 17780,
+          "text" : "understand"
+        },
+        {
+          "end" : 18580,
+          "start" : 18280,
+          "text" : "things."
+        }
+      ]
+    },
+    {
+      "end" : 21300,
+      "id" : "22C2ECB4-5154-4D16-9890-CC30B95B711B",
+      "start" : 19080,
+      "text" : "When I'm working through Karpathy's LLM lecture course,",
+      "words" : [
+        {
+          "end" : 19160,
+          "start" : 19080,
+          "text" : "When"
+        },
+        {
+          "end" : 19300,
+          "start" : 19160,
+          "text" : "I'm"
+        },
+        {
+          "end" : 19500,
+          "start" : 19300,
+          "text" : "working"
+        },
+        {
+          "end" : 19660,
+          "start" : 19500,
+          "text" : "through"
+        },
+        {
+          "end" : 20300,
+          "start" : 19660,
+          "text" : "Karpathy's"
+        },
+        {
+          "end" : 20660,
+          "start" : 20300,
+          "text" : "LLM"
+        },
+        {
+          "end" : 20940,
+          "start" : 20660,
+          "text" : "lecture"
+        },
+        {
+          "end" : 21300,
+          "start" : 20940,
+          "text" : "course,"
+        }
+      ]
+    },
+    {
+      "end" : 24340,
+      "id" : "A132B482-E6D4-4B67-8CC3-10E1D719EEC1",
+      "start" : 21740,
+      "text" : "the agent writes the plumbing, but I write the core idea myself.",
+      "words" : [
+        {
+          "end" : 21860,
+          "start" : 21740,
+          "text" : "the"
+        },
+        {
+          "end" : 22140,
+          "start" : 21860,
+          "text" : "agent"
+        },
+        {
+          "end" : 22340,
+          "start" : 22140,
+          "text" : "writes"
+        },
+        {
+          "end" : 22500,
+          "start" : 22340,
+          "text" : "the"
+        },
+        {
+          "end" : 22720,
+          "start" : 22500,
+          "text" : "plumbing,"
+        },
+        {
+          "end" : 22980,
+          "start" : 22920,
+          "text" : "but"
+        },
+        {
+          "end" : 23240,
+          "start" : 22980,
+          "text" : "I"
+        },
+        {
+          "end" : 23420,
+          "start" : 23240,
+          "text" : "write"
+        },
+        {
+          "end" : 23580,
+          "start" : 23420,
+          "text" : "the"
+        },
+        {
+          "end" : 23720,
+          "start" : 23580,
+          "text" : "core"
+        },
+        {
+          "end" : 23940,
+          "start" : 23720,
+          "text" : "idea"
+        },
+        {
+          "end" : 24340,
+          "start" : 23940,
+          "text" : "myself."
+        }
+      ]
+    },
+    {
+      "end" : 26460,
+      "id" : "30F42FC7-E8EE-4727-8DD8-809430992A3A",
+      "start" : 25000,
+      "text" : "That's the part I want to understand.",
+      "words" : [
+        {
+          "end" : 25260,
+          "start" : 25000,
+          "text" : "That's"
+        },
+        {
+          "end" : 25440,
+          "start" : 25260,
+          "text" : "the"
+        },
+        {
+          "end" : 25620,
+          "start" : 25440,
+          "text" : "part"
+        },
+        {
+          "end" : 25700,
+          "start" : 25620,
+          "text" : "I"
+        },
+        {
+          "end" : 25900,
+          "start" : 25700,
+          "text" : "want"
+        },
+        {
+          "end" : 25960,
+          "start" : 25900,
+          "text" : "to"
+        },
+        {
+          "end" : 26460,
+          "start" : 25960,
+          "text" : "understand."
+        }
+      ]
+    },
+    {
+      "end" : 28640,
+      "id" : "02958B45-2E11-4F6E-9D67-3DE3AC6FD7EB",
+      "start" : 26930,
+      "text" : "So go fast on the parts that teach you nothing,",
+      "words" : [
+        {
+          "end" : 27060,
+          "start" : 26930,
+          "text" : "So"
+        },
+        {
+          "end" : 27200,
+          "start" : 27060,
+          "text" : "go"
+        },
+        {
+          "end" : 27540,
+          "start" : 27200,
+          "text" : "fast"
+        },
+        {
+          "end" : 27640,
+          "start" : 27540,
+          "text" : "on"
+        },
+        {
+          "end" : 27780,
+          "start" : 27640,
+          "text" : "the"
+        },
+        {
+          "end" : 27960,
+          "start" : 27780,
+          "text" : "parts"
+        },
+        {
+          "end" : 28100,
+          "start" : 27960,
+          "text" : "that"
+        },
+        {
+          "end" : 28300,
+          "start" : 28100,
+          "text" : "teach"
+        },
+        {
+          "end" : 28440,
+          "start" : 28300,
+          "text" : "you"
+        },
+        {
+          "end" : 28640,
+          "start" : 28440,
+          "text" : "nothing,"
+        }
+      ]
+    },
+    {
+      "end" : 31940,
+      "id" : "DA94A0A8-24C8-4195-9C1A-EC56BF241E13",
+      "start" : 28640,
+      "text" : "but go slow on the core part that you're meant to struggle with.",
+      "words" : [
+        {
+          "end" : 28800,
+          "start" : 28640,
+          "text" : "but"
+        },
+        {
+          "end" : 28980,
+          "start" : 28800,
+          "text" : "go"
+        },
+        {
+          "end" : 29500,
+          "start" : 28980,
+          "text" : "slow"
+        },
+        {
+          "end" : 30140,
+          "start" : 29500,
+          "text" : "on"
+        },
+        {
+          "end" : 30260,
+          "start" : 30140,
+          "text" : "the"
+        },
+        {
+          "end" : 30500,
+          "start" : 30260,
+          "text" : "core"
+        },
+        {
+          "end" : 30760,
+          "start" : 30500,
+          "text" : "part"
+        },
+        {
+          "end" : 30900,
+          "start" : 30760,
+          "text" : "that"
+        },
+        {
+          "end" : 31060,
+          "start" : 30900,
+          "text" : "you're"
+        },
+        {
+          "end" : 31260,
+          "start" : 31060,
+          "text" : "meant"
+        },
+        {
+          "end" : 31440,
+          "start" : 31260,
+          "text" : "to"
+        },
+        {
+          "end" : 31700,
+          "start" : 31440,
+          "text" : "struggle"
+        },
+        {
+          "end" : 31940,
+          "start" : 31700,
+          "text" : "with."
+        }
+      ]
+    },
+    {
+      "end" : 35000,
+      "id" : "19D79461-D394-40B1-951C-2F6B50577A82",
+      "start" : 32419,
+      "text" : "Now, AI can't make you smarter on its own. You have to do that work.",
+      "words" : [
+        {
+          "end" : 32500,
+          "start" : 32419,
+          "text" : "Now,"
+        },
+        {
+          "end" : 32720,
+          "start" : 32660,
+          "text" : "AI"
+        },
+        {
+          "end" : 33060,
+          "start" : 32720,
+          "text" : "can't"
+        },
+        {
+          "end" : 33180,
+          "start" : 33060,
+          "text" : "make"
+        },
+        {
+          "end" : 33240,
+          "start" : 33180,
+          "text" : "you"
+        },
+        {
+          "end" : 33560,
+          "start" : 33240,
+          "text" : "smarter"
+        },
+        {
+          "end" : 33700,
+          "start" : 33560,
+          "text" : "on"
+        },
+        {
+          "end" : 33840,
+          "start" : 33700,
+          "text" : "its"
+        },
+        {
+          "end" : 33960,
+          "start" : 33840,
+          "text" : "own."
+        },
+        {
+          "end" : 34140,
+          "start" : 34080,
+          "text" : "You"
+        },
+        {
+          "end" : 34400,
+          "start" : 34140,
+          "text" : "have"
+        },
+        {
+          "end" : 34480,
+          "start" : 34400,
+          "text" : "to"
+        },
+        {
+          "end" : 34580,
+          "start" : 34480,
+          "text" : "do"
+        },
+        {
+          "end" : 34740,
+          "start" : 34580,
+          "text" : "that"
+        },
+        {
+          "end" : 35000,
+          "start" : 34740,
+          "text" : "work."
+        }
+      ]
+    },
+    {
+      "end" : 39080,
+      "id" : "D218CD8D-5B4F-4D9D-906E-0E4540DF9BF1",
+      "start" : 35500,
+      "text" : "Keeping them busy is not the goal. Make sure you carve out time for your own growth.",
+      "words" : [
+        {
+          "end" : 35720,
+          "start" : 35500,
+          "text" : "Keeping"
+        },
+        {
+          "end" : 35900,
+          "start" : 35720,
+          "text" : "them"
+        },
+        {
+          "end" : 36080,
+          "start" : 35900,
+          "text" : "busy"
+        },
+        {
+          "end" : 36220,
+          "start" : 36080,
+          "text" : "is"
+        },
+        {
+          "end" : 36500,
+          "start" : 36220,
+          "text" : "not"
+        },
+        {
+          "end" : 36680,
+          "start" : 36500,
+          "text" : "the"
+        },
+        {
+          "end" : 36820,
+          "start" : 36680,
+          "text" : "goal."
+        },
+        {
+          "end" : 37480,
+          "start" : 37260,
+          "text" : "Make"
+        },
+        {
+          "end" : 37580,
+          "start" : 37480,
+          "text" : "sure"
+        },
+        {
+          "end" : 37660,
+          "start" : 37580,
+          "text" : "you"
+        },
+        {
+          "end" : 38000,
+          "start" : 37660,
+          "text" : "carve"
+        },
+        {
+          "end" : 38100,
+          "start" : 38000,
+          "text" : "out"
+        },
+        {
+          "end" : 38320,
+          "start" : 38100,
+          "text" : "time"
+        },
+        {
+          "end" : 38440,
+          "start" : 38320,
+          "text" : "for"
+        },
+        {
+          "end" : 38580,
+          "start" : 38440,
+          "text" : "your"
+        },
+        {
+          "end" : 38760,
+          "start" : 38580,
+          "text" : "own"
+        },
+        {
+          "end" : 39080,
+          "start" : 38760,
+          "text" : "growth."
+        }
+      ]
+    },
+    {
+      "end" : 43340,
+      "id" : "B047F8D8-15F4-4CC6-B22C-695BD13168E8",
+      "start" : 39620,
+      "text" : "Block a slot on your day where you do the work, where you write something by hand,",
+      "words" : [
+        {
+          "end" : 39880,
+          "start" : 39620,
+          "text" : "Block"
+        },
+        {
+          "end" : 40000,
+          "start" : 39880,
+          "text" : "a"
+        },
+        {
+          "end" : 40240,
+          "start" : 40000,
+          "text" : "slot"
+        },
+        {
+          "end" : 40360,
+          "start" : 40240,
+          "text" : "on"
+        },
+        {
+          "end" : 40440,
+          "start" : 40360,
+          "text" : "your"
+        },
+        {
+          "end" : 40620,
+          "start" : 40440,
+          "text" : "day"
+        },
+        {
+          "end" : 40780,
+          "start" : 40620,
+          "text" : "where"
+        },
+        {
+          "end" : 41080,
+          "start" : 40780,
+          "text" : "you"
+        },
+        {
+          "end" : 41240,
+          "start" : 41080,
+          "text" : "do"
+        },
+        {
+          "end" : 41360,
+          "start" : 41240,
+          "text" : "the"
+        },
+        {
+          "end" : 41620,
+          "start" : 41360,
+          "text" : "work,"
+        },
+        {
+          "end" : 42080,
+          "start" : 42020,
+          "text" : "where"
+        },
+        {
+          "end" : 42260,
+          "start" : 42080,
+          "text" : "you"
+        },
+        {
+          "end" : 42540,
+          "start" : 42260,
+          "text" : "write"
+        },
+        {
+          "end" : 42800,
+          "start" : 42540,
+          "text" : "something"
+        },
+        {
+          "end" : 43000,
+          "start" : 42800,
+          "text" : "by"
+        },
+        {
+          "end" : 43340,
+          "start" : 43000,
+          "text" : "hand,"
+        }
+      ]
+    },
+    {
+      "end" : 46700,
+      "id" : "D5DB1057-D52B-4C61-8048-F715C750344C",
+      "start" : 43630,
+      "text" : "read it slowly, do the deep thinking, and are not just trying to keep agents busy.",
+      "words" : [
+        {
+          "end" : 43760,
+          "start" : 43630,
+          "text" : "read"
+        },
+        {
+          "end" : 43920,
+          "start" : 43760,
+          "text" : "it"
+        },
+        {
+          "end" : 44180,
+          "start" : 43920,
+          "text" : "slowly,"
+        },
+        {
+          "end" : 44400,
+          "start" : 44340,
+          "text" : "do"
+        },
+        {
+          "end" : 44540,
+          "start" : 44400,
+          "text" : "the"
+        },
+        {
+          "end" : 44700,
+          "start" : 44540,
+          "text" : "deep"
+        },
+        {
+          "end" : 44960,
+          "start" : 44700,
+          "text" : "thinking,"
+        },
+        {
+          "end" : 45100,
+          "start" : 45040,
+          "text" : "and"
+        },
+        {
+          "end" : 45160,
+          "start" : 45100,
+          "text" : "are"
+        },
+        {
+          "end" : 45460,
+          "start" : 45160,
+          "text" : "not"
+        },
+        {
+          "end" : 45640,
+          "start" : 45460,
+          "text" : "just"
+        },
+        {
+          "end" : 45820,
+          "start" : 45640,
+          "text" : "trying"
+        },
+        {
+          "end" : 45920,
+          "start" : 45820,
+          "text" : "to"
+        },
+        {
+          "end" : 46080,
+          "start" : 45920,
+          "text" : "keep"
+        },
+        {
+          "end" : 46360,
+          "start" : 46080,
+          "text" : "agents"
+        },
+        {
+          "end" : 46700,
+          "start" : 46360,
+          "text" : "busy."
+        }
+      ]
+    }
+  ],
+  "text" : "The goal is not to keep agents busy.\nIt's to maximize the rate at which you can understand things.\nA while back I made a video about how I use Obsidian to keep agents working for me.\nBut the bottleneck has become me reviewing and understanding everything.\nNow sometimes it's useful to optimize your output,\nbut other times you want to go slow so you can deliberately understand things.\nWhen I'm working through Karpathy's LLM lecture course,\nthe agent writes the plumbing, but I write the core idea myself.\nThat's the part I want to understand.\nSo go fast on the parts that teach you nothing,\nbut go slow on the core part that you're meant to struggle with.\nNow, AI can't make you smarter on its own. You have to do that work.\nKeeping them busy is not the goal. Make sure you carve out time for your own growth.\nBlock a slot on your day where you do the work, where you write something by hand,\nread it slowly, do the deep thinking, and are not just trying to keep agents busy."
+}
