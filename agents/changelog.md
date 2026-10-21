@@ -3,6 +3,10 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-21
+
+- New prototype `prototypes/hyperframes/kb-graph/`: real gameplay footage under HyperFrames graphics. One clock → video map (`edit.json`) cuts the timelapse (`make_timelapse.py`) and times every card, chip, the run timer and the voiceover lines (`make_audio.sh` ties lines and the music dip to run-clock moments), so trims keep everything in sync; a local `<video class="clip">` renders frame-accurately; captions sit over the footage because the graph owns the band (`make_captions.py`). Lessons in `concept.md`: events from cut-out stretches are shown on the shot where the skill was used, with the real time in a comment. (AugiCraft diamond-run Short)
+
 ## 2026-10-17
 
 - Runbook read end to end after 013 ep04: a tracked move is ≥ `S.BEAT` (was "≥ 1 s", against animation-rules 9 and both briefs); the research summary no longer says captions are "2–4 key words" (they are the VO, ≤ 3 words); a caption fits one line at ≤ 15 characters, not "3 words"; step 1 no longer puts the question in the band (step 0: with VO the band is the captions'); step 8 checks every caption is on one line. (013 ep04 update pass)

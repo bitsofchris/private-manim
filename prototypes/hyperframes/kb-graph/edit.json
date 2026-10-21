@@ -1,0 +1,27 @@
+{
+  "source": "/Users/chris/Creating/augicraft-diamond-run/selects",
+  "fps": 30,
+  "size": 1080,
+  "tail": { "clock": "09:21:41", "seconds": 1 },
+  "segments": [
+    { "select": "S01", "in": "08:39:31", "out": "08:39:40", "seconds": 3 },
+    { "select": "S02", "in": "08:40:45", "out": "08:40:52", "seconds": 3 },
+    { "select": "S03", "in": "08:41:00", "out": "08:41:34", "seconds": 4 },
+    { "select": "S15", "in": "08:42:06", "out": "08:42:09", "seconds": 2 },
+    { "select": "S16", "in": "08:44:00", "out": "08:44:04", "seconds": 1 },
+    { "select": "S16", "in": "08:44:04", "out": "08:44:07", "seconds": 1.5 },
+    { "select": "S16", "in": "08:44:10", "out": "08:44:13", "seconds": 1.5 },
+    { "select": "S04", "in": "08:47:04", "out": "08:48:09", "seconds": 2 },
+    { "select": "S05", "in": "08:49:00", "out": "08:49:55", "seconds": 3 },
+    { "select": "S06", "in": "08:50:57", "out": "08:51:09", "seconds": 7 },
+    { "select": "S14", "in": "09:09:16", "out": "09:09:22", "seconds": 2.5 },
+    { "select": "S14", "in": "09:09:22", "out": "09:09:24", "seconds": 1.5 },
+    { "select": "S14", "in": "09:09:27", "out": "09:11:04", "seconds": 1.5 },
+    { "select": "S09", "in": "09:11:04", "out": "09:11:10", "seconds": 2 },
+    { "select": "S10", "in": "09:13:44", "out": "09:15:44", "seconds": 5 },
+    { "select": "S13", "in": "09:15:45", "out": "09:15:52", "seconds": 2.5 },
+    { "select": "S13", "in": "09:16:58", "out": "09:17:07", "seconds": 4 },
+    { "select": "S11", "in": "09:17:08", "out": "09:17:12", "seconds": 1 },
+    { "select": "S12", "in": "09:21:12", "out": "09:21:40", "seconds": 8.5 }
+  ]
+}

@@ -22,6 +22,7 @@ motion must be a tween or a pure function of time (no clocks, no random).
 | `stack-styles/` | which visual styles are possible | one beat (the transformer stack) in ten styles plus the house-style control; its own README | 5 s each |
 | `vec-plane/` | the starting file for a beat on the shared 2D plane kit | ep03's canonical frame rebuilt on `videos/_shared/web/vec/vec.js`: a camera view, e1 and e2 swinging to the rows of W, landing spots, W in the series' matrix notation, a code card | 2 s |
 | `cast/` | the starting file for a beat on the shared cast kit, and the look's sign-off frame | `videos/_shared/web/cast/cast.js`: the human, the agent and the janitor on one floor, the three layer props, the model with its four pipes, the map card | 2 s |
+| `kb-graph/` | a gameplay timelapse with an agent's knowledge base growing under it (the AugiCraft diamond-run Short) | real footage on top through one clock → video time map (`edit.json`, `make_timelapse.py`); skill and lesson cards pop over the graph and shrink into nodes; chips, a run timer, a tool strip, a counter; voiceover, ducked music and captions (`make_audio.sh`, `make_captions.py`); spec and shot list in `concept.md` | 57.5 s |
 
 ```
 cd prototypes/hyperframes/quiz

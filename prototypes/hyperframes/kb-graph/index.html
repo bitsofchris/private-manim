@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Mockup: AgentMiner's knowledge base growing under a timelapse of its diamond run.
+         Spec in concept.md. Footage stills in footage/ are cut from the 2026-10-20 recordings. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="footage/edit.js"></script>
+    <script src="footage/captions.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root {
+        --bg: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0;
+        --teal: #2dd4bf; --magenta: #c084fc; --muted: #4a5070;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #footage { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; overflow: hidden; }
+      #tl { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; }
+      #fade { position: absolute; left: 0; top: 880px; width: 1080px; height: 200px;
+              background: linear-gradient(rgba(11,11,20,0), var(--bg)); }
+      #graph { position: absolute; left: 0; top: 0; }
+      .pill { position: absolute; padding: 12px 30px; border-radius: 30px; background: rgba(11,11,20,0.85);
+              font-size: 60px; line-height: 72px; white-space: nowrap; opacity: 0; }
+      #clock { left: 690px; top: 250px; width: 260px; text-align: center; opacity: 1; }
+      .chip { left: 65px; top: 250px; }
+      .chat { left: 65px; top: 930px; }
+      #hook { left: 65px; top: 470px; width: 885px; text-align: center; font-size: 76px; line-height: 92px;
+              color: var(--magenta); }
+      .card { position: absolute; left: 80px; top: 1030px; width: 860px; padding: 34px 40px 40px;
+              border-radius: 40px; background: var(--panel); border: 6px solid var(--magenta); opacity: 0;
+              transform-origin: 50% 50%; }
+      .card .kind { font-size: 60px; line-height: 70px; color: var(--dim); }
+      .card .id { margin-top: 14px; line-height: 1.15; color: var(--magenta); white-space: nowrap; }
+      .card .blurb { margin-top: 18px; font-size: 60px; line-height: 70px; }
+      .head { position: absolute; top: 1105px; font-size: 60px; line-height: 72px; }
+      .head b { color: var(--teal); }
+      #tools { position: absolute; left: 65px; top: 360px; }
+      /* Voiceover captions (make_captions.py): over the footage, below the hook, above the chat pill. */
+      #cap { position: absolute; left: 65px; top: 690px; width: 885px; display: flex; justify-content: center; }
+      #cap span { padding: 14px 34px; border-radius: 30px; background: rgba(11,11,20,0.85);
+                  font-size: 68px; line-height: 80px; white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="57.5" data-fps="30" data-width="1080" data-height="1920">
+      <div id="footage">
+        <video id="tl" class="clip" src="footage/timelapse.mp4" data-start="0" data-duration="57.5" data-track-index="0" muted playsinline></video>
+        <div id="fade"></div>
+      </div>
+      <svg id="graph" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="1090" x2="1040" y2="1090" stroke="#4a5070" stroke-width="4" />
+        <g id="edges"></g><g id="nodes"></g>
+      </svg>
+      <div id="headL" class="head" data-layout-allow-overlap style="left:65px">SKILLS <b id="nSkills">0</b></div>
+      <div id="headR" class="head" data-layout-allow-overlap style="left:500px;width:450px;text-align:right">VALIDATED <b id="nValid">0</b></div>
+      <div id="clock" class="pill">0:00</div>
+      <svg id="tools" width="300" height="96" viewBox="0 0 300 96" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="cap"><span id="capText"></span></div>
+      <div id="hook" class="pill">“get me 5 diamonds”</div>
+    </div>
+    <script>
+(() => {
+  const SECONDS = window.EDIT.seconds, HOLD_FROM = SECONDS - 0.2, HOOK = 2.0;
+  const { seg, lerp } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const NS = "http://www.w3.org/2000/svg";
+  const c = s => { const [h, m, x] = s.split(":").map(Number); return h * 3600 + m * 60 + (x || 0); };   // seconds may be fractional
+
+  // ---- one time map: clock -> video seconds, generated with the timelapse (make_timelapse.py) ----
+  // A cut between selects is a pair of points with the same video time: events in the gap land on the cut.
+  const MAP = window.EDIT.map.map(([k, v]) => [c(k), v]);
+  const vt = s => { const k = typeof s === "string" ? c(s) : s;
+    if (k <= MAP[0][0]) return MAP[0][1];
+    for (let i = 1; i < MAP.length; i++) if (k <= MAP[i][0]) return lerp(MAP[i - 1][1], MAP[i][1], (k - MAP[i - 1][0]) / (MAP[i][0] - MAP[i - 1][0]));
+    return MAP[MAP.length - 1][1]; };
+  const ct = t => { for (let i = 1; i < MAP.length; i++) if (t < MAP[i][1]) return lerp(MAP[i - 1][0], MAP[i][0], (t - MAP[i - 1][1]) / (MAP[i][1] - MAP[i - 1][1]));
+    return MAP[MAP.length - 1][0]; };
+  // The timer is run time since AgentMiner joined (08:38:59): it ticks with the footage through the
+  // same map, fast in the sped-up stretches, and jumps where the edit cuts time out.
+  const JOINED = c("08:38:59");
+  const elapsed = k => { const e = Math.max(0, Math.floor(k - JOINED)); return `${Math.floor(e / 60)}:${String(e % 60).padStart(2, "0")}`; };
+
+  // ---- the run (augi-craft ~/augi-fresh-kb, 2026-10-20) ----
+  const CHIPS = [["08:39:13", "first logs"], ["08:40:47", "wooden pickaxe"], ["08:41:55", "stone pickaxe"],
+                 ["08:44:05", "found iron"], ["08:47:06", "smelting iron"], ["08:48:38", "iron pickaxe"], ["08:51:05", "diamond #1"],
+                 ["09:09:22", "hit water"], ["09:11:06", "drowned"], ["09:15:45", "5 diamonds"]];
+  // The handoff counter steps when each diamond reached Chris: his hotbar count went 1 -> 6 at these times.
+  const GIVEN = ["09:21:21.5", "09:21:27.5", "09:21:30.5", "09:21:33.5", "09:21:34.5"];
+  // The first handoff (09:05-09:07) is cut, so its two chat lines are too; the hook asks for 5.
+  const CHATS = [["09:21:12", "“give me the diamonds”"]];
+  // nodes: id, kind (helper | lesson | episode), x, y
+  const NODES = {
+    "chop-logs": ["helper", 120, 1250], "craft-item": ["helper", 300, 1240], "ensure-table": ["helper", 190, 1400],
+    "smelt-items": ["helper", 400, 1480], "craft-one-at-a-time": ["lesson", 450, 1320], "mine-blocks": ["helper", 570, 1330],
+    "descend-scan-ore": ["helper", 730, 1235], "give-item-to-player": ["helper", 910, 1240],
+    "staircase-down": ["helper", 740, 1450], "check-movement-progress": ["lesson", 900, 1480],
+    ep1: ["episode", 300, 1360], ep2: ["episode", 620, 1215],
+    ep4: ["episode", 580, 1470], ep5: ["episode", 820, 1335],
+  };
+  // cards: clock, kind label, node id, blurb. A card whose real time falls in a cut-out
+  // stretch is shown on the shot where that skill was used (real time in the comment).
+  const CARDS = [
+    ["08:39:36", "NEW SKILL", "chop-logs", "find a log, dig it, grab the drop"],          // 08:39:45
+    ["08:40:45", "NEW SKILL", "craft-item", "craft, then clear the grid"],                // 08:40:40
+    ["08:40:49", "LESSON", "craft-one-at-a-time", "batch crafting jams the grid"],        // 08:49:01
+    ["08:41:24", "NEW SKILL", "mine-blocks", "mine the nearest blocks of a kind"],        // 08:41:43
+    ["08:42:06", "NEW SKILL", "ensure-table", "find a crafting table or build one"],      // 08:42:46
+    ["08:47:04", "NEW SKILL", "smelt-items", "fuel a furnace, wait, collect"],            // 08:48:19
+    ["08:51:06", "NEW SKILL", "descend-scan-ore", "dig down, scan for diamonds"],         // 08:53:20
+    ["09:13:46", "NEW SKILL", "staircase-down", "dig stairs, turn away from water"],
+    ["09:16:59", "DROPPED", "descend-scan-ore", "looped in water and drowned"],        // 09:17:24
+    ["09:17:01", "LESSON", "check-movement-progress", "check every move got somewhere"],  // 09:17:32
+    ["09:21:13", "NEW SKILL", "give-item-to-player", "walk to the player, toss it"],      // 09:06:38
+  ];
+  const EPISODES = [["08:48:51", "ep1", ["chop-logs", "craft-item", "mine-blocks", "ensure-table", "smelt-items"]],
+                    ["08:53:11", "ep2", ["mine-blocks", "descend-scan-ore"]],   // ep3, the first handoff, is cut
+                    ["09:16:58", "ep4", ["staircase-down", "ensure-table", "craft-item", "mine-blocks", "descend-scan-ore"]],
+                    ["09:21:36", "ep5", ["give-item-to-player"]]   /* 09:22:12 */];
+  const LINKS = [["ensure-table", "craft-item"], ["craft-one-at-a-time", "craft-item"],
+                 ["check-movement-progress", "staircase-down"], ["staircase-down", "descend-scan-ore"]];
+  const VALID = [["08:53:31", "mine-blocks"], ["09:17:09", "craft-item"], ["09:17:09", "ensure-table"], ["09:21:37", "give-item-to-player"] /* 09:22:19 */];
+
+  // ---- schedule: one card at a time; a node exists once its card lands ----
+  const IN = 0.25, HOLDC = 1.0, FLY = 0.6, GAP = 0.05;
+  let free = HOOK;
+  const cards = CARDS.map(([k, kind, id, blurb]) => {
+    const s0 = Math.max(vt(k), free); free = s0 + IN + HOLDC + GAP;
+    return { s0, land: s0 + IN + HOLDC + FLY, kind, id, blurb };
+  });
+  const born = {}, dropped = {};
+  cards.forEach(cd => { if (cd.kind === "DROPPED") dropped[cd.id] = cd.land; else born[cd.id] = cd.land; });
+  EPISODES.forEach(([k, id]) => { born[id] = vt(k); });
+  const heroUntil = {};
+  cards.forEach((cd, i) => { heroUntil[cd.id + cd.kind] = Math.min(cd.land + 1.0, i + 1 < cards.length ? cards[i + 1].s0 : 99); });
+
+  // ---- build ----
+  const pill = (cls, text) => { const d = document.createElement("div"); d.className = "pill " + cls; d.textContent = text; root.appendChild(d); return d; };
+  // chips and chat lines queue like cards, so events from a cut-out stretch do not land on one frame
+  const queue = (rows, cls, gap) => { let next = HOOK + 0.1;
+    return rows.map(([k, text]) => { const t = Math.max(vt(k), next); next = t + gap; return { t, el: pill(cls, text) }; }); };
+  const chips = queue(CHIPS, "chip", 1.4), chats = queue(CHATS, "chat", 2.4);
+  const given = { at: GIVEN.map(vt), el: pill("chip", "") };
+  const cardEls = cards.map(cd => {
+    const d = document.createElement("div"); d.className = "card";
+    const size = Math.max(60, Math.min(84, Math.floor(770 / (0.6 * cd.id.length))));
+    const wrap = 0.6 * size * cd.id.length > 770;                 // too long at 60 px: break after a hyphen
+    d.innerHTML = `<div class="kind">${cd.kind}</div><div class="id" style="font-size:${size}px"></div><div class="blurb">${cd.blurb}</div>`;
+    const idEl = d.querySelector(".id"); idEl.textContent = cd.id; idEl.style.fontFamily = "monospace";
+    if (wrap) idEl.style.whiteSpace = "normal";
+    root.appendChild(d); return d;
+  });
+  const gE = document.getElementById("edges"), gN = document.getElementById("nodes");
+  const mk = (g, tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); g.appendChild(e); return e; };
+  const edges = [];
+  const edge = (a, b, dashed) => {
+    const [, x1, y1] = NODES[a], [, x2, y2] = NODES[b];
+    const len = Math.hypot(x2 - x1, y2 - y1);
+    const el = mk(gE, "line", { x1, y1, x2, y2, stroke: "#4a5070", "stroke-width": 5, "stroke-linecap": "round" });
+    edges.push({ el, len, t: Math.max(born[a], born[b]), dashed });
+  };
+  EPISODES.forEach(([, ep, skills]) => skills.forEach(s => edge(ep, s)));
+  LINKS.forEach(([a, b], i) => edge(a, b, i === 3));
+  const nodes = {};
+  for (const id in NODES) {
+    const [kind, x, y] = NODES[id];
+    const r = kind === "episode" ? 11 : kind === "lesson" ? 20 : 24;
+    const ring = mk(gN, "circle", { cx: x, cy: y, r: r + 13, fill: "none", stroke: "#2dd4bf", "stroke-width": 6, opacity: 0 });
+    const dot = mk(gN, "circle", { cx: x, cy: y, r: 0 });
+    nodes[id] = { kind, x, y, r, ring, dot };
+  }
+  const nSkills = document.getElementById("nSkills"), nValid = document.getElementById("nValid");
+  const heads = [document.getElementById("headL"), document.getElementById("headR")];
+  const hook = document.getElementById("hook"), clock = document.getElementById("clock");
+  const capBox = document.getElementById("cap"), capText = document.getElementById("capText");
+
+  // ---- tool strip: three pickaxe slots, dim until the chip that names each one ----
+  // Material colours are the game's (wood, stone, iron), not house tokens, so viewers know the tools.
+  const PICK = { head: [[2,0],[3,0],[4,0],[5,1],[6,1],[6,2],[7,3],[7,4],[7,5]], handle: [[5,2],[4,3],[3,4],[2,5],[1,6],[0,7]] };
+  const TOOLS = [["wooden pickaxe", "#a8773a"], ["stone pickaxe", "#9a9a9a"], ["iron pickaxe", "#e4e4e4"]];
+  const toolSvg = document.getElementById("tools");
+  const tools = TOOLS.map(([name, color], i) => {
+    const g = mk(toolSvg, "g", {});
+    mk(g, "rect", { x: i * 100 + 2, y: 2, width: 88, height: 88, rx: 18, fill: "rgba(11,11,20,0.85)", stroke: "#4a5070", "stroke-width": 4 });
+    const cells = [];
+    PICK.head.forEach(([cx, cy]) => cells.push(mk(g, "rect", { x: i * 100 + 10 + cx * 9, y: 10 + cy * 9, width: 9, height: 9, fill: color })));
+    PICK.handle.forEach(([cx, cy]) => cells.push(mk(g, "rect", { x: i * 100 + 10 + cx * 9, y: 10 + cy * 9, width: 9, height: 9, fill: "#6b4a26" })));
+    const chip = chips.find(ch => ch.el.textContent === name);
+    return { g, cells, t: chip.t, cx: i * 100 + 46 };
+  });
+  ISO.guides(root);
+
+  const show = (t, a, b, fade = 0.15) => seg(t, a, a + fade) * (1 - seg(t, b - fade, b));
+
+  function render(t) {
+    const tt = Math.min(t, HOLD_FROM);                         // everything is still from HOLD_FROM
+    clock.textContent = elapsed(ct(tt));
+    hook.style.opacity = show(tt, -1, HOOK, 0.3);
+    const cap = window.CAPTIONS.find(k => tt >= k.t0 && tt < k.t1);
+    capText.textContent = cap ? cap.text : "";
+    capBox.style.opacity = cap ? 1 : 0;
+    chips.forEach((ch, i) => { const end = i + 1 < chips.length ? Math.min(ch.t + 1.8, chips[i + 1].t) : ch.t + 1.8; ch.el.style.opacity = show(tt, ch.t, end); });
+    chats.forEach(ch => { ch.el.style.opacity = show(tt, ch.t, ch.t + 2.2); });
+    const g = given.at.filter(t0 => tt >= t0).length;
+    given.el.textContent = g === 1 ? "1 diamond given" : `${g} diamonds given`;
+    given.el.style.opacity = g ? 1 : 0;
+    tools.forEach(tl => {
+      const u = seg(tt, tl.t, tl.t + 0.35), got = tt >= tl.t;
+      tl.cells.forEach(c => c.setAttribute("opacity", got ? 1 : 0.18));
+      const sc = got ? lerp(1.5, 1, E.out(u)) : 1;
+      tl.g.setAttribute("transform", `translate(${tl.cx} 46) scale(${sc}) translate(${-tl.cx} -46)`);
+    });
+
+    let cardUp = 0;                                            // the header hides behind an open card
+    cards.forEach((cd, i) => {
+      const el = cardEls[i], n = nodes[cd.id];
+      if (tt >= cd.s0 - 0.1 && tt <= cd.land) cardUp = Math.max(cardUp, Math.min(seg(tt, cd.s0 - 0.1, cd.s0 + 0.1), 1 - seg(tt, cd.land - FLY, cd.land - FLY + 0.25)));
+      if (tt < cd.s0 || tt > cd.land) { el.style.opacity = 0; return; }
+      const grow = E.back(seg(tt, cd.s0, cd.s0 + IN)), fly = E.io(seg(tt, cd.land - FLY, cd.land));
+      const dx = (n.x - 510) * fly, dy = (n.y - 1215) * fly;      // card centre is about (510, 1215), over the graph
+      el.style.opacity = 1 - seg(tt, cd.land - 0.15, cd.land);
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${(0.6 + 0.4 * grow) * lerp(1, 0.05, fly)})`;
+    });
+
+    let skills = 0, valid = 0;
+    for (const id in nodes) {
+      const n = nodes[id], b = born[id];
+      const u = b === undefined ? 0 : E.out(seg(tt, b, b + 0.25));
+      n.dot.setAttribute("r", n.r * u);
+      const isHero = cards.some(cd => cd.id === id && tt >= cd.land && tt < heroUntil[cd.id + cd.kind]);
+      const gone = dropped[id] !== undefined && tt >= dropped[id];
+      const base = n.kind === "helper" ? "#2dd4bf" : n.kind === "lesson" ? "#ecebe4" : "#8a8fb0";
+      n.dot.setAttribute("fill", gone ? "#14142b" : isHero ? "#c084fc" : base);
+      n.dot.setAttribute("stroke", gone ? "#4a5070" : "none");
+      n.dot.setAttribute("stroke-width", gone ? 5 : 0);
+      n.dot.setAttribute("stroke-dasharray", gone ? "8 7" : "none");
+      if (n.kind !== "episode" && b !== undefined && tt >= b && !gone) skills++;
+    }
+    VALID.forEach(([k, id]) => {
+      const t0 = vt(k), u = seg(tt, t0, t0 + 0.4), n = nodes[id];
+      if (tt >= t0) valid++;
+      if (u > 0) { n.ring.setAttribute("opacity", 1); n.ring.setAttribute("r", (n.r + 13) * lerp(1.8, 1, E.out(u))); }
+    });
+    edges.forEach(e => {
+      const u = seg(tt, e.t, e.t + 0.4);
+      e.el.setAttribute("stroke-dasharray", e.dashed && u >= 1 ? "10 10" : `${e.len} ${e.len}`);
+      e.el.setAttribute("stroke-dashoffset", e.dashed && u >= 1 ? 0 : e.len * (1 - u));
+    });
+    nSkills.textContent = skills; nValid.textContent = valid;
+    heads.forEach(h => { h.style.opacity = 1 - cardUp; });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
