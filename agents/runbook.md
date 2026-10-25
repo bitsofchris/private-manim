@@ -101,6 +101,18 @@ Check the phrase in YouTube's search box before writing a beat:
 Put those four lines at the top of `storyboard.md`; every beat is checked
 against them.
 
+**From a vault block.** A Short may start as a block in Chris's notes,
+dispatched as a task whose `## Context` is the block: `Zzz: short` under
+it, or `do` on the morning board's *Short from today*. The block is the
+source: his sentences are the VO's raw material, a quoted chat prompt in it
+is THE QUESTION in the viewer's words, and a `Source:` URL is evidence for
+one beat at most, never the spine. The task ends at the storyboard (steps
+0–1), commits it, and leaves the session open under Remote Control so Chris
+continues it from the Claude app. The ways in are the vault's `Shorts
+Queue` note ("How to find Shorts now"); the dispatch mechanics are openaugi
+`docs/reference/task-dispatch.md` § Routes. Everything else in this step is
+unchanged.
+
 The hook, from the research in `agents/research/2026-10-03-shorts-craft.md`:
 frame 0 is the finished visual already working (not a title, not a word
 cloud, not a lead-in). With VO there is no question text: the band belongs

@@ -3,6 +3,14 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-25
+
+- Runbook step 0, "From a vault block": a Short may start as a dispatched task from Chris's notes (`Zzz: short` under the block, or `do` on the board's Short from today); the block's quoted chat prompt is THE QUESTION, its `Source:` URL is one evidence beat at most, and the task stops at the storyboard with the session left open under Remote Control. The dispatch side (openaugi `routes:` in the vault's Repos.md) is documented there, not here. Plan archived: `agents/archive/idea-to-short-intake.md`.
+
+## 2026-10-22
+
+- New prototype `prototypes/hyperframes/kb-code/`: kb-graph's Short with a code editor in the band (zoom into a function, type the agent's saved code, zoom out to the hierarchy). Shares kb-graph's footage, edit map and captions by symlink so a re-edit carries over. Trap: a script error in a HyperFrames render gives a frozen video with only a `sub_timeline_readiness_timeout` warning; `snapshot` can pass on an older file, so run `validate` right before the render. (AugiCraft diamond-run Short)
+
 ## 2026-10-21
 
 - New prototype `prototypes/hyperframes/kb-graph/`: real gameplay footage under HyperFrames graphics. One clock → video map (`edit.json`) cuts the timelapse (`make_timelapse.py`) and times every card, chip, the run timer and the voiceover lines (`make_audio.sh` ties lines and the music dip to run-clock moments), so trims keep everything in sync; a local `<video class="clip">` renders frame-accurately; captions sit over the footage because the graph owns the band (`make_captions.py`). Lessons in `concept.md`: events from cut-out stretches are shown on the shot where the skill was used, with the real time in a comment. (AugiCraft diamond-run Short)
