@@ -102,8 +102,8 @@ Put those four lines at the top of `storyboard.md`; every beat is checked
 against them.
 
 **From a vault block.** A Short may start as a block in Chris's notes,
-dispatched as a task whose `## Context` is the block: `Zzz: short` under
-it, or `do` on the morning board's *Short from today*. The block is the
+dispatched as a task whose `## Context` is the block: `Zzz short: <idea>`
+under it, or `do` on the morning board's *Short from today*. The block is the
 source: his sentences are the VO's raw material, a quoted chat prompt in it
 is THE QUESTION in the viewer's words, and a `Source:` URL is evidence for
 one beat at most, never the spine. The task ends at the storyboard (steps

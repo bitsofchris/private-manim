@@ -5,7 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-25
 
-- Runbook step 0, "From a vault block": a Short may start as a dispatched task from Chris's notes (`Zzz: short` under the block, or `do` on the board's Short from today); the block's quoted chat prompt is THE QUESTION, its `Source:` URL is one evidence beat at most, and the task stops at the storyboard with the session left open under Remote Control. The dispatch side (openaugi `routes:` in the vault's Repos.md) is documented there, not here. Plan archived: `agents/archive/idea-to-short-intake.md`.
+- Runbook step 0, "From a vault block": a Short may start as a dispatched task from Chris's notes (`Zzz short: <idea>` under the block, or `do` on the board's Short from today); the block's quoted chat prompt is THE QUESTION, its `Source:` URL is one evidence beat at most, and the task stops at the storyboard with the session left open under Remote Control. The dispatch side (openaugi `routes:` in the vault's Repos.md) is documented there, not here. Plan archived: `agents/archive/idea-to-short-intake.md`.
 
 ## 2026-10-22
 
