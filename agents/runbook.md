@@ -107,8 +107,10 @@ under it, or `do` on the morning board's *Short from today*. The block is the
 source: his sentences are the VO's raw material, a quoted chat prompt in it
 is THE QUESTION in the viewer's words, and a `Source:` URL is evidence for
 one beat at most, never the spine. The task ends at the storyboard (steps
-0–1), commits it, and leaves the session open under Remote Control so Chris
-continues it from the Claude app. The ways in are the vault's `Shorts
+0–1), commits it, shows the script back in the task note (one `###` per
+video, the preflight lines and the VO as read aloud) and in chat, and
+leaves the session open under Remote Control so Chris continues it from
+the Claude app. The ways in are the vault's `Shorts
 Queue` note ("How to find Shorts now"); the dispatch mechanics are openaugi
 `docs/reference/task-dispatch.md` § Routes. Everything else in this step is
 unchanged.
