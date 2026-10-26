@@ -17,9 +17,9 @@ HyperFrames, for every beat.
 
 A Python engineer who added `threading` to a slow loop, saw no speedup,
 and doesn't know why. Knows what a thread is; has never read about the
-interpreter. **Promise:** the GIL is one lock per interpreter, so threads
-only help when the work is waiting; for Python work, use processes, and
-mind what crosses the boundary.
+interpreter. **Promise:** the GIL is one knife in one kitchen, so threads
+only help when the cook is waiting; for chopping, use processes, and
+mind what passes between kitchens.
 
 ## The episodes
 
@@ -36,17 +36,22 @@ mind what crosses the boundary.
   "…vs asyncio python" and "…interview questions", so say "asyncio" once
   in the description).
 
-## The two images (same in both episodes)
+## The image (Chris's chat, 2026-10-26: one kitchen, one knife)
 
-- **The interpreter box:** one rounded box, label "one interpreter", with
-  thread lanes inside it (ep 1: four; ep 2: four) and **one lock token**
-  (magenta, the hero) that sits in exactly one lane at a time. A lane
-  without the lock is dim and waits. Native/IO lanes show a small
-  "waiting" glyph (a clock) while the lock is elsewhere.
-- **The process row:** several interpreter boxes side by side, each with
-  its own lock; between them a thick boundary line with a copy arrow
-  (ep 2 only). Shared memory is a slab under the boxes that the arrow
-  points into instead of across.
+- **The kitchen** is a process: a rounded box with a counter, four
+  line-drawn cooks (`videos/_shared/web/cast/cast.js` humans), an oven on
+  the right (waiting: disk, network) and a small appliance on the left
+  (native code that releases the lock: numpy, a tokenizer).
+- **The knife** is the GIL, the one magenta hero: one token, in exactly
+  one cook's hand at a time. The holder chops; the others are dim, with a
+  clock glyph when they are waiting at the oven.
+- **The row of kitchens** is processes: several boxes, each with its own
+  cook and its own knife; a thick wall between them with a pipe, through
+  which a bowl travels boxed ("pickle").
+- **The fridge** is shared memory: a slab under the row that the bowl goes
+  into once; across the wall travels only a note ("shelf 3").
+- **The shared counter** (ep 2 beat 2) is the memory threads share: a bowl
+  slides along it for free.
 
 ## Evidence (one beat at most)
 

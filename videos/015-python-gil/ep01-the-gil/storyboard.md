@@ -1,6 +1,6 @@
 ENGINE: hyperframes
 
-# Python GIL explained (series ep 1 of 2): storyboard (v1, VO draft for Chris)
+# Python GIL explained (series ep 1 of 2): storyboard (v2, kitchen image, VO draft for Chris)
 
 THE QUESTION: "What is the Python GIL, and why don't my threads run in parallel?"
 WHO IS ASKING: a Python engineer who put a CPU loop on four threads, got
@@ -13,27 +13,27 @@ autocompletes).
 
 **Titles (runbook step 9, Chris picks):** search `Python GIL Explained (Beginner Friendly)` · hook `Every Python dev needs this (Python GIL explained)` (Chris's preference, 10/26).
 
-**One idea:** one interpreter, one lock. Whoever holds it runs.
+**One idea:** one kitchen, one knife. Only the cook holding it does Python work.
 
-**Engine:** HyperFrames (`AGENTS.md` "Which engine"): a box, lanes and a
+**Engine:** HyperFrames (`AGENTS.md` "Which engine"): a box, line-drawn
+cooks from the cast kit (`videos/_shared/web/cast/cast.js`) and a knife
 token that moves. Nothing needs Manim.
 
 Series context: `../SERIES.md` (the two images, search phrases). VO is a
 draft in Chris's voice; he edits before recording (runbook step 1).
 
-## VO (draft: 126 words without the *(if time)* beats, 155 with)
+## VO (draft: 130 words without the two if-time beats, 167 with; the kitchen-and-knife image from Chris's chat, 10/26)
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | The Python GIL is one lock per interpreter, and only the thread holding it can run your Python. | Frame 0 already working: the interpreter box, four thread lanes, the magenta lock token sitting in lane 1; lane 1 bright, the other three dim. Top-middle of the stage, ~5 rows. |
-| 02_turns | So four threads in one process take turns. They never run your Python at the same time. | The token hops lane 1 → 2 → 3 → 4 on the word "turns" (one move per `S.BEAT`); each lane lights only while it holds the token. |
-| 03_cpu | That's why threading a CPU loop makes it no faster. Each thread is waiting for the lock the others hold. | A small code card bottom-middle: `for t in threads: t.start()` over a loop; a timer bar under the box fills at the same rate for one lane or four. The three dim lanes show a clock glyph. |
-| 04_waiting | Threads still help when the work is waiting: a network call, a disk read, or C code like NumPy that drops the lock while it runs. One thread waits, another takes the lock. | Lane 2 turns into a "network" lane (a small cloud), lane 3 a NumPy lane; as each starts waiting it releases the token, which jumps to a lane that has Python to run. Timer bar now fills faster. |
-| 05_processes | For Python-heavy work, use processes. Each process is its own interpreter with its own lock, so they really run in parallel. | The single box splits into four boxes side by side (the process row), each with its own magenta token; all four bright at once. Hero passes to the row of tokens. |
-| 06_boundary *(if time)* | The cost is a boundary: anything that crosses between processes gets copied. | A thick line between two boxes; a small array slides across and a copy appears on the other side. |
-| 07_free *(if time)* | Python 3.13 can run free-threaded, without the lock, but that's still the exception. Default Python has it. | The first box briefly shows its lanes all bright with the token gone, then the token returns; a "3.13t" tag fades. |
-| 08_close | Next time threads don't help, ask one thing: is the work waiting, or is it running Python? | Final visual: the box on the left ("waiting → threads"), the process row on the right ("Python → processes"). Takeaway only, no outro. |
-
+| 01_hook | The Python GIL is one knife in one kitchen: only the cook holding it can do Python work. | Frame 0 already working: the kitchen (a rounded box, label "one process"), four cooks (cast.js line-drawn humans) at a counter, the magenta knife token in cook 1's hand; cook 1 bright, the other three dim. Top-middle of the stage, ~5 rows. |
+| 02_cooks | The kitchen is a process. The cooks are threads. Ten cooks, one knife, one cook chopping at a time. | Labels land on the words: "process" on the box, "threads" over the cooks. On "one knife" the token hops cook 1 → 2 → 3 → 4, one hop per `S.BEAT`; only the holder chops (a small chop motion). |
+| 03_loop | That's why threading a Python loop makes it no faster. The other cooks just stand there waiting for the knife. | A code card bottom-middle: `for t in threads: t.start()`; a timer bar under the kitchen fills at the same rate with one cook or four. The three dim cooks get a clock glyph. |
+| 04_down | Cooks put the knife down when they wait for the oven, that's disk or the network, or when they use an appliance that doesn't need it: NumPy, image decoding, a tokenizer. While one cook waits, another chops. | An oven appears right of the counter, a small appliance (labelled "numpy") left. Cook 2 walks to the oven and sets the knife down; the token jumps to cook 3, who chops. Timer bar fills faster. |
+| 05_kitchens | Want two cooks chopping at once? Build a second kitchen. That's a process: its own interpreter, its own knife. | The box duplicates into a row of four kitchens, each with one cook and its own magenta knife; all four chop at once. Hero passes to the row of knives as one group. |
+| 06_containers *(if time)* | But kitchens don't share counters. Passing food between them means packing it into a container, sending it through a pipe, unpacking it. | A thick wall between two kitchens; a bowl gets boxed (label "pickle"), slides through a pipe, is unboxed on the far side. |
+| 07_free *(if time)* | Free-threaded Python takes the knife away, so every cook can chop. It's still the exception. | The first kitchen briefly shows all four cooks chopping with no token; a "3.13t" tag fades; the token returns. |
+| 08_close | So when threads don't help, ask one thing: is the cook waiting, or is the cook chopping? | Final visual: the kitchen on the left ("waiting → threads"), the row of kitchens on the right ("chopping → processes"). Takeaway only, no outro. |
 Line 1 lands the answer in its first clause and says the search phrase.
 The thing the title names (the GIL, the lock) is on screen at frame 0.
 Beats 06 and 07 are the *(if time)* cuts; 04 and 05 are the contrast that
@@ -42,7 +42,8 @@ stops the wrong takeaway ("threads are useless") and stay.
 ## Layout (decided before any code)
 
 - Top band: nothing (captions burn in below; safe areas from `style.py`).
-- Stage top-middle: the interpreter box, 4 lanes, ~5 rows tall.
+- Stage top-middle: the kitchen, four cooks at a counter, oven right,
+  appliance left, ~5 rows tall.
 - Stage bottom-middle: the code card (beat 3) / the timer bar.
-- One magenta hero at a time: the lock token; in beat 5 the row of tokens
-  as one tight group.
+- One magenta hero at a time: the knife; in beat 5 the row of knives as
+  one tight group.
