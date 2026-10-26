@@ -19,17 +19,17 @@ also offered, so name asyncio in the description).
 **Engine:** HyperFrames, the same kitchen, cooks and knife as ep 1 plus the
 row of kitchens, the wall with the pipe, and the fridge (`../SERIES.md`).
 
-## VO (draft: 183 words without the if-time beat, 195 with; the kitchen-and-knife image from Chris's chat, 10/26)
+## VO (draft: 154 words without the if-time beat, 166 with; the kitchen-and-knife image from Chris's chat, 10/26)
 
 | beat | VO | visual |
 |---|---|---|
 | 01_hook | Threads for waiting, processes for chopping. That's the rule for multithreading versus multiprocessing in Python. | Frame 0: left, one kitchen with four cooks and the magenta knife; right, a row of four kitchens. Labels "waiting" and "chopping" under each. |
-| 02_kitchen | Threads are cooks in one kitchen. They share every counter, so handing off data is free. But there's one knife, and Python work needs the knife. | The single kitchen enlarged; a shared counter (slab) under the cooks that a bowl slides along for free. The token in cook 1's hand. |
-| 03_waiting | When the work is waiting, a request, a file, the oven, the cook puts the knife down and another cook picks it up. Threads win. | An oven and a "network" cloud; cook 2 sets the knife down at the oven, the token jumps to cook 3; a timer bar under the kitchen fills fast. |
+| 02_kitchen | Threads are cooks in one kitchen. They share every counter, so handing off data is free. But there's one knife. | The single kitchen enlarged; a shared counter (slab) under the cooks that a bowl slides along for free. The token in cook 1's hand. |
+| 03_waiting | When the work is waiting, a request, a file, the oven, the cook puts the knife down and another picks it up. Threads win. | An oven and a "network" cloud; cook 2 sets the knife down at the oven, the token jumps to cook 3; a timer bar under the kitchen fills fast. |
 | 04_chopping | When the work is Python, the cooks take turns on the knife. Ten threads, one core's worth of chopping. | All four cooks at the counter with bowls; the token hops in turn; the timer bar fills at the one-cook rate; a "1 core" tag. |
-| 05_processes | Processes are separate kitchens. Each has its own interpreter and its own knife, so Python really runs in parallel. That's why PyTorch's DataLoader workers are processes. | The row of kitchens, eight small ones, each with a cook and its own knife, all chopping; a code card bottom-middle: `DataLoader(ds, num_workers=8)`. Hero passes to the row of knives. |
-| 06_containers | The cost: kitchens don't share counters. Every result gets packed into a container, pickled, sent through a pipe, unpacked. For a big array, the packing can cost more than the cooking. | A thick wall between two kitchens; a large bowl is boxed ("pickle"), squeezed through a pipe, unboxed; the timer bar stalls while it travels. |
-| 07_fridge | The fix is a shared fridge. Put the big tensors in shared memory and pass a note that says shelf 3. That's how a data loader keeps process mode cheap. | A fridge slab under the row of kitchens; the bowl goes into the fridge once; across the wall goes only a small note ("shelf 3"); the timer bar resumes. (Evidence beat: Zephon's process runner, `../SERIES.md`.) |
+| 05_processes | Processes are separate kitchens, each with its own knife, so Python really runs in parallel. PyTorch's DataLoader workers are processes. | The row of kitchens, eight small ones, each with a cook and its own knife, all chopping; a code card bottom-middle: `DataLoader(ds, num_workers=8)`. Hero passes to the row of knives. |
+| 06_containers | The cost: kitchens don't share counters. Every result gets boxed, piped, unboxed. For a big array, the boxing can cost more than the cooking. | A thick wall between two kitchens; a large bowl is boxed ("pickle"), squeezed through a pipe, unboxed; the timer bar stalls while it travels. |
+| 07_fridge | The fix is a shared fridge: big tensors go in shared memory, and you pass a note that says shelf 3. | A fridge slab under the row of kitchens; the bowl goes into the fridge once; across the wall goes only a small note ("shelf 3"); the timer bar resumes. (Evidence beat: Zephon's process runner, `../SERIES.md`.) |
 | 08_asyncio *(if time)* | All waiting and nothing else? Use asyncio: one cook, no knife fights. | One kitchen, one cook, a loop arrow over the oven and the cloud; the other cooks gone. |
 | 09_close | Waiting, threads. Chopping, processes. Big food between kitchens, the shared fridge. | Final visual: kitchen, row of kitchens, fridge, each with its label. Takeaway only, no outro. |
 Line 1 lands the rule in its first clause and says the search phrase.
