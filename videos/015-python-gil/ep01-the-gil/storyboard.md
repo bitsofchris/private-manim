@@ -11,6 +11,8 @@ code), never Python work; for Python work use processes.
 THE SEARCH PHRASE: python gil explained (checked 10/25; "python gil" also
 autocompletes).
 
+**Titles (runbook step 9, Chris picks):** search `Python GIL Explained (Beginner Friendly)` · hook `Every Python dev needs this (Python GIL explained)` (Chris's preference, 10/26).
+
 **One idea:** one interpreter, one lock. Whoever holds it runs.
 
 **Engine:** HyperFrames (`AGENTS.md` "Which engine"): a box, lanes and a

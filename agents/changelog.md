@@ -3,6 +3,10 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-26
+
+- Runbook step 9: two titles, not one. The search title (phrase first, ≤ 50 chars) and the hook title (a stake about the viewer, then the phrase in parentheses). Chris, from 015: a scroller rolls past "GIL"; the phrase still has to be there for search. The day-10 read judges the pair. Hand-off pack item 2 carries both.
+
 ## 2026-10-25
 
 - Runbook step 0, "From a vault block": a Short may start as a dispatched task from Chris's notes (`Zzz short: <idea>` under the block, or `do` on the board's Short from today); the block's quoted chat prompt is THE QUESTION, its `Source:` URL is one evidence beat at most, and the task stops at the storyboard with the session left open under Remote Control. The dispatch side (openaugi `routes:` in the vault's Repos.md) is documented there, not here. Plan archived: `agents/archive/idea-to-short-intake.md`.

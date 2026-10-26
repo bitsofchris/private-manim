@@ -465,13 +465,23 @@ Architecture Diagrams" drew searches for buildings. General guidance agrees: key
 under ~50 so the feed doesn't truncate it, first 100 characters of the
 description carry the takeaway, 3–5 hashtags at the end, tags barely matter.
 
-**The rule:** *The title starts with the search phrase from step 0, in
-those words, then promises it's simple.* One idea, no clever hook in the
-title; the visual is the hook.
+**The rule:** *offer two titles and Chris picks.* Both carry the search
+phrase from step 0 in those words; they differ in who they are for.
 
-- Title: `<search phrase> Made Simple (Beginner Friendly)`, or
-  `What is <X>? <the answer in ≤ 5 words>` for a new term. ≤ 50
-  characters.
+- **The search title**, for the person typing the phrase: `<search phrase>
+  Made Simple (Beginner Friendly)`, or `What is <X>? <the answer in ≤ 5
+  words>` for a new term. ≤ 50 characters, phrase first.
+- **The hook title**, for the person scrolling past (Chris, 2026-10-26: a
+  scroller rolls right past "GIL"; give them the stake or the curiosity,
+  then keep the phrase for search): `<the stake, ≤ 6 words> (<search
+  phrase>)`, e.g. `Every Python dev needs this (Python GIL explained)`,
+  `Most Python devs get this wrong (multithreading vs multiprocessing
+  python)`. The stake is a claim about *them*, not about the topic. Keep
+  the phrase inside the first ~50 characters where it fits; the feed
+  truncates after that.
+- Both go in `storyboard.md` and in the hand-off pack. The day-10 read
+  (step 12) records which was used and its search % next to the phrase,
+  so the pair gets judged by the channel's numbers, not by taste.
 - Description: line 1 answers THE QUESTION in one sentence and contains
   the search phrase (≤ 100 chars). Then
   2–3 lines saying what's shown, in order. Then the post link. Then the
@@ -486,7 +496,7 @@ The last message of the session is a paste-ready pack, nothing else:
 1. **The file**, as a full absolute path (`media/` is gitignored, so the
    folder on disk is the only copy). Upload the mp4 natively to Substack
    Notes; the YouTube link goes in the first reply, not the note.
-2. **Title**, the recommended one, in a code block.
+2. **Titles**, both (search and hook), each in a code block, the recommended one first.
 3. **Description**, in a code block, exactly as in `publish.md`.
 4. **Substack note**, in a code block: the reader's problem in their words,
    the one takeaway, the length in seconds. No links in the note.

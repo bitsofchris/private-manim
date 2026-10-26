@@ -12,6 +12,8 @@ THE SEARCH PHRASE: multithreading vs multiprocessing python (checked
 10/25; first autocomplete; "…vs asyncio python" and "…interview questions"
 also offered, so name asyncio in the description).
 
+**Titles (runbook step 9, Chris picks):** search `Multithreading vs Multiprocessing Python (Made Simple)` · hook `Most Python devs get this wrong (multithreading vs multiprocessing python)` (Chris's preference, 10/26).
+
 **One idea:** pick by the kind of work, then watch what crosses the boundary.
 
 **Engine:** HyperFrames, same box and token as ep 1 plus the process row

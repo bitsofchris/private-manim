@@ -25,8 +25,8 @@ mind what crosses the boundary.
 
 | # | Title | Their question | The answer | What they do after |
 |---|---|---|---|---|
-| 1 | `Python GIL Explained (Beginner Friendly)` | What is the Python GIL and why don't my threads run in parallel? | One lock per interpreter: only the thread holding it runs Python; threads overlap waiting, never Python work. | When threads don't help, ask: is the work waiting, or running Python? |
-| 2 | `Multithreading vs Multiprocessing Python (Made Simple)` | Threads or processes: which one do I use? | Threads for waiting, processes for Python work; everything crossing between processes is copied, so big data goes in shared memory. | Pick by the kind of work, then watch what crosses the boundary. |
+| 1 | `Every Python dev needs this (Python GIL explained)` (hook) / `Python GIL Explained (Beginner Friendly)` (search) | What is the Python GIL and why don't my threads run in parallel? | One lock per interpreter: only the thread holding it runs Python; threads overlap waiting, never Python work. | When threads don't help, ask: is the work waiting, or running Python? |
+| 2 | `Most Python devs get this wrong (multithreading vs multiprocessing python)` (hook) / `Multithreading vs Multiprocessing Python (Made Simple)` (search) | Threads or processes: which one do I use? | Threads for waiting, processes for Python work; everything crossing between processes is copied, so big data goes in shared memory. | Pick by the kind of work, then watch what crosses the boundary. |
 
 ## Search phrases (checked 2026-10-25, YouTube autocomplete)
 
