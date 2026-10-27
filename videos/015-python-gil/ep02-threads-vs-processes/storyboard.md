@@ -1,45 +1,50 @@
 ENGINE: hyperframes
 
-# Multithreading vs multiprocessing in Python (series ep 2 of 2): storyboard (v2, kitchen image, VO draft for Chris)
+# Multithreading vs multiprocessing in Python (series ep 2 of 2): storyboard (v3, the cost of a process, VO draft for Chris)
 
-THE QUESTION: "Multithreading vs multiprocessing in Python: which one do I use?"
+THE QUESTION: "Multithreading vs multiprocessing in Python: which one do I use, and what does a process cost me?"
 WHO IS ASKING: a Python engineer who now knows the GIL exists (ep 1) and
 has a real job to speed up.
 THE ANSWER IN ONE SENTENCE: threads for work that waits, processes for
-work that is Python; everything that crosses between processes is copied,
-so big data goes in shared memory.
+work that runs Python; everything that crosses between processes is
+copied, so big data goes in shared memory.
 THE SEARCH PHRASE: multithreading vs multiprocessing python (checked
 10/25; first autocomplete; "…vs asyncio python" and "…interview questions"
 also offered, so name asyncio in the description).
 
 **Titles (runbook step 9, Chris picks):** search `Multithreading vs Multiprocessing Python (Made Simple)` · hook `Most Python devs get this wrong (multithreading vs multiprocessing python)` (Chris's preference, 10/26).
 
-**One idea:** pick by the kind of work (waiting or chopping), then watch what crosses between kitchens.
+**One idea:** a process gives you a second knife, but everything that crosses between processes gets copied. That copy is what people get wrong.
+
+**Rule for this script (Chris, 10/27):** same as ep 1, every kitchen beat
+lands on the real term in the same breath; labels show both names.
 
 **Engine:** HyperFrames, the same kitchen, cooks and knife as ep 1 plus the
 row of kitchens, the wall with the pipe, and the fridge (`../SERIES.md`).
 
-## VO (draft: 154 words without the if-time beat, 166 with; the kitchen-and-knife image from Chris's chat, 10/26)
+Split with ep 1: ep 1 owns the one kitchen and the waiting-vs-running
+diagnostic. This episode recaps that in one line and spends its words on
+processes, the pickling cost, and shared memory.
+
+## VO (draft: 152 words without the if-time beat, 166 with)
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | Threads for waiting, processes for chopping. That's the rule for multithreading versus multiprocessing in Python. | Frame 0: left, one kitchen with four cooks and the magenta knife; right, a row of four kitchens. Labels "waiting" and "chopping" under each. |
-| 02_kitchen | Threads are cooks in one kitchen. They share every counter, so handing off data is free. But there's one knife. | The single kitchen enlarged; a shared counter (slab) under the cooks that a bowl slides along for free. The token in cook 1's hand. |
-| 03_waiting | When the work is waiting, a request, a file, the oven, the cook puts the knife down and another picks it up. Threads win. | An oven and a "network" cloud; cook 2 sets the knife down at the oven, the token jumps to cook 3; a timer bar under the kitchen fills fast. |
-| 04_chopping | When the work is Python, the cooks take turns on the knife. Ten threads, one core's worth of chopping. | All four cooks at the counter with bowls; the token hops in turn; the timer bar fills at the one-cook rate; a "1 core" tag. |
-| 05_processes | Processes are separate kitchens, each with its own knife, so Python really runs in parallel. PyTorch's DataLoader workers are processes. | The row of kitchens, eight small ones, each with a cook and its own knife, all chopping; a code card bottom-middle: `DataLoader(ds, num_workers=8)`. Hero passes to the row of knives. |
-| 06_containers | The cost: kitchens don't share counters. Every result gets boxed, piped, unboxed. For a big array, the boxing can cost more than the cooking. | A thick wall between two kitchens; a large bowl is boxed ("pickle"), squeezed through a pipe, unboxed; the timer bar stalls while it travels. |
-| 07_fridge | The fix is a shared fridge: big tensors go in shared memory, and you pass a note that says shelf 3. | A fridge slab under the row of kitchens; the bowl goes into the fridge once; across the wall goes only a small note ("shelf 3"); the timer bar resumes. (Evidence beat: Zephon's process runner, `../SERIES.md`.) |
-| 08_asyncio *(if time)* | All waiting and nothing else? Use asyncio: one cook, no knife fights. | One kitchen, one cook, a loop arrow over the oven and the cloud; the other cooks gone. |
-| 09_close | Waiting, threads. Chopping, processes. Big food between kitchens, the shared fridge. | Final visual: kitchen, row of kitchens, fridge, each with its label. Takeaway only, no outro. |
-Line 1 lands the rule in its first clause and says the search phrase.
-Beat 08 is the *(if time)* cut; 06 and 07 are the "how", they stay.
+| 01_hook | Threads for waiting, processes for Python work. That's the rule for multithreading versus multiprocessing in Python. The part people get wrong is what a process costs. | Frame 0: left, one kitchen with four cooks and the magenta knife ("waiting → threads"); right, a row of four kitchens ("Python work → processes"); a price tag hangs on the row. |
+| 02_recap | A process is a kitchen, threads are its cooks, the GIL is the one knife. Threads overlap only while a cook waits on the oven: I/O. | The single kitchen enlarged with the ep 1 labels ("kitchen / process", "cooks / threads", "knife / GIL", "oven / I/O"); cook 2 sets the knife down at the oven, the token jumps to cook 3. One beat, fast. |
+| 03_processes | Multiprocessing builds more kitchens. Each process has its own interpreter and its own GIL, so Python really runs in parallel. PyTorch's DataLoader workers are processes. | The row of kitchens, eight small ones, each with a cook and its own knife, all chopping; label "kitchens / processes, one GIL each"; a code card bottom-middle: `DataLoader(ds, num_workers=8)`. Hero passes to the row of knives as one group. |
+| 04_cost | The price: kitchens don't share counters, processes don't share memory. Every result crossing between them is pickled, pushed through a pipe, unpickled. For a big array, that copy can cost more than the compute. | A thick wall between two kitchens, label "wall / separate memory"; a large bowl is boxed ("pickle"), squeezed through a pipe, unboxed; the timer bar under the row stalls while it travels. |
+| 05_fridge | The fix is a shared fridge: shared memory. Put the big tensor in once, and pass a note that says shelf 3. The pipe carries the note, not the food. | A fridge slab under the row, label "fridge / shared memory"; the bowl goes in once; across the wall goes only a small note ("shelf 3"); the timer bar resumes. Hero: the note. (Evidence beat: Zephon's process runner, `../SERIES.md`.) |
+| 06_asyncio *(if time)* | All waiting and nothing else? asyncio: one cook, one event loop, no knife fights. | One kitchen, one cook, a loop arrow over the oven, label "one cook / event loop"; the other cooks gone. |
+| 07_close | Waiting, threads. Python work, processes. Big data between processes, shared memory. | Final visual: kitchen, row of kitchens, fridge, each with its pair of labels. Takeaway only, no outro. |
+Line 1 lands the rule in its first clause and says the search phrase; its
+third sentence names the stake (the cost) that ep 1 did not cover.
+Beat 06 is the *(if time)* cut; 04 and 05 are the "how", they stay.
 
 ## Layout
 
-- Stage top-middle: the kitchen (beats 2–4) / the row of kitchens (5–7),
-  ~5 rows.
-- Stage bottom-middle: the shared counter, the fridge, the timer bar, the
-  code card in beat 5.
+- Stage top-middle: the kitchen (beat 2) / the row of kitchens (3–5),
+  ~5 rows. Every label is `kitchen thing / real thing`.
+- Stage bottom-middle: the fridge, the timer bar, the code card in beat 3.
 - One magenta hero at a time: the knife, then the row of knives as one
-  group, then the note ("shelf 3") in beat 7.
+  group, then the note ("shelf 3") in beat 5.

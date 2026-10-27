@@ -9,9 +9,12 @@ him to edit before recording** (the source block had one sentence of his;
 the runbook says Chris edits the VO in his words).
 **When to use:** one session per episode, `agents/runbook.md` from step 2
 (record) in the episode folder. Step 0–1 are done here.
-**How it works:** one recurring image (the interpreter box with its one
-lock) carries both episodes; ep 2 adds the process boundary. One engine,
-HyperFrames, for every beat.
+**How it works:** one recurring image (one kitchen, one knife) carries
+both episodes, and every kitchen beat lands on the real term in the same
+breath (knife → GIL, oven → I/O). Ep 1 stops at the diagnostic (is the
+thread waiting or running Python?); ep 2 owns processes, the pickling
+cost, and shared memory. One engine, HyperFrames, for every beat.
+Free-threaded Python is cut from both (opt-in build, not usable yet).
 
 ## Who it is for, the promise
 
@@ -25,8 +28,8 @@ mind what passes between kitchens.
 
 | # | Title | Their question | The answer | What they do after |
 |---|---|---|---|---|
-| 1 | `Every Python dev needs this (Python GIL explained)` (hook) / `Python GIL Explained (Beginner Friendly)` (search) | What is the Python GIL and why don't my threads run in parallel? | One lock per interpreter: only the thread holding it runs Python; threads overlap waiting, never Python work. | When threads don't help, ask: is the work waiting, or running Python? |
-| 2 | `Most Python devs get this wrong (multithreading vs multiprocessing python)` (hook) / `Multithreading vs Multiprocessing Python (Made Simple)` (search) | Threads or processes: which one do I use? | Threads for waiting, processes for Python work; everything crossing between processes is copied, so big data goes in shared memory. | Pick by the kind of work, then watch what crosses the boundary. |
+| 1 | `Every Python dev needs this (Python GIL explained)` (hook) / `Python GIL Explained (Beginner Friendly)` (search) | What is the Python GIL and why don't my threads run in parallel? | One lock per interpreter: only the thread holding it runs Python; threads overlap while waiting (I/O, native code), never while running Python. | When threads don't help, ask: is the thread waiting, or running Python? Running Python → ep 2. |
+| 2 | `Most Python devs get this wrong (multithreading vs multiprocessing python)` (hook) / `Multithreading vs Multiprocessing Python (Made Simple)` (search) | Threads or processes, and what does a process cost me? | Threads for waiting, processes for Python work; everything crossing between processes is pickled and copied, so big data goes in shared memory. | Pick by the kind of work, then keep big data out of the pipe. |
 
 ## Search phrases (checked 2026-10-25, YouTube autocomplete)
 
@@ -50,8 +53,8 @@ mind what passes between kitchens.
   which a bowl travels boxed ("pickle").
 - **The fridge** is shared memory: a slab under the row that the bowl goes
   into once; across the wall travels only a note ("shelf 3").
-- **The shared counter** (ep 2 beat 2) is the memory threads share: a bowl
-  slides along it for free.
+- **Every label shows both names** (`knife / GIL`, `oven / I/O`), so the
+  analogy never floats free of the real thing (Chris, 10/27).
 
 ## Evidence (one beat at most)
 
