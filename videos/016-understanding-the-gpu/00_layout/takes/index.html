@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout/takes: three takes on the series image (the chip), for Chris to pick one. Not in any Short.
+         0–1 s  A: core grid    a 12 × 12 grid of cores, HBM a slab beside it
+         1–2 s  B: SM blocks    the chip as streaming multiprocessors, each with cores and a tensor-core bar
+         2–3 s  C: package      two dies with HBM stacks around them, as a B200 package is laid out
+         Every take shows the same state: the CPU and its kernel queue, ~32 % of the chip lit, the time strip full. -->
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+      .take { position: absolute; inset: 0; }
+      .lab { position: absolute; white-space: nowrap; line-height: 1.15; }
+      .mono { font-family: monospace; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const PAL = { bg: "#0B0B14", panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0",
+                data: "#2DD4BF", hero: "#C084FC", muted: "#4A5070", grid: "#1F2440", off: "#262B4A" };
+  const root = document.getElementById("root");
+  const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+  const lit = (i, frac) => hash(i * 3.7 + 1) < frac;   // the same ~32 % in every take
+
+  function node(tag, attrs, parent) {
+    const el = document.createElementNS(NS, tag);
+    Object.keys(attrs || {}).forEach((k) => el.setAttribute(k, attrs[k]));
+    if (parent) parent.appendChild(el);
+    return el;
+  }
+  const rect = (g, x, y, w, h, a) => node("rect", Object.assign({ x, y, width: w, height: h, rx: 22 }, a), g);
+  function label(host, text, left, top, size, o = {}) {
+    const el = document.createElement("div");
+    el.className = "lab" + (o.mono ? " mono" : "");
+    el.textContent = text;
+    el.style.cssText += `left:${left}px;top:${top}px;font-size:${size}px;color:${o.color || PAL.ink};` +
+      (o.width ? `width:${o.width}px;text-align:${o.align || "center"};` : "");
+    host.appendChild(el);
+    return el;
+  }
+  function take(name, id) {
+    const host = document.createElement("div");
+    host.className = "take"; host.id = id;
+    root.appendChild(host);
+    const svg = node("svg", { width: 1080, height: 1920, viewBox: "0 0 1080 1920" });
+    svg.style.cssText = "position:absolute;left:0;top:0;";
+    svg.setAttribute("data-layout-allow-overflow", "");
+    host.appendChild(svg);
+    label(host, name, 65, 110, 56, { color: PAL.dim });
+    return { host, svg };
+  }
+
+  // Shared by every take: the CPU and its queue of kernel launches (top), the time strip (bottom).
+  function cpuQueue(t, chipTopX) {
+    const g = node("g", {}, t.svg);
+    rect(g, 65, 250, 230, 130, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6 });
+    label(t.host, "CPU", 65, 262, 60, { width: 230 });
+    label(t.host, "Python", 65, 330, 36, { width: 230, color: PAL.dim });
+    ["matmul", "add", "relu", "∇", "adam"].forEach((k, i) => {
+      const x = 325 + i * 127;
+      rect(g, x, 280, 115, 70, { fill: PAL.panel, stroke: PAL.data, "stroke-width": 4, rx: 12 });
+      label(t.host, k, x, 296, 28, { width: 115, mono: true, color: PAL.data });
+    });
+    // the queue drains down into the chip
+    node("path", { d: `M ${chipTopX} 360 L ${chipTopX} 420`, stroke: PAL.dim, "stroke-width": 6, fill: "none", "stroke-linecap": "round" }, g);
+    node("polygon", { points: `${chipTopX - 16},420 ${chipTopX},444 ${chipTopX + 16},420`, fill: PAL.dim }, g);
+  }
+  function strip(t, y = 1220) {
+    const g = node("g", {}, t.svg);
+    label(t.host, "time →", 65, y - 62, 36, { color: PAL.dim });
+    for (let i = 0; i < 24; i++) rect(g, 65 + i * 37, y, 31, 60, { fill: PAL.data, rx: 6, opacity: 0.85 });
+    label(t.host, "GPU-Util 100%", 65, y + 80, 48, { color: PAL.ink });
+  }
+
+  // ---- A: core grid ----
+  (() => {
+    const t = take("A · core grid", "takeA");
+    cpuQueue(t, 382);
+    const g = node("g", {}, t.svg), x0 = 65, y0 = 450, pitch = 50, n = 12, pad = 18;
+    rect(g, x0, y0, n * pitch + pad * 2 - 8, n * pitch + pad * 2 - 8, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6, rx: 28 });
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const on = lit(r * n + c, 0.32), x = x0 + pad + c * pitch, y = y0 + pad + r * pitch;
+      rect(g, x, y, 42, 42, { fill: on ? PAL.data : PAL.off, rx: 6 });
+      rect(g, x + 24, y + 24, 14, 14, { fill: on ? "#0F766E" : PAL.grid, rx: 3 });   // the tensor core, a corner of each cell
+    }
+    label(t.host, "GPU: cores, each with a tensor core", x0, y0 + 645, 36, { color: PAL.dim });
+    // HBM slab and the pipe whose width is bandwidth
+    rect(g, 790, 470, 160, 590, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6 });
+    label(t.host, "HBM", 790, 700, 52, { width: 160 });
+    label(t.host, "180 GB", 790, 765, 34, { width: 160, color: PAL.dim });
+    [0, 1, 2].forEach((k) => rect(g, 703, 700 + k * 40, 87, 22, { fill: PAL.dim, rx: 6, opacity: 0.8 }));
+    strip(t);
+  })();
+
+  // ---- B: SM blocks ----
+  (() => {
+    const t = take("B · SM blocks", "takeB");
+    cpuQueue(t, 382);
+    const g = node("g", {}, t.svg), x0 = 65, y0 = 450, n = 4, pitch = 155;
+    rect(g, x0, y0, n * pitch + 22, n * pitch + 22, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6, rx: 28 });
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const on = lit(r * n + c + 40, 0.32), x = x0 + 18 + c * pitch, y = y0 + 18 + r * pitch;
+      rect(g, x, y, 140, 140, { fill: PAL.bg, stroke: on ? PAL.data : PAL.muted, "stroke-width": 4, rx: 14 });
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++)
+        node("circle", { cx: x + 26 + i * 29, cy: y + 26 + j * 27, r: 9, fill: on ? PAL.data : PAL.off }, g);
+      rect(g, x + 14, y + 104, 112, 24, { fill: on ? "#0F766E" : PAL.grid, rx: 6 });   // the tensor-core bar
+    }
+    label(t.host, "GPU: SMs, each with cores + tensor cores", x0, y0 + 645, 36, { color: PAL.dim });
+    rect(g, 790, 470, 160, 590, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6 });
+    label(t.host, "HBM", 790, 700, 52, { width: 160 });
+    label(t.host, "180 GB", 790, 765, 34, { width: 160, color: PAL.dim });
+    [0, 1, 2].forEach((k) => rect(g, 709, 700 + k * 40, 81, 22, { fill: PAL.dim, rx: 6, opacity: 0.8 }));
+    strip(t);
+  })();
+
+  // ---- C: package (two dies, HBM stacks around them) ----
+  (() => {
+    const t = take("C · B200 package", "takeC");
+    cpuQueue(t, 507);
+    const g = node("g", {}, t.svg);
+    rect(g, 65, 450, 885, 640, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6, rx: 30 });
+    [[110, 0], [520, 1]].forEach(([dx, d]) => {
+      rect(g, dx, 590, 385, 360, { fill: PAL.bg, stroke: PAL.muted, "stroke-width": 4, rx: 16 });
+      for (let r = 0; r < 7; r++) for (let c = 0; c < 8; c++) {
+        const on = lit(d * 100 + r * 8 + c, 0.32);
+        rect(g, dx + 18 + c * 45, 606 + r * 47, 37, 37, { fill: on ? PAL.data : PAL.off, rx: 5 });
+      }
+      [0, 1].forEach((k) => {
+        const hx = dx + 18 + k * 182;
+        [470, 970].forEach((hy) => {
+          rect(g, hx, hy, 167, 100, { fill: "#1B1B36", stroke: PAL.dim, "stroke-width": 4, rx: 10 });
+          label(t.host, "HBM", hx, hy + 28, 36, { width: 167, color: PAL.dim });
+        });
+      });
+    });
+    label(t.host, "2 dies · 8 HBM stacks, 180 GB", 65, 1105, 36, { color: PAL.dim });
+    strip(t);
+  })();
+
+  const takes = ["takeA", "takeB", "takeC"].map((id) => document.getElementById(id));
+  function render(time) {
+    const k = Math.min(2, Math.floor(time));
+    takes.forEach((el, i) => { el.style.visibility = i === k ? "visible" : "hidden"; });
+  }
+  const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+  tl.to({ p: 0 }, { p: 1, duration: 3, ease: "none" }, 0);
+  tl.set({}, {}, 3);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); render(0);
+})();
+    </script>
+  </body>
+</html>
