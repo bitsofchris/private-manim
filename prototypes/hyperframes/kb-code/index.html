@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- kb-graph with the bottom band swapped: AgentMiner's code being written instead of its graph.
+         Footage, chips, cards, captions and sound are kb-graph's. Spec in concept.md. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="footage/edit.js"></script>
+    <script src="footage/captions.js"></script>
+    <script src="footage/code.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root {
+        --bg: #0b0b14; --panel: #14142b; --text: #ecebe4; --dim: #8a8fb0;
+        --teal: #2dd4bf; --magenta: #c084fc; --muted: #4a5070;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg);
+              font-family: "Inter", sans-serif; font-weight: 800; color: var(--text); }
+      #footage { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; overflow: hidden; }
+      #tl { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; }
+      #fade { position: absolute; left: 0; top: 880px; width: 1080px; height: 200px;
+              background: linear-gradient(rgba(11,11,20,0), var(--bg)); }
+      #rule { position: absolute; left: 40px; top: 1088px; width: 1000px; height: 4px; background: var(--muted); }
+      .pill { position: absolute; padding: 12px 30px; border-radius: 30px; background: rgba(11,11,20,0.85);
+              font-size: 60px; line-height: 72px; white-space: nowrap; opacity: 0; }
+      #clock { left: 690px; top: 250px; width: 260px; text-align: center; opacity: 1; }
+      .chip { left: 65px; top: 250px; }
+      .chat { left: 65px; top: 930px; }
+      #hook { left: 65px; top: 470px; width: 885px; text-align: center; font-size: 76px; line-height: 92px;
+              color: var(--magenta); }
+      .card { position: absolute; left: 80px; top: 1030px; width: 860px; padding: 34px 40px 40px;
+              border-radius: 40px; background: var(--panel); border: 6px solid var(--magenta); opacity: 0;
+              transform-origin: 50% 50%; }
+      .card .kind { font-size: 60px; line-height: 70px; color: var(--dim); }
+      .card .id { margin-top: 14px; line-height: 1.15; color: var(--magenta); white-space: nowrap; }
+      .card .blurb { margin-top: 18px; font-size: 60px; line-height: 70px; }
+      .head { position: absolute; top: 1105px; font-size: 60px; line-height: 72px; }
+      .head b { color: var(--teal); }
+      #tools { position: absolute; left: 65px; top: 360px; }
+      /* The editor: the function hierarchy (zoomed out) and the code being typed (zoomed in). */
+      #editor { position: absolute; left: 40px; top: 1190px; width: 1000px; height: 346px; overflow: hidden;
+                border-radius: 24px; background: var(--panel); }
+      #outline, #code { position: absolute; left: 0; top: 0; width: 1000px; height: 346px; }
+      .row { position: absolute; left: 28px; height: 34px; font-size: 27px; line-height: 34px; white-space: nowrap; }
+      .row .badge { position: absolute; left: 820px; top: 0; color: var(--teal); }
+      #lines { position: absolute; left: 0; top: 0; width: 1000px; }
+      .ln { position: absolute; left: 0; height: 38px; font-size: 28px; line-height: 38px; white-space: pre; }
+      .ln .no { position: absolute; left: 0; width: 64px; text-align: right; color: var(--muted); }
+      .ln .tx { position: absolute; left: 84px; }
+      #edgeR { position: absolute; left: 920px; top: 0; width: 80px; height: 346px;
+               background: linear-gradient(90deg, rgba(20,20,43,0), var(--panel)); }
+      /* Voiceover captions (make_captions.py): over the footage, below the hook, above the chat pill. */
+      #cap { position: absolute; left: 65px; top: 690px; width: 885px; display: flex; justify-content: center; }
+      #cap span { padding: 14px 34px; border-radius: 30px; background: rgba(11,11,20,0.85);
+                  font-size: 68px; line-height: 80px; white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="57.5" data-fps="30" data-width="1080" data-height="1920">
+      <div id="footage">
+        <video id="tl" class="clip" src="footage/timelapse.mp4" data-start="0" data-duration="57.5" data-track-index="0" muted playsinline></video>
+        <div id="fade"></div>
+      </div>
+      <div id="rule"></div>
+      <div id="editor" data-layout-allow-overflow data-layout-allow-occlusion data-layout-allow-overlap>
+        <div id="outline"><div id="empty" class="row" style="top:8px;color:#4a5070">// no skills yet</div></div>
+        <div id="code"><div id="lines"></div></div>
+        <div id="edgeR"></div>
+      </div>
+      <div id="headL" class="head" data-layout-allow-overlap style="left:65px">SKILLS <b id="nSkills">0</b></div>
+      <div id="headR" class="head" data-layout-allow-overlap style="left:500px;width:450px;text-align:right">VALIDATED <b id="nValid">0</b></div>
+      <div id="clock" class="pill">0:00</div>
+      <svg id="tools" width="300" height="96" viewBox="0 0 300 96" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="cap"><span id="capText"></span></div>
+      <div id="hook" class="pill">“get me 5 diamonds”</div>
+    </div>
+    <script>
+(() => {
+  const SECONDS = window.EDIT.seconds, HOLD_FROM = SECONDS - 0.2, HOOK = 2.0;
+  const { seg, lerp } = ISO;
+  const E = ISO.E();
+  const root = document.getElementById("root");
+  const NS = "http://www.w3.org/2000/svg";
+  const MONO = "monospace";                                   // set from the script: a CSS class renders Inter
+  const c = s => { const [h, m, x] = s.split(":").map(Number); return h * 3600 + m * 60 + (x || 0); };   // seconds may be fractional
+
+  // ---- one time map: clock -> video seconds, generated with the timelapse (make_timelapse.py) ----
+  // A cut between selects is a pair of points with the same video time: events in the gap land on the cut.
+  const MAP = window.EDIT.map.map(([k, v]) => [c(k), v]);
+  const vt = s => { const k = typeof s === "string" ? c(s) : s;
+    if (k <= MAP[0][0]) return MAP[0][1];
+    for (let i = 1; i < MAP.length; i++) if (k <= MAP[i][0]) return lerp(MAP[i - 1][1], MAP[i][1], (k - MAP[i - 1][0]) / (MAP[i][0] - MAP[i - 1][0]));
+    return MAP[MAP.length - 1][1]; };
+  const ct = t => { for (let i = 1; i < MAP.length; i++) if (t < MAP[i][1]) return lerp(MAP[i - 1][0], MAP[i][0], (t - MAP[i - 1][1]) / (MAP[i][1] - MAP[i - 1][1]));
+    return MAP[MAP.length - 1][0]; };
+  // The timer is run time since AgentMiner joined (08:38:59): it ticks with the footage through the
+  // same map, fast in the sped-up stretches, and jumps where the edit cuts time out.
+  const JOINED = c("08:38:59");
+  const elapsed = k => { const e = Math.max(0, Math.floor(k - JOINED)); return `${Math.floor(e / 60)}:${String(e % 60).padStart(2, "0")}`; };
+
+  // ---- the run (augi-craft ~/augi-fresh-kb, 2026-10-20) ----
+  const CHIPS = [["08:39:13", "first logs"], ["08:40:47", "wooden pickaxe"], ["08:41:55", "stone pickaxe"],
+                 ["08:44:05", "found iron"], ["08:47:06", "smelting iron"], ["08:48:38", "iron pickaxe"], ["08:51:05", "diamond #1"],
+                 ["09:09:22", "hit water"], ["09:11:06", "drowned"], ["09:15:45", "5 diamonds"]];
+  // The handoff counter steps when each diamond reached Chris: his hotbar count went 1 -> 6 at these times.
+  const GIVEN = ["09:21:21.5", "09:21:27.5", "09:21:30.5", "09:21:33.5", "09:21:34.5"];
+  // The first handoff (09:05-09:07) is cut, so its two chat lines are too; the hook asks for 5.
+  const CHATS = [["09:21:12", "“give me the diamonds”"]];
+  // cards: clock, kind label, note id, blurb. A card whose real time falls in a cut-out
+  // stretch is shown on the shot where that skill was used (real time in the comment).
+  const CARDS = [
+    ["08:39:36", "NEW SKILL", "chop-logs", "find a log, dig it, grab the drop"],          // 08:39:45
+    ["08:40:45", "NEW SKILL", "craft-item", "craft, then clear the grid"],                // 08:40:40
+    ["08:40:49", "LESSON", "craft-one-at-a-time", "batch crafting jams the grid"],        // 08:49:01
+    ["08:41:24", "NEW SKILL", "mine-blocks", "mine the nearest blocks of a kind"],        // 08:41:43
+    ["08:42:06", "NEW SKILL", "ensure-table", "find a crafting table or build one"],      // 08:42:46
+    ["08:47:04", "NEW SKILL", "smelt-items", "fuel a furnace, wait, collect"],            // 08:48:19
+    ["08:51:06", "NEW SKILL", "descend-scan-ore", "dig down, scan for diamonds"],         // 08:53:20
+    ["09:13:46", "NEW SKILL", "staircase-down", "dig stairs, turn away from water"],
+    ["09:16:59", "DROPPED", "descend-scan-ore", "looped in water and drowned"],        // 09:17:24
+    ["09:17:01", "LESSON", "check-movement-progress", "check every move got somewhere"],  // 09:17:32
+    ["09:21:13", "NEW SKILL", "give-item-to-player", "walk to the player, toss it"],      // 09:06:38
+  ];
+  const VALID = [["08:53:31", "mine-blocks"], ["09:17:09", "craft-item"], ["09:17:09", "ensure-table"], ["09:21:37", "give-item-to-player"] /* 09:22:19 */];
+  // The hierarchy: helpers in the order they were written, each lesson under the helper it names.
+  const ROWS = ["chop-logs", "craft-item", "craft-one-at-a-time", "mine-blocks", "ensure-table", "smelt-items",
+                "descend-scan-ore", "staircase-down", "check-movement-progress", "give-item-to-player"];
+  const PARENT = { "craft-one-at-a-time": "craft-item", "check-movement-progress": "staircase-down" };
+  const CODE = window.CODE;
+
+  // ---- schedule: one card at a time; each card zooms the editor into its code, types it, zooms out ----
+  // Card: in 0.25 s, held 0.75 s, then 0.6 s into the editor. Zoom in behind the card, type while it holds,
+  // zoom back out to the hierarchy before the next card. Typing runs ~13 lines/s, faster if the gap is short.
+  const IN = 0.25, HOLDC = 0.75, FLY = 0.6, SPACE = 2.8;
+  const ZIN = 0.45, ZOUT = 0.45, TYPE0 = 0.7, REST = 0.25;
+  let free = HOOK;
+  const cards = CARDS.map(([k, kind, id, blurb]) => {
+    const s0 = Math.max(vt(k), free); free = s0 + SPACE;
+    return { s0, land: s0 + IN + HOLDC + FLY, kind, id, blurb };
+  });
+  cards.forEach((cd, i) => {
+    const next = i + 1 < cards.length ? cards[i + 1].s0 : HOLD_FROM;
+    const lines = CODE[cd.id].lines.length;
+    cd.type0 = cd.s0 + TYPE0;
+    cd.type1 = cd.type0 + Math.min(Math.max(lines * 0.075, 0.8), 3.2, next - cd.type0 - REST - ZOUT - 0.05);
+    cd.zout = cd.type1 + REST;
+  });
+  const born = {}, dropped = {}, heroUntil = {};
+  cards.forEach((cd, i) => {
+    if (cd.kind === "DROPPED") dropped[cd.id] = cd.zout; else born[cd.id] = cd.s0;
+    heroUntil[cd.id + cd.kind] = i + 1 < cards.length ? cards[i + 1].s0 : 99;
+  });
+  // how far the editor is zoomed in (0 = hierarchy, 1 = code), and which card it is on
+  const zoomAt = t => {
+    for (const cd of cards) if (t >= cd.s0 && t < cd.zout + ZOUT)
+      return { cd, z: E.io(seg(t, cd.s0 + 0.1, cd.s0 + 0.1 + ZIN)) * (1 - E.io(seg(t, cd.zout, cd.zout + ZOUT))) };
+    return { cd: null, z: 0 };
+  };
+  // A validation lands as a tick in the hierarchy, so it waits until the editor is zoomed out.
+  const valid = VALID.map(([k, id]) => { let t0 = vt(k); while (t0 < SECONDS && zoomAt(t0).z > 0.3) t0 += 1 / 30; return { t0, id }; });
+
+  // ---- build ----
+  const pill = (cls, text) => { const d = document.createElement("div"); d.className = "pill " + cls; d.textContent = text; root.appendChild(d); return d; };
+  // chips and chat lines queue like cards, so events from a cut-out stretch do not land on one frame
+  const queue = (rows, cls, gap) => { let next = HOOK + 0.1;
+    return rows.map(([k, text]) => { const t = Math.max(vt(k), next); next = t + gap; return { t, el: pill(cls, text) }; }); };
+  const chips = queue(CHIPS, "chip", 1.4), chats = queue(CHATS, "chat", 2.4);
+  const given = { at: GIVEN.map(vt), el: pill("chip", "") };
+  const cardEls = cards.map(cd => {
+    const d = document.createElement("div"); d.className = "card";
+    const size = Math.max(60, Math.min(84, Math.floor(770 / (0.6 * cd.id.length))));
+    const wrap = 0.6 * size * cd.id.length > 770;                 // too long at 60 px: break after a hyphen
+    d.innerHTML = `<div class="kind">${cd.kind}</div><div class="id" style="font-size:${size}px"></div><div class="blurb">${cd.blurb}</div>`;
+    const idEl = d.querySelector(".id"); idEl.textContent = cd.id; idEl.style.fontFamily = MONO;
+    if (wrap) idEl.style.whiteSpace = "normal";
+    root.appendChild(d); return d;
+  });
+  const span = (parent, text, color) => { const s = document.createElement("span"); s.textContent = text; s.style.fontFamily = MONO;
+    if (color) s.style.color = color; parent.appendChild(s); return s; };
+
+  // hierarchy rows: "├─ chopLogs(count, maxDistance)" or "│  └─ // craft-one-at-a-time"
+  const ROW_H = 34, ROW_TOP = 8;
+  const outline = document.getElementById("outline");
+  const rows = {};
+  ROWS.forEach((id, i) => {
+    const el = document.createElement("div"); el.className = "row"; el.style.fontFamily = MONO;
+    const lesson = CODE[id].kind === "lesson", last = !ROWS.slice(i + 1).some(r => CODE[r].kind === "helper");
+    span(el, lesson ? "│  └─ " : last ? "└─ " : "├─ ", "#4a5070");
+    const name = span(el, lesson ? `// ${id}` : CODE[id].fn);
+    let args = null;
+    if (!lesson) {                                              // keep clear of the tick at 820 px (~48 chars)
+      let params = CODE[id].params.join(", ");
+      while (CODE[id].fn.length + params.length > 40) params = params.replace(/,? ?[^,]*$/, "") + ", …";
+      args = span(el, `(${params.replace(/(, …)+$/, ", …")})`, "#8a8fb0");
+    }
+    const badge = span(el, "", null); badge.className = "badge";
+    outline.appendChild(el);
+    rows[id] = { el, name, args, badge, lesson };
+  });
+
+  // code view: a fixed pool of line elements, refilled every frame from the typed prefix
+  const LH = 38, VIS = 11, ANCHOR = 5.6;                       // the cursor sits ~6 lines down, below the card
+  const linesEl = document.getElementById("lines"), codeEl = document.getElementById("code");
+  const pool = Array.from({ length: VIS }, () => {
+    const ln = document.createElement("div"); ln.className = "ln";
+    const no = span(ln, ""); no.className = "no"; const tx = document.createElement("span"); tx.className = "tx"; tx.style.fontFamily = MONO;
+    ln.appendChild(tx); linesEl.appendChild(ln); return { ln, no, tx };
+  });
+  // syntax colours from the house palette: keywords teal, calls ink, strings and numbers dim, comments muted
+  const TOK = /(\/\/.*$)|('(?:[^'\\]|\\.)*'?|"(?:[^"\\]|\\.)*"?|`[^`]*`?)|(\b\d+(?:\.\d+)?\b)|(\b(?:const|let|var|async|await|function|return|if|else|for|while|of|in|try|catch|new|throw|continue|break|true|false|null)\b)/g;
+  const tokens = line => { const out = []; let at = 0, m; TOK.lastIndex = 0;
+    while ((m = TOK.exec(line))) {
+      if (m.index > at) out.push([line.slice(at, m.index), "#ecebe4"]);
+      out.push([m[0], m[1] ? "#6c7398" : m[2] || m[3] ? "#a9aed0" : "#2dd4bf"]); at = m.index + m[0].length;
+    }
+    if (at < line.length) out.push([line.slice(at), "#ecebe4"]);
+    return out; };
+  // a buffer per card: lines, how many are typed (or left) at time t, and context lines that are already there
+  const buffers = cards.map(cd => {
+    const own = CODE[cd.id].lines.map(l => ({ toks: tokens(l), len: l.length, typed: true, lesson: cd.kind === "LESSON" }));
+    const ctx = cd.kind === "LESSON" ? [{ toks: [], len: 0, typed: false }].concat(CODE[PARENT[cd.id]].lines.slice(0, 9).map(l => ({ toks: tokens(l), len: l.length, typed: false }))) : [];
+    const total = own.reduce((a, l) => a + l.len + 1, 0);
+    return { lines: own.concat(ctx), own: own.length, total };
+  });
+
+  const nSkills = document.getElementById("nSkills"), nValid = document.getElementById("nValid");
+  const heads = [document.getElementById("headL"), document.getElementById("headR")];
+  const hook = document.getElementById("hook"), clock = document.getElementById("clock");
+  const capBox = document.getElementById("cap"), capText = document.getElementById("capText");
+
+  // ---- tool strip: three pickaxe slots, dim until the chip that names each one ----
+  // Material colours are the game's (wood, stone, iron), not house tokens, so viewers know the tools.
+  const mk = (g, tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); g.appendChild(e); return e; };
+  const PICK = { head: [[2,0],[3,0],[4,0],[5,1],[6,1],[6,2],[7,3],[7,4],[7,5]], handle: [[5,2],[4,3],[3,4],[2,5],[1,6],[0,7]] };
+  const TOOLS = [["wooden pickaxe", "#a8773a"], ["stone pickaxe", "#9a9a9a"], ["iron pickaxe", "#e4e4e4"]];
+  const toolSvg = document.getElementById("tools");
+  const tools = TOOLS.map(([name, color], i) => {
+    const g = mk(toolSvg, "g", {});
+    mk(g, "rect", { x: i * 100 + 2, y: 2, width: 88, height: 88, rx: 18, fill: "rgba(11,11,20,0.85)", stroke: "#4a5070", "stroke-width": 4 });
+    const cells = [];
+    PICK.head.forEach(([cx, cy]) => cells.push(mk(g, "rect", { x: i * 100 + 10 + cx * 9, y: 10 + cy * 9, width: 9, height: 9, fill: color })));
+    PICK.handle.forEach(([cx, cy]) => cells.push(mk(g, "rect", { x: i * 100 + 10 + cx * 9, y: 10 + cy * 9, width: 9, height: 9, fill: "#6b4a26" })));
+    const chip = chips.find(ch => ch.el.textContent === name);
+    return { g, cells, t: chip.t, cx: i * 100 + 46 };
+  });
+  ISO.guides(root);
+  const empty = document.getElementById("empty"); empty.style.fontFamily = MONO;
+  const edgeR = document.getElementById("edgeR");
+
+  const show = (t, a, b, fade = 0.15) => seg(t, a, a + fade) * (1 - seg(t, b - fade, b));
+  // a row's y in the editor: rows above it push it down as they grow in, so a lesson opens a gap
+  const rowGrow = (id, t) => born[id] === undefined ? 0 : E.out(seg(t, born[id], born[id] + 0.3));
+  const rowY = (id, t) => ROW_TOP + ROWS.slice(0, ROWS.indexOf(id)).reduce((a, r) => a + rowGrow(r, t), 0) * ROW_H;
+
+  // draw buffer b with `chars` characters of its own lines typed (or, deleting, left)
+  function drawCode(b, chars, cursor) {
+    let start = 0, cur = 0, curCol = 0;                         // cur: the line the cursor is on
+    const shown = b.lines.map((l, i) => {
+      if (!l.typed) return l.len;
+      const n = Math.max(0, Math.min(l.len, chars - start));
+      if (chars >= start) { cur = i; curCol = n; }
+      start += l.len + 1;
+      return n;
+    });
+    const typedLines = cur + 1;                                 // lines that exist so far
+    const scroll = Math.max(0, cur + curCol / 60 - ANCHOR);
+    const first = Math.floor(scroll);
+    linesEl.style.transform = `translateY(${-(scroll * LH) + 14}px)`;
+    pool.forEach((p, k) => {
+      const i = first + k, l = b.lines[i];
+      p.ln.style.top = `${i * LH}px`;
+      const visible = l && (i < typedLines || !l.typed);
+      p.no.textContent = visible ? String(i + 1) : "";
+      while (p.tx.firstChild) p.tx.removeChild(p.tx.firstChild);
+      if (!visible) return;
+      let n = shown[i];
+      for (const [text, color] of l.toks) {
+        if (n <= 0) break;
+        const s = span(p.tx, text.slice(0, n), l.lesson ? "#ecebe4" : color); n -= text.length;
+        if (!l.typed) s.style.opacity = 0.45;
+      }
+      if (cursor && i === cur) span(p.tx, "▌", "#c084fc");
+    });
+  }
+
+  function render(t) {
+    const tt = Math.min(t, HOLD_FROM);                         // everything is still from HOLD_FROM
+    clock.textContent = elapsed(ct(tt));
+    hook.style.opacity = show(tt, -1, HOOK, 0.3);
+    const cap = window.CAPTIONS.find(k => tt >= k.t0 && tt < k.t1);
+    capText.textContent = cap ? cap.text : "";
+    capBox.style.opacity = cap ? 1 : 0;
+    chips.forEach((ch, i) => { const end = i + 1 < chips.length ? Math.min(ch.t + 1.8, chips[i + 1].t) : ch.t + 1.8; ch.el.style.opacity = show(tt, ch.t, end); });
+    chats.forEach(ch => { ch.el.style.opacity = show(tt, ch.t, ch.t + 2.2); });
+    const g = given.at.filter(t0 => tt >= t0).length;
+    given.el.textContent = g === 1 ? "1 diamond given" : `${g} diamonds given`;
+    given.el.style.opacity = g ? 1 : 0;
+    tools.forEach(tl => {
+      const u = seg(tt, tl.t, tl.t + 0.35), got = tt >= tl.t;
+      tl.cells.forEach(c => c.setAttribute("opacity", got ? 1 : 0.18));
+      const sc = got ? lerp(1.5, 1, E.out(u)) : 1;
+      tl.g.setAttribute("transform", `translate(${tl.cx} 46) scale(${sc}) translate(${-tl.cx} -46)`);
+    });
+
+    let cardUp = 0;                                            // the header hides behind an open card
+    cards.forEach((cd, i) => {
+      const el = cardEls[i];
+      if (tt >= cd.s0 - 0.1 && tt <= cd.land) cardUp = Math.max(cardUp, Math.min(seg(tt, cd.s0 - 0.1, cd.s0 + 0.1), 1 - seg(tt, cd.land - FLY, cd.land - FLY + 0.25)));
+      if (tt < cd.s0 || tt > cd.land) { el.style.opacity = 0; return; }
+      const grow = E.back(seg(tt, cd.s0, cd.s0 + IN)), fly = E.io(seg(tt, cd.land - FLY, cd.land));
+      const dx = (220 - 510) * fly, dy = (1215 - 1215) * fly;   // shrinks into the editor's top left, where the code starts
+      el.style.opacity = 1 - seg(tt, cd.land - 0.25, cd.land);
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${(0.6 + 0.4 * grow) * lerp(1, 0.05, fly)})`;
+    });
+
+    // ---- the editor ----
+    const { cd, z } = zoomAt(tt);
+    const focus = cd ? cd.id : null;
+    const fy = focus ? rowY(focus, tt) + ROW_H / 2 : 173;      // zoom about the row being written
+    outline.style.transformOrigin = `200px ${fy}px`;
+    outline.style.transform = `scale(${lerp(1, 3.2, z)})`;
+    outline.style.opacity = 1 - seg(z, 0.15, 0.7);
+    codeEl.style.transformOrigin = `200px ${fy}px`;
+    codeEl.style.transform = `scale(${lerp(0.3, 1, z)})`;
+    codeEl.style.opacity = seg(z, 0.35, 0.9);
+    edgeR.style.opacity = z;                                   // long code lines fade out; the hierarchy's ticks must not
+    empty.style.opacity = 1 - seg(tt, cards[0].s0, cards[0].s0 + 0.2);
+    if (cd && z > 0) {
+      const b = buffers[cards.indexOf(cd)];
+      const u = seg(tt, cd.type0, cd.type1);
+      if (cd.kind === "DROPPED") {                             // the whole function goes, last line first
+        drawCode(b, Math.round(b.total * (1 - E.inn(u))), u > 0 && u < 1);
+        codeEl.style.background = u > 0 && u < 1 ? "rgba(192,132,252,0.10)" : "none";
+      } else {
+        drawCode(b, Math.round(b.total * u), u < 1 || Math.floor(tt * 3) % 2 === 0);
+        codeEl.style.background = "none";
+      }
+    }
+
+    let skills = 0;
+    ROWS.forEach(id => {
+      const r = rows[id], b = born[id], gr = rowGrow(id, tt);
+      r.el.style.top = `${rowY(id, tt)}px`;
+      r.el.style.opacity = gr;
+      r.el.style.transform = `translateX(${lerp(-30, 0, gr)}px)`;
+      const gone = dropped[id] !== undefined && tt >= dropped[id];
+      const hero = cards.some(k => k.id === id && k.kind !== "DROPPED" && tt >= k.s0 && tt < heroUntil[k.id + k.kind]);
+      r.name.style.color = gone ? "#4a5070" : hero ? "#c084fc" : r.lesson ? "#ecebe4" : "#2dd4bf";
+      r.name.style.textDecoration = gone ? "line-through" : "none";
+      if (r.args) { r.args.style.color = gone ? "#4a5070" : "#8a8fb0"; r.args.style.textDecoration = gone ? "line-through" : "none"; }
+      if (gone) r.badge.textContent = "dropped", r.badge.style.color = "#8a8fb0";
+      if (b !== undefined && tt >= b && !gone) skills++;
+    });
+    let nv = 0;
+    valid.forEach(({ t0, id }) => {
+      if (tt < t0) return;
+      nv++;
+      const r = rows[id], u = seg(tt, t0, t0 + 0.4);
+      r.badge.textContent = "✓ valid"; r.badge.style.color = "#2dd4bf";
+      r.badge.style.transform = `scale(${lerp(1.8, 1, E.out(u))})`;
+    });
+    ROWS.forEach(id => { if (!valid.some(v => v.id === id && tt >= v.t0) && !(dropped[id] !== undefined && tt >= dropped[id])) rows[id].badge.textContent = ""; });
+    nSkills.textContent = skills; nValid.textContent = nv;
+    heads.forEach(h => { h.style.opacity = 1 - cardUp; });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
