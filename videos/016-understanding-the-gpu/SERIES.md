@@ -1,4 +1,4 @@
-# Understanding the GPU: the series (idea backlog)
+# Understanding the GPU: the series (13 Shorts)
 
 **Name:** understanding-the-gpu-series
 **Description:** Shorts for a research engineer who trains models on GPUs
@@ -6,12 +6,13 @@ but has never been taught what the GPU is doing: what a FLOP is, what a
 kernel is, where the data goes, and how to tell whether training is using
 the chip well. Grew out of Chris's 2026-10-27 note ("MFU vs GPU
 saturation, what's the difference?") and his follow-up questions in the
-storyboard session the same night. **Status: idea backlog. The arc and
-episode order are not agreed yet; only the MFU Short has a storyboard
-(`storyboard.md`, v2).**
-**When to use:** pick the next episode from here; when an arc is agreed,
-this file becomes the series file `agents/series.md` step 1 describes
-(ledger, per-episode preflight, checklist).
+storyboard session the same night. **Status (10/27): Chris asked for all 13
+ready to record; one storyboard per episode folder `epNN-slug/`, VO
+drafted in his voice for him to edit.** Ep 8 (MFU) was storyboarded first.
+**When to use:** the series home (`agents/series.md` step 1): the ledger
+every episode copies, the recurring image, which episode owns which
+fact, the checklist. Each episode then runs `agents/runbook.md` from
+step 2 in its folder.
 **How it works:** each idea is one Short with one question. Every
 episode must stand alone (viewers arrive from search), but the order
 below builds each one on the last. Search phrases were checked 2026-10-27
@@ -25,6 +26,70 @@ efficient, or why. Knows Python and neural nets; has never written CUDA.
 **Promise:** by the end you can picture one training step moving through
 the chip, and you know which number says the GPU is busy and which says
 it is doing useful work.
+
+## Ledger (every episode copies these; nothing invented per episode)
+
+- **GPU:** one NVIDIA **B200**. bf16 dense peak **2,250 TFLOPS** (say
+  "about 2,250 teraflops" or "2.25 petaflops"); the 2× "sparse" figure is
+  only ever shown as the spec-sheet trap (ep 4). GPU memory (HBM):
+  **180 GB**, bandwidth about **8 TB/s**. Verify any other B200 figure
+  before using it; the exact SM count is never stated (the grid is a
+  picture, not a count).
+- **Model:** an **8B-parameter** dense transformer (Llama-3-8B sized),
+  trained in **bf16** with Adam.
+- **Throughput:** **20,000 tokens/s** on one B200.
+- **FLOPs:** a FLOP is one floating-point multiply or one add. Training
+  costs **6 × params per token** (forward 2, backward 4). The run does
+  6 × 8e9 × 20,000 = **960 TFLOPS** → **MFU 43 %**. nvidia-smi on the same
+  run: **GPU-Util 100 %**.
+- **The tiny layer** (for counting FLOPs): 3 inputs, 2 outputs, **6
+  weights**; forward 12 FLOPs = 2 × 6.
+- **Memory for the 8B model with Adam, mixed precision:** 16 bytes per
+  parameter = **128 GB** before activations (bf16 weights 2 + bf16 grads
+  2 + fp32 master weights 4 + Adam m 4 + Adam v 4). Activations on top
+  scale with batch × sequence length.
+- **Reference:** PaLM 540B trained at **46 % MFU** (Chowdhery et al. 2022,
+  the paper that named MFU).
+- **Code on screen** is real PyTorch that runs: `torch.profiler`,
+  `torch.compile`, `torch.cuda.utilization()`, `loss.item()`,
+  `DataLoader(num_workers=..., pin_memory=True)`.
+
+## The series image (one chip, drawn the same way every episode)
+
+HyperFrames, house style (`AGENTS.md`). Each episode adds one part to a
+picture the viewer has seen before:
+
+- **The chip:** a rounded box mid-stage holding a **12 × 12 grid of core
+  cells** (dark at rest, teal when working). Tensor cores (ep 5 on) are a
+  highlighted sub-block inside each cell, not a new drawing.
+- **Memory (HBM):** a slab to the right of the chip, label `HBM 180 GB`,
+  joined to the grid by a pipe whose width shows bandwidth (ep 5).
+- **The CPU and its queue:** a small box top-left, label `CPU (Python)`,
+  with a queue of kernel tiles running into the chip (ep 6 on).
+- **The time strip:** a row of slots under the chip, filled when any
+  kernel ran, grey when idle (ep 7 on).
+- **The MFU meter:** a gauge right of the chip (ep 8 on).
+- **The loader:** a box feeding batches in from the left (ep 10).
+- One magenta hero at a time (`AGENTS.md` rule 2); everything else teal
+  or grey.
+
+## One home per fact (say it fully once; elsewhere one clause at most)
+
+| Fact | Home |
+|---|---|
+| GPU vs CPU: many simple cores vs few big ones | ep 1 |
+| What a FLOP is; FLOPs vs FLOPS; why chips are rated in them | ep 2 |
+| 6 × params × tokens, forward 2 + backward 4 | ep 3 |
+| Floating point, precision, bf16/fp8, dense vs sparse spec | ep 4 |
+| Tensor cores vs memory; compute-bound vs memory-bound | ep 5 |
+| What a kernel is; the CPU queue; async; `.item()` syncs | ep 6 |
+| What nvidia-smi shows; GPU-Util = share of time any kernel ran | ep 7 |
+| MFU; computing it from tokens/s | ep 8 |
+| Reading a profiler trace; idle gaps | ep 9 |
+| Data loader starving the GPU; workers, pinned memory, prefetch | ep 10 |
+| Raising MFU: batch, `torch.compile` fusion, bf16, CUDA graphs | ep 11 |
+| What fills GPU memory; 16 bytes per param; OOM | ep 12 |
+| Multi-GPU all-reduce; communication vs compute overlap | ep 13 |
 
 ## Where the ideas came from
 
@@ -68,14 +133,26 @@ it is doing useful work.
 - **DCGM counters** (`SM_ACTIVE`, `PIPE_TENSOR_ACTIVE`): companion
   material for #7 / #8.
 
+## Checklist
+
+| # | Folder | Storyboard | VO (Chris edited) | Recorded | Beats | Assembled | Shipped |
+|---|---|---|---|---|---|---|---|
+| 1 | `ep01-why-gpus-for-ai/` |  | | | | | |
+| 2 | `ep02-flops-explained/` |  | | | | | |
+| 3 | `ep03-six-flops-per-parameter/` |  | | | | | |
+| 4 | `ep04-floating-point-precision/` |  | | | | | |
+| 5 | `ep05-tensor-cores-vs-memory/` |  | | | | | |
+| 6 | `ep06-cuda-kernel-training-step/` |  | | | | | |
+| 7 | `ep07-nvidia-smi/` |  | | | | | |
+| 8 | `ep08-gpu-utilization-vs-mfu/` | v2 | | | | | |
+| 9 | `ep09-pytorch-profiler/` |  | | | | | |
+| 10 | `ep10-gpu-idle-dataloader/` |  | | | | | |
+| 11 | `ep11-raising-mfu/` |  | | | | | |
+| 12 | `ep12-cuda-out-of-memory/` |  | | | | | |
+| 13 | `ep13-multi-gpu-communication/` |  | | | | | |
+
 ## Open decisions (Chris's)
 
-- The arc: all 13, or a first season (a suggestion: 2, 6, 5, 8, the four
-  Chris called out, in that order, then 7, 9, 11).
-- Whether #3 folds into #2 and #7 folds into #8.
-- The series image: one chip drawn the same way in every episode (a grid
-  of cores, the memory beside it, a queue from the CPU), so each Short adds
-  one part to a picture the viewer already knows.
-- Folder layout: this folder becomes `016-understanding-the-gpu/` with one
-  `epNN-slug/` per episode (`agents/series.md`), the MFU storyboard moving
-  to its episode folder.
+- Release order: build order above, or the four Chris called out first
+  (2, 6, 5, 8).
+- Whether #3 folds into #2 and #7 folds into #8 after reading the drafts.

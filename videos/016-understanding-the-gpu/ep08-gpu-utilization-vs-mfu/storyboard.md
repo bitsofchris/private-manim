@@ -29,8 +29,8 @@ at", "how is it measured".
 **Engine:** HyperFrames (`AGENTS.md` "Which engine"): one GPU chip drawn
 as a grid of cores, a time strip, a meter, and a code card. Nothing needs Manim.
 
-Series context: fits the Bytes to Tensor / dataloading thread
-(`../014-pytorch-dataloading/`): low utilization is the loader's problem;
+Series context: ep 8 of `../SERIES.md` (Understanding the GPU). Fits the Bytes to Tensor / dataloading thread
+(`../../014-pytorch-dataloading/`): low utilization is the loader's problem;
 this Short is the metric that tells you which problem you have.
 
 ## Ledger (every beat copies these, nothing invented per beat)
