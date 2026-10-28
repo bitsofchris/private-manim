@@ -146,9 +146,12 @@ draws the training loop (diagram 1's six boxes) with the same card style,
 so the batch that leaves ep 1's loader is the batch that leaves ep 2's
 machine.
 
-Look: flat house style (Chris did not choose the isometric kit). The
-canonical frame (`00_layout/`) shows two or three takes on the machine side
-by side; Chris approves one before any episode session.
+Look: flat house style (Chris did not choose the isometric kit). The kit
+was built 2026-10-28 (`_kit/data.js`, `machine.js`, `code.js`; `window.SC`
+with `mount`, `REST`, an empty `SEAM` each episode fills in its own
+`_kit/seam.js`). The canonical frame `00_layout/layout.png` shows it in
+three states (ep 2's frame 0, ep 5's twins, ep 3's `__getitem__`);
+**approval pending** before any episode session starts.
 
 ## The episodes
 
