@@ -159,24 +159,44 @@ multi-GPU communication. The standalone nvidia-smi Short is in
 - **DCGM counters** (`SM_ACTIVE`, `PIPE_TENSOR_ACTIVE`): companion
   material for #7.
 
+## How it was recorded
+
+One file, `~/Creating/016-gpu-understanding.m4a` (497.6 s, AAC mono
+44.1 kHz), 2026-10-28, series order, "Episode N: working name" before
+episodes 2–8. Exported with a title tag, like 014's, so likely Descript;
+**whether Studio Sound was on is not known: ask Chris before step 3**
+(loudnorm only unless he says otherwise; never denoise a Studio Sound
+take). Split 2026-10-28: cut times in `TRANSCRIPT.md` and each
+`script.md`, with where each take leaves the planned script.
+
+From the split, for the episode sessions:
+- Ep 7 never says "nvidia-smi", so its search phrase needs a new choice
+  or a re-recorded line 1 (its `script.md`).
+- Repeats to cut: ep 6 ("Forward queues…"), ep 7 ("GPU utilization
+  measures…").
+- No recorded closer (next move) in ep 1 or ep 3.
+- Ear checks: ep 2 `check_divide.m4a`, ep 6 `check_step.m4a`, ep 8
+  `check_right_then.m4a`.
+
 ## Checklist
 
-| # | Folder | Storyboard | VO (Chris edited) | Recorded | Beats | Assembled | Shipped |
+| # | Folder | Storyboard | VO (Chris edited) | Recorded (raw) | Beats | Assembled | Shipped |
 |---|---|---|---|---|---|---|---|
-| 1 | `ep01-why-gpus-for-ai/` | v2 | | | | | |
-| 2 | `ep02-flops-explained/` | v2 | | | | | |
-| 3 | `ep03-six-flops-per-parameter/` | v2 | | | | | |
-| 4 | `ep04-floating-point-precision/` | v2 | | | | | |
-| 5 | `ep05-tensor-cores-vs-memory/` | v2 | | | | | |
-| 6 | `ep06-cuda-kernel-training-step/` | v2 | | | | | |
-| 7 | `ep07-nvidia-smi-utilization-vs-mfu/` | v3 | | | | | |
-| 8 | `ep08-pytorch-profiler/` | v2 | | | | | |
+| 1 | `ep01-why-gpus-for-ai/` | v2 | in the take | 49.5 s | | | |
+| 2 | `ep02-flops-explained/` | v2 | in the take | 61.9 s | | | |
+| 3 | `ep03-six-flops-per-parameter/` | v2 | in the take | 48.2 s | | | |
+| 4 | `ep04-floating-point-precision/` | v2 | in the take | 51.9 s | | | |
+| 5 | `ep05-tensor-cores-vs-memory/` | v2 | in the take | 54.3 s | | | |
+| 6 | `ep06-cuda-kernel-training-step/` | v2 | in the take | 59.6 s | | | |
+| 7 | `ep07-nvidia-smi-utilization-vs-mfu/` | v3 | in the take | 75.6 s | | | |
+| 8 | `ep08-pytorch-profiler/` | v2 | in the take | 47.5 s | | | |
 
 ## Open decisions (Chris's)
 
-- Recording order: build order 1–8, or the four Chris called out first
-  (2, 6, 5, 7).
-- Ep 7 says "kernel" (ep 6 owns it); fine in series order, but a viewer
-  arriving from search gets it undefined. Alternative: "one tiny job".
+- ~~Recording order~~: recorded 1–8 (10/28).
+- Ep 7's search phrase: the take never says "nvidia-smi". Re-record line
+  1 with it, or move to `gpu utilization` (autocompletes; results lean
+  gaming).
+- ~~Ep 7's "kernel"~~: settled in the take; ep 7 defines it inline.
 - Ep 7 keeps one clause on the data loader (beat 04) now that the loader
   Short is cut.
