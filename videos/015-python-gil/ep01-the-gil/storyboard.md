@@ -53,3 +53,28 @@ diagnostic and hands the second kitchen to ep 2 in one line.
 - Stage bottom-middle: the code card (beats 3–4) / the timer bar.
 - One magenta hero at a time: the knife. The ghost second kitchen in beat 7
   is grey, not magenta.
+
+## Final beats (the contract; `vo_final.wav` 46.09 s, master seconds; from `tools/beat_cuts.py`)
+
+Captions are anchored bottom (`assemble.py --captions-anchor bottom`), so the stage runs to y 1330. Cut list: `script.md` (pause cap only, no phrase cuts).
+
+| # | Folder | Start | Length | VO |
+|---|---|---:|---:|---|
+| 1 | `01_kitchen` | 0.000 | 7.250 | In Python, think of a process as a kitchen. Here, threads are cooks, and they all share the kitchen's memory. |
+| 2 | `02_knife` | 7.250 | 7.550 | The knife is the GIL, the global interpreter lock. Whoever holds the knife is what runs the Python code while everyone else waits. |
+| 3 | `03_loop` | 14.800 | 7.030 | This is why threading a CPU loop makes it no faster. Four threads with one knife, you have one core's worth of work still. |
+| 4 | `04_oven` | 21.830 | 9.940 | But a cook puts the knife down to wait on the oven. That could be an I/O, a request, a file read, a sleep. The GIL is released while the thread waits, so another thread can run. |
+| 5 | `05_appliance` | 31.770 | 4.110 | Same for an appliance. Think of NumPy, image decoding, a tokenizer. |
+| 6 | `06_close` | 35.880 | 10.210 | But when threads don't help, ask one thing. Is this thread waiting, or is it running Python? If it's waiting, then threads work. But if it's running Python, you need a second kitchen or another process. |
+
+## Seam states (`SC.SEAM1[n]` in `../_kit/kitchen.js`; `00_layout/layout.png` shows them, state n at n–n+1 s)
+
+| cut | what is on screen (both sides draw `SC.SEAM1[n]`, chop 0) |
+|---|---|
+| 0 (frame 0) | kitchen box + "kitchen / process"; four cooks at the counter, cook 1 holds the knife (hero), the others at rest, smiling; no other label |
+| 1→2 | + "cooks / threads" |
+| 2→3 | + "knife / GIL"; cooks 2–4 waiting (clock, dim, flat face) |
+| 3→4 | knife with cook 4 (the hops happened in beat 3); cooks 1–3 waiting; code card `for t in threads: t.start()`; timer bar full |
+| 4→5 | oven + "oven / I/O"; cook 2 at the oven (clock); knife with cook 3, chopping; code card gone; timer bar on |
+| 5→6 | + appliance + "appliance / native code"; cook 4 at the appliance working without the knife; knife with cook 3 |
+| end | same, timer bar gone; "waiting → threads" under the box; ghost second kitchen (dashed) with "second kitchen / another process" and "running Python → processes" above it |
