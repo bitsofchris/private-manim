@@ -4,8 +4,8 @@
 // typed is the hero. Loaded after kit/machine.js; machine.js picks it up
 // through window.SC_makeCode and drives it from S.code.
 //
-// Card: x 65–950, y 330–1010 (centred in the stage, captions in the band as
-// usual). Up to eight lines at 68 px pitch, 52 px monospace (≈ 31 px a
+// Card: x 65–950, centred on the stage (y 665), sized to its lines (3–8 rows
+// at 68 px pitch; captions stay in the band). 52 px monospace (≈ 31 px a
 // character: 28 characters a line, the limit kit/data.js keeps).
 //
 // S.code fields:
@@ -18,7 +18,7 @@
 //   blink 0..       seconds, for the cursor's 0.5 s blink (pass the beat time)
 (function () {
   const PAL = { bg: "#0B0B14", panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0", data: "#2DD4BF", hero: "#C084FC", muted: "#4A5070" };
-  const CARD = { x: 65, y: 330, w: 885, h: 680, pad: 34, pitch: 68, size: 52, rows: 8 };
+  const CARD = { x: 65, w: 885, pad: 34, pitch: 68, size: 52, rows: 8, cy: 665 };
   const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 
   // How many characters a typist has landed `seconds` after starting, over
@@ -50,7 +50,7 @@
 
   function makeCode(root) {
     const card = document.createElement("div");
-    card.style.cssText = `position:absolute;left:${CARD.x}px;top:${CARD.y}px;width:${CARD.w}px;height:${CARD.h}px;` +
+    card.style.cssText = `position:absolute;left:${CARD.x}px;top:0px;width:${CARD.w}px;height:100px;` +
       `border-radius:28px;background:${PAL.panel};overflow:hidden;`;
     card.setAttribute("data-layout-allow-overflow", "");
     card.setAttribute("data-layout-allow-occlusion", "");
@@ -72,6 +72,8 @@
       card.style.opacity = o; card.style.visibility = o > 0.001 ? "visible" : "hidden";
       if (o <= 0.001) return;
       const lines = C.lines || [];
+      const nRows = Math.max(3, Math.min(CARD.rows, lines.length)), h = CARD.pad * 2 + nRows * CARD.pitch;
+      card.style.height = `${h}px`; card.style.top = `${Math.round(CARD.cy - h / 2)}px`;
       let left = C.typed == null ? Infinity : Math.max(0, Math.floor(C.typed));
       const shown = [];
       lines.forEach((ln, i) => {

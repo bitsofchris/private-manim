@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- 00_layout: the canonical frame of the PyTorch Dataloading series, in three states. Not in any Short.
          0–2 s  ep 2's frame 0: map-style, the sampler named, samples hopping into the loader
-         2–4 s  the flip to the code card, typing the loader call (ep 2's code beat)
-         4–6 s  ep 5's twin batches: iterable, the sampler struck, two workers, [4, 512] twice -->
+         2–6 s  the flip to the code card, typing the loader call (ep 2's code beat), and back
+         6–8 s  ep 5's twin batches: iterable, the sampler struck, two workers, [4, 512] twice -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -23,17 +23,17 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-fps="30" data-width="1080" data-height="1920"></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6;
+  const BEAT_SECONDS = 8;
   const root = document.getElementById("root");
   const kit = SC.mount(root);
   const C = SC.D.code, { seg } = SC;
-  const T = { flipIn: 2.0, typeFrom: 2.5, flipOut: 3.7 };
+  const T = { flipIn: 2.0, typeFrom: 2.5, flipOut: 5.6 };
   function render(t) {
     SC.clock = t;
-    if (t < 4) {
+    if (t < 6) {
       const flip = seg(t, T.flipIn, T.flipIn + 0.4) * (1 - seg(t, T.flipOut, T.flipOut + 0.4));
       const typed = SC_typedAt(C.loader, t - T.typeFrom);
       // the hero passes to the line being typed
