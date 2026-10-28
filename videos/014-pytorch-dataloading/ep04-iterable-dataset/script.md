@@ -21,11 +21,11 @@ Splits are also your problem too. If you run multiple workers, splitting the str
 
 The data loader on top is the same though. Same batch size, same collate, same batch out. The only thing that changes: the data loader is asking for the next sample, not for the sample at index i.
 
-So use map until you can't, and the day sample i stops being cheap, swap to an ~~interval~~ iterable dataset.
+So use map until you can't, and the day sample i stops being cheap, swap to an iterable dataset.
 
 ## Where the take leaves the script
 
 - Line 1 split in two: "…you use an iterable dataset. Here we use one function, iter, that just yields samples." Keep.
 - The *(if time)* beat (splits, workers) was read, with "is up to you to determine" (script: "is your problem"). Candidate cut if the episode needs seconds; it does not (52.7 s raw).
 - "Same batch size": Parakeet heard "batch I" on both passes; Chris's own transcript has "batch size". Caption spelling fix at step 7.
-- **Ear check:** the last words. Both recognizers (Parakeet and Chris's transcript) heard "swap to an **interval** dataset". If that is what was said, the options are to cut the closer at "swap" + the sentence before it ("So use map until you can't"), or to record the one line. Clip: `check_closer.m4a` in this folder (take 240.0–246.0 s).
+- The last words: both recognizers heard "swap to an **interval** dataset"; Chris confirmed by ear (10/28) that he said **iterable**. Caption spelling fix at step 7 (`fix_words.py --sub interval iterable`).

@@ -136,6 +136,14 @@ number; `_kit/data.js` holds the ones drawn.
    lines, and as each argument or method lands, its station or card in
    the machine lights. "That line IS this box."
 
+**Never both at once** (Chris, 10/28): the screen shows the machine, or
+the code, not the two together. A code beat flips (`S.flip` 0 → 1, a
+crossfade of about 0.4 s) from the machine to the code card, which then
+fills the stage, types its lines with a typist's uneven rhythm
+(`SC_typedAt`, deterministic jitter per character), and flips back when
+the VO returns to the machine. The hero passes with the flip: in the
+machine it is a part; on the code card it is the line being typed.
+
 The **magenta hero** is whatever the VO names: the batch (ep 1, 2), a
 station as it is named (ep 2), `__getitem__` (ep 3), `__iter__` with the
 sampler crossed out (ep 4), the twin batches then the fix (ep 5). Teal is
@@ -191,10 +199,9 @@ Chris before step 3** (the default chain is loudnorm only either way;
 never denoise a Studio Sound take). Split 2026-10-28; cut times are in
 `TRANSCRIPT.md` and each `script.md`.
 
-Open ear checks, in the split report:
-- Ep 4's last words: both recognizers heard "swap to an interval
-  dataset". Clip: `ep04-iterable-dataset/check_closer.m4a`.
-- Ep 2 has no recorded closer.
+Settled by ear (Chris, 10/28): ep 4's last words are "swap to an
+iterable dataset" (both recognizers wrote "interval"; fix the caption at
+step 7). Ep 2 ends as recorded, on the batch arriving, with no closer.
 
 ## Written companion (lines that did not make a script)
 

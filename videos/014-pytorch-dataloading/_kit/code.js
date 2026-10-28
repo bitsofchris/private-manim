@@ -1,33 +1,62 @@
-// code.js — the typed code card in the band for the PyTorch Dataloading series
-// (014), after prototypes/hyperframes/kb-code/: the editor types the ledger's
-// real lines, and the line being typed is the hero (its station lights through
-// S.hero in machine.js). Loaded after kit/machine.js; machine.js picks it up
+// code.js — the code card of the PyTorch Dataloading series (014). The
+// machine flips to it (S.flip, machine.js) and it fills the stage; it types
+// the ledger's real lines with a typist's uneven rhythm, and the line being
+// typed is the hero. Loaded after kit/machine.js; machine.js picks it up
 // through window.SC_makeCode and drives it from S.code.
 //
-// Card: x 65–950, y 1105–1330 (captions anchored bottom sit under it; every
-// caption must fit one line). Four lines at 48 px pitch, 44 px monospace
-// (≈ 26.5 px a character: 33 characters a line). A fifth line scrolls the first
-// one out.
+// Card: x 65–950, y 330–1010 (centred in the stage, captions in the band as
+// usual). Up to eight lines at 68 px pitch, 52 px monospace (≈ 31 px a
+// character: 28 characters a line, the limit kit/data.js keeps).
 //
 // S.code fields:
-//   o 0..1          opacity
+//   o 0..1          opacity (machine.js multiplies in S.flip)
 //   lines [{t, lit}]  from kit/data.js (DL_DATA.code.*)
-//   typed N         characters shown so far, over all lines in order; Infinity = all
+//   typed N         characters shown so far, over all lines in order; Infinity = all.
+//                   Use SC_typedAt(lines, seconds) for the typing look.
 //   lit NAME|null   the line whose `lit` equals NAME is drawn magenta (usually S.hero)
 //   cursor 0|1      a block cursor after the last typed character
+//   blink 0..       seconds, for the cursor's 0.5 s blink (pass the beat time)
 (function () {
   const PAL = { bg: "#0B0B14", panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0", data: "#2DD4BF", hero: "#C084FC", muted: "#4A5070" };
-  const CARD = { x: 65, y: 1105, w: 885, h: 225, pad: 16, pitch: 48, size: 44, rows: 4 };
+  const CARD = { x: 65, y: 330, w: 885, h: 680, pad: 34, pitch: 68, size: 52, rows: 8 };
+  const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+  // How many characters a typist has landed `seconds` after starting, over
+  // `lines` in order, at about `cps` characters a second: each character takes
+  // 0.45–1.55× the mean (hashed by its index, so every frame agrees), a space
+  // is quick, and a line break is a 2.5× pause before the next line starts.
+  function typedAt(lines, seconds, cps = 22) {
+    if (seconds <= 0) return 0;
+    const mean = 1 / cps;
+    let t = 0, n = 0;
+    for (let li = 0; li < lines.length; li++) {
+      const s = lines[li].t;
+      if (li > 0) t += mean * 2.5;
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        t += c === " " ? mean * 0.5 : mean * (0.45 + 1.1 * hash(n * 7 + li * 131 + 1));
+        if (t > seconds) return n;
+        n++;
+      }
+    }
+    return n;
+  }
+  // The seconds typedAt needs to finish `lines` (for a beat planning its cues).
+  function typingSeconds(lines, cps = 22) {
+    let lo = 0, hi = 60, total = lines.reduce((a, l) => a + l.t.length, 0);
+    for (let k = 0; k < 24; k++) { const m = (lo + hi) / 2; if (typedAt(lines, m, cps) >= total) hi = m; else lo = m; }
+    return hi;
+  }
 
   function makeCode(root) {
     const card = document.createElement("div");
     card.style.cssText = `position:absolute;left:${CARD.x}px;top:${CARD.y}px;width:${CARD.w}px;height:${CARD.h}px;` +
-      `border-radius:24px;background:${PAL.panel};overflow:hidden;`;
+      `border-radius:28px;background:${PAL.panel};overflow:hidden;`;
     card.setAttribute("data-layout-allow-overflow", "");
     card.setAttribute("data-layout-allow-occlusion", "");
     root.appendChild(card);
     const rows = [];
-    for (let i = 0; i < CARD.rows + 1; i++) {
+    for (let i = 0; i < CARD.rows; i++) {
       const el = document.createElement("div");
       el.style.cssText = `position:absolute;left:${CARD.pad}px;top:${CARD.pad + i * CARD.pitch}px;height:${CARD.pitch}px;` +
         `font-size:${CARD.size}px;line-height:${CARD.pitch}px;white-space:pre;color:${PAL.ink};`;
@@ -38,33 +67,33 @@
     const cursor = document.createElement("span");
     cursor.textContent = "█";
     cursor.style.cssText = `color:${PAL.hero};`;
-    let last = "";
     function set(C) {
       const o = C.o == null ? 0 : C.o;
       card.style.opacity = o; card.style.visibility = o > 0.001 ? "visible" : "hidden";
       if (o <= 0.001) return;
       const lines = C.lines || [];
       let left = C.typed == null ? Infinity : Math.max(0, Math.floor(C.typed));
-      // which lines are visible: the last CARD.rows that have started typing
       const shown = [];
       lines.forEach((ln, i) => {
         const n = Math.min(ln.t.length, left);
-        if (left > 0 || i === 0) shown.push({ ln, n, i });
+        if (left > 0 || i === 0) shown.push({ ln, n });
         left -= ln.t.length;
       });
       const first = Math.max(0, shown.length - CARD.rows);
+      const blinkOn = C.blink == null ? true : Math.floor(C.blink / 0.5) % 2 === 0;
       rows.forEach((el, r) => {
         const s = shown[first + r];
         if (!s) { el.textContent = ""; el.style.visibility = "hidden"; return; }
         el.style.visibility = "visible";
-        const text = s.ln.t.slice(0, s.n);
         const isComment = s.ln.t.trim().startsWith("#");
-        el.textContent = text;
+        el.textContent = s.ln.t.slice(0, s.n);
         el.style.color = s.ln.lit && C.lit && s.ln.lit === C.lit ? PAL.hero : isComment ? PAL.muted : PAL.ink;
-        if (C.cursor && first + r === shown.length - 1 && s.n < s.ln.t.length + 1) el.appendChild(cursor);
+        if (C.cursor && first + r === shown.length - 1 && blinkOn) el.appendChild(cursor);
       });
     }
-    return { set, card, rows };
+    return { set, card, rows, CARD };
   }
   window.SC_makeCode = makeCode;
+  window.SC_typedAt = typedAt;
+  window.SC_typingSeconds = typingSeconds;
 })();

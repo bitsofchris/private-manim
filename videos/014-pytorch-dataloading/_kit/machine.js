@@ -18,7 +18,7 @@
 //   loader box     y 500–970    x 65–950     dashed; "DataLoader"; four stations
 //     stations     y 580+       x 95–920     sampler, fetch, batching, collate; 86 tall, 12 apart
 //   batch row      y 1000–1090  the batch tensor (x 190–600) -> the model chip (x 700–920)
-//   code card      y 1105–1330  kit/code.js
+//   code card      y 330–1010   kit/code.js, shown instead of the machine (S.flip)
 //
 // S fields (all optional; SC.REST is the rest state, ep 2's frame 0):
 //   mode "map"|"iterable"      methods on the dataset card; "iterable" strikes the sampler
@@ -29,7 +29,8 @@
 //   twins 0..1                 a second, identical batch beside the first (ep 5); the True/False is on the code card
 //   shape "[32, 512]"          the batch card's label (ep 5: "[4, 512]")
 //   loader 0..1, batch 0..1, model 0..1, dataset 0..1   opacities
-//   code {o, lines, typed, lit}   the code card (kit/code.js)
+//   flip 0..1                  0 = the machine, 1 = the code card; never both (a 0.4 s crossfade)
+//   code {o, lines, typed, lit, cursor, blink}   the code card (kit/code.js)
 (function () {
   const NS = "http://www.w3.org/2000/svg";
   const D = window.DL_DATA;
@@ -195,6 +196,9 @@
     function draw(g, S) {
       S = Object.assign({}, REST, S);
       const clock = SC.clock || 0;
+      // the flip: the machine fades over the first 60 % of it, the code card comes in over the last 60 %
+      const flip = S.flip || 0, mOn = 1 - seg(flip, 0, 0.6), cOn = seg(flip, 0.4, 1);
+      S = Object.assign({}, S, { dataset: S.dataset * mOn, loader: S.loader * mOn, batch: S.batch * mOn, model: S.model * mOn });
       // dataset
       const dsO = S.dataset;
       show(dsG, dsO); show(dsLabel, dsO);
@@ -238,12 +242,12 @@
       show(outArrow, S.loader * S.batch);
       // hero
       Object.keys(parts).forEach((k) => tint(parts[k], S.hero === k));
-      if (code) code.set(S.code || { o: 0 });
+      if (code) { const c = Object.assign({ o: 1 }, S.code || {}); c.o *= cOn; code.set(c); }
     }
     return { draw, parts, stations: st, code, svg };
   }
 
-  const REST = { mode: "map", workers: 0, hero: null, strike: 0, twins: 0, shape: D.series.shape,
+  const REST = { mode: "map", workers: 0, hero: null, strike: 0, twins: 0, shape: D.series.shape, flip: 0,
                  loader: 1, batch: 1, model: 1, dataset: 1, code: { o: 0 } };
   const E = () => ({ io: gsap.parseEase("power2.inOut"), out: gsap.parseEase("power2.out"), inn: gsap.parseEase("power2.in"),
                      back: gsap.parseEase("back.out(1.4)"), sine: gsap.parseEase("sine.inOut") });

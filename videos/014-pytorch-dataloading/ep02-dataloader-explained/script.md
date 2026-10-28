@@ -28,5 +28,5 @@ Out comes the batch and what goes into the forward pass.
 - "call it **n number of times**" (script: 32 times). The number is on the code card anyway.
 - Flub at take 93.4–94.6 s ("a random sequences of indies"), re-read at once: cut the first reading.
 - The *(if time)* beat ("the DataLoader never loads your data") was not read.
-- **No closer was read.** The script's last line ("When you set a DataLoader argument, you're turning a knob on one station. Find the station first, then the argument.") is missing; the take ends on "Out comes the batch and what goes into the forward pass", and the next word in the master take is "so episode three". Options for Chris: end there (the batch arriving is the final visual, so it can stand as the takeaway), or record the one closer line.
+- **No closer was read**, and Chris decided (10/28) the episode ends as recorded: on "Out comes the batch and what goes into the forward pass", with the batch arriving at the model as the final still. The next word in the master take is "so episode three", so the cut must end on the pause after "pass".
 - "and what goes into the forward pass" (script: "and that's what goes into"); keep as said.

@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- 00_layout: the canonical frame of the PyTorch Dataloading series, in three states. Not in any Short.
-         0–2 s  ep 2's frame 0: map-style, the sampler named, the loader call typed in the band
-         2–4 s  ep 5's twin batches: iterable, the sampler struck, two workers, [4, 512] twice, equal → True
-         4–6 s  ep 3's look: __getitem__ the hero, the Dataset class typed in the band -->
+         0–2 s  ep 2's frame 0: map-style, the sampler named, samples hopping into the loader
+         2–4 s  the flip to the code card, typing the loader call (ep 2's code beat)
+         4–6 s  ep 5's twin batches: iterable, the sampler struck, two workers, [4, 512] twice -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -29,16 +29,21 @@
   const BEAT_SECONDS = 6;
   const root = document.getElementById("root");
   const kit = SC.mount(root);
-  const C = SC.D.code;
-  const LOOKS = [
-    { mode: "map", workers: 0, hero: "sampler", code: { o: 1, lines: C.loader, lit: "sampler" } },
-    { mode: "iterable", strike: 1, workers: 2, twins: 1, shape: SC.D.series.smallShape, hero: "twins",
-      code: { o: 1, lines: C.workers, lit: "twins" } },
-    { mode: "map", workers: 0, hero: "getitem", code: { o: 1, lines: C.mapStyle, lit: "getitem" } },
-  ];
+  const C = SC.D.code, { seg } = SC;
+  const T = { flipIn: 2.0, typeFrom: 2.5, flipOut: 3.7 };
   function render(t) {
     SC.clock = t;
-    kit.draw(null, LOOKS[Math.min(2, Math.floor(t / 2))]);
+    if (t < 4) {
+      const flip = seg(t, T.flipIn, T.flipIn + 0.4) * (1 - seg(t, T.flipOut, T.flipOut + 0.4));
+      const typed = SC_typedAt(C.loader, t - T.typeFrom);
+      // the hero passes to the line being typed
+      let n = 0, lit = "dataset";
+      C.loader.forEach((ln) => { if (typed > n) lit = ln.lit || lit; n += ln.t.length; });
+      kit.draw(null, { mode: "map", workers: 0, hero: flip > 0 ? lit : "sampler", flip,
+                       code: { lines: C.loader, typed, lit, cursor: 1, blink: t } });
+    } else {
+      kit.draw(null, { mode: "iterable", strike: 1, workers: 2, twins: 1, shape: SC.D.series.smallShape, hero: "twins" });
+    }
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
