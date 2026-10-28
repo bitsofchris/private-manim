@@ -24,7 +24,7 @@ the first. "what is a flop" autocompletes to floppy disks; "flops ai"
 results are on topic ("FLOPs vs FLOPS Explained: LLM Compute Made Simple")
 but the phrase is not offered.)
 
-**Titles (runbook step 9, Chris picks):** search `FLOPs Explained: What GPUs Actually Count (AI)` · hook `Every AI chip is rated in one thing. (FLOPs explained)`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `FLOPs Explained Made Simple (Beginner Friendly)` (47 chars) · hook `Every AI engineer needs this number (FLOPs explained)`
 
 **One idea:** a FLOP is one multiply or one add, and AI is nearly nothing
 else, so FLOPs are the unit of AI work.
@@ -45,8 +45,8 @@ Series context: ep 2 of `../SERIES.md` (Understanding the GPU). Home of
 point gets the one-sentence picture here (it is what the F means); bit
 widths, bf16 vs fp8 and dense vs sparse are ep 4 (one clause each here:
 "in bf16", "dense ... at the precision you train in"). 6 × params × tokens
-is ep 3: the 960 trillion is shown as code, never derived in the VO.
-Comes before ep 8, whose MFU fraction is FLOPS ÷ FLOPS.
+is ep 3: the 720 trillion is shown as code, never derived in the VO.
+Comes before ep 7, whose MFU fraction is FLOPS ÷ FLOPS.
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
@@ -55,10 +55,10 @@ Comes before ep 8, whose MFU fraction is FLOPS ÷ FLOPS.
   teraflops"); the sparse figure (4,500) is never shown here.
 - tera = 10^12 (a trillion).
 - The count example: the series run, an **8B-parameter** model on
-  **20,000 tokens** (one second of the ep 8 run): 6 × 8e9 × 20,000 =
-  **9.6 × 10^14 FLOPs**, said "about 960 trillion FLOPs".
-- That count at peak: 9.6e14 / 2.25e15 = **0.43 s** (shown on the code
-  card only; it is why the run is 43 % MFU in ep 8, not said here).
+  **15,000 tokens** (one second of the ep 7 run): 6 × 8e9 × 15,000 =
+  **7.2 × 10^14 FLOPs**, said "about 720 trillion FLOPs".
+- That count at peak: 7.2e14 / 2.25e15 = **0.32 s** (shown on the code
+  card only; it is why the run is 32 % MFU in ep 7, not said here).
 - Floating-point examples: **0.0000001** (a ten-millionth) and
   **3,000,000** (three million), on screen as `1 × 10⁻⁷` and `3 × 10⁶`.
 - The chip: the series 12 × 12 grid of core cells, dark at rest, teal
@@ -71,8 +71,8 @@ Comes before ep 8, whose MFU fraction is FLOPS ÷ FLOPS.
 | 01_hook | A FLOP is one multiply or one add, and it's the unit all AI compute is measured in. | Frame 0 already working: the series chip mid-stage, the 12 × 12 grid flickering teal. One cell (row 6, col 6) zooms out to a card above the chip: `a × b + c`; on "multiply" the `×` lights, on "add" the `+` lights, and a counter under the card ticks `FLOPs: 1 → 2`. Magenta hero: the counter. ~5 rows of stage. |
 | 02_float | Computers store decimals as floating point: scientific notation in binary, a sign, digits and an exponent. The point floats, so one format holds a ten-millionth and three million. | The `a` in the card expands into a number strip: `+ 1.0 × 10⁻⁷` over `+ 3.0 × 10⁶`, each split into three labeled boxes `sign · digits · exponent` (no bit counts; widths are ep 4). On "the point floats" the decimal point slides along `0.0000001` → `3000000.`. Magenta hero: the exponent box. |
 | 03_everything | Every weight, activation and gradient is one. | The strip folds back into `a`; the zoom pulls out to the whole grid, every cell now showing a tiny `×+` glyph for a beat. Labels fade in left of the chip: `weights`, `activations`, `gradients`, each with an arrow into the grid. |
-| 04_count | FLOPs, small s, is a count. Training an 8-billion-parameter model on 20,000 tokens costs about 960 trillion FLOPs. | Code card bottom-middle, line 1 types: `flops = 6 * 8e9 * 20_000  # 9.6e14`. The counter above runs up to `9.6 × 10¹⁴ FLOPs` as the line lands. The lowercase `s` in `FLOPs` on the counter is the magenta hero. |
-| 05_rate | FLOPS, capital S, is per second. A B200 peaks near 2,250 teraflops in bf16. Tera is a trillion. | A spec chip label appears on the chip's top edge: `B200 · bf16 dense · 2,250 TFLOPS`; under it a small gloss `tera = 10¹²`. Code card line 2 types: `seconds = flops / 2250e12  # 0.43 at peak`. The whole grid lights teal for 0.43 s on a small timer, then rests. Magenta hero: the capital `S`. |
+| 04_count | FLOPs, small s, is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs. | Code card bottom-middle, line 1 types: `flops = 6 * 8e9 * 15_000  # 7.2e14`. The counter above runs up to `9.6 × 10¹⁴ FLOPs` as the line lands. The lowercase `s` in `FLOPs` on the counter is the magenta hero. |
+| 05_rate | FLOPS, capital S, is per second. A B200 peaks near 2,250 teraflops in bf16. Tera is a trillion. | A spec chip label appears on the chip's top edge: `B200 · bf16 dense · 2,250 TFLOPS`; under it a small gloss `tera = 10¹²`. Code card line 2 types: `seconds = flops / 2250e12  # 0.32 at peak`. The whole grid lights teal for 0.32 s on a small timer, then rests. Magenta hero: the capital `S`. |
 | 06_why | A transformer's compute is nearly all matrix multiplies, and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. | Above the chip, a small matmul: a 3 × 2 weight block times a column; one output cell expands to `w₁x₁ + w₂x₂ + w₃x₃` and each `×` and `+` drops into a cell of the grid, which lights teal, many cells at once. Magenta hero: the one expanded output cell. |
 | 07_bill *(if time)* | Divide a run's FLOPs by the FLOPS you get and you have GPU-hours. GPU-hours are the bill. | A one-line fraction over the code card: `FLOPs ÷ FLOPS = GPU-hours → $`. No numbers. |
 | 08_close | Next time you read a GPU spec, find dense FLOPS at the precision you train in. That's your run's real ceiling. | Final visual: a spec-sheet card with three rows (`FP8 sparse`, `BF16 sparse`, `BF16 dense`); the `BF16 dense · 2,250 TFLOPS` row in magenta, the others greyed. The chip under it, all cells lit. Takeaway only, no outro. |
@@ -109,14 +109,14 @@ viewer's next move (read a spec sheet correctly), not line 1 again.
   false for fp16 (3 × 10⁶ is past its max of 65,504, and 10⁻⁷ is below its
   smallest normal number). The card shows the values in decimal scientific
   notation and does not name a format; ep 4 owns the bit widths.
-- **960 trillion FLOPs for 20,000 tokens** uses 6 × params per token (ep
+- **720 trillion FLOPs for 15,000 tokens** uses 6 × params per token (ep
   3), which ignores attention FLOPs and activation recompute.
 - **"GPUs are built to do exactly that, thousands at once"**: one clause of
   ep 1's GPU-vs-CPU fact; tensor cores (ep 5) are what make the bf16
   matmul peak, CUDA cores do the rest. Not said here.
 - **The closer:** dense FLOPS at your training precision is the right
   peak for MFU and for comparing chips' compute; whether a run gets near
-  it is ep 5 (memory-bound ops) and ep 8 (MFU). Spec sheets often lead
+  it is ep 5 (memory-bound ops) and ep 7 (MFU). Spec sheets often lead
   with the sparse or fp8/fp4 number.
 - `torch.utils.flop_counter.FlopCounterMode` counts a step's real FLOPs;
   companion material, not this Short.

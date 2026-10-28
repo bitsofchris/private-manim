@@ -24,7 +24,7 @@ not the count; second choice. No autocomplete for "training compute"
 note: ep 2's phrase is "flops explained", whose results share some videos
 with this one; ep 3's title adds "LLM" and "train" to split them.)
 
-**Titles (runbook step 9, Chris picks):** search `How Many FLOPs to Train an LLM? (6 per Parameter, Explained)` · hook `Backprop costs twice the forward pass. Here's why.`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `FLOPs LLM Training Made Simple (Beginner Friendly)` (50 chars) · hook `You can price any training run (FLOPs LLM)`
 
 **One idea:** every weight is touched three times per token (once forward,
 twice back), two FLOPs each time. That's the 6.
@@ -40,7 +40,7 @@ payoff beat, and a code card. Nothing needs Manim.
 
 Series context: ep 3 of `../SERIES.md` (Understanding the GPU). Home of
 "6 × params × tokens, forward 2 + backward 4". What a FLOP is belongs to
-ep 2 (one clause here: "one multiply and one add"); MFU belongs to ep 8
+ep 2 (one clause here: "one multiply and one add"); MFU belongs to ep 7
 (one clause at most: the closer's "what one GPU actually delivers").
 
 ## Ledger (every beat copies these, nothing invented per beat)
@@ -52,11 +52,11 @@ ep 2 (one clause here: "one multiply and one add"); MFU belongs to ep 8
   Total **36** = 6 × 6.
 - FLOPs per token, training: **6 × params** (forward 2, backward 4).
 - Model: **8B parameters**, dense transformer (Llama-3-8B sized), bf16.
-- Throughput: **20,000 tokens/s** on one **B200**.
-- Achieved: 6 × 8e9 × 20,000 = **960 TFLOPS** (9.6e14 FLOP/s).
+- Throughput: **15,000 tokens/s per GPU** (one B200 in an 8-GPU run).
+- Achieved: 6 × 8e9 × 15,000 = **720 TFLOPS** (7.2e14 FLOP/s).
 - *(if time)* Llama 3 8B pretraining data: **15 trillion tokens** (Meta's
-  model card says "over 15T"). At 20,000 tokens/s: 15e12 ÷ 2e4 = 7.5e8 s
-  = **about 24 years** on one B200 (23.8).
+  model card says "over 15T"). At 15,000 tokens/s: 15e12 ÷ 1.5e4 = 1.0e9 s
+  = **about 32 years** on one B200 (31.7).
 - Code on screen: `flops = 6 * n_params * n_tokens`.
 
 ## VO (draft: 143 words without the if-time beat, 161 with)
@@ -69,8 +69,8 @@ ep 2 (one clause here: "one multiply and one add"); MFU belongs to ep 8
 | 04_back_input | Coming back, the error has to reach the layer before: the same weights in reverse, another multiply and add each. | Error dots (`dy1 dy2`) appear on the outputs and flow right to left along the same six lines to `dx1 dx2 dx3`; each line ticks `×`, `+` again; counter 12 → 24. Small label: `dx = Wᵀ · dy`. Magenta hero passes to the backward flow. |
 | 05_back_weight | Then each weight needs its own gradient, for the optimizer. Error times input, added to a running total. Two more. | Each weight line lights a third time: a small gradient tag `dw` hangs off each line, filled by `dy × x` and then `+` into a running-total bar under the tag; counter 24 → 36. Label: `dW = dy · xᵀ`. |
 | 06_total | That's six per weight, per token. Backward costs twice the forward. | The three passes stack as bars beside the layer: forward 12 (teal), back-to-input 12, back-to-weights 12 (backward bracket = 24). Counter reads `36 = 6 × 6` in magenta. |
-| 07_code | So training compute is six, times parameters, times tokens. An 8-billion-parameter model at 20,000 tokens a second is doing 960 teraflops. | The tiny layer shrinks into one core cell of the series chip (12 × 12 grid, mid-stage, cells lighting teal). The code card bottom-middle (the payoff, real lines): `flops = 6 * n_params * n_tokens` / `6 * 8e9 * 20_000  # 9.6e14 per second`. Each line lands on its number; a label by the chip: `960 TFLOPS`. Magenta hero: the `6` in the code. |
-| 08_scale *(if time)* | At that pace, Llama 3 8B's 15 trillion tokens would keep one B200 busy for about 24 years. | A token counter under the chip races to `15T`; a calendar strip beside it flips to `~24 years`. |
+| 07_code | So training compute is six, times parameters, times tokens. An 8-billion-parameter model at 15,000 tokens a second per GPU is doing 720 teraflops. | The tiny layer shrinks into one core cell of the series chip (12 × 12 grid, mid-stage, cells lighting teal). The code card bottom-middle (the payoff, real lines): `flops = 6 * n_params * n_tokens` / `6 * 8e9 * 15_000  # 7.2e14 per second`. Each line lands on its number; a label by the chip: `720 TFLOPS`. Magenta hero: the `6` in the code. |
+| 08_scale *(if time)* | At that pace, Llama 3 8B's 15 trillion tokens would keep one B200 busy for about 32 years. | A token counter under the chip races to `15T`; a calendar strip beside it flips to `~32 years`. |
 | 09_close | Before your next run, multiply six by parameters by tokens. Divide by what one GPU actually delivers, and that's your GPU-hours. | Final visual: the code card alone, three lines: `flops = 6 * n_params * n_tokens` / `seconds = flops / flops_per_sec_per_gpu` / `gpu_hours = seconds / 3600`, `gpu_hours` in magenta. Takeaway only, no outro. |
 
 Line 1 is the answer and says "FLOPs" and "LLM", the search phrase, in
@@ -81,7 +81,7 @@ short on purpose: it is the "backward = 2 × forward" takeaway, said once.
 Beat 08 is the *(if time)* cut: a vivid scale, but the closer stands
 without it. The closer is the viewer's next move (estimate a run), not
 line 1 again; "what one GPU actually delivers" is the one-clause nod to
-MFU (ep 8) and keeps the closer true (dividing by peak would undercount
+MFU (ep 7) and keeps the closer true (dividing by peak would undercount
 the hours by about 2×).
 
 ## Facts to keep straight (notes, not VO)
@@ -116,10 +116,10 @@ the hours by about 2×).
   n_ctx/12. Grows past that at long context. (2) The optimizer step: per
   step, not per token, a few FLOPs per weight, negligible. (3) Activation
   recompute: an extra forward, 8N per token; counting it gives HFU, not
-  MFU (ep 8's companion).
-- **960 TFLOPS is a rate** (FLOP/s), from tokens/s. The total for a run
+  MFU (ep 7's companion).
+- **720 TFLOPS is a rate** (FLOP/s), from tokens/s. The total for a run
   is 6 × N × D in FLOPs. Beat 07 keeps the "per second" on the code card.
-- **24 years** (beat 08) is tokens ÷ tokens/s at the ledger's throughput,
+- **32 years** (beat 08) is tokens ÷ tokens/s at the ledger's throughput,
   a hypothetical: Meta trained Llama 3 8B on many H100s (model card: 1.3M
   H100-80GB GPU-hours, pretraining). Say "would", never "took".
 - To verify before publish: nothing new beyond the above; Meta's "over

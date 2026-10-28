@@ -20,7 +20,7 @@ hardware explainers ("CPU vs GPU | Simply Explained", "CPUs vs GPUs As Fast
 As Possible"), so it goes in the title as the second phrase. "gpu vs cpu for
 ai" autocompletes only itself, on-topic results.)
 
-**Titles (runbook step 9, Chris picks):** search `Why GPUs for AI? GPU vs CPU Explained` · hook `Your CPU has a few cores. Your GPU has thousands.`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `Why GPU for AI? Made Simple (Beginner Friendly)` (47 chars) · hook `You use it daily. Here's why (why GPU for AI)`
 
 **One idea:** the work is a pile of independent multiply-adds; the GPU is
 the chip with enough hands to do the pile at once.
@@ -103,7 +103,7 @@ viewer's first timing isn't a fake near-zero.
   "each output", which is the true version.
 - "Over 99 %" is of BERT's arithmetic (FLOPs), not its runtime: the same
   paper finds matmuls are 61 % of runtime, the rest memory-bound ops.
-  That gap is ep 5's story (memory) and ep 11's (fusion); not here.
+  That gap is ep 5's story (memory) and cut ep 11's (fusion); not here.
 - Timing on the GPU without `torch.cuda.synchronize()` measures only the
   launch, because CUDA calls return before the kernel finishes (ep 6's
   home). The first CUDA call also pays for context setup; a warm-up run

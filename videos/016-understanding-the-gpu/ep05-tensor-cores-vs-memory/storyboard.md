@@ -22,14 +22,14 @@ title as the second phrase. "compute bound" autocompletes to "cpu bound
 games": avoid. "roofline model explained" and "arithmetic intensity"
 autocomplete but are narrower; companion material.)
 
-**Titles (runbook step 9, Chris picks):** search `Tensor Cores Explained: Compute-Bound vs Memory-Bound` · hook `Your GPU's fastest part spends most of its time waiting`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `Tensor Cores Explained (Beginner Friendly)` (42 chars) · hook `Your GPU is waiting on memory (tensor cores explained)`
 
 **One idea:** the math is cheap; moving the numbers is the cost. A matmul
 reuses what it loads, an elementwise op doesn't.
 
 **Source note:** Chris's idea is one line ("Tensor cores vs memory on the
 GPU, maybe as data flowing through it") with no answer sentences, so this
-VO is a draft in Chris's voice for him to rewrite (same as ep 8). His own
+VO is a draft in Chris's voice for him to rewrite (same as ep 7). His own
 image kept as the spine: data flowing through the chip.
 
 **Engine:** HyperFrames (`AGENTS.md` "Which engine"): the series chip, the
@@ -39,7 +39,7 @@ Series context: ep 5 of `../SERIES.md` (Understanding the GPU). This
 episode adds the HBM slab and the pipe to the series chip, and the
 tensor-core sub-block inside each cell. It owns "tensor cores vs memory;
 compute-bound vs memory-bound". FLOP is ep 2's (one clause here); the fix,
-`torch.compile` fusion, is ep 11's (one clause in the closer).
+`torch.compile` fusion, is cut ep 11's (one clause in the closer).
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
@@ -78,7 +78,7 @@ Line 1 says the search phrase and lands the claim in its second sentence;
 "memory" is on screen from frame 0 and spoken by ~4 s. Beat 07 is the
 *(if time)* cut. Beat 06 stays: it is the contrast the whole Short exists
 for. Beat 04 names arithmetic intensity because it is the term the viewer
-will search next; it is spoken once. The closer's fusion clause is ep 11's
+will search next; it is spoken once. The closer's fusion clause is cut ep 11's
 home: one clause, no how. Code on screen: beats 05 and 06 (`x @ W` vs
 `torch.relu(x)`).
 
@@ -118,7 +118,7 @@ home: one clause, no how. Code on screen: beats 05 and 06 (`x @ W` vs
   Chris wants exact, say "almost 300". Confirm against NVIDIA's current
   datasheet.
 - Add "needed intensity ≈ 280 FLOPs/byte (2,250 TFLOPS ÷ 8 TB/s)" to the
-  SERIES.md ledger so ep 11 reuses the same number.
+  SERIES.md ledger so cut ep 11 reuses the same number.
 
 ## Layout (decided before any code)
 

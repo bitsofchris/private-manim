@@ -19,14 +19,14 @@ PyTorch Profiler" and the PyTorch conference talk on the profiler, with
 chapter titles "GPU Utilization", "Trace View". "torch profiler" also
 autocompletes; "pytorch profiler trace" falls back to the first two.)
 
-**Titles (runbook step 9, Chris picks):** search `PyTorch Profiler Tutorial: Find Where Your GPU Sits Idle` · hook `Your GPU is idle between kernels. Here's how to see it.`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `PyTorch Profiler Made Simple (Beginner Friendly)` (48 chars) · hook `Your GPU sits idle. Find where (PyTorch profiler)`
 
 **One idea:** the trace is a picture of idle time. Read the gaps, not the
 blocks; the biggest gap is the first fix.
 
 **Source note:** Chris's question in the 10/27 session ("How does PyTorch
 or Ray show you this properly?") has no answer sentences of his, so this
-VO is a draft in his voice for him to rewrite (same as ep 8). Every claim
+VO is a draft in his voice for him to rewrite (same as ep 7). Every claim
 was checked against the PyTorch docs (2.14 profiler page, the profiler
 recipe, the TensorBoard profiler tutorial's deprecation note) and the
 PyTorch `main` source; see "Facts to keep straight".
@@ -35,10 +35,10 @@ PyTorch `main` source; see "Facts to keep straight".
 time strip unrolled into a two-row trace, and a code card. Nothing needs
 Manim.
 
-Series context: ep 9 of `../SERIES.md` (Understanding the GPU). Home of
+Series context: ep 8 of `../SERIES.md` (Understanding the GPU). Home of
 "reading a profiler trace; idle gaps". Leans on ep 6 (what a kernel is,
 one clause here), ep 7 (GPU-Util, not said here), and hands the data-loader
-gap to ep 10 (named once, not fixed here).
+gap to cut ep 10 (named once, not fixed here).
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
@@ -54,7 +54,7 @@ gap to ep 10 (named once, not fixed here).
   `GPU stream` (one block per kernel).
 - The three gap causes, in this order and these words: `waiting on data`,
   `Python launching small kernels`, `sync: loss.item()`.
-- The biggest gap is the **data** gap (it is ep 10's hand-off); its CPU
+- The biggest gap is the **data** gap (it is cut ep 10's hand-off); its CPU
   row above shows a `DataLoader __next__` block. No gap carries a
   millisecond figure: the trace is a picture, not a measurement.
 - The summary line: `prof.key_averages().table(sort_by="cuda_time_total", row_limit=10)`.
@@ -80,7 +80,7 @@ with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
 | 02_record | Wrap a few steps in torch dot profiler. Skip the first couple, so you record real training, not startup. | The code card slides up bottom-middle with the ledger's six lines. Highlight walks: `profile(activities=[…CPU, …CUDA]` → `schedule(wait=1, warmup=1, active=3…)`. Above the card, five step tiles: tile 1 grey "skip", tile 2 grey "warm-up", tiles 3–5 teal "record". Magenta hero: `schedule(...)`. |
 | 03_open | It writes a trace file; open it in Perfetto. The top rows are the CPU. Below them, the GPU stream: one block per kernel. | The card's `on_trace_ready` line highlights, a `trace.json` tile drops out of it and opens into the full-width trace (3 steps). Row labels draw on: `CPU (Python)`, `GPU stream`. Small gloss under the trace: "Perfetto: ui.perfetto.dev". On "one block per kernel" a thin flow line joins one CPU launch to its GPU block (ep 6's queue, one clause). |
 | 04_gaps | A gap in that row is the GPU doing nothing, waiting on the next batch, on Python launching small kernels, or on a sync like loss dot item. | Camera stays on the trace. Three gaps get labels in turn, each label under its gap in grey: `waiting on data`, `Python launching small kernels` (a run of thin slivers with hairline gaps), `sync: loss.item()` (the CPU row above shows a `cudaStreamSynchronize` bar). |
-| 05_biggest | Find the biggest gap first. Look at what the CPU was doing right then; that's what the GPU was waiting for. | The widest gap (the data gap) takes the magenta hero; the other labels dim. A vertical guide rises from the gap to the CPU row, landing on a `DataLoader __next__` block. Small tag at the gap's edge: "→ ep 10". |
+| 05_biggest | Find the biggest gap first. Look at what the CPU was doing right then; that's what the GPU was waiting for. | The widest gap (the data gap) takes the magenta hero; the other labels dim. A vertical guide rises from the gap to the CPU row, landing on a `DataLoader __next__` block. Small tag at the gap's edge: "→ cut ep 10". |
 | 06_table | Once the gaps are closed, sort the summary table by CUDA time. That's your list of kernels worth making faster. | The gaps close (blocks slide together). The code card swaps to one line, `prof.key_averages().table(sort_by="cuda_time_total")`, and a 4-row table prints under it: kernel name / CUDA total, top row a matmul (`…gemm…`), then `aten::copy_`, an elementwise op, a softmax. Names only, times shown as bars, no figures. Magenta hero: the top row. |
 | 07_ray *(if time)* | On Ray Train, the same block goes inside your training function, on each worker. | A box labeled `train_func (each Ray worker)` wraps the code card; two small copies of the trace stack under it, one per worker. |
 | 08_close | Profile a few steps, open the trace, and close the biggest gap before you touch the model. | Final visual: the trace, gaps closed, GPU row solid teal, with the magenta marker on where the biggest gap was. Takeaway only, no outro. |
@@ -93,7 +93,7 @@ three causes are what makes a gap readable. Beat 06 stays: it is the
 contrast that stops the wrong takeaway ("the profiler is only for gaps")
 and the second code line. Beat 05 is the only "how to read it" beat and
 stays. The data loader gets one clause (beat 04) and a tag (beat 05);
-the fixes are ep 10's. GPU-Util is not said (ep 7); "kernel" gets one
+the fixes are cut ep 10's. GPU-Util is not said (ep 7); "kernel" gets one
 clause (beat 03, ep 6).
 
 ## Facts to keep straight (notes, not VO)
@@ -149,7 +149,7 @@ clause (beat 03, ep 6).
   closer's ordering, not stated as a number.
 - Gap causes not in the VO: CPU-side work (logging, Python bookkeeping),
   host-to-device copies without `pin_memory`, NCCL waits on multi-GPU
-  (ep 13). Companion.
+  (cut ep 13). Companion.
 
 ## Layout (decided before any code)
 

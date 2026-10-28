@@ -21,7 +21,7 @@ Threads and Warps". "what is a gpu kernel" autocompletes too, same
 results. "pytorch cuda kernel" gets no autocomplete. Our angle is a
 kernel seen through one PyTorch training step, not a CUDA C tutorial.)
 
-**Titles (runbook step 9, Chris picks):** search `What Is a CUDA Kernel? (One PyTorch Training Step)` · hook `Your CPU isn't training your model. It's filling a queue.`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `What is a CUDA Kernel? Your code, on the GPU` (44 chars) · hook `Your CPU just fills a queue (what is a CUDA kernel)`
 
 **One idea:** your training loop doesn't do the math; it queues kernels,
 and the GPU drains the queue.
@@ -42,7 +42,7 @@ episode adds the CPU box and its kernel queue to the series image; every
 later episode keeps them. Owns: what a kernel is, the CPU queue, async
 launch, `.item()` syncs. Mentions in one clause only: the idle GPU (the
 time strip and what utilization measures are ep 7; the loader fix is
-ep 10); GPU vs CPU cores (ep 1).
+cut ep 10); GPU vs CPU cores (ep 1).
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
@@ -85,7 +85,7 @@ Chris's "why not just say function?" with the two differences that matter
 viewer who skips it loses nothing about the GPU. Beat 06 stays: it is
 the cost of an empty queue, the reason beat 08 matters; it names the
 idle GPU in one clause and leaves "utilization" to ep 7 and the loader
-fix to ep 10. The closer is the viewer's next move, not line 1 again.
+fix to cut ep 10. The closer is the viewer's next move, not line 1 again.
 `__global__` and the `<<<blocks, threads>>>` launch are not said; if
 Chris wants CUDA C on screen, a one-line inset under the opened tile in
 beat 02 (`__global__ void relu(float* x)`) is the place, as a label.
@@ -121,7 +121,7 @@ beat 02 (`__global__ void relu(float* x)`) is the place, as a label.
   Not said.
 - **"A kernel or more per op"**: matmul goes to cuBLAS (one or a few
   kernels); add, ReLU, softmax, layernorm are each one or more; a fused
-  op (`torch.compile`, ep 11) is one kernel for several ops. The exact
+  op (`torch.compile`, cut ep 11) is one kernel for several ops. The exact
   kernel count per step is not said (no verified number for the 8B model;
   "thousands" per step is plausible but unverified, so cut).
 - **Where the word comes from** (Chris asked): unverified. Commonly
@@ -133,7 +133,7 @@ beat 02 (`__global__ void relu(float* x)`) is the place, as a label.
   only.
 - **The closer.** Calling `.item()` every step forces a sync every step;
   logging every N steps removes all but one in N. How much it costs
-  depends on the model (ep 9 shows how to see it in a trace).
+  depends on the model (ep 8 shows how to see it in a trace).
 - Verify before publish: that the Fireship and Computerphile titles in
   the search note are still the top results (only for the description;
   nothing in the video depends on them).
@@ -149,4 +149,4 @@ beat 02 (`__global__ void relu(float* x)`) is the place, as a label.
 - Stage bottom-middle: the code card (beat 4 on), four lines, ~2 rows.
 - One magenta hero at a time: head tile → opened block grid → CPU box →
   lit code line → `loss.item()` → empty queue slot → the edited line.
-- No time strip (ep 7's part) and no MFU meter (ep 8's part).
+- No time strip (ep 7's part) and no MFU meter (ep 7's part).

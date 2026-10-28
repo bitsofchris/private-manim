@@ -1,12 +1,10 @@
 # Understanding the GPU: all scripts (VO drafts for Chris)
 
-All 13 VOs in one file, the order to record them (`agents/series.md` step 2). Each is a draft in Chris's voice from his 10/27 questions; rewrite in your own words before recording. Beats marked *(if time)* are the first cut. The full storyboards (preflight, visuals, sources) are in each `epNN-slug/storyboard.md`.
+All 8 VOs in one file, in recording order (`agents/series.md` step 2). Each is a draft in Chris's voice from his 10/27 questions; rewrite in your own words before recording. *(if time)* beats are the first cut. Full storyboards (preflight, visuals, sources) are in each `epNN-slug/storyboard.md`.
 
 ## ep01-why-gpus-for-ai: 145 words (159 with if-time)
 
-**Titles:** search `Why GPUs for AI? GPU vs CPU Explained` · hook `Your CPU has a few cores. Your GPU has thousands.`
-
-**Question:** "Why does AI run on GPUs and not CPUs?"
+**Search title:** `Why GPU for AI? Made Simple (Beginner Friendly)` · **Hook title:** `You use it daily. Here's why (why GPU for AI)`
 
 **Search phrase:** why gpu for ai
 
@@ -30,9 +28,7 @@ Storyboard: `ep01-why-gpus-for-ai/storyboard.md`
 
 ## ep02-flops-explained: 136 words (153 with if-time)
 
-**Titles:** search `FLOPs Explained: What GPUs Actually Count (AI)` · hook `Every AI chip is rated in one thing. (FLOPs explained)`
-
-**Question:** "FLOP is a floating point operation? What does that mean
+**Search title:** `FLOPs Explained Made Simple (Beginner Friendly)` · **Hook title:** `Every AI engineer needs this number (FLOPs explained)`
 
 **Search phrase:** flops explained
 
@@ -42,7 +38,7 @@ Storyboard: `ep01-why-gpus-for-ai/storyboard.md`
 >
 > Every weight, activation and gradient is one.
 >
-> FLOPs, small s, is a count. Training an 8-billion-parameter model on 20,000 tokens costs about 960 trillion FLOPs.
+> FLOPs, small s, is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs.
 >
 > FLOPS, capital S, is per second. A B200 peaks near 2,250 teraflops in bf16. Tera is a trillion.
 >
@@ -54,11 +50,9 @@ Storyboard: `ep01-why-gpus-for-ai/storyboard.md`
 
 Storyboard: `ep02-flops-explained/storyboard.md`
 
-## ep03-six-flops-per-parameter: 143 words (161 with if-time)
+## ep03-six-flops-per-parameter: 145 words (163 with if-time)
 
-**Titles:** search `How Many FLOPs to Train an LLM? (6 per Parameter, Explained)` · hook `Backprop costs twice the forward pass. Here's why.`
-
-**Question:** "Why is it 6 FLOPs per parameter per token? How much
+**Search title:** `FLOPs LLM Training Made Simple (Beginner Friendly)` · **Hook title:** `You can price any training run (FLOPs LLM)`
 
 **Search phrase:** flops llm
 
@@ -74,9 +68,9 @@ Storyboard: `ep02-flops-explained/storyboard.md`
 >
 > That's six per weight, per token. Backward costs twice the forward.
 >
-> So training compute is six, times parameters, times tokens. An 8-billion-parameter model at 20,000 tokens a second is doing 960 teraflops.
+> So training compute is six, times parameters, times tokens. An 8-billion-parameter model at 15,000 tokens a second per GPU is doing 720 teraflops.
 >
-> *(if time)* At that pace, Llama 3 8B's 15 trillion tokens would keep one B200 busy for about 24 years.
+> *(if time)* At that pace, Llama 3 8B's 15 trillion tokens would keep one B200 busy for about 32 years.
 >
 > Before your next run, multiply six by parameters by tokens. Divide by what one GPU actually delivers, and that's your GPU-hours.
 
@@ -84,9 +78,7 @@ Storyboard: `ep03-six-flops-per-parameter/storyboard.md`
 
 ## ep04-floating-point-precision: 144 words (162 with if-time)
 
-**Titles:** search `bf16 vs fp16 vs fp32 (Explained for Training)` · hook `Half the bits, twice the math (bf16 explained)`
-
-**Question:** "Why does bf16 / fp8 make training faster, and what do fp32,
+**Search title:** `bf16 vs fp16 Made Simple (Beginner Friendly)` · **Hook title:** `You use this without knowing why (bf16 vs fp16)`
 
 **Search phrase:** bf16 vs fp16
 
@@ -108,9 +100,7 @@ Storyboard: `ep04-floating-point-precision/storyboard.md`
 
 ## ep05-tensor-cores-vs-memory: 140 words (150 with if-time)
 
-**Titles:** search `Tensor Cores Explained: Compute-Bound vs Memory-Bound` · hook `Your GPU's fastest part spends most of its time waiting`
-
-**Question:** "Where does the time go inside the GPU? Are the tensor cores
+**Search title:** `Tensor Cores Explained (Beginner Friendly)` · **Hook title:** `Your GPU is waiting on memory (tensor cores explained)`
 
 **Search phrase:** tensor cores explained
 
@@ -134,9 +124,7 @@ Storyboard: `ep05-tensor-cores-vs-memory/storyboard.md`
 
 ## ep06-cuda-kernel-training-step: 150 words (163 with if-time)
 
-**Titles:** search `What Is a CUDA Kernel? (One PyTorch Training Step)` · hook `Your CPU isn't training your model. It's filling a queue.`
-
-**Question:** "What is a kernel? Why not just say function? And what
+**Search title:** `What is a CUDA Kernel? Your code, on the GPU` · **Hook title:** `Your CPU just fills a queue (what is a CUDA kernel)`
 
 **Search phrase:** what is a cuda kernel
 
@@ -158,67 +146,35 @@ Storyboard: `ep05-tensor-cores-vs-memory/storyboard.md`
 
 Storyboard: `ep06-cuda-kernel-training-step/storyboard.md`
 
-## ep07-nvidia-smi: 135 words (151 with if-time)
+## ep07-nvidia-smi-utilization-vs-mfu: 149 words (156 with if-time)
 
-**Titles:** search `nvidia-smi Explained: What Every Number Means` · hook `nvidia-smi says 100%. One tiny kernel would too.`
-
-**Question:** "What is NVIDIA SMI? I don't know what this means exactly."
+**Search title:** `nvidia-smi GPU-Util vs MFU, Made Simple` · **Hook title:** `Your GPU says 100%. It's lying (nvidia-smi)`
 
 **Search phrase:** nvidia smi
 
-> nvidia-smi is your GPU's dashboard. It ships with NVIDIA's driver; type it and you get one row per GPU.
->
-> Memory used, out of total: how close you are to out of memory.
->
-> *(if time)* Power draw against its cap, and temperature: a quick check the card is working, not idling.
->
-> At the bottom, the processes on the GPU. Your training script should be listed.
->
-> Then GPU-Util: the share of recent time any kernel was running. Not how much of the chip it used.
->
-> One tiny kernel running nonstop reads 100 percent. This 8-billion-parameter run shows 100 and uses 43 percent of the chip's math.
->
-> To watch it live, add dash l one, or query just the columns you need as CSV and log them.
->
-> PyTorch and Ray's dashboard show this same number.
->
-> Use nvidia-smi to check your job is on the GPU, memory has room, and it's never idle. For efficiency, compute MFU.
-
-Storyboard: `ep07-nvidia-smi/storyboard.md`
-
-## ep08-gpu-utilization-vs-mfu: 153 words (160 with if-time)
-
-**Titles:** search `nvidia-smi GPU Utilization vs MFU (Explained)` · hook `Your GPU says 100%. It's lying. (MFU explained)`
-
-**Question:** "MFU vs GPU saturation, what's the difference? How do I know
-
-**Search phrase:** nvidia smi gpu utilization
-
 > nvidia-smi says your GPU is at 100 percent. That only means it's busy. MFU tells you if it's doing useful work.
 >
-> Utilization is the share of time any kernel ran. One tiny kernel still counts as 100.
+> It's the monitor that ships with NVIDIA's driver: memory, power, and GPU-Util, per GPU.
 >
-> That's saturation. When it's low, your data loader is starving the GPU. Fix that first.
+> GPU-Util is the share of time any kernel was running, not how much of the chip it used. One tiny kernel counts as 100.
 >
-> A FLOP is one floating-point operation, one multiply or one add. Training costs about six FLOPs per parameter, per token.
+> That's saturation. If it drops, your data loader is starving the GPU.
 >
 > MFU, model FLOPs utilization, is the FLOPs your model does each second, divided by what the chip could do.
 >
-> An 8-billion-parameter model at 20,000 tokens a second does 960 teraflops. A B200 peaks near 2,250. That's 43 percent.
+> An 8-billion-parameter model at 15,000 tokens a second per GPU does 720 teraflops. A B200 peaks near 2,250. That's 32 percent.
 >
-> PyTorch's profiler shows the idle gaps. Ray shows the same busy number. Neither gives you MFU; you log it.
+> Ray's dashboard shows the same busy number. Neither gives you MFU; you log it.
 >
 > *(if time)* For scale: PaLM trained at 46 percent.
 >
 > Utilization tells you if the GPU is waiting. MFU tells you if the busy time is useful. Log tokens per second and watch MFU.
 
-Storyboard: `ep08-gpu-utilization-vs-mfu/storyboard.md`
+Storyboard: `ep07-nvidia-smi-utilization-vs-mfu/storyboard.md`
 
-## ep09-pytorch-profiler: 148 words (162 with if-time)
+## ep08-pytorch-profiler: 148 words (162 with if-time)
 
-**Titles:** search `PyTorch Profiler Tutorial: Find Where Your GPU Sits Idle` · hook `Your GPU is idle between kernels. Here's how to see it.`
-
-**Question:** "How does PyTorch show me where my training step wastes GPU
+**Search title:** `PyTorch Profiler Made Simple (Beginner Friendly)` · **Hook title:** `Your GPU sits idle. Find where (PyTorch profiler)`
 
 **Search phrase:** pytorch profiler
 
@@ -238,109 +194,5 @@ Storyboard: `ep08-gpu-utilization-vs-mfu/storyboard.md`
 >
 > Profile a few steps, open the trace, and close the biggest gap before you touch the model.
 
-Storyboard: `ep09-pytorch-profiler/storyboard.md`
-
-## ep10-gpu-idle-dataloader: 145 words (160 with if-time)
-
-**Titles:** search `PyTorch DataLoader num_workers: Why GPU Utilization Is Low` · hook `Your GPU isn't slow. It's waiting on your data loader.`
-
-**Question:** "Why is my GPU utilization low during training?"
-
-**Search phrase:** pytorch dataloader num_workers
-
-> If your GPU utilization is low, your GPU isn't slow. It's waiting on your data loader.
->
-> It can finish a training step before one Python process has read, decoded and batched the next. Then it sits idle until the batch shows up.
->
-> By default, num_workers is zero: batches load in your main process, the same one that queues the GPU's work.
->
-> The data loader has workers that you can spin out in parallel. Set num_workers, and that many processes prepare batches while the GPU trains.
->
-> Turn on pin_memory, and the copy to the GPU gets faster. Add non_blocking, and Python keeps queueing work while it copies.
->
-> Now the next batch is waiting when the step ends, and the gaps close.
->
-> *(if time)* prefetch_factor sets how many batches each worker keeps ready. persistent_workers keeps them alive between epochs.
->
-> Before you touch the model, loop over the loader alone and time it. If a batch takes longer than a step, fix the loader first.
-
-Storyboard: `ep10-gpu-idle-dataloader/storyboard.md`
-
-## ep11-raising-mfu: 143 words (157 with if-time)
-
-**Titles:** search `torch compile and 3 more ways to raise MFU` · hook `Your training is wasting the GPU (torch compile)`
-
-**Question:** "My GPU is busy but MFU is low. What do I change?"
-
-**Search phrase:** torch compile
-
-> Four changes raise MFU on a busy GPU, tried in this order: bf16, bigger batches, torch compile, CUDA graphs.
->
-> First, autocast to bf16. By default, PyTorch runs fp32 matmuls without the tensor cores. In bf16, they run on them.
->
-> Second, a bigger batch or longer sequences, as far as memory allows. Each kernel gets more work, so it fills more of the chip.
->
-> Third, torch compile. Small elementwise ops, like adds and activations, wait on memory: each one reads its data and writes it back. Compile fuses a chain of them into one kernel, so the data goes through memory once.
->
-> Fourth, CUDA graphs, for steps made of many tiny kernels the CPU can't launch fast enough. Reduce-overhead mode records the step once and replays it in one launch.
->
-> *(if time)* Your first compiled step is slow; that's the compile. Time the steps after it.
->
-> Make one change, re-measure MFU, and keep it only if the number goes up.
-
-Storyboard: `ep11-raising-mfu/storyboard.md`
-
-## ep12-cuda-out-of-memory: 145 words (156 with if-time)
-
-**Titles:** search `CUDA Out of Memory in PyTorch: What's Filling Your GPU` · hook `Your 8B model needs 128 GB before it sees a single token`
-
-**Question:** "Why do I get CUDA out of memory, and what's filling my GPU?"
-
-**Search phrase:** cuda out of memory pytorch
-
-> CUDA out of memory means four things filled your GPU: weights, gradients, optimizer state, and activations. Only activations grow with your batch.
->
-> Train an 8-billion-parameter model in mixed precision with Adam. Each parameter costs 16 bytes.
->
-> Two for the bf16 weight, two for its gradient, four for an fp32 master copy, eight for Adam's two running averages.
->
-> That's 128 gigabytes on a 180 gigabyte B200, before a single activation.
->
-> Activations are what the forward pass keeps for the backward pass. They grow with batch size times sequence length, and fill the rest. That's what overflows.
->
-> So shrink the micro-batch and use gradient accumulation to keep the same effective batch. Still over? Turn on activation checkpointing: recompute most of them in the backward pass instead of storing them.
->
-> *(if time)* Past that, FSDP splits weights, gradients and optimizer state across GPUs.
->
-> Next time it crashes, print the peak with max memory allocated, then cut the micro-batch until it fits.
-
-Storyboard: `ep12-cuda-out-of-memory/storyboard.md`
-
-## ep13-multi-gpu-communication: 150 words (167 with if-time)
-
-**Titles:** search `Multi-GPU Training in PyTorch: Why 8 GPUs Aren't 8× Faster (DDP)` · hook `8 GPUs, not 8× faster. Here's where the time goes.`
-
-**Question:** "Why doesn't 8 GPUs give me 8× the speed?"
-
-**Search phrase:** multi gpu training pytorch
-
-> Eight GPUs don't train eight times faster, because every step they have to stop and share their gradients.
->
-> In PyTorch DDP, each GPU holds a full copy of the model and trains its own slice of the batch.
->
-> Setup is two lines: start NCCL, NVIDIA's library for GPUs talking to each other, and wrap the model.
->
-> After backward, each GPU has different gradients. An all-reduce averages them, so every copy takes the same step.
->
-> For an 8-billion-parameter model in bf16, that's 16 gigabytes of gradients, every step.
->
-> That's communication, not math. If it waits until backward ends, no GPU does model math until it's done, and MFU drops.
->
-> DDP overlaps them. It packs gradients into 25-megabyte buckets and sends each one while backward is still computing the rest.
->
-> *(if time)* Inside one server that's NVLink. Across servers it crosses the network, at a fraction of the bandwidth.
->
-> So profile one step. If a gap shows up after backward, sync less often: bigger batches per GPU, or accumulate with no_sync.
-
-Storyboard: `ep13-multi-gpu-communication/storyboard.md`
+Storyboard: `ep08-pytorch-profiler/storyboard.md`
 

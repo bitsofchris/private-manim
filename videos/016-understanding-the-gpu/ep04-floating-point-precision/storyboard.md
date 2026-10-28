@@ -22,7 +22,7 @@ training" autocompletes, results on topic; kept for the description.
 "floating point explained" autocompletes but returns general CS
 (Computerphile), not ML.)
 
-**Titles (runbook step 9, Chris picks):** search `bf16 vs fp16 vs fp32 (Explained for Training)` · hook `Half the bits, twice the math (bf16 explained)`
+**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `bf16 vs fp16 Made Simple (Beginner Friendly)` (44 chars) · hook `You use this without knowing why (bf16 vs fp16)`
 
 **One idea:** a number's bit width sets how fast the chip can do math on
 it; bf16 wins because it halves the bits without shrinking the range.
@@ -30,7 +30,7 @@ it; bf16 wins because it halves the bits without shrinking the range.
 **Source note:** Chris's input is questions in the 10/27 chat ("what is
 floating point", "why does bf16 / fp8 make it faster"), with no answer
 sentences, so this VO is a draft in his voice for him to rewrite (same as
-ep 8 and 015).
+ep 7 and 015).
 
 **Engine:** HyperFrames (`AGENTS.md` "Which engine"): bit-box rows, the
 series chip, a spec-sheet card and a code card. Nothing needs Manim.
@@ -39,7 +39,7 @@ Series context: ep 4 of `../SERIES.md` (Understanding the GPU). Home of
 "floating point, precision, bf16/fp8, dense vs sparse spec". What a FLOP
 is belongs to ep 2 (no clause needed here: "math" carries it); tensor
 cores get one clause ("tensor-core cycle"), their home is ep 5; bf16 as
-an MFU lever is ep 11.
+an MFU lever is cut ep 11.
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
@@ -108,7 +108,7 @@ viewer's next move.
 - "Training stays stable" is narrowed to the range problem: bf16 has
   fewer mantissa bits than fp16 (7 vs 10), so mixed-precision training
   keeps fp32 master weights and autocast keeps some ops (reductions,
-  softmax, loss) in fp32. Memory cost of that is ep 12's.
+  softmax, loss) in fp32. Memory cost of that is cut ep 12's.
 - autocast does not do fp8. fp8 training uses Transformer Engine
   (`te.fp8_autocast`) or torchao's float8; formats E4M3 (forward) and E5M2
   (gradients) with per-tensor scaling (Hopper), block scaling (MXFP8) on
