@@ -19,8 +19,6 @@ PyTorch Profiler" and the PyTorch conference talk on the profiler, with
 chapter titles "GPU Utilization", "Trace View". "torch profiler" also
 autocompletes; "pytorch profiler trace" falls back to the first two.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `PyTorch Profiler Made Simple (Beginner Friendly)` (48 chars) · hook `Your GPU sits idle. Find where (PyTorch profiler)`
-
 **One idea:** the trace is a picture of idle time. Read the gaps, not the
 blocks; the biggest gap is the first fix.
 
@@ -72,7 +70,7 @@ with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
   (the import, `from torch.profiler import profile, schedule,
   ProfilerActivity`, goes in the companion, not on the card.)
 
-## VO (draft: 146 words without the if-time beat, 160 with)
+## VO (draft: 148 words without the if-time beat, 162 with)
 
 | beat | VO | visual |
 |---|---|---|

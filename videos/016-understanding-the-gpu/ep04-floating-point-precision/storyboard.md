@@ -22,8 +22,6 @@ training" autocompletes, results on topic; kept for the description.
 "floating point explained" autocompletes but returns general CS
 (Computerphile), not ML.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `bf16 vs fp16 Made Simple (Beginner Friendly)` (44 chars) · hook `You use this without knowing why (bf16 vs fp16)`
-
 **One idea:** a number's bit width sets how fast the chip can do math on
 it; bf16 wins because it halves the bits without shrinking the range.
 

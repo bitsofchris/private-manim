@@ -24,8 +24,6 @@ the first. "what is a flop" autocompletes to floppy disks; "flops ai"
 results are on topic ("FLOPs vs FLOPS Explained: LLM Compute Made Simple")
 but the phrase is not offered.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `FLOPs Explained Made Simple (Beginner Friendly)` (47 chars) · hook `Every AI engineer needs this number (FLOPs explained)`
-
 **One idea:** a FLOP is one multiply or one add, and AI is nearly nothing
 else, so FLOPs are the unit of AI work.
 

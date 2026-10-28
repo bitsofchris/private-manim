@@ -4,8 +4,6 @@ All 8 VOs in one file, in recording order (`agents/series.md` step 2). Each is a
 
 ## ep01-why-gpus-for-ai: 145 words (159 with if-time)
 
-**Search title:** `Why GPU for AI? Made Simple (Beginner Friendly)` · **Hook title:** `You use it daily. Here's why (why GPU for AI)`
-
 **Search phrase:** why gpu for ai
 
 > AI runs on GPUs because a neural network is mostly multiply-adds, and they can all happen at the same time.
@@ -28,8 +26,6 @@ Storyboard: `ep01-why-gpus-for-ai/storyboard.md`
 
 ## ep02-flops-explained: 136 words (153 with if-time)
 
-**Search title:** `FLOPs Explained Made Simple (Beginner Friendly)` · **Hook title:** `Every AI engineer needs this number (FLOPs explained)`
-
 **Search phrase:** flops explained
 
 > A FLOP is one multiply or one add, and it's the unit all AI compute is measured in.
@@ -51,8 +47,6 @@ Storyboard: `ep01-why-gpus-for-ai/storyboard.md`
 Storyboard: `ep02-flops-explained/storyboard.md`
 
 ## ep03-six-flops-per-parameter: 145 words (163 with if-time)
-
-**Search title:** `FLOPs LLM Training Made Simple (Beginner Friendly)` · **Hook title:** `You can price any training run (FLOPs LLM)`
 
 **Search phrase:** flops llm
 
@@ -78,8 +72,6 @@ Storyboard: `ep03-six-flops-per-parameter/storyboard.md`
 
 ## ep04-floating-point-precision: 144 words (162 with if-time)
 
-**Search title:** `bf16 vs fp16 Made Simple (Beginner Friendly)` · **Hook title:** `You use this without knowing why (bf16 vs fp16)`
-
 **Search phrase:** bf16 vs fp16
 
 > bf16 makes training faster because each number is half the bits of fp32. Half the bits, twice the peak math.
@@ -99,8 +91,6 @@ Storyboard: `ep03-six-flops-per-parameter/storyboard.md`
 Storyboard: `ep04-floating-point-precision/storyboard.md`
 
 ## ep05-tensor-cores-vs-memory: 140 words (150 with if-time)
-
-**Search title:** `Tensor Cores Explained (Beginner Friendly)` · **Hook title:** `Your GPU is waiting on memory (tensor cores explained)`
 
 **Search phrase:** tensor cores explained
 
@@ -124,8 +114,6 @@ Storyboard: `ep05-tensor-cores-vs-memory/storyboard.md`
 
 ## ep06-cuda-kernel-training-step: 150 words (163 with if-time)
 
-**Search title:** `What is a CUDA Kernel? Your code, on the GPU` · **Hook title:** `Your CPU just fills a queue (what is a CUDA kernel)`
-
 **Search phrase:** what is a cuda kernel
 
 > Every op in your PyTorch training step becomes CUDA kernels: functions your CPU hands the GPU to run.
@@ -147,8 +135,6 @@ Storyboard: `ep05-tensor-cores-vs-memory/storyboard.md`
 Storyboard: `ep06-cuda-kernel-training-step/storyboard.md`
 
 ## ep07-nvidia-smi-utilization-vs-mfu: 149 words (156 with if-time)
-
-**Search title:** `nvidia-smi GPU-Util vs MFU, Made Simple` · **Hook title:** `Your GPU says 100%. It's lying (nvidia-smi)`
 
 **Search phrase:** nvidia smi
 
@@ -173,8 +159,6 @@ Storyboard: `ep06-cuda-kernel-training-step/storyboard.md`
 Storyboard: `ep07-nvidia-smi-utilization-vs-mfu/storyboard.md`
 
 ## ep08-pytorch-profiler: 148 words (162 with if-time)
-
-**Search title:** `PyTorch Profiler Made Simple (Beginner Friendly)` · **Hook title:** `Your GPU sits idle. Find where (PyTorch profiler)`
 
 **Search phrase:** pytorch profiler
 

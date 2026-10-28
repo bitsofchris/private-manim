@@ -9,7 +9,8 @@ saturation, what's the difference?") and his follow-up questions in the
 storyboard session the same night. **Status (10/27, v2): 8 Shorts. Chris cut 10–13 (loader, raising MFU,
 OOM, multi-GPU: storyboards kept in `_archive/`) and the nvidia-smi Short
 merged into utilization vs MFU (ep 7). Numbers moved to realistic values
-(15,000 tokens/s per GPU, 32 % MFU). Titles follow runbook step 9. VO is
+(15,000 tokens/s per GPU, 32 % MFU). No YouTube titles yet: proposed at
+runbook step 9, Chris picks then. VO is
 a draft in Chris's voice.**
 **When to use:** the series home (`agents/series.md` step 1): the ledger
 every episode copies, the recurring image, which episode owns which

@@ -20,8 +20,6 @@ hardware explainers ("CPU vs GPU | Simply Explained", "CPUs vs GPUs As Fast
 As Possible"), so it goes in the title as the second phrase. "gpu vs cpu for
 ai" autocompletes only itself, on-topic results.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `Why GPU for AI? Made Simple (Beginner Friendly)` (47 chars) · hook `You use it daily. Here's why (why GPU for AI)`
-
 **One idea:** the work is a pile of independent multiply-adds; the GPU is
 the chip with enough hands to do the pile at once.
 

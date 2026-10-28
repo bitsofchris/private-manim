@@ -22,8 +22,6 @@ title as the second phrase. "compute bound" autocompletes to "cpu bound
 games": avoid. "roofline model explained" and "arithmetic intensity"
 autocomplete but are narrower; companion material.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `Tensor Cores Explained (Beginner Friendly)` (42 chars) · hook `Your GPU is waiting on memory (tensor cores explained)`
-
 **One idea:** the math is cheap; moving the numbers is the cost. A matmul
 reuses what it loads, an elementwise op doesn't.
 

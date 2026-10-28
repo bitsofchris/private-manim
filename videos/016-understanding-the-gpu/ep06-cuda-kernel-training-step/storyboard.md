@@ -21,8 +21,6 @@ Threads and Warps". "what is a gpu kernel" autocompletes too, same
 results. "pytorch cuda kernel" gets no autocomplete. Our angle is a
 kernel seen through one PyTorch training step, not a CUDA C tutorial.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `What is a CUDA Kernel? Your code, on the GPU` (44 chars) · hook `Your CPU just fills a queue (what is a CUDA kernel)`
-
 **One idea:** your training loop doesn't do the math; it queues kernels,
 and the GPU drains the queue.
 

@@ -24,8 +24,6 @@ not the count; second choice. No autocomplete for "training compute"
 note: ep 2's phrase is "flops explained", whose results share some videos
 with this one; ep 3's title adds "LLM" and "train" to split them.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `FLOPs LLM Training Made Simple (Beginner Friendly)` (50 chars) · hook `You can price any training run (FLOPs LLM)`
-
 **One idea:** every weight is touched three times per token (once forward,
 twice back), two FLOPs each time. That's the 6.
 
@@ -59,7 +57,7 @@ ep 2 (one clause here: "one multiply and one add"); MFU belongs to ep 7
   = **about 32 years** on one B200 (31.7).
 - Code on screen: `flops = 6 * n_params * n_tokens`.
 
-## VO (draft: 143 words without the if-time beat, 161 with)
+## VO (draft: 145 words without the if-time beat, 163 with)
 
 | beat | VO | visual |
 |---|---|---|

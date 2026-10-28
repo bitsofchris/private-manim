@@ -15,8 +15,6 @@ endpoint, not a browser: offered verbatim, and "nvidia smi tutorial";
 results are ML/Linux monitoring videos. "gpu utilization 100" returns gaming
 fixes; "mfu" and "model flops utilization" get no autocomplete.)
 
-**Titles (runbook step 9, Chris picks; both carry the search phrase):** search `nvidia-smi GPU-Util vs MFU, Made Simple` (39 chars) · hook `Your GPU says 100%. It's lying (nvidia-smi)`
-
 **One idea:** busy is not efficient. Utilization is a clock; MFU is a meter.
 
 **Source note:** Chris's note was all questions, so this VO is a draft in
@@ -40,7 +38,7 @@ profiler is ep 8.
   (illustrative; take the B200's reported total from a real readout).
 - PaLM 540B: **46 % MFU** (Chowdhery et al. 2022, the paper that named MFU).
 
-## VO (draft: 148 words without the if-time beat, 155 with)
+## VO (draft: 149 words without the if-time beat, 156 with)
 
 | beat | VO | visual |
 |---|---|---|
