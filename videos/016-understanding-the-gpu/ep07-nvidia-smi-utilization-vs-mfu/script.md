@@ -20,7 +20,7 @@ Utilization tells you if the GPU is waiting. MFU tells you if the busy time is u
 
 ## Where the take leaves the script
 
-- **nvidia-smi is never said.** Line 1 became "GPU saturation can stay at 100 percent…" and the nvidia-smi beat (what the tool is) is not recorded. The search phrase `nvidia smi` is now not in the VO, so step 0 needs a new phrase or a re-recorded line 1. Rechecked 10/28: "gpu utilization" autocompletes (results lean gaming: "gpu utilization 100", "…low in games"); "gpu saturation", "mfu gpu", "model flops utilization" get nothing useful.
+- **nvidia-smi is never said, on purpose** (Chris, 10/28). Line 1 is "GPU saturation can stay at 100 percent…" and the nvidia-smi beat is gone. Search phrase: `gpu utilization` (autocompletes; results lean gaming, so the titles and description line 1 say training or AI). The storyboard's preflight and nvidia-smi visuals change accordingly.
 - Kernel is defined inline ("A kernel is a single operation the GPU could be doing"), which settles the open decision about viewers arriving from search.
 - **Repeat:** "GPU utilization measures the share of time any kernel was running." then the same sentence again after the kernel definition. Cut the first (take 375.4–380.0 s, here 12.3–16.9 s).
 - Not recorded: the *(if time)* PaLM 46 % line.

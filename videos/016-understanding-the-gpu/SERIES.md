@@ -140,7 +140,7 @@ picture the viewer has seen before:
 | 4 | Floating point and precision | Why does bf16 / fp8 make training faster? | Fewer bits per number: more numbers per memory read and more multiply-adds per tensor-core cycle, so peak FLOPS roughly doubles each step down. Spec sheets also quote "sparse" at 2×; compare against dense in your training dtype. | `bf16 vs fp16`, `fp32 vs fp16`, `fp8 training` | Chris's "what is floating point" |
 | 5 | Tensor cores vs memory | Where does the time go inside the GPU? | Data flows from GPU memory (HBM) through cache to the tensor cores. Matmuls reuse each number many times, so the tensor cores stay fed (compute-bound); elementwise ops do one FLOP per number moved, so the cores wait on memory (memory-bound). Drawn as data flowing through the chip. | `tensor cores explained`, `tensor cores vs cuda cores`, `how tensor cores work`; `roofline model explained` for a later cut | Chris |
 | 6 | What is a CUDA kernel (one training step, walked through) | What is a GPU kernel, and what happens when my training step runs? | A kernel is one function the CPU launches onto the GPU, run as thousands of threads at once. `loss = model(x)` becomes a queue of kernel launches; the CPU runs ahead, the GPU drains the queue; `loss.item()` makes the CPU wait; a late batch leaves the queue empty and the GPU idle. | `what is a cuda kernel` (offered verbatim); `cuda kernel` (strong); alt `how gpu works for deep learning`. Competitive: Fireship, Computerphile | Chris |
-| 7 | nvidia-smi: GPU-Util vs MFU | Is my training actually using the GPU fully? | nvidia-smi's GPU-Util says some kernel ran (busy); MFU says how much of the chip's peak math the model used (6 × params × tokens/s ÷ peak). You log it yourself. | `nvidia smi` (offered; ML/Linux results) | Chris, the original note; merged with the old nvidia-smi idea 10/27 |
+| 7 | nvidia-smi: GPU-Util vs MFU | Is my training actually using the GPU fully? | nvidia-smi's GPU-Util says some kernel ran (busy); MFU says how much of the chip's peak math the model used (6 × params × tokens/s ÷ peak). You log it yourself. | `gpu utilization` (10/28: the take drops nvidia-smi on purpose; autocompletes, results lean gaming) | Chris, the original note; merged with the old nvidia-smi idea 10/27 |
 | 8 | Reading a PyTorch profiler trace | Where are the idle gaps in my training step? | `torch.profiler` draws every kernel on a timeline; the gaps are the GPU waiting (data, CPU, a sync). Find the biggest gap first. | `pytorch profiler` (offered; also `pytorch profiler tutorial`) | Chris's "how does PyTorch show this" |
 
 **Cut 10/27 (Chris: "we don't need 10–13"), storyboards in `_archive/`:**
@@ -170,13 +170,13 @@ take). Split 2026-10-28: cut times in `TRANSCRIPT.md` and each
 `script.md`, with where each take leaves the planned script.
 
 From the split, for the episode sessions:
-- Ep 7 never says "nvidia-smi", so its search phrase needs a new choice
-  or a re-recorded line 1 (its `script.md`).
+- Ep 7 never says "nvidia-smi", on purpose (Chris, 10/28). Its search
+  phrase moves to `gpu utilization` (see its `script.md`).
 - Repeats to cut: ep 6 ("Forward queues…"), ep 7 ("GPU utilization
   measures…").
 - No recorded closer (next move) in ep 1 or ep 3.
-- Ear checks: ep 2 `check_divide.m4a`, ep 6 `check_step.m4a`, ep 8
-  `check_right_then.m4a`.
+- Ear checks settled by the written VO (Chris, 10/28): "Divide a run's
+  FLOPs", "training step", "doing right then".
 
 ## Checklist
 
@@ -194,9 +194,9 @@ From the split, for the episode sessions:
 ## Open decisions (Chris's)
 
 - ~~Recording order~~: recorded 1–8 (10/28).
-- Ep 7's search phrase: the take never says "nvidia-smi". Re-record line
-  1 with it, or move to `gpu utilization` (autocompletes; results lean
-  gaming).
+- ~~Ep 7's search phrase~~: `gpu utilization` (10/28). It autocompletes
+  but its results lean gaming, so the titles and description line 1 must
+  say training or AI.
 - ~~Ep 7's "kernel"~~: settled in the take; ep 7 defines it inline.
 - Ep 7 keeps one clause on the data loader (beat 04) now that the loader
   Short is cut.

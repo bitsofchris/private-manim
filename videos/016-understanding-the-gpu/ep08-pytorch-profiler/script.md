@@ -24,4 +24,4 @@ On Ray Train, the same block goes inside your training function on each worker. 
 
 - Not recorded: "open it in Perfetto". The VO says "it writes a trace file" and goes straight to the rows; name Perfetto on screen.
 - The *(if time)* Ray Train line is recorded.
-- Ear check: "Look at what the CPU is doing right then: what was the GPU waiting for?" Parakeet heard "doing right. Then, what was…" (clip `check_right_then.m4a`).
+- "doing right then": Parakeet heard "right. Then,"; settled by the written VO (Chris, 10/28).

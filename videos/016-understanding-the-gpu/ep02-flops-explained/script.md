@@ -25,4 +25,4 @@ Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the b
 - Added "FLOP stands for floating-point operation." and "This is a rate."
 - The *(if time)* GPU-hours line is recorded and is now the closer ("…and you have GPU-hours. This is the bill."). The scripted closer (find dense FLOPS at your precision on a spec sheet) is not recorded.
 - Raw 61.9 s; about 55.8 s once pauses are capped, so under 60 without cutting a line.
-- Ear checks: "Divide a run's FLOPs" (both recognizers heard "Divider runs FLOPs", clip `check_divide.m4a`); "three million" (Parakeet heard "three millionth"; Chris's transcript and the script say "million").
+- Ear checks settled by the written VO (Chris, 10/28): "Divide a run's FLOPs", "three million".

@@ -25,4 +25,4 @@ Call item only on the steps you log. The CPU stays ahead and the queue stays ful
 - "Why not just say function?" became "Now, we call these kernels because they don't run just once." That states why they're called kernels, a claim this series could not source (SERIES.md: the name's origin is unsourced). Keep the visual to what a kernel does (many threads, one function), not the etymology.
 - **Repeat:** "Forward queues a kernel or more per op." then the full "Forward queues up a kernel or more per op: matmul, add, ReLU." Cut the first (take 321.0–324.6 s, here 26.5–30.1 s).
 - The *(if time)* "Not the Linux kernel" line is not recorded.
-- Ear check: "training step" — both recognizers heard "training set" (clip `check_step.m4a`). If it was "set", Chris decides whether the caption says "step".
+- "training step": the recognizers heard "set"; settled by the written VO (Chris, 10/28).
