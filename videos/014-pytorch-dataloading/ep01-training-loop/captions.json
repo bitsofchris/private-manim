@@ -1,0 +1,322 @@
+[
+ {
+  "start": 0.63,
+  "end": 1.08,
+  "text": "A batch is"
+ },
+ {
+  "start": 1.14,
+  "end": 1.62,
+  "text": "just a bunch"
+ },
+ {
+  "start": 1.68,
+  "end": 2.2,
+  "text": "of samples"
+ },
+ {
+  "start": 2.26,
+  "end": 2.94,
+  "text": "packed into one"
+ },
+ {
+  "start": 3.0,
+  "end": 3.56,
+  "text": "tensor so the"
+ },
+ {
+  "start": 3.62,
+  "end": 4.12,
+  "text": "GPU can"
+ },
+ {
+  "start": 4.18,
+  "end": 4.86,
+  "text": "parallelize."
+ },
+ {
+  "start": 5.4,
+  "end": 5.94,
+  "text": "And a PyTorch"
+ },
+ {
+  "start": 6.0,
+  "end": 6.43,
+  "text": "training loop"
+ },
+ {
+  "start": 6.49,
+  "end": 7.02,
+  "text": "is what happens"
+ },
+ {
+  "start": 7.08,
+  "end": 7.2,
+  "text": "to that"
+ },
+ {
+  "start": 7.26,
+  "end": 7.78,
+  "text": "one batch."
+ },
+ {
+  "start": 8.32,
+  "end": 8.82,
+  "text": "The data loader"
+ },
+ {
+  "start": 8.88,
+  "end": 9.9,
+  "text": "yields it, the"
+ },
+ {
+  "start": 9.96,
+  "end": 10.48,
+  "text": "batch goes into"
+ },
+ {
+  "start": 10.54,
+  "end": 10.86,
+  "text": "the forward"
+ },
+ {
+  "start": 10.92,
+  "end": 11.62,
+  "text": "pass, and the"
+ },
+ {
+  "start": 11.68,
+  "end": 12.06,
+  "text": "model makes"
+ },
+ {
+  "start": 12.12,
+  "end": 12.6,
+  "text": "a prediction."
+ },
+ {
+  "start": 14.51,
+  "end": 15.27,
+  "text": "We compare that"
+ },
+ {
+  "start": 15.33,
+  "end": 15.68,
+  "text": "prediction to"
+ },
+ {
+  "start": 15.74,
+  "end": 16.26,
+  "text": "the target, and"
+ },
+ {
+  "start": 16.32,
+  "end": 16.46,
+  "text": "that's"
+ },
+ {
+  "start": 16.52,
+  "end": 17.0,
+  "text": "the loss."
+ },
+ {
+  "start": 17.52,
+  "end": 17.86,
+  "text": "The loss is"
+ },
+ {
+  "start": 17.92,
+  "end": 18.56,
+  "text": "then propagated"
+ },
+ {
+  "start": 18.62,
+  "end": 19.42,
+  "text": "backwards, and"
+ },
+ {
+  "start": 19.48,
+  "end": 19.86,
+  "text": "the weights are"
+ },
+ {
+  "start": 19.92,
+  "end": 20.56,
+  "text": "updated as part"
+ },
+ {
+  "start": 20.62,
+  "end": 20.88,
+  "text": "of gradient"
+ },
+ {
+  "start": 20.94,
+  "end": 21.26,
+  "text": "descent."
+ },
+ {
+  "start": 21.89,
+  "end": 22.64,
+  "text": "That is one"
+ },
+ {
+  "start": 22.7,
+  "end": 23.38,
+  "text": "training step."
+ },
+ {
+  "start": 23.82,
+  "end": 24.06,
+  "text": "Then we go"
+ },
+ {
+  "start": 24.12,
+  "end": 24.52,
+  "text": "back to the"
+ },
+ {
+  "start": 24.58,
+  "end": 25.06,
+  "text": "data loader for"
+ },
+ {
+  "start": 25.12,
+  "end": 25.74,
+  "text": "the next batch."
+ },
+ {
+  "start": 26.26,
+  "end": 27.02,
+  "text": "An epoch is"
+ },
+ {
+  "start": 27.08,
+  "end": 27.64,
+  "text": "one pass"
+ },
+ {
+  "start": 27.7,
+  "end": 27.9,
+  "text": "through the"
+ },
+ {
+  "start": 27.96,
+  "end": 28.82,
+  "text": "whole dataset."
+ },
+ {
+  "start": 29.29,
+  "end": 29.74,
+  "text": "So this inner"
+ },
+ {
+  "start": 29.8,
+  "end": 30.54,
+  "text": "loop runs once"
+ },
+ {
+  "start": 30.6,
+  "end": 31.64,
+  "text": "per epoch, and"
+ },
+ {
+  "start": 31.7,
+  "end": 32.34,
+  "text": "the outer loop"
+ },
+ {
+  "start": 32.4,
+  "end": 32.92,
+  "text": "runs for as"
+ },
+ {
+  "start": 32.98,
+  "end": 33.74,
+  "text": "many epochs as"
+ },
+ {
+  "start": 33.8,
+  "end": 34.18,
+  "text": "you set."
+ },
+ {
+  "start": 34.64,
+  "end": 35.34,
+  "text": "The model never"
+ },
+ {
+  "start": 35.4,
+  "end": 35.72,
+  "text": "sees your"
+ },
+ {
+  "start": 35.78,
+  "end": 36.64,
+  "text": "dataset, it"
+ },
+ {
+  "start": 36.7,
+  "end": 37.42,
+  "text": "only ever sees"
+ },
+ {
+  "start": 37.48,
+  "end": 38.0,
+  "text": "one batch at"
+ },
+ {
+  "start": 38.06,
+  "end": 38.38,
+  "text": "a time."
+ },
+ {
+  "start": 38.84,
+  "end": 39.1,
+  "text": "So if your"
+ },
+ {
+  "start": 39.16,
+  "end": 39.52,
+  "text": "loss isn't"
+ },
+ {
+  "start": 39.58,
+  "end": 40.04,
+  "text": "moving, check"
+ },
+ {
+  "start": 40.1,
+  "end": 40.16,
+  "text": "the"
+ },
+ {
+  "start": 40.22,
+  "end": 40.72,
+  "text": "batch first."
+ },
+ {
+  "start": 41.34,
+  "end": 41.48,
+  "text": "Everything"
+ },
+ {
+  "start": 41.54,
+  "end": 42.14,
+  "text": "downstream of"
+ },
+ {
+  "start": 42.2,
+  "end": 42.72,
+  "text": "it is the"
+ },
+ {
+  "start": 42.78,
+  "end": 43.6,
+  "text": "same four lines"
+ },
+ {
+  "start": 43.66,
+  "end": 44.12,
+  "text": "every time."
+ }
+]

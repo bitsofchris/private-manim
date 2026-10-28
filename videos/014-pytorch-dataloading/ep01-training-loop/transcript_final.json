@@ -1,0 +1,886 @@
+{
+  "segments" : [
+    {
+      "end" : 4860,
+      "id" : "EFB743AB-BCE8-4DCB-9A37-09E5EDBE7260",
+      "start" : 1,
+      "text" : "A batch is just a bunch of samples packed into one tensor so the GPU can parallelize.",
+      "words" : [
+        {
+          "end" : 660,
+          "start" : 0,
+          "text" : "A"
+        },
+        {
+          "end" : 1000,
+          "start" : 660,
+          "text" : "batch"
+        },
+        {
+          "end" : 1140,
+          "start" : 1000,
+          "text" : "is"
+        },
+        {
+          "end" : 1300,
+          "start" : 1140,
+          "text" : "just"
+        },
+        {
+          "end" : 1500,
+          "start" : 1300,
+          "text" : "a"
+        },
+        {
+          "end" : 1680,
+          "start" : 1500,
+          "text" : "bunch"
+        },
+        {
+          "end" : 1860,
+          "start" : 1680,
+          "text" : "of"
+        },
+        {
+          "end" : 2260,
+          "start" : 1860,
+          "text" : "samples"
+        },
+        {
+          "end" : 2620,
+          "start" : 2260,
+          "text" : "packed"
+        },
+        {
+          "end" : 2800,
+          "start" : 2620,
+          "text" : "into"
+        },
+        {
+          "end" : 3000,
+          "start" : 2800,
+          "text" : "one"
+        },
+        {
+          "end" : 3300,
+          "start" : 3000,
+          "text" : "tensor"
+        },
+        {
+          "end" : 3520,
+          "start" : 3300,
+          "text" : "so"
+        },
+        {
+          "end" : 3620,
+          "start" : 3520,
+          "text" : "the"
+        },
+        {
+          "end" : 3960,
+          "start" : 3620,
+          "text" : "GPU"
+        },
+        {
+          "end" : 4180,
+          "start" : 3960,
+          "text" : "can"
+        },
+        {
+          "end" : 4860,
+          "start" : 4180,
+          "text" : "parallelize."
+        }
+      ]
+    },
+    {
+      "end" : 7780,
+      "id" : "D9E562E1-6D5F-41BC-8A1E-C71C232111D5",
+      "start" : 5400,
+      "text" : "And a pi-towards training loop is what happens to that one batch.",
+      "words" : [
+        {
+          "end" : 5480,
+          "start" : 5400,
+          "text" : "And"
+        },
+        {
+          "end" : 5580,
+          "start" : 5480,
+          "text" : "a"
+        },
+        {
+          "end" : 5720,
+          "start" : 5580,
+          "text" : "pi"
+        },
+        {
+          "end" : 6000,
+          "start" : 5720,
+          "text" : "-towards"
+        },
+        {
+          "end" : 6280,
+          "start" : 6000,
+          "text" : "training"
+        },
+        {
+          "end" : 6480,
+          "start" : 6280,
+          "text" : "loop"
+        },
+        {
+          "end" : 6600,
+          "start" : 6480,
+          "text" : "is"
+        },
+        {
+          "end" : 6740,
+          "start" : 6600,
+          "text" : "what"
+        },
+        {
+          "end" : 7080,
+          "start" : 6740,
+          "text" : "happens"
+        },
+        {
+          "end" : 7180,
+          "start" : 7080,
+          "text" : "to"
+        },
+        {
+          "end" : 7260,
+          "start" : 7180,
+          "text" : "that"
+        },
+        {
+          "end" : 7420,
+          "start" : 7260,
+          "text" : "one"
+        },
+        {
+          "end" : 7780,
+          "start" : 7420,
+          "text" : "batch."
+        }
+      ]
+    },
+    {
+      "end" : 12600,
+      "id" : "5B6EA6B3-51BF-455D-AB92-CE3929D59818",
+      "start" : 8320,
+      "text" : "The data loader yields it, the batch goes into the forward pass, and the model makes a prediction.",
+      "words" : [
+        {
+          "end" : 8440,
+          "start" : 8320,
+          "text" : "The"
+        },
+        {
+          "end" : 8660,
+          "start" : 8440,
+          "text" : "data"
+        },
+        {
+          "end" : 8880,
+          "start" : 8660,
+          "text" : "loader"
+        },
+        {
+          "end" : 9240,
+          "start" : 8880,
+          "text" : "yields"
+        },
+        {
+          "end" : 9400,
+          "start" : 9240,
+          "text" : "it,"
+        },
+        {
+          "end" : 9960,
+          "start" : 9840,
+          "text" : "the"
+        },
+        {
+          "end" : 10200,
+          "start" : 9960,
+          "text" : "batch"
+        },
+        {
+          "end" : 10400,
+          "start" : 10200,
+          "text" : "goes"
+        },
+        {
+          "end" : 10540,
+          "start" : 10400,
+          "text" : "into"
+        },
+        {
+          "end" : 10720,
+          "start" : 10540,
+          "text" : "the"
+        },
+        {
+          "end" : 10920,
+          "start" : 10720,
+          "text" : "forward"
+        },
+        {
+          "end" : 11300,
+          "start" : 10920,
+          "text" : "pass,"
+        },
+        {
+          "end" : 11540,
+          "start" : 11400,
+          "text" : "and"
+        },
+        {
+          "end" : 11680,
+          "start" : 11540,
+          "text" : "the"
+        },
+        {
+          "end" : 11880,
+          "start" : 11680,
+          "text" : "model"
+        },
+        {
+          "end" : 12120,
+          "start" : 11880,
+          "text" : "makes"
+        },
+        {
+          "end" : 12200,
+          "start" : 12120,
+          "text" : "a"
+        },
+        {
+          "end" : 12600,
+          "start" : 12200,
+          "text" : "prediction."
+        }
+      ]
+    },
+    {
+      "end" : 17000,
+      "id" : "FB438CE3-1816-4D1D-BD7D-02742C99F107",
+      "start" : 14320,
+      "text" : "We compare that prediction to the target, and that's the loss.",
+      "words" : [
+        {
+          "end" : 14680,
+          "start" : 14320,
+          "text" : "We"
+        },
+        {
+          "end" : 15080,
+          "start" : 14680,
+          "text" : "compare"
+        },
+        {
+          "end" : 15320,
+          "start" : 15080,
+          "text" : "that"
+        },
+        {
+          "end" : 15600,
+          "start" : 15320,
+          "text" : "prediction"
+        },
+        {
+          "end" : 15740,
+          "start" : 15600,
+          "text" : "to"
+        },
+        {
+          "end" : 15860,
+          "start" : 15740,
+          "text" : "the"
+        },
+        {
+          "end" : 16080,
+          "start" : 15860,
+          "text" : "target,"
+        },
+        {
+          "end" : 16320,
+          "start" : 16219,
+          "text" : "and"
+        },
+        {
+          "end" : 16520,
+          "start" : 16320,
+          "text" : "that's"
+        },
+        {
+          "end" : 16680,
+          "start" : 16520,
+          "text" : "the"
+        },
+        {
+          "end" : 17000,
+          "start" : 16680,
+          "text" : "loss."
+        }
+      ]
+    },
+    {
+      "end" : 21260,
+      "id" : "3CC440F7-C23E-4C79-AA8A-A67ACB9230C1",
+      "start" : 17520,
+      "text" : "The loss is then propagated backwards, and the weights are updated as part of gradient descent.",
+      "words" : [
+        {
+          "end" : 17620,
+          "start" : 17520,
+          "text" : "The"
+        },
+        {
+          "end" : 17820,
+          "start" : 17620,
+          "text" : "loss"
+        },
+        {
+          "end" : 17920,
+          "start" : 17820,
+          "text" : "is"
+        },
+        {
+          "end" : 18060,
+          "start" : 17920,
+          "text" : "then"
+        },
+        {
+          "end" : 18620,
+          "start" : 18060,
+          "text" : "propagated"
+        },
+        {
+          "end" : 18940,
+          "start" : 18620,
+          "text" : "backwards,"
+        },
+        {
+          "end" : 19480,
+          "start" : 19420,
+          "text" : "and"
+        },
+        {
+          "end" : 19580,
+          "start" : 19480,
+          "text" : "the"
+        },
+        {
+          "end" : 19780,
+          "start" : 19580,
+          "text" : "weights"
+        },
+        {
+          "end" : 19920,
+          "start" : 19780,
+          "text" : "are"
+        },
+        {
+          "end" : 20240,
+          "start" : 19920,
+          "text" : "updated"
+        },
+        {
+          "end" : 20400,
+          "start" : 20240,
+          "text" : "as"
+        },
+        {
+          "end" : 20620,
+          "start" : 20400,
+          "text" : "part"
+        },
+        {
+          "end" : 20740,
+          "start" : 20620,
+          "text" : "of"
+        },
+        {
+          "end" : 20940,
+          "start" : 20740,
+          "text" : "gradient"
+        },
+        {
+          "end" : 21260,
+          "start" : 20940,
+          "text" : "descent."
+        }
+      ]
+    },
+    {
+      "end" : 23380,
+      "id" : "16629D34-852F-4B24-9747-5302B627A648",
+      "start" : 21800,
+      "text" : "That is one training step.",
+      "words" : [
+        {
+          "end" : 22080,
+          "start" : 21800,
+          "text" : "That"
+        },
+        {
+          "end" : 22360,
+          "start" : 22080,
+          "text" : "is"
+        },
+        {
+          "end" : 22700,
+          "start" : 22360,
+          "text" : "one"
+        },
+        {
+          "end" : 23080,
+          "start" : 22700,
+          "text" : "training"
+        },
+        {
+          "end" : 23380,
+          "start" : 23080,
+          "text" : "step."
+        }
+      ]
+    },
+    {
+      "end" : 25740,
+      "id" : "A8C2766C-2FDA-4BBD-87CF-D86E5137197B",
+      "start" : 23820,
+      "text" : "Then we go back to the data loader for the next batch.",
+      "words" : [
+        {
+          "end" : 23920,
+          "start" : 23820,
+          "text" : "Then"
+        },
+        {
+          "end" : 24020,
+          "start" : 23920,
+          "text" : "we"
+        },
+        {
+          "end" : 24120,
+          "start" : 24020,
+          "text" : "go"
+        },
+        {
+          "end" : 24340,
+          "start" : 24120,
+          "text" : "back"
+        },
+        {
+          "end" : 24460,
+          "start" : 24340,
+          "text" : "to"
+        },
+        {
+          "end" : 24580,
+          "start" : 24460,
+          "text" : "the"
+        },
+        {
+          "end" : 24760,
+          "start" : 24580,
+          "text" : "data"
+        },
+        {
+          "end" : 24980,
+          "start" : 24760,
+          "text" : "loader"
+        },
+        {
+          "end" : 25120,
+          "start" : 24980,
+          "text" : "for"
+        },
+        {
+          "end" : 25240,
+          "start" : 25120,
+          "text" : "the"
+        },
+        {
+          "end" : 25480,
+          "start" : 25240,
+          "text" : "next"
+        },
+        {
+          "end" : 25740,
+          "start" : 25480,
+          "text" : "batch."
+        }
+      ]
+    },
+    {
+      "end" : 28820,
+      "id" : "BC950282-4ED2-4664-BDC5-CA09D060B34B",
+      "start" : 26260,
+      "text" : "An epoch is one pass through the whole dataset.",
+      "words" : [
+        {
+          "end" : 26440,
+          "start" : 26260,
+          "text" : "An"
+        },
+        {
+          "end" : 26900,
+          "start" : 26440,
+          "text" : "epoch"
+        },
+        {
+          "end" : 27080,
+          "start" : 26900,
+          "text" : "is"
+        },
+        {
+          "end" : 27400,
+          "start" : 27080,
+          "text" : "one"
+        },
+        {
+          "end" : 27700,
+          "start" : 27400,
+          "text" : "pass"
+        },
+        {
+          "end" : 27860,
+          "start" : 27700,
+          "text" : "through"
+        },
+        {
+          "end" : 27960,
+          "start" : 27860,
+          "text" : "the"
+        },
+        {
+          "end" : 28320,
+          "start" : 27960,
+          "text" : "whole"
+        },
+        {
+          "end" : 28820,
+          "start" : 28320,
+          "text" : "dataset."
+        }
+      ]
+    },
+    {
+      "end" : 34180,
+      "id" : "98F64426-35D8-49C4-9F58-E2AC086235EE",
+      "start" : 29000,
+      "text" : "So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set.",
+      "words" : [
+        {
+          "end" : 29380,
+          "start" : 29000,
+          "text" : "So"
+        },
+        {
+          "end" : 29540,
+          "start" : 29380,
+          "text" : "this"
+        },
+        {
+          "end" : 29800,
+          "start" : 29540,
+          "text" : "inner"
+        },
+        {
+          "end" : 30060,
+          "start" : 29800,
+          "text" : "loop"
+        },
+        {
+          "end" : 30300,
+          "start" : 30060,
+          "text" : "runs"
+        },
+        {
+          "end" : 30600,
+          "start" : 30300,
+          "text" : "once"
+        },
+        {
+          "end" : 30780,
+          "start" : 30600,
+          "text" : "per"
+        },
+        {
+          "end" : 31200,
+          "start" : 30780,
+          "text" : "epoch,"
+        },
+        {
+          "end" : 31700,
+          "start" : 31640,
+          "text" : "and"
+        },
+        {
+          "end" : 31780,
+          "start" : 31700,
+          "text" : "the"
+        },
+        {
+          "end" : 32119,
+          "start" : 31780,
+          "text" : "outer"
+        },
+        {
+          "end" : 32400,
+          "start" : 32119,
+          "text" : "loop"
+        },
+        {
+          "end" : 32759,
+          "start" : 32400,
+          "text" : "runs"
+        },
+        {
+          "end" : 32900,
+          "start" : 32759,
+          "text" : "for"
+        },
+        {
+          "end" : 32980,
+          "start" : 32900,
+          "text" : "as"
+        },
+        {
+          "end" : 33180,
+          "start" : 32980,
+          "text" : "many"
+        },
+        {
+          "end" : 33640,
+          "start" : 33180,
+          "text" : "epochs"
+        },
+        {
+          "end" : 33780,
+          "start" : 33640,
+          "text" : "as"
+        },
+        {
+          "end" : 33860,
+          "start" : 33780,
+          "text" : "you"
+        },
+        {
+          "end" : 34180,
+          "start" : 33860,
+          "text" : "set."
+        }
+      ]
+    },
+    {
+      "end" : 38380,
+      "id" : "1226F55E-C017-4971-9211-74653E95F4A1",
+      "start" : 34560,
+      "text" : "The model never sees your dataset, it only ever sees one batch at a time.",
+      "words" : [
+        {
+          "end" : 34740,
+          "start" : 34560,
+          "text" : "The"
+        },
+        {
+          "end" : 35100,
+          "start" : 34740,
+          "text" : "model"
+        },
+        {
+          "end" : 35400,
+          "start" : 35100,
+          "text" : "never"
+        },
+        {
+          "end" : 35640,
+          "start" : 35400,
+          "text" : "sees"
+        },
+        {
+          "end" : 35780,
+          "start" : 35640,
+          "text" : "your"
+        },
+        {
+          "end" : 36160,
+          "start" : 35780,
+          "text" : "dataset,"
+        },
+        {
+          "end" : 36700,
+          "start" : 36620,
+          "text" : "it"
+        },
+        {
+          "end" : 37040,
+          "start" : 36700,
+          "text" : "only"
+        },
+        {
+          "end" : 37340,
+          "start" : 37040,
+          "text" : "ever"
+        },
+        {
+          "end" : 37480,
+          "start" : 37340,
+          "text" : "sees"
+        },
+        {
+          "end" : 37680,
+          "start" : 37480,
+          "text" : "one"
+        },
+        {
+          "end" : 37960,
+          "start" : 37680,
+          "text" : "batch"
+        },
+        {
+          "end" : 38060,
+          "start" : 37960,
+          "text" : "at"
+        },
+        {
+          "end" : 38140,
+          "start" : 38060,
+          "text" : "a"
+        },
+        {
+          "end" : 38380,
+          "start" : 38140,
+          "text" : "time."
+        }
+      ]
+    },
+    {
+      "end" : 40720,
+      "id" : "4D834D96-1F5D-4CDC-8F4D-9EE8026B0EBE",
+      "start" : 38770,
+      "text" : "So if your loss isn't moving, check the batch first.",
+      "words" : [
+        {
+          "end" : 38920,
+          "start" : 38770,
+          "text" : "So"
+        },
+        {
+          "end" : 39020,
+          "start" : 38920,
+          "text" : "if"
+        },
+        {
+          "end" : 39160,
+          "start" : 39020,
+          "text" : "your"
+        },
+        {
+          "end" : 39380,
+          "start" : 39160,
+          "text" : "loss"
+        },
+        {
+          "end" : 39580,
+          "start" : 39380,
+          "text" : "isn't"
+        },
+        {
+          "end" : 39800,
+          "start" : 39580,
+          "text" : "moving,"
+        },
+        {
+          "end" : 40060,
+          "start" : 39900,
+          "text" : "check"
+        },
+        {
+          "end" : 40220,
+          "start" : 40060,
+          "text" : "the"
+        },
+        {
+          "end" : 40400,
+          "start" : 40220,
+          "text" : "batch"
+        },
+        {
+          "end" : 40720,
+          "start" : 40400,
+          "text" : "first."
+        }
+      ]
+    },
+    {
+      "end" : 44120,
+      "id" : "1F7580F1-B9E4-468D-A9FA-AA95B9209941",
+      "start" : 41340,
+      "text" : "Everything downstream of it is the same four lines every time.",
+      "words" : [
+        {
+          "end" : 41540,
+          "start" : 41340,
+          "text" : "Everything"
+        },
+        {
+          "end" : 41920,
+          "start" : 41540,
+          "text" : "downstream"
+        },
+        {
+          "end" : 42200,
+          "start" : 41920,
+          "text" : "of"
+        },
+        {
+          "end" : 42340,
+          "start" : 42200,
+          "text" : "it"
+        },
+        {
+          "end" : 42600,
+          "start" : 42340,
+          "text" : "is"
+        },
+        {
+          "end" : 42780,
+          "start" : 42600,
+          "text" : "the"
+        },
+        {
+          "end" : 43060,
+          "start" : 42780,
+          "text" : "same"
+        },
+        {
+          "end" : 43340,
+          "start" : 43060,
+          "text" : "four"
+        },
+        {
+          "end" : 43660,
+          "start" : 43340,
+          "text" : "lines"
+        },
+        {
+          "end" : 43840,
+          "start" : 43660,
+          "text" : "every"
+        },
+        {
+          "end" : 44120,
+          "start" : 43840,
+          "text" : "time."
+        }
+      ]
+    }
+  ],
+  "text" : "A batch is just a bunch of samples packed into one tensor so the GPU can parallelize.\nAnd a pi-towards training loop is what happens to that one batch.\nThe data loader yields it, the batch goes into the forward pass, and the model makes a prediction.\nWe compare that prediction to the target, and that's the loss.\nThe loss is then propagated backwards, and the weights are updated as part of gradient descent.\nThat is one training step.\nThen we go back to the data loader for the next batch.\nAn epoch is one pass through the whole dataset.\nSo this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set.\nThe model never sees your dataset, it only ever sees one batch at a time.\nSo if your loss isn't moving, check the batch first.\nEverything downstream of it is the same four lines every time."
+}
