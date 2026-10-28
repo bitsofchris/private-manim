@@ -1,6 +1,6 @@
 ENGINE: hyperframes
 
-# MFU vs GPU utilization: storyboard (v1, VO draft for Chris)
+# MFU vs GPU utilization: storyboard (v2, B200 numbers and a FLOPs beat; VO draft for Chris)
 
 THE QUESTION: "MFU vs GPU saturation, what's the difference? How do I know
 if my training is actually using my GPUs fully?"
@@ -27,7 +27,7 @@ His own phrases kept: "effectively using your GPUs", "the metric to look
 at", "how is it measured".
 
 **Engine:** HyperFrames (`AGENTS.md` "Which engine"): one GPU chip drawn
-as a grid of SMs, a time strip, a meter, and a code card. Nothing needs Manim.
+as a grid of cores, a time strip, a meter, and a code card. Nothing needs Manim.
 
 Series context: fits the Bytes to Tensor / dataloading thread
 (`../014-pytorch-dataloading/`): low utilization is the loader's problem;
@@ -35,34 +35,40 @@ this Short is the metric that tells you which problem you have.
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
-- GPU: one H100 SXM, bf16 dense peak **989 TFLOPS** (say "about 990").
-- Model: **1B parameters**, dense transformer.
-- Throughput: **60,000 tokens/s** on that GPU.
+- GPU: one **B200**, bf16 dense peak **2,250 TFLOPS** (Chris, 10/27: use
+  B200s; the sparse figure, 4,500, is never used).
+- Model: **8B parameters**, dense transformer (Llama-3-8B sized).
+- Throughput: **20,000 tokens/s** on that GPU.
+- A FLOP: one floating-point operation, one multiply or one add.
 - FLOPs per token, training: **6 × params** (forward 2, backward 4).
-- Achieved: 6 × 1e9 × 60,000 = **360 TFLOPS** → MFU **36 %**.
+- Achieved: 6 × 8e9 × 20,000 = **960 TFLOPS** → MFU **43 %** (42.7).
 - nvidia-smi on the same run: **GPU-Util 100 %**.
 - Reference point: PaLM 540B trained at **46 % MFU** (Chowdhery et al. 2022,
   the paper that named MFU).
-- The SM grid: 12 × 11 = 132 cells (an H100 has 132 SMs).
+- The SM grid: 12 × 12 cells, a picture of "many cores", not the real SM
+  count; no label claims a number.
+- nvidia-smi on screen is glossed once: "nvidia-smi: NVIDIA's GPU monitor".
 
-## VO (draft: 154 words without the if-time beat, 161 with)
+## VO (draft: 153 words without the if-time beat, 160 with)
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | nvidia-smi says your GPU is at 100 percent. That only means it's busy. MFU tells you if it's doing useful work. | Frame 0 already working: a terminal card top-middle with the real nvidia-smi row, `GPU-Util 100%` in magenta. Below it the chip: a 12 × 11 grid of SM cells, a handful lit teal, most dark. ~6 rows of stage. |
-| 02_util | Utilization is the share of time any kernel was running. One tiny kernel on one core still counts as 100. | A time strip under the chip, every slot filled ("a kernel ran"); on "one tiny kernel" a single SM cell lights and the strip still reads 100 %. The magenta hero moves from the `100%` to that one lit cell. |
+| 01_hook | nvidia-smi says your GPU is at 100 percent. That only means it's busy. MFU tells you if it's doing useful work. | Frame 0 already working: a terminal card top-middle with the real nvidia-smi row and a small gloss under the card, "nvidia-smi: NVIDIA's GPU monitor"; `GPU-Util 100%` in magenta. Below it the chip: a 12 × 12 grid of core cells, a handful lit teal, most dark. ~6 rows of stage. |
+| 02_util | Utilization is the share of time any kernel ran. One tiny kernel still counts as 100. | A time strip under the chip, every slot filled ("a kernel ran"); on "one tiny kernel" a single cell lights and the strip still reads 100 %. The magenta hero moves from the `100%` to that one lit cell. |
 | 03_saturation | That's saturation. When it's low, your data loader is starving the GPU. Fix that first. | Gaps open in the time strip (grey slots, label "idle: waiting on data"); a small loader box at the left feeds batches in late. Gaps close as batches arrive on time. |
-| 04_mfu | MFU, model FLOPs utilization, is the metric to look at: the math your model needs, divided by the math the chip could do. | A meter appears right of the chip, label `MFU`. The SM grid now lights proportionally: ~36 % of cells teal, filling as the meter rises. The fraction draws under it: `model FLOPs / peak FLOPs`. Magenta hero: the meter needle. |
-| 05_measure | Here's how it's measured: six times parameters times tokens per second. One billion parameters at sixty thousand tokens is 360 teraflops. An H100 peaks near 990. Thirty-six percent. | The code card, bottom-middle (the payoff beat, real lines): `flops = 6 * n_params * tokens_per_sec` / `mfu = flops / 989e12` / `# 0.36`. Each line lands on its number; the meter settles at 36 %. Under the terminal card, `GPU-Util 100%` stays lit: the two numbers side by side. |
-| 06_tools | PyTorch's profiler shows the idle gaps. Ray's dashboard shows the same busy number as nvidia-smi. Neither gives you MFU; you log it yourself. | Two small labeled panels swap into the terminal card's place: "torch.profiler → idle gaps" (the time strip with gaps), "Ray dashboard → GPU util" (a 100 % gauge). A pen icon on the code card: "log it yourself". |
-| 07_good *(if time)* | For scale: PaLM trained at 46 percent. | A tick on the meter at 46 % labeled "PaLM 540B". |
-| 08_close | Utilization tells you if the GPU is waiting. MFU tells you if the busy time is useful. Log tokens per second and watch MFU. | Final visual: the time strip (left, label "busy?") and the MFU meter (right, label "useful?"), the meter in magenta. Takeaway only, no outro. |
+| 04_flops | A FLOP is one floating-point operation, one multiply or one add. Training costs about six FLOPs per parameter, per token. | One cell zooms out of the grid: `a × b + c`, the multiply and the add each tick a counter `FLOPs: 2`. Then a token chip passes a weight row: forward `2`, backward `4`, summing to `6 × params` per token. Magenta hero: the counter. |
+| 05_mfu | MFU, model FLOPs utilization, is the FLOPs your model does each second, divided by what the chip could do. | A meter appears right of the chip, label `MFU`. The fraction draws under it: `model FLOPs/s ÷ peak FLOPs/s`. Magenta hero: the meter needle. |
+| 06_measure | An 8-billion-parameter model at 20,000 tokens a second does 960 teraflops. A B200 peaks near 2,250. That's 43 percent. | The code card, bottom-middle (the payoff beat, real lines): `flops = 6 * 8e9 * 20_000  # 9.6e14` / `mfu = flops / 2250e12` / `# 0.43`. Each line lands on its number; ~43 % of grid cells light teal as the meter settles at 43 %. Up top, `GPU-Util 100%` stays lit: the two numbers side by side. |
+| 07_tools | PyTorch's profiler shows the idle gaps. Ray shows the same busy number. Neither gives you MFU; you log it. | Two small labeled panels swap into the terminal card's place: "torch.profiler → idle gaps" (the time strip with gaps), "Ray dashboard → GPU util" (a 100 % gauge). A pen icon on the code card: "log it". |
+| 08_good *(if time)* | For scale: PaLM trained at 46 percent. | A tick on the meter at 46 % labeled "PaLM 540B". |
+| 09_close | Utilization tells you if the GPU is waiting. MFU tells you if the busy time is useful. Log tokens per second and watch MFU. | Final visual: the time strip (left, label "busy?") and the MFU meter (right, label "useful?"), the meter in magenta. Takeaway only, no outro. |
 
 Line 1 says the search phrase and lands the claim ("only means it's
 busy") in its second sentence; MFU is named and on screen by ~6 s.
-Beat 07 is the *(if time)* cut. Beat 03 stays: it is the contrast that
-stops the wrong takeaway ("ignore utilization"). Beat 06 answers Chris's
-"how does PyTorch or Ray show you this" and stays.
+Beat 08 is the *(if time)* cut. Beat 03 stays: it is the contrast that
+stops the wrong takeaway ("ignore utilization"). Beat 04 (what a FLOP is)
+is Chris's ask, 10/27, and the MFU fraction means nothing without it.
+Beat 07 answers Chris's "how does PyTorch or Ray show you this" and stays.
 
 ## Facts to keep straight (notes, not VO)
 
@@ -84,7 +90,7 @@ stops the wrong takeaway ("ignore utilization"). Beat 06 answers Chris's
 
 - Top band: nothing (captions burn in below; safe areas from `style.py`).
 - Stage top: terminal card / tool panels (beats 1, 6), ~1.5 rows.
-- Stage middle: the SM grid (12 × 11) with the MFU meter to its right; the
+- Stage middle: the core grid (12 × 12) with the MFU meter to its right; the
   time strip directly under the grid.
 - Stage bottom-middle: the code card (beat 5 on).
-- One magenta hero at a time: `100%` → the one lit SM → the MFU needle.
+- One magenta hero at a time: `100%` → the one lit cell → the FLOPs counter → the MFU needle.
