@@ -5,7 +5,7 @@
 // through window.SC_makeCode and drives it from S.code.
 //
 // Card: x 65–950, centred on the stage (y 665), sized to its lines (3–8 rows
-// at 68 px pitch; captions stay in the band). 52 px monospace (≈ 31 px a
+// at 64 px pitch; captions stay in the band). 48 px monospace (≈ 29 px a
 // character: 28 characters a line, the limit kit/data.js keeps).
 //
 // S.code fields:
@@ -18,7 +18,7 @@
 //   blink 0..       seconds, for the cursor's 0.5 s blink (pass the beat time)
 (function () {
   const PAL = { bg: "#0B0B14", panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0", data: "#2DD4BF", hero: "#C084FC", muted: "#4A5070" };
-  const CARD = { x: 65, w: 885, pad: 34, pitch: 68, size: 52, rows: 8, cy: 665 };
+  const CARD = { x: 65, w: 885, pad: 30, pitch: 64, size: 48, rows: 8, cy: 665 };
   const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 
   // How many characters a typist has landed `seconds` after starting, over
