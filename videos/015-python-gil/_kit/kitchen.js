@@ -15,7 +15,7 @@
 //
 // Layout (px, 1080×1920; captions anchored bottom, so the stage runs to y 1330):
 //   label row     y 235–367   "kitchen / process" left, "knife / GIL" right
-//   kitchen box   y 380–900   x 80–950; cooks' feet at y 850; counter y 740–765
+//   kitchen box   y 380–900   x 80–950; cooks' feet at y 880 (~250 px tall, toques on); counter y 740–765
 //   bottom zone   y 980–1300  code card, timer bar, the ghost kitchen, the small row, the fridge
 //   big row       y 380–900   the four kitchens, when the row is the subject (ep 2)
 (function () {
@@ -42,17 +42,17 @@
 
   // ---- geometry ----
   const BOX = { x: 80, y: 380, w: 870, h: 520, rx: 28 };
-  const FEET = 850, FIG = 0.42;
+  const FEET = 880, FIG = 0.48;               // cooks ~260 px tall; the knife keeps its own size
   const COUNTER = { x: 290, y: 740, w: 520, h: 25 };
-  const SPOT = { counter: [400, 510, 620, 730], oven: 860, appl: 170 };
+  const SPOT = { counter: [370, 500, 630, 760], oven: 860, appl: 170 };
   const OVEN = { x: 800, y: 660, w: 120, h: 180 };
   const APPL = { x: 110, y: 770, w: 120, h: 70 };
   const ZONE = { y: 980, h: 320 };                  // bottom zone
   const ROW = { n: 4, w: 200, gap: 23, x0: 80 };    // four kitchens across the safe width
   const rowX = (i) => ROW.x0 + i * (ROW.w + ROW.gap);
   // the row in its two homes: small (bottom zone) and big (the kitchen box's place)
-  const ROW_SMALL = { y: 1050, h: 250, fig: 0.22, feet: 1272, counter: 1205 };
-  const ROW_BIG = { y: 420, h: 440, fig: 0.36, feet: 820, counter: 720 };
+  const ROW_SMALL = { y: 1050, h: 250, fig: 0.27, feet: 1278, counter: 1205 };
+  const ROW_BIG = { y: 420, h: 440, fig: 0.44, feet: 830, counter: 720 };
   const WALL_I = 2;                                  // the wall stands before kitchen index 2
   const PIPE = { y: 600, h: 44, x0: 420, x1: 610 };  // crosses the wall between kitchens 1 and 2 (big row)
   const FRIDGE = { x: 80, y: 980, w: 870, h: 320, door: 420, shelves: [1050, 1130, 1210] };
@@ -139,7 +139,10 @@
     node("circle", { cx: APPL.x + APPL.w - 24, cy: APPL.y + APPL.h - 18, r: 7, fill: PAL.dim }, gAppl);
 
     // the cooks and their clocks
-    const cooks = SPOT.counter.map((x) => C.human(svg, { x, y: FEET, s: FIG }));
+    // a toque on every cook, in the head group so it tilts with the head (head top sits at y −516 in figure space)
+    const toque = (p) => node("path", { d: "M-42 -500 H42 V-526 C62 -562 42 -594 0 -594 C-42 -594 -62 -562 -42 -526 Z",
+      fill: PAL.bg, stroke: PAL.ink, "stroke-width": 8, "stroke-linejoin": "round" }, p.headG);
+    const cooks = SPOT.counter.map((x) => { const p = C.human(svg, { x, y: FEET, s: FIG }); toque(p); return p; });
     const clocks = cooks.map(() => {
       const g = node("g", {}, svg);
       node("circle", { cx: 0, cy: 0, r: 26, fill: PAL.bg, stroke: PAL.dim, "stroke-width": 5 }, g);
@@ -181,7 +184,7 @@
       rowBoxes.push(node("rect", { x: rowX(i), y: 0, width: ROW.w, height: 10, rx: 18, fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6 }, rowG));
       rowCounters.push(node("rect", { x: rowX(i) + 30, y: 0, width: ROW.w - 60, height: 16, rx: 4, fill: PAL.muted }, rowG));
       rowBowls.push(node("ellipse", { cx: rowX(i) + ROW.w / 2 + 26, cy: 0, rx: 18, ry: 8, fill: PAL.bg, stroke: PAL.data, "stroke-width": 4 }, rowG));
-      rowCooks.push(C.human(rowG, { x: rowX(i) + ROW.w / 2 - 10, y: 0, s: 0.3 }));
+      const rc = C.human(rowG, { x: rowX(i) + ROW.w / 2 - 10, y: 0, s: 0.3 }); toque(rc); rowCooks.push(rc);
       const k = node("g", {}, rowG);
       node("path", { d: "M0 0 L0 -20 Q0 -54 8 -64 L13 -64 Q13 -36 11 -20 L11 0 Z", fill: PAL.ink, stroke: PAL.ink, "stroke-width": 2 }, k);
       node("rect", { x: -3, y: 0, width: 17, height: 26, rx: 4, fill: PAL.bg, stroke: PAL.ink, "stroke-width": 4 }, k);
@@ -256,13 +259,13 @@
         const dim = !holds && c.at === "counter" && c.wait;
         p.el.setAttribute("opacity", S.K.o * (dim ? 0.55 : 1));
         opac(clocks[i], c.wait * S.K.o);
-        clocks[i].setAttribute("transform", `translate(${x + 54} ${FEET - 230})`);
+        clocks[i].setAttribute("transform", `translate(${x + 70} ${FEET - 262})`);
         bowls[i].setAttribute("opacity", c.at === "counter" ? 1 : 0.25);
       });
       // knife
       if (S.knife.holder >= 0) {
         const h = C.hand(cooks[S.knife.holder], 1);
-        knife.setAttribute("transform", `translate(${h[0]} ${h[1]}) rotate(${-20 + 35 * Math.sin(Math.PI * chop)}) scale(${FIG / 0.42})`);
+        knife.setAttribute("transform", `translate(${h[0]} ${h[1]}) rotate(${-20 + 35 * Math.sin(Math.PI * chop)}) scale(0.85)`);
       } else knife.setAttribute("transform", `translate(540 ${COUNTER.y - 8}) rotate(-90) scale(0.9)`);
       opac(knife, S.K.o);
       knifeColor(S.knife.hero ? PAL.hero : PAL.ink);
@@ -285,7 +288,7 @@
         C.place(p, rowX(i) + ROW.w / 2 - 10, home.feet, home.fig);
         C.pose(p, { armL: 22, armR: 70 + 28 * Math.sin(Math.PI * chop) * R.chop, lean: -3, tilt: 0 });
         const h = C.hand(p, 1);
-        rowKnives[i].setAttribute("transform", `translate(${h[0]} ${h[1]}) rotate(${-20 + 35 * Math.sin(Math.PI * chop) * R.chop}) scale(${home.fig / 0.3})`);
+        rowKnives[i].setAttribute("transform", `translate(${h[0]} ${h[1]}) rotate(${-20 + 35 * Math.sin(Math.PI * chop) * R.chop}) scale(${home.fig / 0.42})`);
         rowKnives[i].querySelectorAll && Array.from(rowKnives[i].querySelectorAll("*")).forEach((el, k) => {
           const c = R.hero ? PAL.hero : PAL.ink;
           if (k === 0) { el.setAttribute("fill", c); el.setAttribute("stroke", c); } else el.setAttribute("stroke", c);
