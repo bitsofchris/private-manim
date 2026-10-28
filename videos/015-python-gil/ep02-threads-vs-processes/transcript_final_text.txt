@@ -1,0 +1,61 @@
+00:00.001-00:02.800
+In Python, you use threads when you're stuck waiting for I.
+
+00:02.880-00:03.040
+O.
+
+00:03.200-00:06.480
+, or processes when you have more CPU work in Python to do.
+
+00:06.480-00:09.920
+The part people often miss is what an additional process actually costs.
+
+00:09.500-00:11.420
+Think of a process as a full kitchen.
+
+00:11.420-00:14.059
+Threads are its cooks, the gill is one knife.
+
+00:14.059-00:16.299
+Multiprocessing builds more kitchens.
+
+00:16.299-00:21.660
+Each process has its own interpreter and its own gill, so Python actually runs in parallel
+
+00:21.400-00:28.360
+PyTorch's data loader workers are new processes, but the cost is that kitchens don't actually share counter space.
+
+00:28.360-00:31.080
+Similarly, processes don't share memory.
+
+00:30.800-00:35.600
+Every result crossing between processes needs to be pickled, pushed through a pipe, and then unpickled again.
+
+00:35.600-00:38.399
+For a big array, that copy can cost more than the compute.
+
+00:38.399-00:41.600
+The fix here is a shared fridge or shared memory.
+
+00:41.200-00:44.720
+You put the big tensor in once and pass a note that says shelf three.
+
+00:44.720-00:47.920
+The pipe carries the note, not the actual food.
+
+00:47.920-00:49.200
+Think if you're waiting on I.
+
+00:49.280-00:49.440
+O.
+
+00:49.600-00:50.640
+, use threads.
+
+00:50.640-00:54.720
+If you're blocked by Python or CPU intensive work, use more processes.
+
+00:54.200-00:58.440
+And if you have big data between processes, be sure that you shared memory
+
+

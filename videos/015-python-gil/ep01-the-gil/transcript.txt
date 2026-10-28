@@ -1,0 +1,52 @@
+00:00.001-00:03.440
+In Python, think of a process as a kitchen.
+
+00:03.440-00:08.080
+Here, threads are cooks, and they all share the kitchen's memory.
+
+00:07.859-00:11.059
+The knife is the gill, the global interpreter lock.
+
+00:11.059-00:15.940
+Whoever holds the knife is what runs the Python code while everyone else waits.
+
+00:15.940-00:19.779
+This is why threading a CPU loop makes it no faster.
+
+00:19.779-00:23.779
+Four threads with one knife, you have one core's worth of work still.
+
+00:24.020-00:27.140
+But a cook puts the knife down to wait on the oven.
+
+00:27.140-00:28.020
+That could be an I.
+
+00:28.100-00:28.260
+O.
+
+00:28.420-00:30.660
+, a request, a file read, a sleep.
+
+00:30.660-00:34.180
+The gill is released while the thread waits so another thread can run.
+
+00:36.120-00:37.240
+Same for an appliance.
+
+00:37.240-00:39.960
+Think of NumPy, image decoding, a tokenizer.
+
+00:39.960-00:42.280
+But when threads don't help, ask one thing.
+
+00:42.280-00:45.160
+Is this thread waiting or is it running Python?
+
+00:45.040-00:46.960
+If it's waiting, then threads work.
+
+00:46.960-00:50.320
+But if it's running Python you need a second kitchen or another process
+
+

@@ -1,0 +1,342 @@
+[
+ {
+  "start": 0.42,
+  "end": 1.27,
+  "text": "In Python"
+ },
+ {
+  "start": 1.33,
+  "end": 1.72,
+  "text": "think of a"
+ },
+ {
+  "start": 1.78,
+  "end": 2.44,
+  "text": "process as"
+ },
+ {
+  "start": 2.5,
+  "end": 2.98,
+  "text": "a kitchen."
+ },
+ {
+  "start": 3.56,
+  "end": 4.42,
+  "text": "Here, threads"
+ },
+ {
+  "start": 4.48,
+  "end": 5.08,
+  "text": "are cooks"
+ },
+ {
+  "start": 5.72,
+  "end": 5.96,
+  "text": "and they all"
+ },
+ {
+  "start": 6.02,
+  "end": 6.32,
+  "text": "share the"
+ },
+ {
+  "start": 6.38,
+  "end": 6.68,
+  "text": "kitchen's"
+ },
+ {
+  "start": 6.74,
+  "end": 7.0,
+  "text": "memory."
+ },
+ {
+  "start": 7.5,
+  "end": 8.18,
+  "text": "The knife is"
+ },
+ {
+  "start": 8.24,
+  "end": 8.7,
+  "text": "the GIL"
+ },
+ {
+  "start": 8.94,
+  "end": 9.24,
+  "text": "the global"
+ },
+ {
+  "start": 9.3,
+  "end": 9.66,
+  "text": "interpreter"
+ },
+ {
+  "start": 9.72,
+  "end": 10.1,
+  "text": "lock."
+ },
+ {
+  "start": 10.52,
+  "end": 11.4,
+  "text": "Whoever holds"
+ },
+ {
+  "start": 11.46,
+  "end": 11.92,
+  "text": "the knife"
+ },
+ {
+  "start": 11.98,
+  "end": 12.42,
+  "text": "is what"
+ },
+ {
+  "start": 12.6,
+  "end": 13.14,
+  "text": "runs the Python"
+ },
+ {
+  "start": 13.2,
+  "end": 13.62,
+  "text": "code while"
+ },
+ {
+  "start": 13.68,
+  "end": 13.94,
+  "text": "everyone"
+ },
+ {
+  "start": 14.0,
+  "end": 14.54,
+  "text": "else waits."
+ },
+ {
+  "start": 15.06,
+  "end": 15.4,
+  "text": "This is why"
+ },
+ {
+  "start": 15.46,
+  "end": 16.48,
+  "text": "threading a CPU"
+ },
+ {
+  "start": 16.54,
+  "end": 17.46,
+  "text": "loop makes it"
+ },
+ {
+  "start": 17.52,
+  "end": 18.06,
+  "text": "no faster."
+ },
+ {
+  "start": 18.7,
+  "end": 19.14,
+  "text": "Four threads"
+ },
+ {
+  "start": 19.2,
+  "end": 19.88,
+  "text": "with one knife"
+ },
+ {
+  "start": 19.97,
+  "end": 20.48,
+  "text": "you have one"
+ },
+ {
+  "start": 20.54,
+  "end": 21.1,
+  "text": "core's worth of"
+ },
+ {
+  "start": 21.16,
+  "end": 21.6,
+  "text": "work still."
+ },
+ {
+  "start": 22.06,
+  "end": 22.52,
+  "text": "But a cook"
+ },
+ {
+  "start": 22.58,
+  "end": 23.0,
+  "text": "puts the knife"
+ },
+ {
+  "start": 23.06,
+  "end": 23.8,
+  "text": "down to wait"
+ },
+ {
+  "start": 23.86,
+  "end": 24.32,
+  "text": "on the oven."
+ },
+ {
+  "start": 24.82,
+  "end": 25.1,
+  "text": "That could be"
+ },
+ {
+  "start": 25.16,
+  "end": 25.76,
+  "text": "an I/O"
+ },
+ {
+  "start": 25.82,
+  "end": 26.26,
+  "text": "a request"
+ },
+ {
+  "start": 26.27,
+  "end": 27.04,
+  "text": "a file read"
+ },
+ {
+  "start": 27.1,
+  "end": 27.5,
+  "text": "a sleep."
+ },
+ {
+  "start": 27.96,
+  "end": 28.4,
+  "text": "The GIL is"
+ },
+ {
+  "start": 28.46,
+  "end": 28.98,
+  "text": "released while"
+ },
+ {
+  "start": 29.04,
+  "end": 29.18,
+  "text": "the"
+ },
+ {
+  "start": 29.24,
+  "end": 29.74,
+  "text": "thread waits"
+ },
+ {
+  "start": 29.88,
+  "end": 30.4,
+  "text": "so another"
+ },
+ {
+  "start": 30.46,
+  "end": 31.06,
+  "text": "thread can run."
+ },
+ {
+  "start": 32.48,
+  "end": 32.82,
+  "text": "Same for"
+ },
+ {
+  "start": 32.88,
+  "end": 33.28,
+  "text": "an appliance."
+ },
+ {
+  "start": 33.54,
+  "end": 34.19,
+  "text": "Think of NumPy"
+ },
+ {
+  "start": 34.25,
+  "end": 34.98,
+  "text": "image decoding"
+ },
+ {
+  "start": 35.04,
+  "end": 35.6,
+  "text": "a tokenizer."
+ },
+ {
+  "start": 36.16,
+  "end": 36.32,
+  "text": "But when"
+ },
+ {
+  "start": 36.38,
+  "end": 36.98,
+  "text": "threads don't"
+ },
+ {
+  "start": 37.04,
+  "end": 37.64,
+  "text": "help, ask"
+ },
+ {
+  "start": 37.7,
+  "end": 38.08,
+  "text": "one thing."
+ },
+ {
+  "start": 38.22,
+  "end": 38.76,
+  "text": "Is this thread"
+ },
+ {
+  "start": 38.82,
+  "end": 39.56,
+  "text": "waiting, or is"
+ },
+ {
+  "start": 39.62,
+  "end": 39.68,
+  "text": "it"
+ },
+ {
+  "start": 39.68,
+  "end": 40.26,
+  "text": "running Python?"
+ },
+ {
+  "start": 40.84,
+  "end": 41.02,
+  "text": "If it's"
+ },
+ {
+  "start": 41.08,
+  "end": 41.58,
+  "text": "waiting, then"
+ },
+ {
+  "start": 41.64,
+  "end": 42.14,
+  "text": "threads work."
+ },
+ {
+  "start": 42.56,
+  "end": 42.74,
+  "text": "But if it's"
+ },
+ {
+  "start": 42.8,
+  "end": 43.32,
+  "text": "running Python"
+ },
+ {
+  "start": 43.38,
+  "end": 43.74,
+  "text": "you need a"
+ },
+ {
+  "start": 43.8,
+  "end": 44.42,
+  "text": "second kitchen"
+ },
+ {
+  "start": 44.42,
+  "end": 44.64,
+  "text": "or another"
+ },
+ {
+  "start": 44.7,
+  "end": 45.22,
+  "text": "process."
+ }
+]

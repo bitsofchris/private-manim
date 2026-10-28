@@ -1,0 +1,1135 @@
+{
+  "segments" : [
+    {
+      "end" : 2920,
+      "id" : "3E48DA1B-8B72-42B3-BFE9-8EEC068AD8AC",
+      "start" : 1,
+      "text" : "In Python, you use threads when you're stuck waiting for I/O,",
+      "words" : [
+        {
+          "end" : 460,
+          "start" : 0,
+          "text" : "In"
+        },
+        {
+          "end" : 780,
+          "start" : 460,
+          "text" : "Python,"
+        },
+        {
+          "end" : 1040,
+          "start" : 980,
+          "text" : "you"
+        },
+        {
+          "end" : 1200,
+          "start" : 1040,
+          "text" : "use"
+        },
+        {
+          "end" : 1560,
+          "start" : 1200,
+          "text" : "threads"
+        },
+        {
+          "end" : 1720,
+          "start" : 1560,
+          "text" : "when"
+        },
+        {
+          "end" : 1860,
+          "start" : 1720,
+          "text" : "you're"
+        },
+        {
+          "end" : 2080,
+          "start" : 1860,
+          "text" : "stuck"
+        },
+        {
+          "end" : 2340,
+          "start" : 2080,
+          "text" : "waiting"
+        },
+        {
+          "end" : 2540,
+          "start" : 2340,
+          "text" : "for"
+        },
+        {
+          "end" : 2760,
+          "start" : 2540,
+          "text" : "I"
+        },
+        {
+          "end" : 2920,
+          "start" : 2760,
+          "text" : "/O,"
+        }
+      ]
+    },
+    {
+      "end" : 5960,
+      "id" : "27AAA881-2075-4A7D-8F17-303B6516F081",
+      "start" : 3360,
+      "text" : "or processes when you have more CPU work in Python to do.",
+      "words" : [
+        {
+          "end" : 3420,
+          "start" : 3360,
+          "text" : "or"
+        },
+        {
+          "end" : 3920,
+          "start" : 3420,
+          "text" : "processes"
+        },
+        {
+          "end" : 4180,
+          "start" : 3920,
+          "text" : "when"
+        },
+        {
+          "end" : 4260,
+          "start" : 4180,
+          "text" : "you"
+        },
+        {
+          "end" : 4360,
+          "start" : 4260,
+          "text" : "have"
+        },
+        {
+          "end" : 4500,
+          "start" : 4360,
+          "text" : "more"
+        },
+        {
+          "end" : 4880,
+          "start" : 4500,
+          "text" : "CPU"
+        },
+        {
+          "end" : 5200,
+          "start" : 4880,
+          "text" : "work"
+        },
+        {
+          "end" : 5280,
+          "start" : 5200,
+          "text" : "in"
+        },
+        {
+          "end" : 5620,
+          "start" : 5280,
+          "text" : "Python"
+        },
+        {
+          "end" : 5780,
+          "start" : 5620,
+          "text" : "to"
+        },
+        {
+          "end" : 5960,
+          "start" : 5780,
+          "text" : "do."
+        }
+      ]
+    },
+    {
+      "end" : 9260,
+      "id" : "6162C5A4-E529-4E1A-B34A-A103F3D1ACA9",
+      "start" : 6260,
+      "text" : "The part people often miss is what an additional process actually costs.",
+      "words" : [
+        {
+          "end" : 6420,
+          "start" : 6260,
+          "text" : "The"
+        },
+        {
+          "end" : 6660,
+          "start" : 6420,
+          "text" : "part"
+        },
+        {
+          "end" : 6900,
+          "start" : 6660,
+          "text" : "people"
+        },
+        {
+          "end" : 7180,
+          "start" : 6900,
+          "text" : "often"
+        },
+        {
+          "end" : 7380,
+          "start" : 7180,
+          "text" : "miss"
+        },
+        {
+          "end" : 7500,
+          "start" : 7380,
+          "text" : "is"
+        },
+        {
+          "end" : 7660,
+          "start" : 7500,
+          "text" : "what"
+        },
+        {
+          "end" : 7780,
+          "start" : 7660,
+          "text" : "an"
+        },
+        {
+          "end" : 8160,
+          "start" : 7780,
+          "text" : "additional"
+        },
+        {
+          "end" : 8580,
+          "start" : 8160,
+          "text" : "process"
+        },
+        {
+          "end" : 8900,
+          "start" : 8580,
+          "text" : "actually"
+        },
+        {
+          "end" : 9260,
+          "start" : 8900,
+          "text" : "costs."
+        }
+      ]
+    },
+    {
+      "end" : 11200,
+      "id" : "B44E1514-2FBB-4D09-96D9-5B581BEA0EBA",
+      "start" : 9680,
+      "text" : "Think of a process as a full kitchen.",
+      "words" : [
+        {
+          "end" : 9900,
+          "start" : 9680,
+          "text" : "Think"
+        },
+        {
+          "end" : 10000,
+          "start" : 9900,
+          "text" : "of"
+        },
+        {
+          "end" : 10100,
+          "start" : 10000,
+          "text" : "a"
+        },
+        {
+          "end" : 10440,
+          "start" : 10100,
+          "text" : "process"
+        },
+        {
+          "end" : 10580,
+          "start" : 10440,
+          "text" : "as"
+        },
+        {
+          "end" : 10660,
+          "start" : 10580,
+          "text" : "a"
+        },
+        {
+          "end" : 10860,
+          "start" : 10660,
+          "text" : "full"
+        },
+        {
+          "end" : 11200,
+          "start" : 10860,
+          "text" : "kitchen."
+        }
+      ]
+    },
+    {
+      "end" : 13640,
+      "id" : "FF5A292E-3790-4A08-8291-58649149CF02",
+      "start" : 11700,
+      "text" : "Threads are its cooks, the gill is one knife.",
+      "words" : [
+        {
+          "end" : 11900,
+          "start" : 11700,
+          "text" : "Threads"
+        },
+        {
+          "end" : 11960,
+          "start" : 11900,
+          "text" : "are"
+        },
+        {
+          "end" : 12140,
+          "start" : 11960,
+          "text" : "its"
+        },
+        {
+          "end" : 12400,
+          "start" : 12140,
+          "text" : "cooks,"
+        },
+        {
+          "end" : 12880,
+          "start" : 12760,
+          "text" : "the"
+        },
+        {
+          "end" : 13020,
+          "start" : 12880,
+          "text" : "gill"
+        },
+        {
+          "end" : 13140,
+          "start" : 13020,
+          "text" : "is"
+        },
+        {
+          "end" : 13320,
+          "start" : 13140,
+          "text" : "one"
+        },
+        {
+          "end" : 13640,
+          "start" : 13320,
+          "text" : "knife."
+        }
+      ]
+    },
+    {
+      "end" : 15820,
+      "id" : "1EAB9717-5A9B-4C8F-AA7F-E9F6891FDAA9",
+      "start" : 14460,
+      "text" : "Multiprocessing builds more kitchens.",
+      "words" : [
+        {
+          "end" : 14940,
+          "start" : 14460,
+          "text" : "Multiprocessing"
+        },
+        {
+          "end" : 15220,
+          "start" : 14940,
+          "text" : "builds"
+        },
+        {
+          "end" : 15420,
+          "start" : 15220,
+          "text" : "more"
+        },
+        {
+          "end" : 15820,
+          "start" : 15420,
+          "text" : "kitchens."
+        }
+      ]
+    },
+    {
+      "end" : 19060,
+      "id" : "44E791B6-0A2D-4255-B8C4-6A00FFA30C3F",
+      "start" : 16360,
+      "text" : "Each process has its own interpreter and its own gill,",
+      "words" : [
+        {
+          "end" : 16600,
+          "start" : 16360,
+          "text" : "Each"
+        },
+        {
+          "end" : 17120,
+          "start" : 16600,
+          "text" : "process"
+        },
+        {
+          "end" : 17380,
+          "start" : 17120,
+          "text" : "has"
+        },
+        {
+          "end" : 17520,
+          "start" : 17380,
+          "text" : "its"
+        },
+        {
+          "end" : 17740,
+          "start" : 17520,
+          "text" : "own"
+        },
+        {
+          "end" : 18160,
+          "start" : 17740,
+          "text" : "interpreter"
+        },
+        {
+          "end" : 18440,
+          "start" : 18160,
+          "text" : "and"
+        },
+        {
+          "end" : 18600,
+          "start" : 18440,
+          "text" : "its"
+        },
+        {
+          "end" : 18860,
+          "start" : 18600,
+          "text" : "own"
+        },
+        {
+          "end" : 19060,
+          "start" : 18860,
+          "text" : "gill,"
+        }
+      ]
+    },
+    {
+      "end" : 21180,
+      "id" : "4FF7946C-7F4F-4A38-9681-1589736A11F8",
+      "start" : 19460,
+      "text" : "so Python actually runs in parallel.",
+      "words" : [
+        {
+          "end" : 19520,
+          "start" : 19460,
+          "text" : "so"
+        },
+        {
+          "end" : 19940,
+          "start" : 19520,
+          "text" : "Python"
+        },
+        {
+          "end" : 20440,
+          "start" : 19940,
+          "text" : "actually"
+        },
+        {
+          "end" : 20740,
+          "start" : 20440,
+          "text" : "runs"
+        },
+        {
+          "end" : 20900,
+          "start" : 20740,
+          "text" : "in"
+        },
+        {
+          "end" : 21180,
+          "start" : 20900,
+          "text" : "parallel."
+        }
+      ]
+    },
+    {
+      "end" : 24260,
+      "id" : "C1047AC4-BABB-4551-9BAA-F4FAD30DD40C",
+      "start" : 21820,
+      "text" : "PyTorch's data loader workers are new processes.",
+      "words" : [
+        {
+          "end" : 22300,
+          "start" : 21820,
+          "text" : "PyTorch's"
+        },
+        {
+          "end" : 22480,
+          "start" : 22300,
+          "text" : "data"
+        },
+        {
+          "end" : 22740,
+          "start" : 22480,
+          "text" : "loader"
+        },
+        {
+          "end" : 23000,
+          "start" : 22740,
+          "text" : "workers"
+        },
+        {
+          "end" : 23480,
+          "start" : 23000,
+          "text" : "are"
+        },
+        {
+          "end" : 23700,
+          "start" : 23480,
+          "text" : "new"
+        },
+        {
+          "end" : 24260,
+          "start" : 23700,
+          "text" : "processes."
+        }
+      ]
+    },
+    {
+      "end" : 27860,
+      "id" : "44ABEA46-0801-49D0-8743-70A25CEDCBA0",
+      "start" : 24780,
+      "text" : "But the cost is that kitchens don't actually share counter space.",
+      "words" : [
+        {
+          "end" : 24860,
+          "start" : 24780,
+          "text" : "But"
+        },
+        {
+          "end" : 24980,
+          "start" : 24860,
+          "text" : "the"
+        },
+        {
+          "end" : 25240,
+          "start" : 24980,
+          "text" : "cost"
+        },
+        {
+          "end" : 25380,
+          "start" : 25240,
+          "text" : "is"
+        },
+        {
+          "end" : 25580,
+          "start" : 25380,
+          "text" : "that"
+        },
+        {
+          "end" : 26620,
+          "start" : 25580,
+          "text" : "kitchens"
+        },
+        {
+          "end" : 26880,
+          "start" : 26620,
+          "text" : "don't"
+        },
+        {
+          "end" : 27080,
+          "start" : 26880,
+          "text" : "actually"
+        },
+        {
+          "end" : 27320,
+          "start" : 27080,
+          "text" : "share"
+        },
+        {
+          "end" : 27640,
+          "start" : 27320,
+          "text" : "counter"
+        },
+        {
+          "end" : 27860,
+          "start" : 27640,
+          "text" : "space."
+        }
+      ]
+    },
+    {
+      "end" : 30500,
+      "id" : "43817121-BEDD-4043-8579-4C096D92E825",
+      "start" : 28200,
+      "text" : "Similarly, processes don't share memory.",
+      "words" : [
+        {
+          "end" : 28840,
+          "start" : 28200,
+          "text" : "Similarly,"
+        },
+        {
+          "end" : 29560,
+          "start" : 29000,
+          "text" : "processes"
+        },
+        {
+          "end" : 29980,
+          "start" : 29560,
+          "text" : "don't"
+        },
+        {
+          "end" : 30220,
+          "start" : 29980,
+          "text" : "share"
+        },
+        {
+          "end" : 30500,
+          "start" : 30220,
+          "text" : "memory."
+        }
+      ]
+    },
+    {
+      "end" : 33640,
+      "id" : "33D0068F-BE9D-41A0-AF79-C23C3DA46C96",
+      "start" : 31180,
+      "text" : "Every result crossing between processes needs to be pickled,",
+      "words" : [
+        {
+          "end" : 31280,
+          "start" : 31180,
+          "text" : "Every"
+        },
+        {
+          "end" : 31620,
+          "start" : 31280,
+          "text" : "result"
+        },
+        {
+          "end" : 32119,
+          "start" : 31620,
+          "text" : "crossing"
+        },
+        {
+          "end" : 32419,
+          "start" : 32119,
+          "text" : "between"
+        },
+        {
+          "end" : 32840,
+          "start" : 32419,
+          "text" : "processes"
+        },
+        {
+          "end" : 33160,
+          "start" : 32840,
+          "text" : "needs"
+        },
+        {
+          "end" : 33280,
+          "start" : 33160,
+          "text" : "to"
+        },
+        {
+          "end" : 33440,
+          "start" : 33280,
+          "text" : "be"
+        },
+        {
+          "end" : 33640,
+          "start" : 33440,
+          "text" : "pickled,"
+        }
+      ]
+    },
+    {
+      "end" : 35340,
+      "id" : "F343972A-33E9-4EED-9B1F-F243FAB149E7",
+      "start" : 33920,
+      "text" : "pushed through a pipe, and then unpickled again.",
+      "words" : [
+        {
+          "end" : 33980,
+          "start" : 33920,
+          "text" : "pushed"
+        },
+        {
+          "end" : 34140,
+          "start" : 33980,
+          "text" : "through"
+        },
+        {
+          "end" : 34260,
+          "start" : 34140,
+          "text" : "a"
+        },
+        {
+          "end" : 34460,
+          "start" : 34260,
+          "text" : "pipe,"
+        },
+        {
+          "end" : 34600,
+          "start" : 34520,
+          "text" : "and"
+        },
+        {
+          "end" : 34700,
+          "start" : 34600,
+          "text" : "then"
+        },
+        {
+          "end" : 35060,
+          "start" : 34700,
+          "text" : "unpickled"
+        },
+        {
+          "end" : 35340,
+          "start" : 35060,
+          "text" : "again."
+        }
+      ]
+    },
+    {
+      "end" : 38100,
+      "id" : "A4522362-4065-4EC8-8931-1E76274A0CEB",
+      "start" : 35820,
+      "text" : "For a big array, that copy can cost more than the compute.",
+      "words" : [
+        {
+          "end" : 35900,
+          "start" : 35820,
+          "text" : "For"
+        },
+        {
+          "end" : 36000,
+          "start" : 35900,
+          "text" : "a"
+        },
+        {
+          "end" : 36160,
+          "start" : 36000,
+          "text" : "big"
+        },
+        {
+          "end" : 36360,
+          "start" : 36160,
+          "text" : "array,"
+        },
+        {
+          "end" : 36540,
+          "start" : 36390,
+          "text" : "that"
+        },
+        {
+          "end" : 36820,
+          "start" : 36540,
+          "text" : "copy"
+        },
+        {
+          "end" : 36980,
+          "start" : 36820,
+          "text" : "can"
+        },
+        {
+          "end" : 37300,
+          "start" : 36980,
+          "text" : "cost"
+        },
+        {
+          "end" : 37540,
+          "start" : 37300,
+          "text" : "more"
+        },
+        {
+          "end" : 37680,
+          "start" : 37540,
+          "text" : "than"
+        },
+        {
+          "end" : 37780,
+          "start" : 37680,
+          "text" : "the"
+        },
+        {
+          "end" : 38100,
+          "start" : 37780,
+          "text" : "compute."
+        }
+      ]
+    },
+    {
+      "end" : 40940,
+      "id" : "3E271CA5-D7D4-447E-B4C0-266FA44F253E",
+      "start" : 38530,
+      "text" : "The fix here is a shared fridge or shared memory.",
+      "words" : [
+        {
+          "end" : 38680,
+          "start" : 38530,
+          "text" : "The"
+        },
+        {
+          "end" : 38980,
+          "start" : 38680,
+          "text" : "fix"
+        },
+        {
+          "end" : 39180,
+          "start" : 38980,
+          "text" : "here"
+        },
+        {
+          "end" : 39320,
+          "start" : 39180,
+          "text" : "is"
+        },
+        {
+          "end" : 39480,
+          "start" : 39320,
+          "text" : "a"
+        },
+        {
+          "end" : 39780,
+          "start" : 39480,
+          "text" : "shared"
+        },
+        {
+          "end" : 40100,
+          "start" : 39780,
+          "text" : "fridge"
+        },
+        {
+          "end" : 40360,
+          "start" : 40100,
+          "text" : "or"
+        },
+        {
+          "end" : 40660,
+          "start" : 40360,
+          "text" : "shared"
+        },
+        {
+          "end" : 40940,
+          "start" : 40660,
+          "text" : "memory."
+        }
+      ]
+    },
+    {
+      "end" : 44380,
+      "id" : "3582B79C-C159-44BA-A5F2-5002AE9660B5",
+      "start" : 41350,
+      "text" : "You put the big tensor in once and pass a note that says shelf three.",
+      "words" : [
+        {
+          "end" : 41480,
+          "start" : 41350,
+          "text" : "You"
+        },
+        {
+          "end" : 41700,
+          "start" : 41480,
+          "text" : "put"
+        },
+        {
+          "end" : 41820,
+          "start" : 41700,
+          "text" : "the"
+        },
+        {
+          "end" : 42080,
+          "start" : 41820,
+          "text" : "big"
+        },
+        {
+          "end" : 42400,
+          "start" : 42080,
+          "text" : "tensor"
+        },
+        {
+          "end" : 42520,
+          "start" : 42400,
+          "text" : "in"
+        },
+        {
+          "end" : 42840,
+          "start" : 42520,
+          "text" : "once"
+        },
+        {
+          "end" : 43020,
+          "start" : 42840,
+          "text" : "and"
+        },
+        {
+          "end" : 43320,
+          "start" : 43020,
+          "text" : "pass"
+        },
+        {
+          "end" : 43380,
+          "start" : 43320,
+          "text" : "a"
+        },
+        {
+          "end" : 43520,
+          "start" : 43380,
+          "text" : "note"
+        },
+        {
+          "end" : 43660,
+          "start" : 43520,
+          "text" : "that"
+        },
+        {
+          "end" : 43880,
+          "start" : 43660,
+          "text" : "says"
+        },
+        {
+          "end" : 44160,
+          "start" : 43880,
+          "text" : "shelf"
+        },
+        {
+          "end" : 44380,
+          "start" : 44160,
+          "text" : "three."
+        }
+      ]
+    },
+    {
+      "end" : 47560,
+      "id" : "39788891-6AAC-4FE9-8DE6-7556AC40B8D5",
+      "start" : 44820,
+      "text" : "The pipe carries the note, not the actual food.",
+      "words" : [
+        {
+          "end" : 45000,
+          "start" : 44820,
+          "text" : "The"
+        },
+        {
+          "end" : 45220,
+          "start" : 45000,
+          "text" : "pipe"
+        },
+        {
+          "end" : 45580,
+          "start" : 45220,
+          "text" : "carries"
+        },
+        {
+          "end" : 45760,
+          "start" : 45580,
+          "text" : "the"
+        },
+        {
+          "end" : 46120,
+          "start" : 45760,
+          "text" : "note,"
+        },
+        {
+          "end" : 46740,
+          "start" : 46600,
+          "text" : "not"
+        },
+        {
+          "end" : 46900,
+          "start" : 46740,
+          "text" : "the"
+        },
+        {
+          "end" : 47180,
+          "start" : 46900,
+          "text" : "actual"
+        },
+        {
+          "end" : 47560,
+          "start" : 47180,
+          "text" : "food."
+        }
+      ]
+    },
+    {
+      "end" : 50180,
+      "id" : "970DFCC4-AA19-4805-B925-0148AB05D081",
+      "start" : 48080,
+      "text" : "Think if you're waiting on I/O, use threads.",
+      "words" : [
+        {
+          "end" : 48320,
+          "start" : 48080,
+          "text" : "Think"
+        },
+        {
+          "end" : 48440,
+          "start" : 48320,
+          "text" : "if"
+        },
+        {
+          "end" : 48560,
+          "start" : 48440,
+          "text" : "you're"
+        },
+        {
+          "end" : 48840,
+          "start" : 48560,
+          "text" : "waiting"
+        },
+        {
+          "end" : 49040,
+          "start" : 48840,
+          "text" : "on"
+        },
+        {
+          "end" : 49240,
+          "start" : 49040,
+          "text" : "I"
+        },
+        {
+          "end" : 49420,
+          "start" : 49240,
+          "text" : "/O,"
+        },
+        {
+          "end" : 49800,
+          "start" : 49740,
+          "text" : "use"
+        },
+        {
+          "end" : 50180,
+          "start" : 49800,
+          "text" : "threads."
+        }
+      ]
+    },
+    {
+      "end" : 53820,
+      "id" : "23911F2F-180C-4473-A57B-A7B1648CF4E0",
+      "start" : 50640,
+      "text" : "If you're blocked by Python or CPU intensive work, use more processes.",
+      "words" : [
+        {
+          "end" : 50780,
+          "start" : 50640,
+          "text" : "If"
+        },
+        {
+          "end" : 50920,
+          "start" : 50780,
+          "text" : "you're"
+        },
+        {
+          "end" : 51200,
+          "start" : 50920,
+          "text" : "blocked"
+        },
+        {
+          "end" : 51380,
+          "start" : 51200,
+          "text" : "by"
+        },
+        {
+          "end" : 51780,
+          "start" : 51380,
+          "text" : "Python"
+        },
+        {
+          "end" : 51940,
+          "start" : 51780,
+          "text" : "or"
+        },
+        {
+          "end" : 52240,
+          "start" : 51940,
+          "text" : "CPU"
+        },
+        {
+          "end" : 52540,
+          "start" : 52240,
+          "text" : "intensive"
+        },
+        {
+          "end" : 52880,
+          "start" : 52540,
+          "text" : "work,"
+        },
+        {
+          "end" : 53160,
+          "start" : 53040,
+          "text" : "use"
+        },
+        {
+          "end" : 53360,
+          "start" : 53160,
+          "text" : "more"
+        },
+        {
+          "end" : 53820,
+          "start" : 53360,
+          "text" : "processes."
+        }
+      ]
+    },
+    {
+      "end" : 57900,
+      "id" : "748DE797-CC87-4DCF-BE78-D05972BD62E3",
+      "start" : 54500,
+      "text" : "And if you have big data between processes, be sure to use shared memory.",
+      "words" : [
+        {
+          "end" : 54680,
+          "start" : 54500,
+          "text" : "And"
+        },
+        {
+          "end" : 54800,
+          "start" : 54680,
+          "text" : "if"
+        },
+        {
+          "end" : 54820,
+          "start" : 54800,
+          "text" : "you"
+        },
+        {
+          "end" : 54940,
+          "start" : 54820,
+          "text" : "have"
+        },
+        {
+          "end" : 55200,
+          "start" : 54940,
+          "text" : "big"
+        },
+        {
+          "end" : 55440,
+          "start" : 55200,
+          "text" : "data"
+        },
+        {
+          "end" : 55740,
+          "start" : 55440,
+          "text" : "between"
+        },
+        {
+          "end" : 56240,
+          "start" : 55740,
+          "text" : "processes,"
+        },
+        {
+          "end" : 56800,
+          "start" : 56720,
+          "text" : "be"
+        },
+        {
+          "end" : 57120,
+          "start" : 56800,
+          "text" : "sure"
+        },
+        {
+          "end" : 57180,
+          "start" : 57120,
+          "text" : "to"
+        },
+        {
+          "end" : 57400,
+          "start" : 57180,
+          "text" : "use"
+        },
+        {
+          "end" : 57660,
+          "start" : 57400,
+          "text" : "shared"
+        },
+        {
+          "end" : 57900,
+          "start" : 57660,
+          "text" : "memory."
+        }
+      ]
+    }
+  ],
+  "text" : "In Python, you use threads when you're stuck waiting for I/O,\nor processes when you have more CPU work in Python to do.\nThe part people often miss is what an additional process actually costs.\nThink of a process as a full kitchen.\nThreads are its cooks, the gill is one knife.\nMultiprocessing builds more kitchens.\nEach process has its own interpreter and its own gill,\nso Python actually runs in parallel.\nPyTorch's data loader workers are new processes.\nBut the cost is that kitchens don't actually share counter space.\nSimilarly, processes don't share memory.\nEvery result crossing between processes needs to be pickled,\npushed through a pipe, and then unpickled again.\nFor a big array, that copy can cost more than the compute.\nThe fix here is a shared fridge or shared memory.\nYou put the big tensor in once and pass a note that says shelf three.\nThe pipe carries the note, not the actual food.\nThink if you're waiting on I/O, use threads.\nIf you're blocked by Python or CPU intensive work, use more processes.\nAnd if you have big data between processes, be sure to use shared memory."
+}

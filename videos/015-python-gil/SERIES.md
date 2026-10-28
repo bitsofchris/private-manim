@@ -39,7 +39,7 @@ mind what passes between kitchens.
   "…vs asyncio python" and "…interview questions", so say "asyncio" once
   in the description).
 
-## The image (Chris's chat, 2026-10-26: one kitchen, one knife)
+## The image (Chris's chat, 2026-10-26: one kitchen, one knife; code: `_kit/kitchen.js`, seam states `SC.SEAM1` / `SC.SEAM2`)
 
 - **The kitchen** is a process: a rounded box with a counter, four
   line-drawn cooks (`videos/_shared/web/cast/cast.js` humans), an oven on
@@ -66,7 +66,8 @@ beat 7 only. Not the spine.
 
 ## Checklist
 
-- [ ] ep 1 VO edited by Chris, recorded
-- [ ] ep 2 VO edited by Chris, recorded
+- [x] ep 1 VO recorded 2026-10-28 (`ep01-the-gil/script.md`), cut, 46.1 s
+- [x] ep 2 VO recorded 2026-10-28 (`ep02-threads-vs-processes/script.md`), cut, 58.5 s (cut list for Chris)
+- [x] kit `_kit/kitchen.js` (both episodes' seam states) and `00_layout/` per episode (canonical frame for Chris)
 - [ ] ep 1 built, assembled, published
 - [ ] ep 2 built, assembled, published

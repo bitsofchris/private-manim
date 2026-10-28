@@ -1,0 +1,941 @@
+{
+  "segments" : [
+    {
+      "end" : 2980,
+      "id" : "16D19532-F44D-4169-A97F-5DC0C076D142",
+      "start" : 1,
+      "text" : "In Python, think of a process as a kitchen.",
+      "words" : [
+        {
+          "end" : 500,
+          "start" : 0,
+          "text" : "In"
+        },
+        {
+          "end" : 900,
+          "start" : 500,
+          "text" : "Python,"
+        },
+        {
+          "end" : 1500,
+          "start" : 1140,
+          "text" : "think"
+        },
+        {
+          "end" : 1640,
+          "start" : 1500,
+          "text" : "of"
+        },
+        {
+          "end" : 1780,
+          "start" : 1640,
+          "text" : "a"
+        },
+        {
+          "end" : 2260,
+          "start" : 1780,
+          "text" : "process"
+        },
+        {
+          "end" : 2500,
+          "start" : 2260,
+          "text" : "as"
+        },
+        {
+          "end" : 2660,
+          "start" : 2500,
+          "text" : "a"
+        },
+        {
+          "end" : 2980,
+          "start" : 2660,
+          "text" : "kitchen."
+        }
+      ]
+    },
+    {
+      "end" : 5080,
+      "id" : "812AB682-5EDA-4016-B252-90EDE1C5A395",
+      "start" : 3560,
+      "text" : "Here, threads are cooks,",
+      "words" : [
+        {
+          "end" : 3800,
+          "start" : 3560,
+          "text" : "Here,"
+        },
+        {
+          "end" : 4480,
+          "start" : 4220,
+          "text" : "threads"
+        },
+        {
+          "end" : 4600,
+          "start" : 4480,
+          "text" : "are"
+        },
+        {
+          "end" : 5080,
+          "start" : 4600,
+          "text" : "cooks,"
+        }
+      ]
+    },
+    {
+      "end" : 7000,
+      "id" : "06A95F56-9658-4AD3-A94A-636BCDF34A5B",
+      "start" : 5720,
+      "text" : "and they all share the kitchen's memory.",
+      "words" : [
+        {
+          "end" : 5780,
+          "start" : 5720,
+          "text" : "and"
+        },
+        {
+          "end" : 5860,
+          "start" : 5780,
+          "text" : "they"
+        },
+        {
+          "end" : 6020,
+          "start" : 5860,
+          "text" : "all"
+        },
+        {
+          "end" : 6220,
+          "start" : 6020,
+          "text" : "share"
+        },
+        {
+          "end" : 6380,
+          "start" : 6220,
+          "text" : "the"
+        },
+        {
+          "end" : 6740,
+          "start" : 6380,
+          "text" : "kitchen's"
+        },
+        {
+          "end" : 7000,
+          "start" : 6740,
+          "text" : "memory."
+        }
+      ]
+    },
+    {
+      "end" : 8700,
+      "id" : "B6D66CF7-54C6-4C7F-9D0D-FC2E964B0D1F",
+      "start" : 7500,
+      "text" : "The knife is the gill,",
+      "words" : [
+        {
+          "end" : 7620,
+          "start" : 7500,
+          "text" : "The"
+        },
+        {
+          "end" : 8040,
+          "start" : 7620,
+          "text" : "knife"
+        },
+        {
+          "end" : 8240,
+          "start" : 8040,
+          "text" : "is"
+        },
+        {
+          "end" : 8480,
+          "start" : 8240,
+          "text" : "the"
+        },
+        {
+          "end" : 8700,
+          "start" : 8480,
+          "text" : "gill,"
+        }
+      ]
+    },
+    {
+      "end" : 10100,
+      "id" : "F2841539-1AF7-4666-B304-7E5AD41D8E71",
+      "start" : 8940,
+      "text" : "the global interpreter lock.",
+      "words" : [
+        {
+          "end" : 9000,
+          "start" : 8940,
+          "text" : "the"
+        },
+        {
+          "end" : 9300,
+          "start" : 9000,
+          "text" : "global"
+        },
+        {
+          "end" : 9720,
+          "start" : 9300,
+          "text" : "interpreter"
+        },
+        {
+          "end" : 10100,
+          "start" : 9720,
+          "text" : "lock."
+        }
+      ]
+    },
+    {
+      "end" : 12420,
+      "id" : "C6FB6817-B152-4F7D-8632-A39D25F2E79E",
+      "start" : 10520,
+      "text" : "Whoever holds the knife is what",
+      "words" : [
+        {
+          "end" : 10840,
+          "start" : 10520,
+          "text" : "Whoever"
+        },
+        {
+          "end" : 11460,
+          "start" : 10840,
+          "text" : "holds"
+        },
+        {
+          "end" : 11660,
+          "start" : 11460,
+          "text" : "the"
+        },
+        {
+          "end" : 11980,
+          "start" : 11660,
+          "text" : "knife"
+        },
+        {
+          "end" : 12260,
+          "start" : 11980,
+          "text" : "is"
+        },
+        {
+          "end" : 12420,
+          "start" : 12260,
+          "text" : "what"
+        }
+      ]
+    },
+    {
+      "end" : 14540,
+      "id" : "11C54F57-C797-4715-A6C4-FF5B38CEBE96",
+      "start" : 12600,
+      "text" : "runs the Python code while everyone else waits.",
+      "words" : [
+        {
+          "end" : 12700,
+          "start" : 12600,
+          "text" : "runs"
+        },
+        {
+          "end" : 12860,
+          "start" : 12700,
+          "text" : "the"
+        },
+        {
+          "end" : 13200,
+          "start" : 12860,
+          "text" : "Python"
+        },
+        {
+          "end" : 13500,
+          "start" : 13200,
+          "text" : "code"
+        },
+        {
+          "end" : 13680,
+          "start" : 13500,
+          "text" : "while"
+        },
+        {
+          "end" : 14000,
+          "start" : 13680,
+          "text" : "everyone"
+        },
+        {
+          "end" : 14280,
+          "start" : 14000,
+          "text" : "else"
+        },
+        {
+          "end" : 14540,
+          "start" : 14280,
+          "text" : "waits."
+        }
+      ]
+    },
+    {
+      "end" : 18060,
+      "id" : "D751341D-F936-44FA-9F31-AE55AACC57A0",
+      "start" : 15060,
+      "text" : "This is why threading a CPU loop makes it no faster.",
+      "words" : [
+        {
+          "end" : 15240,
+          "start" : 15060,
+          "text" : "This"
+        },
+        {
+          "end" : 15340,
+          "start" : 15240,
+          "text" : "is"
+        },
+        {
+          "end" : 15460,
+          "start" : 15340,
+          "text" : "why"
+        },
+        {
+          "end" : 16040,
+          "start" : 15460,
+          "text" : "threading"
+        },
+        {
+          "end" : 16180,
+          "start" : 16040,
+          "text" : "a"
+        },
+        {
+          "end" : 16540,
+          "start" : 16180,
+          "text" : "CPU"
+        },
+        {
+          "end" : 16940,
+          "start" : 16540,
+          "text" : "loop"
+        },
+        {
+          "end" : 17400,
+          "start" : 16940,
+          "text" : "makes"
+        },
+        {
+          "end" : 17520,
+          "start" : 17400,
+          "text" : "it"
+        },
+        {
+          "end" : 17620,
+          "start" : 17520,
+          "text" : "no"
+        },
+        {
+          "end" : 18060,
+          "start" : 17620,
+          "text" : "faster."
+        }
+      ]
+    },
+    {
+      "end" : 19880,
+      "id" : "424EC0A7-4F8C-415E-B87E-BF4EB444CD04",
+      "start" : 18700,
+      "text" : "Four threads with one knife,",
+      "words" : [
+        {
+          "end" : 18840,
+          "start" : 18700,
+          "text" : "Four"
+        },
+        {
+          "end" : 19200,
+          "start" : 18840,
+          "text" : "threads"
+        },
+        {
+          "end" : 19340,
+          "start" : 19200,
+          "text" : "with"
+        },
+        {
+          "end" : 19540,
+          "start" : 19340,
+          "text" : "one"
+        },
+        {
+          "end" : 19880,
+          "start" : 19540,
+          "text" : "knife,"
+        }
+      ]
+    },
+    {
+      "end" : 21600,
+      "id" : "1CADBC09-0562-45D4-82F5-FE930B304E71",
+      "start" : 19970,
+      "text" : "you have one course worth of work still.",
+      "words" : [
+        {
+          "end" : 20120,
+          "start" : 19970,
+          "text" : "you"
+        },
+        {
+          "end" : 20260,
+          "start" : 20120,
+          "text" : "have"
+        },
+        {
+          "end" : 20540,
+          "start" : 20260,
+          "text" : "one"
+        },
+        {
+          "end" : 20840,
+          "start" : 20540,
+          "text" : "course"
+        },
+        {
+          "end" : 21040,
+          "start" : 20840,
+          "text" : "worth"
+        },
+        {
+          "end" : 21160,
+          "start" : 21040,
+          "text" : "of"
+        },
+        {
+          "end" : 21360,
+          "start" : 21160,
+          "text" : "work"
+        },
+        {
+          "end" : 21600,
+          "start" : 21360,
+          "text" : "still."
+        }
+      ]
+    },
+    {
+      "end" : 24320,
+      "id" : "0F79A11F-31DB-420D-B6CB-16F2AA2427AB",
+      "start" : 22060,
+      "text" : "But a cook puts the knife down to wait on the oven.",
+      "words" : [
+        {
+          "end" : 22160,
+          "start" : 22060,
+          "text" : "But"
+        },
+        {
+          "end" : 22260,
+          "start" : 22160,
+          "text" : "a"
+        },
+        {
+          "end" : 22400,
+          "start" : 22260,
+          "text" : "cook"
+        },
+        {
+          "end" : 22760,
+          "start" : 22400,
+          "text" : "puts"
+        },
+        {
+          "end" : 22860,
+          "start" : 22760,
+          "text" : "the"
+        },
+        {
+          "end" : 23060,
+          "start" : 22860,
+          "text" : "knife"
+        },
+        {
+          "end" : 23420,
+          "start" : 23060,
+          "text" : "down"
+        },
+        {
+          "end" : 23620,
+          "start" : 23420,
+          "text" : "to"
+        },
+        {
+          "end" : 23860,
+          "start" : 23620,
+          "text" : "wait"
+        },
+        {
+          "end" : 23960,
+          "start" : 23860,
+          "text" : "on"
+        },
+        {
+          "end" : 24080,
+          "start" : 23960,
+          "text" : "the"
+        },
+        {
+          "end" : 24320,
+          "start" : 24080,
+          "text" : "oven."
+        }
+      ]
+    },
+    {
+      "end" : 26260,
+      "id" : "15C355B7-F522-4DBE-A3BA-A799F39D0646",
+      "start" : 24820,
+      "text" : "That could be an I/O, a request,",
+      "words" : [
+        {
+          "end" : 24900,
+          "start" : 24820,
+          "text" : "That"
+        },
+        {
+          "end" : 25040,
+          "start" : 24900,
+          "text" : "could"
+        },
+        {
+          "end" : 25160,
+          "start" : 25040,
+          "text" : "be"
+        },
+        {
+          "end" : 25240,
+          "start" : 25160,
+          "text" : "an"
+        },
+        {
+          "end" : 25400,
+          "start" : 25240,
+          "text" : "I"
+        },
+        {
+          "end" : 25600,
+          "start" : 25400,
+          "text" : "/O,"
+        },
+        {
+          "end" : 25880,
+          "start" : 25820,
+          "text" : "a"
+        },
+        {
+          "end" : 26260,
+          "start" : 25880,
+          "text" : "request,"
+        }
+      ]
+    },
+    {
+      "end" : 27500,
+      "id" : "61882AE8-1399-46C9-8FD7-1AD85FE46623",
+      "start" : 26270,
+      "text" : "a file read, a sleep.",
+      "words" : [
+        {
+          "end" : 26420,
+          "start" : 26270,
+          "text" : "a"
+        },
+        {
+          "end" : 26720,
+          "start" : 26420,
+          "text" : "file"
+        },
+        {
+          "end" : 26980,
+          "start" : 26720,
+          "text" : "read,"
+        },
+        {
+          "end" : 27200,
+          "start" : 27100,
+          "text" : "a"
+        },
+        {
+          "end" : 27500,
+          "start" : 27200,
+          "text" : "sleep."
+        }
+      ]
+    },
+    {
+      "end" : 29740,
+      "id" : "B872354F-D628-4F1B-AD1A-7B8E3CF49C3A",
+      "start" : 27960,
+      "text" : "The gill is released while the thread waits,",
+      "words" : [
+        {
+          "end" : 28100,
+          "start" : 27960,
+          "text" : "The"
+        },
+        {
+          "end" : 28300,
+          "start" : 28100,
+          "text" : "gill"
+        },
+        {
+          "end" : 28460,
+          "start" : 28300,
+          "text" : "is"
+        },
+        {
+          "end" : 28800,
+          "start" : 28460,
+          "text" : "released"
+        },
+        {
+          "end" : 29040,
+          "start" : 28800,
+          "text" : "while"
+        },
+        {
+          "end" : 29200,
+          "start" : 29040,
+          "text" : "the"
+        },
+        {
+          "end" : 29420,
+          "start" : 29200,
+          "text" : "thread"
+        },
+        {
+          "end" : 29740,
+          "start" : 29420,
+          "text" : "waits,"
+        }
+      ]
+    },
+    {
+      "end" : 31060,
+      "id" : "16238E61-AB50-4383-B66E-D79209D7B381",
+      "start" : 29880,
+      "text" : "so another thread can run.",
+      "words" : [
+        {
+          "end" : 30080,
+          "start" : 29880,
+          "text" : "so"
+        },
+        {
+          "end" : 30460,
+          "start" : 30080,
+          "text" : "another"
+        },
+        {
+          "end" : 30720,
+          "start" : 30460,
+          "text" : "thread"
+        },
+        {
+          "end" : 30880,
+          "start" : 30720,
+          "text" : "can"
+        },
+        {
+          "end" : 31060,
+          "start" : 30880,
+          "text" : "run."
+        }
+      ]
+    },
+    {
+      "end" : 33280,
+      "id" : "D51DBE3C-ACD3-4C7F-A95E-EFC8CD994656",
+      "start" : 32380,
+      "text" : "Same for an appliance.",
+      "words" : [
+        {
+          "end" : 32759,
+          "start" : 32380,
+          "text" : "Same"
+        },
+        {
+          "end" : 32880,
+          "start" : 32759,
+          "text" : "for"
+        },
+        {
+          "end" : 32960,
+          "start" : 32880,
+          "text" : "an"
+        },
+        {
+          "end" : 33280,
+          "start" : 32960,
+          "text" : "appliance."
+        }
+      ]
+    },
+    {
+      "end" : 35600,
+      "id" : "7547CFEA-37E9-4E5B-A6AD-F753F1184A69",
+      "start" : 33540,
+      "text" : "Think of NumPy, image decoding, a tokenizer.",
+      "words" : [
+        {
+          "end" : 33660,
+          "start" : 33540,
+          "text" : "Think"
+        },
+        {
+          "end" : 33820,
+          "start" : 33660,
+          "text" : "of"
+        },
+        {
+          "end" : 34180,
+          "start" : 33820,
+          "text" : "NumPy,"
+        },
+        {
+          "end" : 34500,
+          "start" : 34240,
+          "text" : "image"
+        },
+        {
+          "end" : 34920,
+          "start" : 34500,
+          "text" : "decoding,"
+        },
+        {
+          "end" : 35140,
+          "start" : 35040,
+          "text" : "a"
+        },
+        {
+          "end" : 35600,
+          "start" : 35140,
+          "text" : "tokenizer."
+        }
+      ]
+    },
+    {
+      "end" : 38080,
+      "id" : "2019D462-D598-45A3-910B-6E2C4B09DE3E",
+      "start" : 36160,
+      "text" : "But when threads don't help, ask one thing.",
+      "words" : [
+        {
+          "end" : 36220,
+          "start" : 36160,
+          "text" : "But"
+        },
+        {
+          "end" : 36380,
+          "start" : 36220,
+          "text" : "when"
+        },
+        {
+          "end" : 36680,
+          "start" : 36380,
+          "text" : "threads"
+        },
+        {
+          "end" : 37040,
+          "start" : 36680,
+          "text" : "don't"
+        },
+        {
+          "end" : 37360,
+          "start" : 37040,
+          "text" : "help,"
+        },
+        {
+          "end" : 37660,
+          "start" : 37480,
+          "text" : "ask"
+        },
+        {
+          "end" : 37840,
+          "start" : 37660,
+          "text" : "one"
+        },
+        {
+          "end" : 38080,
+          "start" : 37840,
+          "text" : "thing."
+        }
+      ]
+    },
+    {
+      "end" : 40260,
+      "id" : "3400E359-F7FC-49DE-BF31-4E5E74E5CA79",
+      "start" : 38220,
+      "text" : "Is this thread waiting, or is it running Python?",
+      "words" : [
+        {
+          "end" : 38360,
+          "start" : 38220,
+          "text" : "Is"
+        },
+        {
+          "end" : 38600,
+          "start" : 38360,
+          "text" : "this"
+        },
+        {
+          "end" : 38820,
+          "start" : 38600,
+          "text" : "thread"
+        },
+        {
+          "end" : 39200,
+          "start" : 38820,
+          "text" : "waiting,"
+        },
+        {
+          "end" : 39500,
+          "start" : 39420,
+          "text" : "or"
+        },
+        {
+          "end" : 39620,
+          "start" : 39500,
+          "text" : "is"
+        },
+        {
+          "end" : 39680,
+          "start" : 39620,
+          "text" : "it"
+        },
+        {
+          "end" : 39880,
+          "start" : 39680,
+          "text" : "running"
+        },
+        {
+          "end" : 40260,
+          "start" : 39880,
+          "text" : "Python?"
+        }
+      ]
+    },
+    {
+      "end" : 42140,
+      "id" : "1D0266A6-897C-41B1-BA11-FF8DB3A97F00",
+      "start" : 40840,
+      "text" : "If it's waiting, then threads work.",
+      "words" : [
+        {
+          "end" : 40940,
+          "start" : 40840,
+          "text" : "If"
+        },
+        {
+          "end" : 41080,
+          "start" : 40940,
+          "text" : "it's"
+        },
+        {
+          "end" : 41420,
+          "start" : 41080,
+          "text" : "waiting,"
+        },
+        {
+          "end" : 41640,
+          "start" : 41500,
+          "text" : "then"
+        },
+        {
+          "end" : 41880,
+          "start" : 41640,
+          "text" : "threads"
+        },
+        {
+          "end" : 42140,
+          "start" : 41880,
+          "text" : "work."
+        }
+      ]
+    },
+    {
+      "end" : 44420,
+      "id" : "8910E596-88BE-4F3F-BAEC-736112FE7A7D",
+      "start" : 42560,
+      "text" : "But if it's running Python, you need a second kitchen",
+      "words" : [
+        {
+          "end" : 42620,
+          "start" : 42560,
+          "text" : "But"
+        },
+        {
+          "end" : 42700,
+          "start" : 42620,
+          "text" : "if"
+        },
+        {
+          "end" : 42800,
+          "start" : 42700,
+          "text" : "it's"
+        },
+        {
+          "end" : 42960,
+          "start" : 42800,
+          "text" : "running"
+        },
+        {
+          "end" : 43280,
+          "start" : 42960,
+          "text" : "Python,"
+        },
+        {
+          "end" : 43500,
+          "start" : 43380,
+          "text" : "you"
+        },
+        {
+          "end" : 43700,
+          "start" : 43500,
+          "text" : "need"
+        },
+        {
+          "end" : 43800,
+          "start" : 43700,
+          "text" : "a"
+        },
+        {
+          "end" : 44040,
+          "start" : 43800,
+          "text" : "second"
+        },
+        {
+          "end" : 44420,
+          "start" : 44040,
+          "text" : "kitchen"
+        }
+      ]
+    },
+    {
+      "end" : 45220,
+      "id" : "00066644-A86A-40B8-8200-A6DE188539CD",
+      "start" : 44420,
+      "text" : "or another process.",
+      "words" : [
+        {
+          "end" : 44500,
+          "start" : 44420,
+          "text" : "or"
+        },
+        {
+          "end" : 44700,
+          "start" : 44500,
+          "text" : "another"
+        },
+        {
+          "end" : 45220,
+          "start" : 44700,
+          "text" : "process."
+        }
+      ]
+    }
+  ],
+  "text" : "In Python, think of a process as a kitchen.\nHere, threads are cooks,\nand they all share the kitchen's memory.\nThe knife is the gill,\nthe global interpreter lock.\nWhoever holds the knife is what\nruns the Python code while everyone else waits.\nThis is why threading a CPU loop makes it no faster.\nFour threads with one knife,\nyou have one course worth of work still.\nBut a cook puts the knife down to wait on the oven.\nThat could be an I/O, a request,\na file read, a sleep.\nThe gill is released while the thread waits,\nso another thread can run.\nSame for an appliance.\nThink of NumPy, image decoding, a tokenizer.\nBut when threads don't help, ask one thing.\nIs this thread waiting, or is it running Python?\nIf it's waiting, then threads work.\nBut if it's running Python, you need a second kitchen\nor another process."
+}

@@ -1,0 +1,28 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_kitchen.mp4",
+   "end": 7.25
+  },
+  {
+   "clip": "media/hf/02_knife.mp4",
+   "end": 7.55
+  },
+  {
+   "clip": "media/hf/03_loop.mp4",
+   "end": 7.03
+  },
+  {
+   "clip": "media/hf/04_oven.mp4",
+   "end": 9.94
+  },
+  {
+   "clip": "media/hf/05_appliance.mp4",
+   "end": 4.11
+  },
+  {
+   "clip": "media/hf/06_close.mp4",
+   "end": 10.21
+  }
+ ]
+}
