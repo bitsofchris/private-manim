@@ -20,7 +20,7 @@ lecture take, not of a scripted read.
 | Thing | Where | Use |
 |---|---|---|
 | The take, Studio Sound, 1430.6 s | `~/Creating/pytorch dataloading/edit/studio-sound-Chris Lettieri.m4a` | VO source. Runbook step 3 is loudnorm only (Studio Sound, never denoise) |
-| Transcript, Parakeet v3, timestamped | `videos/014-pytorch-dataloading/TRANSCRIPT.md` | the line mine below; times are seconds into the m4a |
+| Transcript, Parakeet v3, timestamped | `videos/014-pytorch-dataloading/TRANSCRIPT-lecture-2026-07-24.md` | the line mine below; times are seconds into the m4a |
 | Camera + screen recordings, same clock | `…/edit/Chris Lettieri.mp4`, `…/edit/Chris Lettieri's screen.mp4` | the web-UI training footage (17:29–23:13 of the take) if a Short wants real footage on top, kb-graph style |
 | Descript edit | `…/edit/edit.xml` | what the long video kept: 298.5–1424.0 s, 520 s after cuts |
 | Diagram 1: the training loop | `…/ChatGPT Image … 08_26_44 AM.png` | six boxes (DataLoader → forward → loss → backward → update → log) over the pseudo-code; ep 1's image |
