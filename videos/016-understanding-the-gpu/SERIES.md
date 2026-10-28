@@ -50,6 +50,29 @@ it is doing useful work.
   scale with batch × sequence length.
 - **Reference:** PaLM 540B trained at **46 % MFU** (Chowdhery et al. 2022,
   the paper that named MFU).
+- **Derived and shared (added after the storyboards, 10/27):**
+  - B200 dense ladder: TF32 **1,125** / bf16 **2,250** / fp8 **4,500**
+    TFLOPS (HGX B200 page, sparse ÷ 2 ÷ 8). An "fp32" matmul on tensor
+    cores is TF32; the ladder is labeled TF32, never fp32.
+  - Needed arithmetic intensity: 2,250e12 ÷ 8e12 ≈ **280 FLOPs per byte**
+    (ep 5, ep 11). Bandwidth 8 TB/s; one source says 7.7 (→ ~290).
+  - Units: ledger memory is decimal **GB**; PyTorch errors print **GiB**
+    (128 GB ≈ 119 GiB). Say GB in the VO.
+  - GPU-Util's sample window is **1/6 s to 1 s** depending on the GPU:
+    say "recent time", never "the last second". Ray's dashboard reads the
+    same NVML number (verified in Ray's source, ep 7).
+  - 6 × 8e9 includes Llama-3-8B's ~0.5B input-embedding lookup (no
+    matmul), an overcount of ~7 %; notes only.
+  - Whole-run example: Llama 3 8B trained on 15T+ tokens (Meta model
+    card); at 20,000 tokens/s that's ~24 years on one B200 (ep 3).
+  - The series training step, one code card for eps 6, 7, 9, 10, 11:
+    `loss = loss_fn(model(x), y)` / `loss.backward()` / `opt.step()` /
+    `print(loss.item())`.
+  - Kernel-tile labels in the queue, everywhere: `matmul`, `add`, `relu`,
+    `softmax`, `∇` (backward), `adam`.
+  - On-screen nvidia-smi values (eps 7, 8, 10, 12) are illustrative and
+    must match: 100 % GPU-Util, ~143 GB used. The B200's reported total
+    (MiB) is unverified: take it from a real readout before building.
 - **Code on screen** is real PyTorch that runs: `torch.profiler`,
   `torch.compile`, `torch.cuda.utilization()`, `loss.item()`,
   `DataLoader(num_workers=..., pin_memory=True)`.
@@ -78,9 +101,9 @@ picture the viewer has seen before:
 | Fact | Home |
 |---|---|
 | GPU vs CPU: many simple cores vs few big ones | ep 1 |
-| What a FLOP is; FLOPs vs FLOPS; why chips are rated in them | ep 2 |
+| What a FLOP is; FLOPs vs FLOPS; floating point as the picture (scientific notation in binary) | ep 2 |
 | 6 × params × tokens, forward 2 + backward 4 | ep 3 |
-| Floating point, precision, bf16/fp8, dense vs sparse spec | ep 4 |
+| Bit widths, bf16/fp16/fp8, dense vs sparse spec | ep 4 |
 | Tensor cores vs memory; compute-bound vs memory-bound | ep 5 |
 | What a kernel is; the CPU queue; async; `.item()` syncs | ep 6 |
 | What nvidia-smi shows; GPU-Util = share of time any kernel ran | ep 7 |
@@ -108,7 +131,7 @@ picture the viewer has seen before:
 
 | # | Working title | Their question | The answer, roughly | Search phrase (autocomplete 10/27) | Source |
 |---|---|---|---|---|---|
-| 1 | Why GPUs for AI | Why does AI run on GPUs and not CPUs? | A neural net is almost all multiply-adds, and they don't depend on each other; a GPU is thousands of simple cores built to do them at once, a CPU a few dozen built for branching code. | `why gpu for ai` (offered; also `gpu vs cpu explained`) | *(adjacent)*, the ep 0 the rest stand on |
+| 1 | Why GPUs for AI | Why does AI run on GPUs and not CPUs? | A neural net is almost all multiply-adds, and they don't depend on each other; a GPU is thousands of simple cores built to do them at once, a CPU a few big cores built to run one thread fast (no CPU core count: 2026 server CPUs reach 192–288 cores). | `why gpu for ai` (offered; also `gpu vs cpu explained`) | *(adjacent)*, the ep 0 the rest stand on |
 | 2 | FLOPs explained | What is a FLOP, and why are GPUs rated in them? | One floating-point multiply or add. FLOPs is a count, FLOPS a rate; a B200 does ~2,250 trillion bf16 FLOPS. AI compute and cost are counted in FLOPs. | `flops explained` (offered; results are AI explainers, suggestions are mostly flip-flops); `teraflops explained` | Chris |
 | 3 | Why 6 FLOPs per parameter per token | How much compute does training a model take? | Forward: each weight is one multiply and one add, 2. Backward: two matmuls the same size (gradient for the input, gradient for the weight), 4. Total 6 × params × tokens; that turns into GPU-hours and dollars. | not checked; may fold into #2 | Chris's question |
 | 4 | Floating point and precision | Why does bf16 / fp8 make training faster? | Fewer bits per number: more numbers per memory read and more multiply-adds per tensor-core cycle, so peak FLOPS roughly doubles each step down. Spec sheets also quote "sparse" at 2×; compare against dense in your training dtype. | `bf16 vs fp16`, `fp32 vs fp16`, `fp8 training` | Chris's "what is floating point" |
@@ -152,6 +175,18 @@ picture the viewer has seen before:
 | 13 | `ep13-multi-gpu-communication/` |  | | | | | |
 
 ## Open decisions (Chris's)
+
+- Overlap now that the series exists: ep 8 still explains GPU-Util (ep 7's
+  home) and 6 × params (ep 3's) in full beats. Keep them so ep 8 stands
+  alone from search, or trim to one clause each and give ep 8 the words.
+- Ep 8 beat 02 says "kernel"; the proposal was "the GPU was doing
+  anything / one tiny job". Ep 6 now owns "kernel".
+- Ep 10 shares its search phrase (`pytorch dataloader num_workers`) with
+  014 ep 5; keep both with distinct titles, or retitle ep 10 around
+  `gpu utilization pytorch`.
+- Ep 10 kept one phrase of Chris's own from 014's transcript, "workers
+  that you can spin out in parallel"; Parakeet wrote "span": check the
+  audio.
 
 - Release order: build order above, or the four Chris called out first
   (2, 6, 5, 8).
