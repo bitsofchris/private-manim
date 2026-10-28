@@ -479,7 +479,10 @@ phrase from step 0 in those words; they differ in who they are for.
   python)`. The stake is a claim about *them*, not about the topic. Keep
   the phrase inside the first ~50 characters where it fits; the feed
   truncates after that.
-- Both go in `storyboard.md` and in the hand-off pack. The day-10 read
+- **When:** here, at step 9, after the cut is final, and only here
+  (Chris, 2026-10-28). No titles in `storyboard.md`, `SERIES.md` or
+  `SCRIPTS.md`; earlier steps use a plain working name. Propose both in
+  `publish.md` and the hand-off pack; Chris decides then. The day-10 read
   (step 12) records which was used and its search % next to the phrase,
   so the pair gets judged by the channel's numbers, not by taste.
 - Description: line 1 answers THE QUESTION in one sentence and contains

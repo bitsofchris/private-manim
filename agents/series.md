@@ -27,15 +27,16 @@ Write `SERIES.md` at the series root. It is the series' one home:
   beat invents a number.
 - One section per episode: the runbook step 0 preflight (question in the
   viewer's words, who is asking, one-sentence answer, search phrase
-  checked in YouTube autocomplete), the title, frame 0 and the magenta
+  checked in YouTube autocomplete), a working name (no YouTube title:
+  titles are proposed at runbook step 9), frame 0 and the magenta
   hero, the code beat, the parts to reuse.
-- A **checklist** table, one row per episode: title, folder, Script, VO,
+- A **checklist** table, one row per episode: working name, folder, Script, VO,
   Storyboard, Beats, Assembled, Shipped.
 
 ## 2. Scripts (Claude, Chris edits)
 
 All episodes in one file, `SCRIPTS.md` at the series root, one `##`
-heading per episode with its title and word count. Every script passes
+heading per episode with its working name and word count. Every script passes
 runbook step 1's VO rules ("VO line 1", "Say each thing once, and get to
 it fast", 130–150 words). Chris tightens in his own words before he
 records.
@@ -45,7 +46,7 @@ records.
 One file for the whole series, in script order (runbook step 2 for mic and
 flubs):
 
-- Before each episode, say **"Episode N: title"**, then pause ~2 s.
+- Before each episode, say **"Episode N: working name"**, then pause ~2 s.
 - Pause ~3 s between episodes. Flub: pause, re-read the sentence.
 - Departing from the script is fine; what was said is the VO.
 
@@ -64,7 +65,7 @@ timestamped transcript if there is one.
    where the take carries on the sentence (runbook step 5, 3).
 3. Cut each one into its folder, announcement removed:
    `ffmpeg -ss START -to END -i ALL.m4a -ac 1 -c:a aac -b:a 160k epNN-slug/vo_raw.m4a`
-4. Write `epNN-slug/script.md`: the title, the duration, the source cut
+4. Write `epNN-slug/script.md`: the working name, the duration, the source cut
    times ("cut from ALL.m4a at 132.16–182.73 s, announcement removed"), a
    pointer to `../SCRIPTS.md`, how it was recorded (QuickTime raw, or
    Descript with Studio Sound: ask Chris if you don't know; runbook step 3
@@ -103,7 +104,7 @@ Start by reading AGENTS.md (the entry point) and follow agents/runbook.md as the
 
 Where this episode stands:
 - The voice is recorded and cut: FOLDER/vo_raw.m4a. FOLDER/script.md is what I actually said. That transcript, not the planned script, is the VO.
-- Runbook steps 0–2 are done. The preflight lines (question, who is asking, one-sentence answer, search phrase), the YouTube title, frame 0 and hero, the code beat, and the parts to reuse are in this episode's section of videos/NNN-slug/SERIES.md. Carry the search phrase into the storyboard's preflight lines and build the code beat on the VO line it names. The planned script is in SCRIPTS.md for reference only.
+- Runbook steps 0–2 are done. The preflight lines (question, who is asking, one-sentence answer, search phrase), frame 0 and hero, the code beat, and the parts to reuse are in this episode's section of videos/NNN-slug/SERIES.md. Carry the search phrase into the storyboard's preflight lines and build the code beat on the VO line it names. The planned script is in SCRIPTS.md for reference only.
 
 Do, in runbook order:
 1. Write FOLDER/storyboard.md (step 1): the ENGINE line first, chosen by AGENTS.md "Which engine"; the preflight lines; the ledger from SERIES.md, used identically in every beat; a beat | VO | visual table built from script.md.
@@ -111,7 +112,7 @@ Do, in runbook order:
 3. Render FOLDER/00_layout (the canonical frame) while the cut list waits: two or three takes on the hero image side by side in one PNG. Send me the cut list and the frame together, and build beats only after I approve both.
 4. Build the beats (step 6) with parallel agents, each briefed with the matching beat brief; one agent owns both sides of a cut that a beat-only prop crosses. Each renders and reviews its own contact sheet. Then check every cut (last frame of beat N beside the first frame of beat N+1).
 5. Captions, assembly, review (steps 7–8): sequential clean re-render, assemble, contact sheets, fix what the sheets show. Then tell me the media/short.mp4 path to watch on my phone, and iterate on what I say.
-6. Write FOLDER/publish.md (step 9) with the title from SERIES.md; description line 1 contains the search phrase. Send the hand-off pack (step 10) when I say done.
+6. Write FOLDER/publish.md (step 9): propose both titles (search and hook) for me to pick; description line 1 contains the search phrase. Send the hand-off pack (step 10) when I say done.
 
 This series: SERIES-SPECIFIC LOOK, CONVENTIONS AND SHARED KIT.
 
