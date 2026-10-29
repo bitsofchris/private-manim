@@ -1,6 +1,6 @@
 ENGINE: hyperframes
 
-# Why GPUs for AI: storyboard (v3, rebuilt from the take)
+# Why GPUs for AI: storyboard (v4: the network in beats 1–2)
 
 THE QUESTION: "Why does AI run on GPUs and not CPUs?"
 WHO IS ASKING: a research engineer or ML learner who types `.to("cuda")`
@@ -35,9 +35,14 @@ state are rendered in `00_layout/layout.png`.
   memory slab beside it (`GPU memory (VRAM) 180 GB`, at rest, never named
   in ep 1). Core count only as "thousands" (VO); never on screen ("the
   grid is a picture, not a count").
+- **The network:** a tiny neural network, 4-4-4-2 nodes left to right, in
+  the top slot in beats 1–2 only (`_kit/ep.js`). Its first layer is `W`:
+  the 16 edges from column 0 to column 1, the edges into node j are W's
+  column j, node j's output is y's column j. No labels.
 - **The CPU:** one box of **4 big cores** (`_kit/ep.js`), a picture of "a
-  few", no number on screen. Small in the top slot; big in the chip's
-  place in beat 3, each core with a cache block and a branch fork (icons,
+  few", no number on screen. Not on screen in beats 1–2 (Chris, first
+  watch); fades in on "CPU" in beat 3, big in the chip's place, then
+  small in the top slot from beat 4, each core with a cache block and a branch fork (icons,
   no labels; the captions name them). The series' "CPU / Python" box and
   kernel queue (ep 6's) are hidden all episode; so is the time strip (ep 7's).
 - **The layer:** `y = x @ W`, three 4 × 4 matrices in the bottom slot, in
@@ -55,9 +60,9 @@ state are rendered in `00_layout/layout.png`.
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | A neural network is mostly multiplication and addition. GPUs allow these to all happen at the same time. | Frame 0 already working: the chip mid-stage, ~32 % of cells shimmering teal; the small CPU top-left, its 4 cores lit; `y = x @ W` in the bottom slot, y empty. Hero: the chip. On "the same time" the whole grid lights at once and every y cell fills together. |
-| 02_layer | So if you take one layer, y equals x times W, each output is its own row times column. None of them waits on the other. | On "one layer" y empties. On "its own row times column" one row of x, one column of W and their y cell go magenta (hero `ycell`) and that cell fills. On "none of them waits" every other y cell fills at the same moment, and the whole y matrix is the hero. |
-| 03_cpu | Now a CPU is built to run one thread as fast as possible. A few big cores, some big caches, some smart branching. It works through that pile a few at a time. | On "CPU" the chip and memory fade and the CPU grows into the chip's place (hero `cpu`); y empties as it grows. "one thread": one core lit. "A few big cores": the 4 cores. "big caches": the cache blocks. "smart branching": the forks. "a few at a time": all 4 cores lit, y fills one row of four per tick, three rows by the end, the last row waiting. |
+| 01_hook | A neural network is mostly multiplication and addition. GPUs allow these to all happen at the same time. | Frame 0 already working: the tiny network in the top slot, its layers firing in turn (hero `net`); the chip mid-stage, ~32 % of cells shimmering teal; `y = x @ W` in the bottom slot, y empty. On "GPUs" the hero passes to the chip and the network goes still. On "the same time" the whole grid lights at once and every y cell fills together. |
+| 02_layer | So if you take one layer, y equals x times W, each output is its own row times column. None of them waits on the other. | On "one layer" the network's first layer goes magenta (hero `layer`) and y empties: the equation is that layer. On "its own row times column" one row of x, one column of W and their y cell go magenta (hero `ycell`) and that cell fills; the output node for that column and its 4 incoming edges light with W's column. On "none of them waits" every other y cell fills at the same moment, and the whole y matrix (with the layer's 4 output nodes) is the hero. |
+| 03_cpu | Now a CPU is built to run one thread as fast as possible. A few big cores, some big caches, some smart branching. It works through that pile a few at a time. | On "CPU" the network, the chip and memory fade and the CPU fades in and grows into the chip's place (hero `cpu`); y empties as it grows. "one thread": one core lit. "A few big cores": the 4 cores. "big caches": the cache blocks. "smart branching": the forks. "a few at a time": all 4 cores lit, y fills one row of four per tick, three rows by the end, the last row waiting. |
 | 04_gpu | A GPU trades per-core speed for count. This grid is the chip. Thousands of small cores all working at once. | On "A GPU" the CPU shrinks back to the top slot, the chip and memory return dark, y empties; hero `chip`. "This grid is the chip": the grid border pulses. On "all working at once" every cell lights in one pulse and every y cell fills together. |
 | 05_tensor | Newer GPUs add tensor cores, which do a small matrix multiply in one step. | On "tensor cores" the corner sub-blocks grow (`tc: 1`), title "tensor cores", hero `tc`. On "in one step" the sub-blocks pulse once. |
 | 06_code | In PyTorch, that's one line. Move x and W to CUDA, and the same at sign runs the whole grid. | On "In PyTorch" the matrices give way to the code card (the bottom slot), tensor cores and title back to rest ("GPU"). "that's one line": `y = x @ W` lit. "Move x and W to CUDA": the `.to("cuda")` line lit. "the same at sign": `y = x @ W` lit again; "runs the whole grid": a bright wave sweeps the lit grid once. Ends still. |
@@ -90,14 +95,15 @@ code card, down to y 1330).
 ## Seam states (`_kit/seam.js`; fields as `SC.REST` + ep 1's defaults unless named)
 
 Ep 1's defaults (all cuts): series CPU, queue and time strip hidden; the
-4-core CPU shown, cores `1111`; matrices shown; chip and memory shown.
+4-core CPU shown, cores `1111`; network hidden; matrices shown; chip and
+memory shown. Cuts 0–2: **network 1, CPU 0**.
 
 | Cut | After beat | State |
 |---|---|---|
-| 0 | frame 0 | lit 0.32, **shimmer 1**, hero chip, CPU small, y empty |
-| 1 | hook | **lit 1**, hero chip, y all done |
-| 2 | layer | lit 1, **hero y** (every y cell magenta), y all done |
-| 3 | cpu | **big 1, chip 0, memory 0**, cache 1, branch 1, hero cpu, y rows 1–3 done (`1111 1111 1111 0000`), lit 0 (hidden) |
+| 0 | frame 0 | network 1 **flow 1**, CPU 0, lit 0.32, **shimmer 1**, hero net, y empty |
+| 1 | hook | network 1 (still), CPU 0, **lit 1**, hero chip, y all done |
+| 2 | layer | network 1, CPU 0, lit 1, **hero y** (every y cell and the layer's 4 output nodes magenta), y all done |
+| 3 | cpu | **network 0, CPU 1, big 1, chip 0, memory 0**, cache 1, branch 1, hero cpu, y rows 1–3 done (`1111 1111 1111 0000`), lit 0 (hidden) |
 | 4 | gpu | big 0, chip and memory back, lit 1, hero chip, y all done |
 | 5 | tensor | as 4, **tc 1, hero tc, title "tensor cores"** |
 | 6 | code (end) | as 4 but tc 0, title "GPU", hero null, **matrices 0, code card** (`matmul`, all typed, lit `at`, cy 1246) |
