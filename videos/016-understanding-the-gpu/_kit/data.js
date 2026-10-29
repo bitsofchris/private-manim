@@ -6,8 +6,9 @@ window.GPU_DATA = {
   chip: { n: 12, title: "GPU" },
   // MFU and GPU-Util on the same run (ledger: 720 TFLOPS of 2,250 → 32 %; nvidia-smi 100 %).
   run: { mfu: 0.32, mfuText: "32%", util: "GPU-Util 100%" },
-  // HBM (high-bandwidth memory) is the GPU's own memory; the take never says "HBM", so the slab says "GPU memory".
-  hbm: { name: ["GPU", "memory"], size: "180 GB", bw: "8 TB/s" },
+  // HBM (high-bandwidth memory) is the GPU's own memory; the take never says "HBM", so the slab says "GPU memory",
+  // with "(VRAM)" under it: the name viewers already know for it.
+  hbm: { name: ["GPU", "memory"], aka: "(VRAM)", size: "180 GB", bw: "8 TB/s" },
   // Kernel tiles in the queue, everywhere (SERIES.md "Kernel-tile labels").
   queue: ["matmul", "add", "relu", "∇", "adam"],
   // Code cards: real lines that run. ≤ 36 characters a line fits the card at

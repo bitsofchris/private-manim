@@ -150,8 +150,9 @@
     const pipe = [0, 1, 2].map((k) => rect(hbmG, c.x + c.size, 700 + k * 40, s.x - c.x - c.size, 22, { fill: PAL.dim, rx: 6, opacity: 0.8 }));
     const hbmLab = label(root, D.hbm.name[0], { left: s.x, top: 685, size: 40, width: s.w });
     const hbmLab2 = label(root, D.hbm.name[1], { left: s.x, top: 735, size: 32, width: s.w });
-    const hbmSize = label(root, D.hbm.size, { left: s.x, top: 800, size: 34, width: s.w, color: PAL.dim });
-    const hbmBw = label(root, D.hbm.bw, { left: s.x, top: 848, size: 34, width: s.w, color: PAL.dim });
+    const hbmAka = label(root, D.hbm.aka, { left: s.x, top: 775, size: 30, width: s.w, color: PAL.dim });
+    const hbmSize = label(root, D.hbm.size, { left: s.x, top: 840, size: 34, width: s.w, color: PAL.dim });
+    const hbmBw = label(root, D.hbm.bw, { left: s.x, top: 888, size: 34, width: s.w, color: PAL.dim });
     const meterG = node("g", {}, svg);
     const gauge = { x: s.x + 30, y: s.y + 150, w: s.w - 60, h: s.h - 170 };
     const meterBox = rect(meterG, gauge.x, gauge.y, gauge.w, gauge.h, { fill: PAL.bg, stroke: PAL.ink, "stroke-width": 6, rx: 16 });
@@ -218,7 +219,7 @@
       title.style.color = hero === "chip" || hero === "tc" ? PAL.hero : PAL.ink;
 
       // side slot
-      show(hbmG, S.hbm); show(hbmLab, S.hbm); show(hbmLab2, S.hbm); show(hbmSize, S.hbm); show(hbmBw, S.hbm * S.bw);
+      show(hbmG, S.hbm); show(hbmLab, S.hbm); show(hbmLab2, S.hbm); show(hbmAka, S.hbm); show(hbmSize, S.hbm); show(hbmBw, S.hbm * S.bw);
       hbmBox.setAttribute("stroke", col("hbm", PAL.ink)); hbmLab.style.color = hbmLab2.style.color = col("hbm", PAL.ink);
       pipe.forEach((p) => p.setAttribute("fill", col("pipe", PAL.dim)));
       show(meterG, S.meter); show(meterLab, S.meter); show(meterVal, S.meter);
