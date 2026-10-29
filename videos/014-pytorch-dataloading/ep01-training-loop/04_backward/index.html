@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 4 "Backward + step" (master 17.260, 6.340 s). Opens on SC.SEAM[3]
+         (glyph beside loss, loss lit), ends on SC.SEAM[4] (glyph beside update, the four
+         boxes lit as "step").
+         "backwards" 1.36: the glyph rides loss -> backward (0.7 s), backward lights on arrival
+         "updated"   2.66: rides backward -> update (0.7 s), update lights on arrival
+         "one training step" 5.10: all four boxes light together; still to the end -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.34" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.34, MASTER = 17.26;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg, lerp } = SC, E = SC.E(), R = "ring";
+  // cues, beat-local seconds (master - 17.26)
+  const T = {
+    backwards: 1.36,   // "backwards" @18.62: ride loss -> backward
+    updated:   2.66,   // "updated"   @19.92: ride backward -> update
+    step:      5.10,   // "one" @22.36 ("one training step"): the four boxes light
+  };
+  const RIDE = 0.7;
+  const U = { loss: LOOP.at(R, "loss"), backward: LOOP.at(R, "backward"), update: LOOP.at(R, "update") };
+  const loop = (u, lit) => Object.assign({}, SC.LOOP_ONLY, { loop: { o: 1, take: R, u, batch: 1, slot: 0, lit } });
+
+  function state(t) {
+    if (t < T.backwards) return SC.SEAM[3];
+    if (t >= T.step) return SC.SEAM[4];
+    if (t < T.updated) {
+      const p = E.io(seg(t, T.backwards, T.backwards + RIDE));
+      return loop(lerp(U.loss, U.backward, p), p >= 1 ? "backward" : "loss");
+    }
+    const p = E.io(seg(t, T.updated, T.updated + RIDE));
+    return loop(lerp(U.backward, U.update, p), p >= 1 ? "update" : "backward");
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(null, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

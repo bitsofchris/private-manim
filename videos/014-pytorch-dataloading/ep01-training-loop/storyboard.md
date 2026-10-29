@@ -116,7 +116,7 @@ states `SC.SEAM` in `_kit/seam.js`; links per beat: `vendor`, `kit`, `ep`.
 | 7 | one batch | o 0 | REST, hero batch, flip 0 | off |
 | 8 | end | o 0 | REST, hero batch | off |
 
-## Cut list (proposed 2026-10-28; awaiting Chris)
+## Cut list (approved by Chris 2026-10-28, with take `ring`)
 
 Raw take 51.3 s. Pauses capped at 0.25 s (`tighten_vo.py --max-gap 0.25
 --noise=-45dB`; `--noise auto` read −52.8 dB and found no pauses, the
