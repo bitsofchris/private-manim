@@ -69,5 +69,5 @@ beat 7 only. Not the spine.
 - [x] ep 1 VO recorded 2026-10-28 (`ep01-the-gil/script.md`), cut, 46.1 s
 - [x] ep 2 VO recorded 2026-10-28 (`ep02-threads-vs-processes/script.md`), cut, 58.5 s (cut list for Chris)
 - [x] kit `_kit/kitchen.js` (both episodes' seam states) and `00_layout/` per episode (canonical frame for Chris)
-- [ ] ep 1 built, assembled, published
-- [ ] ep 2 built, assembled, published
+- [x] ep 1 built 2026-10-29 (6 beats, every cut 0–4/255), assembled `ep01-the-gil/media/short.mp4` 46.1 s; [ ] published
+- [x] ep 2 built 2026-10-29 (6 beats, every cut 1–4/255), assembled `ep02-threads-vs-processes/media/short.mp4` 58.5 s; [ ] published

@@ -33,7 +33,7 @@ audience yet).
 | beat | VO | visual |
 |---|---|---|
 | 01_hook | The Python GIL is one knife in one kitchen: only the cook holding it can do Python work. | Frame 0 already working: the kitchen (a rounded box, label "kitchen / one process"), four cooks (cast.js line-drawn humans) at a counter, the magenta knife token in cook 1's hand; cook 1 bright, the other three dim. Top-middle of the stage, ~5 rows. |
-| 02_map | The kitchen is a process. The cooks are threads; they share the kitchen's memory. The knife is the GIL: whoever holds it runs Python code. Everyone else waits. | Labels land on the words, each with both names: "kitchen / process" on the box, "cooks / threads" over the cooks, "knife / GIL" on the token. On "everyone else waits" the three dim cooks get a clock glyph. |
+| 02_map | The kitchen is a process. The cooks are threads; they share the kitchen's memory. The knife is the GIL: whoever holds it runs Python code. Everyone else waits. | Labels land on the words, each with both names: "kitchen / process" on the box, "cooks / threads" over the cooks, "knife / GIL" on the token. On "everyone else waits" the three other cooks fold their arms and dim (no clock glyph: Chris, 10/29). |
 | 03_loop | That's why threading a CPU loop makes it no faster. Four threads, one knife, one core's worth of work. | A code card bottom-middle: `for t in threads: t.start()`; the token hops cook 1 → 2 → 3 → 4, one hop per `S.BEAT`, only the holder chops; a timer bar under the kitchen fills at the same rate with one cook or four. |
 | 04_try *(if time)* | Try it: time the loop on one thread, then on four. Same number. | The code card gains two lines: `1 thread: 4.1s` / `4 threads: 4.2s`. |
 | 05_oven | But a cook puts the knife down to wait on the oven. That's I/O: a request, a file read, a sleep. The GIL is released while the thread waits, so another thread runs. | An oven appears right of the counter, label "oven / I/O". Cook 2 walks to it and sets the knife down; the token jumps to cook 3, who chops. Timer bar fills faster. |
@@ -73,8 +73,8 @@ Captions are anchored bottom (`assemble.py --captions-anchor bottom`), so the st
 |---|---|
 | 0 (frame 0) | kitchen box + "kitchen / process"; four cooks at the counter, cook 1 holds the knife (hero), the others at rest, smiling; no other label |
 | 1→2 | + "cooks / threads" |
-| 2→3 | + "knife / GIL"; cooks 2–4 waiting (clock, dim, flat face) |
+| 2→3 | + "knife / GIL"; cooks 2–4 waiting (arms folded, dim, flat face) |
 | 3→4 | knife with cook 4 (the hops happened in beat 3); cooks 1–3 waiting; code card `for t in threads: t.start()`; timer bar full |
-| 4→5 | oven + "oven / I/O"; cook 2 at the oven (clock); knife with cook 3, chopping; code card gone; timer bar on |
+| 4→5 | oven + "oven / I/O"; cook 2 at the oven; knife with cook 3, chopping; code card gone; timer bar on |
 | 5→6 | + appliance + "appliance / native code"; cook 4 at the appliance working without the knife; knife with cook 3 |
 | end | same, timer bar gone; "waiting → threads" under the box; ghost second kitchen (dashed) with "second kitchen / another process" and "running Python → processes" above it |

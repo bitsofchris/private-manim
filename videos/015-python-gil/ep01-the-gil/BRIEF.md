@@ -68,6 +68,7 @@ cd NN_beat && HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1 npx --yes
 HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1 npx --yes --prefer-offline hyperframes@0.8.115 render -o ../media/hf/NN_beat.mp4
 cd .. && "$ROOT"/tools/review_frames.sh --at CUE1,CUE2 media/hf/NN_beat.mp4 4
 ffprobe -v error -show_entries format=duration -of csv=p=0 media/hf/NN_beat.mp4
+uv run --no-sync --project "$ROOT" python "$ROOT"/tools/seam_check.py beats.json --beat NN_beat   # once a neighbour's render exists; plain python3 lacks PIL
 ```
 
 Open your contact sheet with the Read tool and look. `check` must be 0

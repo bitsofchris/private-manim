@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_loop (14.800, 7.030 s): SEAM1[2] -> SEAM1[3]. "This is why threading a CPU loop
+         makes it no faster. Four threads with one knife, you have one core's worth of work still."
+         The code card and empty timer come in on "threading"; from "loop" the knife hops
+         cook 1 -> 2 -> 3 -> 4 (0.6 s hop, one 0.5 s stroke by each holder between hops), the
+         holder chopping and the other three folded; the timer fills at one cook's rate and is
+         full on "still". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.03" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  SC.SEAM = SC.SEAM1;
+  const BEAT_SECONDS = 7.03;
+  const CUE = {
+    threading: 0.66,   /* "threading": code card + empty timer land here */
+    loop: 1.74,        /* "loop": first hop starts, timer starts filling */
+    knife: 4.74,       /* "knife": the knife is with cook 4 by here */
+    still: 6.56,       /* "still": timer full */
+  };
+  const HOLD = 6.73;                       // chop 0 from here; last 0.3 s is SEAM1[3] exactly
+  const IN = 0.2;                          // ramp for a card / bar landing on a word
+  const HOP = 0.6, DWELL = 0.5;            // hop 1 -> 2 -> 3 -> 4; one stroke between hops
+  const HOPS = [0, 1, 2].map((i) => CUE.loop + i * (HOP + DWELL));   // 1.74, 2.84, 3.94 -> lands 4.54
+  const LAND = HOPS[2] + HOP;              // 4.54, before "knife" (4.74)
+  const P0 = CUE.loop / 3;                 // cook 1's stroke period before the first hop (3 strokes end exactly at "loop")
+  const P4 = (HOLD - LAND) / 4;            // cook 4's stroke period after landing (4 strokes end exactly at HOLD)
+
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const A = SC.SEAM[2], B = SC.SEAM[3];
+
+  function render(t) {
+    // knife: linear fraction between hands; the kit eases the position and lifts the arc itself
+    let holder = 0, chop = 0;
+    const waits = [0, 1, 1, 1];
+    if (t < HOPS[0]) {
+      chop = (t / P0) % 1;
+    } else if (t < LAND) {
+      const i = HOPS.findIndex((h, j) => t < h + HOP + (j < 2 ? DWELL : 0));
+      const u = SC.seg(t, HOPS[i], HOPS[i] + HOP);     // 0..1 through the hop, 1 during the dwell
+      holder = i + u;
+      for (let j = 0; j < i; j++) waits[j] = 1;         // earlier givers stay folded
+      waits[i] = u;                                      // the giver folds as the knife leaves
+      waits[i + 1] = 1 - u;                              // the receiver unfolds as it arrives
+      chop = u >= 1 ? SC.seg(t, HOPS[i] + HOP, HOPS[i] + HOP + DWELL) : 0;   // one stroke, then still for the hop
+    } else {
+      holder = 3; waits[0] = waits[1] = waits[2] = 1; waits[3] = 0;
+      chop = t < HOLD ? ((t - LAND) / P4) % 1 : 0;
+    }
+    const cardO = SC.seg(t, CUE.threading - IN, CUE.threading);
+    const fill = SC.seg(t, CUE.loop, CUE.still);
+    const S = SC.state(A, {
+      knife: { holder },
+      cooks: waits.map((w) => ({ at: "counter", wait: w })),
+      code: { o: cardO, text: B.code.text },
+      timer: { o: cardO, fill },
+      chop,
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

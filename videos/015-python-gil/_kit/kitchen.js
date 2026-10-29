@@ -56,7 +56,7 @@
   const ROW_SMALL = { y: 1050, h: 250, fig: 0.27, feet: 1278, counter: 1205 };
   const ROW_BIG = { y: 420, h: 440, fig: 0.44, feet: 830, counter: 720 };
   const WALL_I = 2;                                  // the wall stands before kitchen index 2
-  const PIPE = { y: 600, h: 44, x0: 420, x1: 610 };  // crosses the wall between kitchens 1 and 2 (big row)
+  const PIPE = { y: 520, h: 44, x0: 420, x1: 610 };  // crosses the wall between kitchens 2 and 3 (0-indexed 1 and 2) of the big row, above the cooks' heads
   const FRIDGE = { x: 80, y: 980, w: 870, h: 320, door: 420, shelves: [1050, 1130, 1210] };
 
   // ---- the state ----
@@ -177,8 +177,8 @@
     const timerFill = node("rect", { x: 86, y: 1256, width: 0, height: 38, rx: 8, fill: PAL.data }, timerG);
     const timerLab = I.label(root, "work done", { size: 60, left: 80, top: 1178, width: 870, align: "left", color: PAL.dim });
     const ghostG = node("g", {}, svg);
-    node("rect", { x: 80, y: 1050, width: 870, height: 250, rx: 28, fill: "none", stroke: PAL.dim, "stroke-width": 6, "stroke-dasharray": "22 18" }, ghostG);
-    const labGhost = pair("second kitchen", "another process", { left: 80, top: 1108, width: 870 });
+    node("rect", { x: 80, y: 1062, width: 870, height: 238, rx: 28, fill: "none", stroke: PAL.dim, "stroke-width": 6, "stroke-dasharray": "22 18" }, ghostG);
+    const labGhost = pair("second kitchen", "another process", { left: 80, top: 1118, width: 870 });
 
     // the row of kitchens (ep 2), drawn at a home h = ROW_SMALL | ROW_BIG, interpolated by row.big
     const rowG = node("g", {}, svg);
@@ -224,8 +224,8 @@
 
     // the close labels
     const labClose1 = pair("waiting", "→ threads", { left: 760, top: 580, width: 190 });   // unused by default; ep1 close uses the oven label
-    const closeL = I.label(root, "waiting → threads", { size: 60, left: 80, top: 906, width: 870, align: "center", color: PAL.ink });
-    const closeR = I.label(root, "running Python → processes", { size: 60, left: 80, top: 980, width: 870, align: "center", color: PAL.ink });
+    const closeL = I.label(root, "waiting → threads", { size: 60, left: 80, top: 896, width: 870, align: "center", color: PAL.ink });
+    const closeR = I.label(root, "running Python → processes", { size: 60, left: 80, top: 962, width: 870, align: "center", color: PAL.ink });
 
     // the bowl / note path between kitchen 1 and 2 of the big row: counter 1 → pipe → counter 2
     function pipePath(u) {
@@ -322,7 +322,7 @@
       const nc = S.fridge.noteHero ? PAL.hero : PAL.dim;
       noteRect.setAttribute("stroke", nc); noteText.setAttribute("fill", nc);
       // the close
-      domOpac(closeL, S.close.o * S.K.o);
+      domOpac(closeL, S.close.o * Math.max(S.K.o, R.o * R.big));   // under the kitchen (ep 1) or under the big row (ep 2 close)
       domOpac(closeR, S.close.o * (S.ghost.o || (R.o && !R.big ? 1 : 0)));
       labClose1.set(0);
       labRowSmall.set(0);

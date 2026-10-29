@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_close (015 ep 2, beat 6): SEAM2[5] -> SEAM2[6]. The takeaway. Opens on the big row
+         still with the fridge and the magenta note on counter 3. On "use more processes" the hero
+         passes from the note to the four knives and the row cooks chop to the hold; on "shared
+         memory" the fridge label pulses. The last frame is the takeaway, held still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.694" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  SC.SEAM = SC.SEAM2;
+  const BEAT_SECONDS = 10.694;
+  // beat-local seconds (master - 47.850), from words.json
+  const CUE = {
+    threads: 1.95,     /* "threads": "waiting → threads" under the row (close.o) */
+    processes: 5.51,   /* "processes": the knives go magenta, the note dims, the row cooks chop */
+    shared:    9.55,   /* "shared (memory)": the fridge label pulses */
+  };
+  const HOLD = 10.39;            // still from here: SEAM2[6] exactly
+  const STROKE = 0.5;            // one chop stroke
+  const CHOP0 = HOLD - STROKE * Math.ceil((HOLD - CUE.processes) / STROKE);   // strokes phased so chop is 0 at HOLD
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const A = SC.SEAM2[5], B = SC.SEAM2[6];
+  const { seg, lerp, pulse } = SC;
+  function render(t) {
+    if (t >= HOLD) { kit.draw(null, SC.state(B, { chop: 0 })); return; }
+    const on = t >= CUE.processes ? 1 : 0;                           // the hero passes note -> knives (the kit reads hero flags as booleans: one swap)
+    const S = SC.state(A, {
+      row: { hero: on, chop: seg(t, CUE.processes, CUE.processes + 0.2) },
+      fridge: { noteHero: 1 - on, lab: 1 - 0.5 * pulse(t, CUE.shared, 0.3) },
+      close: { o: seg(t, CUE.threads, CUE.threads + 0.2) },
+      chop: t >= CUE.processes ? ((t - CHOP0) / STROKE) % 1 : 0,
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
