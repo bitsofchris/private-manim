@@ -138,7 +138,7 @@
     node("rect", { x: APPL.x + 14, y: APPL.y + 14, width: APPL.w - 28, height: 24, rx: 4, fill: PAL.data, "fill-opacity": 0.6 }, gAppl);
     node("circle", { cx: APPL.x + APPL.w - 24, cy: APPL.y + APPL.h - 18, r: 7, fill: PAL.dim }, gAppl);
 
-    // the cooks: a waiting cook is dimmed with a flat face (no clock icon: Chris, 10/29, it read as noise)
+    // the cooks: a waiting cook folds its arms, dimmed, flat face (no clock icon: Chris, 10/29, it read as noise)
     // a toque on every cook, in the head group so it tilts with the head (head top sits at y −516 in figure space)
     const toque = (p) => node("path", { d: "M-42 -500 H42 V-526 C62 -562 42 -594 0 -594 C-42 -594 -62 -562 -42 -526 Z",
       fill: PAL.bg, stroke: PAL.ink, "stroke-width": 8, "stroke-linejoin": "round" }, p.headG);
@@ -247,6 +247,7 @@
         if (holds) { pose.armR = 70 + 28 * Math.sin(Math.PI * chop); pose.lean = -3; }
         else if (c.at === "oven") { pose.armR = 48; pose.lean = 4; }
         else if (c.at === "appl") { pose.armL = 64 + 10 * Math.sin(Math.PI * chop); pose.lean = -4; }
+        else if (c.wait) { pose.armL = -56; pose.armR = -56; pose.tilt = 9; }   // waiting at the counter: arms folded, head tipped
         C.pose(p, pose);
         C.face(p, c.wait ? "flat" : "smile");
         p.el.setAttribute("stroke-opacity", 1);
