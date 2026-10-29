@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout: the canonical frame of Understanding the GPU (take A), through the states the
+         episodes use, so every string the kit can show is on screen once. Not in any Short.
+         0–2 s    rest, already working: CPU + queue, ~32 % of cells shimmering, HBM, strip full (eps 1–3)
+         2–4 s    ep 5: tensor cores emphasised and the hero; HBM with 8 TB/s; a memory-bound chip
+         4–6 s    ep 6: the queue drains into the chip; the training step on the code card, loss.item() lit, CPU waiting
+         6–8 s    ep 7: the data loader in the CPU's place; gaps in the strip; the MFU meter at 32 %
+         8–10 s   ep 7: one tiny kernel, strip still full, GPU-Util 100 % the hero
+         10–12 s  ep 7: the MFU code card typing under the chip, the meter the hero -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="12" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 12;
+  const kit = SC.mount(document.getElementById("root"));
+  const C = SC.D.code, { seg } = SC;
+  function render(t) {
+    SC.clock = t;
+    if (t < 2) {
+      kit.draw({ shimmer: 1 });
+    } else if (t < 4) {
+      kit.draw({ lit: 0.08, tc: 1, hero: "tc", bw: 1, queueO: 0, caption: "tensor cores: the corners" });
+    } else if (t < 6) {
+      const drain = seg(t, 4.3, 5.3);
+      kit.draw({ drain, queue: ["matmul", "add", "relu", "∇", "adam", "matmul"], cpuWait: 1, hero: "queue", strip: 0,
+                 code: { o: 1, lines: C.step, typed: Infinity, lit: "sync" } });
+    } else if (t < 8) {
+      kit.draw({ cpu: 0, loader: 1, queueO: 0, hbm: 0, meter: 1, hero: "meter", slots: "111100111110001111100111" });
+    } else if (t < 10) {
+      kit.draw({ one: 77, hbm: 0, meter: 1, mfu: 0.01, mfuText: "~0%", hero: "util", caption: "one tiny kernel" });
+    } else {
+      const typed = SC_typedAt(C.mfu, (t - 10) * 2.5);
+      kit.draw({ hbm: 0, meter: 1, hero: "meter", strip: 0, caption: "",
+                 code: { o: 1, lines: C.mfu, typed, lit: null, cursor: 1, blink: t } });
+    }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
