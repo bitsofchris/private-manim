@@ -1,0 +1,347 @@
+[
+ {
+  "start": 0.4,
+  "end": 0.96,
+  "text": "A FLOP is"
+ },
+ {
+  "start": 1.02,
+  "end": 2.04,
+  "text": "one multiply or"
+ },
+ {
+  "start": 2.1,
+  "end": 3.04,
+  "text": "one add, and"
+ },
+ {
+  "start": 3.1,
+  "end": 3.58,
+  "text": "it's the unit"
+ },
+ {
+  "start": 3.64,
+  "end": 4.3,
+  "text": "that all AI"
+ },
+ {
+  "start": 4.36,
+  "end": 4.84,
+  "text": "compute is"
+ },
+ {
+  "start": 4.9,
+  "end": 5.36,
+  "text": "measured in."
+ },
+ {
+  "start": 5.92,
+  "end": 6.56,
+  "text": "FLOP stands for"
+ },
+ {
+  "start": 6.62,
+  "end": 7.3,
+  "text": "floating point"
+ },
+ {
+  "start": 7.36,
+  "end": 7.98,
+  "text": "operation."
+ },
+ {
+  "start": 8.66,
+  "end": 9.22,
+  "text": "Computers store"
+ },
+ {
+  "start": 9.28,
+  "end": 10.0,
+  "text": "decimals as a"
+ },
+ {
+  "start": 10.06,
+  "end": 10.98,
+  "text": "floating point"
+ },
+ {
+  "start": 11.04,
+  "end": 11.32,
+  "text": "scientific"
+ },
+ {
+  "start": 11.38,
+  "end": 12.0,
+  "text": "notation in"
+ },
+ {
+  "start": 12.06,
+  "end": 13.22,
+  "text": "binary, a sign,"
+ },
+ {
+  "start": 13.28,
+  "end": 13.7,
+  "text": "digits, and"
+ },
+ {
+  "start": 13.76,
+  "end": 14.2,
+  "text": "an exponent."
+ },
+ {
+  "start": 14.85,
+  "end": 15.25,
+  "text": "The point"
+ },
+ {
+  "start": 15.31,
+  "end": 16.5,
+  "text": "floats, so one"
+ },
+ {
+  "start": 16.56,
+  "end": 17.9,
+  "text": "format holds a"
+ },
+ {
+  "start": 17.96,
+  "end": 18.68,
+  "text": "ten-millionth"
+ },
+ {
+  "start": 18.74,
+  "end": 19.26,
+  "text": "and"
+ },
+ {
+  "start": 19.32,
+  "end": 19.92,
+  "text": "three million."
+ },
+ {
+  "start": 20.4,
+  "end": 20.86,
+  "text": "Every weight"
+ },
+ {
+  "start": 20.92,
+  "end": 21.52,
+  "text": "activation, and"
+ },
+ {
+  "start": 21.58,
+  "end": 22.02,
+  "text": "gradient is"
+ },
+ {
+  "start": 22.08,
+  "end": 22.44,
+  "text": "one of these"
+ },
+ {
+  "start": 22.5,
+  "end": 22.86,
+  "text": "numbers."
+ },
+ {
+  "start": 23.52,
+  "end": 24.04,
+  "text": "FLOPs with a"
+ },
+ {
+  "start": 24.1,
+  "end": 24.62,
+  "text": "small s is"
+ },
+ {
+  "start": 24.68,
+  "end": 25.12,
+  "text": "a count."
+ },
+ {
+  "start": 25.94,
+  "end": 26.2,
+  "text": "Training an"
+ },
+ {
+  "start": 26.26,
+  "end": 26.62,
+  "text": "8 billion"
+ },
+ {
+  "start": 26.68,
+  "end": 27.44,
+  "text": "parameter model"
+ },
+ {
+  "start": 27.5,
+  "end": 28.44,
+  "text": "on 15,000"
+ },
+ {
+  "start": 28.5,
+  "end": 29.58,
+  "text": "tokens costs"
+ },
+ {
+  "start": 29.64,
+  "end": 30.86,
+  "text": "about 720"
+ },
+ {
+  "start": 30.92,
+  "end": 32.02,
+  "text": "trillion FLOPs."
+ },
+ {
+  "start": 32.619,
+  "end": 33.06,
+  "text": "FLOPS with a"
+ },
+ {
+  "start": 33.12,
+  "end": 33.78,
+  "text": "capital S is"
+ },
+ {
+  "start": 33.84,
+  "end": 34.5,
+  "text": "per second."
+ },
+ {
+  "start": 34.6,
+  "end": 35.22,
+  "text": "This is a rate."
+ },
+ {
+  "start": 35.76,
+  "end": 36.88,
+  "text": "A B200 peaks"
+ },
+ {
+  "start": 36.94,
+  "end": 38.6,
+  "text": "near 2,250"
+ },
+ {
+  "start": 38.66,
+  "end": 39.28,
+  "text": "teraFLOPS"
+ },
+ {
+  "start": 39.34,
+  "end": 40.22,
+  "text": "in bf16."
+ },
+ {
+  "start": 40.84,
+  "end": 41.16,
+  "text": "Tera is"
+ },
+ {
+  "start": 41.22,
+  "end": 41.7,
+  "text": "a trillion."
+ },
+ {
+  "start": 42.21,
+  "end": 42.96,
+  "text": "A transformer's"
+ },
+ {
+  "start": 43.02,
+  "end": 43.42,
+  "text": "compute is"
+ },
+ {
+  "start": 43.48,
+  "end": 44.04,
+  "text": "nearly all"
+ },
+ {
+  "start": 44.1,
+  "end": 44.4,
+  "text": "matrix"
+ },
+ {
+  "start": 44.46,
+  "end": 45.36,
+  "text": "multiplies and"
+ },
+ {
+  "start": 45.42,
+  "end": 45.96,
+  "text": "a matmul is"
+ },
+ {
+  "start": 46.02,
+  "end": 46.92,
+  "text": "only multiplies"
+ },
+ {
+  "start": 46.96,
+  "end": 47.34,
+  "text": "and adds."
+ },
+ {
+  "start": 47.88,
+  "end": 48.86,
+  "text": "GPUs are built"
+ },
+ {
+  "start": 48.92,
+  "end": 49.16,
+  "text": "to do"
+ },
+ {
+  "start": 49.22,
+  "end": 50.06,
+  "text": "exactly that"
+ },
+ {
+  "start": 50.48,
+  "end": 50.84,
+  "text": "thousands"
+ },
+ {
+  "start": 50.9,
+  "end": 51.38,
+  "text": "at once."
+ },
+ {
+  "start": 51.99,
+  "end": 52.48,
+  "text": "Divide a run's"
+ },
+ {
+  "start": 52.54,
+  "end": 53.56,
+  "text": "FLOPs by the"
+ },
+ {
+  "start": 53.62,
+  "end": 54.76,
+  "text": "FLOPS you get,"
+ },
+ {
+  "start": 54.82,
+  "end": 55.54,
+  "text": "and you have"
+ },
+ {
+  "start": 55.6,
+  "end": 56.92,
+  "text": "GPU-hours."
+ },
+ {
+  "start": 56.98,
+  "end": 57.3,
+  "text": "This is the"
+ },
+ {
+  "start": 57.36,
+  "end": 58.3,
+  "text": "bill."
+ }
+]
