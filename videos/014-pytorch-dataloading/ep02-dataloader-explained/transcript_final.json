@@ -1,0 +1,850 @@
+{
+  "segments" : [
+    {
+      "end" : 3380,
+      "id" : "3E9B9CBC-2A67-429B-B5D5-BCE3616624B1",
+      "start" : 1,
+      "text" : "In PyTorch, the dataset's job is to hand back one sample,",
+      "words" : [
+        {
+          "end" : 740,
+          "start" : 0,
+          "text" : "In"
+        },
+        {
+          "end" : 1220,
+          "start" : 740,
+          "text" : "PyTorch,"
+        },
+        {
+          "end" : 1400,
+          "start" : 1320,
+          "text" : "the"
+        },
+        {
+          "end" : 1840,
+          "start" : 1400,
+          "text" : "dataset's"
+        },
+        {
+          "end" : 2040,
+          "start" : 1840,
+          "text" : "job"
+        },
+        {
+          "end" : 2140,
+          "start" : 2040,
+          "text" : "is"
+        },
+        {
+          "end" : 2240,
+          "start" : 2140,
+          "text" : "to"
+        },
+        {
+          "end" : 2520,
+          "start" : 2240,
+          "text" : "hand"
+        },
+        {
+          "end" : 2780,
+          "start" : 2520,
+          "text" : "back"
+        },
+        {
+          "end" : 3000,
+          "start" : 2780,
+          "text" : "one"
+        },
+        {
+          "end" : 3380,
+          "start" : 3000,
+          "text" : "sample,"
+        }
+      ]
+    },
+    {
+      "end" : 8220,
+      "id" : "F9393D7F-0258-4D1E-B8B7-BB42C9DC9B14",
+      "start" : 3780,
+      "text" : "and the data loader's job is to call it n number of times and hand back a batch.",
+      "words" : [
+        {
+          "end" : 3880,
+          "start" : 3780,
+          "text" : "and"
+        },
+        {
+          "end" : 4060,
+          "start" : 3880,
+          "text" : "the"
+        },
+        {
+          "end" : 4280,
+          "start" : 4060,
+          "text" : "data"
+        },
+        {
+          "end" : 4820,
+          "start" : 4280,
+          "text" : "loader's"
+        },
+        {
+          "end" : 5100,
+          "start" : 4820,
+          "text" : "job"
+        },
+        {
+          "end" : 5220,
+          "start" : 5100,
+          "text" : "is"
+        },
+        {
+          "end" : 5360,
+          "start" : 5220,
+          "text" : "to"
+        },
+        {
+          "end" : 5780,
+          "start" : 5360,
+          "text" : "call"
+        },
+        {
+          "end" : 5940,
+          "start" : 5780,
+          "text" : "it"
+        },
+        {
+          "end" : 6460,
+          "start" : 5940,
+          "text" : "n"
+        },
+        {
+          "end" : 6700,
+          "start" : 6460,
+          "text" : "number"
+        },
+        {
+          "end" : 6860,
+          "start" : 6700,
+          "text" : "of"
+        },
+        {
+          "end" : 7180,
+          "start" : 6860,
+          "text" : "times"
+        },
+        {
+          "end" : 7360,
+          "start" : 7180,
+          "text" : "and"
+        },
+        {
+          "end" : 7560,
+          "start" : 7360,
+          "text" : "hand"
+        },
+        {
+          "end" : 7780,
+          "start" : 7560,
+          "text" : "back"
+        },
+        {
+          "end" : 7920,
+          "start" : 7780,
+          "text" : "a"
+        },
+        {
+          "end" : 8220,
+          "start" : 7920,
+          "text" : "batch."
+        }
+      ]
+    },
+    {
+      "end" : 11040,
+      "id" : "E86A26D3-EA77-49A8-BE2A-55AC87B81A4D",
+      "start" : 8720,
+      "text" : "The data loader is a machine with four different stations,",
+      "words" : [
+        {
+          "end" : 8820,
+          "start" : 8720,
+          "text" : "The"
+        },
+        {
+          "end" : 9020,
+          "start" : 8820,
+          "text" : "data"
+        },
+        {
+          "end" : 9280,
+          "start" : 9020,
+          "text" : "loader"
+        },
+        {
+          "end" : 9400,
+          "start" : 9280,
+          "text" : "is"
+        },
+        {
+          "end" : 9480,
+          "start" : 9400,
+          "text" : "a"
+        },
+        {
+          "end" : 9860,
+          "start" : 9480,
+          "text" : "machine"
+        },
+        {
+          "end" : 10080,
+          "start" : 9860,
+          "text" : "with"
+        },
+        {
+          "end" : 10380,
+          "start" : 10080,
+          "text" : "four"
+        },
+        {
+          "end" : 10640,
+          "start" : 10380,
+          "text" : "different"
+        },
+        {
+          "end" : 11040,
+          "start" : 10640,
+          "text" : "stations,"
+        }
+      ]
+    },
+    {
+      "end" : 13060,
+      "id" : "ED7D13BF-8D97-437E-94E6-9B5EC31E4742",
+      "start" : 11180,
+      "text" : "and every argument you pass is one of those stations.",
+      "words" : [
+        {
+          "end" : 11240,
+          "start" : 11180,
+          "text" : "and"
+        },
+        {
+          "end" : 11440,
+          "start" : 11240,
+          "text" : "every"
+        },
+        {
+          "end" : 11760,
+          "start" : 11440,
+          "text" : "argument"
+        },
+        {
+          "end" : 11860,
+          "start" : 11760,
+          "text" : "you"
+        },
+        {
+          "end" : 12180,
+          "start" : 11860,
+          "text" : "pass"
+        },
+        {
+          "end" : 12300,
+          "start" : 12180,
+          "text" : "is"
+        },
+        {
+          "end" : 12480,
+          "start" : 12300,
+          "text" : "one"
+        },
+        {
+          "end" : 12580,
+          "start" : 12480,
+          "text" : "of"
+        },
+        {
+          "end" : 12720,
+          "start" : 12580,
+          "text" : "those"
+        },
+        {
+          "end" : 13060,
+          "start" : 12720,
+          "text" : "stations."
+        }
+      ]
+    },
+    {
+      "end" : 14840,
+      "id" : "A577136C-7E3D-4860-9D6F-1E9154AF3492",
+      "start" : 13600,
+      "text" : "Your dataset sits at the front.",
+      "words" : [
+        {
+          "end" : 13740,
+          "start" : 13600,
+          "text" : "Your"
+        },
+        {
+          "end" : 14060,
+          "start" : 13740,
+          "text" : "dataset"
+        },
+        {
+          "end" : 14400,
+          "start" : 14060,
+          "text" : "sits"
+        },
+        {
+          "end" : 14480,
+          "start" : 14400,
+          "text" : "at"
+        },
+        {
+          "end" : 14620,
+          "start" : 14480,
+          "text" : "the"
+        },
+        {
+          "end" : 14840,
+          "start" : 14620,
+          "text" : "front."
+        }
+      ]
+    },
+    {
+      "end" : 18540,
+      "id" : "4030A614-F42F-4582-8533-B5C6E608584B",
+      "start" : 15200,
+      "text" : "All it knows is how to go get one sample wherever that data lives.",
+      "words" : [
+        {
+          "end" : 15360,
+          "start" : 15200,
+          "text" : "All"
+        },
+        {
+          "end" : 15480,
+          "start" : 15360,
+          "text" : "it"
+        },
+        {
+          "end" : 15740,
+          "start" : 15480,
+          "text" : "knows"
+        },
+        {
+          "end" : 15840,
+          "start" : 15740,
+          "text" : "is"
+        },
+        {
+          "end" : 15960,
+          "start" : 15840,
+          "text" : "how"
+        },
+        {
+          "end" : 16080,
+          "start" : 15960,
+          "text" : "to"
+        },
+        {
+          "end" : 16219,
+          "start" : 16080,
+          "text" : "go"
+        },
+        {
+          "end" : 16420,
+          "start" : 16219,
+          "text" : "get"
+        },
+        {
+          "end" : 16820,
+          "start" : 16420,
+          "text" : "one"
+        },
+        {
+          "end" : 17260,
+          "start" : 16820,
+          "text" : "sample"
+        },
+        {
+          "end" : 17780,
+          "start" : 17260,
+          "text" : "wherever"
+        },
+        {
+          "end" : 18020,
+          "start" : 17780,
+          "text" : "that"
+        },
+        {
+          "end" : 18220,
+          "start" : 18020,
+          "text" : "data"
+        },
+        {
+          "end" : 18540,
+          "start" : 18220,
+          "text" : "lives."
+        }
+      ]
+    },
+    {
+      "end" : 20200,
+      "id" : "9C456085-7AD8-4B38-A5F7-FBC81A94571A",
+      "start" : 18960,
+      "text" : "The first station is the sampler.",
+      "words" : [
+        {
+          "end" : 19080,
+          "start" : 18960,
+          "text" : "The"
+        },
+        {
+          "end" : 19300,
+          "start" : 19080,
+          "text" : "first"
+        },
+        {
+          "end" : 19600,
+          "start" : 19300,
+          "text" : "station"
+        },
+        {
+          "end" : 19700,
+          "start" : 19600,
+          "text" : "is"
+        },
+        {
+          "end" : 19880,
+          "start" : 19700,
+          "text" : "the"
+        },
+        {
+          "end" : 20200,
+          "start" : 19880,
+          "text" : "sampler."
+        }
+      ]
+    },
+    {
+      "end" : 21520,
+      "id" : "F60EE499-D2E7-4F59-AA1E-9A1B1E01B490",
+      "start" : 20560,
+      "text" : "It decides the order.",
+      "words" : [
+        {
+          "end" : 20620,
+          "start" : 20560,
+          "text" : "It"
+        },
+        {
+          "end" : 21020,
+          "start" : 20620,
+          "text" : "decides"
+        },
+        {
+          "end" : 21180,
+          "start" : 21020,
+          "text" : "the"
+        },
+        {
+          "end" : 21520,
+          "start" : 21180,
+          "text" : "order."
+        }
+      ]
+    },
+    {
+      "end" : 23840,
+      "id" : "1CCB33BB-12FA-4BDD-A80E-F3CF64738D6C",
+      "start" : 22100,
+      "text" : "Shuffle equals true is a random sampler,",
+      "words" : [
+        {
+          "end" : 22280,
+          "start" : 22100,
+          "text" : "Shuffle"
+        },
+        {
+          "end" : 22560,
+          "start" : 22280,
+          "text" : "equals"
+        },
+        {
+          "end" : 22800,
+          "start" : 22560,
+          "text" : "true"
+        },
+        {
+          "end" : 22960,
+          "start" : 22800,
+          "text" : "is"
+        },
+        {
+          "end" : 23140,
+          "start" : 22960,
+          "text" : "a"
+        },
+        {
+          "end" : 23460,
+          "start" : 23140,
+          "text" : "random"
+        },
+        {
+          "end" : 23840,
+          "start" : 23460,
+          "text" : "sampler,"
+        }
+      ]
+    },
+    {
+      "end" : 25560,
+      "id" : "71C823A3-3AA5-43E1-BE96-79442E3045F6",
+      "start" : 24260,
+      "text" : "a random sequence of indices.",
+      "words" : [
+        {
+          "end" : 24320,
+          "start" : 24260,
+          "text" : "a"
+        },
+        {
+          "end" : 24740,
+          "start" : 24320,
+          "text" : "random"
+        },
+        {
+          "end" : 25160,
+          "start" : 24740,
+          "text" : "sequence"
+        },
+        {
+          "end" : 25280,
+          "start" : 25160,
+          "text" : "of"
+        },
+        {
+          "end" : 25560,
+          "start" : 25280,
+          "text" : "indices."
+        }
+      ]
+    },
+    {
+      "end" : 27100,
+      "id" : "11F40A41-9D27-42A4-8D01-B605616DD982",
+      "start" : 26200,
+      "text" : "Second up is fetch.",
+      "words" : [
+        {
+          "end" : 26520,
+          "start" : 26200,
+          "text" : "Second"
+        },
+        {
+          "end" : 26680,
+          "start" : 26520,
+          "text" : "up"
+        },
+        {
+          "end" : 26800,
+          "start" : 26680,
+          "text" : "is"
+        },
+        {
+          "end" : 27100,
+          "start" : 26800,
+          "text" : "fetch."
+        }
+      ]
+    },
+    {
+      "end" : 31000,
+      "id" : "7C7DA78C-142E-4CB5-861C-1CE025F5C367",
+      "start" : 27280,
+      "text" : "Workers will call your dataset with those indices in parallel if you ask for them.",
+      "words" : [
+        {
+          "end" : 27720,
+          "start" : 27280,
+          "text" : "Workers"
+        },
+        {
+          "end" : 27860,
+          "start" : 27720,
+          "text" : "will"
+        },
+        {
+          "end" : 28140,
+          "start" : 27860,
+          "text" : "call"
+        },
+        {
+          "end" : 28300,
+          "start" : 28140,
+          "text" : "your"
+        },
+        {
+          "end" : 28540,
+          "start" : 28300,
+          "text" : "dataset"
+        },
+        {
+          "end" : 28760,
+          "start" : 28540,
+          "text" : "with"
+        },
+        {
+          "end" : 28940,
+          "start" : 28760,
+          "text" : "those"
+        },
+        {
+          "end" : 29260,
+          "start" : 28940,
+          "text" : "indices"
+        },
+        {
+          "end" : 29800,
+          "start" : 29260,
+          "text" : "in"
+        },
+        {
+          "end" : 30200,
+          "start" : 29800,
+          "text" : "parallel"
+        },
+        {
+          "end" : 30460,
+          "start" : 30200,
+          "text" : "if"
+        },
+        {
+          "end" : 30520,
+          "start" : 30460,
+          "text" : "you"
+        },
+        {
+          "end" : 30740,
+          "start" : 30520,
+          "text" : "ask"
+        },
+        {
+          "end" : 30880,
+          "start" : 30740,
+          "text" : "for"
+        },
+        {
+          "end" : 31000,
+          "start" : 30880,
+          "text" : "them."
+        }
+      ]
+    },
+    {
+      "end" : 34620,
+      "id" : "3BA08FFA-10B0-45EC-A0C0-FE1778D16C85",
+      "start" : 31400,
+      "text" : "Third is batching. It collects batch-sized samples.",
+      "words" : [
+        {
+          "end" : 31640,
+          "start" : 31400,
+          "text" : "Third"
+        },
+        {
+          "end" : 31800,
+          "start" : 31640,
+          "text" : "is"
+        },
+        {
+          "end" : 32259,
+          "start" : 31800,
+          "text" : "batching."
+        },
+        {
+          "end" : 32480,
+          "start" : 32400,
+          "text" : "It"
+        },
+        {
+          "end" : 32940,
+          "start" : 32480,
+          "text" : "collects"
+        },
+        {
+          "end" : 33500,
+          "start" : 32940,
+          "text" : "batch"
+        },
+        {
+          "end" : 33980,
+          "start" : 33500,
+          "text" : "-sized"
+        },
+        {
+          "end" : 34620,
+          "start" : 33980,
+          "text" : "samples."
+        }
+      ]
+    },
+    {
+      "end" : 38920,
+      "id" : "8401288E-1658-4F3E-8F93-BDBEB101D1F4",
+      "start" : 35180,
+      "text" : "And fourth is collate. This is what packs them into one tensor shaped for the GPU.",
+      "words" : [
+        {
+          "end" : 35240,
+          "start" : 35180,
+          "text" : "And"
+        },
+        {
+          "end" : 35500,
+          "start" : 35240,
+          "text" : "fourth"
+        },
+        {
+          "end" : 35680,
+          "start" : 35500,
+          "text" : "is"
+        },
+        {
+          "end" : 35980,
+          "start" : 35680,
+          "text" : "collate."
+        },
+        {
+          "end" : 36140,
+          "start" : 36060,
+          "text" : "This"
+        },
+        {
+          "end" : 36280,
+          "start" : 36140,
+          "text" : "is"
+        },
+        {
+          "end" : 36360,
+          "start" : 36280,
+          "text" : "what"
+        },
+        {
+          "end" : 36800,
+          "start" : 36360,
+          "text" : "packs"
+        },
+        {
+          "end" : 37020,
+          "start" : 36800,
+          "text" : "them"
+        },
+        {
+          "end" : 37280,
+          "start" : 37020,
+          "text" : "into"
+        },
+        {
+          "end" : 37560,
+          "start" : 37280,
+          "text" : "one"
+        },
+        {
+          "end" : 37900,
+          "start" : 37560,
+          "text" : "tensor"
+        },
+        {
+          "end" : 38300,
+          "start" : 37900,
+          "text" : "shaped"
+        },
+        {
+          "end" : 38440,
+          "start" : 38300,
+          "text" : "for"
+        },
+        {
+          "end" : 38580,
+          "start" : 38440,
+          "text" : "the"
+        },
+        {
+          "end" : 38920,
+          "start" : 38580,
+          "text" : "GPU."
+        }
+      ]
+    },
+    {
+      "end" : 41720,
+      "id" : "19B9EE98-A765-4B8B-99BB-234F01C53CFF",
+      "start" : 39660,
+      "text" : "Out comes the batch and what goes into the forward pass.",
+      "words" : [
+        {
+          "end" : 39740,
+          "start" : 39660,
+          "text" : "Out"
+        },
+        {
+          "end" : 39980,
+          "start" : 39740,
+          "text" : "comes"
+        },
+        {
+          "end" : 40120,
+          "start" : 39980,
+          "text" : "the"
+        },
+        {
+          "end" : 40380,
+          "start" : 40120,
+          "text" : "batch"
+        },
+        {
+          "end" : 40480,
+          "start" : 40380,
+          "text" : "and"
+        },
+        {
+          "end" : 40620,
+          "start" : 40480,
+          "text" : "what"
+        },
+        {
+          "end" : 40820,
+          "start" : 40620,
+          "text" : "goes"
+        },
+        {
+          "end" : 41000,
+          "start" : 40820,
+          "text" : "into"
+        },
+        {
+          "end" : 41160,
+          "start" : 41000,
+          "text" : "the"
+        },
+        {
+          "end" : 41380,
+          "start" : 41160,
+          "text" : "forward"
+        },
+        {
+          "end" : 41720,
+          "start" : 41380,
+          "text" : "pass."
+        }
+      ]
+    }
+  ],
+  "text" : "In PyTorch, the dataset's job is to hand back one sample,\nand the data loader's job is to call it n number of times and hand back a batch.\nThe data loader is a machine with four different stations,\nand every argument you pass is one of those stations.\nYour dataset sits at the front.\nAll it knows is how to go get one sample wherever that data lives.\nThe first station is the sampler.\nIt decides the order.\nShuffle equals true is a random sampler,\na random sequence of indices.\nSecond up is fetch.\nWorkers will call your dataset with those indices in parallel if you ask for them.\nThird is batching. It collects batch-sized samples.\nAnd fourth is collate. This is what packs them into one tensor shaped for the GPU.\nOut comes the batch and what goes into the forward pass."
+}

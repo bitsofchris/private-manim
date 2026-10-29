@@ -1,0 +1,43 @@
+00:00.240-00:08.560
+In PyTorch, the dataset's job is to hand back one sample, and the data loader's job is to call it n number of times and hand back a batch.
+
+00:08.400-00:13.440
+The data loader is a machine with four different stations, and every argument you pass is one of those stations.
+
+00:13.440-00:15.039
+Your dataset sits at the front.
+
+00:15.039-00:19.119
+All it knows is how to go get one sample, wherever that data lives.
+
+00:18.800-00:20.480
+The first station is the sampler.
+
+00:20.480-00:21.759
+It decides the order.
+
+00:21.759-00:26.080
+Shuffle equals true is a random sampler, a random sequence of indices.
+
+00:26.080-00:27.360
+Second up is fetch.
+
+00:27.360-00:31.439
+Workers will call your dataset with those indices in parallel if you ask for them
+
+00:31.200-00:32.400
+Third is batching.
+
+00:32.400-00:34.880
+It collects batch-sized samples.
+
+00:34.880-00:36.080
+And fourth is collate.
+
+00:36.080-00:39.360
+This is what packs them into one tensor shaped for the GPU.
+
+00:39.360-00:42.080
+Out comes the batch and what goes into the forward pass.
+
+

@@ -1,0 +1,40 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 8.47
+  },
+  {
+   "clip": "media/hf/02_stations.mp4",
+   "end": 2.63
+  },
+  {
+   "clip": "media/hf/03_args_code.mp4",
+   "end": 3.92
+  },
+  {
+   "clip": "media/hf/04_dataset.mp4",
+   "end": 3.73
+  },
+  {
+   "clip": "media/hf/05_sampler.mp4",
+   "end": 7.13
+  },
+  {
+   "clip": "media/hf/06_fetch.mp4",
+   "end": 5.355
+  },
+  {
+   "clip": "media/hf/07_batching.mp4",
+   "end": 3.665
+  },
+  {
+   "clip": "media/hf/08_collate.mp4",
+   "end": 4.39
+  },
+  {
+   "clip": "media/hf/09_out.mp4",
+   "end": 3.072
+  }
+ ]
+}
