@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 03_shards (starter: holds SEAM[2] then SEAM[3]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 03_shards: beat 3, "I most frequently use this when training bigger models. You pack the data into shards and just stream them through."
+         Opens on SEAM[2] (the EP4.ITER card, yield lit, cursor off), ends on SEAM[3] (the machine, shards on, the shards the hero).
+         beat-local cues (master − 7.285), from words.json: I@7.61 shards@10.62 stream@11.46 through.@11.94
+         0.15–0.55  the card flips back to the machine (machine in from flip 0.6, i.e. by ~0.31, on "I"); __iter__ the hero
+         3.20–3.45  the shards fade in under the Dataset card; on "shards" (3.335) they become the magenta hero, machine hero null
+         4.10–4.45  "stream": one opacity dip of the shards (1 → 0.5 → 1); samples keep hopping (SC.clock)
+         4.60–end   SEAM[3] itself -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -35,9 +35,34 @@
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
   SC.E();
+  const { seg } = SC;
+  // beat-local cues (master − 7.285)
+  const CUE = {
+    i: 0.325,       /* "I": the machine is back */
+    shards: 3.335,  /* "shards": the shards in, the hero */
+    stream: 4.175,  /* "stream": one opacity dip */
+  };
+  const T = {
+    flipOut: 0.15,               // the card starts to fade, the machine is in from ~0.31
+    shardsIn: CUE.shards - 0.135, // fade in over 0.25 s, arriving just after the word
+    dip: CUE.stream - 0.075,     // the dip, 0.35 s wide, lowest just after "stream"
+    still: 4.6,                  // SEAM[3] from here (BEAT_SECONDS − 0.3 = 4.85)
+  };
+  const FLIP = 0.4;
+  function state(t) {
+    if (t <= T.flipOut) return SC.SEAM[2];
+    if (t >= T.still) return SC.SEAM[3];
+    const flip = 1 - seg(t, T.flipOut, T.flipOut + FLIP);
+    const shardsHero = t >= CUE.shards;
+    const o = seg(t, T.shardsIn, T.shardsIn + 0.25) * (1 - 0.5 * SC.pulse(t, T.dip, 0.35));
+    const S = { mode: "iterable", strike: 1, workers: 0, hero: shardsHero ? null : "iter", flip,
+                shards: { o, order: [0, 1, 2], load: 0, hero: shardsHero ? 1 : 0 } };
+    if (flip > 0) S.code = SC.SEAM[2].code;
+    return S;
+  }
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[2] : SC.SEAM[3]);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 08_same_loader (starter: holds SEAM[7] then SEAM[8]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 08_same_loader (beat 8, machine; SEAM[7] -> SEAM[8]). Master 32.559, 4.501 s.
+         0.00        SEAM[7]: fetch the hero, workers 2, shards [2,0,1] with card 2 loaded
+         0.15-0.65   "data loader" (32.96): the Dataset card and shards dim 1 -> 0.45 (S.dataset); hero null at 0.30,
+                     the loader box stands alone
+         2.50        "batch" (35.16): batching the hero
+         3.16        "collate," (35.82): collate the hero
+         3.74        "batch out" (36.40): the batch card the hero
+         3.60-4.05   dataset back to 1 (by ~36.6)
+         4.10 - end  still on SEAM[8] (hero batch) -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -34,10 +36,31 @@
   const BEAT_SECONDS = 4.501, MASTER = 32.559;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  SC.E();
+  const E = SC.E();
+  const CUE = {
+    data: 0.401,       /* "data"      32.96 */
+    batch: 2.601,      /* "batch"     35.16 (size) */
+    collate: 3.261,    /* "collate,"  35.82 */
+    out: 3.841,        /* "batch"     36.40 (out) */
+    back: 4.050,       /* ~36.61: the Dataset card back to 1 */
+    still: 4.100,
+  };
+  const DIM = 0.45;
+  function state(t) {
+    if (t <= 0) return SC.SEAM[7];
+    if (t >= CUE.still) return SC.SEAM[8];
+    const S = Object.assign({}, SC.SEAM[7]);
+    S.dataset = 1 - (1 - DIM) * E.io(SC.seg(t, CUE.data - 0.25, CUE.data + 0.25))
+                  + (1 - DIM) * E.io(SC.seg(t, CUE.back - 0.45, CUE.back));
+    S.hero = t < CUE.data - 0.1 ? "fetch"
+           : t < CUE.batch - 0.1 ? null
+           : t < CUE.collate - 0.1 ? "batching"
+           : t < CUE.out - 0.1 ? "collate" : "batch";
+    return S;
+  }
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[7] : SC.SEAM[8]);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 10_swap (starter: holds SEAM[9] then SEAM[10]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 10_swap: "So use map until you can't, and the day sample i stops being cheap, swap to an
+         iterable dataset."  SEAM[9] -> SEAM[10] (= SEAM[0]); the last beat of the Short.
+         So (0.28): the EP4.CMP card (getitem lit) flips back to the machine over 0.4 s (0.16-0.56). While
+           flip >= 0.6 (machine hidden) it goes to map mode, strike 0, hero getitem: the machine reappears
+           map-style with __getitem__ magenta, continuing the card's lit line, by "map" (0.56).
+         swap (3.34): mode -> iterable from 3.24 (__len__/__getitem__ give way to __iter__, the hero), the strike
+           draws across the sampler 3.22-3.82; __iter__ is the hero well before "iterable" (3.88). SEAM[10] from 3.82.
+         The sample hop decelerates 4.62-4.90 and rests where frame 0 starts it (clock 46.80 = 26 x 1.8 s),
+           so the last 0.3 s are still and the Short loops onto frame 0. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -34,10 +36,39 @@
   const BEAT_SECONDS = 5.203, MASTER = 42.040;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  SC.E();
+  const ease = SC.E().io;
+  const { seg, clamp01 } = SC;
+  // beat-local cues (master − 42.040), from words.json
+  const CUE = {
+    so: 0.28,        /* "So": flip back to the machine */
+    map: 0.56,       /* "map": the map-style machine fully in, __getitem__ the hero */
+    swap: 3.34,      /* "swap": methods swap, the strike draws */
+    iterable: 3.88,  /* "iterable": __iter__ the hero (already, from the swap) */
+  };
+  const FLIP = 0.4, T_FLIP = CUE.so - 0.12;             // flip 1 -> 0 over 0.16–0.56; machine hidden (flip >= 0.6) until 0.32
+  const T_SWAP = CUE.swap - 0.10, T_STRIKE = [CUE.swap - 0.12, CUE.swap + 0.48];   // 0.6 s strike
+  const T = { slowFrom: 4.62, still: 4.90 };            // the hop rests at clock 42.04 + 4.76 = 46.80 (frame 0's phase)
+  const MAP = { mode: "map", strike: 0, workers: 0, hero: "getitem", shards: { o: 0 } };
+  function state(t) {
+    if (t <= 0) return SC.SEAM[9];
+    if (t >= T_STRIKE[1]) return SC.SEAM[10];           // = frame 0: iterable, struck, __iter__ the hero
+    const flip = 1 - seg(t, T_FLIP, T_FLIP + FLIP);
+    if (flip >= 0.6) return Object.assign({}, SC.SEAM[9], MAP, { flip });   // hidden: the card still covers it
+    const S = Object.assign({}, SC.SEAM[10], MAP, { flip });
+    if (flip > 0) S.code = SC.SEAM[9].code;               // the card fades out
+    if (t >= T_SWAP) Object.assign(S, { mode: "iterable", hero: "iter" });
+    S.strike = ease(seg(t, T_STRIKE[0], T_STRIKE[1]));
+    return S;
+  }
+  // the sample hop decelerates to rest, so the last frames are still
+  function clockAt(t) {
+    if (t <= T.slowFrom) return t;
+    const w = T.still - T.slowFrom, u = clamp01((t - T.slowFrom) / w);
+    return T.slowFrom + w * (u - u * u / 2);
+  }
   function render(t) {
-    SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[9] : SC.SEAM[10]);
+    SC.clock = MASTER + clockAt(t);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

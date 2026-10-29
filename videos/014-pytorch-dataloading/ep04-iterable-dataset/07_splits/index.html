@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 07_splits (starter: holds SEAM[6] then SEAM[7]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 07_splits (beat 7, machine; SEAM[6] -> SEAM[7]). Master 27.360, 5.199 s.
+         0.00        SEAM[6]: __iter__ the hero, shards [2,0,1] with card 2 loaded, workers 0
+         0.12        "Splits" (27.58): the shards the hero (machine hero null), one opacity dip 1 -> 0.5 -> 1 (0.12-0.82)
+         1.96        "multiple" (29.42): fetch the hero, shards back to ink; 2.06 workers 1 (first photocopy)
+         2.36        "workers," (29.72): workers 2, the second photocopy and x2
+         3.14 - end  still on SEAM[7] (hero fetch, workers 2); samples keep hopping (SC.clock) -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -34,10 +33,30 @@
   const BEAT_SECONDS = 5.199, MASTER = 27.360;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  SC.E();
+  const E = SC.E();
+  const CUE = {
+    splits: 0.220,     /* "Splits"    27.58 */
+    multiple: 2.060,   /* "multiple"  29.42 */
+    workers: 2.360,    /* "workers,"  29.72 */
+    still: 3.140,      /* ~30.50: SEAM[7] from here */
+  };
+  function state(t) {
+    if (t <= 0) return SC.SEAM[6];
+    if (t >= CUE.still) return SC.SEAM[7];
+    const A = SC.SEAM[6];
+    const sh = Object.assign({}, A.shards);
+    const S = Object.assign({}, A, { shards: sh });
+    if (t >= CUE.splits - 0.1 && t < CUE.multiple - 0.1) {
+      S.hero = null; sh.hero = 1;                                    // the one hero: the shards
+      sh.o = 1 - 0.5 * E.sine(SC.pulse(t, CUE.splits - 0.1, 0.7));   // one dip on "Splits"
+    }
+    if (t >= CUE.multiple - 0.1) S.hero = "fetch";
+    S.workers = t >= CUE.workers ? 2 : t >= CUE.multiple ? 1 : 0;   // the photocopies one at a time
+    return S;
+  }
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[6] : SC.SEAM[7]);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

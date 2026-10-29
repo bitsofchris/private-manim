@@ -3,13 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 01_hook_iter (starter: holds SEAM[0] then SEAM[1]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 01_hook_iter: beat 1, the hook (master 0.000–3.750; SEAM[0] -> SEAM[1]).
+         Frame 0 is the iterable machine already running: sampler struck, __iter__ the magenta hero,
+         samples hopping (SC.clock = master seconds, continuous into beat 2).
+         2.46–2.76 __iter__ dips to no hero (0.3 s) and re-lights on "iterable" (2.76). Otherwise still.
+         Last 0.3 s: SEAM[1] (identical to SEAM[0]). -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -35,9 +33,18 @@
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
   SC.E();
+  // beat-local cues (= master; MASTER is 0), from words.json + the RMS envelope of vo_final.wav
+  const CUE = {
+    iterable: 2.76,  /* "iterable": __iter__ re-lights (the end of its 0.3 s dip) */
+  };
+  const DIP = 0.30;                                  // the pulse: hero null for 0.3 s before the word
+  const HOLD = BEAT_SECONDS - 0.3;                   // 3.45: SEAM[1] itself from here
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[0] : SC.SEAM[1]);
+    if (t <= 0) { ep.draw(SC.SEAM[0]); return; }
+    if (t >= HOLD) { ep.draw(SC.SEAM[1]); return; }
+    const dip = t >= CUE.iterable - DIP && t < CUE.iterable;
+    ep.draw(dip ? Object.assign({}, SC.SEAM[0], { hero: null }) : SC.SEAM[0]);
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

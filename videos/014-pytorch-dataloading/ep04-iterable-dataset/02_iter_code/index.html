@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 02_iter_code (starter: holds SEAM[1] then SEAM[2]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 02_iter_code: beat 2, one function (master 3.750–7.285; SEAM[1] -> SEAM[2]).
+         0.00       SEAM[1]: the iterable machine, __iter__ the hero, samples hopping.
+         0.15–0.55  flip to the EP4.ITER card (the card comes in on "Here", 0.33), the class line
+                    already typed (30 characters would not fit the window at a readable cps).
+         0.60–2.32  the other three lines type at cps 34; def __iter__(self): is the line being
+                    typed and the hero from 0.60, done by 1.20, held through "iter," (1.61).
+         2.33       the yield line typed and the hero ("yields", 2.41), cursor off: SEAM[2], still. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -35,9 +35,30 @@
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
   SC.E();
+  const L = EP4.ITER, HEAD = L[0].t.length, REST = L.slice(1);
+  // beat-local cues (master − 3.750), from words.json + the RMS envelope of vo_final.wav:
+  // Here,@4.08 iter,@5.36 (onset ~5.27) yields@6.16 (onset ~6.19)
+  const CUE = {
+    here: 0.33,      /* "Here": the card is in (flip 0.15–0.55) */
+    iter: 1.61,      /* "iter,": def __iter__(self): the hero (typed by 1.20) */
+    yields: 2.41,    /* "yields": the yield line typed and the hero */
+  };
+  const FLIP0 = 0.15, FLIP1 = 0.55;
+  const T0 = 0.60, CPS = 34;                         // SC_typingSeconds(REST, 34) = 1.72: line 2 by 1.20, all by 2.32
+  const T_DONE = T0 + SC_typingSeconds(REST, CPS);
+  const HOLD = Math.min(CUE.yields - 0.08, BEAT_SECONDS - 0.3);   // 2.33: SEAM[2] itself from here
+  const TOTAL = L.reduce((a, l) => a + l.t.length, 0);
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[1] : SC.SEAM[2]);
+    if (t <= 0) { ep.draw(SC.SEAM[1]); return; }
+    if (t >= HOLD && t >= T_DONE) { ep.draw(SC.SEAM[2]); return; }
+    const flip = SC.seg(t, FLIP0, FLIP1);
+    const typed = HEAD + SC_typedAt(REST, t - T0, CPS);
+    const lit = t < T0 ? null : "iter";
+    ep.draw(Object.assign({}, SC.SEAM[1], {
+      flip,
+      code: { o: 1, lines: L, typed, lit, cursor: typed < TOTAL ? 1 : 0, blink: t },
+    }));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

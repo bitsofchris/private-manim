@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 06_shuffle (starter: holds SEAM[5] then SEAM[6]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 06_shuffle: beat 6, SEAM[5] (machine, iter hero, shards [0,1,2]) -> SEAM[6] (shards [2,0,1], card 2 loaded).
+         Cues (master, words.json; beat-local = master - 21.740):
+           shuffling@22.08 (0.34)    the shards the hero, machine hero null (swap at 0.24)
+           pre-shuffle@23.74 (2.00)  card 2 hops 2 -> 0 over the others (1.75-2.55), cards 0, 1 step
+                                     right one slot (1.95-2.60): order [2,0,1], via S.shards.pos
+           load@25.42 (3.68)         card 2 (slot 0) rises into the Dataset card and fades, load 0 -> 1
+                                     (3.55-4.40), done by "memory"@26.16 (4.42)
+           yield@26.62 (4.88)        __iter__ the hero, shards back to ink (swap at 4.78) = SEAM[6], held
+         Samples keep hopping throughout (SC.clock). -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -34,10 +36,25 @@
   const BEAT_SECONDS = 5.620, MASTER = 21.740;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  SC.E();
+  const CUE = { shuffling: 0.24 /* "shuffling" 22.08 */, pre: 1.75 /* "pre-shuffle" 23.74 */,
+                load: 3.55 /* "load" 25.42 */, memory: 4.40 /* "memory" 26.16 */, yield: 4.78 /* "yield" 26.62 */ };
+  const { seg, lerp } = SC;
+  const ease = SC.E();
+  function state(t) {
+    if (t <= CUE.shuffling) return SC.SEAM[5];                   // __iter__ the hero, shards at rest [0,1,2]
+    if (t >= CUE.yield) return SC.SEAM[6];                       // shuffled, card 2 loaded, __iter__ the hero
+    const u2 = ease.io(seg(t, CUE.pre, CUE.pre + 0.8));          // card 2 leads, hopping over the others
+    const u01 = ease.io(seg(t, CUE.pre + 0.2, CUE.pre + 0.85));  // cards 0, 1 step right behind it
+    const pos = [lerp(0, 1, u01), lerp(1, 2, u01), lerp(2, 0, u2)];
+    const load = ease.io(seg(t, CUE.load, CUE.memory));
+    // card 2 lifts over the other two while they dip under it (they would overlap at a 30 px hop)
+    const lift = [-30 * Math.sin(Math.PI * u01), -30 * Math.sin(Math.PI * u01), 56 * Math.sin(Math.PI * u2)];
+    const shards = { o: 1, order: [2, 0, 1], pos, lift, load, loadCard: 2, hero: 1 };
+    return Object.assign({}, SC.SEAM[5], { hero: null, shards });
+  }
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[5] : SC.SEAM[6]);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 05_no_sampler (starter: holds SEAM[4] then SEAM[5]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 05_no_sampler: beat 5, SEAM[4] (the LEN card, yield lit) -> SEAM[5] (machine, iter hero, shards at rest).
+         Cues (master, words.json; beat-local = master - 17.030):
+           This@17.24 (0.21)     the card flips back to the machine over 0.4 s (0.10-0.50), shards on at rest,
+                                 __iter__ the hero (continuing the card's lit yield line)
+           sampler@17.92 (0.89)  the struck sampler station the hero (swap at 0.79)
+           calls@19.06 (2.03)    the Dataset card the hero (swap at 1.93)
+           yields@20.54 (3.51)   __iter__ the hero (swap at 3.41) = SEAM[5], held to the end
+         Samples keep hopping throughout (SC.clock). -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -35,9 +36,22 @@
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
   SC.E();
+  const CUE = { flip: 0.10 /* "This" 17.24 */, sampler: 0.79 /* "sampler" 17.92 */,
+                calls: 1.93 /* "calls" 19.06 */, yields: 3.41 /* "yields" 20.54 */ };
+  const FLIP = 0.4;
+  const { seg } = SC;
+  function state(t) {
+    if (t <= CUE.flip) return SC.SEAM[4];                        // the LEN card, yield lit, cursor off
+    if (t >= CUE.yields) return SC.SEAM[5];                      // the machine, __iter__ the hero, shards at rest
+    const flip = 1 - seg(t, CUE.flip, CUE.flip + FLIP);          // the card fades out, the machine fades in
+    const hero = t < CUE.sampler ? "iter" : t < CUE.calls ? "sampler" : "dataset";
+    const S = Object.assign({}, SC.SEAM[5], { hero, flip });
+    if (flip > 0) S.code = SC.SEAM[4].code;
+    return S;
+  }
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[4] : SC.SEAM[5]);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

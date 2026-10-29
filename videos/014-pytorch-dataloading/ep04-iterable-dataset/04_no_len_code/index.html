@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 04_no_len_code (starter: holds SEAM[3] then SEAM[4]; replace this comment with the beat's cue plan)
-         was 00_layout: frame 0 of the IterableDataset episode and the takes on its new prop. Not in the Short.
-         0–2 s  frame 0 (SEAM[0]): iterable, the sampler struck, __iter__ the hero, samples hopping
-         2–4 s  the shards, take "row" (under the Dataset card), the hero
-         4–6 s  the shards, take "column" (left of the Dataset card), the hero
-         6–8 s  the code card: the stream class and len(stream) # TypeError (SEAM[4])
-         8–10 s the code card of beat 9: __iter__ over __getitem__, the hero on getitem (SEAM[9]) -->
+    <!-- ep04 04_no_len_code: beat 4, "There's no length and no get item. Sample i doesn't exist until the iterator produces it."
+         Opens on SEAM[3] (the machine, the shards the hero), ends on SEAM[4] (EP4.LEN fully typed, yield lit, cursor off).
+         beat-local cues (master − 12.435), from words.json: There's@12.69 length@13.00 get item.@13.50 produces@16.24
+         0.10–0.50  "There's": the machine flips to EP4.LEN (card in from flip 0.4, i.e. ~0.26), the four class lines
+                    already there, row 5 empty with the cursor, lit len (the line being typed is the hero)
+         0.40–~1.0  len(stream)  # TypeError types at ~36 cps: the lit hero through "length" (0.565) and "get item" (1.065)
+         3.70       the hero passes to the yield line, landing on "produces" (3.805)
+         3.80–end   SEAM[4] itself (BEAT_SECONDS − 0.3 = 4.295) -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
@@ -35,9 +36,39 @@
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
   SC.E();
+  const { seg } = SC, C = EP4.LEN, L4 = [C[4]], LEN4 = C[4].t.length;
+  // beat-local cues (master − 12.435)
+  const CUE = {
+    theres: 0.255,    /* "There's": the flip to the card */
+    length: 0.565,    /* "length": the TypeError line lit, typing */
+    getitem: 1.065,   /* "get item.": the TypeError line typed, still lit */
+    produces: 3.805,  /* "produces": the hero passes to the yield line */
+  };
+  const CPS = 36;
+  const T = {
+    flip: 0.10,                   // machine out by ~0.34, card in from ~0.26
+    type: 0.40,                   // len(stream)  # TypeError starts typing
+    yield: CUE.produces - 0.10,   // the hero swap lands on the word
+    still: 3.80,                  // SEAM[4] from here
+  };
+  T.done = T.type + SC_typingSeconds(L4, CPS);   // ~1.0: typed before "get item" (1.065)
+  const FLIP = 0.4;
+  function state(t) {
+    if (t <= T.flip) return SC.SEAM[3];
+    if (t >= T.still) return SC.SEAM[4];
+    const flip = seg(t, T.flip, T.flip + FLIP);
+    const n = SC_typedAt(L4, t - T.type, CPS);
+    const S = Object.assign({}, SC.SEAM[4], {
+      flip,
+      code: { o: 1, lines: C, typedLines: [Infinity, Infinity, Infinity, Infinity, n],
+              lit: t >= T.yield ? "yield" : "len", cursor: n < LEN4 ? 1 : 0, cursorLine: 4, blink: t - T.type },
+    });
+    if (flip < 0.6) S.shards = SC.SEAM[3].shards;   // the shards fade out with the machine
+    return S;
+  }
   function render(t) {
     SC.clock = MASTER + t;
-    ep.draw(t < BEAT_SECONDS - 0.001 ? SC.SEAM[3] : SC.SEAM[4]);
+    ep.draw(state(t));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
