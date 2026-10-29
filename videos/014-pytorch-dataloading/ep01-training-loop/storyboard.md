@@ -62,7 +62,8 @@ it; the seam-state kit makes a return cheap.
    forward, loss, backward, update. A muted track leaves the slot, runs
    down past the boxes, under update, and back up the left gutter,
    dashed, into the slot. The glyph is the batch card small: two rows of
-   the readout's digits in a rounded card. It rides the track and is the hero while
+   the readout's digits in a rounded card (`loop.n` picks which two rows, so
+   the next batch is visibly a different one). It rides the track and is the hero while
    the VO is about it; a box turns magenta as the VO names it.
 3. **The code card** (beats 4, 6, 8, 11; shared `_kit/code.js`): the
    stage flips to it (`S.flip` 0 → 1 over 0.4 s). Beats 4 and 6 show the
@@ -89,7 +90,7 @@ is its prose.
 | 4 | Loss, the code | We compare that prediction to the target, and that's the loss. | "We" (12.96): flip to the code card with the four body lines; they type fast (cps ~34) from 13.3 so `loss = loss_fn(out, y)` is complete by "loss" (15.12), when it becomes the hero; the other two lines finish by 15.5. Cursor off, still: SEAM[4]. | the line being typed, then loss |
 | 5 | Backward + update | The loss is then propagated backwards, and the weights are updated as part of gradient descent. | "The loss" (15.94): flip back to the loop, the glyph beside loss with loss lit. "backwards" (17.04): rides to beside backward, backward lights. "updated" (18.34): rides to beside update, update lights. Still from 19.2: SEAM[5]. | loss → backward → update |
 | 6 | One step, the code | That is one training step. | "That" (20.32): flip to the code card, four body lines fully typed, none lit; "one" (20.76): all four light together (`LOOP.STEP`). Still: SEAM[6]. | the four lines |
-| 7 | Next batch | Then we go back to the data loader for the next batch. | "Then" (22.28): flip back to the loop, glyph beside update, update lit; "go back" (22.42): rides the dashed return up the left gutter into the slot, boxes muted, glyph the hero, arriving on "next batch" (23.64). Still: SEAM[7]. | the batch |
+| 7 | Next batch | Then we go back to the data loader for the next batch. | "Then" (22.28): flip back to the loop, glyph beside update, update lit. "go back" (22.42): the used batch fades out beside update (it is consumed, it does not go round again); a magenta spark rides the dashed return up the left gutter into the slot (control goes round, `loop.spark`). It arrives at 23.47 and a *different* batch pops into the slot (`loop.n` 1: readout rows 3–4, `loop.scale` back-ease), the hero, on "next batch" (23.64). Still: SEAM[7]. | the spark, then the next batch |
 | 8 | Epoch, the code | An epoch is one pass through the whole dataset. So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set. | "An epoch" (24.66): flip to the six-line card with the four body lines already typed and the two header rows empty; the headers type in (`typedLines`, line 0 then line 1, ~22 cps) from 25.1, done by ~27.5. "inner loop" (27.97): `for batch in loader:` the hero; "outer loop" (30.12): `for epoch in range(epochs):` the hero. Cursor off, still from 31: SEAM[8]. | the line being typed, inner, outer |
 | 9 | One batch | The model never sees your dataset, it only ever sees one batch at a time. | "The model" (33.0): flip back to the machine at rest; the model chip is the hero. "one batch" (35.82): the hero passes to the batch card. Still: SEAM[9]. | model → the batch |
 | 10 | Check the batch | So if your loss isn't moving, check the batch first. | "check the batch" (38.22): the batch card pulses once. Still: SEAM[10]. | the batch |
@@ -130,7 +131,7 @@ this table; seam states `SC.SEAM` in `_kit/seam.js`; links per beat:
 | 4 | loss code | card | flip 1, `LOOP.BODY` fully typed, lit loss, cursor 0 |
 | 5 | backward | loop | u at update, lit update |
 | 6 | step code | card | `LOOP.BODY`, lit `LOOP.STEP` (the four) |
-| 7 | next batch | loop | u 0, lit batch |
+| 7 | next batch | loop | u 0, lit batch, n 1 (the next batch's digits) |
 | 8 | epoch code | card | `LOOP.CODE` fully typed, lit outer |
 | 9 | one batch | machine | REST, hero batch |
 | 10 | check batch | machine | same |

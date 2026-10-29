@@ -186,7 +186,7 @@
     });
     const nWorkers = domTint(parts.fetch, label(root, "", { left: 820, top: st.fetch.y + 16, size: 48, mono: true }), PAL.data);
     // batching glyph: the samples as rows of numbers in brackets, and how many of them (×32)
-    const stackRO = readout(root, st.batching.glyph, parts.batching, 560, st.batching.y + 4, G.station.h - 8, D.series.readout, { size: 22 });
+    const stackRO = readout(root, st.batching.glyph, parts.batching, 560, st.batching.y + 4, G.station.h - 8, D.series.readout.slice(0, 3), { size: 22 });
     const nBatch = domTint(parts.batching, label(root, "\u00D7" + D.series.batch, { left: stackRO.end + 16, top: st.batching.y + 16, size: 48, mono: true }), PAL.data);
     // collate glyph: the stack becoming one block
     const colStack = [0, 1, 2].map((j) => line(st.collate.glyph, 580 + j * 6, st.collate.y + 20 + j * 20, 690 + j * 6, st.collate.y + 20 + j * 20, { stroke: PAL.data, "stroke-width": 5 }));
@@ -199,7 +199,7 @@
     function tensorCard(p, x) {
       const g = node("g", {}, svg);
       p.svg.push(tintable(rect(g, x, bt.y, bt.w, bt.h, { fill: PAL.panel, stroke: PAL.data, "stroke-width": 6 }), PAL.data));
-      const ro = readout(root, g, p, x, bt.y + 4, bt.h - 8, D.series.readout, { size: 26, pitch: 27 });
+      const ro = readout(root, g, p, x, bt.y + 4, bt.h - 8, D.series.readout.slice(0, 3), { size: 26, pitch: 27 });
       const labDx = ro.end + 12 - x;
       const lab = domTint(p, label(root, D.series.shape, { left: x + labDx, top: bt.y + 25, size: 34, mono: true }), PAL.ink);
       const move = (nx) => { g.setAttribute("transform", `translate(${(nx - x).toFixed(1)} 0)`); lab.style.left = `${nx + labDx}px`; ro.move(nx); };

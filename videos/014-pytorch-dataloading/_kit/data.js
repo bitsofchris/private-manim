@@ -5,7 +5,8 @@ window.DL_DATA = {
   series: { points: 512, nSeries: 512, batch: 32, workers: 2, smallBatch: 4, shape: "[32, 512]", smallShape: "[4, 512]",
             // The first values of the first three series (the ledger's readout; one decimal, true minus signs), so a
             // batch on screen is rows of numbers in brackets (agents/style.md "Vectors and matrices as numbers"), not a picture.
-            readout: [["0.3", "\u22121.2"], ["0.7", "0.1"], ["\u22120.8", "0.5"]] },
+            // four rows: the card and the batching station show the first three; a glyph shows two (batch n = rows 2n, 2n+1)
+            readout: [["0.3", "\u22121.2"], ["0.7", "0.1"], ["\u22120.8", "0.5"], ["1.4", "\u22120.2"]] },
   // The sampler's glyph: a shuffled run of indices (the ledger's RandomSampler, seed 77, first six).
   indices: [7, 2, 5, 0, 3, 1],
   // Method names shown on the Dataset card.

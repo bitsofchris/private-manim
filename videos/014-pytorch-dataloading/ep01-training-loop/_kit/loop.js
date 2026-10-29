@@ -27,6 +27,10 @@
 //   slot 0..1        a second batch waiting in the slot (the next batch)
 //   lit NAME|null    the magenta hero: batch, loader, forward, loss, backward, update,
 //                    step (the four boxes together), track (the loop itself)
+//   n 0|1            which batch the riding glyph is (its digits: readout rows 2n, 2n+1), so
+//                    "the next batch" is visibly a different one (beat 7)
+//   scale 0..1       the riding glyph's size (1 at rest; a pop-in grows it from 0)
+//   spark u|null     a magenta dot on the track at u: control going round without a batch
 // LOOP.at(take, name) gives the u where the glyph sits beside a box
 // ("forward", "loss", "backward", "update") or in the slot ("loader").
 // LOOP.CODE is the code card's lines (SERIES.md ledger, "The training loop");
@@ -94,10 +98,13 @@
     function glyph(parent) {
       const gg = node("g", {}, parent);
       const r = node("rect", { x: -GLYPH.w / 2, y: -GLYPH.h / 2, width: GLYPH.w, height: GLYPH.h, rx: 12, fill: PAL.panel, stroke: PAL.data, "stroke-width": 5 }, gg);
-      const rows = SC.D.series.readout.slice(0, 2);
+      const RO = SC.D.series.readout;
       // the rounded card is the bracket here: two rows of the readout's digits inside it
-      const ts = rows.map((row, j) => { const t = node("text", { x: 0, y: -4 + j * 20, "text-anchor": "middle", "font-size": 17, "font-weight": 700, "font-family": "monospace", fill: PAL.data }, gg); t.textContent = row.join(" "); return t; });
-      return { g: gg, tint: (on) => { const c = on ? PAL.hero : PAL.data; r.setAttribute("stroke", c); ts.forEach((t) => t.setAttribute("fill", c)); } };
+      const ts = [0, 1].map((j) => node("text", { x: 0, y: -4 + j * 20, "text-anchor": "middle", "font-size": 17, "font-weight": 700, "font-family": "monospace", fill: PAL.data }, gg));
+      let shown = -1;
+      const rows = (n) => { if (n === shown) return; shown = n; ts.forEach((t, j) => { t.textContent = (RO[2 * n + j] || RO[j]).join(" "); }); };
+      rows(0);
+      return { g: gg, rows, tint: (on) => { const c = on ? PAL.hero : PAL.data; r.setAttribute("stroke", c); ts.forEach((t) => t.setAttribute("fill", c)); } };
     }
     Object.keys(TAKES).forEach((take) => {
       const T = TAKES[take], tg = node("g", {}, g), B = {};
@@ -123,10 +130,11 @@
         B[name] = { r, lab };
       });
       const ride = glyph(tg);
-      built[take] = { tg, solid, dashed, heads, lRect, lLab, slotGlyph, B, ride, labels: [lLab].concat(BOXES.map((n) => B[n].lab)) };
+      const spark = node("circle", { r: 11, fill: PAL.hero }, tg);
+      built[take] = { tg, solid, dashed, heads, lRect, lLab, slotGlyph, B, ride, spark, labels: [lLab].concat(BOXES.map((n) => B[n].lab)) };
     });
     function draw(Lp, mOn) {
-      Lp = Object.assign({ o: 0, take: "ring", u: 0, batch: 1, slot: 0, lit: null }, Lp || {});
+      Lp = Object.assign({ o: 0, take: "ring", u: 0, batch: 1, slot: 0, lit: null, n: 0, scale: 1, spark: null }, Lp || {});
       const o = clamp01(Lp.o) * mOn;
       Object.keys(built).forEach((take) => {
         const K = built[take], on = take === Lp.take ? o : 0;
@@ -144,9 +152,12 @@
           K.B[name].lab.style.color = hot ? PAL.hero : PAL.ink;
         });
         const [x, y] = pointAt(take, Lp.u);
-        K.ride.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+        K.ride.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${Math.max(0.001, Lp.scale).toFixed(3)})`);
         show(K.ride.g, clamp01(Lp.batch));
+        K.ride.rows(Lp.n);
         K.ride.tint(Lp.lit === "batch");
+        if (Lp.spark == null) show(K.spark, 0);
+        else { const [sx, sy] = pointAt(take, Lp.spark); K.spark.setAttribute("cx", sx.toFixed(1)); K.spark.setAttribute("cy", sy.toFixed(1)); show(K.spark, 1); }
         show(K.slotGlyph.g, clamp01(Lp.slot));
         K.slotGlyph.tint(false);
       });

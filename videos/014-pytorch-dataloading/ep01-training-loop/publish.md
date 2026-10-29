@@ -25,6 +25,34 @@ SERIES.md's working name, `PyTorch Training Loop Explained (One Batch at
 a Time)`, is 53 characters, over the 50 limit; the search title above
 keeps its claim in fewer.
 
+Round 2 (2026-10-29; Chris: both above "suck"). Five, all ≤ 50
+characters, the phrase or its words kept where search needs them:
+
+```
+PyTorch Training Loop Explained: Loss Not Moving?
+```
+(49; the pain in the title, the phrase first)
+
+```
+The Model Never Sees Your Dataset (PyTorch)
+```
+(43; the counterintuitive line from the VO; no phrase, the description carries it)
+
+```
+Your PyTorch Training Loop Is Only 4 Lines
+```
+(42; pattern interrupt: it is smaller than you think)
+
+```
+PyTorch Training Loop Explained in One Batch
+```
+(44; the search phrase plus the one idea)
+
+```
+What Happens to One Batch in a PyTorch Loop
+```
+(43; the question the Short answers, in the viewer's words)
+
 ## Description
 
 ```

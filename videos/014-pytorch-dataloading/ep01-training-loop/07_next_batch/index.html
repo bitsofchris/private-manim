@@ -31,27 +31,33 @@
   const { seg, lerp } = SC, E = SC.E(), R = "ring";
   // cues, beat-local seconds (master - 22.020)
   const T = {
-    then:  0.26,   // "Then" @22.28: the card flips back to the loop, glyph beside update, update lit
-    go:    0.42,   // "go"   @22.42 ("go back"): the glyph leaves update along the dashed return
-    next:  1.62,   // "next" @23.64 ("next batch"): it arrives in the slot
-    still: 1.70,   // hold SEAM[7] ("batch." @23.88)
+    then:   0.26,   // "Then" @22.28: the card flips back to the loop, glyph beside update, update lit
+    go:     0.42,   // "go"   @22.42 ("go back"): the used batch fades out beside update; a magenta spark rides the dashed return
+    arrive: 1.45,   // the spark reaches the slot
+    next:   1.62,   // "next" @23.64 ("next batch"): a different batch (readout rows 2–3) pops into the slot, the hero
+    still:  1.78,   // hold SEAM[7] ("batch." @23.88); the hold must start by BEAT_SECONDS - 0.3
   };
-  const FLIP = 0.4;
+  const FLIP = 0.4, FADE = 0.3, POP = 0.3;
   const U_UPDATE = LOOP.at(R, "update");
   const loop = (u, lit) => Object.assign({}, SC.LOOP_ONLY, { loop: { o: 1, take: R, u, batch: 1, slot: 0, lit } });
 
   function state(t) {
     if (t <= T.then) return SC.SEAM[6];                      // the four-line card, the four lit
-    if (t >= T.still) return SC.SEAM[7];                     // the loop, the batch back in the slot (u 0), lit batch
-    let u, lit;
-    if (t < T.go) { u = U_UPDATE; lit = "update"; }
-    else {
-      const p = E.out(seg(t, T.go, T.next));
-      u = p >= 1 ? 0 : lerp(U_UPDATE, 1, p);                 // u 1 == u 0 on the track; the seam says 0
-      lit = "batch";                                         // the boxes go muted as it leaves; the batch is the hero
+    if (t >= T.still) return SC.SEAM[7];                     // the loop, the next batch (n 1) in the slot, lit batch
+    const S = loop(U_UPDATE, "update"), L = S.loop;
+    if (t >= T.go) {
+      // the batch is consumed: it fades beside update while control (the spark) goes round the dashed return
+      L.batch = 1 - seg(t, T.go, T.go + FADE);
+      L.lit = null;
+      L.spark = t < T.arrive ? lerp(U_UPDATE, 1, E.io(seg(t, T.go, T.arrive))) : null;
+    }
+    if (t >= T.arrive) {
+      // the loader hands out the next batch: a different one pops into the slot and is the hero
+      L.n = 1; L.u = 0; L.batch = 1; L.lit = "batch";
+      L.scale = E.back(seg(t, T.arrive, T.arrive + POP));
     }
     const flip = 1 - seg(t, T.then, T.then + FLIP);          // the card fades out as it was, the loop fades in
-    const S = Object.assign(loop(u, lit), { flip });
+    S.flip = flip;
     if (flip > 0) S.code = SC.SEAM[6].code;
     return S;
   }
