@@ -1,0 +1,49 @@
+00:00.001-00:06.000
+A PyTorch dataset class has two functions, how many samples and how do I get sample i?
+
+00:06.000-00:08.400
+Everything else is the data loader's job
+
+00:09.440-00:11.840
+Len returns the number of samples.
+
+00:11.840-00:15.040
+GetItem returns sample at index i.
+
+00:16.000-00:16.640
+In this
+
+00:21.180-00:26.540
+Here, the series are pre-computed into one tensor, so get item is just a slice.
+
+00:26.540-00:30.700
+Because you can index into the dataset, the sampler owns the order.
+
+00:30.100-00:35.060
+It uses the length to make a random sequence of indices and calls getItem on each one.
+
+00:35.060-00:39.540
+So shuffling is free, and the validation split is just a list of indices.
+
+00:39.440-00:41.200
+If you've ever shuffled with torch.
+
+00:41.280-00:44.480
+randperm and sliced batches by hand, you already wrote this.
+
+00:44.480-00:46.240
+Randperm is the sampler.
+
+00:46.240-00:50.800
+The range step is the batcher, and the slice is get item plus collate.
+
+00:50.560-00:52.640
+This is called a map style dataset.
+
+00:52.640-00:55.040
+You use it when random access is cheap.
+
+00:59.040-01:03.360
+If you write these two functions first, the load or the shuffle and the split will come for free
+
+

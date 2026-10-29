@@ -1,0 +1,965 @@
+{
+  "segments" : [
+    {
+      "end" : 2840,
+      "id" : "EDC3071A-897B-44F0-91E8-42B19E92F6AE",
+      "start" : 1,
+      "text" : "A PyTorch dataset class has two functions.",
+      "words" : [
+        {
+          "end" : 840,
+          "start" : 0,
+          "text" : "A"
+        },
+        {
+          "end" : 1320,
+          "start" : 840,
+          "text" : "PyTorch"
+        },
+        {
+          "end" : 1620,
+          "start" : 1320,
+          "text" : "dataset"
+        },
+        {
+          "end" : 1980,
+          "start" : 1620,
+          "text" : "class"
+        },
+        {
+          "end" : 2120,
+          "start" : 1980,
+          "text" : "has"
+        },
+        {
+          "end" : 2320,
+          "start" : 2120,
+          "text" : "two"
+        },
+        {
+          "end" : 2840,
+          "start" : 2320,
+          "text" : "functions."
+        }
+      ]
+    },
+    {
+      "end" : 5780,
+      "id" : "A73E615C-EAEA-4B41-8C1F-9C9B259B16B8",
+      "start" : 3360,
+      "text" : "How many samples and how do I get sample i.",
+      "words" : [
+        {
+          "end" : 3440,
+          "start" : 3360,
+          "text" : "How"
+        },
+        {
+          "end" : 3680,
+          "start" : 3440,
+          "text" : "many"
+        },
+        {
+          "end" : 4100,
+          "start" : 3680,
+          "text" : "samples"
+        },
+        {
+          "end" : 4600,
+          "start" : 4100,
+          "text" : "and"
+        },
+        {
+          "end" : 4820,
+          "start" : 4600,
+          "text" : "how"
+        },
+        {
+          "end" : 4900,
+          "start" : 4820,
+          "text" : "do"
+        },
+        {
+          "end" : 4980,
+          "start" : 4900,
+          "text" : "I"
+        },
+        {
+          "end" : 5180,
+          "start" : 4980,
+          "text" : "get"
+        },
+        {
+          "end" : 5520,
+          "start" : 5180,
+          "text" : "sample"
+        },
+        {
+          "end" : 5780,
+          "start" : 5520,
+          "text" : "i."
+        }
+      ]
+    },
+    {
+      "end" : 8080,
+      "id" : "E43C1690-B4A5-4D2B-8956-94349ADD1ABA",
+      "start" : 6320,
+      "text" : "Everything else is the data loader's job.",
+      "words" : [
+        {
+          "end" : 6580,
+          "start" : 6320,
+          "text" : "Everything"
+        },
+        {
+          "end" : 6980,
+          "start" : 6580,
+          "text" : "else"
+        },
+        {
+          "end" : 7160,
+          "start" : 6980,
+          "text" : "is"
+        },
+        {
+          "end" : 7340,
+          "start" : 7160,
+          "text" : "the"
+        },
+        {
+          "end" : 7560,
+          "start" : 7340,
+          "text" : "data"
+        },
+        {
+          "end" : 7880,
+          "start" : 7560,
+          "text" : "loader's"
+        },
+        {
+          "end" : 8080,
+          "start" : 7880,
+          "text" : "job."
+        }
+      ]
+    },
+    {
+      "end" : 10380,
+      "id" : "8B28D1A7-AC6C-4BCD-83D4-48BF6248D106",
+      "start" : 8540,
+      "text" : "Len returns the number of samples.",
+      "words" : [
+        {
+          "end" : 8860,
+          "start" : 8540,
+          "text" : "Len"
+        },
+        {
+          "end" : 9440,
+          "start" : 8860,
+          "text" : "returns"
+        },
+        {
+          "end" : 9580,
+          "start" : 9440,
+          "text" : "the"
+        },
+        {
+          "end" : 9840,
+          "start" : 9580,
+          "text" : "number"
+        },
+        {
+          "end" : 9980,
+          "start" : 9840,
+          "text" : "of"
+        },
+        {
+          "end" : 10380,
+          "start" : 9980,
+          "text" : "samples."
+        }
+      ]
+    },
+    {
+      "end" : 13480,
+      "id" : "BE13299B-2002-4B03-A2B7-1EED71A9B933",
+      "start" : 10939,
+      "text" : "GetItem returns sample at index i.",
+      "words" : [
+        {
+          "end" : 11459,
+          "start" : 10939,
+          "text" : "GetItem"
+        },
+        {
+          "end" : 11980,
+          "start" : 11459,
+          "text" : "returns"
+        },
+        {
+          "end" : 12460,
+          "start" : 11980,
+          "text" : "sample"
+        },
+        {
+          "end" : 12740,
+          "start" : 12460,
+          "text" : "at"
+        },
+        {
+          "end" : 13180,
+          "start" : 12740,
+          "text" : "index"
+        },
+        {
+          "end" : 13480,
+          "start" : 13180,
+          "text" : "i."
+        }
+      ]
+    },
+    {
+      "end" : 16180,
+      "id" : "23D76685-931B-44FB-B225-80C447D5701B",
+      "start" : 14020,
+      "text" : "Here, the series are pre-computed into one tensor.",
+      "words" : [
+        {
+          "end" : 14220,
+          "start" : 14020,
+          "text" : "Here,"
+        },
+        {
+          "end" : 14440,
+          "start" : 14270,
+          "text" : "the"
+        },
+        {
+          "end" : 14740,
+          "start" : 14440,
+          "text" : "series"
+        },
+        {
+          "end" : 14880,
+          "start" : 14740,
+          "text" : "are"
+        },
+        {
+          "end" : 15120,
+          "start" : 14880,
+          "text" : "pre"
+        },
+        {
+          "end" : 15520,
+          "start" : 15120,
+          "text" : "-computed"
+        },
+        {
+          "end" : 15680,
+          "start" : 15520,
+          "text" : "into"
+        },
+        {
+          "end" : 15880,
+          "start" : 15680,
+          "text" : "one"
+        },
+        {
+          "end" : 16180,
+          "start" : 15880,
+          "text" : "tensor."
+        }
+      ]
+    },
+    {
+      "end" : 18500,
+      "id" : "637FAC24-9337-4779-8061-EEEBE5D2C858",
+      "start" : 16820,
+      "text" : "So getItem is just a slice.",
+      "words" : [
+        {
+          "end" : 16900,
+          "start" : 16820,
+          "text" : "So"
+        },
+        {
+          "end" : 17460,
+          "start" : 16900,
+          "text" : "getItem"
+        },
+        {
+          "end" : 17640,
+          "start" : 17460,
+          "text" : "is"
+        },
+        {
+          "end" : 18000,
+          "start" : 17640,
+          "text" : "just"
+        },
+        {
+          "end" : 18160,
+          "start" : 18000,
+          "text" : "a"
+        },
+        {
+          "end" : 18500,
+          "start" : 18160,
+          "text" : "slice."
+        }
+      ]
+    },
+    {
+      "end" : 20500,
+      "id" : "AB64FA8D-8BCD-4BFD-BB61-57158956EA22",
+      "start" : 19020,
+      "text" : "Because you can index into the dataset,",
+      "words" : [
+        {
+          "end" : 19280,
+          "start" : 19020,
+          "text" : "Because"
+        },
+        {
+          "end" : 19380,
+          "start" : 19280,
+          "text" : "you"
+        },
+        {
+          "end" : 19500,
+          "start" : 19380,
+          "text" : "can"
+        },
+        {
+          "end" : 19900,
+          "start" : 19500,
+          "text" : "index"
+        },
+        {
+          "end" : 20080,
+          "start" : 19900,
+          "text" : "into"
+        },
+        {
+          "end" : 20220,
+          "start" : 20080,
+          "text" : "the"
+        },
+        {
+          "end" : 20500,
+          "start" : 20220,
+          "text" : "dataset,"
+        }
+      ]
+    },
+    {
+      "end" : 21960,
+      "id" : "70CF0C19-18A3-43AC-B6A7-851C643A8F9E",
+      "start" : 20800,
+      "text" : "the sampler owns the order.",
+      "words" : [
+        {
+          "end" : 20920,
+          "start" : 20800,
+          "text" : "the"
+        },
+        {
+          "end" : 21240,
+          "start" : 20920,
+          "text" : "sampler"
+        },
+        {
+          "end" : 21600,
+          "start" : 21240,
+          "text" : "owns"
+        },
+        {
+          "end" : 21720,
+          "start" : 21600,
+          "text" : "the"
+        },
+        {
+          "end" : 21960,
+          "start" : 21720,
+          "text" : "order."
+        }
+      ]
+    },
+    {
+      "end" : 24820,
+      "id" : "0B3D3DCD-6E63-4773-B97D-F61912F0267F",
+      "start" : 22600,
+      "text" : "It uses the length to make a random sequence of",
+      "words" : [
+        {
+          "end" : 22740,
+          "start" : 22600,
+          "text" : "It"
+        },
+        {
+          "end" : 23180,
+          "start" : 22740,
+          "text" : "uses"
+        },
+        {
+          "end" : 23340,
+          "start" : 23180,
+          "text" : "the"
+        },
+        {
+          "end" : 23640,
+          "start" : 23340,
+          "text" : "length"
+        },
+        {
+          "end" : 23740,
+          "start" : 23640,
+          "text" : "to"
+        },
+        {
+          "end" : 23900,
+          "start" : 23740,
+          "text" : "make"
+        },
+        {
+          "end" : 24020,
+          "start" : 23900,
+          "text" : "a"
+        },
+        {
+          "end" : 24260,
+          "start" : 24020,
+          "text" : "random"
+        },
+        {
+          "end" : 24680,
+          "start" : 24260,
+          "text" : "sequence"
+        },
+        {
+          "end" : 24820,
+          "start" : 24680,
+          "text" : "of"
+        }
+      ]
+    },
+    {
+      "end" : 26980,
+      "id" : "4297C64D-34AD-4A66-87DE-9BE0C719B953",
+      "start" : 24920,
+      "text" : "indices and calls getItem on each one.",
+      "words" : [
+        {
+          "end" : 25080,
+          "start" : 24920,
+          "text" : "indices"
+        },
+        {
+          "end" : 25440,
+          "start" : 25080,
+          "text" : "and"
+        },
+        {
+          "end" : 25860,
+          "start" : 25440,
+          "text" : "calls"
+        },
+        {
+          "end" : 26360,
+          "start" : 25860,
+          "text" : "getItem"
+        },
+        {
+          "end" : 26520,
+          "start" : 26360,
+          "text" : "on"
+        },
+        {
+          "end" : 26740,
+          "start" : 26520,
+          "text" : "each"
+        },
+        {
+          "end" : 26980,
+          "start" : 26740,
+          "text" : "one."
+        }
+      ]
+    },
+    {
+      "end" : 28880,
+      "id" : "4FB83EDD-5625-4E07-BE7B-D39BA89CF2A5",
+      "start" : 27370,
+      "text" : "So shuffling is free and",
+      "words" : [
+        {
+          "end" : 27560,
+          "start" : 27370,
+          "text" : "So"
+        },
+        {
+          "end" : 27960,
+          "start" : 27560,
+          "text" : "shuffling"
+        },
+        {
+          "end" : 28120,
+          "start" : 27960,
+          "text" : "is"
+        },
+        {
+          "end" : 28440,
+          "start" : 28120,
+          "text" : "free"
+        },
+        {
+          "end" : 28880,
+          "start" : 28440,
+          "text" : "and"
+        }
+      ]
+    },
+    {
+      "end" : 30820,
+      "id" : "EB743969-27DF-4762-B00C-E1B001751D8A",
+      "start" : 28880,
+      "text" : "The validation split is just a list of indices.",
+      "words" : [
+        {
+          "end" : 28920,
+          "start" : 28880,
+          "text" : "The"
+        },
+        {
+          "end" : 29280,
+          "start" : 28920,
+          "text" : "validation"
+        },
+        {
+          "end" : 29580,
+          "start" : 29280,
+          "text" : "split"
+        },
+        {
+          "end" : 29840,
+          "start" : 29580,
+          "text" : "is"
+        },
+        {
+          "end" : 30080,
+          "start" : 29840,
+          "text" : "just"
+        },
+        {
+          "end" : 30220,
+          "start" : 30080,
+          "text" : "a"
+        },
+        {
+          "end" : 30400,
+          "start" : 30220,
+          "text" : "list"
+        },
+        {
+          "end" : 30520,
+          "start" : 30400,
+          "text" : "of"
+        },
+        {
+          "end" : 30820,
+          "start" : 30520,
+          "text" : "indices."
+        }
+      ]
+    },
+    {
+      "end" : 35680,
+      "id" : "CE72B212-E937-4945-A7C4-664E8EF1E059",
+      "start" : 31400,
+      "text" : "If you've ever shuffled with torch.randperm and sliced batches by hand, you already wrote",
+      "words" : [
+        {
+          "end" : 31540,
+          "start" : 31400,
+          "text" : "If"
+        },
+        {
+          "end" : 31700,
+          "start" : 31540,
+          "text" : "you've"
+        },
+        {
+          "end" : 31800,
+          "start" : 31700,
+          "text" : "ever"
+        },
+        {
+          "end" : 32200,
+          "start" : 31800,
+          "text" : "shuffled"
+        },
+        {
+          "end" : 32439,
+          "start" : 32200,
+          "text" : "with"
+        },
+        {
+          "end" : 32700,
+          "start" : 32439,
+          "text" : "torch"
+        },
+        {
+          "end" : 33520,
+          "start" : 32700,
+          "text" : ".randperm"
+        },
+        {
+          "end" : 33800,
+          "start" : 33520,
+          "text" : "and"
+        },
+        {
+          "end" : 34320,
+          "start" : 33800,
+          "text" : "sliced"
+        },
+        {
+          "end" : 34680,
+          "start" : 34320,
+          "text" : "batches"
+        },
+        {
+          "end" : 34820,
+          "start" : 34680,
+          "text" : "by"
+        },
+        {
+          "end" : 35080,
+          "start" : 34820,
+          "text" : "hand,"
+        },
+        {
+          "end" : 35140,
+          "start" : 35080,
+          "text" : "you"
+        },
+        {
+          "end" : 35500,
+          "start" : 35140,
+          "text" : "already"
+        },
+        {
+          "end" : 35680,
+          "start" : 35500,
+          "text" : "wrote"
+        }
+      ]
+    },
+    {
+      "end" : 35960,
+      "id" : "39111E2F-E095-433D-9730-609452FF1898",
+      "start" : 35780,
+      "text" : "this.",
+      "words" : [
+        {
+          "end" : 35960,
+          "start" : 35780,
+          "text" : "this."
+        }
+      ]
+    },
+    {
+      "end" : 41720,
+      "id" : "137A164F-5AC0-496D-AE5B-B4D11C70D79A",
+      "start" : 36480,
+      "text" : "randperm is the sampler, the range step is the batcher, and the slice is getitem + colate.",
+      "words" : [
+        {
+          "end" : 36880,
+          "start" : 36480,
+          "text" : "randperm"
+        },
+        {
+          "end" : 37040,
+          "start" : 36880,
+          "text" : "is"
+        },
+        {
+          "end" : 37240,
+          "start" : 37040,
+          "text" : "the"
+        },
+        {
+          "end" : 37560,
+          "start" : 37240,
+          "text" : "sampler,"
+        },
+        {
+          "end" : 38220,
+          "start" : 38080,
+          "text" : "the"
+        },
+        {
+          "end" : 38420,
+          "start" : 38220,
+          "text" : "range"
+        },
+        {
+          "end" : 38700,
+          "start" : 38420,
+          "text" : "step"
+        },
+        {
+          "end" : 38880,
+          "start" : 38700,
+          "text" : "is"
+        },
+        {
+          "end" : 39060,
+          "start" : 38880,
+          "text" : "the"
+        },
+        {
+          "end" : 39440,
+          "start" : 39060,
+          "text" : "batcher,"
+        },
+        {
+          "end" : 39660,
+          "start" : 39560,
+          "text" : "and"
+        },
+        {
+          "end" : 39800,
+          "start" : 39660,
+          "text" : "the"
+        },
+        {
+          "end" : 40200,
+          "start" : 39800,
+          "text" : "slice"
+        },
+        {
+          "end" : 40560,
+          "start" : 40200,
+          "text" : "is"
+        },
+        {
+          "end" : 41060,
+          "start" : 40560,
+          "text" : "getitem"
+        },
+        {
+          "end" : 41300,
+          "start" : 41060,
+          "text" : "+"
+        },
+        {
+          "end" : 41720,
+          "start" : 41300,
+          "text" : "colate."
+        }
+      ]
+    },
+    {
+      "end" : 43560,
+      "id" : "F509A538-0AE3-412D-9639-0BB59C9A2507",
+      "start" : 42220,
+      "text" : "This is called a map style dataset.",
+      "words" : [
+        {
+          "end" : 42340,
+          "start" : 42220,
+          "text" : "This"
+        },
+        {
+          "end" : 42460,
+          "start" : 42340,
+          "text" : "is"
+        },
+        {
+          "end" : 42660,
+          "start" : 42460,
+          "text" : "called"
+        },
+        {
+          "end" : 42780,
+          "start" : 42660,
+          "text" : "a"
+        },
+        {
+          "end" : 42980,
+          "start" : 42780,
+          "text" : "map"
+        },
+        {
+          "end" : 43240,
+          "start" : 42980,
+          "text" : "style"
+        },
+        {
+          "end" : 43560,
+          "start" : 43240,
+          "text" : "dataset."
+        }
+      ]
+    },
+    {
+      "end" : 45860,
+      "id" : "9652F099-C9B3-43C5-AAEB-8FCBBBE2F0C4",
+      "start" : 43940,
+      "text" : "You use it when random access is cheap.",
+      "words" : [
+        {
+          "end" : 44100,
+          "start" : 43940,
+          "text" : "You"
+        },
+        {
+          "end" : 44380,
+          "start" : 44100,
+          "text" : "use"
+        },
+        {
+          "end" : 44480,
+          "start" : 44380,
+          "text" : "it"
+        },
+        {
+          "end" : 44640,
+          "start" : 44480,
+          "text" : "when"
+        },
+        {
+          "end" : 44940,
+          "start" : 44640,
+          "text" : "random"
+        },
+        {
+          "end" : 45240,
+          "start" : 44940,
+          "text" : "access"
+        },
+        {
+          "end" : 45460,
+          "start" : 45240,
+          "text" : "is"
+        },
+        {
+          "end" : 45860,
+          "start" : 45460,
+          "text" : "cheap."
+        }
+      ]
+    },
+    {
+      "end" : 49420,
+      "id" : "5C317427-44C9-4C34-A22A-FEB1413B4FD9",
+      "start" : 46240,
+      "text" : "If you write these two functions first, the loader, the shuffle, and the split will come",
+      "words" : [
+        {
+          "end" : 46500,
+          "start" : 46240,
+          "text" : "If"
+        },
+        {
+          "end" : 46560,
+          "start" : 46500,
+          "text" : "you"
+        },
+        {
+          "end" : 46740,
+          "start" : 46560,
+          "text" : "write"
+        },
+        {
+          "end" : 46960,
+          "start" : 46740,
+          "text" : "these"
+        },
+        {
+          "end" : 47140,
+          "start" : 46960,
+          "text" : "two"
+        },
+        {
+          "end" : 47540,
+          "start" : 47140,
+          "text" : "functions"
+        },
+        {
+          "end" : 47860,
+          "start" : 47540,
+          "text" : "first,"
+        },
+        {
+          "end" : 48040,
+          "start" : 47940,
+          "text" : "the"
+        },
+        {
+          "end" : 48300,
+          "start" : 48040,
+          "text" : "loader,"
+        },
+        {
+          "end" : 48500,
+          "start" : 48380,
+          "text" : "the"
+        },
+        {
+          "end" : 48720,
+          "start" : 48500,
+          "text" : "shuffle,"
+        },
+        {
+          "end" : 48800,
+          "start" : 48720,
+          "text" : "and"
+        },
+        {
+          "end" : 48880,
+          "start" : 48800,
+          "text" : "the"
+        },
+        {
+          "end" : 49100,
+          "start" : 48880,
+          "text" : "split"
+        },
+        {
+          "end" : 49200,
+          "start" : 49100,
+          "text" : "will"
+        },
+        {
+          "end" : 49420,
+          "start" : 49200,
+          "text" : "come"
+        }
+      ]
+    },
+    {
+      "end" : 49860,
+      "id" : "3A3A499F-9F62-4912-BDE0-F17E8FFD961B",
+      "start" : 49500,
+      "text" : "for free.",
+      "words" : [
+        {
+          "end" : 49580,
+          "start" : 49500,
+          "text" : "for"
+        },
+        {
+          "end" : 49860,
+          "start" : 49580,
+          "text" : "free."
+        }
+      ]
+    }
+  ],
+  "text" : "A PyTorch dataset class has two functions.\nHow many samples and how do I get sample i.\nEverything else is the data loader's job.\nLen returns the number of samples.\nGetItem returns sample at index i.\nHere, the series are pre-computed into one tensor.\nSo getItem is just a slice.\nBecause you can index into the dataset,\nthe sampler owns the order.\nIt uses the length to make a random sequence of\nindices and calls getItem on each one.\nSo shuffling is free and\nThe validation split is just a list of indices.\nIf you've ever shuffled with torch.randperm and sliced batches by hand, you already wrote\nthis.\nrandperm is the sampler, the range step is the batcher, and the slice is getitem + colate.\nThis is called a map style dataset.\nYou use it when random access is cheap.\nIf you write these two functions first, the loader, the shuffle, and the split will come\nfor free."
+}

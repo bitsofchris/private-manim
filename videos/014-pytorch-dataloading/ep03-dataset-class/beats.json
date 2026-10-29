@@ -1,0 +1,44 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 6.05
+  },
+  {
+   "clip": "media/hf/02_loader_job.mp4",
+   "end": 2.26
+  },
+  {
+   "clip": "media/hf/03_len_getitem.mp4",
+   "end": 5.44
+  },
+  {
+   "clip": "media/hf/04_slice.mp4",
+   "end": 6.9
+  },
+  {
+   "clip": "media/hf/05_sampler.mp4",
+   "end": 6.57
+  },
+  {
+   "clip": "media/hf/06_shuffle.mp4",
+   "end": 3.915
+  },
+  {
+   "clip": "media/hf/07_by_hand.mp4",
+   "end": 5.085
+  },
+  {
+   "clip": "media/hf/08_three_parts.mp4",
+   "end": 5.75
+  },
+  {
+   "clip": "media/hf/09_map_style.mp4",
+   "end": 4.165
+  },
+  {
+   "clip": "media/hf/10_closer.mp4",
+   "end": 4.365
+  }
+ ]
+}
