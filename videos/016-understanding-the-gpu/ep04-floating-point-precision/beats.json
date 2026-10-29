@@ -1,0 +1,32 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 6.01
+  },
+  {
+   "clip": "media/hf/02_bits.mp4",
+   "end": 5.2
+  },
+  {
+   "clip": "media/hf/03_peak.mp4",
+   "end": 5.58
+  },
+  {
+   "clip": "media/hf/04_fp16.mp4",
+   "end": 8.2
+  },
+  {
+   "clip": "media/hf/05_bf16.mp4",
+   "end": 6.52
+  },
+  {
+   "clip": "media/hf/06_fp8.mp4",
+   "end": 6.73
+  },
+  {
+   "clip": "media/hf/07_close.mp4",
+   "end": 6.444
+  }
+ ]
+}

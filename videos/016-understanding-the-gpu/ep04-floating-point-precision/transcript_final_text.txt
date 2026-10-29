@@ -1,0 +1,31 @@
+00:00.480-00:06.000
+BF16 makes training faster because each number is half the bits of FP32.
+
+00:06.000-00:08.720
+Fewer bits means more numbers per memory read.
+
+00:08.760-00:11.320
+and more multiple adds per tensor core cycle.
+
+00:11.320-00:17.080
+A B200 peaks near 2250 teraflops in BF16, FP8 doubles that.
+
+00:16.960-00:21.359
+FP16 is also 16 bits, but it spends them on precision.
+
+00:21.359-00:25.360
+So anything past 65,504 will overflow.
+
+00:25.160-00:28.760
+BF16 keeps FP32's 8 exponent bits.
+
+00:28.760-00:31.640
+Same range, less precision, and training stays stable.
+
+00:31.640-00:38.760
+FP8 keeps just three bits, so training in it needs a scaling library like Nvidia's Transformer Engine.
+
+00:38.100-00:44.899
+In PyTorch, wrap your forward pass in autocast with BF sixteen, you get faster math without the overflow.
+
+

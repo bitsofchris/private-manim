@@ -1,0 +1,618 @@
+{
+  "segments" : [
+    {
+      "end" : 5620,
+      "id" : "37E698E1-8D35-4E5C-9E9D-629F52DDF33E",
+      "start" : 1,
+      "text" : "BF16 makes training faster because each number is half the bits of FP32.",
+      "words" : [
+        {
+          "end" : 1240,
+          "start" : 0,
+          "text" : "BF16"
+        },
+        {
+          "end" : 1720,
+          "start" : 1240,
+          "text" : "makes"
+        },
+        {
+          "end" : 2080,
+          "start" : 1720,
+          "text" : "training"
+        },
+        {
+          "end" : 2440,
+          "start" : 2080,
+          "text" : "faster"
+        },
+        {
+          "end" : 2660,
+          "start" : 2440,
+          "text" : "because"
+        },
+        {
+          "end" : 3020,
+          "start" : 2660,
+          "text" : "each"
+        },
+        {
+          "end" : 3260,
+          "start" : 3020,
+          "text" : "number"
+        },
+        {
+          "end" : 3360,
+          "start" : 3260,
+          "text" : "is"
+        },
+        {
+          "end" : 3820,
+          "start" : 3360,
+          "text" : "half"
+        },
+        {
+          "end" : 4080,
+          "start" : 3820,
+          "text" : "the"
+        },
+        {
+          "end" : 4320,
+          "start" : 4080,
+          "text" : "bits"
+        },
+        {
+          "end" : 4540,
+          "start" : 4320,
+          "text" : "of"
+        },
+        {
+          "end" : 5620,
+          "start" : 4540,
+          "text" : "FP32."
+        }
+      ]
+    },
+    {
+      "end" : 10960,
+      "id" : "12BDF03F-007C-40C3-BEBC-944B345579B9",
+      "start" : 6400,
+      "text" : "Fewer bits means more numbers per memory read, and more multiply adds per tensor core cycle.",
+      "words" : [
+        {
+          "end" : 6580,
+          "start" : 6400,
+          "text" : "Fewer"
+        },
+        {
+          "end" : 6760,
+          "start" : 6580,
+          "text" : "bits"
+        },
+        {
+          "end" : 7000,
+          "start" : 6760,
+          "text" : "means"
+        },
+        {
+          "end" : 7240,
+          "start" : 7000,
+          "text" : "more"
+        },
+        {
+          "end" : 7580,
+          "start" : 7240,
+          "text" : "numbers"
+        },
+        {
+          "end" : 7740,
+          "start" : 7580,
+          "text" : "per"
+        },
+        {
+          "end" : 8020,
+          "start" : 7740,
+          "text" : "memory"
+        },
+        {
+          "end" : 8380,
+          "start" : 8020,
+          "text" : "read,"
+        },
+        {
+          "end" : 8960,
+          "start" : 8720,
+          "text" : "and"
+        },
+        {
+          "end" : 9220,
+          "start" : 8960,
+          "text" : "more"
+        },
+        {
+          "end" : 9600,
+          "start" : 9220,
+          "text" : "multiply"
+        },
+        {
+          "end" : 9840,
+          "start" : 9600,
+          "text" : "adds"
+        },
+        {
+          "end" : 10020,
+          "start" : 9840,
+          "text" : "per"
+        },
+        {
+          "end" : 10340,
+          "start" : 10020,
+          "text" : "tensor"
+        },
+        {
+          "end" : 10580,
+          "start" : 10340,
+          "text" : "core"
+        },
+        {
+          "end" : 10960,
+          "start" : 10580,
+          "text" : "cycle."
+        }
+      ]
+    },
+    {
+      "end" : 16560,
+      "id" : "B91FF2AB-1312-49FC-805D-2CB779770339",
+      "start" : 11460,
+      "text" : "A B200 peaks near 2250 teraflops in BF16, FP8 doubles that.",
+      "words" : [
+        {
+          "end" : 11620,
+          "start" : 11460,
+          "text" : "A"
+        },
+        {
+          "end" : 12160,
+          "start" : 11620,
+          "text" : "B200"
+        },
+        {
+          "end" : 12580,
+          "start" : 12160,
+          "text" : "peaks"
+        },
+        {
+          "end" : 12760,
+          "start" : 12580,
+          "text" : "near"
+        },
+        {
+          "end" : 13600,
+          "start" : 12760,
+          "text" : "2250"
+        },
+        {
+          "end" : 14180,
+          "start" : 13600,
+          "text" : "teraflops"
+        },
+        {
+          "end" : 14300,
+          "start" : 14180,
+          "text" : "in"
+        },
+        {
+          "end" : 15040,
+          "start" : 14300,
+          "text" : "BF16,"
+        },
+        {
+          "end" : 16020,
+          "start" : 15460,
+          "text" : "FP8"
+        },
+        {
+          "end" : 16320,
+          "start" : 16020,
+          "text" : "doubles"
+        },
+        {
+          "end" : 16560,
+          "start" : 16320,
+          "text" : "that."
+        }
+      ]
+    },
+    {
+      "end" : 20820,
+      "id" : "8363F082-71B7-49F6-BA85-322B05EEEBEE",
+      "start" : 17020,
+      "text" : "FP16 is also 16 bits, but it spends them on precision.",
+      "words" : [
+        {
+          "end" : 17700,
+          "start" : 17020,
+          "text" : "FP16"
+        },
+        {
+          "end" : 17840,
+          "start" : 17700,
+          "text" : "is"
+        },
+        {
+          "end" : 18220,
+          "start" : 17840,
+          "text" : "also"
+        },
+        {
+          "end" : 18640,
+          "start" : 18220,
+          "text" : "16"
+        },
+        {
+          "end" : 18880,
+          "start" : 18640,
+          "text" : "bits,"
+        },
+        {
+          "end" : 19060,
+          "start" : 18880,
+          "text" : "but"
+        },
+        {
+          "end" : 19180,
+          "start" : 19060,
+          "text" : "it"
+        },
+        {
+          "end" : 19820,
+          "start" : 19180,
+          "text" : "spends"
+        },
+        {
+          "end" : 20120,
+          "start" : 19820,
+          "text" : "them"
+        },
+        {
+          "end" : 20360,
+          "start" : 20120,
+          "text" : "on"
+        },
+        {
+          "end" : 20820,
+          "start" : 20360,
+          "text" : "precision."
+        }
+      ]
+    },
+    {
+      "end" : 24700,
+      "id" : "790A0B14-A788-48AB-BB3F-29D8A4EB2B02",
+      "start" : 21280,
+      "text" : "So anything past 65504 will overflow.",
+      "words" : [
+        {
+          "end" : 21520,
+          "start" : 21280,
+          "text" : "So"
+        },
+        {
+          "end" : 21880,
+          "start" : 21520,
+          "text" : "anything"
+        },
+        {
+          "end" : 22380,
+          "start" : 21880,
+          "text" : "past"
+        },
+        {
+          "end" : 24100,
+          "start" : 22380,
+          "text" : "65504"
+        },
+        {
+          "end" : 24240,
+          "start" : 24100,
+          "text" : "will"
+        },
+        {
+          "end" : 24700,
+          "start" : 24240,
+          "text" : "overflow."
+        }
+      ]
+    },
+    {
+      "end" : 28420,
+      "id" : "B6C43F6A-0741-41CE-B183-4FC8BF8A1BF3",
+      "start" : 25280,
+      "text" : "BF16 keeps FP32's 8 exponent bits.",
+      "words" : [
+        {
+          "end" : 25980,
+          "start" : 25280,
+          "text" : "BF16"
+        },
+        {
+          "end" : 26400,
+          "start" : 25980,
+          "text" : "keeps"
+        },
+        {
+          "end" : 27360,
+          "start" : 26400,
+          "text" : "FP32's"
+        },
+        {
+          "end" : 27600,
+          "start" : 27360,
+          "text" : "8"
+        },
+        {
+          "end" : 28060,
+          "start" : 27600,
+          "text" : "exponent"
+        },
+        {
+          "end" : 28420,
+          "start" : 28060,
+          "text" : "bits."
+        }
+      ]
+    },
+    {
+      "end" : 31200,
+      "id" : "9444791C-09FB-407A-991E-507A28867250",
+      "start" : 29000,
+      "text" : "Same range, less precision, and training stays stable.",
+      "words" : [
+        {
+          "end" : 29140,
+          "start" : 29000,
+          "text" : "Same"
+        },
+        {
+          "end" : 29420,
+          "start" : 29140,
+          "text" : "range,"
+        },
+        {
+          "end" : 29580,
+          "start" : 29480,
+          "text" : "less"
+        },
+        {
+          "end" : 29960,
+          "start" : 29580,
+          "text" : "precision,"
+        },
+        {
+          "end" : 30300,
+          "start" : 30160,
+          "text" : "and"
+        },
+        {
+          "end" : 30560,
+          "start" : 30300,
+          "text" : "training"
+        },
+        {
+          "end" : 30860,
+          "start" : 30560,
+          "text" : "stays"
+        },
+        {
+          "end" : 31200,
+          "start" : 30860,
+          "text" : "stable."
+        }
+      ]
+    },
+    {
+      "end" : 37660,
+      "id" : "C568B372-45AD-4E32-A8CA-3659834B48F0",
+      "start" : 31820,
+      "text" : "FP8 keeps just 3 bits, so training in it needs a scaling library like NVIDIA's Transformer",
+      "words" : [
+        {
+          "end" : 32240,
+          "start" : 31820,
+          "text" : "FP8"
+        },
+        {
+          "end" : 32520,
+          "start" : 32240,
+          "text" : "keeps"
+        },
+        {
+          "end" : 32780,
+          "start" : 32520,
+          "text" : "just"
+        },
+        {
+          "end" : 33280,
+          "start" : 32780,
+          "text" : "3"
+        },
+        {
+          "end" : 33820,
+          "start" : 33280,
+          "text" : "bits,"
+        },
+        {
+          "end" : 34200,
+          "start" : 34120,
+          "text" : "so"
+        },
+        {
+          "end" : 34620,
+          "start" : 34200,
+          "text" : "training"
+        },
+        {
+          "end" : 34740,
+          "start" : 34620,
+          "text" : "in"
+        },
+        {
+          "end" : 34900,
+          "start" : 34740,
+          "text" : "it"
+        },
+        {
+          "end" : 35200,
+          "start" : 34900,
+          "text" : "needs"
+        },
+        {
+          "end" : 35380,
+          "start" : 35200,
+          "text" : "a"
+        },
+        {
+          "end" : 36060,
+          "start" : 35380,
+          "text" : "scaling"
+        },
+        {
+          "end" : 36500,
+          "start" : 36060,
+          "text" : "library"
+        },
+        {
+          "end" : 36720,
+          "start" : 36500,
+          "text" : "like"
+        },
+        {
+          "end" : 37160,
+          "start" : 36720,
+          "text" : "NVIDIA's"
+        },
+        {
+          "end" : 37660,
+          "start" : 37160,
+          "text" : "Transformer"
+        }
+      ]
+    },
+    {
+      "end" : 37920,
+      "id" : "C9C6306E-A6F2-46A0-9170-7DD907FD8F46",
+      "start" : 37820,
+      "text" : "Engine.",
+      "words" : [
+        {
+          "end" : 37920,
+          "start" : 37820,
+          "text" : "Engine."
+        }
+      ]
+    },
+    {
+      "end" : 43580,
+      "id" : "FFD6A87D-1A42-4D08-84A3-E77166B4763C",
+      "start" : 38440,
+      "text" : "In PyTorch, wrap your forward pass in AutoCast with BF16, you get faster math without the",
+      "words" : [
+        {
+          "end" : 38540,
+          "start" : 38440,
+          "text" : "In"
+        },
+        {
+          "end" : 39140,
+          "start" : 38540,
+          "text" : "PyTorch,"
+        },
+        {
+          "end" : 39420,
+          "start" : 39260,
+          "text" : "wrap"
+        },
+        {
+          "end" : 39500,
+          "start" : 39420,
+          "text" : "your"
+        },
+        {
+          "end" : 39780,
+          "start" : 39500,
+          "text" : "forward"
+        },
+        {
+          "end" : 40120,
+          "start" : 39780,
+          "text" : "pass"
+        },
+        {
+          "end" : 40340,
+          "start" : 40120,
+          "text" : "in"
+        },
+        {
+          "end" : 40900,
+          "start" : 40340,
+          "text" : "AutoCast"
+        },
+        {
+          "end" : 41040,
+          "start" : 40900,
+          "text" : "with"
+        },
+        {
+          "end" : 41680,
+          "start" : 41040,
+          "text" : "BF16,"
+        },
+        {
+          "end" : 42160,
+          "start" : 42000,
+          "text" : "you"
+        },
+        {
+          "end" : 42320,
+          "start" : 42160,
+          "text" : "get"
+        },
+        {
+          "end" : 42720,
+          "start" : 42320,
+          "text" : "faster"
+        },
+        {
+          "end" : 43100,
+          "start" : 42720,
+          "text" : "math"
+        },
+        {
+          "end" : 43440,
+          "start" : 43100,
+          "text" : "without"
+        },
+        {
+          "end" : 43580,
+          "start" : 43440,
+          "text" : "the"
+        }
+      ]
+    },
+    {
+      "end" : 44040,
+      "id" : "8ABE0E57-2D62-4614-A779-98BB6C6A86F0",
+      "start" : 43620,
+      "text" : "overflow.",
+      "words" : [
+        {
+          "end" : 44040,
+          "start" : 43620,
+          "text" : "overflow."
+        }
+      ]
+    }
+  ],
+  "text" : "BF16 makes training faster because each number is half the bits of FP32.\nFewer bits means more numbers per memory read, and more multiply adds per tensor core cycle.\nA B200 peaks near 2250 teraflops in BF16, FP8 doubles that.\nFP16 is also 16 bits, but it spends them on precision.\nSo anything past 65504 will overflow.\nBF16 keeps FP32's 8 exponent bits.\nSame range, less precision, and training stays stable.\nFP8 keeps just 3 bits, so training in it needs a scaling library like NVIDIA's Transformer\nEngine.\nIn PyTorch, wrap your forward pass in AutoCast with BF16, you get faster math without the\noverflow."
+}

@@ -1,0 +1,257 @@
+[
+ {
+  "start": 0.38,
+  "end": 1.66,
+  "text": "bf16 makes"
+ },
+ {
+  "start": 1.72,
+  "end": 2.38,
+  "text": "training faster"
+ },
+ {
+  "start": 2.44,
+  "end": 2.96,
+  "text": "because each"
+ },
+ {
+  "start": 3.02,
+  "end": 3.76,
+  "text": "number is half"
+ },
+ {
+  "start": 3.82,
+  "end": 4.26,
+  "text": "the bits"
+ },
+ {
+  "start": 4.32,
+  "end": 5.62,
+  "text": "of fp32."
+ },
+ {
+  "start": 6.4,
+  "end": 6.7,
+  "text": "Fewer bits"
+ },
+ {
+  "start": 6.76,
+  "end": 7.18,
+  "text": "means more"
+ },
+ {
+  "start": 7.24,
+  "end": 7.68,
+  "text": "numbers per"
+ },
+ {
+  "start": 7.74,
+  "end": 8.78,
+  "text": "memory read"
+ },
+ {
+  "start": 8.84,
+  "end": 9.16,
+  "text": "and more"
+ },
+ {
+  "start": 9.22,
+  "end": 9.78,
+  "text": "multiply-adds"
+ },
+ {
+  "start": 9.84,
+  "end": 10.28,
+  "text": "per tensor"
+ },
+ {
+  "start": 10.34,
+  "end": 10.96,
+  "text": "core cycle."
+ },
+ {
+  "start": 11.46,
+  "end": 12.52,
+  "text": "A B200 peaks"
+ },
+ {
+  "start": 12.58,
+  "end": 13.54,
+  "text": "near 2,250"
+ },
+ {
+  "start": 13.6,
+  "end": 14.12,
+  "text": "teraflops"
+ },
+ {
+  "start": 14.18,
+  "end": 15.04,
+  "text": "in bf16."
+ },
+ {
+  "start": 15.54,
+  "end": 16.01,
+  "text": "fp8"
+ },
+ {
+  "start": 16.07,
+  "end": 16.56,
+  "text": "doubles that."
+ },
+ {
+  "start": 17.02,
+  "end": 18.16,
+  "text": "fp16 is also"
+ },
+ {
+  "start": 18.22,
+  "end": 19.0,
+  "text": "16 bits, but"
+ },
+ {
+  "start": 19.06,
+  "end": 20.06,
+  "text": "it spends them"
+ },
+ {
+  "start": 20.12,
+  "end": 20.82,
+  "text": "on precision."
+ },
+ {
+  "start": 21.43,
+  "end": 21.82,
+  "text": "So anything"
+ },
+ {
+  "start": 21.88,
+  "end": 24.04,
+  "text": "past 65,504"
+ },
+ {
+  "start": 24.1,
+  "end": 24.7,
+  "text": "will overflow."
+ },
+ {
+  "start": 25.28,
+  "end": 26.34,
+  "text": "bf16 keeps"
+ },
+ {
+  "start": 26.4,
+  "end": 27.54,
+  "text": "fp32's 8"
+ },
+ {
+  "start": 27.6,
+  "end": 28.42,
+  "text": "exponent bits."
+ },
+ {
+  "start": 29.0,
+  "end": 29.42,
+  "text": "Same range"
+ },
+ {
+  "start": 29.48,
+  "end": 30.1,
+  "text": "less precision"
+ },
+ {
+  "start": 30.16,
+  "end": 30.5,
+  "text": "and training"
+ },
+ {
+  "start": 30.56,
+  "end": 31.2,
+  "text": "stays stable."
+ },
+ {
+  "start": 31.82,
+  "end": 32.72,
+  "text": "fp8 keeps just"
+ },
+ {
+  "start": 32.78,
+  "end": 34.14,
+  "text": "3 bits, so"
+ },
+ {
+  "start": 34.2,
+  "end": 34.88,
+  "text": "training in it"
+ },
+ {
+  "start": 34.94,
+  "end": 36.0,
+  "text": "needs a scaling"
+ },
+ {
+  "start": 36.06,
+  "end": 36.67,
+  "text": "library like"
+ },
+ {
+  "start": 36.73,
+  "end": 37.1,
+  "text": "NVIDIA's"
+ },
+ {
+  "start": 37.16,
+  "end": 37.76,
+  "text": "Transformer"
+ },
+ {
+  "start": 37.82,
+  "end": 38.04,
+  "text": "Engine."
+ },
+ {
+  "start": 38.44,
+  "end": 39.2,
+  "text": "In PyTorch"
+ },
+ {
+  "start": 39.26,
+  "end": 39.44,
+  "text": "wrap your"
+ },
+ {
+  "start": 39.5,
+  "end": 40.3,
+  "text": "forward pass in"
+ },
+ {
+  "start": 40.36,
+  "end": 40.84,
+  "text": "autocast"
+ },
+ {
+  "start": 40.9,
+  "end": 41.68,
+  "text": "with bf16."
+ },
+ {
+  "start": 42.12,
+  "end": 42.66,
+  "text": "You get faster"
+ },
+ {
+  "start": 42.72,
+  "end": 43.17,
+  "text": "math"
+ },
+ {
+  "start": 43.23,
+  "end": 43.58,
+  "text": "without the"
+ },
+ {
+  "start": 43.62,
+  "end": 44.04,
+  "text": "overflow."
+ }
+]
