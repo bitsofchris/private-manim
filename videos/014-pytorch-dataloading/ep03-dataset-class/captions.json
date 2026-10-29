@@ -1,0 +1,382 @@
+[
+ {
+  "start": 0.73,
+  "end": 1.26,
+  "text": "A PyTorch"
+ },
+ {
+  "start": 1.32,
+  "end": 1.92,
+  "text": "dataset class"
+ },
+ {
+  "start": 1.98,
+  "end": 2.14,
+  "text": "has"
+ },
+ {
+  "start": 2.2,
+  "end": 2.84,
+  "text": "two functions."
+ },
+ {
+  "start": 3.36,
+  "end": 3.62,
+  "text": "How many"
+ },
+ {
+  "start": 3.68,
+  "end": 4.76,
+  "text": "samples and how"
+ },
+ {
+  "start": 4.82,
+  "end": 5.12,
+  "text": "do I get"
+ },
+ {
+  "start": 5.18,
+  "end": 5.78,
+  "text": "sample i?"
+ },
+ {
+  "start": 6.32,
+  "end": 6.92,
+  "text": "Everything else"
+ },
+ {
+  "start": 6.98,
+  "end": 7.5,
+  "text": "is the data"
+ },
+ {
+  "start": 7.56,
+  "end": 8.08,
+  "text": "loader's job."
+ },
+ {
+  "start": 8.54,
+  "end": 9.38,
+  "text": "__len__ returns"
+ },
+ {
+  "start": 9.44,
+  "end": 9.78,
+  "text": "the number"
+ },
+ {
+  "start": 9.84,
+  "end": 10.38,
+  "text": "of samples."
+ },
+ {
+  "start": 10.939,
+  "end": 11.399,
+  "text": "__getitem__"
+ },
+ {
+  "start": 11.459,
+  "end": 12.4,
+  "text": "returns sample"
+ },
+ {
+  "start": 12.46,
+  "end": 13.48,
+  "text": "at index i."
+ },
+ {
+  "start": 14.02,
+  "end": 14.38,
+  "text": "Here, the"
+ },
+ {
+  "start": 14.44,
+  "end": 14.85,
+  "text": "series are"
+ },
+ {
+  "start": 14.91,
+  "end": 15.46,
+  "text": "precomputed"
+ },
+ {
+  "start": 15.52,
+  "end": 15.62,
+  "text": "into"
+ },
+ {
+  "start": 15.68,
+  "end": 16.18,
+  "text": "one tensor"
+ },
+ {
+  "start": 16.82,
+  "end": 17.4,
+  "text": "so __getitem__"
+ },
+ {
+  "start": 17.46,
+  "end": 17.96,
+  "text": "is just"
+ },
+ {
+  "start": 18.02,
+  "end": 18.5,
+  "text": "a slice."
+ },
+ {
+  "start": 19.02,
+  "end": 19.44,
+  "text": "Because you can"
+ },
+ {
+  "start": 19.5,
+  "end": 20.02,
+  "text": "index into"
+ },
+ {
+  "start": 20.08,
+  "end": 20.5,
+  "text": "the dataset"
+ },
+ {
+  "start": 20.8,
+  "end": 21.18,
+  "text": "the sampler"
+ },
+ {
+  "start": 21.24,
+  "end": 21.96,
+  "text": "owns the order."
+ },
+ {
+  "start": 22.6,
+  "end": 23.28,
+  "text": "It uses the"
+ },
+ {
+  "start": 23.34,
+  "end": 23.84,
+  "text": "length to make"
+ },
+ {
+  "start": 23.9,
+  "end": 24.2,
+  "text": "a random"
+ },
+ {
+  "start": 24.26,
+  "end": 24.82,
+  "text": "sequence of"
+ },
+ {
+  "start": 24.92,
+  "end": 25.38,
+  "text": "indices and"
+ },
+ {
+  "start": 25.44,
+  "end": 25.8,
+  "text": "calls"
+ },
+ {
+  "start": 25.86,
+  "end": 26.46,
+  "text": "__getitem__ on"
+ },
+ {
+  "start": 26.52,
+  "end": 26.98,
+  "text": "each one."
+ },
+ {
+  "start": 27.46,
+  "end": 27.9,
+  "text": "So shuffling"
+ },
+ {
+  "start": 27.96,
+  "end": 28.44,
+  "text": "is free"
+ },
+ {
+  "start": 28.44,
+  "end": 28.88,
+  "text": "and"
+ },
+ {
+  "start": 28.88,
+  "end": 29.22,
+  "text": "the validation"
+ },
+ {
+  "start": 29.28,
+  "end": 30.05,
+  "text": "split is just"
+ },
+ {
+  "start": 30.11,
+  "end": 30.34,
+  "text": "a list"
+ },
+ {
+  "start": 30.4,
+  "end": 30.82,
+  "text": "of indices."
+ },
+ {
+  "start": 31.45,
+  "end": 31.74,
+  "text": "If you've ever"
+ },
+ {
+  "start": 31.8,
+  "end": 32.42,
+  "text": "shuffled with"
+ },
+ {
+  "start": 32.48,
+  "end": 33.46,
+  "text": "torch.randperm"
+ },
+ {
+  "start": 33.52,
+  "end": 34.28,
+  "text": "and sliced"
+ },
+ {
+  "start": 34.34,
+  "end": 34.76,
+  "text": "batches by"
+ },
+ {
+  "start": 34.82,
+  "end": 35.08,
+  "text": "hand, you"
+ },
+ {
+  "start": 35.14,
+  "end": 35.68,
+  "text": "already wrote"
+ },
+ {
+  "start": 35.78,
+  "end": 35.96,
+  "text": "this."
+ },
+ {
+  "start": 36.48,
+  "end": 36.98,
+  "text": "Randperm is"
+ },
+ {
+  "start": 37.04,
+  "end": 38.02,
+  "text": "the sampler."
+ },
+ {
+  "start": 38.08,
+  "end": 38.67,
+  "text": "The range step"
+ },
+ {
+  "start": 38.73,
+  "end": 39.5,
+  "text": "is the batcher"
+ },
+ {
+  "start": 39.56,
+  "end": 40.14,
+  "text": "and the slice"
+ },
+ {
+  "start": 40.2,
+  "end": 41.0,
+  "text": "is __getitem__"
+ },
+ {
+  "start": 41.06,
+  "end": 41.72,
+  "text": "plus collate."
+ },
+ {
+  "start": 42.22,
+  "end": 42.6,
+  "text": "This is called"
+ },
+ {
+  "start": 42.66,
+  "end": 42.92,
+  "text": "a map"
+ },
+ {
+  "start": 42.98,
+  "end": 43.56,
+  "text": "style dataset."
+ },
+ {
+  "start": 43.94,
+  "end": 44.42,
+  "text": "You use it"
+ },
+ {
+  "start": 44.48,
+  "end": 44.88,
+  "text": "when random"
+ },
+ {
+  "start": 44.94,
+  "end": 45.18,
+  "text": "access"
+ },
+ {
+  "start": 45.24,
+  "end": 45.86,
+  "text": "is cheap."
+ },
+ {
+  "start": 46.41,
+  "end": 46.68,
+  "text": "If you write"
+ },
+ {
+  "start": 46.74,
+  "end": 47.08,
+  "text": "these two"
+ },
+ {
+  "start": 47.14,
+  "end": 47.48,
+  "text": "functions"
+ },
+ {
+  "start": 47.54,
+  "end": 47.98,
+  "text": "first, the"
+ },
+ {
+  "start": 48.04,
+  "end": 48.44,
+  "text": "loader, the"
+ },
+ {
+  "start": 48.5,
+  "end": 48.74,
+  "text": "shuffle, and"
+ },
+ {
+  "start": 48.8,
+  "end": 49.04,
+  "text": "the split"
+ },
+ {
+  "start": 49.1,
+  "end": 49.42,
+  "text": "will come"
+ },
+ {
+  "start": 49.5,
+  "end": 49.86,
+  "text": "for free."
+ }
+]
