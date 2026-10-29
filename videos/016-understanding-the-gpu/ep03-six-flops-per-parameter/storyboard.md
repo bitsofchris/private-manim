@@ -1,6 +1,6 @@
 ENGINE: hyperframes
 
-# Why 6 FLOPs per parameter per token: storyboard (v1, VO draft for Chris)
+# Why 6 FLOPs per parameter per token: storyboard (v3, built from the take)
 
 THE QUESTION: "Why is it 6 FLOPs per parameter per token? How much
 compute does training a model actually take?"
@@ -12,126 +12,146 @@ token going forward (2), and twice that coming back, once to pass the
 error to the layer before and once to build its own gradient (4), so
 training costs 6 × params × tokens.
 THE SEARCH PHRASE: flops llm (checked 10/27 via YouTube's autocomplete
-endpoint and results page, not a browser: "flops llm" autocompletes
-(typing "llm flops" offers it), and its results are LLM-compute
-explainers ("FLOPs vs FLOPS Explained: LLM Compute Made Simple", "FLOPS
-Demystified: AI and the math behind DeepSeek training costs"). "scaling
-laws llm" autocompletes and is on topic (one result has a chapter "The
-Compute Budget Equation (C ≈ 6ND)") but its viewers want the loss curves,
-not the count; second choice. No autocomplete for "training compute"
-(computer courses), "flops per token", "how much compute to train llm",
-"llm training cost", "flops to train", "training flops" (soccer). Overlap
-note: ep 2's phrase is "flops explained", whose results share some videos
-with this one; ep 3's title adds "LLM" and "train" to split them.)
+endpoint and results page; second choice "scaling laws llm". The take
+keeps it: line 1 says "LLM" and "FLOPs" in its first clause.)
 
 **One idea:** every weight is touched three times per token (once forward,
 twice back), two FLOPs each time. That's the 6.
 
-**Source note:** Chris asked "Why is it 6 flops per parameter per token?
-Work that out for me" in the 10/27 storyboard session and liked the
-worked answer (the tiny layer, dx = Wᵀ·dy, dW = dy·xᵀ). He has no written
-sentences on this, so the VO is a draft in his voice for him to rewrite.
+**Source:** the VO is `script.md` ("As recorded"), not the planned script
+in `../SCRIPTS.md`. v1 of this file (the draft before recording) is in
+git history.
 
-**Engine:** HyperFrames (`AGENTS.md` "Which engine"): the tiny 3 → 2
-layer drawn as six weight lines, a FLOP counter, the series chip in the
-payoff beat, and a code card. Nothing needs Manim.
-
-Series context: ep 3 of `../SERIES.md` (Understanding the GPU). Home of
-"6 × params × tokens, forward 2 + backward 4". What a FLOP is belongs to
-ep 2 (one clause here: "one multiply and one add"); MFU belongs to ep 7
-(one clause at most: the closer's "what one GPU actually delivers").
+Series context: ep 3 of `../SERIES.md`. Home of "6 × params × tokens,
+forward 2 + backward 4". What a FLOP is belongs to ep 2 (here only "one
+multiply and one add"); MFU belongs to ep 7 (not mentioned: the take
+dropped the closer).
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
-- A FLOP: one floating-point multiply or one add (ep 2's home; not
-  re-defined here).
-- **The tiny layer:** 3 inputs (x1, x2, x3), 2 outputs (y1, y2), **6
-  weights** (w11 … w23). Forward **12 FLOPs** = 2 × 6. Backward 24 = 4 × 6.
-  Total **36** = 6 × 6.
-- FLOPs per token, training: **6 × params** (forward 2, backward 4).
-- Model: **8B parameters**, dense transformer (Llama-3-8B sized), bf16.
-- Throughput: **15,000 tokens/s per GPU** (one B200 in an 8-GPU run).
-- Achieved: 6 × 8e9 × 15,000 = **720 TFLOPS** (7.2e14 FLOP/s).
-- *(if time)* Llama 3 8B pretraining data: **15 trillion tokens** (Meta's
-  model card says "over 15T"). At 15,000 tokens/s: 15e12 ÷ 1.5e4 = 1.0e9 s
-  = **about 32 years** on one B200 (31.7).
-- Code on screen: `flops = 6 * n_params * n_tokens`.
+From `../SERIES.md` (series ledger), used identically in every beat:
 
-## VO (draft: 145 words without the if-time beat, 163 with)
+- A FLOP: one floating-point multiply or one add. **FLOPs** is a count,
+  **FLOPS** a rate (`TFLOPS`).
+- FLOPs per token, training: **6 × params** (forward 2, backward 4).
+- **The tiny layer:** 3 inputs (`x1 x2 x3`), 2 outputs (`y1 y2`), **6
+  weights** (the 2 × 3 matrix `W`). Forward **12 FLOPs** = 2 × 6.
+  Backward 24 = 4 × 6. Total **36** = 6 × 6.
+- Model: **8B parameters**, dense transformer (Llama-3-8B sized), bf16.
+- Throughput: **15,000 tokens/s per GPU** (one B200 in an 8-GPU run;
+  always "per GPU").
+- Achieved: 6 × 8e9 × 15,000 = **720 TFLOPS** (7.2e14 FLOP/s), a rate.
+- Code on screen (`../_kit/data.js`, `code.sixN`):
+  `flops = 6 * n_params * n_tokens` / `6 * 8e9 * 15_000  # 7.2e14 /s`.
+- Every on-screen string of this episode is in `_kit/ep.js` (`EP`), the
+  rest in `../_kit/data.js`.
+
+## Beats (from what was said)
+
+The take's changes from v1 (`script.md`, "Where the take leaves the
+script"): line 1 says "about six" and the 2 / 4 split is its own
+sentence; "Backward costs twice the forward", the *(if time)* Llama 3
+line and the closer were not recorded. So v1's beat 06 keeps only "That's
+six per weight per token", beat 08 (32 years) and beat 09 (the GPU-hours
+card) are dropped, and v1's beat 07 splits in two at the sentence. The
+Short ends on "720 teraflops" over the chip and the card.
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | Training an LLM costs six FLOPs per parameter, per token: two forward, four back. | Frame 0 already working: the tiny layer mid-stage (3 teal input dots left, 2 output dots right, 6 weight lines between) with a token chip passing through; a counter above it reads `6 × params` in magenta, split under it into `2 →` and `← 4`. ~6 rows of stage. |
-| 02_layer | Almost every parameter sits in a weight matrix. Here's a tiny one: three inputs, two outputs, six weights. | The counter clears. The layer settles: inputs labeled `x1 x2 x3`, outputs `y1 y2`, each of the 6 lines labeled `w11 … w23`. On "six weights" the lines flash once in order. Beside it, small, the matrix form `y = W x` with `W` as a 2 × 3 grid of the same six cells. |
-| 03_forward | Going forward, each weight does one multiply and one add. Two FLOPs per weight, twelve for the layer. | Left to right, each weight line ticks `×` then `+` as a value flows along it; a counter top-right climbs 0 → 12, two per line. Under the counter: `forward = 2 × 6`. Magenta hero: the counter. |
-| 04_back_input | Coming back, the error has to reach the layer before: the same weights in reverse, another multiply and add each. | Error dots (`dy1 dy2`) appear on the outputs and flow right to left along the same six lines to `dx1 dx2 dx3`; each line ticks `×`, `+` again; counter 12 → 24. Small label: `dx = Wᵀ · dy`. Magenta hero passes to the backward flow. |
-| 05_back_weight | Then each weight needs its own gradient, for the optimizer. Error times input, added to a running total. Two more. | Each weight line lights a third time: a small gradient tag `dw` hangs off each line, filled by `dy × x` and then `+` into a running-total bar under the tag; counter 24 → 36. Label: `dW = dy · xᵀ`. |
-| 06_total | That's six per weight, per token. Backward costs twice the forward. | The three passes stack as bars beside the layer: forward 12 (teal), back-to-input 12, back-to-weights 12 (backward bracket = 24). Counter reads `36 = 6 × 6` in magenta. |
-| 07_code | So training compute is six, times parameters, times tokens. An 8-billion-parameter model at 15,000 tokens a second per GPU is doing 720 teraflops. | The tiny layer shrinks into one core cell of the series chip (12 × 12 grid, mid-stage, cells lighting teal). The code card bottom-middle (the payoff, real lines): `flops = 6 * n_params * n_tokens` / `6 * 8e9 * 15_000  # 7.2e14 per second`. Each line lands on its number; a label by the chip: `720 TFLOPS`. Magenta hero: the `6` in the code. |
-| 08_scale *(if time)* | At that pace, Llama 3 8B's 15 trillion tokens would keep one B200 busy for about 32 years. | A token counter under the chip races to `15T`; a calendar strip beside it flips to `~32 years`. |
-| 09_close | Before your next run, multiply six by parameters by tokens. Divide by what one GPU actually delivers, and that's your GPU-hours. | Final visual: the code card alone, three lines: `flops = 6 * n_params * n_tokens` / `seconds = flops / flops_per_sec_per_gpu` / `gpu_hours = seconds / 3600`, `gpu_hours` in magenta. Takeaway only, no outro. |
+| 01_hook | Training an LLM costs about six FLOPs per parameter per token. You spend two FLOPs on the forward pass and about four on the backward pass. | Frame 0 already working: the tiny layer mid-stage (3 input dots left, 2 output dots right, 6 weight lines, teal), a value pulse running along the lines; above it the FLOP bar, full, in three equal segments, labelled `→ 2` under the first and `← 4` under the other two; the readout `6 × params` (magenta hero). On "two FLOPs on the forward pass" the first segment pulses; on "four on the backward" the other two. |
+| 02_layer | Almost every parameter sits in a weight matrix. Here's a tiny one: three inputs, two outputs, six weights. | The bar and readout clear. On "weight matrix" the matrix `W` (2 × 3 cells) grows in under the layer with `y = W x` beside it (hero: the matrix). On "three inputs" the input dots pulse, "two outputs" the output dots, "six weights" the six lines flash once in order, each with its matrix cell (hero: the lines). |
+| 03_forward | Going forward, each weight does one multiply and one add. So you have two FLOPs per weight, twelve for this entire layer. | The bar returns empty. Left to right, a value runs along each line, the line ticks `×` then `+`; the first segment fills one sixth per line; the readout counts `0 FLOPs` → `12 FLOPs`, two per line; on "twelve" it lands (magenta hero: the readout). |
+| 04_back_input | Coming backwards now, the error has to reach the layer before. So the same weights in reverse, another multiply and add each. | Output labels become `dy1 dy2`, inputs `dx1 dx2 dx3`; `dx = Wᵀ dy` replaces `y = W x`. The error runs right to left along the same six lines, each ticking `×`, `+`; the second segment fills; readout 12 → 24. Hero: the backward flow (lines and the filling segment). |
+| 05_back_weight | Then each weight needs its own gradient for the optimizer. Error times input, added to a running total, is two more. | Inputs back to `x1 x2 x3` (outputs stay `dy`); the matrix label becomes `dW`, `dW = dy xᵀ` beside it. Each weight's cell fills as its gradient lands (`×` on "error times input", `+` on "running total"); the third segment fills; readout 24 → 36. Hero: the `dW` matrix. |
+| 06_total | That's six per weight per token. | The bar's labels go back to the hook's `→ 2` / `← 4`, the readout becomes `36 = 6 × 6` (magenta hero). |
+| 07_code | So training compute is six times parameters times tokens. | The layer shrinks into one core cell of the series chip as the chip fades in (CPU and queue, cells lit teal, GPU memory: the rest image); the bar and readout clear. The code card in the bottom slot types `flops = 6 * n_params * n_tokens` (magenta hero: the line). |
+| 08_run | An 8-billion-parameter model at 15,000 tokens per second per GPU is doing 720 teraflops. | The card types `6 * 8e9 * 15_000  # 7.2e14 /s` as it is said; on "720 teraflops" the label under the chip turns from `GPU` to `720 TFLOPS` (magenta hero: the chip and its label). Still from there to the end. |
 
-Line 1 is the answer and says "FLOPs" and "LLM", the search phrase, in
-its first clause; the 2 + 4 split is on screen from frame 0. Beats 03–05
-are the working Chris asked for, one pass per beat, so each beat adds one
-new step and the counter (12 → 24 → 36) carries the thread. Beat 06 is
-short on purpose: it is the "backward = 2 × forward" takeaway, said once.
-Beat 08 is the *(if time)* cut: a vivid scale, but the closer stands
-without it. The closer is the viewer's next move (estimate a run), not
-line 1 again; "what one GPU actually delivers" is the one-clause nod to
-MFU (ep 7) and keeps the closer true (dividing by peak would undercount
-the hours by about 2×).
+Layout (px, 1080 × 1920; safe x 65–950, y 230–1536):
+
+- Top, y 250–470 (the chip's top slot, free until beat 07): the readout
+  (72 px, centred) and the FLOP bar under it (three segments, x 65–950),
+  segment labels under the bar.
+- Middle, y 520–940: the tiny layer. Input dots x 240, output dots x 760;
+  labels outside the dots (`x1` left, `y1` right).
+- Below, y 980–1100: the matrix `W` (2 × 3 cells) right, its formula left.
+- Beats 07–08: the series chip (`../_kit/chip.js`, y 450–1078) and the
+  code card docked at the band top (cy 1345). Captions anchored bottom
+  for the whole Short (`assemble.py --captions-anchor bottom`), every
+  caption one line.
+- One magenta hero at a time: `6 × params` → the matrix → the lines →
+  the readout → the backward flow → `dW` → `36 = 6 × 6` → the code line
+  → `720 TFLOPS`.
+
+## Final beats (the contract; `vo_final.wav` 45.400 s, master seconds)
+
+Beat brief: `agents/beat-brief-hyperframes.md` plus this table; seam
+states `SC.SEAM` in `_kit/seam.js`; links per beat: `vendor`
+(`../../../_shared/web/vendor`), `kit` (`../../_kit`), `ep` (`../_kit`).
+
+| # | Folder | Start | Length | VO |
+|---|---|---:|---:|---|
+| 1 | `01_hook` | 0.000 | 8.660 | Training an LLM costs about 6 FLOPs per parameter per token. You spend 2 FLOPs on the forward pass and about 4 on the backward pass. |
+| 2 | `02_layer` | 8.660 | 5.500 | Almost every parameter sits in a weight matrix. Here's a tiny one, 3 inputs, 2 outputs, 6 weights. |
+| 3 | `03_forward` | 14.160 | 6.325 | Going forward, each weight does one multiply and one add. So you have 2 FLOPs per weight, 12 for this entire layer. |
+| 4 | `04_back_input` | 20.485 | 6.255 | Coming backwards now, the error has to reach the layer before. So the same weights in reverse, another multiply and add each. |
+| 5 | `05_back_weight` | 26.740 | 6.300 | Then each weight needs its own gradient for the optimizer. Error times input added to a running total is 2 more. |
+| 6 | `06_total` | 33.040 | 1.850 | That's 6 per weight per token. |
+| 7 | `07_code` | 34.890 | 4.070 | So training compute is 6 times parameters times tokens. |
+| 8 | `08_run` | 38.960 | 6.440 | An 8 billion parameter model at 15,000 tokens per second per GPU is doing 720 teraflops. |
+
+## Seam states (`_kit/seam.js`; layer fields as `SC.LAYER.LREST`, chip fields as `SC.REST`, unless named)
+
+Beats 01–06 show no chip part (cpu, queue, chip, GPU memory, strip and
+card all at 0). Beats 07–08 show the chip at rest (CPU, queue, GPU
+memory, cells lit 32 %, shimmering), no strip, the code card at cy 1246
+(bottom edge 1330), the layer gone.
+
+| Cut | After beat | Hero | State |
+|---|---|---|---|
+| 0 | frame 0 | readout | layer, labels `x` / `y`, value pulses running (`run` 1); bar full, split 0 (`→ 2` / `← 4`); readout `6 × params`; no matrix, no formula |
+| 1 | hook | readout | the same, pulses stopped (`run` 0) |
+| 2 | layer | none | bar and readout gone; matrix `W` full (teal); formula `y = W x` |
+| 3 | forward | readout | pass fwd done (lines teal); bar `[1, 0, 0]` split 1 (`→ 2` / `← 2` / `← 2`); readout `12 FLOPs`; `W`, `y = W x` |
+| 4 | back to input | back | pass back done (lines magenta, segment 2 magenta); labels `dx` / `dy`; bar `[1, 1, 0]`; readout `24 FLOPs`; `W`, `dx = Wᵀ dy` |
+| 5 | back to weights | grad | pass grad done (lines, segment 3 and the `dW` cells magenta); labels `x` / `dy`; matrix `dW` fill 6; bar `[1, 1, 1]`; readout `36 FLOPs`; `dW = dy xᵀ` |
+| 6 | total | readout | as 5 with lines and cells teal; bar split 0 (`→ 2` / `← 4`); readout `36 = 6 × 6` |
+| 7 | code | none (the card's line 1 is lit) | chip at rest, shimmer on; card `code.sixN`, line 1 typed (31 characters), lit `sixN`, no cursor |
+| 8 | end | chip | shimmer off (still); title `720 TFLOPS`; card fully typed, nothing lit |
+
+## Cut list
+
+Raw take 48.2 s. Loudnorm-only chain (`enhance_vo.sh` default; Studio
+Sound unknown, so no denoise), floor −73 dB. `tighten_vo.py --max-gap
+0.25 --noise=-40dB --level -14` → **45.4 s, 10 pieces, no phrase cuts.**
+
+- `--noise auto` (−54 dB) found only 4 pauses (breaths sit above it) and
+  left 48.6 s; −40 dB caps them all, as 014 ep02 needed.
+- `script.md` lists no repeats and no ear checks for this episode; a
+  read of the Parakeet transcript finds no flub or repeated phrase.
+- Kept as said: "about six", "Coming backwards now", "So the same
+  weights", "for this entire layer".
+- The Short ends on "teraflops." (the take's end).
+- Parakeet on `vo_final.wav` reads clean, every sentence whole.
+
+Caption fixes in `words.json`: "in" → "an" (Training an LLM), "flops" →
+"FLOPs", "1" → "one" (one multiply, one add), "15 ,000" → "15,000",
+"multiply," → "multiply".
 
 ## Facts to keep straight (notes, not VO)
 
 - **Source of 6N:** Kaplan et al. 2020, *Scaling Laws for Neural Language
   Models*, §2.1: C_forward ≈ 2N + 2·n_layer·n_ctx·d_model; "accounting
   for the backwards pass (approximately twice the compute as the forwards
-  pass)", C ≈ 6N FLOPs per training token; total C = 6NBS (§3.3).
-  Chinchilla (Hoffmann et al. 2022) uses the same rule. Kaplan's N is
-  **non-embedding** parameters.
-- **Embeddings:** Llama-3-8B's 8.0B includes ~0.5B input embedding
-  (128,256 × 4,096), a table lookup with no matmul, so 6 × 8e9 overcounts
-  by ~7 %. The output head (also ~0.5B, untied) is a real matmul and does
-  count. The ledger keeps 8e9 for series consistency; companion note.
+  pass)", C ≈ 6N FLOPs per training token. Chinchilla uses the same rule.
+  Kaplan's N is non-embedding parameters.
+- **Embeddings:** Llama-3-8B's 8.0B includes ~0.5B input embedding (a
+  lookup, no matmul), so 6 × 8e9 overcounts by ~7 %. Companion note.
 - **"One multiply and one add per weight"** is the multiply-accumulate
-  count. Strictly, y1 = w11·x1 + w12·x2 + w13·x3 is 3 multiplies + 2 adds
-  (5, not 6) without a bias; the ledger's "12" counts each weight's
-  multiply-add pair, which is the convention (a matmul of m×k by k×n is
-  2mkn FLOPs). Don't say "exactly" anywhere.
-- **dW per token is a multiply; the add is the accumulate.** dw_ij =
-  dy_i · x_j for one token is one multiply; the add comes from summing
-  that product into the weight's gradient across the tokens in the batch.
-  That's why the VO says "added to a running total", not "multiply and
-  add". Per token, per weight, it is still 2 FLOPs.
-- **dx for the first layer** isn't needed (nothing before it to send the
-  error to); negligible over 32 layers.
-- **Left out of 6N:** (1) attention scores (QKᵀ and softmax·V use no
-  weights and grow with sequence length): Kaplan's context term is
-  2·n_layer·n_ctx·d_model per token forward; for Llama-3-8B (32 layers,
-  d_model 4,096) at n_ctx 8,192 that is ~2.1e9 vs 2N = 1.6e10, ~13 %
-  before the causal mask halves it; Kaplan drops it when d_model >
-  n_ctx/12. Grows past that at long context. (2) The optimizer step: per
-  step, not per token, a few FLOPs per weight, negligible. (3) Activation
-  recompute: an extra forward, 8N per token; counting it gives HFU, not
-  MFU (ep 7's companion).
-- **720 TFLOPS is a rate** (FLOP/s), from tokens/s. The total for a run
-  is 6 × N × D in FLOPs. Beat 07 keeps the "per second" on the code card.
-- **32 years** (beat 08) is tokens ÷ tokens/s at the ledger's throughput,
-  a hypothetical: Meta trained Llama 3 8B on many H100s (model card: 1.3M
-  H100-80GB GPU-hours, pretraining). Say "would", never "took".
-- To verify before publish: nothing new beyond the above; Meta's "over
-  15T tokens" is from the Llama 3 model card (github.com/meta-llama/llama3
-  MODEL_CARD.md), Kaplan §2.1 read on arXiv 2001.08361 (HTML).
-
-## Layout (decided before any code)
-
-- Top band: nothing (captions burn in below; safe areas from `style.py`).
-- Stage top-right: the FLOP counter (beats 01, 03–06), ~1 row.
-- Stage middle: the tiny 3 → 2 layer, ~4 rows, inputs left, outputs right;
-  `y = W x` / `dx = Wᵀ·dy` / `dW = dy·xᵀ` labels under it, one at a time.
-  From beat 07 the layer shrinks into one cell of the series chip
-  (12 × 12 grid, the same drawing as every episode).
-- Stage bottom-middle: the code card (beats 07, 09).
-- One magenta hero at a time: `6 × params` → the counter → the backward
-  flow → `36 = 6 × 6` → the `6` in the code → `gpu_hours`.
+  count (a matmul of m×k by k×n is 2mkn FLOPs). Don't say "exactly".
+- **dW per token is a multiply; the add is the accumulate** across the
+  batch's tokens, which is why the VO says "added to a running total".
+- **Left out of 6N:** attention scores (~13 % for Llama-3-8B at 8K
+  context, before the causal mask), the optimizer step (per step, not per
+  token), activation recompute (8N: HFU, not MFU, ep 7's companion).
+- **720 TFLOPS is a rate**, from tokens/s; the card keeps the "/s".

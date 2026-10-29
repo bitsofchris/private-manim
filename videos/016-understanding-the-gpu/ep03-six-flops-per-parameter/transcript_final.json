@@ -1,0 +1,814 @@
+{
+  "segments" : [
+    {
+      "end" : 4120,
+      "id" : "5F1D2FFF-DF32-4AC8-B39B-CD3D60222B32",
+      "start" : 1,
+      "text" : "Training in LLM costs about 6 flops per parameter per token.",
+      "words" : [
+        {
+          "end" : 700,
+          "start" : 0,
+          "text" : "Training"
+        },
+        {
+          "end" : 820,
+          "start" : 700,
+          "text" : "in"
+        },
+        {
+          "end" : 1280,
+          "start" : 820,
+          "text" : "LLM"
+        },
+        {
+          "end" : 1680,
+          "start" : 1280,
+          "text" : "costs"
+        },
+        {
+          "end" : 1880,
+          "start" : 1680,
+          "text" : "about"
+        },
+        {
+          "end" : 2300,
+          "start" : 1880,
+          "text" : "6"
+        },
+        {
+          "end" : 2620,
+          "start" : 2300,
+          "text" : "flops"
+        },
+        {
+          "end" : 2920,
+          "start" : 2620,
+          "text" : "per"
+        },
+        {
+          "end" : 3440,
+          "start" : 2920,
+          "text" : "parameter"
+        },
+        {
+          "end" : 3700,
+          "start" : 3440,
+          "text" : "per"
+        },
+        {
+          "end" : 4120,
+          "start" : 3700,
+          "text" : "token."
+        }
+      ]
+    },
+    {
+      "end" : 8180,
+      "id" : "1BE85D29-2F2B-4712-B1F1-6EC0AC068CDA",
+      "start" : 4470,
+      "text" : "You spend 2 flops on the forward pass and about 4 on the backward pass.",
+      "words" : [
+        {
+          "end" : 4600,
+          "start" : 4470,
+          "text" : "You"
+        },
+        {
+          "end" : 4920,
+          "start" : 4600,
+          "text" : "spend"
+        },
+        {
+          "end" : 5240,
+          "start" : 4920,
+          "text" : "2"
+        },
+        {
+          "end" : 5680,
+          "start" : 5240,
+          "text" : "flops"
+        },
+        {
+          "end" : 5940,
+          "start" : 5680,
+          "text" : "on"
+        },
+        {
+          "end" : 6060,
+          "start" : 5940,
+          "text" : "the"
+        },
+        {
+          "end" : 6280,
+          "start" : 6060,
+          "text" : "forward"
+        },
+        {
+          "end" : 6580,
+          "start" : 6280,
+          "text" : "pass"
+        },
+        {
+          "end" : 6680,
+          "start" : 6580,
+          "text" : "and"
+        },
+        {
+          "end" : 6880,
+          "start" : 6680,
+          "text" : "about"
+        },
+        {
+          "end" : 7260,
+          "start" : 6880,
+          "text" : "4"
+        },
+        {
+          "end" : 7460,
+          "start" : 7260,
+          "text" : "on"
+        },
+        {
+          "end" : 7580,
+          "start" : 7460,
+          "text" : "the"
+        },
+        {
+          "end" : 7860,
+          "start" : 7580,
+          "text" : "backward"
+        },
+        {
+          "end" : 8180,
+          "start" : 7860,
+          "text" : "pass."
+        }
+      ]
+    },
+    {
+      "end" : 10820,
+      "id" : "874319C0-DABE-434C-8AE1-90A691943B0D",
+      "start" : 9140,
+      "text" : "Almost every parameter sits in a weight matrix.",
+      "words" : [
+        {
+          "end" : 9260,
+          "start" : 9140,
+          "text" : "Almost"
+        },
+        {
+          "end" : 9500,
+          "start" : 9260,
+          "text" : "every"
+        },
+        {
+          "end" : 9840,
+          "start" : 9500,
+          "text" : "parameter"
+        },
+        {
+          "end" : 10180,
+          "start" : 9840,
+          "text" : "sits"
+        },
+        {
+          "end" : 10280,
+          "start" : 10180,
+          "text" : "in"
+        },
+        {
+          "end" : 10380,
+          "start" : 10280,
+          "text" : "a"
+        },
+        {
+          "end" : 10540,
+          "start" : 10380,
+          "text" : "weight"
+        },
+        {
+          "end" : 10820,
+          "start" : 10540,
+          "text" : "matrix."
+        }
+      ]
+    },
+    {
+      "end" : 13920,
+      "id" : "399BBC08-CDF6-4399-B271-CE6B9720E7D4",
+      "start" : 11580,
+      "text" : "Here's a tiny one, 3 inputs, 2 outputs, 6 weights.",
+      "words" : [
+        {
+          "end" : 11660,
+          "start" : 11580,
+          "text" : "Here's"
+        },
+        {
+          "end" : 11780,
+          "start" : 11660,
+          "text" : "a"
+        },
+        {
+          "end" : 12000,
+          "start" : 11780,
+          "text" : "tiny"
+        },
+        {
+          "end" : 12220,
+          "start" : 12000,
+          "text" : "one,"
+        },
+        {
+          "end" : 12480,
+          "start" : 12320,
+          "text" : "3"
+        },
+        {
+          "end" : 12840,
+          "start" : 12480,
+          "text" : "inputs,"
+        },
+        {
+          "end" : 12980,
+          "start" : 12870,
+          "text" : "2"
+        },
+        {
+          "end" : 13360,
+          "start" : 12980,
+          "text" : "outputs,"
+        },
+        {
+          "end" : 13620,
+          "start" : 13400,
+          "text" : "6"
+        },
+        {
+          "end" : 13920,
+          "start" : 13620,
+          "text" : "weights."
+        }
+      ]
+    },
+    {
+      "end" : 17320,
+      "id" : "C9F40E8A-7D8A-42A1-966E-D6FB5BBFE235",
+      "start" : 14400,
+      "text" : "Going forward, each weight does 1 multiply and 1 add.",
+      "words" : [
+        {
+          "end" : 14660,
+          "start" : 14400,
+          "text" : "Going"
+        },
+        {
+          "end" : 14980,
+          "start" : 14660,
+          "text" : "forward,"
+        },
+        {
+          "end" : 15360,
+          "start" : 15160,
+          "text" : "each"
+        },
+        {
+          "end" : 15620,
+          "start" : 15360,
+          "text" : "weight"
+        },
+        {
+          "end" : 15840,
+          "start" : 15620,
+          "text" : "does"
+        },
+        {
+          "end" : 16160,
+          "start" : 15840,
+          "text" : "1"
+        },
+        {
+          "end" : 16680,
+          "start" : 16160,
+          "text" : "multiply"
+        },
+        {
+          "end" : 16860,
+          "start" : 16680,
+          "text" : "and"
+        },
+        {
+          "end" : 17040,
+          "start" : 16860,
+          "text" : "1"
+        },
+        {
+          "end" : 17320,
+          "start" : 17040,
+          "text" : "add."
+        }
+      ]
+    },
+    {
+      "end" : 20240,
+      "id" : "30CBC47D-AF7D-4E95-B55A-9199AE6C7DFA",
+      "start" : 17920,
+      "text" : "So you have 2 flops per weight, 12 for this entire layer.",
+      "words" : [
+        {
+          "end" : 17980,
+          "start" : 17920,
+          "text" : "So"
+        },
+        {
+          "end" : 18000,
+          "start" : 17980,
+          "text" : "you"
+        },
+        {
+          "end" : 18100,
+          "start" : 18000,
+          "text" : "have"
+        },
+        {
+          "end" : 18300,
+          "start" : 18100,
+          "text" : "2"
+        },
+        {
+          "end" : 18640,
+          "start" : 18300,
+          "text" : "flops"
+        },
+        {
+          "end" : 18780,
+          "start" : 18640,
+          "text" : "per"
+        },
+        {
+          "end" : 19040,
+          "start" : 18780,
+          "text" : "weight,"
+        },
+        {
+          "end" : 19380,
+          "start" : 19220,
+          "text" : "12"
+        },
+        {
+          "end" : 19520,
+          "start" : 19380,
+          "text" : "for"
+        },
+        {
+          "end" : 19680,
+          "start" : 19520,
+          "text" : "this"
+        },
+        {
+          "end" : 20000,
+          "start" : 19680,
+          "text" : "entire"
+        },
+        {
+          "end" : 20240,
+          "start" : 20000,
+          "text" : "layer."
+        }
+      ]
+    },
+    {
+      "end" : 23240,
+      "id" : "D89799FB-02A5-413C-B661-03C148FC28D0",
+      "start" : 20680,
+      "text" : "Coming backwards now, the error has to reach the layer before.",
+      "words" : [
+        {
+          "end" : 20900,
+          "start" : 20680,
+          "text" : "Coming"
+        },
+        {
+          "end" : 21240,
+          "start" : 20900,
+          "text" : "backwards"
+        },
+        {
+          "end" : 21500,
+          "start" : 21240,
+          "text" : "now,"
+        },
+        {
+          "end" : 21600,
+          "start" : 21500,
+          "text" : "the"
+        },
+        {
+          "end" : 21940,
+          "start" : 21600,
+          "text" : "error"
+        },
+        {
+          "end" : 22160,
+          "start" : 21940,
+          "text" : "has"
+        },
+        {
+          "end" : 22320,
+          "start" : 22160,
+          "text" : "to"
+        },
+        {
+          "end" : 22540,
+          "start" : 22320,
+          "text" : "reach"
+        },
+        {
+          "end" : 22700,
+          "start" : 22540,
+          "text" : "the"
+        },
+        {
+          "end" : 22840,
+          "start" : 22700,
+          "text" : "layer"
+        },
+        {
+          "end" : 23240,
+          "start" : 22840,
+          "text" : "before."
+        }
+      ]
+    },
+    {
+      "end" : 26460,
+      "id" : "07750BF4-F3E6-4C06-B88C-8C2A6C4FA5F0",
+      "start" : 23740,
+      "text" : "So the same weights in reverse, another multiply, and add each.",
+      "words" : [
+        {
+          "end" : 23800,
+          "start" : 23740,
+          "text" : "So"
+        },
+        {
+          "end" : 23960,
+          "start" : 23800,
+          "text" : "the"
+        },
+        {
+          "end" : 24160,
+          "start" : 23960,
+          "text" : "same"
+        },
+        {
+          "end" : 24380,
+          "start" : 24160,
+          "text" : "weights"
+        },
+        {
+          "end" : 24480,
+          "start" : 24380,
+          "text" : "in"
+        },
+        {
+          "end" : 24760,
+          "start" : 24480,
+          "text" : "reverse,"
+        },
+        {
+          "end" : 25180,
+          "start" : 25000,
+          "text" : "another"
+        },
+        {
+          "end" : 25720,
+          "start" : 25180,
+          "text" : "multiply,"
+        },
+        {
+          "end" : 26000,
+          "start" : 25940,
+          "text" : "and"
+        },
+        {
+          "end" : 26220,
+          "start" : 26000,
+          "text" : "add"
+        },
+        {
+          "end" : 26460,
+          "start" : 26220,
+          "text" : "each."
+        }
+      ]
+    },
+    {
+      "end" : 29500,
+      "id" : "B0DD51E7-816A-41EB-AC13-8853E621237C",
+      "start" : 27020,
+      "text" : "Then each weight needs its own gradient for the optimizer.",
+      "words" : [
+        {
+          "end" : 27140,
+          "start" : 27020,
+          "text" : "Then"
+        },
+        {
+          "end" : 27320,
+          "start" : 27140,
+          "text" : "each"
+        },
+        {
+          "end" : 27540,
+          "start" : 27320,
+          "text" : "weight"
+        },
+        {
+          "end" : 27740,
+          "start" : 27540,
+          "text" : "needs"
+        },
+        {
+          "end" : 27880,
+          "start" : 27740,
+          "text" : "its"
+        },
+        {
+          "end" : 28120,
+          "start" : 27880,
+          "text" : "own"
+        },
+        {
+          "end" : 28500,
+          "start" : 28120,
+          "text" : "gradient"
+        },
+        {
+          "end" : 28840,
+          "start" : 28500,
+          "text" : "for"
+        },
+        {
+          "end" : 29000,
+          "start" : 28840,
+          "text" : "the"
+        },
+        {
+          "end" : 29500,
+          "start" : 29000,
+          "text" : "optimizer."
+        }
+      ]
+    },
+    {
+      "end" : 32800,
+      "id" : "1E3D9797-F314-42B2-A168-6339E3594F35",
+      "start" : 29720,
+      "text" : "Error times input added to a running total is 2 more.",
+      "words" : [
+        {
+          "end" : 30200,
+          "start" : 29720,
+          "text" : "Error"
+        },
+        {
+          "end" : 30500,
+          "start" : 30200,
+          "text" : "times"
+        },
+        {
+          "end" : 30800,
+          "start" : 30500,
+          "text" : "input"
+        },
+        {
+          "end" : 31300,
+          "start" : 30800,
+          "text" : "added"
+        },
+        {
+          "end" : 31480,
+          "start" : 31300,
+          "text" : "to"
+        },
+        {
+          "end" : 31560,
+          "start" : 31480,
+          "text" : "a"
+        },
+        {
+          "end" : 31720,
+          "start" : 31560,
+          "text" : "running"
+        },
+        {
+          "end" : 32080,
+          "start" : 31720,
+          "text" : "total"
+        },
+        {
+          "end" : 32419,
+          "start" : 32080,
+          "text" : "is"
+        },
+        {
+          "end" : 32599,
+          "start" : 32419,
+          "text" : "2"
+        },
+        {
+          "end" : 32800,
+          "start" : 32599,
+          "text" : "more."
+        }
+      ]
+    },
+    {
+      "end" : 34640,
+      "id" : "6C66B201-A7EF-440F-810C-3CF7C76438E3",
+      "start" : 33280,
+      "text" : "That's 6 per weight per token.",
+      "words" : [
+        {
+          "end" : 33500,
+          "start" : 33280,
+          "text" : "That's"
+        },
+        {
+          "end" : 33720,
+          "start" : 33500,
+          "text" : "6"
+        },
+        {
+          "end" : 33880,
+          "start" : 33720,
+          "text" : "per"
+        },
+        {
+          "end" : 34100,
+          "start" : 33880,
+          "text" : "weight"
+        },
+        {
+          "end" : 34240,
+          "start" : 34100,
+          "text" : "per"
+        },
+        {
+          "end" : 34640,
+          "start" : 34240,
+          "text" : "token."
+        }
+      ]
+    },
+    {
+      "end" : 38780,
+      "id" : "405EFFE5-C38C-40E0-9489-C47EADAFC239",
+      "start" : 35140,
+      "text" : "So training compute is 6 times parameters times tokens.",
+      "words" : [
+        {
+          "end" : 35300,
+          "start" : 35140,
+          "text" : "So"
+        },
+        {
+          "end" : 35660,
+          "start" : 35300,
+          "text" : "training"
+        },
+        {
+          "end" : 36380,
+          "start" : 35660,
+          "text" : "compute"
+        },
+        {
+          "end" : 36560,
+          "start" : 36380,
+          "text" : "is"
+        },
+        {
+          "end" : 36940,
+          "start" : 36560,
+          "text" : "6"
+        },
+        {
+          "end" : 37440,
+          "start" : 36940,
+          "text" : "times"
+        },
+        {
+          "end" : 38040,
+          "start" : 37440,
+          "text" : "parameters"
+        },
+        {
+          "end" : 38280,
+          "start" : 38040,
+          "text" : "times"
+        },
+        {
+          "end" : 38780,
+          "start" : 38280,
+          "text" : "tokens."
+        }
+      ]
+    },
+    {
+      "end" : 44760,
+      "id" : "F64EF59A-B1CA-4A78-B4DD-D92F9E5306F9",
+      "start" : 39030,
+      "text" : "An 8 billion parameter model at 15,000 tokens per second per GPU is doing 720 teraflops.",
+      "words" : [
+        {
+          "end" : 39220,
+          "start" : 39030,
+          "text" : "An"
+        },
+        {
+          "end" : 39500,
+          "start" : 39220,
+          "text" : "8"
+        },
+        {
+          "end" : 39740,
+          "start" : 39500,
+          "text" : "billion"
+        },
+        {
+          "end" : 40220,
+          "start" : 39740,
+          "text" : "parameter"
+        },
+        {
+          "end" : 40560,
+          "start" : 40220,
+          "text" : "model"
+        },
+        {
+          "end" : 40760,
+          "start" : 40560,
+          "text" : "at"
+        },
+        {
+          "end" : 41060,
+          "start" : 40760,
+          "text" : "15"
+        },
+        {
+          "end" : 41380,
+          "start" : 41060,
+          "text" : ",000"
+        },
+        {
+          "end" : 41680,
+          "start" : 41380,
+          "text" : "tokens"
+        },
+        {
+          "end" : 41840,
+          "start" : 41680,
+          "text" : "per"
+        },
+        {
+          "end" : 42140,
+          "start" : 41840,
+          "text" : "second"
+        },
+        {
+          "end" : 42340,
+          "start" : 42140,
+          "text" : "per"
+        },
+        {
+          "end" : 42680,
+          "start" : 42340,
+          "text" : "GPU"
+        },
+        {
+          "end" : 42940,
+          "start" : 42680,
+          "text" : "is"
+        },
+        {
+          "end" : 43140,
+          "start" : 42940,
+          "text" : "doing"
+        },
+        {
+          "end" : 43960,
+          "start" : 43140,
+          "text" : "720"
+        },
+        {
+          "end" : 44760,
+          "start" : 43960,
+          "text" : "teraflops."
+        }
+      ]
+    }
+  ],
+  "text" : "Training in LLM costs about 6 flops per parameter per token.\nYou spend 2 flops on the forward pass and about 4 on the backward pass.\nAlmost every parameter sits in a weight matrix.\nHere's a tiny one, 3 inputs, 2 outputs, 6 weights.\nGoing forward, each weight does 1 multiply and 1 add.\nSo you have 2 flops per weight, 12 for this entire layer.\nComing backwards now, the error has to reach the layer before.\nSo the same weights in reverse, another multiply, and add each.\nThen each weight needs its own gradient for the optimizer.\nError times input added to a running total is 2 more.\nThat's 6 per weight per token.\nSo training compute is 6 times parameters times tokens.\nAn 8 billion parameter model at 15,000 tokens per second per GPU is doing 720 teraflops."
+}

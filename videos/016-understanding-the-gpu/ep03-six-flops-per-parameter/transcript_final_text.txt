@@ -1,0 +1,43 @@
+00:00.160-00:04.400
+Training in LLM costs about six flops per parameter per token.
+
+00:04.400-00:08.720
+You spend two flops on the forward pass and about four on the backward pass.
+
+00:08.720-00:11.680
+Almost every parameter sits in a weight matrix.
+
+00:11.260-00:12.220
+Here's a tiny one.
+
+00:12.220-00:14.300
+Three inputs, two outputs, six weights.
+
+00:14.300-00:17.580
+Going forward, each weight does one multiply in one add.
+
+00:17.580-00:20.940
+So you have two flops for weight, 12 for this entire layer.
+
+00:20.500-00:23.540
+Coming backwards now the error has to reach the layer before.
+
+00:23.540-00:26.740
+So the same weights in reverse, another multiply and add each.
+
+00:26.740-00:30.100
+Then each weight needs its own gradient for the optimizer.
+
+00:29.860-00:33.060
+Error times input added to a running total is two more.
+
+00:33.060-00:34.980
+That's six per weight per token.
+
+00:34.980-00:39.380
+So training compute is six times parameters times tokens.
+
+00:38.900-00:45.620
+An 8 billion parameter model at 15,000 tokens per second per GPU is doing 720 teraflops.
+
+
