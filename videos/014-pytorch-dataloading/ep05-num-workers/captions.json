@@ -1,0 +1,447 @@
+[
+ {
+  "start": 0.74,
+  "end": 1.5,
+  "text": "In PyTorch"
+ },
+ {
+  "start": 1.56,
+  "end": 2.04,
+  "text": "num_workers"
+ },
+ {
+  "start": 2.1,
+  "end": 2.64,
+  "text": "doesn't split"
+ },
+ {
+  "start": 2.7,
+  "end": 3.06,
+  "text": "your data"
+ },
+ {
+  "start": 3.12,
+  "end": 3.46,
+  "text": "across"
+ },
+ {
+  "start": 3.52,
+  "end": 4.02,
+  "text": "the workers."
+ },
+ {
+  "start": 4.76,
+  "end": 5.32,
+  "text": "Each worker is"
+ },
+ {
+  "start": 5.38,
+  "end": 6.1,
+  "text": "a full copy"
+ },
+ {
+  "start": 6.16,
+  "end": 6.68,
+  "text": "of your dataset"
+ },
+ {
+  "start": 6.74,
+  "end": 7.2,
+  "text": "fetching and"
+ },
+ {
+  "start": 7.26,
+  "end": 7.68,
+  "text": "collating on"
+ },
+ {
+  "start": 7.74,
+  "end": 8.1,
+  "text": "its own."
+ },
+ {
+  "start": 8.62,
+  "end": 8.9,
+  "text": "So when you"
+ },
+ {
+  "start": 8.96,
+  "end": 9.7,
+  "text": "run an iterable"
+ },
+ {
+  "start": 9.76,
+  "end": 10.3,
+  "text": "dataset with"
+ },
+ {
+  "start": 10.36,
+  "end": 10.62,
+  "text": "multiple"
+ },
+ {
+  "start": 10.68,
+  "end": 11.84,
+  "text": "workers, every"
+ },
+ {
+  "start": 11.9,
+  "end": 12.48,
+  "text": "worker gets the"
+ },
+ {
+  "start": 12.54,
+  "end": 13.38,
+  "text": "same dataset"
+ },
+ {
+  "start": 13.66,
+  "end": 13.92,
+  "text": "object and"
+ },
+ {
+  "start": 13.98,
+  "end": 14.24,
+  "text": "unless you"
+ },
+ {
+  "start": 14.3,
+  "end": 14.64,
+  "text": "split the"
+ },
+ {
+  "start": 14.7,
+  "end": 14.86,
+  "text": "stream"
+ },
+ {
+  "start": 14.92,
+  "end": 15.34,
+  "text": "yourself, they"
+ },
+ {
+  "start": 15.4,
+  "end": 16.06,
+  "text": "all deliver the"
+ },
+ {
+  "start": 16.12,
+  "end": 16.54,
+  "text": "same data."
+ },
+ {
+  "start": 17.08,
+  "end": 17.24,
+  "text": "With a"
+ },
+ {
+  "start": 17.3,
+  "end": 17.66,
+  "text": "map-style"
+ },
+ {
+  "start": 17.72,
+  "end": 18.1,
+  "text": "dataset"
+ },
+ {
+  "start": 18.16,
+  "end": 18.56,
+  "text": "you're fine."
+ },
+ {
+  "start": 19.14,
+  "end": 19.56,
+  "text": "The sampler"
+ },
+ {
+  "start": 19.62,
+  "end": 20.14,
+  "text": "stays in the"
+ },
+ {
+  "start": 20.2,
+  "end": 20.88,
+  "text": "main process"
+ },
+ {
+  "start": 20.94,
+  "end": 22.16,
+  "text": "and hands each"
+ },
+ {
+  "start": 22.22,
+  "end": 22.52,
+  "text": "worker a"
+ },
+ {
+  "start": 22.58,
+  "end": 22.94,
+  "text": "different set"
+ },
+ {
+  "start": 23.0,
+  "end": 23.42,
+  "text": "of indices."
+ },
+ {
+  "start": 24.12,
+  "end": 24.6,
+  "text": "Every sample"
+ },
+ {
+  "start": 24.66,
+  "end": 25.02,
+  "text": "here gets"
+ },
+ {
+  "start": 25.08,
+  "end": 25.66,
+  "text": "fetched once."
+ },
+ {
+  "start": 26.16,
+  "end": 26.48,
+  "text": "But with an"
+ },
+ {
+  "start": 26.54,
+  "end": 26.78,
+  "text": "iterable"
+ },
+ {
+  "start": 26.84,
+  "end": 27.4,
+  "text": "dataset, there"
+ },
+ {
+  "start": 27.46,
+  "end": 28.08,
+  "text": "are no indices."
+ },
+ {
+  "start": 28.88,
+  "end": 29.18,
+  "text": "Each worker"
+ },
+ {
+  "start": 29.24,
+  "end": 29.78,
+  "text": "starts the"
+ },
+ {
+  "start": 29.84,
+  "end": 30.12,
+  "text": "stream from"
+ },
+ {
+  "start": 30.18,
+  "end": 31.1,
+  "text": "the beginning."
+ },
+ {
+  "start": 31.16,
+  "end": 31.32,
+  "text": "So if you"
+ },
+ {
+  "start": 31.38,
+  "end": 31.76,
+  "text": "have the same"
+ },
+ {
+  "start": 31.82,
+  "end": 32.12,
+  "text": "seed"
+ },
+ {
+  "start": 32.18,
+  "end": 32.46,
+  "text": "you're getting"
+ },
+ {
+  "start": 32.54,
+  "end": 33.52,
+  "text": "the same data."
+ },
+ {
+  "start": 33.58,
+  "end": 34.26,
+  "text": "Two workers"
+ },
+ {
+  "start": 34.32,
+  "end": 35.14,
+  "text": "batch size 4"
+ },
+ {
+  "start": 35.2,
+  "end": 35.62,
+  "text": "the first two"
+ },
+ {
+  "start": 35.68,
+  "end": 36.12,
+  "text": "batches will"
+ },
+ {
+  "start": 36.18,
+  "end": 36.74,
+  "text": "be identical."
+ },
+ {
+  "start": 37.3,
+  "end": 37.76,
+  "text": "The fix lives"
+ },
+ {
+  "start": 37.82,
+  "end": 38.28,
+  "text": "inside your"
+ },
+ {
+  "start": 38.34,
+  "end": 39.36,
+  "text": "iter function."
+ },
+ {
+  "start": 39.42,
+  "end": 39.86,
+  "text": "Ask for the"
+ },
+ {
+  "start": 39.92,
+  "end": 41.4,
+  "text": "worker info and"
+ },
+ {
+  "start": 41.46,
+  "end": 41.86,
+  "text": "have worker"
+ },
+ {
+  "start": 41.92,
+  "end": 42.66,
+  "text": "k take"
+ },
+ {
+  "start": 42.72,
+  "end": 43.2,
+  "text": "every nth"
+ },
+ {
+  "start": 43.26,
+  "end": 43.9,
+  "text": "sample"
+ },
+ {
+  "start": 43.96,
+  "end": 45.11,
+  "text": "starting at k."
+ },
+ {
+  "start": 45.17,
+  "end": 45.8,
+  "text": "Now the two"
+ },
+ {
+  "start": 45.86,
+  "end": 46.49,
+  "text": "copies can walk"
+ },
+ {
+  "start": 46.55,
+  "end": 46.9,
+  "text": "the stream in"
+ },
+ {
+  "start": 46.96,
+  "end": 47.21,
+  "text": "step"
+ },
+ {
+  "start": 47.27,
+  "end": 47.68,
+  "text": "and nothing"
+ },
+ {
+  "start": 47.78,
+  "end": 48.06,
+  "text": "is delivered"
+ },
+ {
+  "start": 48.12,
+  "end": 49.02,
+  "text": "twice."
+ },
+ {
+  "start": 49.08,
+  "end": 49.76,
+  "text": "So before you"
+ },
+ {
+  "start": 49.82,
+  "end": 50.3,
+  "text": "increase"
+ },
+ {
+  "start": 50.36,
+  "end": 50.98,
+  "text": "num_workers on"
+ },
+ {
+  "start": 51.04,
+  "end": 51.34,
+  "text": "an iterable"
+ },
+ {
+  "start": 51.4,
+  "end": 52.24,
+  "text": "dataset"
+ },
+ {
+  "start": 52.3,
+  "end": 52.54,
+  "text": "be sure"
+ },
+ {
+  "start": 52.6,
+  "end": 52.96,
+  "text": "you're passing"
+ },
+ {
+  "start": 53.02,
+  "end": 53.4,
+  "text": "that worker"
+ },
+ {
+  "start": 53.46,
+  "end": 54.17,
+  "text": "info to each"
+ },
+ {
+  "start": 54.23,
+  "end": 54.82,
+  "text": "iter function"
+ },
+ {
+  "start": 54.88,
+  "end": 55.72,
+  "text": "so you can"
+ },
+ {
+  "start": 55.78,
+  "end": 56.08,
+  "text": "split the"
+ },
+ {
+  "start": 56.14,
+  "end": 56.36,
+  "text": "stream"
+ },
+ {
+  "start": 56.42,
+  "end": 57.0,
+  "text": "accordingly."
+ }
+]
