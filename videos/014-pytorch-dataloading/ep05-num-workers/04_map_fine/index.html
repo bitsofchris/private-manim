@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 04_map_fine (master 16.810–25.910): "With a map-style dataset, you're fine. The sampler stays in the main
+         process and hands each worker a different set of indices. Every sample here gets fetched once."
+         Opens on SEAM[3] (the trap, hero twins). "map-style" (0.49): the dataset card dips 1 -> 0.25 -> 1 and comes
+         back map-style (__len__/__getitem__), the strike pulls back 1 -> 0 and the twin slides out (twins 1 -> 0,
+         the model chip returns) over 0.7 s; hero dataset. "sampler" (2.47): hero sampler. "each worker" (5.13) and
+         "different" (5.77): the two worker photocopies pulse in turn. "fetched" (8.27): hero batch. Still on SEAM[4]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.1" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.100, MASTER = 16.810;
+  // beat-local cues (master − 16.810), words.json: map-style@17.30 sampler@19.28 each@21.94 different@22.58 fetched@25.08
+  const CUE = {
+    map: 0.49,       /* "map-style": mode -> map, strike 1 -> 0, twins 1 -> 0, hero dataset */
+    sampler: 2.47,   /* "sampler": hero sampler */
+    each: 5.13,      /* "each worker": photocopy 1 pulses */
+    diff: 5.77,      /* "different": photocopy 2 pulses */
+    fetched: 8.27,   /* "fetched": hero batch */
+  };
+  const DIP = 0.5, MOVE = 0.7, PULSE = 0.5;
+  const HOLD = CUE.fetched;                       // nothing moves after the second pulse (6.27); the hero swap lands at 8.27
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const { seg, lerp, pulse } = SC, E = SC.E();
+  const A = SC.SEAM[3], B = SC.SEAM[4];
+  function state(t) {
+    if (t <= CUE.map) return A;
+    if (t >= HOLD) return B;
+    const d = seg(t, CUE.map, CUE.map + DIP);                     // the dip: 1 -> 0.25 -> 1, mode switches at the bottom
+    const dataset = 1 - 0.75 * Math.sin(Math.PI * d);
+    const u = E.io(seg(t, CUE.map, CUE.map + MOVE));
+    return Object.assign({}, B, {
+      mode: d < 0.5 ? A.mode : B.mode, dataset,
+      strike: lerp(A.strike, B.strike, u), twins: lerp(A.twins, B.twins, u),
+      hero: t < CUE.sampler ? "dataset" : "sampler",
+    });
+  }
+  // the two worker photocopies (the <g> children of the fetch glyph): scale about the card centre (150 × 56)
+  function pulseWorkers(t) {
+    const ws = kit.stations.fetch.glyph.children;
+    [CUE.each, CUE.diff].forEach((at, k) => {
+      const p = pulse(t, at, PULSE);
+      if (p > 0) ws[k].setAttribute("transform", `${ws[k].getAttribute("transform")} translate(75 28) scale(${(1 + 0.22 * p).toFixed(4)}) translate(-75 -28)`);
+    });
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    EP5.draw(kit, state(t));
+    pulseWorkers(t);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 09_false_code (beat 9, master 44.855–48.690): "Now the two copies can walk the stream in step and
+         nothing is delivered twice." Opens on SEAM[8] (the shard card, three lines, k and step lit) and holds;
+         "nothing" types line 3 `torch.equal(b1, b2)  # False`, the hero, in by "twice". Ends on SEAM[9]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.835" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.835, MASTER = 44.855;
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const L = EP5.LINES.shard, FROM = SC.SEAM[8], TO = SC.SEAM[9], LAST = [L[3]];
+  // beat-local cues (master − 44.855), from words.json, checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    nothing: 2.525,  /* "nothing" (47.38): line 3 starts typing, the hero (lit twins), cursor on */
+    twice: 3.265,    /* "twice" (48.12): line 3 is in by here */
+  };
+  const CPS = 38;                                       // SC_typingSeconds([line 3], 38) = 0.684: in at 3.21
+  const T_DONE = CUE.nothing + SC_typingSeconds(LAST, CPS);
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t <= CUE.nothing) { EP5.draw(kit, FROM); return; }
+    if (t >= T_DONE) { EP5.draw(kit, TO); return; }   // SEAM[9]: all typed, cursor off, still to the end
+    const typed = EP5.SHARD3 + SC_typedAt(LAST, t - CUE.nothing, CPS);
+    EP5.draw(kit, Object.assign({}, TO, {
+      code: Object.assign({}, TO.code, { typed, lit: typed > EP5.SHARD3 ? "twins" : FROM.code.lit, cursor: 1, blink: t - CUE.nothing }),
+    }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

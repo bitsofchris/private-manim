@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 03_same_data (master 8.360, 8.450 s): "So when you run an iterable dataset with multiple workers,
+         every worker gets the same dataset object, and unless you split the stream yourself, they all deliver the same data."
+         Opens on SEAM[2] (trap, hero collate). "iterable": flip to the iterable card, typed from ~9.70 at 34 cps,
+         the hero following the typed line (dataset -> iter). "same dataset object": the class line is the hero, cursor off.
+         "they": flip back to the trap (hero dataset, the object the card just named). "same": hero twins, the pair pulses once.
+         Still from 8.15; ends on SEAM[3] (trap, hero twins). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.450" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.450, MASTER = 8.360;
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const { seg, pulse } = SC, L = EP5.LINES.iterable, S2 = SC.SEAM[2], S3 = SC.SEAM[3];
+  // beat-local cues (master − 8.360), from words.json, onsets checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    iterable: 1.06,  /* "iterable" @9.42: flip 0 -> 1 to the iterable card over 0.4 s */
+    type: 1.34,      /* typing starts @9.70 (after "iterable" lands) */
+    same: 4.18,      /* "same" @12.54 ("same dataset object"): class line lit "dataset", cursor off */
+    they: 6.88,      /* "they" @15.24: flip 1 -> 0 back to the trap */
+    data: 7.76,      /* "same" @16.12 ("same data"): hero twins, the pair pulses once */
+  };
+  const CPS = 34;                                   // SC_typingSeconds(L, 34) = 2.67: done at 4.01, before "same" (4.18)
+  const PULSE_W = 0.38, HOLD = 8.15;                // pulse ends 8.14; still from BEAT_SECONDS − 0.3
+  // the line being typed: the last line with a character typed; a null lit keeps the previous one
+  function cursorLit(typed) {
+    let n = 0, lit = L[0].lit;
+    L.forEach((ln) => { if (typed > n && ln.lit) lit = ln.lit; n += ln.t.length; });
+    return lit;
+  }
+  function state(t) {
+    if (t <= CUE.iterable) return S2;
+    if (t >= HOLD) return S3;
+    if (t < CUE.they) {
+      const flip = seg(t, CUE.iterable, CUE.iterable + 0.4);
+      const typed = SC_typedAt(L, t - CUE.type, CPS);
+      const lit = t >= CUE.same ? "dataset" : cursorLit(typed);
+      const hero = flip >= 0.6 ? "dataset" : S2.hero;            // the machine's hero changes only while hidden
+      return Object.assign({}, S2, { hero, flip,
+        code: { o: 1, lines: L, typed, lit, cursor: t < CUE.same ? 1 : 0, blink: t } });
+    }
+    const flip = 1 - seg(t, CUE.they, CUE.they + 0.4);
+    const hero = t >= CUE.data ? "twins" : "dataset";
+    if (flip <= 0) return Object.assign({}, S3, { hero });
+    return Object.assign({}, S3, { hero, flip,
+      code: { o: 1, lines: L, typed: Infinity, lit: "dataset", cursor: 0, blink: t } });
+  }
+  // the twin pair's pulse: both cards scale about their own centres, set after draw, removed exactly after
+  const bt = SC.G.batch, LCX = bt.x + bt.w / 2, CY = bt.y + bt.h / 2;   // card centre in each card's local frame
+  const CARDS = [kit.parts.batch, kit.parts.twins];
+  function setPulse(s) {
+    CARDS.forEach((P) => {
+      if (s === 1) {
+        P.svg.forEach((el) => el.removeAttribute("transform"));
+        P.dom.forEach((el) => { el.style.transform = ""; el.style.transformOrigin = ""; });
+        return;
+      }
+      const tr = `translate(${LCX} ${CY}) scale(${s.toFixed(4)}) translate(${-LCX} ${-CY})`;
+      P.svg.forEach((el) => el.setAttribute("transform", tr));
+      // the card's left edge now: its first DOM label (the readout's top row) sits at card x + 26
+      const x0 = parseFloat(P.dom[0].style.left) - 26, cx = x0 + bt.w / 2;
+      P.dom.forEach((el) => {
+        const left = parseFloat(el.style.left) || 0, top = parseFloat(el.style.top) || 0;
+        el.style.transformOrigin = `${cx - left}px ${CY - top}px`;
+        el.style.transform = `scale(${s.toFixed(4)})`;
+      });
+    });
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    EP5.draw(kit, state(t));
+    setPulse(1 + 0.06 * pulse(t, CUE.data, PULSE_W));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

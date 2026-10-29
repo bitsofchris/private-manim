@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 05_no_indices (master 25.910–33.320): "But with an iterable dataset, there are no indices. Each worker
+         starts the stream from the beginning. So if you have the same seed, you're getting the same data."
+         Opens on SEAM[4] (map, hero batch). "iterable" (0.63): the dataset card dips and comes back iterable
+         (__iter__); hero sampler. "no" (1.73): the strike draws across the sampler 0 -> 1 over 0.6 s. "Each"
+         (2.82, onset from the vo_final envelope; words.json has "Each worker"@28.88): flip to the iterable card,
+         fully typed, __iter__ lit, cursor off; the machine under it stays iterable, strike 1, twins 0.
+         "same" (6.74): flip back (from 6.63, "the", so the flip and the slide fit before the hold); the twin
+         slides in 0 -> 1 as the machine comes back (6.74–7.08, fast, eased), hero twins. Still on SEAM[5] from 7.08. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.41" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.410, MASTER = 25.910;
+  // beat-local cues (master − 25.910), words.json + vo_final envelope:
+  // iterable@26.54 no@27.64 Each≈28.73 (onset; "Each worker"@28.88 in words.json) same@32.64
+  const CUE = {
+    iter: 0.63,      /* "iterable": mode -> iterable (dataset dip), hero sampler */
+    no: 1.73,        /* "no": the strike draws 0 -> 1 */
+    each: 2.82,      /* "Each": flip to the iterable card */
+    back: 6.63,      /* "the" (32.54), just before "same": the flip back starts */
+    same: 6.74,      /* "same": the twin slides in, hero twins */
+  };
+  const DIP = 0.5, STRIKE = 0.6, FLIP = 0.4, SLIDE = 0.34;
+  const HOLD = CUE.same + SLIDE;                  // 7.08: still on SEAM[5] (BEAT_SECONDS − 0.3 = 7.11)
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const { seg, lerp } = SC, E = SC.E();
+  const A = SC.SEAM[4], B = SC.SEAM[5];
+  const CARD = { o: 1, lines: EP5.LINES.iterable, typed: Infinity, lit: "iter", cursor: 0 };
+  function state(t) {
+    if (t <= CUE.iter) return A;
+    if (t >= HOLD) return B;
+    const d = seg(t, CUE.iter, CUE.iter + DIP);                  // the dip: 1 -> 0.25 -> 1, mode switches at the bottom
+    const S = Object.assign({}, B, {
+      mode: d < 0.5 ? A.mode : B.mode,
+      dataset: 1 - 0.75 * Math.sin(Math.PI * d),
+      strike: E.io(seg(t, CUE.no, CUE.no + STRIKE)),
+      twins: 0, hero: "sampler",
+    });
+    if (t < CUE.back) {                                          // flip to the card; the machine under it holds
+      S.flip = seg(t, CUE.each, CUE.each + FLIP);
+      if (S.flip > 0) S.code = CARD;
+    } else {                                                     // flip back, then the twin slides in
+      S.flip = 1 - seg(t, CUE.back, CUE.back + FLIP);
+      if (S.flip > 0) S.code = CARD;
+      S.twins = E.io(seg(t, CUE.same, CUE.same + SLIDE));
+      S.hero = "twins";
+    }
+    return S;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    EP5.draw(kit, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

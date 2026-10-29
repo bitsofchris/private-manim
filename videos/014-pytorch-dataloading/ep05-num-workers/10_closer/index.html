@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 10_closer (master 48.690, 9.027 s): the closer, the last frame of the Short. SEAM[9] -> SEAM[10].
+         Opens on the shard card, # False lit, the fixed machine under it.
+         "So" (49.08): flip back to the fixed machine, fetch the hero. "num_workers" (50.40): the two
+         worker photocopies swell once. "passing" (52.70): flip to the shard card, get_worker_info() lit;
+         still from there to the end. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.027" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.027, MASTER_START = 48.690;
+  // cues, beat-local = master - 48.690 (words.json, checked on the vo_final RMS envelope)
+  const CUE = {
+    so: 0.39,       /* "So" @49.08 */
+    workers: 1.71,  /* "num_workers" @50.36 (onset after the gap at 50.38) */
+    passing: 4.01,  /* "passing" @52.66 (onset after the p-closure at 52.70) */
+  };
+  const FLIP = 0.4, PULSE_W = 0.5, PULSE_AMP = 0.12;
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const { seg, pulse } = SC;
+  const FROM = SC.SEAM[9], TO = SC.SEAM[10];
+  // between the flips: the fixed machine (same as both seams), the card behind it already lit fetch
+  const between = (flip) => Object.assign({}, TO, { flip });
+  function state(t) {
+    if (t <= CUE.so) return FROM;
+    if (t >= CUE.passing + FLIP) return TO;
+    if (t < CUE.so + FLIP) {
+      const f = 1 - seg(t, CUE.so, CUE.so + FLIP);
+      return f > 0.4 ? Object.assign({}, FROM, { flip: f }) : between(f);   // the lit swaps only while the card is invisible
+    }
+    return between(seg(t, CUE.passing, CUE.passing + FLIP));
+  }
+  // "num_workers": the two worker photocopies swell about their own centres (150 x 56 cards), after draw
+  function workerPulse(s) {
+    if (s === 1) return;
+    Array.from(kit.stations.fetch.glyph.children).forEach((g) => {
+      const tr = g.getAttribute("transform") || "";
+      g.setAttribute("transform", `${tr} translate(75 28) scale(${s.toFixed(4)}) translate(-75 -28)`);
+    });
+  }
+  function render(t) {
+    SC.clock = MASTER_START + t;
+    EP5.draw(kit, state(t));
+    workerPulse(1 + PULSE_AMP * pulse(t, CUE.workers, PULSE_W));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

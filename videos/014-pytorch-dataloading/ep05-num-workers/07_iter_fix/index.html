@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 07_iter_fix (master 37.020, 2.110 s): "The fix lives inside your iter function."
+         Opens on SEAM[6] (the workers card, # True lit; the trap under it). "The": flip 1 -> 0 back to the
+         trap. "iter": hero -> __iter__ on the Dataset card. Still from there; ends on SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.11" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.110, MASTER = 37.020;
+  // beat-local cues (master − 37.020), from words.json, checked on a 20 ms RMS envelope of vo_final.wav:
+  // The@37.30 fix@37.42 lives@37.64 inside@37.82 your@38.10 iter@38.34 function.@38.52
+  const CUE = {
+    the: 0.26,        /* "The" (37.30; onset 37.28): flip 1 -> 0 over 0.4 s */
+    iter: 1.32,       /* "iter" (38.34): hero -> __iter__, then still (SEAM[7]) */
+  };
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const { seg } = SC, FROM = SC.SEAM[6], TO = SC.SEAM[7];
+  function state(t) {
+    if (t <= CUE.the) return FROM;
+    if (t >= CUE.iter) return TO;
+    return Object.assign({}, FROM, { flip: 1 - seg(t, CUE.the, CUE.the + 0.4) });   // the trap, twins hero, comes back
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    EP5.draw(kit, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
