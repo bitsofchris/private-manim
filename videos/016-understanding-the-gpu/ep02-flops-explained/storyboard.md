@@ -93,7 +93,7 @@ through four states (grow, anatomy, point glide, second number).
 
 ## Final beats (the contract; `beats.json`)
 
-VO 58.365 s (`vo_final.wav`). From 61.9 s raw: no line cut; pauses (which
+VO 51.885 s (`vo_final.wav`). Chris, after the first cut: "A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion." cut (`tools/cut_vo.py --cut 35.50-41.98`, both edges in digital silence; 58.365 → 51.885 s). From 61.9 s raw: no line cut; pauses (which
 in this take are breaths at about −50 dB, so the threshold is −45 dB, not
 `auto`'s −53.8) capped at 0.3 s.
 
@@ -105,9 +105,9 @@ in this take are breaths at about −50 dB, so the threshold is −45 dB, not
 | 4 | 14.525 | 5.635 | `04_range` | The point floats, so one format holds a ten-millionth and three million. |
 | 5 | 20.160 | 3.030 | `05_memory` | Every weight, activation, and gradient is one of these numbers. |
 | 6 | 23.190 | 9.130 | `06_count` | FLOPs with a small s is a count. Training an 8 billion parameter model on 15,000 tokens costs about 720 trillion FLOPs. |
-| 7 | 32.320 | 9.635 | `07_rate` | FLOPS with a capital S is per second. This is a rate. A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion. |
-| 8 | 41.955 | 9.730 | `08_matmul` | A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. |
-| 9 | 51.685 | 6.680 | `09_bill` | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. |
+| 7 | 32.320 | 3.180 | `07_rate` | FLOPS with a capital S is per second. This is a rate. |
+| 8 | 35.500 | 9.705 | `08_matmul` | A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. |
+| 9 | 45.205 | 6.680 | `09_bill` | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. |
 
 ## Seam states (code: `_kit/seam.js`, `SC.SEAM[0..9]`)
 

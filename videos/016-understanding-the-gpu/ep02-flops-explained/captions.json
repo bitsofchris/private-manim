@@ -215,133 +215,103 @@
   "text": "This is a rate."
  },
  {
-  "start": 35.76,
-  "end": 36.88,
-  "text": "A B200 peaks"
- },
- {
-  "start": 36.94,
-  "end": 38.6,
-  "text": "near 2,250"
- },
- {
-  "start": 38.66,
-  "end": 39.28,
-  "text": "teraFLOPS"
- },
- {
-  "start": 39.34,
-  "end": 40.22,
-  "text": "in bf16."
- },
- {
-  "start": 40.84,
-  "end": 41.16,
-  "text": "Tera is"
- },
- {
-  "start": 41.22,
-  "end": 41.7,
-  "text": "a trillion."
- },
- {
-  "start": 42.21,
-  "end": 42.96,
+  "start": 35.73,
+  "end": 36.48,
   "text": "A transformer's"
  },
  {
-  "start": 43.02,
-  "end": 43.42,
+  "start": 36.54,
+  "end": 36.94,
   "text": "compute is"
  },
  {
-  "start": 43.48,
-  "end": 44.04,
+  "start": 37.0,
+  "end": 37.56,
   "text": "nearly all"
  },
  {
-  "start": 44.1,
-  "end": 44.4,
+  "start": 37.62,
+  "end": 37.92,
   "text": "matrix"
  },
  {
-  "start": 44.46,
-  "end": 45.36,
+  "start": 37.98,
+  "end": 38.88,
   "text": "multiplies and"
  },
  {
-  "start": 45.42,
-  "end": 45.96,
+  "start": 38.94,
+  "end": 39.48,
   "text": "a matmul is"
  },
  {
-  "start": 46.02,
-  "end": 46.92,
+  "start": 39.54,
+  "end": 40.44,
   "text": "only multiplies"
  },
  {
-  "start": 46.96,
-  "end": 47.34,
+  "start": 40.48,
+  "end": 40.86,
   "text": "and adds."
  },
  {
-  "start": 47.88,
-  "end": 48.86,
+  "start": 41.4,
+  "end": 42.38,
   "text": "GPUs are built"
  },
  {
-  "start": 48.92,
-  "end": 49.16,
+  "start": 42.44,
+  "end": 42.68,
   "text": "to do"
  },
  {
-  "start": 49.22,
-  "end": 50.06,
+  "start": 42.74,
+  "end": 43.58,
   "text": "exactly that"
  },
  {
-  "start": 50.48,
-  "end": 50.84,
+  "start": 44.0,
+  "end": 44.36,
   "text": "thousands"
  },
  {
-  "start": 50.9,
-  "end": 51.38,
+  "start": 44.42,
+  "end": 44.9,
   "text": "at once."
  },
  {
-  "start": 51.99,
-  "end": 52.48,
+  "start": 45.51,
+  "end": 46.0,
   "text": "Divide a run's"
  },
  {
-  "start": 52.54,
-  "end": 53.56,
+  "start": 46.06,
+  "end": 47.08,
   "text": "FLOPs by the"
  },
  {
-  "start": 53.62,
-  "end": 54.76,
+  "start": 47.14,
+  "end": 48.28,
   "text": "FLOPS you get,"
  },
  {
-  "start": 54.82,
-  "end": 55.54,
+  "start": 48.34,
+  "end": 49.06,
   "text": "and you have"
  },
  {
-  "start": 55.6,
-  "end": 56.92,
+  "start": 49.12,
+  "end": 50.44,
   "text": "GPU-hours."
  },
  {
-  "start": 56.98,
-  "end": 57.3,
+  "start": 50.5,
+  "end": 50.82,
   "text": "This is the"
  },
  {
-  "start": 57.36,
-  "end": 58.3,
+  "start": 50.88,
+  "end": 51.82,
   "text": "bill."
  }
 ]
