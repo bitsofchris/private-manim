@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_range (cut 3 -> 4), master 14.525-20.160: "The point floats, so one format holds a
+         ten-millionth and three million."
+         "floats": hero -> the point; row 1's point glides right to sit after the 1 (1.0 s), the
+         passed zeros dim; the point swells 1.7x while it is the hero (a local helper). "ten-millionth": hero -> exponent (-7). "three million": row 2
+         (3000000. -> +3.0 x 10^6) fades in and its point glides left to after the 3 (0.6 s), the
+         anatomy boxes switch to + 3.0 6 on the word, the exponent the hero. Still from 5.33;
+         ends on SEAM[4]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/flops.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.635" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.635, START = 14.525;
+  // cues, beat-local (master - START), from words.json (onsets agree on the vo_final.wav envelope)
+  const CUE = {
+    floats: 0.785,  /* "floats," 15.31 */
+    tenth: 3.435,   /* "ten-millionth" 17.96 */
+    three: 4.795,   /* "three million." 19.32 */
+  };
+  const GLIDE1 = 1.0, ROW2_IN = 4.695, ROW2_FADE = 0.2, GLIDE2_FROM = 4.73, GLIDE2 = 0.6;  // row 2 done at 5.33
+  const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+  const ramp = (t, a, d) => ease(SC.seg(t, a, a + d));
+  const kit = EP.mount(document.getElementById("root"));
+  // local: the hero point is one 60 px glyph, so it swells while it is the hero (back to 1 by "ten-millionth")
+  const SWELL = 0.7, SWELL_IN = 0.2;
+  const point = kit.float.rows[0].point;
+  function setSwell(t) {
+    const u = ramp(t, CUE.floats, SWELL_IN) * (1 - ramp(t, CUE.tenth - SWELL_IN, SWELL_IN));
+    if (u <= 0) { point.style.transform = ""; return; }
+    point.style.transformOrigin = "50% 80%";
+    point.style.transform = `scale(${(1 + SWELL * u).toFixed(4)})`;
+  }
+  function state(t) {
+    if (t <= 0) return SC.SEAM[3];
+    if (t >= GLIDE2_FROM + GLIDE2) return SC.SEAM[4];
+    const hero = t >= CUE.tenth ? "exp" : t >= CUE.floats ? "point" : "exp";
+    const float = Object.assign({}, SC.SEAM[3].float, {
+      glide1: ramp(t, CUE.floats, GLIDE1),
+      row2: ramp(t, ROW2_IN, ROW2_FADE),
+      glide2: ramp(t, GLIDE2_FROM, GLIDE2),
+      anat: t >= CUE.three ? 2 : 1,
+    });
+    return Object.assign({}, SC.SEAM[3], { hero, float });
+  }
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(state(t));
+    setSwell(t);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
