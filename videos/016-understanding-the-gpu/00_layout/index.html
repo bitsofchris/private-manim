@@ -38,7 +38,7 @@
     if (t < 2) {
       kit.draw({ shimmer: 1 });
     } else if (t < 4) {
-      kit.draw({ lit: 0.08, tc: 1, hero: "tc", bw: 1, queueO: 0, caption: "tensor cores: the corners" });
+      kit.draw({ lit: 0.08, tc: 1, hero: "tc", bw: 1, queueO: 0, title: "tensor cores" });
     } else if (t < 6) {
       const drain = seg(t, 4.3, 5.3);
       kit.draw({ drain, queue: ["matmul", "add", "relu", "∇", "adam", "matmul"], cpuWait: 1, hero: "queue", strip: 0,
@@ -46,10 +46,10 @@
     } else if (t < 8) {
       kit.draw({ cpu: 0, loader: 1, queueO: 0, hbm: 0, meter: 1, hero: "meter", slots: "111100111110001111100111" });
     } else if (t < 10) {
-      kit.draw({ one: 77, hbm: 0, meter: 1, mfu: 0.01, mfuText: "~0%", hero: "util", caption: "one tiny kernel" });
+      kit.draw({ one: 77, hbm: 0, meter: 1, mfu: 0.01, mfuText: "~0%", hero: "util", title: "one tiny kernel" });
     } else {
       const typed = SC_typedAt(C.mfu, (t - 10) * 2.5);
-      kit.draw({ hbm: 0, meter: 1, hero: "meter", strip: 0, caption: "",
+      kit.draw({ hbm: 0, meter: 1, hero: "meter", strip: 0,
                  code: { o: 1, lines: C.mfu, typed, lit: null, cursor: 1, blink: t } });
     }
   }

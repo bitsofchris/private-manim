@@ -5,7 +5,7 @@
 // Loaded after kit/chip.js; chip.js picks it up through window.SC_makeCode and
 // drives it from S.code.
 //
-// Card: x 65–950, centred on y = cy (default 1335: the bottom slot, y 1110–1536,
+// Card: x 65–950, centred on y = cy (default 1345: the bottom slot, y 1180–1536,
 // which the time strip uses when the card is off). 40 px monospace fits 36
 // characters; a longer line shrinks the type for the whole card.
 //
@@ -20,7 +20,7 @@
 //   cy                the card's centre y (default CARD.cy)
 (function () {
   const PAL = { panel: "#14142B", ink: "#ECEBE4", hero: "#C084FC", dim: "#8A8FB0" };
-  const CARD = { x: 65, w: 885, pad: 28, size: 40, rows: 6, cy: 1335, charW: 0.6 };
+  const CARD = { x: 65, w: 885, pad: 28, size: 40, rows: 6, cy: 1345, charW: 0.6 };
   const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 
   // How many characters a typist has landed `seconds` after starting (014's typist).

@@ -19,9 +19,9 @@
 //                             with its tensor core in the bottom-right corner
 //   side slot    y 470–1060   x 790–950: the HBM slab (and the pipe to it, x 693–790),
 //                             or the MFU meter; one at a time
-//   caption      y 1095       one dim line under the chip
-//   bottom slot  y 1150–1536  the time strip (slots 1190–1250; the readout left and
-//                             "time →" right at 1275), or the code card (kit/code.js);
+//   title        y 1090       "GPU", bold and centred under the chip, the CPU label's size
+//   bottom slot  y 1180–1536  the time strip (slots 1200–1260; the readout left and
+//                             "time →" right at 1285), or the code card (kit/code.js);
 //                             one at a time
 //
 // S fields (all optional; SC.REST is the rest state):
@@ -38,7 +38,8 @@
 //   util "…"          the strip's readout (default GPU_DATA.run.util)
 //   mfu 0..1          the meter's fill; mfuText its readout
 //   bw 0|1            "8 TB/s" in the HBM slab
-//   caption "…"       the line under the chip ("" for none)
+//   title "…"         the label under the chip (default "GPU"; a beat may rename it, e.g. "tensor cores";
+//                     it goes magenta with the chip, or with tc when tc is the hero)
 //   cpu, queueO, loader, chip, hbm, meter, strip   opacities (queueO: the queue's)
 //   code {o, lines, typed, lit, cursor, blink, cy}   the code card (kit/code.js)
 (function () {
@@ -58,8 +59,8 @@
     queue: { x: 325, y: 280, w: 115, h: 70, pitch: 127, max: 5 },
     chip: { x: 65, y: 450, pitch: 50, cell: 42, pad: 18 },
     side: { x: 790, y: 470, w: 160, h: 590 },
-    caption: { y: 1095 },
-    strip: { x: 65, y: 1190, h: 60, n: 24, w: 31, pitch: 37, readout: 1275 },
+    title: { y: 1090 },
+    strip: { x: 65, y: 1200, h: 60, n: 24, w: 31, pitch: 37, readout: 1285 },
   };
   G.chip.size = N * G.chip.pitch + G.chip.pad * 2 - 8;                // 628
   G.queue.frontX = G.queue.x + G.queue.w / 2;                         // the arrow into the chip
@@ -140,16 +141,17 @@
       const tc = rect(chipG, x + 24, y + 24, 14, 14, { fill: PAL.grid, rx: 3 });
       cells.push({ body, tc, x, y });
     }
-    const caption = label(root, "", { left: c.x, top: G.caption.y, size: 36, color: PAL.dim });
+    const title = label(root, "", { left: c.x, top: G.title.y, size: 60, width: c.size });
 
     // side slot: HBM and its pipe, or the MFU meter
     const s = G.side;
     const hbmG = node("g", {}, svg);
     const hbmBox = rect(hbmG, s.x, s.y, s.w, s.h, { fill: PAL.panel, stroke: PAL.ink, "stroke-width": 6 });
     const pipe = [0, 1, 2].map((k) => rect(hbmG, c.x + c.size, 700 + k * 40, s.x - c.x - c.size, 22, { fill: PAL.dim, rx: 6, opacity: 0.8 }));
-    const hbmLab = label(root, D.hbm.name, { left: s.x, top: 700, size: 52, width: s.w });
-    const hbmSize = label(root, D.hbm.size, { left: s.x, top: 765, size: 34, width: s.w, color: PAL.dim });
-    const hbmBw = label(root, D.hbm.bw, { left: s.x, top: 815, size: 34, width: s.w, color: PAL.dim });
+    const hbmLab = label(root, D.hbm.name[0], { left: s.x, top: 685, size: 40, width: s.w });
+    const hbmLab2 = label(root, D.hbm.name[1], { left: s.x, top: 735, size: 32, width: s.w });
+    const hbmSize = label(root, D.hbm.size, { left: s.x, top: 800, size: 34, width: s.w, color: PAL.dim });
+    const hbmBw = label(root, D.hbm.bw, { left: s.x, top: 848, size: 34, width: s.w, color: PAL.dim });
     const meterG = node("g", {}, svg);
     const gauge = { x: s.x + 30, y: s.y + 150, w: s.w - 60, h: s.h - 170 };
     const meterBox = rect(meterG, gauge.x, gauge.y, gauge.w, gauge.h, { fill: PAL.bg, stroke: PAL.ink, "stroke-width": 6, rx: 16 });
@@ -212,11 +214,12 @@
         cl.tc.setAttribute("width", 14 + g); cl.tc.setAttribute("height", 14 + g);
         cl.tc.setAttribute("fill", hero === "tc" ? (on ? PAL.hero : "#4B2E6B") : on ? PAL.dataDeep : S.tc > 0.5 ? PAL.muted : PAL.grid);
       });
-      caption.textContent = S.caption; show(caption, S.chip * (S.caption ? 1 : 0));
+      title.textContent = S.title; show(title, S.chip * (S.title ? 1 : 0));
+      title.style.color = hero === "chip" || hero === "tc" ? PAL.hero : PAL.ink;
 
       // side slot
-      show(hbmG, S.hbm); show(hbmLab, S.hbm); show(hbmSize, S.hbm); show(hbmBw, S.hbm * S.bw);
-      hbmBox.setAttribute("stroke", col("hbm", PAL.ink)); hbmLab.style.color = col("hbm", PAL.ink);
+      show(hbmG, S.hbm); show(hbmLab, S.hbm); show(hbmLab2, S.hbm); show(hbmSize, S.hbm); show(hbmBw, S.hbm * S.bw);
+      hbmBox.setAttribute("stroke", col("hbm", PAL.ink)); hbmLab.style.color = hbmLab2.style.color = col("hbm", PAL.ink);
       pipe.forEach((p) => p.setAttribute("fill", col("pipe", PAL.dim)));
       show(meterG, S.meter); show(meterLab, S.meter); show(meterVal, S.meter);
       const fh = (gauge.h - 20) * clamp01(S.mfu);
@@ -236,7 +239,7 @@
   }
 
   const REST = { lit: D.run.mfu, shimmer: 0, one: -1, tc: 0, hero: null, queue: null, drain: 0, cpuWait: 0,
-                 slots: null, util: null, mfu: D.run.mfu, mfuText: null, bw: 0, caption: D.chip.caption,
+                 slots: null, util: null, mfu: D.run.mfu, mfuText: null, bw: 0, title: D.chip.title,
                  cpu: 1, queueO: 1, loader: 0, chip: 1, hbm: 1, meter: 0, strip: 1, code: { o: 0 } };
   // Register the beat: one paused timeline whose only job is to be the clock.
   function start(seconds, render) {
