@@ -263,12 +263,16 @@ another@8.62 process.@8.82
 Opens on SEAM1[5]: cook 2 chopping, and it keeps chopping through the
 close (`SC.chopAt(t, 0.2, HOLD, 2)`, still for the first 0.2 s so the cut
 encodes clean; `cooks[1].cut` 0.8 → 1 over 0 → HOLD). On "threads don't
-help" (0.50 → 1.16) the kitchen shrinks: `K.half` 0 → 1 over 0.6 s
-(`SC.io`), the chip fades out over 0.2 s from 0.50, the slot fades out.
+help" (0.50) the chip fades out over 0.2 s and the slot fades out; the
+kitchen stays full size (Chris, 10/29: shrink only when the second
+kitchen comes in).
 On "waiting" (2.94) `pulse.io` bumps (`SC.pulse(t, 2.94, 0.6)`); on
 "running Python" (3.80) `pulse.py` bumps. On "threads work" (5.76)
 `close.a` 0 → 1 over 0.2 s landing at 5.76; on "running Python," (7.08)
-`close.b` likewise. On "second kitchen" (7.86 → 8.26) `panel.split`
+`close.b` likewise; the kit draws both inside the kitchen above the cooks
+while it is full size. From 7.26 the kitchen shrinks: `K.half` 0 → 1 over
+0.6 s (`SC.io`), landing on "second"; the kit crossfades the close lines
+to the gap below it. On "second kitchen" (7.86 → 8.26) `panel.split`
 0 → 1 (`SC.io`): the wide panel narrows to `process 1`, its rows at half
 width, and `process 2` appears once the left has narrowed; at the same
 time the second kitchen draws in (`twin.o` 1, `twin.draw` 0 → 1 over

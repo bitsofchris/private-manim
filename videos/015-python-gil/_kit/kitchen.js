@@ -17,7 +17,8 @@
 //   labels    y 235–367   "kitchen / process" top-left (stays), one slot
 //                         top-right that shows the thing just named
 //   chip      y 450       one line of code inside the kitchen (requests.get(url) …)
-//   close     y 690/780   "waiting → threads", "running Python → processes"
+//   close     y 420/500   "waiting → threads", "running Python → processes" inside the
+//                         kitchen, sliding to y 690/780 as it shrinks
 //
 // The knife: a chef's knife with the tip resting on the cutting board; the
 // handle rocks in the holder's hand (S.chop), the carrot under the blade
@@ -57,12 +58,13 @@
   const KNIFE_L = 150;                                // tip → end of the grip, at scale 1
   const OVEN = { x: 846, y: 660, w: 96, h: 180 };
   const APPL = { x: 96, y: 760, w: 110, h: 80 };
-  const PANEL = { x: 80, y: 965, w: 870, h: 335, title: 975, row0: 1050, pitch: 64, barX: 400, barX1: 930, barH: 44 };
+  const PANEL = { x: 80, y: 965, w: 870, h: 350, title: 975, row0: 1050, pitch: 64, barX: 400, barX1: 930, barH: 44 };
   const HALF = 0.48;                                  // the kitchens' scale at the close (two fit side by side with a gap)
   const TWIN = { x: 532, y: 380 };                    // where the second kitchen's top-left lands at the close
   const PANEL2 = { x: 525, w: 425, barX: 675 };        // the right half panel; the left half keeps PANEL.x with SPLIT bars
   const SPLIT = { w: 425, barX: 230, barX1: 485 };
-  const CLOSE_Y = [690, 780];
+  const CLOSE_Y = [690, 780];                         // the close lines, in the gap once the kitchen is half size
+  const CLOSE_IN = [420, 500];                        // ... and inside the full-size kitchen, above the cooks, before that (Chris, 10/29: shrink only when the second kitchen comes in)
 
   // ---- the state ----
   const REST = {
@@ -316,7 +318,11 @@
       slot.a.textContent = S.slot.top; slot.b.textContent = S.slot.bottom;
       slot.set(S.slot.o, S.slot.hero);
       chip.textContent = S.chip.text; domOpac(chip, S.chip.o * S.K.o);
-      domOpac(closeA, S.close.a); domOpac(closeB, S.close.b);
+      // the close lines: inside the kitchen while it is full size, in the gap once it is half size; while it shrinks they
+      // fade out in place and fade back in at the gap (a slide would cross the shrinking box)
+      const half = clamp01(S.K.half), gap = half >= 0.5 ? 1 : 0, cf = seg(Math.abs(1 - 2 * half), 0.4, 1);
+      closeA.style.top = `${gap ? CLOSE_Y[0] : CLOSE_IN[0]}px`; closeB.style.top = `${gap ? CLOSE_Y[1] : CLOSE_IN[1]}px`;
+      domOpac(closeA, S.close.a * cf); domOpac(closeB, S.close.b * cf);
       // the panel
       const P = S.panel, split = clamp01(P.split || 0), lanes = clamp01(P.lanes);
       opac(gPanel, P.o);
@@ -338,7 +344,7 @@
     return { draw, svg, gKit: main.g, gTwin: twin.g, cooks: main.cooks, knife: main.knife, twin, labels: { labK, slot }, chip, title, closeA, closeB, bars, bars2, gPanel, gPanel2 };
   }
 
-  window.SC = { PAL, BOX, FEET, FIG, SPOT, OVEN, APPL, PANEL, PANEL2, SPLIT, TWIN, HALF, CLOSE_Y, BOARD, TIP,
+  window.SC = { PAL, BOX, FEET, FIG, SPOT, OVEN, APPL, PANEL, PANEL2, SPLIT, TWIN, HALF, CLOSE_Y, CLOSE_IN, BOARD, TIP,
                 REST, SEAM1, PROTO, SLOT, STAIR, OVEN_ROWS, APPL_ROWS, CLOSE_ROWS, CLOSE_ROWS2, TWIN_COOKS, KIT, cooksAt,
                 state, tween, merge, mount, lerp, clamp01, seg, io, pulse, chopAt,
                 SEAM: SEAM1 };

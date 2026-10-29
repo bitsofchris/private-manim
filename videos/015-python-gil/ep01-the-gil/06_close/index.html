@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- 06_close (35.880 s, 10.210 s): SEAM1[5] -> SEAM1[6]. "But when threads don't help, ask one thing. Is this thread
          waiting, or is it running Python? If it's waiting, then threads work. But if it's running Python, you need a
-         second kitchen or another process." The kitchen shrinks to half size (cook 2 keeps chopping), the bars pulse on
-         their words, the two close lines land. On "second kitchen" the panel splits into "process 1" / "process 2" and a
-         second kitchen draws in at right; its cooks walk in, a knife lands, cook 1 chops, and the two magenta bars grow
+         second kitchen or another process." Cook 2 keeps chopping, the bars pulse on their words, the two close lines land inside the kitchen above the cooks. Just before "second kitchen" the kitchen shrinks to half size, left, and the close lines slide down into the gap; the panel splits into "process 1" / "process 2" and a second kitchen draws in at right; its cooks walk in, a knife lands, cook 1 chops, and the two magenta bars grow
          side by side (Chris, 10/29: show the second kitchen running, with its own four threads). -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
@@ -28,7 +26,7 @@
   // Beat-local cues (master - 35.880), from words.json.
   const CUE = {
     threads: 0.50,   /* "threads" (don't help): the chop stops, the chip and slot fade */
-    help:    1.16,   /* "help": the kitchen is at half size */
+    help:    1.16,   /* "help" */
     waiting: 2.94,   /* "waiting": the dashed bar pulses */
     running: 3.80,   /* "running" (Python?): the magenta bars pulse */
     work:    5.76,   /* "threads" (work): "waiting -> threads" lands */
@@ -38,7 +36,8 @@
   };
   const HOLD = 9.91;                 // still from here (VO ends 9.34)
   const SHRINK = 0.6, SWAP_OUT = 0.15, SWAP_IN = 0.2;
-  const T = { split: 7.86, draw: 7.86, walk: 8.16, knife: 8.76, chop: 8.80 };   // the second kitchen comes alive on "second kitchen"
+  const T = { shrink: 7.26, split: 7.86, draw: 7.86, walk: 8.16, knife: 8.76, chop: 8.80 };   // the second kitchen comes alive on "second kitchen"
+  // the kitchen shrinks only to make room for it (7.26 -> 7.86, landing on "second"); the close lines sit inside the kitchen until then
   const WALK = 0.5, STAGGER = 0.12;
 
   const root = document.getElementById("root");
@@ -64,7 +63,7 @@
     const inB = seg(t, CUE.process - SWAP_IN, CUE.process);
     const slot = inB > 0 ? SC.merge(SC.SLOT.twin, { o: inB }) : SC.merge(SC.SLOT.appl, { o: outA });
     const S = SC.state(A, {
-      K: { half: io(seg(t, CUE.help - SHRINK, CUE.help)) },
+      K: { half: io(seg(t, T.shrink, T.shrink + SHRINK)) },
       chip: { o: 1 - seg(t, CUE.threads, CUE.threads + 0.2) },
       slot,
       panel: { pulse: { io: pulse(t, CUE.waiting, 0.6), py: pulse(t, CUE.running, 0.6) }, split, rows: leftRows(split, grow) },
