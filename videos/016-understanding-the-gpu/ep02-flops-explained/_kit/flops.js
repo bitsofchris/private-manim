@@ -329,7 +329,7 @@
 
   // ---- numbers streaming from GPU memory into the chip ----
   function makeStream(svg) {
-    const x0 = SC.G.side.x + 10, x1 = SC.G.chip.x + SC.G.chip.size - 110, span = x0 - x1, speed = 260, gap = 0.6;
+    const x0 = SC.G.side.x + 10, x1 = SC.G.chip.x + SC.G.chip.size - 20, span = x0 - x1, speed = 260, gap = 0.6;
     const dots = [];
     [0, 1, 2].forEach((p) => [0, 1, 2].forEach((q) => dots.push({ p, q, r: SC.node("rect", { width: 30, height: 30, rx: 6, fill: PAL.data, stroke: PAL.bg, "stroke-width": 4, y: 696 + p * 40 }, svg) })));
     function set(K) {
@@ -340,7 +340,7 @@
         const on = d >= 0 && d <= span;
         const x = x0 - d - 15;
         r.setAttribute("x", x);
-        const fade = on ? Math.min(1, d / 30, (span - d) / 50) : 0;
+        const fade = on ? Math.min(1, d / 20, (span - d) / 25) : 0;
         r.setAttribute("opacity", K.o * Math.max(0, fade));
       });
     }
