@@ -66,6 +66,19 @@ class StateCheck(unittest.TestCase):
         out = subprocess.run(["node", "-e", node], capture_output=True, text=True, check=True).stdout
         self.assertEqual(json.loads(out), [])
 
+    def test_infinity_equals_infinity(self):
+        # a fully typed code card is `typed: Infinity`; Infinity - Infinity is NaN, so the tolerance test alone failed it
+        node = ("const {diff} = require(%s);"
+                "console.log(JSON.stringify(diff({typed: Infinity}, {typed: Infinity}, 1e-6)))") % json.dumps(str(TOOL))
+        out = subprocess.run(["node", "-e", node], capture_output=True, text=True, check=True).stdout
+        self.assertEqual(json.loads(out), [])
+
+    def test_the_stub_dom_has_svg_and_remove_attribute(self):
+        node = ("const m = require(%s); const d = m.stubDom ? m.stubDom() : null;"
+                "if (!d) { console.log('skip'); } else { const e = d.createElementNS('svg', 'g'); e.removeAttribute('x'); console.log('ok'); }") % json.dumps(str(TOOL))
+        out = subprocess.run(["node", "-e", node], capture_output=True, text=True, check=True).stdout.strip()
+        self.assertEqual(out, "ok")
+
 
 if __name__ == "__main__":
     unittest.main()

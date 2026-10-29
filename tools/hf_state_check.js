@@ -49,7 +49,7 @@ function diff(a, b, tol) {
   for (const k of new Set([...Object.keys(A), ...Object.keys(B)])) {
     const x = A[k], y = B[k];
     if (empty(x) && empty(y)) continue;
-    const same = typeof x === "number" && typeof y === "number" ? Math.abs(x - y) <= tol : x === y;
+    const same = x === y || (typeof x === "number" && typeof y === "number" && Math.abs(x - y) <= tol);  // x === y first: Infinity − Infinity is NaN
     if (!same) bad.push([k, x, y]);
   }
   return bad;
@@ -67,7 +67,7 @@ function stubDom() {
       appendChild(c) { this.children.push(c); c.parentNode = this; return c; },
       get firstChild() { return this.children[0] || null; },
       querySelectorAll() { const all = []; const walk = (n) => n.children.forEach((c) => { all.push(c); walk(c); }); walk(this); return all; },
-      getContext: ctx2d, setAttribute() {}, getAttribute() { return null; } };
+      getContext: ctx2d, setAttribute() {}, removeAttribute() {}, getAttribute() { return null; } };
     return e;
   };
   const byId = {};
@@ -153,4 +153,4 @@ if (require.main === module) {
   process.exit(fails);
 }
 
-module.exports = { flatten, diff, check };
+module.exports = { flatten, diff, check, stubDom };
