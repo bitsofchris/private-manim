@@ -14,7 +14,7 @@
 //   DataLoader card  y 250–400  x 190–825   the slot (a batch glyph) at left, "DataLoader" at right
 //   forward / loss / backward / update   x 480–840,  y 460, 610, 760, 910 (90 tall)
 //   (stacked under the loader's right half; "column" centres them)
-//   the track: out of the slot, down the right gutter (x 905) past the
+//   the track: out of the slot, down the right gutter (x 900) past the
 //   four boxes, under update (y 1040), up the left gutter
 //   (x 130), back into the slot. The glyph rides beside the boxes, never
 //   over a label.
@@ -35,7 +35,7 @@
 (function () {
   const SC = window.SC, PAL = SC.PAL, { node, label, show, lerp, seg, clamp01 } = SC;
   const BOXES = ["forward", "loss", "backward", "update"];
-  const GLYPH = { w: 90, h: 56 };
+  const GLYPH = { w: 96, h: 56 };   // the batch glyph: a tiny readout, brackets and two rows of digits (machine.js tensorCard, small)
   const CODE = [
     { t: "for epoch in range(epochs):", lit: "outer" },
     { t: "  for batch in loader:", lit: "inner" },
@@ -50,10 +50,10 @@
       loader: { x: 190, y: 250, w: 635, h: 150, slot: [305, 325], label: 400 },
       boxes: { forward: { x: 480, y: 460, w: 360, h: 90 }, loss: { x: 480, y: 610, w: 360, h: 90 },
                backward: { x: 480, y: 760, w: 360, h: 90 }, update: { x: 480, y: 910, w: 360, h: 90 } },
-      track: [[305, 325], [305, 435], [905, 435], [905, 505], [905, 655], [905, 805], [905, 955], [905, 1040], [130, 1040], [130, 325], [305, 325]],
+      track: [[305, 325], [305, 435], [900, 435], [900, 505], [900, 655], [900, 805], [900, 955], [900, 1040], [130, 1040], [130, 325], [305, 325]],
       beside: { loader: 0, forward: 3, loss: 4, backward: 5, update: 6 },
       dashedFrom: 7,
-      arrows: [[905, 452, "down"], [148, 325, "right"]],
+      arrows: [[900, 452, "down"], [148, 325, "right"]],
     },
     column: {
       loader: { x: 190, y: 250, w: 635, h: 150, slot: [305, 325], label: 400 },
@@ -94,8 +94,10 @@
     function glyph(parent) {
       const gg = node("g", {}, parent);
       const r = node("rect", { x: -GLYPH.w / 2, y: -GLYPH.h / 2, width: GLYPH.w, height: GLYPH.h, rx: 12, fill: PAL.panel, stroke: PAL.data, "stroke-width": 5 }, gg);
-      const ls = [0, 1].map((j) => node("line", { x1: -GLYPH.w / 2 + 16, y1: -9 + j * 18, x2: GLYPH.w / 2 - 16, y2: -9 + j * 18, stroke: PAL.data, "stroke-width": 4, "stroke-linecap": "round" }, gg));
-      return { g: gg, tint: (on) => { const c = on ? PAL.hero : PAL.data; r.setAttribute("stroke", c); ls.forEach((l) => l.setAttribute("stroke", c)); } };
+      const rows = SC.D.series.readout.slice(0, 2);
+      // the rounded card is the bracket here: two rows of the readout's digits inside it
+      const ts = rows.map((row, j) => { const t = node("text", { x: 0, y: -4 + j * 20, "text-anchor": "middle", "font-size": 17, "font-weight": 700, "font-family": "monospace", fill: PAL.data }, gg); t.textContent = row.join(" "); return t; });
+      return { g: gg, tint: (on) => { const c = on ? PAL.hero : PAL.data; r.setAttribute("stroke", c); ts.forEach((t) => t.setAttribute("fill", c)); } };
     }
     Object.keys(TAKES).forEach((take) => {
       const T = TAKES[take], tg = node("g", {}, g), B = {};

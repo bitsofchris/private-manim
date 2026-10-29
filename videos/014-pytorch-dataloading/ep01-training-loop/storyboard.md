@@ -52,14 +52,17 @@ it; the seam-state kit makes a return cheap.
 1. **The machine** (beats 1, 9, 10; shared `_kit/machine.js`, `SC.REST`):
    the series image, samples hopping from the Dataset card into the
    DataLoader box, the `[32, 512]` batch going to the model chip. The
-   batch is the hero. The Short opens on it (a batch is samples packed
+   batch card is a readout: three rows of numbers in brackets, the shape
+   beside them (SERIES.md, "The data"); the batching station stacks the
+   same rows `×32`. The batch is the hero. The Short opens on it (a batch is samples packed
    into one tensor: that is the collate station and the batch card).
 2. **The loop** (beats 2, 3, 5, 7; `_kit/loop.js`, take `ring`):
    diagram 1 redrawn in the card style. The DataLoader card at the top
    with a slot where a batch glyph sits; four boxes under its right half:
    forward, loss, backward, update. A muted track leaves the slot, runs
    down past the boxes, under update, and back up the left gutter,
-   dashed, into the slot. The glyph rides the track and is the hero while
+   dashed, into the slot. The glyph is the batch card small: two rows of
+   the readout's digits in a rounded card. It rides the track and is the hero while
    the VO is about it; a box turns magenta as the VO names it.
 3. **The code card** (beats 4, 6, 8, 11; shared `_kit/code.js`): the
    stage flips to it (`S.flip` 0 → 1 over 0.4 s). Beats 4 and 6 show the

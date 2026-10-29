@@ -18,6 +18,8 @@
 //   loader box     y 500–970    x 65–950     dashed; "DataLoader"; four stations
 //     stations     y 580+       x 95–920     sampler, fetch, batching, collate; 86 tall, 12 apart
 //   batch row      y 1000–1090  the batch tensor (x 190–600) -> the model chip (x 700–920)
+//                              a tensor is rows of numbers in brackets (data.js `readout`) with its shape beside it;
+//                              one sample stays a squiggle (a series), the batching station stacks three number rows ×32
 //   code card      y 330–1010   kit/code.js, shown instead of the machine (S.flip)
 //
 // S fields (all optional; SC.REST is the rest state, ep 2's frame 0):
@@ -99,6 +101,21 @@
     return node("polyline", Object.assign({ points: pts.join(" "), fill: "none", stroke: PAL.data, "stroke-width": 5,
                                             "stroke-linecap": "round", "stroke-linejoin": "round" }, a), g);
   }
+  // A tensor readout: `rows` of numbers (data.js `readout`) in one tall pair of brackets, each row ending in ⋯
+  // (the style guide's matrix notation). DOM rows (the layout check sees the text) between two SVG bracket paths.
+  // Returns { move(x) } so a card can slide (twins) and keep its digits; the rows join part p for hero tinting.
+  function readout(root, g, p, x, y, h, rows, o = {}) {
+    const size = o.size || 24, pitch = o.pitch || Math.round(size * 1.12), pad = Math.max(0, (h - rows.length * pitch) / 2);
+    const cw = size * 0.6, text = rows.map((r) => r.join(" ") + " \u22EF");
+    const w = Math.max(...text.map((t) => t.length)) * cw;
+    const bl = node("path", { d: `M${x + 18},${y + 8} h-10 v${h - 16} h10`, fill: "none", stroke: PAL.dim, "stroke-width": 4, "stroke-linecap": "round" }, g);
+    const br = node("path", { d: `M${x + 26 + w},${y + 8} h10 v${h - 16} h-10`, fill: "none", stroke: PAL.dim, "stroke-width": 4, "stroke-linecap": "round" }, g);
+    p.svg.push(tintable(bl, PAL.dim)); p.svg.push(tintable(br, PAL.dim));
+    const els = text.map((t, i) => domTint(p, label(root, t, { left: x + 26, top: y + pad + i * pitch, size, mono: true }), PAL.data));
+    els.forEach((el) => { el.style.lineHeight = `${pitch}px`; });
+    const end = x + 44 + w;   // where the readout ends (the shape label goes after it)
+    return { els, end, move: (nx) => els.forEach((el) => { el.style.left = `${nx + 26}px`; }) };
+  }
   // Hero tinting: every stroke/fill with data-tint goes magenta when its part is the hero.
   function tintable(el, col) { el.setAttribute("data-tint", col); return el; }
   function tint(part, on) {
@@ -158,23 +175,25 @@
       return g;
     });
     const nWorkers = domTint(parts.fetch, label(root, "", { left: 820, top: st.fetch.y + 16, size: 48, mono: true }), PAL.data);
-    // batching glyph: a stack of samples and the count
-    const stackRows = [0, 1, 2, 3].map((j) => squiggle(st.batching.glyph, 580, st.batching.y + 8 + j * 17, 170, 18, j * 0.5, { "stroke-width": 4 }));
-    const nBatch = domTint(parts.batching, label(root, String(D.series.batch), { left: 800, top: st.batching.y + 16, size: 48, mono: true }), PAL.data);
+    // batching glyph: the samples as rows of numbers in brackets, and how many of them (×32)
+    const stackRO = readout(root, st.batching.glyph, parts.batching, 560, st.batching.y + 4, G.station.h - 8, D.series.readout, { size: 22 });
+    const nBatch = domTint(parts.batching, label(root, "\u00D7" + D.series.batch, { left: stackRO.end + 16, top: st.batching.y + 16, size: 48, mono: true }), PAL.data);
     // collate glyph: the stack becoming one block
     const colStack = [0, 1, 2].map((j) => line(st.collate.glyph, 580 + j * 6, st.collate.y + 20 + j * 20, 690 + j * 6, st.collate.y + 20 + j * 20, { stroke: PAL.data, "stroke-width": 5 }));
     line(st.collate.glyph, 720, st.collate.y + 43, 770, st.collate.y + 43, { stroke: PAL.dim, "stroke-width": 5 });
     node("polygon", { points: `770,${st.collate.y + 31} 790,${st.collate.y + 43} 770,${st.collate.y + 55}`, fill: PAL.dim }, st.collate.glyph);
     parts.collate.svg.push(tintable(rect(st.collate.glyph, 810, st.collate.y + 15, 90, 56, { fill: "none", stroke: PAL.data, "stroke-width": 5, rx: 8 }), PAL.data));
 
-    // batch row: the tensor, the equals word, the twin, the model chip
+    // batch row: the tensor (rows of numbers in brackets, its shape beside), the twin, the model chip
     const bt = G.batch;
     function tensorCard(p, x) {
       const g = node("g", {}, svg);
       p.svg.push(tintable(rect(g, x, bt.y, bt.w, bt.h, { fill: PAL.panel, stroke: PAL.data, "stroke-width": 6 }), PAL.data));
-      [0, 1, 2, 3].forEach((j) => p.svg.push(tintable(line(g, x + 24, bt.y + 18 + j * 18, x + 150, bt.y + 18 + j * 18, { stroke: PAL.data, "stroke-width": 4 }), PAL.data)));
-      const lab = domTint(p, label(root, D.series.shape, { left: x + 170, top: bt.y + 22, size: 40, mono: true }), PAL.ink);
-      return { g, lab, x };
+      const ro = readout(root, g, p, x, bt.y + 4, bt.h - 8, D.series.readout, { size: 26, pitch: 27 });
+      const labDx = ro.end + 12 - x;
+      const lab = domTint(p, label(root, D.series.shape, { left: x + labDx, top: bt.y + 25, size: 34, mono: true }), PAL.ink);
+      const move = (nx) => { g.setAttribute("transform", `translate(${(nx - x).toFixed(1)} 0)`); lab.style.left = `${nx + labDx}px`; ro.move(nx); };
+      return { g, lab, x, move, els: ro.els };
     }
     const batch = tensorCard(parts.batch, bt.x);
     const twin = tensorCard(parts.twins, bt.x);
@@ -225,18 +244,15 @@
       });
       nWorkers.textContent = S.workers >= 2 ? "×" + S.workers : "";
       show(nWorkers, S.loader * (S.workers >= 2 ? 1 : 0));
-      show(nBatch, S.loader);
+      show(nBatch, S.loader); stackRO.els.forEach((el) => show(el, S.loader));
       // batch row
       const tw = S.twins;
       batch.lab.textContent = S.shape; twin.lab.textContent = S.shape;
       // with twins the first card slides to the safe left edge and the twin lands beside it (x 65–475, 540–950)
       const bX = lerp(bt.x, SAFE.x0, tw), twX = lerp(bt.x, SAFE.x1 - bt.w, tw);
-      batch.g.setAttribute("transform", `translate(${(bX - bt.x).toFixed(1)} 0)`);
-      batch.lab.style.left = `${bX + 170}px`;
-      show(batch.g, S.batch); show(batch.lab, S.batch);
-      twin.g.setAttribute("transform", `translate(${(twX - bt.x).toFixed(1)} 0)`);
-      twin.lab.style.left = `${twX + 170}px`;
-      show(twin.g, S.batch * tw); show(twin.lab, S.batch * tw);
+      batch.move(bX); twin.move(twX);
+      show(batch.g, S.batch); show(batch.lab, S.batch); batch.els.forEach((el) => show(el, S.batch));
+      show(twin.g, S.batch * tw); show(twin.lab, S.batch * tw); twin.els.forEach((el) => show(el, S.batch * tw));
       // with twins on screen the model chip and arrow step aside
       show(modelG, S.model * (1 - tw)); show(modelLab, S.model * (1 - tw)); show(arrow, S.model * S.batch * (1 - tw));
       show(outArrow, S.loader * S.batch);
@@ -264,5 +280,5 @@
   }
 
   window.SC = { D, PAL, W, H, SAFE, MID, G, STATIONS, stationY, mount, REST, SEAM: {}, clock: 0,
-                start, E, lerp, clamp01, seg, hash, pulse, label, guides, show, node, squiggle };
+                start, E, lerp, clamp01, seg, hash, pulse, label, guides, show, node, squiggle, readout };
 })();
