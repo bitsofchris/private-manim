@@ -1,0 +1,793 @@
+{
+  "segments" : [
+    {
+      "end" : 2720,
+      "id" : "D99528EB-0379-414D-834D-83AAD2E11EC9",
+      "start" : 1,
+      "text" : "A neural network is mostly multiplication and addition.",
+      "words" : [
+        {
+          "end" : 480,
+          "start" : 0,
+          "text" : "A"
+        },
+        {
+          "end" : 680,
+          "start" : 480,
+          "text" : "neural"
+        },
+        {
+          "end" : 960,
+          "start" : 680,
+          "text" : "network"
+        },
+        {
+          "end" : 1180,
+          "start" : 960,
+          "text" : "is"
+        },
+        {
+          "end" : 1480,
+          "start" : 1180,
+          "text" : "mostly"
+        },
+        {
+          "end" : 2080,
+          "start" : 1480,
+          "text" : "multiplication"
+        },
+        {
+          "end" : 2360,
+          "start" : 2080,
+          "text" : "and"
+        },
+        {
+          "end" : 2720,
+          "start" : 2360,
+          "text" : "addition."
+        }
+      ]
+    },
+    {
+      "end" : 5940,
+      "id" : "100BF125-C77C-4136-A896-7B430C4D8AC0",
+      "start" : 3339,
+      "text" : "GPUs allow these to all happen at the same time.",
+      "words" : [
+        {
+          "end" : 3860,
+          "start" : 3339,
+          "text" : "GPUs"
+        },
+        {
+          "end" : 4180,
+          "start" : 3860,
+          "text" : "allow"
+        },
+        {
+          "end" : 4400,
+          "start" : 4180,
+          "text" : "these"
+        },
+        {
+          "end" : 4520,
+          "start" : 4400,
+          "text" : "to"
+        },
+        {
+          "end" : 4800,
+          "start" : 4520,
+          "text" : "all"
+        },
+        {
+          "end" : 5160,
+          "start" : 4800,
+          "text" : "happen"
+        },
+        {
+          "end" : 5340,
+          "start" : 5160,
+          "text" : "at"
+        },
+        {
+          "end" : 5460,
+          "start" : 5340,
+          "text" : "the"
+        },
+        {
+          "end" : 5640,
+          "start" : 5460,
+          "text" : "same"
+        },
+        {
+          "end" : 5940,
+          "start" : 5640,
+          "text" : "time."
+        }
+      ]
+    },
+    {
+      "end" : 9080,
+      "id" : "C5716B32-CFEA-4C38-BB41-5F7A29B85DA0",
+      "start" : 6310,
+      "text" : "So if you take one layer, Y equals X times W,",
+      "words" : [
+        {
+          "end" : 6500,
+          "start" : 6310,
+          "text" : "So"
+        },
+        {
+          "end" : 6580,
+          "start" : 6500,
+          "text" : "if"
+        },
+        {
+          "end" : 6600,
+          "start" : 6580,
+          "text" : "you"
+        },
+        {
+          "end" : 6840,
+          "start" : 6600,
+          "text" : "take"
+        },
+        {
+          "end" : 7140,
+          "start" : 6840,
+          "text" : "one"
+        },
+        {
+          "end" : 7480,
+          "start" : 7140,
+          "text" : "layer,"
+        },
+        {
+          "end" : 7900,
+          "start" : 7760,
+          "text" : "Y"
+        },
+        {
+          "end" : 8220,
+          "start" : 7900,
+          "text" : "equals"
+        },
+        {
+          "end" : 8500,
+          "start" : 8220,
+          "text" : "X"
+        },
+        {
+          "end" : 8780,
+          "start" : 8500,
+          "text" : "times"
+        },
+        {
+          "end" : 9080,
+          "start" : 8780,
+          "text" : "W,"
+        }
+      ]
+    },
+    {
+      "end" : 12420,
+      "id" : "26018DBC-CA22-42FE-9A1B-7B19BF9227A0",
+      "start" : 9620,
+      "text" : "each output is its own row times column.",
+      "words" : [
+        {
+          "end" : 9800,
+          "start" : 9620,
+          "text" : "each"
+        },
+        {
+          "end" : 10240,
+          "start" : 9800,
+          "text" : "output"
+        },
+        {
+          "end" : 10760,
+          "start" : 10240,
+          "text" : "is"
+        },
+        {
+          "end" : 10940,
+          "start" : 10760,
+          "text" : "its"
+        },
+        {
+          "end" : 11160,
+          "start" : 10940,
+          "text" : "own"
+        },
+        {
+          "end" : 11480,
+          "start" : 11160,
+          "text" : "row"
+        },
+        {
+          "end" : 12000,
+          "start" : 11480,
+          "text" : "times"
+        },
+        {
+          "end" : 12420,
+          "start" : 12000,
+          "text" : "column."
+        }
+      ]
+    },
+    {
+      "end" : 13980,
+      "id" : "C6F4A7F9-D295-4602-B06A-EA4F77729623",
+      "start" : 12960,
+      "text" : "None of them waits on the other.",
+      "words" : [
+        {
+          "end" : 13120,
+          "start" : 12960,
+          "text" : "None"
+        },
+        {
+          "end" : 13220,
+          "start" : 13120,
+          "text" : "of"
+        },
+        {
+          "end" : 13360,
+          "start" : 13220,
+          "text" : "them"
+        },
+        {
+          "end" : 13580,
+          "start" : 13360,
+          "text" : "waits"
+        },
+        {
+          "end" : 13680,
+          "start" : 13580,
+          "text" : "on"
+        },
+        {
+          "end" : 13800,
+          "start" : 13680,
+          "text" : "the"
+        },
+        {
+          "end" : 13980,
+          "start" : 13800,
+          "text" : "other."
+        }
+      ]
+    },
+    {
+      "end" : 17780,
+      "id" : "5D643A1A-9E7F-427A-A450-E6F17DE75269",
+      "start" : 14520,
+      "text" : "Now a CPU is built to run one thread as fast as possible.",
+      "words" : [
+        {
+          "end" : 14620,
+          "start" : 14520,
+          "text" : "Now"
+        },
+        {
+          "end" : 14780,
+          "start" : 14620,
+          "text" : "a"
+        },
+        {
+          "end" : 15180,
+          "start" : 14780,
+          "text" : "CPU"
+        },
+        {
+          "end" : 15540,
+          "start" : 15180,
+          "text" : "is"
+        },
+        {
+          "end" : 15740,
+          "start" : 15540,
+          "text" : "built"
+        },
+        {
+          "end" : 15880,
+          "start" : 15740,
+          "text" : "to"
+        },
+        {
+          "end" : 16120,
+          "start" : 15880,
+          "text" : "run"
+        },
+        {
+          "end" : 16440,
+          "start" : 16120,
+          "text" : "one"
+        },
+        {
+          "end" : 16760,
+          "start" : 16440,
+          "text" : "thread"
+        },
+        {
+          "end" : 16920,
+          "start" : 16760,
+          "text" : "as"
+        },
+        {
+          "end" : 17240,
+          "start" : 16920,
+          "text" : "fast"
+        },
+        {
+          "end" : 17380,
+          "start" : 17240,
+          "text" : "as"
+        },
+        {
+          "end" : 17780,
+          "start" : 17380,
+          "text" : "possible."
+        }
+      ]
+    },
+    {
+      "end" : 20700,
+      "id" : "EDDBC922-F70C-44EB-8017-D469FC236A0D",
+      "start" : 18340,
+      "text" : "A few big cores, some big caches, some smart branching,",
+      "words" : [
+        {
+          "end" : 18440,
+          "start" : 18340,
+          "text" : "A"
+        },
+        {
+          "end" : 18560,
+          "start" : 18440,
+          "text" : "few"
+        },
+        {
+          "end" : 18760,
+          "start" : 18560,
+          "text" : "big"
+        },
+        {
+          "end" : 19020,
+          "start" : 18760,
+          "text" : "cores,"
+        },
+        {
+          "end" : 19340,
+          "start" : 19240,
+          "text" : "some"
+        },
+        {
+          "end" : 19500,
+          "start" : 19340,
+          "text" : "big"
+        },
+        {
+          "end" : 19800,
+          "start" : 19500,
+          "text" : "caches,"
+        },
+        {
+          "end" : 20060,
+          "start" : 19980,
+          "text" : "some"
+        },
+        {
+          "end" : 20280,
+          "start" : 20060,
+          "text" : "smart"
+        },
+        {
+          "end" : 20700,
+          "start" : 20280,
+          "text" : "branching,"
+        }
+      ]
+    },
+    {
+      "end" : 23000,
+      "id" : "A3C5690E-F37E-4CAE-BB2A-257F3CF55207",
+      "start" : 21040,
+      "text" : "it works through that pile a few at a time.",
+      "words" : [
+        {
+          "end" : 21140,
+          "start" : 21040,
+          "text" : "it"
+        },
+        {
+          "end" : 21480,
+          "start" : 21140,
+          "text" : "works"
+        },
+        {
+          "end" : 21580,
+          "start" : 21480,
+          "text" : "through"
+        },
+        {
+          "end" : 21800,
+          "start" : 21580,
+          "text" : "that"
+        },
+        {
+          "end" : 22100,
+          "start" : 21800,
+          "text" : "pile"
+        },
+        {
+          "end" : 22340,
+          "start" : 22100,
+          "text" : "a"
+        },
+        {
+          "end" : 22500,
+          "start" : 22340,
+          "text" : "few"
+        },
+        {
+          "end" : 22600,
+          "start" : 22500,
+          "text" : "at"
+        },
+        {
+          "end" : 22680,
+          "start" : 22600,
+          "text" : "a"
+        },
+        {
+          "end" : 23000,
+          "start" : 22680,
+          "text" : "time."
+        }
+      ]
+    },
+    {
+      "end" : 27000,
+      "id" : "6E56BF85-2020-4647-8B36-C3F1DFB30916",
+      "start" : 23440,
+      "text" : "A GPU trades per core speed for count.",
+      "words" : [
+        {
+          "end" : 23640,
+          "start" : 23440,
+          "text" : "A"
+        },
+        {
+          "end" : 24120,
+          "start" : 23640,
+          "text" : "GPU"
+        },
+        {
+          "end" : 24820,
+          "start" : 24120,
+          "text" : "trades"
+        },
+        {
+          "end" : 25160,
+          "start" : 24820,
+          "text" : "per"
+        },
+        {
+          "end" : 25520,
+          "start" : 25160,
+          "text" : "core"
+        },
+        {
+          "end" : 26080,
+          "start" : 25520,
+          "text" : "speed"
+        },
+        {
+          "end" : 26500,
+          "start" : 26080,
+          "text" : "for"
+        },
+        {
+          "end" : 27000,
+          "start" : 26500,
+          "text" : "count."
+        }
+      ]
+    },
+    {
+      "end" : 28460,
+      "id" : "E60E7511-525E-45D0-B7C9-C4844B0EFE2C",
+      "start" : 27580,
+      "text" : "This grid is the chip.",
+      "words" : [
+        {
+          "end" : 27740,
+          "start" : 27580,
+          "text" : "This"
+        },
+        {
+          "end" : 27980,
+          "start" : 27740,
+          "text" : "grid"
+        },
+        {
+          "end" : 28080,
+          "start" : 27980,
+          "text" : "is"
+        },
+        {
+          "end" : 28200,
+          "start" : 28080,
+          "text" : "the"
+        },
+        {
+          "end" : 28460,
+          "start" : 28200,
+          "text" : "chip."
+        }
+      ]
+    },
+    {
+      "end" : 31440,
+      "id" : "8C9F69BD-F213-455E-9934-2D109C0AF19C",
+      "start" : 28880,
+      "text" : "thousands of small cores all working at once.",
+      "words" : [
+        {
+          "end" : 29280,
+          "start" : 28880,
+          "text" : "thousands"
+        },
+        {
+          "end" : 29540,
+          "start" : 29280,
+          "text" : "of"
+        },
+        {
+          "end" : 29760,
+          "start" : 29540,
+          "text" : "small"
+        },
+        {
+          "end" : 30280,
+          "start" : 29760,
+          "text" : "cores"
+        },
+        {
+          "end" : 30740,
+          "start" : 30280,
+          "text" : "all"
+        },
+        {
+          "end" : 31060,
+          "start" : 30740,
+          "text" : "working"
+        },
+        {
+          "end" : 31180,
+          "start" : 31060,
+          "text" : "at"
+        },
+        {
+          "end" : 31440,
+          "start" : 31180,
+          "text" : "once."
+        }
+      ]
+    },
+    {
+      "end" : 34040,
+      "id" : "8B8431B7-44DE-4ED7-BD66-BB4AEA1F15B5",
+      "start" : 32160,
+      "text" : "Newer GPUs add tensor cores,",
+      "words" : [
+        {
+          "end" : 32380,
+          "start" : 32160,
+          "text" : "Newer"
+        },
+        {
+          "end" : 32860,
+          "start" : 32380,
+          "text" : "GPUs"
+        },
+        {
+          "end" : 33140,
+          "start" : 32860,
+          "text" : "add"
+        },
+        {
+          "end" : 33680,
+          "start" : 33140,
+          "text" : "tensor"
+        },
+        {
+          "end" : 34040,
+          "start" : 33680,
+          "text" : "cores,"
+        }
+      ]
+    },
+    {
+      "end" : 36820,
+      "id" : "BAC7D926-F72D-4B50-9E5D-0EDA3AFA10CD",
+      "start" : 34360,
+      "text" : "which do a small matrix multiply in one step.",
+      "words" : [
+        {
+          "end" : 34560,
+          "start" : 34360,
+          "text" : "which"
+        },
+        {
+          "end" : 34700,
+          "start" : 34560,
+          "text" : "do"
+        },
+        {
+          "end" : 34900,
+          "start" : 34700,
+          "text" : "a"
+        },
+        {
+          "end" : 35280,
+          "start" : 34900,
+          "text" : "small"
+        },
+        {
+          "end" : 35700,
+          "start" : 35280,
+          "text" : "matrix"
+        },
+        {
+          "end" : 36200,
+          "start" : 35700,
+          "text" : "multiply"
+        },
+        {
+          "end" : 36340,
+          "start" : 36200,
+          "text" : "in"
+        },
+        {
+          "end" : 36540,
+          "start" : 36340,
+          "text" : "one"
+        },
+        {
+          "end" : 36820,
+          "start" : 36540,
+          "text" : "step."
+        }
+      ]
+    },
+    {
+      "end" : 38660,
+      "id" : "AB5F03DA-6C8F-483A-BB0C-A15990D3F01D",
+      "start" : 37120,
+      "text" : "In PyTorch, that's one line.",
+      "words" : [
+        {
+          "end" : 37320,
+          "start" : 37120,
+          "text" : "In"
+        },
+        {
+          "end" : 37840,
+          "start" : 37320,
+          "text" : "PyTorch,"
+        },
+        {
+          "end" : 38080,
+          "start" : 37920,
+          "text" : "that's"
+        },
+        {
+          "end" : 38300,
+          "start" : 38080,
+          "text" : "one"
+        },
+        {
+          "end" : 38660,
+          "start" : 38300,
+          "text" : "line."
+        }
+      ]
+    },
+    {
+      "end" : 40460,
+      "id" : "10B5A917-B66C-4809-9523-4563F1D8876C",
+      "start" : 39160,
+      "text" : "Move X and W to CUDA,",
+      "words" : [
+        {
+          "end" : 39340,
+          "start" : 39160,
+          "text" : "Move"
+        },
+        {
+          "end" : 39580,
+          "start" : 39340,
+          "text" : "X"
+        },
+        {
+          "end" : 39700,
+          "start" : 39580,
+          "text" : "and"
+        },
+        {
+          "end" : 39980,
+          "start" : 39700,
+          "text" : "W"
+        },
+        {
+          "end" : 40180,
+          "start" : 39980,
+          "text" : "to"
+        },
+        {
+          "end" : 40460,
+          "start" : 40180,
+          "text" : "CUDA,"
+        }
+      ]
+    },
+    {
+      "end" : 43380,
+      "id" : "504E9D98-1947-4070-AEFA-FD1C2D921219",
+      "start" : 40880,
+      "text" : "and the same @ sign runs the whole grid.",
+      "words" : [
+        {
+          "end" : 41080,
+          "start" : 40880,
+          "text" : "and"
+        },
+        {
+          "end" : 41280,
+          "start" : 41080,
+          "text" : "the"
+        },
+        {
+          "end" : 41600,
+          "start" : 41280,
+          "text" : "same"
+        },
+        {
+          "end" : 41980,
+          "start" : 41600,
+          "text" : "@"
+        },
+        {
+          "end" : 42320,
+          "start" : 41980,
+          "text" : "sign"
+        },
+        {
+          "end" : 42700,
+          "start" : 42320,
+          "text" : "runs"
+        },
+        {
+          "end" : 42840,
+          "start" : 42700,
+          "text" : "the"
+        },
+        {
+          "end" : 43060,
+          "start" : 42840,
+          "text" : "whole"
+        },
+        {
+          "end" : 43380,
+          "start" : 43060,
+          "text" : "grid."
+        }
+      ]
+    }
+  ],
+  "text" : "A neural network is mostly multiplication and addition.\nGPUs allow these to all happen at the same time.\nSo if you take one layer, Y equals X times W,\neach output is its own row times column.\nNone of them waits on the other.\nNow a CPU is built to run one thread as fast as possible.\nA few big cores, some big caches, some smart branching,\nit works through that pile a few at a time.\nA GPU trades per core speed for count.\nThis grid is the chip.\nthousands of small cores all working at once.\nNewer GPUs add tensor cores,\nwhich do a small matrix multiply in one step.\nIn PyTorch, that's one line.\nMove X and W to CUDA,\nand the same @ sign runs the whole grid."
+}

@@ -1,0 +1,43 @@
+00:00.001-00:03.040
+A neural network is mostly multiplication and addition.
+
+00:03.040-00:06.400
+GPUs allow these to all happen at the same time.
+
+00:06.400-00:13.680
+So if you take one layer, y equals x times w, each output is its own row times column.
+
+00:13.240-00:15.000
+None of them waits on the other.
+
+00:15.000-00:17.320
+GPUs allow this to run in parallel.
+
+00:18.040-00:21.960
+Now a CPU is built to run one thread as fast as possible.
+
+00:21.960-00:24.920
+A few big cores, some big caches, some smart branching.
+
+00:24.920-00:27.720
+It works through that pile a few at a time.
+
+00:27.619-00:31.859
+A GPU trades per core speed for count.
+
+00:31.859-00:33.540
+This grid is the chip.
+
+00:33.540-00:36.820
+Thousands of small cores all working at once.
+
+00:36.820-00:42.420
+Newer GPUs add tensor cores, which do a small matrix multiply in one step.
+
+00:42.420-00:44.739
+In PyTorch, that's one line.
+
+00:44.739-00:49.940
+Move X and W to CUDA, and the same at sign runs the whole grid.
+
+
