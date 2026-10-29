@@ -1,36 +1,48 @@
 {
  "beats": [
   {
-   "clip": "media/hf/01_hook.mp4",
-   "end": 8.05
+   "clip": "media/hf/01_hook_batch.mp4",
+   "end": 5.12
   },
   {
-   "clip": "media/hf/02_forward.mp4",
-   "end": 5.505
+   "clip": "media/hf/02_hook_loop.mp4",
+   "end": 2.88
   },
   {
-   "clip": "media/hf/03_loss.mp4",
-   "end": 3.705
+   "clip": "media/hf/03_forward.mp4",
+   "end": 4.75
   },
   {
-   "clip": "media/hf/04_backward.mp4",
-   "end": 6.34
+   "clip": "media/hf/04_loss_code.mp4",
+   "end": 2.93
   },
   {
-   "clip": "media/hf/05_next_batch.mp4",
-   "end": 2.4
+   "clip": "media/hf/05_backward.mp4",
+   "end": 4.32
   },
   {
-   "clip": "media/hf/06_epoch_code.mp4",
-   "end": 8.41
+   "clip": "media/hf/06_step_code.mp4",
+   "end": 2.02
   },
   {
-   "clip": "media/hf/07_one_batch.mp4",
-   "end": 4.2
+   "clip": "media/hf/07_next_batch.mp4",
+   "end": 2.38
   },
   {
-   "clip": "media/hf/08_check_batch.mp4",
-   "end": 6.127
+   "clip": "media/hf/08_epoch_code.mp4",
+   "end": 8.37
+  },
+  {
+   "clip": "media/hf/09_one_batch.mp4",
+   "end": 4.175
+  },
+  {
+   "clip": "media/hf/10_check_batch.mp4",
+   "end": 2.395
+  },
+  {
+   "clip": "media/hf/11_four_lines.mp4",
+   "end": 3.7
   }
  ]
 }

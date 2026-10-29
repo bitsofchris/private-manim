@@ -44,94 +44,108 @@ Series context: `../SERIES.md` (ledger, images, decisions). The VO is
 
 ## The look
 
-Three images, never two at once:
+Three images, never two at once, and **the image changes about every
+5 s** (`agents/style.md`, Shorts rules; Chris on the first cut: 26 s on
+the loop was too long). Each image comes back whenever the VO returns to
+it; the seam-state kit makes a return cheap.
 
-1. **The loop** (beats 1–5, `_kit/loop.js`, take `ring`; `00_layout/`):
-   Chris's diagram 1 redrawn in the kit's card style. The DataLoader card
-   at the top (the same geometry as the machine's Dataset card, x 190–825,
-   y 250–400) with a slot at its left where a batch glyph sits; four boxes
-   stacked under its right half: forward, loss, backward, update (x
-   480–840, 90 tall). A muted track leaves the slot, runs down the right
-   gutter past the boxes, under update, and back up the left gutter,
-   dashed, into the slot. **The batch glyph rides the track** (a small
-   teal tensor card: box + two rows) and is the hero while the VO is about
-   it; a box turns magenta as the VO names it; "one training step" lights
-   the four boxes together.
-2. **The code card** (beat 6, shared `_kit/code.js`): the loop flips to
-   the full-stage card (`S.flip` 0 → 1 over 0.4 s), which types the six
-   lines with `SC_typedAt`; the line being typed is the hero; "inner loop"
-   lights `for batch in loader:`, "outer loop" lights `for epoch …`.
-3. **The machine** (beats 7–8, shared `_kit/machine.js`, `SC.REST`): the
-   series image at rest, samples hopping from the Dataset card into the
+1. **The machine** (beats 1, 9, 10; shared `_kit/machine.js`, `SC.REST`):
+   the series image, samples hopping from the Dataset card into the
    DataLoader box, the `[32, 512]` batch going to the model chip. The
-   batch is the hero. Ep 1's last frame is this, so it is ep 2's frame 0.
+   batch is the hero. The Short opens on it (a batch is samples packed
+   into one tensor: that is the collate station and the batch card).
+2. **The loop** (beats 2, 3, 5, 7; `_kit/loop.js`, take `ring`):
+   diagram 1 redrawn in the card style. The DataLoader card at the top
+   with a slot where a batch glyph sits; four boxes under its right half:
+   forward, loss, backward, update. A muted track leaves the slot, runs
+   down past the boxes, under update, and back up the left gutter,
+   dashed, into the slot. The glyph rides the track and is the hero while
+   the VO is about it; a box turns magenta as the VO names it.
+3. **The code card** (beats 4, 6, 8, 11; shared `_kit/code.js`): the
+   stage flips to it (`S.flip` 0 → 1 over 0.4 s). Beats 4 and 6 show the
+   four body lines (`LOOP.BODY`, indented as they will sit under the
+   headers); beat 8 types the two `for` headers in above them
+   (`code.typedLines`); beat 11 shows all six with the four body lines
+   lit together (`LOOP.STEP`). VS Code colours; the hero line is a
+   magenta gutter bar. Typing is human-paced (`SC_typedAt`).
 
 Captions in the band (y 1100–1536) as usual; the stage is y 230–1100 and
 the code card is centred on it. Palette and sizes from the kit: 60 px
 Inter 800 labels, 48 px monospace code.
 
-Seam states are code: `_kit/seam.js` (`SC.SEAM[0..8]`); the table below
+Seam states are code: `_kit/seam.js` (`SC.SEAM[0..11]`); the table below
 is its prose.
 
-## Beats (VO from script.md; times are vo_final seconds)
+## Beats (VO from script.md; times are vo_final seconds, master)
 
 | # | Beat | VO (as recorded) | Visual (9:16) | Hero |
 |---|------|---|---|---|
-| 1 | Hook | A batch is just a bunch of samples packed into one tensor so the GPU can parallelize. And a PyTorch training loop is what happens to that one batch. | Frame 0: the loop with the batch glyph already riding (out of the slot, down the right gutter). "packed into one tensor" (2.3 s): the glyph pulses. "training loop" (6.0 s): the whole track pulses magenta once, then back to muted. The glyph completes the lap and parks in the slot by 7.5 s; still to the end. | the batch |
-| 2 | Forward | The data loader yields it, the batch goes into the forward pass, and the model makes a prediction. | "yields it" (8.9 s): the glyph leaves the slot and rides to beside forward, arriving on "forward pass" (10.7 s); forward lights on "forward". "prediction" (12.3 s): forward pulses once. Ends: glyph beside forward, forward lit. | the batch, then forward |
-| 3 | Loss | We compare that prediction to the target, and that's the loss. | "compare" (14.7 s): the glyph rides down to beside loss; "loss" (16.7 s): loss lights, forward goes back to muted. | loss |
-| 4 | Backward + step | The loss is then propagated backwards, and the weights are updated as part of gradient descent. That is one training step. | "backwards" (18.6 s): the glyph rides to beside backward, backward lights. "updated" (19.9 s): on to beside update, update lights. "one training step" (22.4 s): all four boxes light together and hold. | backward → update → the four boxes |
-| 5 | Next batch | Then we go back to the data loader for the next batch. | "go back" (24.0 s): the glyph rides the dashed return up the left gutter into the slot, arriving on "next batch" (25.2 s) as the hero. Boxes back to muted. | the batch |
-| 6 | Epoch, the code | An epoch is one pass through the whole dataset. So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set. | "An epoch" (26.3 s): flip to the code card (0.4 s); typing starts at 26.8 s, all six lines land by ~33 s (`SC_typingSeconds`). "inner loop" (29.5 s): `for batch in loader:` is the hero; "outer loop" (31.8 s): `for epoch in range(epochs):` is the hero. Cursor off and still from 33.5 s. | the line being typed, then inner, then outer |
-| 7 | One batch | The model never sees your dataset, it only ever sees one batch at a time. | "The model" (34.6 s): flip back (0.4 s) onto the machine at rest, samples hopping into the DataLoader box; the model chip is the hero. "one batch" (37.7 s): the hero passes to the `[32, 512]` batch card. | model → the batch |
-| 8 | Takeaway | So if your loss isn't moving, check the batch first. Everything downstream of it is the same four lines every time. | "check the batch" (39.9 s): the batch card pulses once. "four lines" (43.1 s): the four stations of the box dim slightly then return (the lines are not on screen: the card never shares the stage with the machine). Still from 44.0 s. | the batch |
+| 1 | Hook: the batch | A batch is just a bunch of samples packed into one tensor so the GPU can parallelize. | Frame 0: the machine at rest, samples already hopping (the series image). "packed into one tensor" (2.26–3.0): the batch card pulses once. Still otherwise. | the batch |
+| 2 | Hook: the loop | And a PyTorch training loop is what happens to that one batch. | "And" (5.38): flip 0 → the loop appears (machine fades, loop fades in over 0.4 s via `S.flip`-style crossfade: the beat lerps `loop.o` 0→1 and `SC.LOOP_ONLY` opacities 1→0). "training loop" (5.98): the whole track pulses magenta once. "one batch" (7.24): the glyph in the slot pulses (lit batch from here). Ends still: SEAM[2]. | the track, then the batch |
+| 3 | Forward | The data loader yields it, the batch goes into the forward pass, and the model makes a prediction. | "yields it" (8.82): the glyph leaves the slot and rides to beside forward, arriving on "forward pass" (10.64); forward lights on arrival. "prediction" (12.18): forward pulses once. Ends: SEAM[3]. | the batch, then forward |
+| 4 | Loss, the code | We compare that prediction to the target, and that's the loss. | "We" (12.96): flip to the code card with the four body lines; they type fast (cps ~34) from 13.3 so `loss = loss_fn(out, y)` is complete by "loss" (15.12), when it becomes the hero; the other two lines finish by 15.5. Cursor off, still: SEAM[4]. | the line being typed, then loss |
+| 5 | Backward + update | The loss is then propagated backwards, and the weights are updated as part of gradient descent. | "The loss" (15.94): flip back to the loop, the glyph beside loss with loss lit. "backwards" (17.04): rides to beside backward, backward lights. "updated" (18.34): rides to beside update, update lights. Still from 19.2: SEAM[5]. | loss → backward → update |
+| 6 | One step, the code | That is one training step. | "That" (20.32): flip to the code card, four body lines fully typed, none lit; "one" (20.76): all four light together (`LOOP.STEP`). Still: SEAM[6]. | the four lines |
+| 7 | Next batch | Then we go back to the data loader for the next batch. | "Then" (22.28): flip back to the loop, glyph beside update, update lit; "go back" (22.42): rides the dashed return up the left gutter into the slot, boxes muted, glyph the hero, arriving on "next batch" (23.64). Still: SEAM[7]. | the batch |
+| 8 | Epoch, the code | An epoch is one pass through the whole dataset. So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set. | "An epoch" (24.66): flip to the six-line card with the four body lines already typed and the two header rows empty; the headers type in (`typedLines`, line 0 then line 1, ~22 cps) from 25.1, done by ~27.5. "inner loop" (27.97): `for batch in loader:` the hero; "outer loop" (30.12): `for epoch in range(epochs):` the hero. Cursor off, still from 31: SEAM[8]. | the line being typed, inner, outer |
+| 9 | One batch | The model never sees your dataset, it only ever sees one batch at a time. | "The model" (33.0): flip back to the machine at rest; the model chip is the hero. "one batch" (35.82): the hero passes to the batch card. Still: SEAM[9]. | model → the batch |
+| 10 | Check the batch | So if your loss isn't moving, check the batch first. | "check the batch" (38.22): the batch card pulses once. Still: SEAM[10]. | the batch |
+| 11 | Four lines | Everything downstream of it is the same four lines every time. | "Everything" (39.64): flip to the six-line card, fully typed, none lit; "four lines" (41.38): the four body lines light together and hold. The last frame is this card. | the four lines |
 
-## Final beats (the contract; `vo_final.wav` 44.737 s, master seconds)
+Ep 1 no longer ends on ep 2's frame 0 (the machine): Chris wants the four
+lines on screen for the closing line. Each Short is found alone; noted
+for the update pass (SERIES.md "The look").
 
-Beat brief: `agents/beat-brief-hyperframes.md` plus this table; seam
-states `SC.SEAM` in `_kit/seam.js`; links per beat: `vendor`, `kit`, `ep`.
+## Final beats (the contract; `vo_final.wav` 43.040 s, master seconds)
+
+Beat brief: `BRIEF.md` (reads `agents/beat-brief-hyperframes.md`) plus
+this table; seam states `SC.SEAM` in `_kit/seam.js`; links per beat:
+`vendor`, `kit`, `ep`.
 
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
-| 1 | `01_hook` | 0.000 | 8.050 | A batch is just a bunch of samples packed into one tensor so the GPU can parallelize. And a PyTorch training loop is what happens to that one batch. |
-| 2 | `02_forward` | 8.050 | 5.505 | The data loader yields it, the batch goes into the forward pass, and the model makes a prediction. |
-| 3 | `03_loss` | 13.555 | 3.705 | We compare that prediction to the target, and that's the loss. |
-| 4 | `04_backward` | 17.260 | 6.340 | The loss is then propagated backwards, and the weights are updated as part of gradient descent. That is one training step. |
-| 5 | `05_next_batch` | 23.600 | 2.400 | Then we go back to the data loader for the next batch. |
-| 6 | `06_epoch_code` | 26.000 | 8.410 | An epoch is one pass through the whole dataset. So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set. |
-| 7 | `07_one_batch` | 34.410 | 4.200 | The model never sees your dataset, it only ever sees one batch at a time. |
-| 8 | `08_check_batch` | 38.610 | 6.127 | So if your loss isn't moving, check the batch first. Everything downstream of it is the same four lines every time. |
+| 1 | `01_hook_batch` | 0.000 | 5.120 | A batch is just a bunch of samples packed into one tensor so the GPU can parallelize. |
+| 2 | `02_hook_loop` | 5.120 | 2.880 | And a PyTorch training loop is what happens to that one batch. |
+| 3 | `03_forward` | 8.000 | 4.750 | The data loader yields it, the batch goes into the forward pass, and the model makes a prediction. |
+| 4 | `04_loss_code` | 12.750 | 2.930 | We compare that prediction to the target, and that's the loss. |
+| 5 | `05_backward` | 15.680 | 4.320 | The loss is then propagated backwards, and the weights are updated as part of gradient descent. |
+| 6 | `06_step_code` | 20.000 | 2.020 | That is one training step. |
+| 7 | `07_next_batch` | 22.020 | 2.380 | Then we go back to the data loader for the next batch. |
+| 8 | `08_epoch_code` | 24.400 | 8.370 | An epoch is one pass through the whole dataset. So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set. |
+| 9 | `09_one_batch` | 32.770 | 4.175 | The model never sees your dataset, it only ever sees one batch at a time. |
+| 10 | `10_check_batch` | 36.945 | 2.395 | So if your loss isn't moving, check the batch first. |
+| 11 | `11_four_lines` | 39.340 | 3.700 | Everything downstream of it is the same four lines every time. |
 
 ## Seam states (`_kit/seam.js`; machine fields as `SC.REST` unless named)
 
-| Cut | After beat | Loop (`S.loop`) | Machine | Code |
-|---|---|---|---|---|
-| 0 | frame 0 | o 1, ring, u 0 (in the slot), batch 1, slot 0, lit batch | off (`SC.LOOP_ONLY`) | off |
-| 1 | hook | same as 0: parked in the slot, lit batch | off | off |
-| 2 | forward | u = `LOOP.at("ring","forward")`, lit forward | off | off |
-| 3 | loss | u at loss, lit loss | off | off |
-| 4 | backward | u at update, lit step (all four) | off | off |
-| 5 | next batch | u 0, lit batch | off | off |
-| 6 | epoch code | o 0 | REST under the card (invisible) | flip 1; `LOOP.CODE` fully typed, lit outer, cursor 0 |
-| 7 | one batch | o 0 | REST, hero batch, flip 0 | off |
-| 8 | end | o 0 | REST, hero batch | off |
+| Cut | After beat | Image | State |
+|---|---|---|---|
+| 0 | frame 0 | machine | REST, hero batch, flip 0, loop off |
+| 1 | hook: the batch | machine | same |
+| 2 | hook: the loop | loop | `SC.LOOP_ONLY`, u 0 (in the slot), lit batch |
+| 3 | forward | loop | u at forward, lit forward |
+| 4 | loss code | card | flip 1, `LOOP.BODY` fully typed, lit loss, cursor 0 |
+| 5 | backward | loop | u at update, lit update |
+| 6 | step code | card | `LOOP.BODY`, lit `LOOP.STEP` (the four) |
+| 7 | next batch | loop | u 0, lit batch |
+| 8 | epoch code | card | `LOOP.CODE` fully typed, lit outer |
+| 9 | one batch | machine | REST, hero batch |
+| 10 | check batch | machine | same |
+| 11 | end | card | `LOOP.CODE`, lit `LOOP.STEP` |
 
-## Cut list (approved by Chris 2026-10-28, with take `ring`)
+## Cut list (second cut, approved flow 2026-10-28)
 
-Raw take 51.3 s. Pauses capped at 0.25 s (`tighten_vo.py --max-gap 0.25
---noise=-45dB`; `--noise auto` read −52.8 dB and found no pauses, the
-room is −72 dB) → **44.7 s, 14 pieces, no phrase cuts.** Every piece
-begins and ends on a whole sentence; Parakeet on the result reads clean.
-The *(if time)* epoch beat (26.0–34.4 s) stays: it is the code beat.
+Raw take 51.3 s. `tighten_vo.py --max-gap 0.25 --noise=-40dB --remove
+15.55-16.25 --level -14` → **43.0 s, 13 pieces, no phrase cuts.** The
+first cut (−45 dB) kept a 0.5 s breath after "makes a prediction" as
+speech (Chris heard the 1.9 s hole at 13 s); −40 dB plus removing that
+breath closes it to 0.25 s. Every piece begins and ends on a whole
+sentence; Parakeet on the result reads clean. The *(if time)* epoch beat
+stays: it is the code beat.
 
-Caption fixes in `words.json`: "pi -towards" → "PyTorch" (joined).
-Parakeet heard "grade 8 descent" and "loss is in moving"; WhisperKit
-(the word-time source) has "gradient descent" and "isn't moving", which
-are right, so nothing else to fix. Two short captions flash under 0.15 s
-("to that", "that's"): the caption tool's usual warning, judged on the
-assembled sheet.
-
-Nothing in the take needs an ear check: no number is spoken.
+Caption fixes in `words.json`: "pi -towards" → "PyTorch" (joined);
+"And epoch" → "An epoch" (WhisperKit). Two captions flash under 0.15 s
+("descent.", "the"): the caption tool's usual warning.
 
 ## Not in this Short (on purpose)
 

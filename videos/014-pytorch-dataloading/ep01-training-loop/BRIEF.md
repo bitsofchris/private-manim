@@ -69,14 +69,40 @@ quick `batch` opacity dip-and-return. Do not reach into the DOM.
 
 ## Cues (master seconds, from words.json; beat-local = master − Start)
 
-packed@2.26 tensor@3.00 training@6.00 loop@6.28 batch.@7.42 |
-The@8.32 yields@8.88 forward@10.72 prediction.@12.25 |
-compare@14.68 target,@15.86 loss.@16.68 |
-backwards@18.62 updated@19.92 one@22.36 training@22.70 step.@23.08 |
-go@24.02 back@24.12 next@25.24 batch.@25.48 |
-An@26.26 epoch@26.44 inner@29.54 loop@29.80 outer@31.78 loop@32.12 set.@33.86 |
-The@34.64 model@34.74 one@37.48 batch@37.68 time.@38.14 |
-check@39.90 batch@40.22 four@43.06 lines@43.34 time.@43.84
+packed@2.26 tensor@3.00 parallelize.@4.18 | And@5.38 training@5.98 loop@6.26 one@7.24 batch.@7.38 |
+The@8.26 yields@8.82 it,@9.18 forward@10.64 pass,@10.92 prediction.@12.18 |
+We@12.96 compare@13.12 target,@14.30 loss.@15.12 |
+The@15.94 backwards,@17.04 updated@18.34 descent.@19.58 |
+That@20.32 one@20.76 training@21.12 step.@21.48 |
+Then@22.28 go@22.42 back@22.54 next@23.64 batch.@23.88 |
+An@24.66 epoch@24.80 dataset.@26.68 inner@27.97 loop@28.14 outer@30.12 loop@30.48 set.@32.22 |
+The@33.0 model@33.08 one@35.82 batch@36.02 time.@36.46 |
+check@38.22 batch@38.54 first.@38.74 |
+Everything@39.64 four@41.38 lines@41.64 time.@42.14
+
+## The code card, out of order
+
+`S.code.typedLines = [n0, n1, ...]` (per-line character counts) replaces
+`typed` when lines land out of order: beat 8 shows `LOOP.CODE` with
+`typedLines = [h0, h1, Infinity, Infinity, Infinity, Infinity]` where
+`h0`/`h1` come from `SC_typedAt(LOOP.CODE.slice(0, 2), seconds)` split
+across the two headers; `cursorLine` says which row carries the cursor.
+`S.code.lit` may be an array (`LOOP.STEP` lights the four body lines).
+`LOOP.BODY` is the four-line card of beats 4 and 6.
+
+## Crossfades between images
+
+Machine ↔ card and loop ↔ card: `S.flip` (the kit's 0.4 s crossfade).
+Machine ↔ loop (beat 2 only): no kit field; the beat lerps the machine's
+four opacities (`dataset, loader, batch, model`) 1 → 0 and `loop.o`
+0 → 1 over 0.4 s itself. A beat that flips to a card from the loop passes
+the loop state through (as SEAM[n−1].loop) so the fade is the kit's.
+
+The previous eight-beat build is in git at commit a343253
+(`git show a343253:videos/014-pytorch-dataloading/ep01-training-loop/03_loss/index.html`
+etc.: 01_hook, 02_forward, 03_loss, 04_backward, 05_next_batch,
+06_epoch_code, 07_one_batch, 08_check_batch). Copy its ride, pulse and
+flip code where it fits; the cues and seam numbers have all changed.
 
 ## Check, render, review (from your beat folder)
 

@@ -29,7 +29,9 @@
 //                    step (the four boxes together), track (the loop itself)
 // LOOP.at(take, name) gives the u where the glyph sits beside a box
 // ("forward", "loss", "backward", "update") or in the slot ("loader").
-// LOOP.CODE is the code card's lines (SERIES.md ledger, "The training loop").
+// LOOP.CODE is the code card's lines (SERIES.md ledger, "The training loop");
+// LOOP.BODY its last four (the card before the `for` headers are typed), LOOP.STEP
+// the four names to light together.
 (function () {
   const SC = window.SC, PAL = SC.PAL, { node, label, show, lerp, seg, clamp01 } = SC;
   const BOXES = ["forward", "loss", "backward", "update"];
@@ -42,6 +44,7 @@
     { t: "    loss.backward()", lit: "backward" },
     { t: "    optimizer.step()", lit: "update" },
   ];
+  const BODY = CODE.slice(2);   // the four lines of the body, shown alone before the headers arrive (beats 4, 6)
   const TAKES = {
     ring: {
       loader: { x: 190, y: 250, w: 635, h: 150, slot: [305, 325], label: 400 },
@@ -164,5 +167,6 @@
   };
   SC.REST.loop = { o: 0 };
   SC.LOOP_ONLY = { dataset: 0, loader: 0, batch: 0, model: 0, hero: null };
-  window.LOOP = { TAKES, CODE, at, pointAt, BOXES };
+  const STEP = BOXES.slice();   // the four body lines lit together: code.lit = LOOP.STEP ("one training step")
+  window.LOOP = { TAKES, CODE, BODY, STEP, at, pointAt, BOXES };
 })();

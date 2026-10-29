@@ -1,72 +1,67 @@
 [
  {
   "old_start": 0.0,
-  "old_end": 4.740938,
+  "old_end": 4.717937,
   "new_start": 0.3
  },
  {
-  "old_start": 5.486375,
-  "old_end": 8.148333000000001,
-  "new_start": 5.291
+  "old_start": 5.491229,
+  "old_end": 8.122729,
+  "new_start": 5.268
  },
  {
-  "old_start": 9.209521,
-  "old_end": 10.508021,
-  "new_start": 8.203
+  "old_start": 9.219208,
+  "old_end": 10.502208,
+  "new_start": 8.149
  },
  {
-  "old_start": 11.204875,
-  "old_end": 14.171812,
-  "new_start": 9.751
+  "old_start": 11.205312,
+  "old_end": 14.130562,
+  "new_start": 9.682
  },
  {
-  "old_start": 15.317957999999999,
-  "old_end": 16.526145999999997,
-  "new_start": 12.968
+  "old_start": 16.967313,
+  "old_end": 19.694083,
+  "new_start": 12.858
  },
  {
-  "old_start": 16.967146000000003,
-  "old_end": 19.703646,
-  "new_start": 14.427
+  "old_start": 20.873563,
+  "old_end": 25.007520999999997,
+  "new_start": 15.834
  },
  {
-  "old_start": 20.871771000000003,
-  "old_end": 25.012874999999998,
-  "new_start": 17.413
+  "old_start": 25.457292000000002,
+  "old_end": 27.140749999999997,
+  "new_start": 20.218
  },
  {
-  "old_start": 25.456771000000003,
-  "old_end": 27.144582999999997,
-  "new_start": 21.804
+  "old_start": 28.087229,
+  "old_end": 30.203311999999997,
+  "new_start": 22.152
  },
  {
-  "old_start": 28.082729,
-  "old_end": 30.229187999999997,
-  "new_start": 23.742
+  "old_start": 31.469229000000002,
+  "old_end": 34.244333,
+  "new_start": 24.518
  },
  {
-  "old_start": 31.442521000000003,
-  "old_end": 34.248895999999995,
-  "new_start": 26.138
+  "old_start": 34.662333000000004,
+  "old_end": 39.771063,
+  "new_start": 27.543
  },
  {
-  "old_start": 34.658771,
-  "old_end": 39.7755,
-  "new_start": 29.195
+  "old_start": 40.353312,
+  "old_end": 44.280896,
+  "new_start": 32.902
  },
  {
-  "old_start": 40.350146,
-  "old_end": 44.289583,
-  "new_start": 34.561
+  "old_start": 44.986646,
+  "old_end": 47.120478999999996,
+  "new_start": 37.079
  },
  {
-  "old_start": 44.982812,
-  "old_end": 47.133145999999996,
-  "new_start": 38.751
- },
- {
-  "old_start": 47.49925,
-  "old_end": 50.582729,
-  "new_start": 41.151
+  "old_start": 47.501667000000005,
+  "old_end": 50.578396,
+  "new_start": 39.463
  }
 ]

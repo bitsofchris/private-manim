@@ -1,31 +1,11 @@
-00:00.320-00:08.080
-A batch is just a bunch of samples packed into one tensor so the GPU can parallelize, and a pie towards training loop is what happens to that one batch.
-
-00:08.080-00:13.680
+A batch is just a bunch of samples packed into one tensor so the GPU can parallelize, and a pi towards training loop is what happens to that one batch.
 The data loader yields it, the batch goes into the forward pass, and the model makes a prediction.
-
-00:14.300-00:17.260
 We compare that prediction to the target and that's the loss.
-
-00:17.260-00:21.900
-The loss is then propagated backwards, and the weights are updated as part of grade 8 descent.
-
-00:21.900-00:23.660
+The loss is then propagated backwards, and the weights are updated as part of grade 8 descent
 That is one training step.
-
-00:23.660-00:26.380
 Then we go back to the data loader for the next batch.
-
-00:25.900-00:29.100
 An epoch is one pass through the whole dataset.
-
-00:29.100-00:34.540
 So this inner loop runs once per epoch, and the outer loop runs for as many epochs as you set.
-
-00:34.540-00:38.940
-The model never sees your dataset, it only ever sees one batch at a time
-
-00:38.600-00:44.680
-So if your loss is in moving check the batch first, everything downstream of it is the same four lines every time
-
-
+The model never sees your dataset, it only ever sees one batch at a time.
+So if your loss isn't moving, check the batch first.
+Everything downstream of it is the same four lines every time.

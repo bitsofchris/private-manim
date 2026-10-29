@@ -4,7 +4,7 @@ Search phrase: **pytorch training loop explained** (SERIES.md "Search
 phrases"; autocompletes, checked 2026-10-25). Before publishing, glance at
 YouTube's results for it.
 
-Final cut: `media/short.mp4`, 44.7 s.
+Final cut: `media/short.mp4`, 43.0 s.
 
 ## Titles (two; Chris picks)
 

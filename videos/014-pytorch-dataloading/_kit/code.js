@@ -13,13 +13,17 @@
 //   lines [{t, lit}]  from kit/data.js (DL_DATA.code.*)
 //   typed N         characters shown so far, over all lines in order; Infinity = all.
 //                   Use SC_typedAt(lines, seconds) for the typing look.
+//   typedLines [N]  per-line counts instead of `typed` (lines typed out of order:
+//                   014 ep01 types the two `for` headers above a body already there)
 //   lit NAME|null   the line whose `lit` equals NAME is the hero: a magenta bar in its
+//                   gutter and a lighter row; an array of names lights each of them
 //                   gutter and a lighter row (the text keeps its colours)
 //
 // The text is coloured like VS Code's Dark+ theme (keywords blue, calls yellow,
 // names light blue, numbers green, strings orange, comments green-grey), so a
 // line reads as code and not as one block of ink. Magenta stays the hero's.
-//   cursor 0|1      a block cursor after the last typed character
+//   cursor 0|1      a block cursor after the last typed character (of the last line,
+//                   or of line `cursorLine` when typing out of order)
 //   blink 0..       seconds, for the cursor's 0.5 s blink (pass the beat time)
 (function () {
   const PAL = { bg: "#0B0B14", panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0", data: "#2DD4BF", hero: "#C084FC", muted: "#4A5070" };
@@ -123,19 +127,23 @@
       card.style.height = `${h}px`; card.style.top = `${Math.round(CARD.cy - h / 2)}px`;
       let left = C.typed == null ? Infinity : Math.max(0, Math.floor(C.typed));
       const shown = [];
-      lines.forEach((ln, i) => {
+      if (C.typedLines) {
+        lines.forEach((ln, i) => shown.push({ ln, n: Math.min(ln.t.length, Math.max(0, Math.floor(C.typedLines[i] == null ? Infinity : C.typedLines[i]))) }));
+      } else lines.forEach((ln, i) => {
         const n = Math.min(ln.t.length, left);
         if (left > 0 || i === 0) shown.push({ ln, n });
         left -= ln.t.length;
       });
+      const litSet = Array.isArray(C.lit) ? C.lit : C.lit ? [C.lit] : [];
       const first = Math.max(0, shown.length - CARD.rows);
       const blinkOn = C.blink == null ? true : Math.floor(C.blink / 0.5) % 2 === 0;
       rows.forEach((el, r) => {
         const s = shown[first + r];
         if (!s) { el.textContent = ""; el.style.visibility = "hidden"; return; }
         el.style.visibility = "visible";
-        fill(el, s.ln.t, s.n, !!(s.ln.lit && C.lit && s.ln.lit === C.lit));
-        if (C.cursor && first + r === shown.length - 1 && blinkOn) el.appendChild(cursor);
+        fill(el, s.ln.t, s.n, !!(s.ln.lit && litSet.includes(s.ln.lit)));
+        const cursorRow = C.cursorLine == null ? shown.length - 1 : C.cursorLine;
+        if (C.cursor && first + r === cursorRow && blinkOn) el.appendChild(cursor);
       });
     }
     return { set, card, rows, CARD };
