@@ -190,7 +190,7 @@ and `pulse.py` bumps once (`SC.pulse(t, 5.74, 0.5)`). End state
 SEAM1[3] (PROTO[7]; `core` is 0 there, so fade `core` out over 0.2 s
 ending at HOLD = 6.73). Still from HOLD.
 
-## 04_oven (21.830, 9.940 s): SEAM1[3] → SEAM1[4]
+## 04_oven (21.830, 10.470 s): SEAM1[3] → SEAM1[4]
 
 VO: "But a cook puts the knife down to wait on the oven. That could be
 an I/O, a request, a file read, a sleep. The GIL is released while the
@@ -211,32 +211,41 @@ it). On "oven" (2.25) `oven.o` 0 → 1 over 0.2 s landing at 2.25, swap the
 slot to `SC.SLOT.oven`, and cook 2 walks: `cooks[1].at = "oven"`, `u`
 0 → 1 over 0.7 s from 2.25 (`SC.io`), `wait` 0. From "wait" (1.79)
 Thread 2's dashed bar grows: `rows[1] = [{ a: 0, b, k: "io" }]`, `b`
-0 → 1 linearly 1.79 → HOLD. Chips, each a 0.15 s swap: "request" (4.05)
+0 → 0.55 linearly 1.79 → 9.27 (the ding). Chips, each a 0.15 s swap: "request" (4.05)
 `requests.get(url)`, "read" (4.89) `open(f).read()`, "sleep" (5.37)
 `time.sleep(1)` (PROTO[8] is between the first two). On "released"
 (6.63) `knife.holder` → 2 (cut; cook 3 unfolds over 0.25 s ending at
 6.63) and cook 3 chops `SC.chopAt(t, 6.63, HOLD, 2)`; from "another
 thread" (8.25) Thread 3's bar grows `rows[2] = [{ a: 0.15, b, k: "py" }]`,
-`b` 0.15 → 1 linearly 8.25 → HOLD, with `cooks[2].cut` 0.5 → 0.8 over
-6.63 → HOLD. End state SEAM1[4] (PROTO[9]), still from HOLD = 9.64.
+`b` 0.15 → 0.55 linearly 8.25 → 9.83, with `cooks[2].cut` 0.5 → 0.8 over
+6.63 → 9.83. Then the round trip, in the silence after "run": at 9.27
+the oven dings (`oven.ding = SC.pulse(t, 9.27, 0.5)`, the chip fades
+over 0.2 s); from 9.37 cook 2 walks back (`u` 1 → 0 over 0.55 s, `SC.io`,
+then `at = "counter"`, `u` 1); at 9.83 the knife hops 3 → 2 over 0.27 s
+(`holder` 2 → 1, cook 3 folds as it leaves, its chop stops); from 10.10
+Thread 2's row gains a magenta bar `{ a: 0.6, b, k: "py" }`, `b` 0.6 →
+0.64 by HOLD = 10.10 (written as a constant: `take + hop` in floats misses
+HOLD). End state SEAM1[4] (PROTO[10]; PROTO[9] is the walk back), still
+from 10.10.
 
-## 05_appliance (31.770, 4.110 s): SEAM1[4] → SEAM1[5]
+## 05_appliance (32.300, 3.580 s): SEAM1[4] → SEAM1[5]
 
 VO: "Same for an appliance. Think of NumPy, image decoding, a tokenizer."
 
-Words: Same@0.71 for@0.99 an@1.11 appliance.@1.19 Think@1.77 of@1.89
-NumPy,@2.05 image@2.48 decoding,@2.73 a@3.27 tokenizer.@3.37
+Words: Same@0.18 for@0.46 an@0.58 appliance.@0.66 Think@1.24 of@1.36
+NumPy,@1.52 image@1.95 decoding,@2.20 a@2.74 tokenizer.@2.84
 
-Opens on SEAM1[4]: cook 3 chopping (keep chopping the whole beat,
-`SC.chopAt(t, 0, HOLD, 2)`; `cooks[2].cut` 0.8 → 1.0 over 0 → HOLD).
-On "appliance" (1.19) `appl.o` 0 → 1 over 0.2 s landing at 1.19, swap
-the slot to `SC.SLOT.appl`, cook 4 unfolds (`wait` → 0 over 0.2 s) and
-walks: `cooks[3].at = "appl"`, `u` 0 → 1 over 0.6 s from 1.19. When it
-arrives (1.79) Thread 4's teal bar grows: `rows[3] = [{ a: 0.4, b,
-k: "nat" }]`, `b` 0.4 → 1 linearly 1.79 → HOLD. Chips, 0.15 s swaps:
-"NumPy" (2.05) `np.dot(a, b)`, "decoding" (2.73) `Image.open(f)`,
-"tokenizer" (3.37) `tokenizer(text)`. End state SEAM1[5] (PROTO[10]),
-still from HOLD = 3.81.
+Opens on SEAM1[4]: cook 2, back from the oven, chopping (the whole beat,
+`SC.chopAt(t, 0, HOLD, 2)`; `cooks[1].cut` 0.5 → 0.8 over 0 → HOLD) and
+Thread 2's magenta bar growing on: `rows[1][1].b` 0.64 → 1 linearly
+0 → HOLD. No chip at the seam. On "appliance" (0.66) `appl.o` 0 → 1 over
+0.2 s landing at 0.66, swap the slot to `SC.SLOT.appl`, cook 4 unfolds
+(`wait` → 0 over 0.2 s) and walks: `cooks[3].at = "appl"`, `u` 0 → 1
+over 0.6 s from 0.66. When it arrives (1.26) Thread 4's teal bar grows:
+`rows[3] = [{ a: 0.7, b, k: "nat" }]`, `b` 0.7 → 1 linearly 1.26 → HOLD.
+Chips, fading in over 0.15 s then 0.15 s swaps: "NumPy" (1.52)
+`np.dot(a, b)`, "decoding" (2.20) `Image.open(f)`, "tokenizer" (2.84)
+`tokenizer(text)`. End state SEAM1[5] (PROTO[11]), still from HOLD = 3.28.
 
 ## 06_close (35.880, 10.210 s): SEAM1[5] → SEAM1[6]
 
@@ -251,15 +260,26 @@ then@5.62 threads@5.76 work.@6.00 But@6.68 if@6.74 it's@6.82 running@6.92
 Python,@7.08 you@7.50 need@7.62 a@7.82 second@7.92 kitchen@8.16 or@8.54
 another@8.62 process.@8.82
 
-Opens on SEAM1[5]: cook 3 chopping (chop `SC.chopAt(t, 0, 0.50, 2)`,
-then still: the kitchen stops being the subject). On "threads don't
+Opens on SEAM1[5]: cook 2 chopping, and it keeps chopping through the
+close (`SC.chopAt(t, 0.2, HOLD, 2)`, still for the first 0.2 s so the cut
+encodes clean; `cooks[1].cut` 0.8 → 1 over 0 → HOLD). On "threads don't
 help" (0.50 → 1.16) the kitchen shrinks: `K.half` 0 → 1 over 0.6 s
 (`SC.io`), the chip fades out over 0.2 s from 0.50, the slot fades out.
 On "waiting" (2.94) `pulse.io` bumps (`SC.pulse(t, 2.94, 0.6)`); on
-"running Python" (3.80) `pulse.py` bumps (`SC.pulse(t, 3.80, 0.6)`). On
-"threads work" (5.76) `close.a` 0 → 1 over 0.2 s landing at 5.76; on
-"running Python" (6.92) `close.b` 0 → 1 landing at 7.08. On "second
-kitchen" (7.92) `ghost.o` 0 → 1 over 0.3 s landing at 8.16; on "another
-process" (8.62) the slot comes back as `SC.SLOT.twin` landing at 8.82.
-End state SEAM1[6] (PROTO[11]), still from HOLD = 9.3 (the VO ends at
-9.1; the last frame holds for 0.9 s).
+"running Python" (3.80) `pulse.py` bumps. On "threads work" (5.76)
+`close.a` 0 → 1 over 0.2 s landing at 5.76; on "running Python," (7.08)
+`close.b` likewise. On "second kitchen" (7.86 → 8.26) `panel.split`
+0 → 1 (`SC.io`): the wide panel narrows to `process 1`, its rows at half
+width, and `process 2` appears once the left has narrowed; at the same
+time the second kitchen draws in (`twin.o` 1, `twin.draw` 0 → 1 over
+0.3 s from 7.86). Its cooks walk in from 8.16, 0.5 s each, staggered
+0.12 s (`twin.cooks[i].in`); `twin.veg` fades in 8.16 → 8.36; at 8.76
+the knife appears in cook 1's hand (`twin.knife` o 0 → 1 over 0.1 s,
+`holder` 0) while cooks 2–4 fold (`wait` 0 → 1 over 8.76 → 8.80); from
+8.80 cook 1 chops (`twin.chop = SC.chopAt(t, 8.80, HOLD, 2)`, cut
+0 → 0.3) and the two magenta bars grow together: process 2's
+`panel2.rows[0] = [{ a: 0.5, b, k: "py" }]` 0.5 → 0.75 and process 1's
+Thread 2 bar (and Thread 4's teal) from their half-width ends to 0.75,
+both linearly 8.80 → HOLD. Slot: `SC.SLOT.twin` fades in over 0.2 s
+landing on "process" (8.82). End state SEAM1[6] (PROTO[13]), still from
+HOLD = 9.91.

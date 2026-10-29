@@ -3,11 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 04_oven (21.830, 9.940 s): SEAM1[3] -> SEAM1[4]. "But a cook puts the knife down to wait on the oven. That could be
+    <!-- 04_oven (21.830, 10.470 s): SEAM1[3] -> SEAM1[4]. "But a cook puts the knife down to wait on the oven. That could be
          an I/O, a request, a file read, a sleep. The GIL is released while the thread waits, so another thread can run."
          The staircase clears and the knife hops 4 -> 2 on "cook"; cook 2 sets it on the board on "down"; the oven appears on
          "oven" and cook 2 walks to it while Thread 2's dashed bar grows from "wait"; three chips on their words; on "released"
-         cook 3 takes the knife and chops, and Thread 3's magenta bar grows from "another thread". -->
+         cook 3 takes the knife and chops, and Thread 3's magenta bar grows from "another thread". Then the round trip, in the
+         silence after "run" (Chris, 10/29): the oven dings, cook 2 walks back, the knife hops 3 -> 2, Thread 2's dashed bar
+         ends and a magenta bar starts on its row: the wait is over and the thread is running Python again. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="kit/kitchen.js"></script>
@@ -20,11 +22,11 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="9.94" data-fps="30" data-width="1080" data-height="1920"></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.47" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 9.94;
-  const HOLD = 9.64;                      // still from here: SEAM1[4] exactly
+  const BEAT_SECONDS = 10.47;
+  const HOLD = 10.10;                     // still from here: SEAM1[4] exactly (the last 0.3 s must be still, with margin)
   // Beat-local cues (master - 21.830), from words.json.
   const CUE = {
     cook: 0.43,       /* "cook": the staircase clears, the knife hops 4 -> 2 */
@@ -36,8 +38,13 @@
     sleep: 5.37,      /* "sleep": chip time.sleep(1) */
     released: 6.63,   /* "released": cook 3 takes the knife and chops */
     another: 8.25,    /* "another": Thread 3's magenta bar starts growing */
+    ding: 9.27,       /* after "run": the oven flashes, the wait is over */
+    back: 9.37,       /* cook 2 walks back to the counter */
+    take: 9.83,       /* the knife hops 3 -> 2, cook 3 folds, Thread 3's bar stops */
+    pick: 10.10,      /* the knife is in cook 2's hand; Thread 2's magenta bar starts (= take + hop2, written out: float sums miss HOLD) */
   };
-  const D = { clear: 0.3, hop: 0.4, walk: 0.7, pop: 0.2, swapOut: 0.15, swapIn: 0.2, chipSwap: 0.15, unfold: 0.25 };
+  const D = { clear: 0.3, hop: 0.4, walk: 0.7, pop: 0.2, swapOut: 0.15, swapIn: 0.2, chipSwap: 0.15, unfold: 0.25, back: 0.55, hop2: 0.27 };
+  const IO_END = 0.55, PY2_A = 0.6, PY2_B = 0.64, PY3_END = 0.55;   // lane fractions at the seam (SC.OVEN_ROWS)
 
   const root = document.getElementById("root");
   SC.SEAM = SC.SEAM1;
@@ -62,19 +69,26 @@
     S.cooks[3].wait = hop;                                   // cook 4 folds as the knife leaves
     S.cooks[1].wait = 1 - hop;                               // cook 2 unfolds as it arrives
     if (t >= CUE.oven) { S.cooks[1].at = "oven"; S.cooks[1].u = io(seg(t, CUE.oven, CUE.oven + D.walk)); }
-    S.cooks[2].wait = 1 - seg(t, CUE.released - D.unfold, CUE.released);
-    S.cooks[2].cut = lerp(0.5, 0.8, seg(t, CUE.released, HOLD));
+    // the round trip: cook 2 walks back from the oven, cook 3 folds as the knife leaves
+    const back = io(seg(t, CUE.back, CUE.back + D.back));
+    if (back > 0) { S.cooks[1].u = 1 - back; if (back >= 1) { S.cooks[1].at = "counter"; S.cooks[1].u = 1; } }
+    const hop2 = io(seg(t, CUE.take, CUE.take + D.hop2));
+    S.cooks[2].wait = t < CUE.take ? 1 - seg(t, CUE.released - D.unfold, CUE.released) : hop2;
+    S.cooks[2].cut = lerp(0.5, 0.8, seg(t, CUE.released, CUE.take));
 
     // the knife
     S.knife.holder = t < CUE.cook ? 3
       : t < CUE.cook + D.hop ? lerp(3, 1, hop)
       : t < CUE.down ? 1
       : t < CUE.released ? -1
-      : 2;
-    S.chop = chopAt(t, CUE.released, HOLD - 0.02, 2);   // strokes end a frame before HOLD: at t = HOLD float rounding left chop ~1
+      : t < CUE.take ? 2
+      : t < CUE.take + D.hop2 ? lerp(2, 1, hop2)
+      : 1;
+    S.chop = chopAt(t, CUE.released, CUE.take, 2);
 
     // the oven and the slot
     S.oven.o = seg(t, CUE.oven - D.pop, CUE.oven);
+    S.oven.ding = SC.pulse(t, CUE.ding, 0.5);
     const sl = swap(t, CUE.oven, D.swapOut, D.swapIn);
     S.slot = Object.assign({}, sl.after ? SC.SLOT.oven : SC.SLOT.knife, { o: sl.o });
 
@@ -93,10 +107,12 @@
       S.panel.rows = SC.STAIR.map((row) => row.map((sg) => ({ a: sg.a, b: lerp(sg.b, sg.a, clear), k: sg.k })));
     } else {
       S.panel.rows = [[], [], [], []];
-      if (t >= CUE.wait) S.panel.rows[1] = [{ a: 0, b: seg(t, CUE.wait, HOLD), k: "io" }];
-      if (t >= CUE.another) S.panel.rows[2] = [{ a: 0.15, b: lerp(0.15, 1, seg(t, CUE.another, HOLD)), k: "py" }];
+      if (t >= CUE.wait) S.panel.rows[1] = [{ a: 0, b: IO_END * seg(t, CUE.wait, CUE.ding), k: "io" }];
+      if (t >= CUE.pick) S.panel.rows[1].push({ a: PY2_A, b: lerp(PY2_A, PY2_B, seg(t, CUE.pick, HOLD)), k: "py" });
+      if (t >= CUE.another) S.panel.rows[2] = [{ a: 0.15, b: lerp(0.15, PY3_END, seg(t, CUE.another, CUE.take)), k: "py" }];
     }
 
+    if (t >= CUE.ding) S.chip.o = Math.min(S.chip.o, 1 - seg(t, CUE.ding, CUE.ding + 0.2));
     kit.draw(null, S);
   }
   window.__timelines = window.__timelines || {};

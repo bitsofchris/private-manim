@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 05_appliance (015 ep 1, beat 5, 4.110 s): SEAM1[4] -> SEAM1[5]. "Same for an appliance. Think of NumPy, image decoding,
-         a tokenizer." Cook 3 keeps chopping; on "appliance" the food processor appears, cook 4 unfolds and walks to it, the slot
-         swaps to "appliance / native code"; when cook 4 arrives Thread 4's teal bar grows; the chip swaps on each named library. -->
+    <!-- 05_appliance (32.300, 3.580 s): SEAM1[4] -> SEAM1[5]. "Same for an appliance. Think of NumPy, image decoding, a
+         tokenizer." Cook 2, back from the oven with the knife, chops the whole beat and Thread 2's magenta bar grows on
+         (the round trip's second half). On "appliance" the food processor fades in, cook 4 unfolds and walks to it; when it
+         arrives Thread 4's teal bar grows; three chips on their words. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="kit/kitchen.js"></script>
@@ -18,18 +19,18 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="4.11" data-fps="30" data-width="1080" data-height="1920"></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.58" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 4.11;
-  const HOLD = 3.81;                                   // still from here: SEAM1[5] exactly
-  // Beat-local cues (master - 31.770), from words.json.
+  const BEAT_SECONDS = 3.58;
+  const HOLD = 3.28;                                   // still from here: SEAM1[5] exactly
+  // Beat-local cues (master - 32.300), from words.json.
   const CUE = {
-    appl:   1.19,  /* "appliance." */
-    arrive: 1.79,  /* "Think": cook 4 reaches the appliance, Thread 4's bar starts */
-    numpy:  2.05,  /* "NumPy," */
-    decode: 2.73,  /* "decoding," */
-    token:  3.37,  /* "tokenizer." */
+    appl:   0.66,  /* "appliance." */
+    arrive: 1.26,  /* "Think": cook 4 reaches the appliance, Thread 4's bar starts */
+    numpy:  1.52,  /* "NumPy," */
+    decode: 2.20,  /* "decoding," */
+    token:  2.84,  /* "tokenizer." */
   };
   const CHIPS = [
     [CUE.numpy,  "np.dot(a, b)"],
@@ -52,9 +53,10 @@
 
   function render(t) {
     const S = SC.state(SC.SEAM1[4]);                   // a deep copy; mutate it
-    // cook 3 chops the whole beat, finishing its carrot
+    // cook 2 chops the whole beat, back from the oven; Thread 2's magenta bar grows on
     S.chop = SC.chopAt(t, 0, HOLD, 2);
-    S.cooks[2].cut = lerp(0.8, 1.0, seg(t, 0, HOLD));
+    S.cooks[1].cut = lerp(0.5, 0.8, seg(t, 0, HOLD));
+    S.panel.rows[1][1] = { a: 0.6, b: lerp(0.64, 1, seg(t, 0, HOLD)), k: "py" };
     // "appliance": the food processor fades in, the slot swaps, cook 4 unfolds and walks to it
     S.appl.o = seg(t, CUE.appl - 0.2, CUE.appl);
     const sl = swap(t, CUE.appl, 0.15, 0.2);
@@ -62,10 +64,10 @@
     S.cooks[3].wait = 1 - seg(t, CUE.appl - 0.2, CUE.appl);
     if (t >= CUE.appl) { S.cooks[3].at = "appl"; S.cooks[3].u = io(seg(t, CUE.appl, CUE.arrive)); }
     // when it arrives, Thread 4's teal bar grows
-    if (t >= CUE.arrive) S.panel.rows[3] = [{ a: 0.4, b: lerp(0.4, 1, seg(t, CUE.arrive, HOLD)), k: "nat" }];
-    // the chip: time.sleep(1) -> np.dot -> Image.open -> tokenizer, each on its word
-    let text = S.chip.text, o = 1;
-    for (const [at, s] of CHIPS) { const c = swap(t, at); if (c.next) text = s; if (t >= at - 0.3 && t < at) o = c.o; }
+    if (t >= CUE.arrive) S.panel.rows[3] = [{ a: 0.7, b: lerp(0.7, 1, seg(t, CUE.arrive, HOLD)), k: "nat" }];
+    // the chip: none at the seam, then np.dot -> Image.open -> tokenizer, each on its word
+    let text = "", o = 0;
+    for (const [at, s] of CHIPS) { const c = swap(t, at); if (c.next) { text = s; o = 1; } if (t >= at - 0.3 && t < at) o = text ? c.o : seg(t, at - 0.15, at); }
     S.chip.text = text; S.chip.o = o;
     if (t >= HOLD) { const E = SC.state(SC.SEAM1[5]); kit.draw(null, E); return; }
     kit.draw(null, S);

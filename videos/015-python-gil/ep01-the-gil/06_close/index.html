@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- 06_close (35.880 s, 10.210 s): SEAM1[5] -> SEAM1[6]. "But when threads don't help, ask one thing. Is this thread
          waiting, or is it running Python? If it's waiting, then threads work. But if it's running Python, you need a
-         second kitchen or another process." The kitchen shrinks to half size, the bars pulse on their words, the two
-         close lines land, the dashed second kitchen draws in, the slot comes back as "second kitchen / another process". -->
+         second kitchen or another process." The kitchen shrinks to half size (cook 2 keeps chopping), the bars pulse on
+         their words, the two close lines land. On "second kitchen" the panel splits into "process 1" / "process 2" and a
+         second kitchen draws in at right; its cooks walk in, a knife lands, cook 1 chops, and the two magenta bars grow
+         side by side (Chris, 10/29: show the second kitchen running, with its own four threads). -->
     <script src="vendor/gsap.min.js"></script>
     <script src="iso/iso.js"></script>
     <script src="kit/kitchen.js"></script>
@@ -34,8 +36,10 @@
     kitchen: 8.16,   /* "kitchen" (second kitchen): the dashed second kitchen is drawn */
     process: 8.82,   /* "process" (another process): slot "second kitchen / another process" */
   };
-  const HOLD = 9.30;                 // still from here (VO ends 9.1)
+  const HOLD = 9.91;                 // still from here (VO ends 9.34)
   const SHRINK = 0.6, SWAP_OUT = 0.15, SWAP_IN = 0.2;
+  const T = { split: 7.86, draw: 7.86, walk: 8.16, knife: 8.76, chop: 8.80 };   // the second kitchen comes alive on "second kitchen"
+  const WALK = 0.5, STAGGER = 0.12;
 
   const root = document.getElementById("root");
   SC.SEAM = SC.SEAM1;
@@ -43,8 +47,18 @@
   const A = SC.SEAM1[5], B = SC.SEAM1[6];
   const { seg, io, pulse, lerp } = SC;
 
+  // the left half's rows at half width, then the running bars (T2 py, T4 nat) grow on from `b0` to `b1` as process 2's do
+  function leftRows(split, grow) {
+    const rows = SC.APPL_ROWS.map((row) => row.map((sg) => ({ a: lerp(sg.a, sg.a * 0.5, split), b: lerp(sg.b, sg.b * 0.5, split), k: sg.k })));
+    rows[1][1].b = lerp(rows[1][1].b, 0.75, grow); rows[3][0].b = lerp(rows[3][0].b, 0.75, grow);
+    return rows;
+  }
   function render(t) {
     if (t >= HOLD) t = HOLD;
+    const split = io(seg(t, T.split, T.split + 0.4));
+    const grow = seg(t, T.chop, HOLD);
+    const twinCooks = [0, 1, 2, 3].map((i) => ({ in: seg(t, T.walk + i * STAGGER, T.walk + i * STAGGER + WALK), at: "counter", u: 1,
+      wait: i === 0 ? 0 : seg(t, T.knife, T.chop), cut: i === 0 ? 0.3 * grow : 0 }));
     // the slot: appliance fades out from "threads", the twin label fades in landing on "process"
     const outA = 1 - seg(t, CUE.threads, CUE.threads + SWAP_OUT);
     const inB = seg(t, CUE.process - SWAP_IN, CUE.process);
@@ -53,11 +67,14 @@
       K: { half: io(seg(t, CUE.help - SHRINK, CUE.help)) },
       chip: { o: 1 - seg(t, CUE.threads, CUE.threads + 0.2) },
       slot,
-      panel: { pulse: { io: pulse(t, CUE.waiting, 0.6), py: pulse(t, CUE.running, 0.6) } },
+      panel: { pulse: { io: pulse(t, CUE.waiting, 0.6), py: pulse(t, CUE.running, 0.6) }, split, rows: leftRows(split, grow) },
+      panel2: { rows: t >= T.chop ? [[{ a: 0.5, b: lerp(0.5, 0.75, grow), k: "py" }], [], [], []] : [[], [], [], []] },
       close: { a: seg(t, CUE.work - 0.2, CUE.work), b: seg(t, CUE.python - 0.2, CUE.python) },
-      ghost: { o: seg(t, CUE.kitchen - 0.3, CUE.kitchen) },
-      chop: SC.chopAt(t, 0, CUE.threads, 2),
+      twin: { o: t >= T.draw ? 1 : 0, draw: seg(t, T.draw, T.draw + 0.3), cooks: twinCooks, veg: seg(t, T.walk, T.walk + 0.2),
+              knife: { o: seg(t, T.knife, T.knife + 0.1), holder: t >= T.knife ? 0 : -1 }, chop: SC.chopAt(t, T.chop, HOLD, 2) },
+      chop: SC.chopAt(t, 0.2, HOLD, 2),               // cook 2 keeps chopping through the close (still for 0.2 s so the cut encodes clean)
     });
+    S.cooks[1].cut = lerp(0.8, 1, seg(t, 0, HOLD));
     kit.draw(null, S);
   }
   window.__timelines = window.__timelines || {};
