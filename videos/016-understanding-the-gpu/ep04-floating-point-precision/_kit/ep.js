@@ -125,8 +125,8 @@
     const lab16 = label(root, "fp16", { left: 65, top: NL.y16 - 5, size: 44 });
     const labB = label(root, "bf16", { left: 65, top: NL.yb - 5, size: 44 });
     const max16 = label(root, "65,504", { left: NL.x0 + NL.at16 * (NL.x1 - NL.x0) + 16, top: NL.y16, size: 40, color: PAL.dim });
-    const sameLab = label(root, "same range as fp32", { left: NL.x0, top: NL.yb + 5, size: 32, width: NL.x1 - NL.x0 - 20,
-                                                          align: "right", color: PAL.bg });
+    // left-aligned so the marker (at 0.6 of the span) never crosses it
+    const sameLab = label(root, "same range as fp32", { left: NL.x0 + 16, top: NL.yb + 5, size: 32, color: PAL.bg });
     const infG = node("g", {}, svg);
     const infBox = node("rect", { x: 475, y: NL.y16 - 4, width: 110, height: NL.h + 8, rx: 26, fill: PAL.panel, "stroke-width": 5 }, infG);
     const infLab = label(root, "inf", { left: 475, top: NL.y16 + 1, size: 40, width: 110 });
