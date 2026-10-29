@@ -7,7 +7,9 @@
          of these numbers."
          From frame 0 the float panel shrinks back into cell (row 5, col 5) over 0.5 s (03's grow in
          reverse); once its contents are gone, memory is the hero: where these numbers live. The
-         card crossfades one word per word: weights -> activations -> gradients. Still from 1.65;
+         card crossfades one word per word: weights -> activations -> gradients, the acronym
+         (FLOATING-POINT / OPERATION) fading out under the first. Numbers stream out of memory
+         along the pipe into the chip from 0.5 s (0.3 s fade in), off by 2.55. Still from 2.55;
          ends on SEAM[5]. -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
@@ -38,6 +40,7 @@
     gradients: 1.42,    /* "gradient" 21.58 */
   };
   const SHRINK = 0.5, MIX = 0.25, LEAD = 0.05;   // each word's crossfade starts LEAD before its word
+  const STREAM_IN = 0.5, STREAM_FADE = 0.3, STREAM_OUT = 2.25;   // in once the panel is gone; off by 2.55, still from there
   const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
   const ramp = (t, a, d) => ease(SC.seg(t, a, a + d));
   const root = document.getElementById("root");
@@ -47,7 +50,7 @@
   [...root.children].filter((d) => d.tagName === "DIV" && d.children.length === 8 &&
     [...d.children].every((c) => c.tagName === "SPAN"))
     .forEach((d) => [d, ...d.children].forEach((e) => e.setAttribute("data-layout-allow-overlap", "")));
-  const NAME = SC.SEAM[4].card.A;
+  const NAME = null;                               // SEAM[4]: the acronym is on, the card holds no text
   const WORDS = [["weights", CUE.weights], ["activations", CUE.activations], ["gradients", CUE.gradients]];
   function card(t) {
     let A = NAME;
@@ -61,11 +64,15 @@
   }
   function state(t) {
     if (t <= 0) return SC.SEAM[4];
-    if (t >= CUE.gradients - LEAD + MIX) return SC.SEAM[5];
+    if (t >= STREAM_OUT + STREAM_FADE) return SC.SEAM[5];
     const grow = 1 - ramp(t, 0, SHRINK);
     const float = grow > 0 ? Object.assign({}, SC.SEAM[4].float, { grow }) : { o: 0 };
     const hero = grow > 0.7 ? "exp" : "hbm";       // the panel's contents are gone below 0.7 (flops.js)
-    return Object.assign({}, SC.SEAM[5], { hero, card: card(t), float });
+    const C = card(t);
+    const acroO = C.A === null ? 1 - C.mix : 0;     // the acronym leaves as the first word crossfades in
+    const acro = acroO > 0 ? Object.assign({}, SC.SEAM[4].acro, { o: acroO }) : { o: 0 };
+    const so = ramp(t, STREAM_IN, STREAM_FADE) * (1 - ramp(t, STREAM_OUT, STREAM_FADE));
+    return Object.assign({}, SC.SEAM[5], { hero, card: C, float, acro, stream: { o: so, phase: t } });
   }
   function render(t) {
     SC.clock = START + t;
