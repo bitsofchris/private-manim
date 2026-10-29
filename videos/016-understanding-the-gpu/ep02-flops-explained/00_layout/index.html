@@ -3,10 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 00_layout: ep 2's frame 0 on the series chip, and every seam state, 1 s each. Not in the Short.
-         0 s   take A: SEAM[0], the top card in the CPU and queue's place, the strip off
-         1 s   take B: the series rest frame kept (CPU, queue, strip), the card in the bottom slot
-         2 s   SEAM[1] … 10 s SEAM[9] -->
+    <!-- 00_layout: ep 2's frame 0 and every seam state, then the new parts mid-move, 1 s each. Not in the Short.
+         0–9 s   SEAM[0] … SEAM[9]
+         10 s    core op: 3.0 carried, `3.0 + 0.5 = 3.5`, 2 FLOPs     11 s  acro mid-unpack
+         12 s    stream, memory the hero                             13 s  count rolling
+         14 s    rate clock half-swept                               15 s  core dot, pair 2 adding -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/chip.js"></script>
@@ -25,17 +26,24 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-fps="30" data-width="1080" data-height="1920"></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 11;
+  const BEAT_SECONDS = 16;
   const kit = EP.mount(document.getElementById("root"));
-  const takeB = Object.assign({}, SC.SEAM[0], { cpu: 1, queueO: 1, strip: 0,
-    card: Object.assign({}, SC.SEAM[0].card, { y: 1150 }) });
+  const M = (n, o) => Object.assign({}, SC.SEAM[n], o);
+  const extra = [
+    M(0, { core: Object.assign({}, SC.SEAM[0].core, { mul: 1, carry: 1, add: 1, n: 2, lit: "add" }) }),
+    M(1, { hero: "acronym", acro: { o: 1, u: 0.55 } }),
+    M(5, { stream: { o: 1, phase: 1.3 } }),
+    M(6, { card: { o: 1, A: { kind: "count", o2: 1, v: 0.62 }, B: null, mix: 0 } }),
+    M(7, { card: { o: 1, A: { kind: "rate", clock: 0.5, clockO: 1 }, B: null, mix: 0 } }),
+    M(8, { hero: "expr", lit: SC.REST.lit, core: { o: 1, grow: 1, mode: "dot", step: 1.6 } }),
+  ];
   function render(t) {
     SC.clock = t;
-    const i = Math.floor(t);
-    kit.draw(i === 0 ? SC.SEAM[0] : i === 1 ? takeB : SC.SEAM[Math.min(9, i - 1)]);
+    const i = Math.min(15, Math.floor(t));
+    kit.draw(i < 10 ? SC.SEAM[i] : extra[i - 10]);
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);

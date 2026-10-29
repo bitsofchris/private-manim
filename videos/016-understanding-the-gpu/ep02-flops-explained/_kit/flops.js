@@ -16,20 +16,33 @@
 //   float    the zoom into one number, over the chip and the side slot (x 65–950,
 //            y 450–1078), grown out of cell (row 5, col 5):
 //            float = {o, grow, row1, row2, glide1, glide2, anat, anatO, lab: [s, d, e]}
+//   core     the zoom into one core: the same panel and grow as float, showing the
+//            arithmetic that core does. core = {o, grow, mode, ...}:
+//              mode "op":  `1.5 × 2.0 = 3.0`, the 3.0 carried down, `3.0 + 0.5 = 3.5`;
+//                          mul, carry, add 0..1 (each step's progress), n (the counter),
+//                          lit "mul"|"add"|null (that sign teal)
+//              mode "dot": one output of the tiny layer, x = [1.0 2.0 0.5], w = [0.5 1.5 2.0]:
+//                          step 0..3 (pair i runs over [i, i+1): multiply at +0.25, add at +0.5);
+//                          the counter (2 per pair, 6 in all) and y follow from step
+//   acro     "FLOP" over the card, unpacking into FLOATING-POINT / OPERATION: acro = {o, u};
+//            u 0 is "FLOP" alone, u 1 the two words; F L O P magenta on hero "acronym"
+//   stream   numbers leaving GPU memory along the pipe into the chip: stream = {o, phase}
+//            (phase: seconds; teal squares outlined in the background colour, 3 a pipe, 0.6 s apart)
 //
 // Card content {kind, ...} (every string is ep 2's ledger, storyboard.md):
 //   op      `a × b + c` and a counter:  n (0|1|2), lit ("mul"|"add"|null: that sign teal)
 //   name    "floating-point" / "operation", the fl and op letters magenta on hero "acronym"
 //   word    one word: word ("weights" | "activations" | "gradients")
-//   count   "FLOPs" (its s magenta on hero "s") / "720 trillion" at o2
-//   rate    step 0: "FLOPS" (its S magenta on hero "S") / "per second"
-//           step 1: "2,250 TFLOPS" (magenta on hero "spec") / "bf16"
-//           step 2: "2,250 TFLOPS" (its T magenta on hero "tera") / "tera = a trillion"
-//   matmul  step 0: `y = x @ W`; step 1 adds `x1*w1 + x2*w2 + x3*w3` (magenta on hero "expr")
+//   count   "FLOPs" (its s magenta on hero "s") / at o2: "720 trillion = 7.2 × 10¹⁴", or
+//           while v < 1 the count rolling up to 720,000,000,000,000 (mono, so it doesn't jitter)
+//   rate    "FLOPS" (its S magenta on hero "S") / "per second", and a 1 s clock at the
+//           card's right: clockO its opacity, clock 0..1 its sweep (magenta on hero "clock")
+//   matmul  `y = x @ W`
 //   frac    "FLOPs ÷ FLOPS" / "= GPU-hours" (hero "hours") and " = $" at dollar (hero "bill")
 //
 // Hero names of ep 2's parts (S.hero, one at a time; the chip's own names still work):
-//   count, acronym, sign, digits, exp, point, s, S, spec, tera, expr, hours, bill
+//   count (the core's counter), acronym, sign, digits, exp, point, s, S, clock,
+//   expr (the dot's running line), hours, bill
 (function () {
   const SC = window.SC, PAL = SC.PAL, { clamp01, seg, lerp, show } = SC;
   const CARD = { x: 65, y: 245, w: 885, h: 190 };
@@ -43,28 +56,18 @@
   function rows(K, hero) {
     if (!K) return [];
     switch (K.kind) {
-      case "op": return [[
-        { t: "a ", mono: 1, size: 76 }, { t: "×", mono: 1, size: 76, c: K.lit === "mul" ? data : ink },
-        { t: " b ", mono: 1, size: 76 }, { t: "+", mono: 1, size: 76, c: K.lit === "add" ? data : ink },
-        { t: " c", mono: 1, size: 76 }, { t: "    " + (K.n || 0), size: 96, c: h(hero, "count", data) },
-        { t: " FLOPs", size: 60, c: dim }]];
-      case "name": return [
-        [{ t: "fl", size: 72, c: h(hero, "acronym", ink) }, { t: "oating-point", size: 72 }],
-        [{ t: "op", size: 72, c: h(hero, "acronym", ink) }, { t: "eration", size: 72 }]];
       case "word": return [[{ t: K.word, size: 84 }]];
-      case "count": return [
-        [{ t: "FLOP", size: 96 }, { t: "s", size: 96, c: h(hero, "s", ink) }],
-        [{ t: "720 trillion", size: 64, c: data, o: K.o2 == null ? 0 : K.o2 }]];
-      case "rate": {
-        if (!K.step) return [[{ t: "FLOP", size: 96 }, { t: "S", size: 96, c: h(hero, "S", ink) }],
-                             [{ t: "per second", size: 64, c: dim }]];
-        const spec = h(hero, "spec", ink);
-        return [[{ t: "2,250 ", size: 96, c: spec }, { t: "T", size: 96, c: h(hero, "tera", spec) }, { t: "FLOPS", size: 96, c: spec }],
-                [{ t: K.step === 1 ? "bf16" : "tera = a trillion", size: 64, c: dim }]];
+      case "count": {
+        const o2 = K.o2 == null ? 0 : K.o2;
+        const row2 = K.v != null && K.v < 1
+          ? [{ t: Math.round(720e12 * clamp01(K.v)).toLocaleString("en-US"), mono: 1, size: 60, c: data, o: o2 }]
+          : [{ t: "720 trillion", size: 60, c: data, o: o2 }, { t: " = 7.2 × 10", size: 60, o: o2 },
+             { t: "14", size: 40, sup: 1, o: o2 }];
+        return [[{ t: "FLOP", size: 96 }, { t: "s", size: 96, c: h(hero, "s", ink) }], row2];
       }
-      case "matmul": return [
-        [{ t: "y = x @ W", mono: 1, size: 72 }],
-        [{ t: "x1*w1 + x2*w2 + x3*w3", mono: 1, size: 60, c: h(hero, "expr", data), o: K.step ? 1 : 0 }]];
+      case "rate": return [[{ t: "FLOP", size: 96 }, { t: "S", size: 96, c: h(hero, "S", ink) }],
+                           [{ t: "per second", size: 64, c: dim }]];
+      case "matmul": return [[{ t: "y = x @ W", mono: 1, size: 84 }]];
       case "frac": return [
         [{ t: "FLOPs ÷ FLOPS", size: 84 }],
         [{ t: "= GPU-hours", size: 72, c: h(hero, "hours", ink) },
@@ -101,6 +104,7 @@
           sp.style.opacity = s.o == null ? 1 : s.o;
           sp.style.fontFamily = s.mono ? MONO : "";
           sp.style.fontWeight = s.mono ? "700" : "";
+          sp.style.position = s.sup ? "relative" : ""; sp.style.top = s.sup ? `-${Math.round(s.size * 0.7)}px` : "";
         });
       });
     }
@@ -152,11 +156,7 @@
     function set(F, hero) {
       F = Object.assign({ o: 0, grow: 1, row1: 0, row2: 0, glide1: 0, glide2: 0, anat: 1, anatO: 0, lab: [0, 0, 0] }, F || {});
       const g = clamp01(F.grow), o = F.o;
-      show(panel, o * (g > 0 ? 1 : 0));
-      const x = lerp(CELL.x, PANEL.x, g), y = lerp(CELL.y, PANEL.y, g);
-      const w = lerp(CELL.s, PANEL.w, g), hh = lerp(CELL.s, PANEL.h, g);
-      Object.assign(panel.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${hh}px`,
-                                   borderWidth: `${lerp(2, 6, g)}px`, borderRadius: `${lerp(6, 28, g)}px` });
+      growBox(panel, o, g);
       const inner = o * seg(g, 0.7, 1);
       rowsF.forEach((R, r) => {
         const N = NUMS[r], ro = inner * (r ? F.row2 : F.row1), gl = clamp01(r ? F.glide2 : F.glide1);
@@ -187,17 +187,193 @@
     return { set, panel, rows: rowsF, boxes, labs };
   }
 
+  // ---- the panel both zooms grow (float and core): out of cell (row 5, col 5) ----
+  function growBox(box, o, g) {
+    show(box, o * (g > 0 ? 1 : 0));
+    Object.assign(box.style, { left: `${lerp(CELL.x, PANEL.x, g)}px`, top: `${lerp(CELL.y, PANEL.y, g)}px`,
+      width: `${lerp(CELL.s, PANEL.w, g)}px`, height: `${lerp(CELL.s, PANEL.h, g)}px`,
+      borderWidth: `${lerp(2, 6, g)}px`, borderRadius: `${lerp(6, 28, g)}px` });
+  }
+  function tile(root, x, y, w, hh, text, size) {
+    const d = el(root, `top:${y}px;left:${x}px;width:${w}px;height:${hh}px;border:6px solid ${PAL.ink};border-radius:18px;` +
+      `text-align:center;font-size:${size}px;line-height:${hh - 12}px;box-sizing:border-box;font-family:${MONO};font-weight:700;`, text);
+    return d;
+  }
+  const sign = (root, x, y, hh, text) => el(root, `top:${y}px;left:${x}px;width:90px;text-align:center;font-size:72px;` +
+    `line-height:${hh}px;font-family:${MONO};font-weight:700;`, text);
+
+  // ---- the core view ----
+  const OP = { yA: 580, yB: 750, h: 110, w: 170, x: [130, 305, 400, 575, 670], yN: 905 };
+  const DOT = { x: [1.0, 2.0, 0.5], w: [0.5, 1.5, 2.0], cols: [250, 460, 670], tw: 170, th: 100, yX: 570, yW: 690,
+                yOp: 815, yY: 935 };
+  const f1 = (v) => v.toFixed(1);
+  function makeCore(root) {
+    const box = el(root, `background:${PAL.panel};border:6px solid ${PAL.ink};border-radius:28px;`);
+    ["data-layout-allow-overflow", "data-layout-allow-occlusion"].forEach((a) => box.setAttribute(a, ""));
+    const head = el(root, `top:470px;left:${PANEL.x}px;width:${PANEL.w}px;text-align:center;font-size:60px;line-height:80px;color:${PAL.dim};`,
+      "inside one core");
+    // op
+    const X = OP.x;
+    const A = [tile(root, X[0], OP.yA, OP.w, OP.h, "1.5", 72), sign(root, X[1], OP.yA, OP.h, "×"),
+               tile(root, X[2], OP.yA, OP.w, OP.h, "2.0", 72), sign(root, X[3], OP.yA, OP.h, "="),
+               tile(root, X[4], OP.yA, OP.w, OP.h, "3.0", 72)];
+    const B = [tile(root, X[0], OP.yB, OP.w, OP.h, "3.0", 72), sign(root, X[1], OP.yB, OP.h, "+"),
+               tile(root, X[2], OP.yB, OP.w, OP.h, "0.5", 72), sign(root, X[3], OP.yB, OP.h, "="),
+               tile(root, X[4], OP.yB, OP.w, OP.h, "3.5", 72)];
+    const nRow = el(root, `top:${OP.yN}px;left:${PANEL.x}px;width:${PANEL.w}px;text-align:center;line-height:120px;`);
+    const nNum = document.createElement("span"); nNum.style.fontSize = "96px"; nRow.appendChild(nNum);
+    const nLab = document.createElement("span"); nLab.style.fontSize = "60px"; nLab.style.color = PAL.dim; nRow.appendChild(nLab);
+    // dot
+    const lx = sign(root, 110, DOT.yX, DOT.th, "x"), lw = sign(root, 110, DOT.yW, DOT.th, "w");
+    const xs = DOT.x.map((v, i) => tile(root, DOT.cols[i], DOT.yX, DOT.tw, DOT.th, f1(v), 64));
+    const ws = DOT.w.map((v, i) => tile(root, DOT.cols[i], DOT.yW, DOT.tw, DOT.th, f1(v), 64));
+    const opLine = el(root, `top:${DOT.yOp}px;left:${PANEL.x}px;width:${PANEL.w}px;text-align:center;font-size:72px;line-height:100px;` +
+      `font-family:${MONO};font-weight:700;`);
+    const opSp = ["y += ", "1.0", " × ", "0.5"].map((t) => { const s = document.createElement("span"); s.textContent = t; opLine.appendChild(s); return s; });
+    const yRow = el(root, `top:${DOT.yY}px;left:${PANEL.x}px;width:${PANEL.w}px;text-align:center;line-height:110px;`);
+    const ySp = document.createElement("span"); ySp.style.cssText = `font-size:72px;font-family:${MONO};font-weight:700;`; yRow.appendChild(ySp);
+    const yN = document.createElement("span"); yN.style.fontSize = "84px"; yRow.appendChild(yN);
+    const yL = document.createElement("span"); yL.style.fontSize = "60px"; yL.style.color = PAL.dim; yRow.appendChild(yL);
+    const opEls = [...A, ...B, nRow], dotEls = [lx, lw, ...xs, ...ws, opLine, yRow];
+
+    function counter(numEl, labEl, n, hero) {
+      numEl.textContent = String(n); numEl.style.color = hero === "count" ? mag : data;
+      labEl.textContent = n === 1 ? " FLOP" : " FLOPs";
+    }
+    function set(K, hero) {
+      K = Object.assign({ o: 0, grow: 1, mode: "op", mul: 0, carry: 0, add: 0, n: 0, lit: null, step: 0 }, K || {});
+      const g = clamp01(K.grow), o = K.o;
+      growBox(box, o, g);
+      const inner = o * seg(g, 0.7, 1);
+      show(head, inner);
+      const isOp = K.mode === "op";
+      opEls.forEach((e) => show(e, 0)); dotEls.forEach((e) => show(e, 0));
+      if (isOp) {
+        const step = (row, u, lit, io) => {              // one operation: operands, sign, "=", the result sliding out of the sign
+          [row[0], row[2]].forEach((t) => (t.style.borderColor = u > 0 && u < 1 ? data : PAL.ink));
+          row[1].style.color = K.lit === lit ? data : ink;
+          show(row[3], io * seg(u, 0.2, 0.5));
+          row[4].style.left = `${lerp(OP.x[3], OP.x[4], seg(u, 0.4, 0.8))}px`;
+          show(row[4], io * seg(u, 0.4, 0.8));
+        };
+        [A[0], A[1], A[2]].forEach((e) => show(e, inner));
+        step(A, K.mul, "mul", inner);
+        // the carry: row A's result slides down into row B's first slot; row B's rest fades in behind it
+        const c = clamp01(K.carry);
+        B[0].style.left = `${lerp(OP.x[4], OP.x[0], c)}px`; B[0].style.top = `${lerp(OP.yA, OP.yB, c)}px`;
+        show(B[0], inner * (c > 0 ? 1 : 0));
+        step(B, K.add, "add", inner);
+        show(B[1], inner * seg(c, 0.5, 1)); show(B[2], inner * seg(c, 0.5, 1));
+        counter(nNum, nLab, K.n, hero); show(nRow, inner);
+      } else {
+        const s = Math.max(0, Math.min(3, K.step)), i = Math.min(2, Math.floor(s)), f = s >= 3 ? 1 : s - i;
+        const cum = [0, 0.5, 3.5, 4.5];
+        const muls = Math.floor(s) + (s < 3 && f >= 0.25 ? 1 : 0), adds = Math.floor(s) + (s < 3 && f >= 0.5 ? 1 : 0);
+        [lx, lw].forEach((e) => show(e, inner));
+        DOT.x.forEach((_, k) => {
+          const on = s < 3 && k === i && s > 0;
+          [xs[k], ws[k]].forEach((t) => { t.style.borderColor = on ? data : PAL.ink; show(t, inner); });
+        });
+        // the running line: the pair being done, the × teal while multiplying, the + while adding
+        opSp[1].textContent = f1(DOT.x[i]); opSp[3].textContent = f1(DOT.w[i]);
+        const lineC = hero === "expr" ? mag : ink;
+        opSp[0].style.color = s > 0 && f >= 0.5 ? data : lineC; opSp[2].style.color = s > 0 && f >= 0.25 && f < 0.5 ? data : lineC;
+        opSp[1].style.color = lineC; opSp[3].style.color = lineC;
+        show(opLine, inner * (s > 0 && s < 3 ? 1 : 0));
+        ySp.textContent = `y = ${f1(cum[adds])}`; ySp.style.color = ink;
+        counter(yN, yL, muls + adds, hero); yN.textContent = "    " + (muls + adds);
+        show(yRow, inner);
+      }
+    }
+    return { set, box };
+  }
+
+  // ---- "FLOP" unpacking into FLOATING-POINT / OPERATION ----
+  const ACRO = { rows: ["FLOATING-POINT", "OPERATION"], keep: [[0, 0], [0, 1], [1, 0], [1, 1]], size: 72, big: 120, pitch: 0.62 };
+  function makeAcro(root) {
+    const cx = CARD.x + CARD.w / 2;
+    const end = [], letters = [];
+    ACRO.rows.forEach((row, r) => [...row].forEach((ch, i) => {
+      const p = ACRO.size * ACRO.pitch;
+      end.push({ ch, r, i, x: cx - (row.length * p) / 2 + i * p, y: CARD.y + 15 + r * 80, p });
+    }));
+    end.forEach((E) => {
+      const d = el(root, `text-align:center;font-family:${MONO};font-weight:700;`, E.ch);
+      const k = ACRO.keep.findIndex(([r, i]) => r === E.r && i === E.i);
+      letters.push({ d, E, k });
+    });
+    const order = letters.filter((L) => L.k < 0);
+    function set(K, hero) {
+      K = Object.assign({ o: 0, u: 0 }, K || {});
+      const u = clamp01(K.u), mv = SC.clamp01(seg(u, 0, 0.6)), m = mv * mv * (3 - 2 * mv);
+      const bp = ACRO.big * ACRO.pitch;
+      letters.forEach((L) => {
+        const { d, E, k } = L;
+        let x = E.x, y = E.y, size = ACRO.size, lh = 80, o = K.o;
+        if (k >= 0) {                                      // F L O P: from the big centred word to their places
+          const sx = CARD.x + CARD.w / 2 - 2 * bp + k * bp, sy = CARD.y + (CARD.h - 140) / 2;
+          x = lerp(sx, E.x, m); y = lerp(sy, E.y, m); size = lerp(ACRO.big, ACRO.size, m); lh = lerp(140, 80, m);
+          d.style.color = hero === "acronym" ? mag : ink;
+        } else {                                           // the rest types in, left to right, row by row
+          const j = order.indexOf(L) / order.length;
+          o *= seg(u, 0.45 + 0.45 * j, 0.5 + 0.45 * j);
+          d.style.color = ink;
+        }
+        const w = size * ACRO.pitch;
+        Object.assign(d.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, fontSize: `${size}px`, lineHeight: `${lh}px` });
+        show(d, o);
+      });
+    }
+    return { set };
+  }
+
+  // ---- numbers streaming from GPU memory into the chip ----
+  function makeStream(svg) {
+    const x0 = SC.G.side.x + 10, x1 = SC.G.chip.x + SC.G.chip.size - 110, span = x0 - x1, speed = 260, gap = 0.6;
+    const dots = [];
+    [0, 1, 2].forEach((p) => [0, 1, 2].forEach((q) => dots.push({ p, q, r: SC.node("rect", { width: 30, height: 30, rx: 6, fill: PAL.data, stroke: PAL.bg, "stroke-width": 4, y: 696 + p * 40 }, svg) })));
+    function set(K) {
+      K = Object.assign({ o: 0, phase: 0 }, K || {});
+      dots.forEach(({ p, q, r }) => {
+        const t = K.phase - q * gap - p * 0.2;
+        const d = t < 0 ? -1 : (t * speed) % (3 * gap * speed);
+        const on = d >= 0 && d <= span;
+        const x = x0 - d - 15;
+        r.setAttribute("x", x);
+        const fade = on ? Math.min(1, d / 30, (span - d) / 50) : 0;
+        r.setAttribute("opacity", K.o * Math.max(0, fade));
+      });
+    }
+    return { set };
+  }
+
+  // ---- the 1 s clock on the rate card ----
+  function makeClock(root) {
+    const R = 75, cx = 860, cy = CARD.y + CARD.h / 2;
+    const ring = el(root, `left:${cx - R}px;top:${cy - R}px;width:${2 * R}px;height:${2 * R}px;border-radius:50%;`);
+    const hole = el(root, `left:${cx - R + 16}px;top:${cy - R + 16}px;width:${2 * R - 32}px;height:${2 * R - 32}px;border-radius:50%;` +
+      `background:${PAL.panel};text-align:center;font-size:60px;line-height:${2 * R - 32}px;`, "1 s");
+    function set(sweep, o, hero) {
+      const col = hero === "clock" ? mag : data, deg = 360 * clamp01(sweep);
+      ring.style.background = `conic-gradient(${col} 0deg ${deg}deg, ${PAL.off} ${deg}deg 360deg)`;
+      show(ring, o); show(hole, o);
+    }
+    return { set };
+  }
+
   function mount(root) {
     const k = SC.mount(root);
     const cardBg = el(root, `left:${CARD.x}px;top:${CARD.y}px;width:${CARD.w}px;height:${CARD.h}px;` +
       `background:${PAL.panel};border-radius:28px;`);
     const A = makeLayer(root), B = makeLayer(root);
     const float = makeFloat(root);
+    const core = makeCore(root), acro = makeAcro(root), stream = makeStream(k.svg), clock = makeClock(root);
     function draw(S) {
       // GPU memory sits under the grown panel: drawn off so its labels aren't
       // "occluded" text. S itself (what hf_state_check records) is unchanged.
-      const F = S.float || {};
-      const covered = F.o > 0 && (F.grow == null ? 1 : F.grow) >= 0.999;
+      const F = S.float || {}, K = S.core || {};
+      const full = (P) => P.o > 0 && (P.grow == null ? 1 : P.grow) >= 0.999;
+      const covered = full(F) || full(K);
       k.draw(covered ? Object.assign({}, S, { hbm: 0 }) : S, S);
       const C = Object.assign({ o: 0, A: null, B: null, mix: 0 }, S.card || {});
       const top = C.y == null ? CARD.y : C.y;          // C.y: only 00_layout's take B moves the card
@@ -205,9 +381,16 @@
       A.set(C.A, S.hero, C.o * (1 - C.mix), top);
       B.set(C.B, S.hero, C.o * C.mix, top);
       float.set(S.float, S.hero);
+      core.set(S.core, S.hero);
+      acro.set(S.acro, S.hero);
+      stream.set(S.stream);
+      const ck = (L, w) => (L && L.kind === "rate" ? w * (L.clockO || 0) : 0);
+      const cko = C.o * (ck(C.A, 1 - C.mix) + ck(C.B, C.mix));
+      const cks = C.B && C.B.kind === "rate" && C.mix > 0.5 ? C.B.clock : (C.A && C.A.kind === "rate" ? C.A.clock : 0);
+      clock.set(cks || 0, cko, S.hero);
     }
-    return Object.assign({}, k, { draw, float, cardBg });
+    return Object.assign({}, k, { draw, float, core, cardBg });
   }
 
-  window.EP = { mount, CARD, PANEL, CELL, NUMS };
+  window.EP = { mount, CARD, PANEL, CELL, NUMS, OP, DOT };
 })();
