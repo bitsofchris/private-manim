@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 08_run (38.960–45.400, 6.440 s, the Short's last beat): "An 8 billion parameter model at
+         15,000 tokens per second per GPU is doing 720 teraflops."
+         Opens on SC.SEAM[7]. The card types line 2 of code.sixN as it is said: `6 * 8e9` on "8 billion",
+         ` * 15_000` on "15,000", `  # 7.2e14 /s` on "720" (the line is the hero while it types). On
+         "720" the label under the chip dips from `GPU` to `720 TFLOPS` (EP.run), the chip takes the
+         hero, the line goes unlit and the shimmer stops. Ends on SC.SEAM[8], still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/layer.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.440" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.440, START = 38.960;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg } = SC;
+  // beat-local cues (master − 38.960), from words.json, checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    eight: 0.34,    /* "8" 39.30: `6 * 8e9` types */
+    n15k: 1.85,     /* "15,000" 40.81: ` * 15_000` types */
+    n720: 4.18,     /* "720" 43.14: title GPU → 720 TFLOPS, hero the chip, shimmer stops, the comment types */
+  };
+  const S7 = SC.SEAM[7], S8 = SC.SEAM[8];
+  const LINES = S8.code.lines, L1 = LINES[0].t.length;
+  // line 2 in three chunks, each typed on the word that says it
+  const CHUNKS = [{ t: "6 * 8e9", at: CUE.eight - 0.04, cps: 12 },
+                  { t: " * 15_000", at: CUE.n15k - 0.05, cps: 14 },
+                  { t: "  # 7.2e14 /s", at: CUE.n720, cps: 18 }];
+  if (CHUNKS.map((c) => c.t).join("") !== LINES[1].t) throw new Error("08_run: chunks do not spell line 2");
+  CHUNKS.forEach((c) => (c.end = c.at + SC_typingSeconds([c], c.cps)));
+  const DIP = 0.4;                                     // the title's fade through zero
+  const STILL = Math.max(CHUNKS[2].end, CUE.n720 + DIP) + 0.05;   // ≈ 4.88: SEAM[8] from here
+  const ease = (u) => u * u * (3 - 2 * u);
+
+  function typedLine2(t) {
+    let n = 0;
+    for (const c of CHUNKS) n += Math.min(c.t.length, SC_typedAt([c], t - c.at, c.cps));
+    return n;
+  }
+  function state(t) {
+    if (t <= 0) return S7;
+    if (t >= STILL) return S8;
+    const S = Object.assign({}, S7);
+    const n2 = typedLine2(t), started = t >= CHUNKS[0].at, after = t >= CUE.n720;
+    S.code = Object.assign({}, S7.code, { typed: L1 + n2,
+      lit: after ? null : started ? "run" : "sixN",            // the line being said is the hero
+      cursor: started && n2 < LINES[1].t.length ? 1 : 0, blink: t - CHUNKS[0].at });
+    if (after) {
+      S.hero = "chip"; S.shimmer = 0;
+      if (seg(t, CUE.n720, CUE.n720 + DIP) >= 0.5) S.title = S8.title;
+    }
+    return S;
+  }
+  // the chip's title label (chip.js does not return it): the DOM label at top 1090
+  let titleEl = null;
+  function findTitle() {
+    if (titleEl || !root.children) return titleEl;
+    for (const el of Array.from(root.children)) if (el.style && el.style.top === `${SC.G.title.y}px`) { titleEl = el; break; }
+    return titleEl;
+  }
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(state(t));
+    const u = seg(t, CUE.n720, CUE.n720 + DIP);
+    if (u > 0 && u < 1 && findTitle()) titleEl.style.opacity = Math.abs(1 - 2 * ease(u)).toFixed(3);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

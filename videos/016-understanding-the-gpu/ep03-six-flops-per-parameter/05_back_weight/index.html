@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_back_weight (6.300 s, master 26.740–33.040): "Then each weight needs its own gradient for the
+         optimizer. Error times input added to a running total is 2 more."
+         Opens on SEAM[4] (backward flow the hero), ends on SEAM[5] (grad the hero), held still.
+         "Then": hero back -> grad, the lines go muted (waiting), inputs dx -> x (cross-fade).
+         "gradient": W -> empty dW cells and dx = Wᵀ dy -> dW = dy xᵀ (cross-fade).
+         "Error times input": line w11 carries ×; "running total": +; the other five run through,
+         cells and segment 3 filling, readout 24 -> 36 FLOPs by "2 more". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/layer.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.3" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.3, START = 26.74;
+  // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
+  const CUE = {
+    then: 0.22,       /* "Then" 26.96 (words.json 27.02) */
+    grad: 1.40,       /* "gradient" 28.14 (words.json 28.12) */
+    error: 3.22,      /* "Error" 29.96 */
+    running: 4.68,    /* "running" 31.42 (words.json 31.56) */
+    total: 4.98,      /* "total" 31.72 */
+    two: 5.60,        /* "2" 32.34 (words.json 32.42) */
+  };
+  const T = { fade: 0.4, colour: 0.3 };
+  T.still = CUE.two + 0.1;                           // 5.70: SEAM[5] from here to the end (0.6 s)
+  const kit = SC.mount(document.getElementById("root"));
+  const P = kit.parts, PAL = SC.PAL, EP = window.EP;
+  const { seg, lerp } = SC;
+  const io = (u) => u * u * (3 - 2 * u);
+  const S4 = SC.SEAM[4], S5 = SC.SEAM[5];
+  const ly = (n, extra) => Object.assign({}, SC.SEAM[n], { ly: Object.assign({}, SC.SEAM[n].ly, extra) });
+
+  // the pass's progress: w11 takes × from "Error" to "running", + to "total"; the other five run through by "2"
+  function prog(t) {
+    if (t < CUE.error) return 0;
+    if (t < CUE.running) return lerp(0.01, 0.49, seg(t, CUE.error, CUE.running));
+    if (t < CUE.total) return lerp(0.5, 1, seg(t, CUE.running, CUE.total));
+    return lerp(1, 6, seg(t, CUE.total, CUE.two));
+  }
+
+  function state(t) {
+    if (t <= 0) return S4;
+    if (t >= T.still) return S5;
+    if (t < CUE.then) return S4;
+    const half = (cue) => t < cue + T.fade / 2;             // a cross-fade swaps its text at the midpoint
+    const p = prog(t);
+    return Object.assign(ly(4, {
+      pass: "grad", prog: p,
+      inLab: half(CUE.then) ? EP.errIn : EP.inName,
+      mat: half(CUE.grad) ? S4.ly.mat : { o: 1, name: "dW", fill: p },
+      eq: half(CUE.grad) ? S4.ly.eq : S5.ly.eq,
+      bar: { o: 1, f: [1, 1, p / 6], split: 1 },
+      rd: { o: 1, text: EP.count(24 + 2 * Math.floor(p)) },
+    }), { hero: "grad" });
+  }
+
+  // beat-local helpers, applied after kit.draw and pure in t:
+  // dip: a cross-fade through 0 (the state swaps the text at the midpoint); mix: a colour blend
+  const dip = (t, cue) => { const u = seg(t, cue, cue + T.fade); return Math.abs(1 - 2 * io(u)); };
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const mix = (a, b, u) => { const A = hex(a), B = hex(b);
+    return "#" + A.map((v, i) => Math.round(lerp(v, B[i], u)).toString(16).padStart(2, "0")).join(""); };
+  const setO = (el, o) => { el.style.opacity = o; el.style.visibility = o > 0.001 ? "visible" : "hidden"; };
+
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(state(t));
+    const inO = t > CUE.then && t < CUE.then + T.fade ? dip(t, CUE.then) : 1;
+    P.labIn.forEach((el) => setO(el, inO));               // the kit never sets these: restored to 1 every frame
+    if (t > CUE.then && t < CUE.then + T.colour) {        // "Then": magenta lines and segment 2 settle
+      const u = io(seg(t, CUE.then, CUE.then + T.colour));
+      P.lines.forEach((ln) => ln.setAttribute("stroke", mix(PAL.hero, PAL.muted, u)));
+      P.segs[1].fill.setAttribute("fill", mix(PAL.hero, PAL.data, u));
+    }
+    if (t > CUE.grad && t < CUE.grad + T.fade) {           // "gradient": W -> dW, formula swap
+      const o = dip(t, CUE.grad);
+      P.cells.forEach((c) => setO(c, o));
+      setO(P.eq, o);
+    }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

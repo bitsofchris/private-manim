@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_forward (master 14.160, 6.325 s): SEAM[2] -> SEAM[3]. "Going forward, each weight does
+         one multiply and one add. So you have 2 FLOPs per weight, 12 for this entire layer."
+         On "Going" the bar returns empty (split 1) with the readout "0 FLOPs" (hero), growing in, and
+         the lines fade to muted. Pass "fwd" runs w11..w23: line 1's x on "one multiply", + on
+         "one add", the other five through to "12"; the first segment fills a sixth per line and
+         the readout counts two per line, landing (a small swell) on "12". Still from STILL. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/layer.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.325" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.325, MASTER = 14.160;
+  const kit = SC.mount(document.getElementById("root"));
+  const { seg, lerp } = SC, EP = window.EP, P = kit.parts;
+  // beat-local cues (master − 14.160), from words.json, onsets checked on a 20 ms RMS envelope
+  const CUE = {
+    going: 0.24,   /* "Going" 14.40: bar and "0 FLOPs" grow in, lines fade to muted */
+    mult: 1.54,    /* "one multiply" 15.84 (voice from 15.70): line 1 starts, its x rides */
+    add: 2.34,     /* "one add" 16.86 (+ shows from 16.50 through "add" 17.04–17.26) */
+    twelve: 5.02,  /* "12" 19.22 (voice from 19.14): the last line lands, readout 12 FLOPs */
+  };
+  const GROW = 0.3, LINE1_END = CUE.add + (CUE.add - CUE.mult);   // 3.14: line 1 done (17.30)
+  const POP = 0.3, STILL = CUE.twelve + POP + 0.08;                // 5.40: SC.SEAM[3] from here
+  const ease = (u) => u * u * (3 - 2 * u);
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const mix = (a, b, u) => { const A = hex(a), B = hex(b);
+    return "#" + A.map((x, i) => Math.round(lerp(x, B[i], u)).toString(16).padStart(2, "0")).join(""); };
+  const TEAL = SC.PAL.data, MUTED = SC.PAL.muted;
+
+  // prog: line 1 paced to the words (x on "multiply", + on "add"), the other five even to "12"
+  const prog = (t) => t < CUE.mult ? 0
+    : t < LINE1_END ? seg(t, CUE.mult, LINE1_END)
+    : 1 + 5 * seg(t, LINE1_END, CUE.twelve);
+
+  function state(t) {
+    if (t <= 0) return SC.SEAM[2];
+    if (t >= STILL) return SC.SEAM[3];
+    const A = SC.SEAM[3];
+    if (t < CUE.going) return SC.SEAM[2];
+    const p = prog(t), g = ease(seg(t, CUE.going, CUE.going + GROW));
+    const ly = Object.assign({}, A.ly, {
+      prog: p,
+      bar: { o: g, f: [p / 6, 0, 0], split: 1 },
+      rd: { o: g, text: EP.count(2 * Math.floor(p + 1e-9)) },
+    });
+    return Object.assign({}, A, { ly });
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(state(t));
+    // grow-in of the readout and the bar (from 0.85 of their size)
+    const g = seg(t, CUE.going, CUE.going + GROW);
+    P.top.style.transformOrigin = "507px 360px";
+    P.top.style.transform = g > 0 && g < 1 ? `scale(${(0.85 + 0.15 * ease(g)).toFixed(4)})` : "";
+    // the lines fade teal → muted as the count resets (the kit swaps them hard)
+    const m = seg(t, CUE.going, CUE.going + GROW);
+    if (m > 0 && m < 1) P.lines.forEach((ln) => ln.setAttribute("stroke", mix(TEAL, MUTED, ease(m))));
+    // the readout swells once as it lands on 12
+    const q = seg(t, CUE.twelve, CUE.twelve + POP);
+    P.rd.style.transformOrigin = "50% 50%";
+    P.rd.style.transform = q > 0 && q < 1 ? `scale(${(1 + 0.12 * Math.sin(Math.PI * q)).toFixed(4)})` : "";
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

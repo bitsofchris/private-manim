@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_total (1.850 s, master 33.040–34.890): "That's 6 per weight per token."
+         Opens on SEAM[5] (grad the hero), ends on SEAM[6] (the readout the hero), held still.
+         "That's": lines, dW cells and segment 3 settle magenta -> teal; the bar's labels go from
+         → 2 | ← 2 | ← 2 back to → 2 | ← 4 (split 1 -> 0, the kit cross-fades them).
+         "6": the readout cross-fades 36 FLOPs -> 36 = 6 × 6 and is the magenta hero. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/layer.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1.85" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 1.85, START = 33.04;
+  // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
+  const CUE = {
+    thats: 0.22,      /* "That's" 33.26 (words.json 33.28) */
+    six: 0.38,        /* "6" 33.42, the "s" (words.json 33.50) */
+  };
+  const T = { colour: 0.3, split: 0.4, fade: 0.4 };
+  T.still = CUE.six + T.fade + 0.05;                 // 0.83: SEAM[6] from here to the end (1.02 s)
+  const kit = SC.mount(document.getElementById("root"));
+  const P = kit.parts, PAL = SC.PAL;
+  const { seg, lerp } = SC;
+  const io = (u) => u * u * (3 - 2 * u);
+  const S5 = SC.SEAM[5], S6 = SC.SEAM[6];
+  const ly = (n, extra) => Object.assign({}, SC.SEAM[n], { ly: Object.assign({}, SC.SEAM[n].ly, extra) });
+
+  function state(t) {
+    if (t <= 0 || t < CUE.thats) return S5;
+    if (t >= T.still) return S6;
+    const split = 1 - io(seg(t, CUE.thats, CUE.thats + T.split));
+    const rd = t < CUE.six + T.fade / 2 ? S5.ly.rd : S6.ly.rd;       // the text swaps at the dip's midpoint
+    return Object.assign(ly(6, { bar: { o: 1, f: [1, 1, 1], split }, rd }),
+                         { hero: t < CUE.six ? null : "readout" });
+  }
+
+  // beat-local helpers, applied after kit.draw and pure in t:
+  // dip: a cross-fade through 0; mix: a colour blend (magenta -> teal as grad stops being the hero)
+  const dip = (t, cue) => { const u = seg(t, cue, cue + T.fade); return Math.abs(1 - 2 * io(u)); };
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const mix = (a, b, u) => { const A = hex(a), B = hex(b);
+    return "#" + A.map((v, i) => Math.round(lerp(v, B[i], u)).toString(16).padStart(2, "0")).join(""); };
+  const setO = (el, o) => { el.style.opacity = o; el.style.visibility = o > 0.001 ? "visible" : "hidden"; };
+
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(state(t));
+    if (t > CUE.thats && t < CUE.thats + T.colour) {
+      const c = mix(PAL.hero, PAL.data, io(seg(t, CUE.thats, CUE.thats + T.colour)));
+      P.lines.forEach((ln) => ln.setAttribute("stroke", c));
+      P.cells.forEach((cl) => { cl.setAttribute("stroke", c); cl.setAttribute("fill", c); });
+      P.segs[2].fill.setAttribute("fill", c);
+    }
+    if (t > CUE.six && t < CUE.six + T.fade) setO(P.rd, dip(t, CUE.six));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
