@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 3 "cpu" (master 14.250–23.220): opens SC.SEAM[2] (y the hero, every y cell done), ends SC.SEAM[3].
+         "CPU" (0.53): hero -> cpu; chip and memory fade, the CPU grows into the chip's place, y empties cell by cell.
+         "one" thread (1.87): only core 1 lit. "cores" (4.51): all 4 lit, each pops once. "caches" (5.25): cache blocks.
+         "branching" (6.03): branch forks. "works through that pile" (6.95, 7.65, 8.35): y fills one row of four per tick,
+         the four cores pop with each. Still from 8.60 (SEAM[3]). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.97" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.970, MASTER = 14.250;
+  // cues (beat-local = master - MASTER; words.json, "CPU" onset checked on the vo_final envelope)
+  const CUE = {
+    cpu: 0.53,       /* "CPU" (14.78): hero -> cpu, the grow starts */
+    one: 1.87,       /* "one" thread (16.12): one core lit */
+    cores: 4.51,     /* "cores" (18.76): all 4 lit, each pops once */
+    caches: 5.25,    /* "caches" (19.50): cache blocks in */
+    branch: 6.03,    /* "branching" (20.28): branch forks in */
+    tick: [6.95, 7.65, 8.35],  /* "works" (21.20) / "pile" (21.90) / "at a time" (22.60): y rows 1, 2, 3 */
+  };
+  const GROW = 0.8, FADE = 0.5, IN = 0.3, POP = 0.25;  // grow; chip/memory fade; cache/branch fade-in; core pop
+  const ALL = "1".repeat(16);
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg, lerp } = SC;
+  // local helpers
+  const ease = (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);   // power2.inOut
+  const pulse = (t, a, w) => (t <= a || t >= a + w ? 0 : Math.sin(Math.PI * (t - a) / w));
+  const coreGs = kit.cpu.cores.map((c) => c.body.parentNode);
+  // scale one core's group about its body's centre; s === 1 clears exactly
+  function scaleCore(i, s) {
+    const g = coreGs[i];
+    if (s === 1) { g.removeAttribute("transform"); return; }
+    const b = kit.cpu.cores[i].body;
+    const cx = +b.getAttribute("x") + +b.getAttribute("width") / 2, cy = +b.getAttribute("y") + +b.getAttribute("height") / 2;
+    g.setAttribute("transform", `translate(${cx} ${cy}) scale(${s.toFixed(4)}) translate(${-cx} ${-cy})`);
+  }
+
+  function state(t) {
+    if (t <= CUE.cpu) return SC.SEAM[2];
+    const g = ease(seg(t, CUE.cpu, CUE.cpu + GROW));
+    const f = seg(t, CUE.cpu, CUE.cpu + FADE);
+    // y empties cell by cell as the CPU grows (row-major), then fills one row of four per tick
+    let fill = [...Array(16)].map((_, k) => (g < (k + 1) / 17 ? "1" : "0")).join("");
+    const rows = CUE.tick.filter((c) => t >= c).length;
+    if (rows) fill = "1".repeat(4 * rows) + "0".repeat(16 - 4 * rows);
+    return Object.assign({}, SC.SEAM[2], {
+      hero: "cpu", big: g, chip: 1 - f, hbm: 1 - f, lit: f >= 1 ? 0 : 1,
+      cores: t >= CUE.one && t < CUE.cores ? "1000" : "1111",
+      cache: seg(t, CUE.caches - IN / 2, CUE.caches + IN / 2),
+      branch: seg(t, CUE.branch - IN / 2, CUE.branch + IN / 2),
+      fill,
+    });
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(state(t));
+    // "cores": each core pops once; each tick: the four cores pop as their row lands
+    const p = 0.06 * pulse(t, CUE.cores, 0.4) + 0.05 * CUE.tick.reduce((a, c) => a + pulse(t, c, POP), 0);
+    for (let i = 0; i < 4; i++) scaleCore(i, p > 0 ? 1 + p : 1);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

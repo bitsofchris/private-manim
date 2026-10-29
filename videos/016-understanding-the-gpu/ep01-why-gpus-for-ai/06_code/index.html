@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 06_code: "In PyTorch, that's one line. Move x and W to CUDA, and the same at sign runs the whole grid."
+         master 37.025–44.036; opens SEAM[5], ends SEAM[6] (the Short's last frame). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.011" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.011, MASTER = 37.025;
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 37.025), from words.json, checked on vo_final.wav
+  const CUE = {
+    torch: 0.295,    /* "PyTorch" (37.32): matrices out, code card in, tc 1 → 0, title "GPU", hero null; 0.6 s */
+    one: 1.095,      /* "one" (38.12 on the envelope; "that's one line"): `y = x @ W` lit */
+    move: 2.135,     /* "Move" (39.16): `x, W = x.to("cuda") ...` lit */
+    at: 4.675,       /* "at" (41.70 on the envelope; words.json 41.60; "the same at sign"): `y = x @ W` lit again */
+    runs: 5.295,     /* "runs" (42.32): the grid wave sweeps once, to "grid" (43.06) */
+    grid: 6.035,     /* "grid" (43.06): the sweep ends; wave back to 0 (off) */
+  };
+  const SWAP = 0.6;
+  const HOLD = CUE.grid;               // SC.SEAM[6] still from here (0.976 s)
+  const CARD = SC.SEAM[6].code;        // { o: 1, lines: matmul, typed: Infinity, lit: "at", cursor: 0, cy: 1246 }
+  const litAt = (t) => (t < CUE.one ? null : t < CUE.move ? "at" : t < CUE.at ? "chip" : "at");
+
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) { kit.draw(SC.SEAM[6]); return; }
+    if (t < CUE.torch) { kit.draw(SC.SEAM[5]); return; }
+    const u = ease(seg(t, CUE.torch, CUE.torch + SWAP));   // mat, tc lerp; hero and title switch at u ≥ 0.5
+    const S = EP.mix(SC.SEAM[5], SC.SEAM[6], u);
+    S.code = Object.assign({}, CARD, { o: u, lit: litAt(t) });
+    S.wave = t > CUE.runs ? seg(t, CUE.runs, CUE.grid) : 0;
+    kit.draw(S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

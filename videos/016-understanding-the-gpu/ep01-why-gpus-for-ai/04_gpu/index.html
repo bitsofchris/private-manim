@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 4 "gpu" (master 23.220–31.800): opens SC.SEAM[3] (the CPU big, 3 rows of y done), ends SC.SEAM[4].
+         "GPU" (0.42): hero -> chip; the CPU shrinks back to the top slot, the chip and memory fade back in dark, y empties.
+         "grid" (4.52): the chip's border pulses once. "all" working (7.34): every cell lights in one pulse and every y cell
+         fills together. Still from 7.58 (SEAM[4]). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.58" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.580, MASTER = 23.220;
+  // cues (beat-local = master - MASTER; words.json, "GPU" and "all" onsets checked on the vo_final envelope)
+  const CUE = {
+    gpu: 0.42,       /* "GPU" (23.64): hero -> chip, the CPU shrinks back, chip and memory return dark */
+    grid: 4.52,      /* "grid" (27.74): the chip's border pulses once (peak on "chip", 28.20) */
+    all: 7.34,       /* "all" working (30.56 on the envelope; words.json 30.28 is the tail of "cores"): every cell lights, every y cell fills */
+  };
+  const SHRINK = 0.7, BACK = 0.5, PULSE = 0.6, LIGHT = 0.24;  // shrink; chip/memory fade-in (its last 0.5 s); border pulse; lighting
+  const ALL = "1".repeat(16), NONE = "0".repeat(16);
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg } = SC;
+  // local helpers
+  const ease = (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);   // power2.inOut
+  const pulse = (t, a, w) => (t <= a || t >= a + w ? 0 : Math.sin(Math.PI * (t - a) / w));
+  const chipG = kit.cells[0].body.parentNode, chipBox = chipG.firstChild;          // the kit doesn't return the chip box
+  const C = SC.G.chip, CX = C.x + C.size / 2, CY = C.y + C.size / 2;
+
+  function state(t) {
+    if (t <= CUE.gpu) return SC.SEAM[3];
+    const g = ease(seg(t, CUE.gpu, CUE.gpu + SHRINK));
+    const b = seg(t, CUE.gpu + SHRINK - BACK, CUE.gpu + SHRINK);
+    const done = SC.SEAM[3].fill;
+    // the done y cells empty as the CPU shrinks (row-major); all fill together on "all"
+    let fill = [...Array(16)].map((_, k) => (done[k] === "1" && g < (k + 1) / 13 ? "1" : "0")).join("");
+    if (t >= CUE.all) fill = ALL;
+    return Object.assign({}, SC.SEAM[4], {
+      big: 1 - g, chip: b, hbm: b,
+      lit: seg(t, CUE.all, CUE.all + LIGHT),
+      fill,
+    });
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(state(t));
+    // "This grid is the chip": the border thickens and the chip swells a little, once
+    const p = pulse(t, CUE.grid, PULSE);
+    chipBox.setAttribute("stroke-width", (6 + 10 * p).toFixed(2));
+    if (p > 0) chipG.setAttribute("transform", `translate(${CX} ${CY}) scale(${(1 + 0.03 * p).toFixed(4)}) translate(${-CX} ${-CY})`);
+    else chipG.removeAttribute("transform");
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

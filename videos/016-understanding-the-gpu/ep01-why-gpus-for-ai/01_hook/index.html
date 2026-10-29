@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 1 "Hook" (master 0.000–6.185): "multiplication" (1.48): the "@" swells once. Frame 0 already working (the grid shimmering at lit 0.32,
+         the small CPU's 4 cores lit, y = x @ W with y empty, hero chip). "the same time" (5.46): the whole grid
+         lights at once (lit 0.32 -> 1, landing 5.50) and every y cell fills together; the "y" letter swells
+         once with it. Still from 5.81. Opens SC.SEAM[0], ends SC.SEAM[1]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      :root { --bg: #0B0B14; --panel: #14142B; --text: #ECEBE4; --dim: #8A8FB0;
+              --data: #2DD4BF; --hero: #C084FC; --muted: #4A5070; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.185" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.185, MASTER = 0.000;
+  // cues (beat-local = master - MASTER; "same" checked on the vo_final envelope: /s/ 5.36, vowel 5.50)
+  const CUE = {
+    mult: 1.48,      /* "multiplication" (1.48): the "@" swells once (the one DOM change before the cue) */
+    same: 5.46,      /* "same time" (5.46): every y cell fills; the grid's ramp lands on the vowel */
+  };
+  const RAMP = [5.26, 5.50];   // lit 0.32 -> 1 (0.24 s), shimmer on until it lands (no cell jumps), off after
+  const MW = 0.5;              // the "@" swell: 1.48-1.98
+  const PW = 0.35;             // the "y" swell: 5.46-5.81; still (SEAM[1]) from 5.81 to the end
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const yLetter = kit.letters[0], atSign = kit.letters[3];   // [y, =, x, @, W]
+  const pulse = (t, t0, w) => (t <= t0 || t >= t0 + w ? 0 : Math.sin(Math.PI * (t - t0) / w));   // local helper
+  const ease = (u) => u * u * (3 - 2 * u);
+  function state(t) {
+    if (t <= 0) return SC.SEAM[0];
+    const u = ease(SC.seg(t, RAMP[0], RAMP[1]));
+    if (u >= 1) return SC.SEAM[1];
+    const S = EP.mix(SC.SEAM[0], SC.SEAM[1], u);
+    S.shimmer = 1;                                   // keep trading places until every cell is lit
+    S.fill = t >= CUE.same ? SC.SEAM[1].fill : SC.SEAM[0].fill;
+    return S;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(state(t));
+    const m = 1 + 0.3 * pulse(t, CUE.mult, MW);
+    if (m === 1) { atSign.style.transform = ""; atSign.style.transformOrigin = ""; }
+    else { atSign.style.transformOrigin = "50% 50%"; atSign.style.transform = `scale(${m.toFixed(4)})`; }
+    const s = 1 + 0.25 * pulse(t, CUE.same, PW);
+    if (s === 1) { yLetter.style.transform = ""; yLetter.style.transformOrigin = ""; }
+    else { yLetter.style.transformOrigin = "50% 50%"; yLetter.style.transform = `scale(${s.toFixed(4)})`; }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 05_tensor: "Newer GPUs add tensor cores, which do a small matrix multiply in one step."
+         master 31.800–37.025; opens SEAM[4], ends SEAM[5]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.225" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.225, MASTER = 31.800;
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg, lerp } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 31.800), from words.json
+  const CUE = {
+    tc: 1.52,        /* "tensor" (33.32 on the envelope; words.json 33.14 is the silent closure): the corner sub-blocks grow over 0.6 s, title "tensor cores", hero tc */
+    pulse: 4.54,     /* "one" (36.34): the sub-blocks pulse once, 0.38 s, peaking on "step" (36.54) */
+  };
+  const GROW = 0.6, PULSE = 0.38;
+  const HOLD = CUE.pulse + PULSE;      // 4.92: SC.SEAM[5] still from here (0.305 s)
+
+  // Local overlay (pulse): after kit.draw, swell every tensor-core corner a further `extra` px
+  // and lift its fill toward ink. The kit's tc is defined on 0..1 only, so the pulse lives here.
+  const HERO = [0xC0, 0x84, 0xFC], INK = [0xEC, 0xEB, 0xE4];
+  const mixHex = (a, b, u) => "#" + a.map((v, i) => Math.round(lerp(v, b[i], u)).toString(16).padStart(2, "0")).join("");
+  function pulse(p) {
+    if (!(p > 0)) return;
+    const extra = 8 * p, g = 6 + extra, lifted = mixHex(HERO, INK, 0.45 * p);
+    kit.cells.forEach((cl) => {
+      cl.tc.setAttribute("x", cl.x + 24 - g); cl.tc.setAttribute("y", cl.y + 24 - g);
+      cl.tc.setAttribute("width", 14 + g); cl.tc.setAttribute("height", 14 + g);
+      if (cl.tc.getAttribute("fill") === SC.PAL.hero) cl.tc.setAttribute("fill", lifted);
+    });
+  }
+
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) { kit.draw(SC.SEAM[5]); return; }
+    if (t < CUE.tc) { kit.draw(SC.SEAM[4]); return; }
+    const u = ease(seg(t, CUE.tc, CUE.tc + GROW));   // strings (hero, title) switch at u ≥ 0.5
+    kit.draw(EP.mix(SC.SEAM[4], SC.SEAM[5], u));
+    const p = seg(t, CUE.pulse, CUE.pulse + PULSE);
+    pulse(Math.sin(Math.PI * p));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
