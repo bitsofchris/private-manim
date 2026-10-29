@@ -37,9 +37,8 @@ From `../SERIES.md` and `../_kit/data.js`; ep 2's own strings are in
 - A FLOP: one floating-point multiply or one add. `a × b + c` is 2 FLOPs.
 - **FLOPs** (small s) is a count; **FLOPS** (capital S) is per second.
   Spelled so everywhere, on screen and in captions.
-- GPU: one **B200**, bf16 dense peak **2,250 TFLOPS** (said "2,250
-  teraFLOPS in bf16"); the sparse figure is never shown here. tera = a
-  trillion (10^12).
+- No GPU model or peak is named (the B200 line was cut after the first
+  cut, Chris: "irrelevant here").
 - The count: the series run, an **8B-parameter** model on **15,000
   tokens**: 6 × 8e9 × 15,000 = **7.2e14**, said "about 720 trillion FLOPs".
   Code card line (data.js `code.flops[0]`): `flops = 6 * 8e9 * 15_000  # 7.2e14`.
@@ -50,10 +49,17 @@ From `../SERIES.md` and `../_kit/data.js`; ep 2's own strings are in
   and **3000000** (three million) = `+3.0 × 10⁶`; the anatomy boxes
   `+ | 1.0 | −7` then `+ | 3.0 | 6`, labelled sign, digits, exponent. No
   format named, no bit counts (ep 4).
-- The matmul: `y = x @ W`, one output expanded as `x1*w1 + x2*w2 + x3*w3`.
+- The arithmetic in one core (illustration values, approved by Chris):
+  `1.5 × 2.0 = 3.0`, `3.0 + 0.5 = 3.5`: 2 FLOPs.
+- The matmul: `y = x @ W`; one output of the series' tiny layer (3 inputs)
+  as three multiply-adds, x = [1.0, 2.0, 0.5], w = [0.5, 1.5, 2.0]:
+  y = 0.5, 3.5, 4.5; 6 FLOPs (2 per pair; the ledger's tiny layer is 12 for
+  2 outputs).
+- The count rolls up as `720,000,000,000,000` and lands as `720 trillion
+  = 7.2 × 10¹⁴` (the ledger's 7.2e14).
 - The bill: `FLOPs ÷ FLOPS` / `= GPU-hours = $`. No numbers.
 - The chip: the series 12 × 12 grid, dark at rest, teal when working; no
-  label claims a core count. Chip title `GPU`, then `B200` from beat 07 on.
+  label claims a core count. Chip title `GPU` throughout.
 
 ## The picture
 
@@ -79,17 +85,24 @@ through four states (grow, anatomy, point glide, second number).
 
 ## Beats (visual brief)
 
+v2, after the first cut (Chris: "watching the GPU cores dance around gets
+kind of boring and repetitive"): the Short alternates between **inside one
+core** (the panel grown out of cell row 5, col 5: the arithmetic, the
+number) and **the whole chip** (the scale). Example operands (`1.5 × 2.0 +
+0.5`, the dot product's x and w) are illustration values Chris approved,
+not ledger numbers.
+
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | A FLOP is one multiply or one add, and it's the unit that all AI compute is measured in. | Frame 0 already working: the chip with ~32 % of cells shimmering teal, memory at rest, the top card `a × b + c` with the counter `0 FLOPs` (counter the magenta hero). "multiply" → the `×` lights teal and the counter ticks 1; "add" → the `+` lights, the counter ticks 2 (and the `×` returns). Both signs back to ink by "unit"; still from ~5.2. |
-| 02_name | FLOP stands for floating-point operation. | The card crossfades to `floating-point` / `operation`, the **fl** and **op** letters magenta (hero "acronym") on "floating". |
-| 03_float | Computers store decimals as floating point: scientific notation in binary, a sign, digits, and an exponent. | "floating point" (10.06): the float panel grows out of cell (row 5, col 5) over the chip and memory (0.6 s). "scientific notation": the decimal row `0.0000001 → +1.0 × 10⁻⁷` and the anatomy boxes fade in. Hero passes sign → digits → exponent on each word, each label appearing on its word. The acronym letters return to ink on "floating point". |
-| 04_range | The point floats, so one format holds a ten-millionth and three million. | "floats" (15.31): hero → the point; row 1's point glides right to sit after the 1 (`00000001.`, the passed zeros dim). "ten-millionth" (17.96): hero → exponent (`−7`). "three million" (19.32): row 2 `3000000. → +3.0 × 10⁶` fades in and its point glides left to after the 3 (trailing zeros dim); the anatomy boxes switch to `+ 3.0 6` with the exponent the hero. |
-| 05_memory | Every weight, activation, and gradient is one of these numbers. | The float panel shrinks back into its cell (0.5 s, the reverse of 03's grow); memory (VRAM) is the hero: it is where these numbers live. The card shows one word per word said: `weights` → `activations` → `gradients`. |
-| 06_count | FLOPs with a small s is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs. | "FLOPs" (23.52): the card crossfades to `FLOPs`; hero memory → the small `s` on "small s". "Training" (25.94): the code card grows in (0.2 s) and line 1 types (`SC_typedAt`), the hero passing to the code line (`lit: "count"`) as it types; it lands by "720". "720 trillion" (30.10): `720 trillion` fades in teal under `FLOPs`. |
-| 07_rate | FLOPS with a capital S is per second. This is a rate. A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion. | "FLOPS" (32.62): the card crossfades to `FLOPS` / `per second`, the capital `S` the hero; the code line goes ink. "B200" (35.94): the chip title `GPU` → `B200`. "2,250" (37.26): the card crossfades to `2,250 TFLOPS` / `bf16`, the whole number the hero. "Tera" (40.84): the second line becomes `tera = a trillion` and the hero narrows to the `T`. |
-| 08_matmul | A transformer's compute is nearly all matrix multiplies, and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. | The code card fades out (0.4 s) at the start. "matrix multiplies" (44.10): the card crossfades to `y = x @ W`. "only multiplies and adds" (46.02): `x1*w1 + x2*w2 + x3*w3` fades in under it, the hero. "thousands at once" (50.48): every cell lights teal at once (lit 0.32 → 1 over ~0.3 s) and the hero passes to the chip (box and `B200` title). |
-| 09_bill | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. | "Divide" (52.00): the card crossfades to `FLOPs ÷ FLOPS`; hero chip → none. "GPU-hours" (55.60): `= GPU-hours` fades in, the hero. "bill" (57.36): ` = $` fades in and takes the hero. Still from ~57.8 to the end; every cell stays lit. |
+| 01_hook | A FLOP is one multiply or one add, and it's the unit that all AI compute is measured in. | Frame 0 is inside one core: `1.5 × 2.0`, `0 FLOPs` (the counter the hero), `FLOP` big on the card. "multiply" (1.32): the × goes teal, `= 3.0` slides out of it, counter 1. The 3.0 is carried down to row 2. "add" (2.24): `3.0 + 0.5 = 3.5`, the + teal, counter 2. "all AI compute" (3.84): the panel shrinks back into its cell and the hero passes to the chip: every core is doing this. |
+| 02_name | FLOP stands for floating-point operation. | "FLOP" (5.92): F L O P go magenta (hero "acronym"). "floating" (6.62): the letters glide apart and FLOATING-POINT / OPERATION types in around them. |
+| 03_float | Computers store decimals as floating point: scientific notation in binary, a sign, digits, and an exponent. | Unchanged: the float panel grows on "floating point", sign → digits → exponent. |
+| 04_range | The point floats, so one format holds a ten-millionth and three million. | Unchanged: the point glides; row 2 on "three million". |
+| 05_memory | Every weight, activation, and gradient is one of these numbers. | The panel shrinks back; memory is the hero, and numbers stream out of it along the pipe into the chip (`stream`) while the card shows `weights` → `activations` → `gradients`. The stream fades out before the cut. |
+| 06_count | FLOPs with a small s is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs. | `FLOPs`, small s the hero. "Training": the code line types (lit "count") and under `FLOPs` the count rolls up (mono digits) as it types, landing on "720": `720 trillion = 7.2 × 10¹⁴`. |
+| 07_rate | FLOPS with a capital S is per second. This is a rate. | `FLOPS` / `per second`, capital S the hero; the code line unlit. "per second" (34.06): the 1 s clock appears at the card's right and sweeps once, the hero. |
+| 08_matmul | A transformer's compute is nearly all matrix multiplies, and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. | The code card and clock fade. "matrix" (37.62): `y = x @ W`. "matmul" (39.02): back inside one core for one output: x and w tiles; from "only" (39.54) each pair runs `y += x·w` (× teal, then +), y going 0.5, 3.5, 4.5 and the counter to 6 FLOPs; the running line the hero. "thousands" (44.00): the panel shrinks back, every cell lights, the chip the hero. |
+| 09_bill | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. | "Divide" (45.51): `FLOPs ÷ FLOPS`, hero none. "GPU-hours" (49.12): `= GPU-hours`, the hero. "bill" (50.88): ` = $`, the hero. Still to the end; every cell lit. |
 
 ## Final beats (the contract; `beats.json`)
 
@@ -111,21 +124,21 @@ in this take are breaths at about −50 dB, so the threshold is −45 dB, not
 
 ## Seam states (code: `_kit/seam.js`, `SC.SEAM[0..9]`)
 
-Every state: `cpu 0, queueO 0, strip 0, shimmer 1`, memory at rest, the top
-card at `o 1`, `B null, mix 0`.
+Every state: `cpu 0, queueO 0, strip 0, shimmer 1`, memory at rest, title
+`GPU`, the card bg at `o 1`, `B null, mix 0`.
 
-| cut | at | hero | top card | float panel | chip | code card |
-|---|---|---|---|---|---|---|
-| 0 (frame 0) | 0.000 | count | op, n 0 | off | lit 0.32, `GPU` | off |
-| 1 (01→02) | 5.640 | count | op, n 2, no sign lit | off | lit 0.32, `GPU` | off |
-| 2 (02→03) | 8.320 | acronym | name | off | lit 0.32, `GPU` | off |
-| 3 (03→04) | 14.525 | exp | name | grown, row 1, anatomy 1 (`+ 1.0 −7`), all three labels | (covered) | off |
-| 4 (04→05) | 20.160 | exp | name | grown, rows 1–2 glided, anatomy 2 (`+ 3.0 6`), labels | (covered) | off |
-| 5 (05→06) | 23.190 | hbm | word `gradients` | off | lit 0.32, `GPU` | off |
-| 6 (06→07) | 32.320 | null | count, `720 trillion` on | off | lit 0.32, `GPU` | line 1 typed, lit `count`, cy 1245 |
-| 7 (07→08) | 41.955 | tera | rate step 2 | off | lit 0.32, `B200` | line 1 typed, unlit |
-| 8 (08→09) | 51.685 | chip | matmul step 1 | off | lit 1, `B200` | off |
-| 9 (end) | 58.365 | bill | frac, `$` on | off | lit 1, `B200` | off |
+| cut | at | hero | card | acro | panel | chip | code card |
+|---|---|---|---|---|---|---|---|
+| 0 (frame 0) | 0.000 | count | — | `FLOP` (u 0) | core op: `1.5 × 2.0`, n 0 | (covered) | off |
+| 1 (01→02) | 5.640 | chip | — | `FLOP` | off | lit 0.32 | off |
+| 2 (02→03) | 8.320 | acronym | — | FLOATING-POINT / OPERATION (u 1) | off | lit 0.32 | off |
+| 3 (03→04) | 14.525 | exp | — | u 1 | float: row 1, anatomy 1, labels | (covered) | off |
+| 4 (04→05) | 20.160 | exp | — | u 1 | float: rows 1–2 glided, anatomy 2 | (covered) | off |
+| 5 (05→06) | 23.190 | hbm | word `gradients` | off | off (stream off) | lit 0.32 | off |
+| 6 (06→07) | 32.320 | null | count, `720 trillion = 7.2 × 10¹⁴` | off | off | lit 0.32 | line 1, lit `count`, cy 1245 |
+| 7 (07→08) | 35.500 | clock | rate, clock swept (1), on | off | off | lit 0.32 | line 1, unlit |
+| 8 (08→09) | 45.205 | chip | matmul `y = x @ W` | off | off | lit 1 | off |
+| 9 (end) | 51.885 | bill | frac, `$` on | off | off | lit 1 | off |
 
 ## Facts to keep straight (notes, not VO)
 
@@ -135,7 +148,6 @@ card at `o 1`, `B null, mix 0`.
 - **A matmul of (m × k) by (k × n) costs 2·m·k·n FLOPs** (Narayanan et al.
   2021). "Nearly all" of a transformer's compute is matmuls (well over 90 %
   for Llama-style models at typical lengths); the VO says "nearly all".
-- **B200 bf16 dense 2,250 TFLOPS** (series ledger).
 - **The floating-point examples:** "holds" means "is in range of": true for
   fp32 and bf16, false for fp16 (3 × 10⁶ is past its max of 65,504). 10⁻⁷ is
   approximate in any binary format. The panel shows decimal scientific
