@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 09_bill (cut 8 -> 9, master 51.685, 6.680 s; the last beat):
+         "Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill."
+         "Divide"    the card crossfades to `FLOPs ÷ FLOPS`; hero chip -> none
+         "GPU-hours" `= GPU-hours` fades in under it, the hero (hours)
+         "bill"      ` = $` fades in and takes the hero (bill)
+         still from "bill" + 0.3 s to the end: SEAM[9]; every cell stays lit -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/flops.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.68" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.68, START = 51.685;
+  // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
+  const CUE = {
+    divide: 0.285,     /* "Divide" 51.97 (words.json 51.99 "Divide a") */
+    hours: 3.975,      /* "GPU-hours" 55.66 (words.json 55.60; the G lands after the gap) */
+    bill: 5.735,       /* "bill" 57.42 (words.json 57.36 is the end of "the") */
+  };
+  const T = { fade: 0.3 };
+  T.still = CUE.bill + T.fade;                      // 6.035: SEAM[9] from here to the end
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg } = SC;
+  const io = (u) => u * u * (3 - 2 * u);
+  const S8 = SC.SEAM[8], S9 = SC.SEAM[9];
+  const MM1 = S8.card.A, FRAC0 = { kind: "frac", dollar: 0 };
+  const HOURS = "= GPU-hours";
+
+  // beat-local helper: the kit's frac card always shows "= GPU-hours", so its fade-in is set on the span
+  // after the kit has drawn (the kit resets every span's opacity on each draw, so this stays pure in t).
+  function spanO(text, o) {
+    root.querySelectorAll("span").forEach((sp) => { if (sp.textContent === text) sp.style.opacity = o; });
+  }
+
+  function state(t) {
+    if (t <= 0) return S8;
+    if (t >= T.still) return S9;
+    const S = Object.assign({}, S8);
+    if (t < CUE.divide) return S8;                                         // the chip still the hero
+    S.hero = null;                                                         // "Divide": hero chip -> none
+    const m = seg(t, CUE.divide, CUE.divide + T.fade);
+    S.card = m < 1 ? { o: 1, A: MM1, B: FRAC0, mix: io(m) } : { o: 1, A: FRAC0, B: null, mix: 0 };
+    if (t >= CUE.hours) S.hero = "hours";
+    if (t >= CUE.bill) {
+      S.hero = "bill";
+      S.card = { o: 1, A: { kind: "frac", dollar: io(seg(t, CUE.bill, T.still)) }, B: null, mix: 0 };
+    }
+    return S;
+  }
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(state(t));
+    if (t >= CUE.divide && t < CUE.hours + T.fade) spanO(HOURS, io(seg(t, CUE.hours, CUE.hours + T.fade)));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
