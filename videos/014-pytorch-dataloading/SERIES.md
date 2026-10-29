@@ -224,7 +224,7 @@ step 7). Ep 2 ends as recorded, on the batch arriving, with no closer.
 
 | # | Folder | VO | Storyboard | Beats | Assembled | Shipped |
 |---|---|:-:|:-:|:-:|:-:|:-:|
-| 1 | `ep01-training-loop/` | x | | | | |
+| 1 | `ep01-training-loop/` | x | x | x | x | |
 | 2 | `ep02-dataloader-explained/` | x | | | | |
 | 3 | `ep03-dataset-class/` | x | | | | |
 | 4 | `ep04-iterable-dataset/` | x | | | | |

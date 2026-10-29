@@ -6,7 +6,18 @@ YouTube's results for it.
 
 Final cut: `media/short.mp4`, 43.0 s.
 
-## Titles (two; Chris picks)
+## Titles
+
+**Chosen (Chris, 2026-10-29, round 2's #4; 44 characters, the phrase first):**
+
+```
+PyTorch Training Loop Explained in One Batch
+```
+
+Alternate for the hook slot if one is wanted: round 2's #1, `PyTorch
+Training Loop Explained: Loss Not Moving?`.
+
+### Round 1 (rejected)
 
 Search title, for the person typing the phrase (49 characters, phrase first):
 
@@ -25,8 +36,10 @@ SERIES.md's working name, `PyTorch Training Loop Explained (One Batch at
 a Time)`, is 53 characters, over the 50 limit; the search title above
 keeps its claim in fewer.
 
-Round 2 (2026-10-29; Chris: both above "suck"). Five, all ≤ 50
-characters, the phrase or its words kept where search needs them:
+### Round 2 (2026-10-29; Chris: both above "suck")
+
+Five, all ≤ 50 characters, the phrase or its words kept where search
+needs them; #4 chosen:
 
 ```
 PyTorch Training Loop Explained: Loss Not Moving?
@@ -73,16 +86,18 @@ Level up human.
 ## Substack note
 
 ```
-If you've typed a PyTorch training loop from a tutorial and can't say what each line does to the batch: the loop is four things that happen to one batch, every time. The DataLoader yields it, forward, loss, backward, update, then the next one. 45 seconds.
+If you've typed a PyTorch training loop from a tutorial and can't say what each line does to the batch: the loop is four things that happen to one batch, every time. The DataLoader yields it, forward, loss, backward, update, then the next one. 43 seconds.
 ```
 
 ## Checked against the final cut
 
-Reviewed on a 30-tile sheet of `media/short.mp4` (43.07 s) 2026-10-28,
-second cut. On screen: the machine with samples hopping and the
-`[32, 512]` batch card (beats 1, 9, 10); the DataLoader card and the
-glyph riding past forward, loss, backward, update and back (beats 2, 3,
-5, 7); the four body lines typed with `loss = loss_fn(out, y)` lit (beat
+Reviewed on frame sheets of `media/short.mp4` (43.04 s) 2026-10-29,
+fifth cut. On screen: the machine with samples hopping as bracketed rows
+of numbers and the `[32, 512]` batch card as three rows in brackets
+(beats 1, 9, 10); the DataLoader card and the glyph (two rows of digits)
+riding past forward, loss, backward, update, then fading as a spark
+goes round and a different batch pops into the slot (beats 2, 3, 5, 7);
+the four body lines typed with `loss = loss_fn(out, y)` lit (beat
 4), lit together on "one training step" (beat 6), the two `for` headers
 typed above them with inner then outer lit (beat 8), and the six lines
 with the four lit on "same four lines every time" (beat 11, the last
