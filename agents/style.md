@@ -49,6 +49,17 @@ Rules that are specific to Shorts:
 - The Short's frame 0 (the hook beat): something is on screen and something is moving by frame 1. No title card, no empty dark opener. Later beats follow `agents/animation-rules.md` rule 1: only what the VO names moves, and a beat may hold still until its first cue (012 ep03).
 - Readable text has one floor per engine, both passed on a phone: Manim, nothing smaller than `SHORT_LABEL_SCALE` (~1/20 of frame height, ~96 px line height); HyperFrames, 60 px font-size, weight 800 (`agents/beat-brief-hyperframes.md`, "Layout, in pixels").
 - One caption at a time, 2 to 4 words, always in the band. Burned-in VO captions from `tools/assemble.py` use the same band, so a beat uses scene captions or VO captions, not both.
+- **The scene changes about every 5 s.** The message comes first, but a
+  Short that holds one image for 20 s loses the scroller (Chris, 014
+  ep01: the loop image held for 26 s, "we should be changing between the
+  scenes a little bit quicker"). A video may have only two or three
+  images, and they may come back as often as the VO returns to them;
+  what matters is that something new is on screen every ~5 s: a flip to
+  the code card and back, the machine, the loop. Plan it in the
+  storyboard's beats table: no run of beats on one image longer than
+  ~6 s unless that image is itself moving through distinct states. The
+  seam-state kit makes a return to an image cheap (the state is data),
+  so reuse images rather than inventing more.
 
 ### Manim 0.18.1 gotchas found building the Short pipeline
 

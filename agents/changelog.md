@@ -5,6 +5,7 @@ that forced it. Newest first.
 
 ## 2026-10-28
 
+- `agents/style.md` Shorts rules: the scene changes about every 5 s; images may repeat (a flip to the code card and back) but no run on one image longer than ~6 s unless it is moving through states. Chris, 014 ep01: 26 s on the loop image was too long. The storyboard's beats table plans it. (014)
 - `agents/style.md` "Code on screen": code cards use VS Code Dark+ colours, the hero line is a magenta gutter bar and a lighter row (not magenta text), and code the VO introduces is typed at a human's uneven pace (`SC_typedAt` / `SC_typingSeconds` in `videos/014-pytorch-dataloading/_kit/code.js`). Chris, 014 ep01: "not just purple", "simulate the typing like a human when it makes sense". (014)
 
 ## 2026-10-26
