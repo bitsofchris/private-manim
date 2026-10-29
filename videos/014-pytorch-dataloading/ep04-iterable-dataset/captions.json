@@ -1,0 +1,407 @@
+[
+ {
+  "start": 0.699,
+  "end": 1.14,
+  "text": "If looking up"
+ },
+ {
+  "start": 1.2,
+  "end": 1.6,
+  "text": "one sample"
+ },
+ {
+  "start": 1.66,
+  "end": 2.16,
+  "text": "isn't cheap"
+ },
+ {
+  "start": 2.22,
+  "end": 2.7,
+  "text": "you use an"
+ },
+ {
+  "start": 2.76,
+  "end": 3.02,
+  "text": "iterable"
+ },
+ {
+  "start": 3.08,
+  "end": 3.42,
+  "text": "dataset."
+ },
+ {
+  "start": 4.08,
+  "end": 4.54,
+  "text": "Here, we use"
+ },
+ {
+  "start": 4.6,
+  "end": 5.3,
+  "text": "one function"
+ },
+ {
+  "start": 5.36,
+  "end": 6.1,
+  "text": "iter, that just"
+ },
+ {
+  "start": 6.16,
+  "end": 6.96,
+  "text": "yields samples."
+ },
+ {
+  "start": 7.61,
+  "end": 7.86,
+  "text": "I most"
+ },
+ {
+  "start": 7.92,
+  "end": 8.46,
+  "text": "frequently use"
+ },
+ {
+  "start": 8.52,
+  "end": 8.68,
+  "text": "this when"
+ },
+ {
+  "start": 8.74,
+  "end": 8.94,
+  "text": "training"
+ },
+ {
+  "start": 9.0,
+  "end": 9.52,
+  "text": "bigger models."
+ },
+ {
+  "start": 9.66,
+  "end": 10.18,
+  "text": "You pack the"
+ },
+ {
+  "start": 10.24,
+  "end": 10.56,
+  "text": "data into"
+ },
+ {
+  "start": 10.62,
+  "end": 11.4,
+  "text": "shards and just"
+ },
+ {
+  "start": 11.46,
+  "end": 11.7,
+  "text": "stream"
+ },
+ {
+  "start": 11.76,
+  "end": 12.18,
+  "text": "them through."
+ },
+ {
+  "start": 12.69,
+  "end": 12.94,
+  "text": "There's no"
+ },
+ {
+  "start": 13.0,
+  "end": 13.32,
+  "text": "length and"
+ },
+ {
+  "start": 13.38,
+  "end": 13.9,
+  "text": "no get item."
+ },
+ {
+  "start": 14.02,
+  "end": 14.58,
+  "text": "Sample i"
+ },
+ {
+  "start": 14.64,
+  "end": 15.36,
+  "text": "doesn't exist"
+ },
+ {
+  "start": 15.42,
+  "end": 15.82,
+  "text": "until the"
+ },
+ {
+  "start": 15.88,
+  "end": 16.18,
+  "text": "iterator"
+ },
+ {
+  "start": 16.24,
+  "end": 16.82,
+  "text": "produces it."
+ },
+ {
+  "start": 17.24,
+  "end": 17.48,
+  "text": "This means"
+ },
+ {
+  "start": 17.54,
+  "end": 17.7,
+  "text": "there's"
+ },
+ {
+  "start": 17.76,
+  "end": 18.3,
+  "text": "no sampler."
+ },
+ {
+  "start": 18.48,
+  "end": 19.0,
+  "text": "The loader just"
+ },
+ {
+  "start": 19.06,
+  "end": 19.44,
+  "text": "calls your"
+ },
+ {
+  "start": 19.5,
+  "end": 19.96,
+  "text": "dataset over"
+ },
+ {
+  "start": 20.02,
+  "end": 20.34,
+  "text": "and over and"
+ },
+ {
+  "start": 20.4,
+  "end": 20.92,
+  "text": "it yields the"
+ },
+ {
+  "start": 20.98,
+  "end": 21.46,
+  "text": "next sample."
+ },
+ {
+  "start": 22.02,
+  "end": 22.58,
+  "text": "So shuffling is"
+ },
+ {
+  "start": 22.64,
+  "end": 22.7,
+  "text": "now"
+ },
+ {
+  "start": 22.76,
+  "end": 23.28,
+  "text": "your problem."
+ },
+ {
+  "start": 23.68,
+  "end": 24.2,
+  "text": "You pre-shuffle"
+ },
+ {
+  "start": 24.26,
+  "end": 24.68,
+  "text": "the data into"
+ },
+ {
+  "start": 24.74,
+  "end": 25.52,
+  "text": "shards, load"
+ },
+ {
+  "start": 25.58,
+  "end": 26.1,
+  "text": "one shard into"
+ },
+ {
+  "start": 26.16,
+  "end": 26.56,
+  "text": "memory, and"
+ },
+ {
+  "start": 26.62,
+  "end": 27.14,
+  "text": "yield from it."
+ },
+ {
+  "start": 27.58,
+  "end": 28.24,
+  "text": "Splits are also"
+ },
+ {
+  "start": 28.3,
+  "end": 28.41,
+  "text": "your"
+ },
+ {
+  "start": 28.47,
+  "end": 28.96,
+  "text": "problem, too."
+ },
+ {
+  "start": 29.0,
+  "end": 29.36,
+  "text": "If you run"
+ },
+ {
+  "start": 29.42,
+  "end": 29.66,
+  "text": "multiple"
+ },
+ {
+  "start": 29.72,
+  "end": 30.24,
+  "text": "workers"
+ },
+ {
+  "start": 30.3,
+  "end": 30.54,
+  "text": "splitting the"
+ },
+ {
+  "start": 30.6,
+  "end": 31.0,
+  "text": "stream between"
+ },
+ {
+  "start": 31.06,
+  "end": 31.6,
+  "text": "them is up"
+ },
+ {
+  "start": 31.66,
+  "end": 31.78,
+  "text": "to you"
+ },
+ {
+  "start": 31.84,
+  "end": 32.279,
+  "text": "to determine."
+ },
+ {
+  "start": 32.84,
+  "end": 33.42,
+  "text": "The data loader"
+ },
+ {
+  "start": 33.48,
+  "end": 33.96,
+  "text": "on top is"
+ },
+ {
+  "start": 34.02,
+  "end": 34.12,
+  "text": "the"
+ },
+ {
+  "start": 34.18,
+  "end": 34.58,
+  "text": "same though."
+ },
+ {
+  "start": 35.08,
+  "end": 35.36,
+  "text": "Same batch"
+ },
+ {
+  "start": 35.42,
+  "end": 35.76,
+  "text": "size, same"
+ },
+ {
+  "start": 35.82,
+  "end": 36.34,
+  "text": "collate, same"
+ },
+ {
+  "start": 36.4,
+  "end": 36.88,
+  "text": "batch out."
+ },
+ {
+  "start": 37.24,
+  "end": 37.56,
+  "text": "The only thing"
+ },
+ {
+  "start": 37.62,
+  "end": 38.16,
+  "text": "that changes"
+ },
+ {
+  "start": 38.22,
+  "end": 38.64,
+  "text": "the data loader"
+ },
+ {
+  "start": 38.7,
+  "end": 39.32,
+  "text": "is asking for"
+ },
+ {
+  "start": 39.38,
+  "end": 39.72,
+  "text": "the next"
+ },
+ {
+  "start": 39.78,
+  "end": 40.6,
+  "text": "sample, not"
+ },
+ {
+  "start": 40.66,
+  "end": 41.06,
+  "text": "for the sample"
+ },
+ {
+  "start": 41.12,
+  "end": 41.76,
+  "text": "at index i."
+ },
+ {
+  "start": 42.32,
+  "end": 42.76,
+  "text": "So use map"
+ },
+ {
+  "start": 42.82,
+  "end": 43.12,
+  "text": "until you"
+ },
+ {
+  "start": 43.18,
+  "end": 43.78,
+  "text": "can't, and the"
+ },
+ {
+  "start": 43.84,
+  "end": 44.4,
+  "text": "day sample i"
+ },
+ {
+  "start": 44.46,
+  "end": 44.86,
+  "text": "stops being"
+ },
+ {
+  "start": 44.92,
+  "end": 45.76,
+  "text": "cheap, swap to"
+ },
+ {
+  "start": 45.82,
+  "end": 46.1,
+  "text": "an iterable"
+ },
+ {
+  "start": 46.16,
+  "end": 46.64,
+  "text": "dataset."
+ }
+]

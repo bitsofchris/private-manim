@@ -16,6 +16,8 @@
 //                   is the pre-shuffle). Fractional positions are fine: a beat
 //                   lerps `pos` instead (pos[k] = slot of card k, 0..2) while they move.
 //   pos [p0,p1,p2]  the slot of card k (overrides order; lets cards move between slots)
+//   lift [l0,l1,l2] px up (negative = down); when given it replaces the built-in hop between slots,
+//                   so a card passing two others can lift over them while they dip (a card is 68 px tall)
 //   load 0..1       card `loadCard` rises into the Dataset card and fades (1 = loaded, gone)
 //   loadCard k      which card is loaded (default: whichever sits in slot 0)
 //   hero 0|1        the three cards magenta (the one magenta hero: set machine hero null)
@@ -66,7 +68,7 @@
       cards.forEach((c, k) => {
         const p = pos[k], lo = Math.floor(p), hi = Math.min(2, lo + 1), f = p - lo;
         const a = geo.slot(lo), b = geo.slot(hi);
-        let x = SC.lerp(a.x, b.x, f), y = SC.lerp(a.y, b.y, f) - Math.sin(Math.PI * f) * 30;  // a hop between slots
+        let x = SC.lerp(a.x, b.x, f), y = SC.lerp(a.y, b.y, f) - (sh.lift ? sh.lift[k] : Math.sin(Math.PI * f) * 30);  // a hop between slots
         let o = O;
         if (k === loadCard && sh.load > 0) {
           // rise into the Dataset card's left half, fading as it enters
