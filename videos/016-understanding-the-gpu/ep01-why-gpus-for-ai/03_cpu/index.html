@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep01 beat 3 "cpu" (master 14.250–23.220): opens SC.SEAM[2] (y the hero, every y cell done), ends SC.SEAM[3].
-         "CPU" (0.53): hero -> cpu; chip and memory fade, the CPU grows into the chip's place, y empties cell by cell.
+    <!-- ep01 beat 3 "cpu" (master 14.250–23.220): opens SC.SEAM[2] (y the hero, every y cell done, the network in the top slot), ends SC.SEAM[3].
+         "CPU" (0.53): hero -> cpu; the network fades out as the CPU fades in (0.3 s); chip and memory fade, the CPU grows into the chip's place, y empties cell by cell.
          "one" thread (1.87): only core 1 lit. "cores" (4.51): all 4 lit, each pops once. "caches" (5.25): cache blocks.
          "branching" (6.03): branch forks. "works through that pile" (6.95, 7.65, 8.35): y fills one row of four per tick,
          the four cores pop with each. Still from 8.60 (SEAM[3]). -->
@@ -39,7 +39,7 @@
     branch: 6.03,    /* "branching" (20.28): branch forks in */
     tick: [6.95, 7.65, 8.35],  /* "works" (21.20) / "pile" (21.90) / "at a time" (22.60): y rows 1, 2, 3 */
   };
-  const GROW = 0.8, FADE = 0.5, IN = 0.3, POP = 0.25;  // grow; chip/memory fade; cache/branch fade-in; core pop
+  const GROW = 0.8, FADE = 0.5, IN = 0.3, POP = 0.25, SWAP = 0.3;  // grow; chip/memory fade; cache/branch fade-in; core pop; network out / CPU in
   const ALL = "1".repeat(16);
   const root = document.getElementById("root");
   const kit = EP.mount(root);
@@ -66,6 +66,7 @@
     const rows = CUE.tick.filter((c) => t >= c).length;
     if (rows) fill = "1".repeat(4 * rows) + "0".repeat(16 - 4 * rows);
     return Object.assign({}, SC.SEAM[2], {
+      net: 1 - seg(t, CUE.cpu, CUE.cpu + SWAP), cpu4: seg(t, CUE.cpu, CUE.cpu + SWAP),
       hero: "cpu", big: g, chip: 1 - f, hbm: 1 - f, lit: f >= 1 ? 0 : 1,
       cores: t >= CUE.one && t < CUE.cores ? "1000" : "1111",
       cache: seg(t, CUE.caches - IN / 2, CUE.caches + IN / 2),
