@@ -71,7 +71,7 @@ function stubDom() {
     return e;
   };
   const byId = {};
-  return { createElement: make, getElementById: (id) => (byId[id] = byId[id] || make("div")), fonts: null,
+  return { createElement: make, createElementNS: (ns, tag) => make(tag), getElementById: (id) => (byId[id] = byId[id] || make("div")), fonts: null,
            querySelectorAll: () => [], body: make("body") };
 }
 
