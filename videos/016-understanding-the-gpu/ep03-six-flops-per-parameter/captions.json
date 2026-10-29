@@ -1,0 +1,322 @@
+[
+ {
+  "start": 0.41,
+  "end": 1.22,
+  "text": "Training an LLM"
+ },
+ {
+  "start": 1.28,
+  "end": 2.24,
+  "text": "costs about 6"
+ },
+ {
+  "start": 2.3,
+  "end": 2.86,
+  "text": "FLOPs per"
+ },
+ {
+  "start": 2.92,
+  "end": 3.38,
+  "text": "parameter"
+ },
+ {
+  "start": 3.44,
+  "end": 4.12,
+  "text": "per token."
+ },
+ {
+  "start": 4.57,
+  "end": 5.18,
+  "text": "You spend 2"
+ },
+ {
+  "start": 5.24,
+  "end": 6.0,
+  "text": "FLOPs on the"
+ },
+ {
+  "start": 6.06,
+  "end": 6.52,
+  "text": "forward pass"
+ },
+ {
+  "start": 6.58,
+  "end": 7.2,
+  "text": "and about 4"
+ },
+ {
+  "start": 7.26,
+  "end": 7.52,
+  "text": "on the"
+ },
+ {
+  "start": 7.58,
+  "end": 8.18,
+  "text": "backward pass."
+ },
+ {
+  "start": 9.14,
+  "end": 9.44,
+  "text": "Almost every"
+ },
+ {
+  "start": 9.5,
+  "end": 9.78,
+  "text": "parameter"
+ },
+ {
+  "start": 9.84,
+  "end": 10.32,
+  "text": "sits in a"
+ },
+ {
+  "start": 10.38,
+  "end": 10.82,
+  "text": "weight matrix."
+ },
+ {
+  "start": 11.58,
+  "end": 11.94,
+  "text": "Here's a tiny"
+ },
+ {
+  "start": 12.0,
+  "end": 12.81,
+  "text": "one, 3 inputs"
+ },
+ {
+  "start": 12.87,
+  "end": 13.34,
+  "text": "2 outputs"
+ },
+ {
+  "start": 13.4,
+  "end": 13.92,
+  "text": "6 weights."
+ },
+ {
+  "start": 14.4,
+  "end": 15.1,
+  "text": "Going forward"
+ },
+ {
+  "start": 15.16,
+  "end": 15.62,
+  "text": "each weight"
+ },
+ {
+  "start": 15.68,
+  "end": 16.1,
+  "text": "does one"
+ },
+ {
+  "start": 16.16,
+  "end": 16.8,
+  "text": "multiply and"
+ },
+ {
+  "start": 16.86,
+  "end": 17.32,
+  "text": "one add."
+ },
+ {
+  "start": 17.92,
+  "end": 18.240000000000002,
+  "text": "So you have 2"
+ },
+ {
+  "start": 18.3,
+  "end": 18.72,
+  "text": "FLOPs per"
+ },
+ {
+  "start": 18.78,
+  "end": 19.16,
+  "text": "weight,"
+ },
+ {
+  "start": 19.22,
+  "end": 19.62,
+  "text": "12 for this"
+ },
+ {
+  "start": 19.68,
+  "end": 20.24,
+  "text": "entire layer."
+ },
+ {
+  "start": 20.55,
+  "end": 20.84,
+  "text": "Coming"
+ },
+ {
+  "start": 20.9,
+  "end": 21.44,
+  "text": "backwards now"
+ },
+ {
+  "start": 21.5,
+  "end": 22.1,
+  "text": "the error has"
+ },
+ {
+  "start": 22.16,
+  "end": 22.64,
+  "text": "to reach the"
+ },
+ {
+  "start": 22.7,
+  "end": 23.24,
+  "text": "layer before."
+ },
+ {
+  "start": 23.74,
+  "end": 24.1,
+  "text": "So the same"
+ },
+ {
+  "start": 24.16,
+  "end": 24.42,
+  "text": "weights in"
+ },
+ {
+  "start": 24.48,
+  "end": 24.94,
+  "text": "reverse"
+ },
+ {
+  "start": 25.0,
+  "end": 25.4,
+  "text": "another"
+ },
+ {
+  "start": 25.46,
+  "end": 25.94,
+  "text": "multiply and"
+ },
+ {
+  "start": 26.0,
+  "end": 26.46,
+  "text": "add each."
+ },
+ {
+  "start": 27.02,
+  "end": 27.26,
+  "text": "Then each"
+ },
+ {
+  "start": 27.32,
+  "end": 27.68,
+  "text": "weight needs"
+ },
+ {
+  "start": 27.74,
+  "end": 28.06,
+  "text": "its own"
+ },
+ {
+  "start": 28.12,
+  "end": 28.78,
+  "text": "gradient for"
+ },
+ {
+  "start": 28.84,
+  "end": 29.5,
+  "text": "the optimizer."
+ },
+ {
+  "start": 29.96,
+  "end": 30.44,
+  "text": "Error times"
+ },
+ {
+  "start": 30.5,
+  "end": 31.42,
+  "text": "input added to"
+ },
+ {
+  "start": 31.48,
+  "end": 32.02,
+  "text": "a running total"
+ },
+ {
+  "start": 32.08,
+  "end": 32.8,
+  "text": "is 2 more."
+ },
+ {
+  "start": 33.28,
+  "end": 33.82,
+  "text": "That's 6 per"
+ },
+ {
+  "start": 33.88,
+  "end": 34.11,
+  "text": "weight"
+ },
+ {
+  "start": 34.17,
+  "end": 34.64,
+  "text": "per token."
+ },
+ {
+  "start": 35.14,
+  "end": 35.6,
+  "text": "So training"
+ },
+ {
+  "start": 35.66,
+  "end": 36.88,
+  "text": "compute is 6"
+ },
+ {
+  "start": 36.94,
+  "end": 37.38,
+  "text": "times"
+ },
+ {
+  "start": 37.44,
+  "end": 37.98,
+  "text": "parameters"
+ },
+ {
+  "start": 38.04,
+  "end": 38.78,
+  "text": "times tokens."
+ },
+ {
+  "start": 39.14,
+  "end": 39.68,
+  "text": "An 8 billion"
+ },
+ {
+  "start": 39.74,
+  "end": 40.5,
+  "text": "parameter model"
+ },
+ {
+  "start": 40.56,
+  "end": 41.32,
+  "text": "at 15,000"
+ },
+ {
+  "start": 41.38,
+  "end": 41.78,
+  "text": "tokens per"
+ },
+ {
+  "start": 41.84,
+  "end": 42.62,
+  "text": "second per GPU"
+ },
+ {
+  "start": 42.68,
+  "end": 43.08,
+  "text": "is doing"
+ },
+ {
+  "start": 43.14,
+  "end": 44.76,
+  "text": "720 teraflops."
+ }
+]
