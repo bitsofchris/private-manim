@@ -1,0 +1,44 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook_twins.mp4",
+   "end": 4.39
+  },
+  {
+   "clip": "media/hf/02_full_copy.mp4",
+   "end": 3.97
+  },
+  {
+   "clip": "media/hf/03_same_data.mp4",
+   "end": 8.45
+  },
+  {
+   "clip": "media/hf/04_map_fine.mp4",
+   "end": 9.1
+  },
+  {
+   "clip": "media/hf/05_no_indices.mp4",
+   "end": 7.41
+  },
+  {
+   "clip": "media/hf/06_true_code.mp4",
+   "end": 3.7
+  },
+  {
+   "clip": "media/hf/07_iter_fix.mp4",
+   "end": 2.11
+  },
+  {
+   "clip": "media/hf/08_worker_info.mp4",
+   "end": 5.725
+  },
+  {
+   "clip": "media/hf/09_false_code.mp4",
+   "end": 3.835
+  },
+  {
+   "clip": "media/hf/10_closer.mp4",
+   "end": 9.027
+  }
+ ]
+}

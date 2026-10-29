@@ -1,0 +1,43 @@
+00:00.320-00:04.480
+In PyTorch, NumWorkers doesn't split your data across the workers.
+
+00:04.480-00:08.640
+Each worker is a full copy of your dataset fetching and collating on its own.
+
+00:08.300-00:13.820
+So when you run an iterable dataset with multiple workers, every worker gets the same dataset object.
+
+00:13.820-00:16.860
+And unless you split the stream yourself, they all deliver the same data.
+
+00:16.860-00:19.260
+With a map style dataset, you're fine.
+
+00:18.800-00:23.919
+The sampler stays in the main process and hands each worker a different set of indices.
+
+00:23.919-00:28.880
+Every sample here gets fetched once, but with an iterable dataset, there are no indices.
+
+00:28.560-00:30.880
+Each worker starts the stream from the beginning.
+
+00:30.880-00:33.440
+So if you have the same seed, you're getting the same data.
+
+00:33.440-00:37.040
+Two workers, batch size 4, the first two batches will be identical.
+
+00:37.040-00:39.200
+The fix lives inside your iter function.
+
+00:39.260-00:45.019
+Ask for the worker info and have worker K take every nth sample starting at K.
+
+00:45.019-00:48.860
+Now the two copies can walk the stream in step and nothing is delivered twice.
+
+00:48.700-00:57.580
+So before you increase num workers on an iterable dataset, be sure you're passing that worker info to each iter function so you can split the stream accordingly.
+
+

@@ -1,0 +1,1062 @@
+{
+  "segments" : [
+    {
+      "end" : 4020,
+      "id" : "C73B07BE-4EF4-428C-9666-6748816FFC96",
+      "start" : 1,
+      "text" : "In PyTorch, NumWorkers doesn't split your data across the workers.",
+      "words" : [
+        {
+          "end" : 820,
+          "start" : 0,
+          "text" : "In"
+        },
+        {
+          "end" : 1420,
+          "start" : 820,
+          "text" : "PyTorch,"
+        },
+        {
+          "end" : 2100,
+          "start" : 1560,
+          "text" : "NumWorkers"
+        },
+        {
+          "end" : 2420,
+          "start" : 2100,
+          "text" : "doesn't"
+        },
+        {
+          "end" : 2700,
+          "start" : 2420,
+          "text" : "split"
+        },
+        {
+          "end" : 2840,
+          "start" : 2700,
+          "text" : "your"
+        },
+        {
+          "end" : 3120,
+          "start" : 2840,
+          "text" : "data"
+        },
+        {
+          "end" : 3520,
+          "start" : 3120,
+          "text" : "across"
+        },
+        {
+          "end" : 3700,
+          "start" : 3520,
+          "text" : "the"
+        },
+        {
+          "end" : 4020,
+          "start" : 3700,
+          "text" : "workers."
+        }
+      ]
+    },
+    {
+      "end" : 8100,
+      "id" : "E0A32FAA-AE4B-4D2A-AD57-9758BD5E59A3",
+      "start" : 4760,
+      "text" : "Each worker is a full copy of your dataset fetching and collating on its own.",
+      "words" : [
+        {
+          "end" : 4840,
+          "start" : 4760,
+          "text" : "Each"
+        },
+        {
+          "end" : 5200,
+          "start" : 4840,
+          "text" : "worker"
+        },
+        {
+          "end" : 5380,
+          "start" : 5200,
+          "text" : "is"
+        },
+        {
+          "end" : 5480,
+          "start" : 5380,
+          "text" : "a"
+        },
+        {
+          "end" : 5800,
+          "start" : 5480,
+          "text" : "full"
+        },
+        {
+          "end" : 6160,
+          "start" : 5800,
+          "text" : "copy"
+        },
+        {
+          "end" : 6300,
+          "start" : 6160,
+          "text" : "of"
+        },
+        {
+          "end" : 6400,
+          "start" : 6300,
+          "text" : "your"
+        },
+        {
+          "end" : 6740,
+          "start" : 6400,
+          "text" : "dataset"
+        },
+        {
+          "end" : 7120,
+          "start" : 6740,
+          "text" : "fetching"
+        },
+        {
+          "end" : 7260,
+          "start" : 7120,
+          "text" : "and"
+        },
+        {
+          "end" : 7560,
+          "start" : 7260,
+          "text" : "collating"
+        },
+        {
+          "end" : 7740,
+          "start" : 7560,
+          "text" : "on"
+        },
+        {
+          "end" : 7880,
+          "start" : 7740,
+          "text" : "its"
+        },
+        {
+          "end" : 8100,
+          "start" : 7880,
+          "text" : "own."
+        }
+      ]
+    },
+    {
+      "end" : 13380,
+      "id" : "7F69E3C7-7D43-4841-84B2-8642D3A38E46",
+      "start" : 8620,
+      "text" : "So when you run an iterable dataset with multiple workers, every worker gets the same dataset",
+      "words" : [
+        {
+          "end" : 8720,
+          "start" : 8620,
+          "text" : "So"
+        },
+        {
+          "end" : 8860,
+          "start" : 8720,
+          "text" : "when"
+        },
+        {
+          "end" : 8960,
+          "start" : 8860,
+          "text" : "you"
+        },
+        {
+          "end" : 9220,
+          "start" : 8960,
+          "text" : "run"
+        },
+        {
+          "end" : 9420,
+          "start" : 9220,
+          "text" : "an"
+        },
+        {
+          "end" : 9760,
+          "start" : 9420,
+          "text" : "iterable"
+        },
+        {
+          "end" : 10140,
+          "start" : 9760,
+          "text" : "dataset"
+        },
+        {
+          "end" : 10360,
+          "start" : 10140,
+          "text" : "with"
+        },
+        {
+          "end" : 10680,
+          "start" : 10360,
+          "text" : "multiple"
+        },
+        {
+          "end" : 11040,
+          "start" : 10680,
+          "text" : "workers,"
+        },
+        {
+          "end" : 11900,
+          "start" : 11660,
+          "text" : "every"
+        },
+        {
+          "end" : 12140,
+          "start" : 11900,
+          "text" : "worker"
+        },
+        {
+          "end" : 12360,
+          "start" : 12140,
+          "text" : "gets"
+        },
+        {
+          "end" : 12540,
+          "start" : 12360,
+          "text" : "the"
+        },
+        {
+          "end" : 12980,
+          "start" : 12540,
+          "text" : "same"
+        },
+        {
+          "end" : 13380,
+          "start" : 12980,
+          "text" : "dataset"
+        }
+      ]
+    },
+    {
+      "end" : 16540,
+      "id" : "A1D3EBC0-7F35-4146-8BEE-F4209AAECA92",
+      "start" : 13660,
+      "text" : "object and unless you split the stream yourself, they all deliver the same data.",
+      "words" : [
+        {
+          "end" : 13720,
+          "start" : 13660,
+          "text" : "object"
+        },
+        {
+          "end" : 13980,
+          "start" : 13720,
+          "text" : "and"
+        },
+        {
+          "end" : 14220,
+          "start" : 13980,
+          "text" : "unless"
+        },
+        {
+          "end" : 14300,
+          "start" : 14220,
+          "text" : "you"
+        },
+        {
+          "end" : 14580,
+          "start" : 14300,
+          "text" : "split"
+        },
+        {
+          "end" : 14700,
+          "start" : 14580,
+          "text" : "the"
+        },
+        {
+          "end" : 14920,
+          "start" : 14700,
+          "text" : "stream"
+        },
+        {
+          "end" : 15220,
+          "start" : 14920,
+          "text" : "yourself,"
+        },
+        {
+          "end" : 15400,
+          "start" : 15240,
+          "text" : "they"
+        },
+        {
+          "end" : 15720,
+          "start" : 15400,
+          "text" : "all"
+        },
+        {
+          "end" : 15960,
+          "start" : 15720,
+          "text" : "deliver"
+        },
+        {
+          "end" : 16120,
+          "start" : 15960,
+          "text" : "the"
+        },
+        {
+          "end" : 16299,
+          "start" : 16120,
+          "text" : "same"
+        },
+        {
+          "end" : 16540,
+          "start" : 16299,
+          "text" : "data."
+        }
+      ]
+    },
+    {
+      "end" : 18560,
+      "id" : "846AD71A-271A-4836-93F1-AF74D35E93B5",
+      "start" : 17080,
+      "text" : "With a map-style dataset, you're fine.",
+      "words" : [
+        {
+          "end" : 17160,
+          "start" : 17080,
+          "text" : "With"
+        },
+        {
+          "end" : 17300,
+          "start" : 17160,
+          "text" : "a"
+        },
+        {
+          "end" : 17480,
+          "start" : 17300,
+          "text" : "map"
+        },
+        {
+          "end" : 17720,
+          "start" : 17480,
+          "text" : "-style"
+        },
+        {
+          "end" : 18000,
+          "start" : 17720,
+          "text" : "dataset,"
+        },
+        {
+          "end" : 18240,
+          "start" : 18160,
+          "text" : "you're"
+        },
+        {
+          "end" : 18560,
+          "start" : 18240,
+          "text" : "fine."
+        }
+      ]
+    },
+    {
+      "end" : 23420,
+      "id" : "30423769-E38A-49AF-9649-AD290CA19494",
+      "start" : 19140,
+      "text" : "The sampler stays in the main process and hands each worker a different set of indices.",
+      "words" : [
+        {
+          "end" : 19280,
+          "start" : 19140,
+          "text" : "The"
+        },
+        {
+          "end" : 19620,
+          "start" : 19280,
+          "text" : "sampler"
+        },
+        {
+          "end" : 19960,
+          "start" : 19620,
+          "text" : "stays"
+        },
+        {
+          "end" : 20080,
+          "start" : 19960,
+          "text" : "in"
+        },
+        {
+          "end" : 20200,
+          "start" : 20080,
+          "text" : "the"
+        },
+        {
+          "end" : 20380,
+          "start" : 20200,
+          "text" : "main"
+        },
+        {
+          "end" : 20940,
+          "start" : 20380,
+          "text" : "process"
+        },
+        {
+          "end" : 21340,
+          "start" : 20940,
+          "text" : "and"
+        },
+        {
+          "end" : 21940,
+          "start" : 21340,
+          "text" : "hands"
+        },
+        {
+          "end" : 22180,
+          "start" : 21940,
+          "text" : "each"
+        },
+        {
+          "end" : 22440,
+          "start" : 22180,
+          "text" : "worker"
+        },
+        {
+          "end" : 22580,
+          "start" : 22440,
+          "text" : "a"
+        },
+        {
+          "end" : 22820,
+          "start" : 22580,
+          "text" : "different"
+        },
+        {
+          "end" : 23000,
+          "start" : 22820,
+          "text" : "set"
+        },
+        {
+          "end" : 23140,
+          "start" : 23000,
+          "text" : "of"
+        },
+        {
+          "end" : 23420,
+          "start" : 23140,
+          "text" : "indices."
+        }
+      ]
+    },
+    {
+      "end" : 25660,
+      "id" : "EA410075-C09B-4E42-9946-411442B1CE88",
+      "start" : 24120,
+      "text" : "Every sample here gets fetched once.",
+      "words" : [
+        {
+          "end" : 24340,
+          "start" : 24120,
+          "text" : "Every"
+        },
+        {
+          "end" : 24660,
+          "start" : 24340,
+          "text" : "sample"
+        },
+        {
+          "end" : 24880,
+          "start" : 24660,
+          "text" : "here"
+        },
+        {
+          "end" : 25080,
+          "start" : 24880,
+          "text" : "gets"
+        },
+        {
+          "end" : 25360,
+          "start" : 25080,
+          "text" : "fetched"
+        },
+        {
+          "end" : 25660,
+          "start" : 25360,
+          "text" : "once."
+        }
+      ]
+    },
+    {
+      "end" : 28080,
+      "id" : "641C3847-8EFE-491B-9BAD-EFC2715B1FA4",
+      "start" : 26160,
+      "text" : "But with an iterable dataset, there are no indices.",
+      "words" : [
+        {
+          "end" : 26240,
+          "start" : 26160,
+          "text" : "But"
+        },
+        {
+          "end" : 26380,
+          "start" : 26240,
+          "text" : "with"
+        },
+        {
+          "end" : 26540,
+          "start" : 26380,
+          "text" : "an"
+        },
+        {
+          "end" : 26840,
+          "start" : 26540,
+          "text" : "iterable"
+        },
+        {
+          "end" : 27180,
+          "start" : 26840,
+          "text" : "dataset,"
+        },
+        {
+          "end" : 27460,
+          "start" : 27380,
+          "text" : "there"
+        },
+        {
+          "end" : 27640,
+          "start" : 27460,
+          "text" : "are"
+        },
+        {
+          "end" : 27800,
+          "start" : 27640,
+          "text" : "no"
+        },
+        {
+          "end" : 28080,
+          "start" : 27800,
+          "text" : "indices."
+        }
+      ]
+    },
+    {
+      "end" : 32460,
+      "id" : "157F4B60-11AC-4863-A8D1-64DDB82A7A85",
+      "start" : 28880,
+      "text" : "worker starts the stream from the beginning. So if you have the same seed, you're getting",
+      "words" : [
+        {
+          "end" : 29240,
+          "start" : 28880,
+          "text" : "worker"
+        },
+        {
+          "end" : 29600,
+          "start" : 29240,
+          "text" : "starts"
+        },
+        {
+          "end" : 29840,
+          "start" : 29600,
+          "text" : "the"
+        },
+        {
+          "end" : 30000,
+          "start" : 29840,
+          "text" : "stream"
+        },
+        {
+          "end" : 30180,
+          "start" : 30000,
+          "text" : "from"
+        },
+        {
+          "end" : 30320,
+          "start" : 30180,
+          "text" : "the"
+        },
+        {
+          "end" : 30560,
+          "start" : 30320,
+          "text" : "beginning."
+        },
+        {
+          "end" : 31220,
+          "start" : 31160,
+          "text" : "So"
+        },
+        {
+          "end" : 31280,
+          "start" : 31220,
+          "text" : "if"
+        },
+        {
+          "end" : 31380,
+          "start" : 31280,
+          "text" : "you"
+        },
+        {
+          "end" : 31500,
+          "start" : 31380,
+          "text" : "have"
+        },
+        {
+          "end" : 31620,
+          "start" : 31500,
+          "text" : "the"
+        },
+        {
+          "end" : 31820,
+          "start" : 31620,
+          "text" : "same"
+        },
+        {
+          "end" : 32099,
+          "start" : 31820,
+          "text" : "seed,"
+        },
+        {
+          "end" : 32240,
+          "start" : 32180,
+          "text" : "you're"
+        },
+        {
+          "end" : 32460,
+          "start" : 32240,
+          "text" : "getting"
+        }
+      ]
+    },
+    {
+      "end" : 36740,
+      "id" : "4FBB190A-E3C6-481F-BD96-A74E96D5CF9B",
+      "start" : 32540,
+      "text" : "the same data. Two workers, batch size 4, the first two batches will be identical.",
+      "words" : [
+        {
+          "end" : 32640,
+          "start" : 32540,
+          "text" : "the"
+        },
+        {
+          "end" : 32800,
+          "start" : 32640,
+          "text" : "same"
+        },
+        {
+          "end" : 33060,
+          "start" : 32800,
+          "text" : "data."
+        },
+        {
+          "end" : 33740,
+          "start" : 33500,
+          "text" : "Two"
+        },
+        {
+          "end" : 34100,
+          "start" : 33740,
+          "text" : "workers,"
+        },
+        {
+          "end" : 34520,
+          "start" : 34320,
+          "text" : "batch"
+        },
+        {
+          "end" : 34740,
+          "start" : 34520,
+          "text" : "size"
+        },
+        {
+          "end" : 35040,
+          "start" : 34740,
+          "text" : "4,"
+        },
+        {
+          "end" : 35280,
+          "start" : 35200,
+          "text" : "the"
+        },
+        {
+          "end" : 35540,
+          "start" : 35280,
+          "text" : "first"
+        },
+        {
+          "end" : 35680,
+          "start" : 35540,
+          "text" : "two"
+        },
+        {
+          "end" : 36060,
+          "start" : 35680,
+          "text" : "batches"
+        },
+        {
+          "end" : 36180,
+          "start" : 36060,
+          "text" : "will"
+        },
+        {
+          "end" : 36320,
+          "start" : 36180,
+          "text" : "be"
+        },
+        {
+          "end" : 36740,
+          "start" : 36320,
+          "text" : "identical."
+        }
+      ]
+    },
+    {
+      "end" : 42660,
+      "id" : "60D70DBE-87B0-4A98-ACB8-47FF9F41B4E9",
+      "start" : 37300,
+      "text" : "The fix lives inside your iter function. Ask for the worker info, and have worker k take",
+      "words" : [
+        {
+          "end" : 37420,
+          "start" : 37300,
+          "text" : "The"
+        },
+        {
+          "end" : 37640,
+          "start" : 37420,
+          "text" : "fix"
+        },
+        {
+          "end" : 37820,
+          "start" : 37640,
+          "text" : "lives"
+        },
+        {
+          "end" : 38100,
+          "start" : 37820,
+          "text" : "inside"
+        },
+        {
+          "end" : 38340,
+          "start" : 38100,
+          "text" : "your"
+        },
+        {
+          "end" : 38520,
+          "start" : 38340,
+          "text" : "iter"
+        },
+        {
+          "end" : 38840,
+          "start" : 38520,
+          "text" : "function."
+        },
+        {
+          "end" : 39660,
+          "start" : 39420,
+          "text" : "Ask"
+        },
+        {
+          "end" : 39780,
+          "start" : 39660,
+          "text" : "for"
+        },
+        {
+          "end" : 39920,
+          "start" : 39780,
+          "text" : "the"
+        },
+        {
+          "end" : 40300,
+          "start" : 39920,
+          "text" : "worker"
+        },
+        {
+          "end" : 40740,
+          "start" : 40300,
+          "text" : "info,"
+        },
+        {
+          "end" : 41460,
+          "start" : 41380,
+          "text" : "and"
+        },
+        {
+          "end" : 41600,
+          "start" : 41460,
+          "text" : "have"
+        },
+        {
+          "end" : 41920,
+          "start" : 41600,
+          "text" : "worker"
+        },
+        {
+          "end" : 42260,
+          "start" : 41920,
+          "text" : "k"
+        },
+        {
+          "end" : 42660,
+          "start" : 42260,
+          "text" : "take"
+        }
+      ]
+    },
+    {
+      "end" : 47680,
+      "id" : "3616F514-E3C6-47E6-B481-F8C58DBDE859",
+      "start" : 42720,
+      "text" : "every nth sample, starting at k. Now the two copies can walk the stream in step and nothing",
+      "words" : [
+        {
+          "end" : 42900,
+          "start" : 42720,
+          "text" : "every"
+        },
+        {
+          "end" : 43260,
+          "start" : 42900,
+          "text" : "nth"
+        },
+        {
+          "end" : 43640,
+          "start" : 43260,
+          "text" : "sample,"
+        },
+        {
+          "end" : 44140,
+          "start" : 43960,
+          "text" : "starting"
+        },
+        {
+          "end" : 44280,
+          "start" : 44140,
+          "text" : "at"
+        },
+        {
+          "end" : 44540,
+          "start" : 44280,
+          "text" : "k."
+        },
+        {
+          "end" : 45520,
+          "start" : 45080,
+          "text" : "Now"
+        },
+        {
+          "end" : 45720,
+          "start" : 45520,
+          "text" : "the"
+        },
+        {
+          "end" : 45860,
+          "start" : 45720,
+          "text" : "two"
+        },
+        {
+          "end" : 46100,
+          "start" : 45860,
+          "text" : "copies"
+        },
+        {
+          "end" : 46300,
+          "start" : 46100,
+          "text" : "can"
+        },
+        {
+          "end" : 46520,
+          "start" : 46300,
+          "text" : "walk"
+        },
+        {
+          "end" : 46620,
+          "start" : 46520,
+          "text" : "the"
+        },
+        {
+          "end" : 46860,
+          "start" : 46620,
+          "text" : "stream"
+        },
+        {
+          "end" : 46960,
+          "start" : 46860,
+          "text" : "in"
+        },
+        {
+          "end" : 47260,
+          "start" : 46960,
+          "text" : "step"
+        },
+        {
+          "end" : 47380,
+          "start" : 47260,
+          "text" : "and"
+        },
+        {
+          "end" : 47680,
+          "start" : 47380,
+          "text" : "nothing"
+        }
+      ]
+    },
+    {
+      "end" : 52540,
+      "id" : "57791BAD-2853-472A-88D9-09C9EE472900",
+      "start" : 47780,
+      "text" : "is delivered twice. So before you increase numWorkers on an iterable dataset, be sure",
+      "words" : [
+        {
+          "end" : 47840,
+          "start" : 47780,
+          "text" : "is"
+        },
+        {
+          "end" : 48120,
+          "start" : 47840,
+          "text" : "delivered"
+        },
+        {
+          "end" : 48300,
+          "start" : 48120,
+          "text" : "twice."
+        },
+        {
+          "end" : 49180,
+          "start" : 49080,
+          "text" : "So"
+        },
+        {
+          "end" : 49460,
+          "start" : 49180,
+          "text" : "before"
+        },
+        {
+          "end" : 49820,
+          "start" : 49460,
+          "text" : "you"
+        },
+        {
+          "end" : 50360,
+          "start" : 49820,
+          "text" : "increase"
+        },
+        {
+          "end" : 50840,
+          "start" : 50360,
+          "text" : "numWorkers"
+        },
+        {
+          "end" : 51040,
+          "start" : 50840,
+          "text" : "on"
+        },
+        {
+          "end" : 51140,
+          "start" : 51040,
+          "text" : "an"
+        },
+        {
+          "end" : 51400,
+          "start" : 51140,
+          "text" : "iterable"
+        },
+        {
+          "end" : 51720,
+          "start" : 51400,
+          "text" : "dataset,"
+        },
+        {
+          "end" : 52420,
+          "start" : 52300,
+          "text" : "be"
+        },
+        {
+          "end" : 52540,
+          "start" : 52420,
+          "text" : "sure"
+        }
+      ]
+    },
+    {
+      "end" : 57000,
+      "id" : "EBDFAE14-060E-4DD8-9ED6-583861367B1D",
+      "start" : 52600,
+      "text" : "you're passing that worker info to each iter function so you can split the stream accordingly.",
+      "words" : [
+        {
+          "end" : 52660,
+          "start" : 52600,
+          "text" : "you're"
+        },
+        {
+          "end" : 53020,
+          "start" : 52660,
+          "text" : "passing"
+        },
+        {
+          "end" : 53240,
+          "start" : 53020,
+          "text" : "that"
+        },
+        {
+          "end" : 53460,
+          "start" : 53240,
+          "text" : "worker"
+        },
+        {
+          "end" : 53800,
+          "start" : 53460,
+          "text" : "info"
+        },
+        {
+          "end" : 54000,
+          "start" : 53800,
+          "text" : "to"
+        },
+        {
+          "end" : 54180,
+          "start" : 54000,
+          "text" : "each"
+        },
+        {
+          "end" : 54380,
+          "start" : 54180,
+          "text" : "iter"
+        },
+        {
+          "end" : 54880,
+          "start" : 54380,
+          "text" : "function"
+        },
+        {
+          "end" : 55460,
+          "start" : 54880,
+          "text" : "so"
+        },
+        {
+          "end" : 55620,
+          "start" : 55460,
+          "text" : "you"
+        },
+        {
+          "end" : 55780,
+          "start" : 55620,
+          "text" : "can"
+        },
+        {
+          "end" : 55980,
+          "start" : 55780,
+          "text" : "split"
+        },
+        {
+          "end" : 56140,
+          "start" : 55980,
+          "text" : "the"
+        },
+        {
+          "end" : 56420,
+          "start" : 56140,
+          "text" : "stream"
+        },
+        {
+          "end" : 57000,
+          "start" : 56420,
+          "text" : "accordingly."
+        }
+      ]
+    }
+  ],
+  "text" : "In PyTorch, NumWorkers doesn't split your data across the workers.\nEach worker is a full copy of your dataset fetching and collating on its own.\nSo when you run an iterable dataset with multiple workers, every worker gets the same dataset\nobject and unless you split the stream yourself, they all deliver the same data.\nWith a map-style dataset, you're fine.\nThe sampler stays in the main process and hands each worker a different set of indices.\nEvery sample here gets fetched once.\nBut with an iterable dataset, there are no indices.\nworker starts the stream from the beginning. So if you have the same seed, you're getting\nthe same data. Two workers, batch size 4, the first two batches will be identical.\nThe fix lives inside your iter function. Ask for the worker info, and have worker k take\nevery nth sample, starting at k. Now the two copies can walk the stream in step and nothing\nis delivered twice. So before you increase numWorkers on an iterable dataset, be sure\nyou're passing that worker info to each iter function so you can split the stream accordingly."
+}
