@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep03 06_shuffle: "So shuffling is free and the validation split is just a list of
+         indices." Machine (SEAM[5]); "shuffling": sampler the hero; "list": the sampler's index
+         label 7 2 5 0 3 1 pulses once (1.10x, left centre), restored. Ends on SEAM[6]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.915" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.915;
+  const START = 27.22;
+  const CUE = {
+    shuffling: 27.56 - START - 0.05, /* "shuffling" */
+    list: 30.22 - START,             /* "list" (of indices): the index pulse */
+  };
+  const PULSE_W = 0.6;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const A = SC.SEAM[5], B = SC.SEAM[6];
+  // the "7 2 5 0 3 1" label: parts.sampler.dom[1] (dom[0] is the station's "sampler" name)
+  const idx = kit.parts.sampler.dom.find((el) => el.textContent === SC.D.indices.join(" "));
+  idx.style.transformOrigin = "left center";
+  function render(t) {
+    SC.clock = START + t;
+    let S;
+    if (t <= 0) S = A;
+    else if (t >= BEAT_SECONDS - 0.3) S = B;
+    else S = Object.assign({}, B, { hero: t >= CUE.shuffling ? "sampler" : A.hero });
+    kit.draw(null, S);
+    const p = t < BEAT_SECONDS - 0.3 ? SC.pulse(t, CUE.list, PULSE_W) : 0;
+    idx.style.transform = p > 0 ? `scale(${(1 + 0.10 * p).toFixed(4)})` : "";
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

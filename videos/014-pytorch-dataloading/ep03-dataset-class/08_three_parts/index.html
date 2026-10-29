@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep03 08_three_parts: "Randperm is the sampler. The range step is the batcher, and the slice is __getitem__ plus collate."
+         SEAM[7] (EP.HAND card) -> flip to the machine over the first 0.4 s, sampler the hero ->
+         "range": batching -> "__getitem__": getitem -> "collate": collate = SEAM[8], still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.75" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.75;
+  const START = 36.220;
+  const CUE = {
+    randperm: 36.48 - START,  /* "Randperm" (is the sampler): sampler the hero as the machine comes in */
+    sampler: 37.24 - START,   /* "sampler" */
+    range: 38.22 - START,     /* "range" (step is the batcher): batching */
+    getitem: 40.56 - START,   /* "__getitem__": getitem */
+    collate: 41.30 - START,   /* "collate": collate = SEAM[8], still to the end */
+  };
+  const FLIP = { at: 0, dur: 0.4 };
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const ease = SC.E();
+  const S7 = SC.SEAM[7], S8 = SC.SEAM[8];
+  function heroAt(t) {
+    if (t >= CUE.getitem - 0.05) return "getitem";
+    if (t >= CUE.range - 0.05) return "batching";
+    return "sampler";
+  }
+  function render(t) {
+    SC.clock = START + t;
+    if (t >= CUE.collate - 0.05) { kit.draw(null, S8); return; }
+    const flip = 1 - ease.io(SC.seg(t, FLIP.at, FLIP.at + FLIP.dur));
+    if (flip >= 1) { kit.draw(null, S7); return; }
+    const S = Object.assign({}, S8, { flip, hero: heroAt(t) });
+    if (flip > 0) S.code = S7.code;   // the card's own code through the crossfade
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

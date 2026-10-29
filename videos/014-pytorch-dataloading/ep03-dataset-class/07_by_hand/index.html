@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep03 07_by_hand: "If you've ever shuffled with torch.randperm and sliced batches by hand, you already wrote this."
+         SEAM[6] (machine, sampler) -> "If": flip to the EP.HAND card, typed at 28 cps from 31.6,
+         the hero the line being typed -> "already": cursor off, nothing lit = SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.085" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.085;
+  const START = 31.135;
+  const CUE = {
+    if: 31.45 - START,        /* "If": flip machine -> the hand-rolled loop card */
+    type: 31.60 - START,      /* typing starts; line 1 lands ~32.46, near "torch.randperm"@32.48 */
+    already: 35.14 - START,   /* "already": cursor off, nothing lit */
+  };
+  const CPS = 28;             // SC_typingSeconds(EP.HAND, 28) = 3.27 s: all four lines by ~34.87
+  const FLIP = { at: CUE.if - 0.05, dur: 0.4 };
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const ease = SC.E();
+  const S6 = SC.SEAM[6], S7 = SC.SEAM[7];
+  function render(t) {
+    SC.clock = START + t;
+    if (t >= CUE.already) { kit.draw(null, S7); return; }
+    const flip = ease.io(SC.seg(t, FLIP.at, FLIP.at + FLIP.dur));
+    if (flip <= 0) { kit.draw(null, S6); return; }
+    const typed = SC_typedAt(EP.HAND, t - CUE.type, CPS);
+    const code = { o: 1, lines: EP.HAND, typed, lit: EP.litAt(EP.HAND, typed), cursor: 1, blink: t };
+    kit.draw(null, Object.assign({}, S6, { flip, hero: flip < 0.6 ? S6.hero : null, code }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
