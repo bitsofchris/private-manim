@@ -138,17 +138,11 @@
     node("rect", { x: APPL.x + 14, y: APPL.y + 14, width: APPL.w - 28, height: 24, rx: 4, fill: PAL.data, "fill-opacity": 0.6 }, gAppl);
     node("circle", { cx: APPL.x + APPL.w - 24, cy: APPL.y + APPL.h - 18, r: 7, fill: PAL.dim }, gAppl);
 
-    // the cooks and their clocks
+    // the cooks: a waiting cook is dimmed with a flat face (no clock icon: Chris, 10/29, it read as noise)
     // a toque on every cook, in the head group so it tilts with the head (head top sits at y −516 in figure space)
     const toque = (p) => node("path", { d: "M-42 -500 H42 V-526 C62 -562 42 -594 0 -594 C-42 -594 -62 -562 -42 -526 Z",
       fill: PAL.bg, stroke: PAL.ink, "stroke-width": 8, "stroke-linejoin": "round" }, p.headG);
     const cooks = SPOT.counter.map((x) => { const p = C.human(svg, { x, y: FEET, s: FIG }); toque(p); return p; });
-    const clocks = cooks.map(() => {
-      const g = node("g", {}, svg);
-      node("circle", { cx: 0, cy: 0, r: 26, fill: PAL.bg, stroke: PAL.dim, "stroke-width": 5 }, g);
-      line(g, 0, 0, 0, -16, ink(5, PAL.dim)); line(g, 0, 0, 11, 0, ink(5, PAL.dim));
-      return g;
-    });
     // the knife (origin at the grip)
     const knife = node("g", {}, svg);
     const blade = node("path", { d: "M0 0 L0 -34 Q0 -92 14 -108 L22 -108 Q22 -60 18 -34 L18 0 Z", fill: PAL.hero, stroke: PAL.hero, "stroke-width": 3, "stroke-linejoin": "round" }, knife);
@@ -257,9 +251,7 @@
         C.face(p, c.wait ? "flat" : "smile");
         p.el.setAttribute("stroke-opacity", 1);
         const dim = !holds && c.at === "counter" && c.wait;
-        p.el.setAttribute("opacity", S.K.o * (dim ? 0.55 : 1));
-        opac(clocks[i], c.wait * S.K.o);
-        clocks[i].setAttribute("transform", `translate(${x + 70} ${FEET - 262})`);
+        p.el.setAttribute("opacity", S.K.o * (dim ? 0.4 : 1));
         bowls[i].setAttribute("opacity", c.at === "counter" ? 1 : 0.25);
       });
       // knife
