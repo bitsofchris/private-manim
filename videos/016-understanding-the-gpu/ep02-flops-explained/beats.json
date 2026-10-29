@@ -1,0 +1,40 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook.mp4",
+   "end": 5.64
+  },
+  {
+   "clip": "media/hf/02_name.mp4",
+   "end": 2.68
+  },
+  {
+   "clip": "media/hf/03_float.mp4",
+   "end": 6.205
+  },
+  {
+   "clip": "media/hf/04_range.mp4",
+   "end": 5.635
+  },
+  {
+   "clip": "media/hf/05_memory.mp4",
+   "end": 3.03
+  },
+  {
+   "clip": "media/hf/06_count.mp4",
+   "end": 9.13
+  },
+  {
+   "clip": "media/hf/07_rate.mp4",
+   "end": 9.635
+  },
+  {
+   "clip": "media/hf/08_matmul.mp4",
+   "end": 9.73
+  },
+  {
+   "clip": "media/hf/09_bill.mp4",
+   "end": 6.68
+  }
+ ]
+}

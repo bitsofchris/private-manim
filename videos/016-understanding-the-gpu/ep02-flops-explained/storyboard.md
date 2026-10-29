@@ -1,6 +1,6 @@
 ENGINE: hyperframes
 
-# FLOPs explained: storyboard (v1, VO draft for Chris)
+# FLOPs explained: storyboard (v3, built from the take)
 
 THE QUESTION: "FLOP is a floating point operation? What does that mean
 exactly? Why are FLOPs a thing with GPUs?"
@@ -13,122 +13,137 @@ floating-point numbers (decimals stored like scientific notation in
 binary); FLOPs counts them, FLOPS counts them per second, and because a
 transformer is nearly all matmuls, which are only multiplies and adds,
 counting FLOPs counts the work.
-THE SEARCH PHRASE: flops explained (checked 10/27 via YouTube's
-autocomplete endpoint, not a browser: "flops explained" autocompletes and
-its top results are AI explainers ("FLOPS: The New Benchmark For AI
-Performance", "FLOPS Demystified: AI and the math behind DeepSeek training
-costs"), but the other suggestions are flip-flops (circuits, sandals) and
-movie flops, so the title must say AI or GPU. "teraflops explained" also
-autocompletes; its top result is PS5/Xbox, so it is the second phrase, not
-the first. "what is a flop" autocompletes to floppy disks; "flops ai"
-results are on topic ("FLOPs vs FLOPS Explained: LLM Compute Made Simple")
-but the phrase is not offered.)
+THE SEARCH PHRASE: flops explained (checked 10/27 against YouTube's
+autocomplete endpoint: it autocompletes and its top results are AI
+explainers, but the other suggestions are flip-flops and movie flops, so
+the title must say AI or GPU; "teraflops explained" is the second phrase).
+The take says "A FLOP is…" in its first two words.
 
 **One idea:** a FLOP is one multiply or one add, and AI is nearly nothing
-else, so FLOPs are the unit of AI work.
+else, so FLOPs are the unit of AI work. **The closer** (as recorded): divide
+a run's FLOPs by the FLOPS you get and you have GPU-hours, the bill.
 
-**Source note:** Chris's input is questions in a chat ("FLOP is a floating
-point operation? What does that mean exactly? Why are FLOPs a thing with
-GPUs?") plus an explanation he read and liked, so this VO is a draft in
-his voice for him to rewrite. His own words kept: "what does that mean
-exactly" became the floating-point beat; "why are FLOPs a thing with GPUs"
-became the matmul beat.
-
-**Engine:** HyperFrames (`AGENTS.md` "Which engine"): the series chip, one
-cell zoomed to an expression, a counter, a number card and a code card.
-Nothing needs Manim.
-
-Series context: ep 2 of `../SERIES.md` (Understanding the GPU). Home of
-"what a FLOP is; FLOPs vs FLOPS; why chips are rated in them". Floating
-point gets the one-sentence picture here (it is what the F means); bit
-widths, bf16 vs fp8 and dense vs sparse are ep 4 (one clause each here:
-"in bf16", "dense ... at the precision you train in"). 6 × params × tokens
-is ep 3: the 720 trillion is shown as code, never derived in the VO.
-Comes before ep 7, whose MFU fraction is FLOPS ÷ FLOPS.
+The VO is `script.md` ("As recorded"); the planned script (v2 of this file,
+`../SCRIPTS.md`) is reference only. Where the take left it: "FLOP stands for
+floating-point operation" and "This is a rate" were added; the *(if time)*
+GPU-hours line is the closer; the spec-sheet closer (dense FLOPS at your
+precision) was not recorded, so its spec-sheet card is dropped.
 
 ## Ledger (every beat copies these, nothing invented per beat)
 
-- A FLOP: one floating-point multiply or one add (series ledger).
-- GPU: one **B200**, bf16 dense peak **2,250 TFLOPS** ("about 2,250
-  teraflops"); the sparse figure (4,500) is never shown here.
-- tera = 10^12 (a trillion).
-- The count example: the series run, an **8B-parameter** model on
-  **15,000 tokens** (one second of the ep 7 run): 6 × 8e9 × 15,000 =
-  **7.2 × 10^14 FLOPs**, said "about 720 trillion FLOPs".
-- That count at peak: 7.2e14 / 2.25e15 = **0.32 s** (shown on the code
-  card only; it is why the run is 32 % MFU in ep 7, not said here).
-- Floating-point examples: **0.0000001** (a ten-millionth) and
-  **3,000,000** (three million), on screen as `1 × 10⁻⁷` and `3 × 10⁶`.
-- The chip: the series 12 × 12 grid of core cells, dark at rest, teal
-  when working; no label claims a core count.
+From `../SERIES.md` and `../_kit/data.js`; ep 2's own strings are in
+`_kit/flops.js`.
 
-## VO (draft: 136 words without the if-time beat, 153 with)
+- A FLOP: one floating-point multiply or one add. `a × b + c` is 2 FLOPs.
+- **FLOPs** (small s) is a count; **FLOPS** (capital S) is per second.
+  Spelled so everywhere, on screen and in captions.
+- GPU: one **B200**, bf16 dense peak **2,250 TFLOPS** (said "2,250
+  teraFLOPS in bf16"); the sparse figure is never shown here. tera = a
+  trillion (10^12).
+- The count: the series run, an **8B-parameter** model on **15,000
+  tokens**: 6 × 8e9 × 15,000 = **7.2e14**, said "about 720 trillion FLOPs".
+  Code card line (data.js `code.flops[0]`): `flops = 6 * 8e9 * 15_000  # 7.2e14`.
+  The `6 *` is not explained (ep 3). data.js's second line (`seconds = flops
+  / 2250e12  # 0.32`) is not shown: the VO never says seconds or peak, and
+  its closer divides by "the FLOPS you get", not the peak.
+- Floating-point examples: **0.0000001** (a ten-millionth) = `+1.0 × 10⁻⁷`
+  and **3000000** (three million) = `+3.0 × 10⁶`; the anatomy boxes
+  `+ | 1.0 | −7` then `+ | 3.0 | 6`, labelled sign, digits, exponent. No
+  format named, no bit counts (ep 4).
+- The matmul: `y = x @ W`, one output expanded as `x1*w1 + x2*w2 + x3*w3`.
+- The bill: `FLOPs ÷ FLOPS` / `= GPU-hours = $`. No numbers.
+- The chip: the series 12 × 12 grid, dark at rest, teal when working; no
+  label claims a core count. Chip title `GPU`, then `B200` from beat 07 on.
+
+## The picture
+
+The series chip (`../_kit/chip.js`) with the CPU, its queue and the time
+strip off all episode (ep 2 never names them; the strip's "GPU-Util" is
+ep 7's word). GPU memory stays at rest on the right. Ep 2's own parts
+(`_kit/flops.js`):
+
+- **The top card** (y 245–435, in the CPU and queue's place): one or two
+  lines of text that change with the VO: the operation and its counter,
+  the acronym, the word, the count, the rate, the matmul, the bill.
+- **The float panel** (over the chip and memory, y 450–1078), grown out of
+  one cell: a decimal row and its scientific form, and the anatomy boxes.
+- **The code card** (`../_kit/code.js`) in the bottom slot, centred at y
+  1245 so its bottom edge is 1329 (≤ 1330), beats 06–07. Captions anchored
+  bottom all through (`assemble.py --captions-anchor bottom`), every caption
+  one line.
+
+Scene changes: op card (0–5.6) → acronym (5.6–8.3) → float panel (8.3–20.2)
+in two states → memory (20.2–23.2) → count + code (23.2–32.3) → rate (32.3–42)
+→ matmul (42–51.7) → bill (51.7–58.4). The 12 s on the float panel moves
+through four states (grow, anatomy, point glide, second number).
+
+## Beats (visual brief)
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | A FLOP is one multiply or one add, and it's the unit all AI compute is measured in. | Frame 0 already working: the series chip mid-stage, the 12 × 12 grid flickering teal. One cell (row 6, col 6) zooms out to a card above the chip: `a × b + c`; on "multiply" the `×` lights, on "add" the `+` lights, and a counter under the card ticks `FLOPs: 1 → 2`. Magenta hero: the counter. ~5 rows of stage. |
-| 02_float | Computers store decimals as floating point: scientific notation in binary, a sign, digits and an exponent. The point floats, so one format holds a ten-millionth and three million. | The `a` in the card expands into a number strip: `+ 1.0 × 10⁻⁷` over `+ 3.0 × 10⁶`, each split into three labeled boxes `sign · digits · exponent` (no bit counts; widths are ep 4). On "the point floats" the decimal point slides along `0.0000001` → `3000000.`. Magenta hero: the exponent box. |
-| 03_everything | Every weight, activation and gradient is one. | The strip folds back into `a`; the zoom pulls out to the whole grid, every cell now showing a tiny `×+` glyph for a beat. Labels fade in left of the chip: `weights`, `activations`, `gradients`, each with an arrow into the grid. |
-| 04_count | FLOPs, small s, is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs. | Code card bottom-middle, line 1 types: `flops = 6 * 8e9 * 15_000  # 7.2e14`. The counter above runs up to `9.6 × 10¹⁴ FLOPs` as the line lands. The lowercase `s` in `FLOPs` on the counter is the magenta hero. |
-| 05_rate | FLOPS, capital S, is per second. A B200 peaks near 2,250 teraflops in bf16. Tera is a trillion. | A spec chip label appears on the chip's top edge: `B200 · bf16 dense · 2,250 TFLOPS`; under it a small gloss `tera = 10¹²`. Code card line 2 types: `seconds = flops / 2250e12  # 0.32 at peak`. The whole grid lights teal for 0.32 s on a small timer, then rests. Magenta hero: the capital `S`. |
-| 06_why | A transformer's compute is nearly all matrix multiplies, and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. | Above the chip, a small matmul: a 3 × 2 weight block times a column; one output cell expands to `w₁x₁ + w₂x₂ + w₃x₃` and each `×` and `+` drops into a cell of the grid, which lights teal, many cells at once. Magenta hero: the one expanded output cell. |
-| 07_bill *(if time)* | Divide a run's FLOPs by the FLOPS you get and you have GPU-hours. GPU-hours are the bill. | A one-line fraction over the code card: `FLOPs ÷ FLOPS = GPU-hours → $`. No numbers. |
-| 08_close | Next time you read a GPU spec, find dense FLOPS at the precision you train in. That's your run's real ceiling. | Final visual: a spec-sheet card with three rows (`FP8 sparse`, `BF16 sparse`, `BF16 dense`); the `BF16 dense · 2,250 TFLOPS` row in magenta, the others greyed. The chip under it, all cells lit. Takeaway only, no outro. |
+| 01_hook | A FLOP is one multiply or one add, and it's the unit that all AI compute is measured in. | Frame 0 already working: the chip with ~32 % of cells shimmering teal, memory at rest, the top card `a × b + c` with the counter `0 FLOPs` (counter the magenta hero). "multiply" → the `×` lights teal and the counter ticks 1; "add" → the `+` lights, the counter ticks 2 (and the `×` returns). Both signs back to ink by "unit"; still from ~5.2. |
+| 02_name | FLOP stands for floating-point operation. | The card crossfades to `floating-point` / `operation`, the **fl** and **op** letters magenta (hero "acronym") on "floating". |
+| 03_float | Computers store decimals as floating point: scientific notation in binary, a sign, digits, and an exponent. | "floating point" (10.06): the float panel grows out of cell (row 5, col 5) over the chip and memory (0.6 s). "scientific notation": the decimal row `0.0000001 → +1.0 × 10⁻⁷` and the anatomy boxes fade in. Hero passes sign → digits → exponent on each word, each label appearing on its word. The acronym letters return to ink on "floating point". |
+| 04_range | The point floats, so one format holds a ten-millionth and three million. | "floats" (15.31): hero → the point; row 1's point glides right to sit after the 1 (`00000001.`, the passed zeros dim). "ten-millionth" (17.96): hero → exponent (`−7`). "three million" (19.32): row 2 `3000000. → +3.0 × 10⁶` fades in and its point glides left to after the 3 (trailing zeros dim); the anatomy boxes switch to `+ 3.0 6` with the exponent the hero. |
+| 05_memory | Every weight, activation, and gradient is one of these numbers. | The float panel shrinks back into its cell (0.5 s, the reverse of 03's grow); memory (VRAM) is the hero: it is where these numbers live. The card shows one word per word said: `weights` → `activations` → `gradients`. |
+| 06_count | FLOPs with a small s is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs. | "FLOPs" (23.52): the card crossfades to `FLOPs`; hero memory → the small `s` on "small s". "Training" (25.94): the code card grows in (0.2 s) and line 1 types (`SC_typedAt`), the hero passing to the code line (`lit: "count"`) as it types; it lands by "720". "720 trillion" (30.10): `720 trillion` fades in teal under `FLOPs`. |
+| 07_rate | FLOPS with a capital S is per second. This is a rate. A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion. | "FLOPS" (32.62): the card crossfades to `FLOPS` / `per second`, the capital `S` the hero; the code line goes ink. "B200" (35.94): the chip title `GPU` → `B200`. "2,250" (37.26): the card crossfades to `2,250 TFLOPS` / `bf16`, the whole number the hero. "Tera" (40.84): the second line becomes `tera = a trillion` and the hero narrows to the `T`. |
+| 08_matmul | A transformer's compute is nearly all matrix multiplies, and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. | The code card fades out (0.4 s) at the start. "matrix multiplies" (44.10): the card crossfades to `y = x @ W`. "only multiplies and adds" (46.02): `x1*w1 + x2*w2 + x3*w3` fades in under it, the hero. "thousands at once" (50.48): every cell lights teal at once (lit 0.32 → 1 over ~0.3 s) and the hero passes to the chip (box and `B200` title). |
+| 09_bill | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. | "Divide" (52.00): the card crossfades to `FLOPs ÷ FLOPS`; hero chip → none. "GPU-hours" (55.60): `= GPU-hours` fades in, the hero. "bill" (57.36): ` = $` fades in and takes the hero. Still from ~57.8 to the end; every cell stays lit. |
 
-Line 1 is the answer and lands "FLOP" (the search phrase) in its first two
-words; the `a × b + c` card and counter are on screen from frame 0. Beat 07
-is the *(if time)* cut: the viewer keeps "the unit AI compute is measured
-in" without the billing chain. Beat 02 stays: it is Chris's "what does that
-mean exactly", the F in FLOP. Beat 04 is the code beat (real Python that
-runs); the `6 *` on screen is not explained here (ep 3). The closer is the
-viewer's next move (read a spec sheet correctly), not line 1 again.
+## Final beats (the contract; `beats.json`)
+
+VO 58.365 s (`vo_final.wav`). From 61.9 s raw: no line cut; pauses (which
+in this take are breaths at about −50 dB, so the threshold is −45 dB, not
+`auto`'s −53.8) capped at 0.3 s.
+
+| beat | start | length | folder | VO |
+|---|---|---|---|---|
+| 1 | 0.000 | 5.640 | `01_hook` | A FLOP is one multiply or one add, and it's the unit that all AI compute is measured in. |
+| 2 | 5.640 | 2.680 | `02_name` | FLOP stands for floating point operation. |
+| 3 | 8.320 | 6.205 | `03_float` | Computers store decimals as a floating point, scientific notation in binary, a sign, digits, and an exponent. |
+| 4 | 14.525 | 5.635 | `04_range` | The point floats, so one format holds a ten-millionth and three million. |
+| 5 | 20.160 | 3.030 | `05_memory` | Every weight, activation, and gradient is one of these numbers. |
+| 6 | 23.190 | 9.130 | `06_count` | FLOPs with a small s is a count. Training an 8 billion parameter model on 15,000 tokens costs about 720 trillion FLOPs. |
+| 7 | 32.320 | 9.635 | `07_rate` | FLOPS with a capital S is per second. This is a rate. A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion. |
+| 8 | 41.955 | 9.730 | `08_matmul` | A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. |
+| 9 | 51.685 | 6.680 | `09_bill` | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. |
+
+## Seam states (code: `_kit/seam.js`, `SC.SEAM[0..9]`)
+
+Every state: `cpu 0, queueO 0, strip 0, shimmer 1`, memory at rest, the top
+card at `o 1`, `B null, mix 0`.
+
+| cut | at | hero | top card | float panel | chip | code card |
+|---|---|---|---|---|---|---|
+| 0 (frame 0) | 0.000 | count | op, n 0 | off | lit 0.32, `GPU` | off |
+| 1 (01→02) | 5.640 | count | op, n 2, no sign lit | off | lit 0.32, `GPU` | off |
+| 2 (02→03) | 8.320 | acronym | name | off | lit 0.32, `GPU` | off |
+| 3 (03→04) | 14.525 | exp | name | grown, row 1, anatomy 1 (`+ 1.0 −7`), all three labels | (covered) | off |
+| 4 (04→05) | 20.160 | exp | name | grown, rows 1–2 glided, anatomy 2 (`+ 3.0 6`), labels | (covered) | off |
+| 5 (05→06) | 23.190 | hbm | word `gradients` | off | lit 0.32, `GPU` | off |
+| 6 (06→07) | 32.320 | null | count, `720 trillion` on | off | lit 0.32, `GPU` | line 1 typed, lit `count`, cy 1245 |
+| 7 (07→08) | 41.955 | tera | rate step 2 | off | lit 0.32, `B200` | line 1 typed, unlit |
+| 8 (08→09) | 51.685 | chip | matmul step 1 | off | lit 1, `B200` | off |
+| 9 (end) | 58.365 | bill | frac, `$` on | off | lit 1, `B200` | off |
 
 ## Facts to keep straight (notes, not VO)
 
-- **One FMA counts as two FLOPs.** GPUs do a fused multiply-add in one
-  instruction, but NVIDIA's peak figures count it as two operations (the
-  Nsight docs define peak as cores × clock × 2 for this reason). That is
-  why the VO says "one multiply or one add" and the card shows `a × b + c`
-  ticking twice. Some papers count a MAC as one op; companion material.
-- **A matmul of (m × k) by (k × n) costs 2·m·k·n FLOPs** (Megatron-LM,
-  Narayanan et al. 2021). "Nearly all of a transformer's compute is
-  matmuls": ELECTRA's appendix says matrix multiplies account for most of
-  the compute; per-layer estimates for Llama-style models put it well over
-  90 % at typical sequence lengths. Attention's score computation is also
-  a matmul but grows with sequence length; softmax, norms and activations
-  are the small non-matmul remainder. The VO says "nearly all", not a
-  percentage.
-- **B200 bf16 dense 2,250 TFLOPS, sparse 4,500** (Lenovo HGX B200 guide,
-  SemiAnalysis InferenceX; NVIDIA's own datasheet not retrieved). Series
-  ledger number.
-- **The floating-point examples:** fp32 holds 3,000,000 exactly; bf16 only
-  approximately (8 significant bits), and 10⁻⁷ is approximate in any
-  binary format. "Holds" means "is in range of": true for fp32 and bf16,
-  false for fp16 (3 × 10⁶ is past its max of 65,504, and 10⁻⁷ is below its
-  smallest normal number). The card shows the values in decimal scientific
-  notation and does not name a format; ep 4 owns the bit widths.
+- **One FMA counts as two FLOPs.** NVIDIA's peak figures count a fused
+  multiply-add as two operations (Nsight: peak = cores × clock × 2), hence
+  `a × b + c` ticking twice. Some papers count a MAC as one op.
+- **A matmul of (m × k) by (k × n) costs 2·m·k·n FLOPs** (Narayanan et al.
+  2021). "Nearly all" of a transformer's compute is matmuls (well over 90 %
+  for Llama-style models at typical lengths); the VO says "nearly all".
+- **B200 bf16 dense 2,250 TFLOPS** (series ledger).
+- **The floating-point examples:** "holds" means "is in range of": true for
+  fp32 and bf16, false for fp16 (3 × 10⁶ is past its max of 65,504). 10⁻⁷ is
+  approximate in any binary format. The panel shows decimal scientific
+  notation and names no format; ep 4 owns bit widths.
+- **Where the numbers live:** weights, activations and gradients sit in GPU
+  memory (HBM/VRAM) during training, hence memory as beat 05's hero.
+- **"Divide a run's FLOPs by the FLOPS you get"** gives seconds; GPU-hours
+  is that over 3,600 per GPU. The VO's "GPU-hours" is the unit you pay for;
+  the card shows no numbers. "The FLOPS you get" is below peak (ep 7's MFU).
 - **720 trillion FLOPs for 15,000 tokens** uses 6 × params per token (ep
   3), which ignores attention FLOPs and activation recompute.
-- **"GPUs are built to do exactly that, thousands at once"**: one clause of
-  ep 1's GPU-vs-CPU fact; tensor cores (ep 5) are what make the bf16
-  matmul peak, CUDA cores do the rest. Not said here.
-- **The closer:** dense FLOPS at your training precision is the right
-  peak for MFU and for comparing chips' compute; whether a run gets near
-  it is ep 5 (memory-bound ops) and ep 7 (MFU). Spec sheets often lead
-  with the sparse or fp8/fp4 number.
-- `torch.utils.flop_counter.FlopCounterMode` counts a step's real FLOPs;
-  companion material, not this Short.
-
-## Layout (decided before any code)
-
-- Top band: nothing (captions burn in below; safe areas from `style.py`).
-- Stage top: the zoom card (`a × b + c`, the number strip in beat 02, the
-  matmul in beat 06, the spec-sheet card in beat 08), ~1.5 rows.
-- Stage middle: the series chip, 12 × 12 grid, with its spec label on the
-  top edge from beat 05; the FLOPs counter directly under the zoom card,
-  between it and the chip.
-- Stage bottom-middle: the code card (beats 04, 05; the if-time fraction
-  in 07).
-- One magenta hero at a time: the counter → the exponent box → (none,
-  labels teal) → the small `s` → the capital `S` → the expanded matmul
-  output cell → the `BF16 dense` row.

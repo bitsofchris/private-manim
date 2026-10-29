@@ -1,0 +1,49 @@
+00:00.001-00:05.760
+A flop is one multiply or one add, and it's the unit that all AI compute is measured in.
+
+00:05.760-00:08.880
+Flop stands for floating point operation.
+
+00:08.500-00:14.980
+Computers store decimals as a floating point, scientific notation in binary, assigned, digits, and an exponent.
+
+00:14.980-00:20.500
+The point floats, so one format holds a 10 millionth and 3 millionth.
+
+00:20.640-00:24.960
+Every weight, activation, and gradient is one of these numbers.
+
+00:24.960-00:27.360
+Flops with a small s is a count.
+
+00:27.360-00:35.040
+Training an 8 billion parameter model on 15,000 tokens costs about 720 trillion flops.
+
+00:34.740-00:37.060
+Flops with a capital S is per second.
+
+00:37.060-00:38.340
+This is a rate.
+
+00:38.340-00:43.540
+A B200 peaks near 2250 teraflops in BF16.
+
+00:43.540-00:44.980
+Tera is a trillion
+
+00:45.340-00:51.339
+A transformers compute is nearly all matrix multiplies and a mat mole is only multiplies and adds.
+
+00:51.339-00:55.660
+GPUs are built to do exactly that, thousands at once.
+
+00:55.720-00:58.440
+Divider runs flops by the flops.
+
+00:58.440-01:00.920
+You get and you have GPU hours.
+
+01:00.920-01:01.960
+This is the bill
+
+

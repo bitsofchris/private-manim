@@ -1,0 +1,927 @@
+{
+  "segments" : [
+    {
+      "end" : 5360,
+      "id" : "392502A7-8CB5-4860-AFA2-10758C977AAE",
+      "start" : 1,
+      "text" : "A flop is one multiplier, one add, and it's the unit that all AI compute is measured in.",
+      "words" : [
+        {
+          "end" : 480,
+          "start" : 0,
+          "text" : "A"
+        },
+        {
+          "end" : 840,
+          "start" : 480,
+          "text" : "flop"
+        },
+        {
+          "end" : 1020,
+          "start" : 840,
+          "text" : "is"
+        },
+        {
+          "end" : 1320,
+          "start" : 1020,
+          "text" : "one"
+        },
+        {
+          "end" : 1920,
+          "start" : 1320,
+          "text" : "multiplier,"
+        },
+        {
+          "end" : 2240,
+          "start" : 2100,
+          "text" : "one"
+        },
+        {
+          "end" : 2600,
+          "start" : 2240,
+          "text" : "add,"
+        },
+        {
+          "end" : 3100,
+          "start" : 2900,
+          "text" : "and"
+        },
+        {
+          "end" : 3220,
+          "start" : 3100,
+          "text" : "it's"
+        },
+        {
+          "end" : 3340,
+          "start" : 3220,
+          "text" : "the"
+        },
+        {
+          "end" : 3640,
+          "start" : 3340,
+          "text" : "unit"
+        },
+        {
+          "end" : 3820,
+          "start" : 3640,
+          "text" : "that"
+        },
+        {
+          "end" : 4080,
+          "start" : 3820,
+          "text" : "all"
+        },
+        {
+          "end" : 4360,
+          "start" : 4080,
+          "text" : "AI"
+        },
+        {
+          "end" : 4740,
+          "start" : 4360,
+          "text" : "compute"
+        },
+        {
+          "end" : 4900,
+          "start" : 4740,
+          "text" : "is"
+        },
+        {
+          "end" : 5180,
+          "start" : 4900,
+          "text" : "measured"
+        },
+        {
+          "end" : 5360,
+          "start" : 5180,
+          "text" : "in."
+        }
+      ]
+    },
+    {
+      "end" : 7980,
+      "id" : "CCBE5BAF-58D2-4F5F-AC2E-52AB273CF195",
+      "start" : 5920,
+      "text" : "Flop stands for floating point operation.",
+      "words" : [
+        {
+          "end" : 6180,
+          "start" : 5920,
+          "text" : "Flop"
+        },
+        {
+          "end" : 6400,
+          "start" : 6180,
+          "text" : "stands"
+        },
+        {
+          "end" : 6620,
+          "start" : 6400,
+          "text" : "for"
+        },
+        {
+          "end" : 7080,
+          "start" : 6620,
+          "text" : "floating"
+        },
+        {
+          "end" : 7360,
+          "start" : 7080,
+          "text" : "point"
+        },
+        {
+          "end" : 7980,
+          "start" : 7360,
+          "text" : "operation."
+        }
+      ]
+    },
+    {
+      "end" : 13600,
+      "id" : "75BEA7A3-1F6A-48D7-98ED-8FF3301AC382",
+      "start" : 8660,
+      "text" : "Computers store decimals as a floating point, scientific notation in binary, a sign, digits,",
+      "words" : [
+        {
+          "end" : 9040,
+          "start" : 8660,
+          "text" : "Computers"
+        },
+        {
+          "end" : 9280,
+          "start" : 9040,
+          "text" : "store"
+        },
+        {
+          "end" : 9720,
+          "start" : 9280,
+          "text" : "decimals"
+        },
+        {
+          "end" : 9920,
+          "start" : 9720,
+          "text" : "as"
+        },
+        {
+          "end" : 10060,
+          "start" : 9920,
+          "text" : "a"
+        },
+        {
+          "end" : 10360,
+          "start" : 10060,
+          "text" : "floating"
+        },
+        {
+          "end" : 10640,
+          "start" : 10360,
+          "text" : "point,"
+        },
+        {
+          "end" : 11380,
+          "start" : 11040,
+          "text" : "scientific"
+        },
+        {
+          "end" : 11860,
+          "start" : 11380,
+          "text" : "notation"
+        },
+        {
+          "end" : 12060,
+          "start" : 11860,
+          "text" : "in"
+        },
+        {
+          "end" : 12440,
+          "start" : 12060,
+          "text" : "binary,"
+        },
+        {
+          "end" : 12840,
+          "start" : 12660,
+          "text" : "a"
+        },
+        {
+          "end" : 13140,
+          "start" : 12840,
+          "text" : "sign,"
+        },
+        {
+          "end" : 13600,
+          "start" : 13280,
+          "text" : "digits,"
+        }
+      ]
+    },
+    {
+      "end" : 14200,
+      "id" : "92C4EE35-43BD-4C18-BFCC-1B9210AFEF8E",
+      "start" : 13680,
+      "text" : "and an exponent.",
+      "words" : [
+        {
+          "end" : 13760,
+          "start" : 13680,
+          "text" : "and"
+        },
+        {
+          "end" : 13860,
+          "start" : 13760,
+          "text" : "an"
+        },
+        {
+          "end" : 14200,
+          "start" : 13860,
+          "text" : "exponent."
+        }
+      ]
+    },
+    {
+      "end" : 19920,
+      "id" : "7A99CCD9-E013-4CDA-9A21-5BC4DF2CE46C",
+      "start" : 14720,
+      "text" : "The point floats, so one format holds a ten millionth and three millionth.",
+      "words" : [
+        {
+          "end" : 14920,
+          "start" : 14720,
+          "text" : "The"
+        },
+        {
+          "end" : 15280,
+          "start" : 14920,
+          "text" : "point"
+        },
+        {
+          "end" : 15720,
+          "start" : 15280,
+          "text" : "floats,"
+        },
+        {
+          "end" : 16280,
+          "start" : 16180,
+          "text" : "so"
+        },
+        {
+          "end" : 16560,
+          "start" : 16280,
+          "text" : "one"
+        },
+        {
+          "end" : 16940,
+          "start" : 16560,
+          "text" : "format"
+        },
+        {
+          "end" : 17360,
+          "start" : 16940,
+          "text" : "holds"
+        },
+        {
+          "end" : 17960,
+          "start" : 17360,
+          "text" : "a"
+        },
+        {
+          "end" : 18220,
+          "start" : 17960,
+          "text" : "ten"
+        },
+        {
+          "end" : 18740,
+          "start" : 18220,
+          "text" : "millionth"
+        },
+        {
+          "end" : 19320,
+          "start" : 18740,
+          "text" : "and"
+        },
+        {
+          "end" : 19540,
+          "start" : 19320,
+          "text" : "three"
+        },
+        {
+          "end" : 19920,
+          "start" : 19540,
+          "text" : "millionth."
+        }
+      ]
+    },
+    {
+      "end" : 22860,
+      "id" : "1E582601-B868-4B25-824A-0EA36756CD27",
+      "start" : 20400,
+      "text" : "Every weight, activation, and gradient is one of these numbers.",
+      "words" : [
+        {
+          "end" : 20540,
+          "start" : 20400,
+          "text" : "Every"
+        },
+        {
+          "end" : 20840,
+          "start" : 20540,
+          "text" : "weight,"
+        },
+        {
+          "end" : 21360,
+          "start" : 20920,
+          "text" : "activation,"
+        },
+        {
+          "end" : 21580,
+          "start" : 21500,
+          "text" : "and"
+        },
+        {
+          "end" : 21780,
+          "start" : 21580,
+          "text" : "gradient"
+        },
+        {
+          "end" : 22080,
+          "start" : 21780,
+          "text" : "is"
+        },
+        {
+          "end" : 22260,
+          "start" : 22080,
+          "text" : "one"
+        },
+        {
+          "end" : 22380,
+          "start" : 22260,
+          "text" : "of"
+        },
+        {
+          "end" : 22500,
+          "start" : 22380,
+          "text" : "these"
+        },
+        {
+          "end" : 22860,
+          "start" : 22500,
+          "text" : "numbers."
+        }
+      ]
+    },
+    {
+      "end" : 25120,
+      "id" : "64601590-94E7-4B9F-B97E-38F1C5FDA80E",
+      "start" : 23520,
+      "text" : "Flops with a small s is a count.",
+      "words" : [
+        {
+          "end" : 23820,
+          "start" : 23520,
+          "text" : "Flops"
+        },
+        {
+          "end" : 23980,
+          "start" : 23820,
+          "text" : "with"
+        },
+        {
+          "end" : 24100,
+          "start" : 23980,
+          "text" : "a"
+        },
+        {
+          "end" : 24360,
+          "start" : 24100,
+          "text" : "small"
+        },
+        {
+          "end" : 24540,
+          "start" : 24360,
+          "text" : "s"
+        },
+        {
+          "end" : 24680,
+          "start" : 24540,
+          "text" : "is"
+        },
+        {
+          "end" : 24800,
+          "start" : 24680,
+          "text" : "a"
+        },
+        {
+          "end" : 25120,
+          "start" : 24800,
+          "text" : "count."
+        }
+      ]
+    },
+    {
+      "end" : 32020,
+      "id" : "51403C5F-D180-4921-A260-F51406D0CD01",
+      "start" : 25940,
+      "text" : "Training an 8 billion parameter model on 15,000 tokens costs about 720 trillion flops.",
+      "words" : [
+        {
+          "end" : 26080,
+          "start" : 25940,
+          "text" : "Training"
+        },
+        {
+          "end" : 26260,
+          "start" : 26080,
+          "text" : "an"
+        },
+        {
+          "end" : 26420,
+          "start" : 26260,
+          "text" : "8"
+        },
+        {
+          "end" : 26680,
+          "start" : 26420,
+          "text" : "billion"
+        },
+        {
+          "end" : 27120,
+          "start" : 26680,
+          "text" : "parameter"
+        },
+        {
+          "end" : 27500,
+          "start" : 27120,
+          "text" : "model"
+        },
+        {
+          "end" : 27700,
+          "start" : 27500,
+          "text" : "on"
+        },
+        {
+          "end" : 28080,
+          "start" : 27700,
+          "text" : "15"
+        },
+        {
+          "end" : 28500,
+          "start" : 28080,
+          "text" : ",000"
+        },
+        {
+          "end" : 28960,
+          "start" : 28500,
+          "text" : "tokens"
+        },
+        {
+          "end" : 29640,
+          "start" : 28960,
+          "text" : "costs"
+        },
+        {
+          "end" : 29980,
+          "start" : 29640,
+          "text" : "about"
+        },
+        {
+          "end" : 30920,
+          "start" : 29980,
+          "text" : "720"
+        },
+        {
+          "end" : 31520,
+          "start" : 30920,
+          "text" : "trillion"
+        },
+        {
+          "end" : 32020,
+          "start" : 31520,
+          "text" : "flops."
+        }
+      ]
+    },
+    {
+      "end" : 34500,
+      "id" : "F50A89A5-7AC7-4A66-B41F-13D24A605692",
+      "start" : 32619,
+      "text" : "Flops with a capital S is per second.",
+      "words" : [
+        {
+          "end" : 32860,
+          "start" : 32619,
+          "text" : "Flops"
+        },
+        {
+          "end" : 33020,
+          "start" : 32860,
+          "text" : "with"
+        },
+        {
+          "end" : 33120,
+          "start" : 33020,
+          "text" : "a"
+        },
+        {
+          "end" : 33460,
+          "start" : 33120,
+          "text" : "capital"
+        },
+        {
+          "end" : 33700,
+          "start" : 33460,
+          "text" : "S"
+        },
+        {
+          "end" : 33840,
+          "start" : 33700,
+          "text" : "is"
+        },
+        {
+          "end" : 34060,
+          "start" : 33840,
+          "text" : "per"
+        },
+        {
+          "end" : 34500,
+          "start" : 34060,
+          "text" : "second."
+        }
+      ]
+    },
+    {
+      "end" : 35220,
+      "id" : "A32BD255-D538-4F10-A3E5-23BA78F95B0B",
+      "start" : 34600,
+      "text" : "This is a rate.",
+      "words" : [
+        {
+          "end" : 34720,
+          "start" : 34600,
+          "text" : "This"
+        },
+        {
+          "end" : 34820,
+          "start" : 34720,
+          "text" : "is"
+        },
+        {
+          "end" : 34980,
+          "start" : 34820,
+          "text" : "a"
+        },
+        {
+          "end" : 35220,
+          "start" : 34980,
+          "text" : "rate."
+        }
+      ]
+    },
+    {
+      "end" : 40220,
+      "id" : "51D2AF21-0F4D-40AF-AB0B-DE88D8620E29",
+      "start" : 35760,
+      "text" : "A B200 peaks near 2250 teraflops in BF16.",
+      "words" : [
+        {
+          "end" : 35940,
+          "start" : 35760,
+          "text" : "A"
+        },
+        {
+          "end" : 36480,
+          "start" : 35940,
+          "text" : "B200"
+        },
+        {
+          "end" : 36940,
+          "start" : 36480,
+          "text" : "peaks"
+        },
+        {
+          "end" : 37260,
+          "start" : 36940,
+          "text" : "near"
+        },
+        {
+          "end" : 38660,
+          "start" : 37260,
+          "text" : "2250"
+        },
+        {
+          "end" : 39340,
+          "start" : 38660,
+          "text" : "teraflops"
+        },
+        {
+          "end" : 39520,
+          "start" : 39340,
+          "text" : "in"
+        },
+        {
+          "end" : 40220,
+          "start" : 39520,
+          "text" : "BF16."
+        }
+      ]
+    },
+    {
+      "end" : 41700,
+      "id" : "73EDA041-BD80-4BC6-9D00-69AD22C38220",
+      "start" : 40840,
+      "text" : "Tera is a trillion.",
+      "words" : [
+        {
+          "end" : 41040,
+          "start" : 40840,
+          "text" : "Tera"
+        },
+        {
+          "end" : 41220,
+          "start" : 41040,
+          "text" : "is"
+        },
+        {
+          "end" : 41360,
+          "start" : 41220,
+          "text" : "a"
+        },
+        {
+          "end" : 41700,
+          "start" : 41360,
+          "text" : "trillion."
+        }
+      ]
+    },
+    {
+      "end" : 46920,
+      "id" : "F20E8DAF-907C-4D5B-9386-2FB7D62285D8",
+      "start" : 42080,
+      "text" : "A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies",
+      "words" : [
+        {
+          "end" : 42320,
+          "start" : 42080,
+          "text" : "A"
+        },
+        {
+          "end" : 43020,
+          "start" : 42320,
+          "text" : "transformer's"
+        },
+        {
+          "end" : 43360,
+          "start" : 43020,
+          "text" : "compute"
+        },
+        {
+          "end" : 43480,
+          "start" : 43360,
+          "text" : "is"
+        },
+        {
+          "end" : 43720,
+          "start" : 43480,
+          "text" : "nearly"
+        },
+        {
+          "end" : 44100,
+          "start" : 43720,
+          "text" : "all"
+        },
+        {
+          "end" : 44460,
+          "start" : 44100,
+          "text" : "matrix"
+        },
+        {
+          "end" : 45100,
+          "start" : 44460,
+          "text" : "multiplies"
+        },
+        {
+          "end" : 45420,
+          "start" : 45100,
+          "text" : "and"
+        },
+        {
+          "end" : 45500,
+          "start" : 45420,
+          "text" : "a"
+        },
+        {
+          "end" : 45880,
+          "start" : 45500,
+          "text" : "matmul"
+        },
+        {
+          "end" : 46020,
+          "start" : 45880,
+          "text" : "is"
+        },
+        {
+          "end" : 46340,
+          "start" : 46020,
+          "text" : "only"
+        },
+        {
+          "end" : 46920,
+          "start" : 46340,
+          "text" : "multiplies"
+        }
+      ]
+    },
+    {
+      "end" : 47340,
+      "id" : "CD40D25C-29C5-48FD-9336-5E5F791BF476",
+      "start" : 46960,
+      "text" : "and adds.",
+      "words" : [
+        {
+          "end" : 47060,
+          "start" : 46960,
+          "text" : "and"
+        },
+        {
+          "end" : 47340,
+          "start" : 47060,
+          "text" : "adds."
+        }
+      ]
+    },
+    {
+      "end" : 50060,
+      "id" : "6BC1E2B9-C87C-4CB7-9180-5533F399B022",
+      "start" : 47820,
+      "text" : "GPUs are built to do exactly that.",
+      "words" : [
+        {
+          "end" : 48600,
+          "start" : 47820,
+          "text" : "GPUs"
+        },
+        {
+          "end" : 48680,
+          "start" : 48600,
+          "text" : "are"
+        },
+        {
+          "end" : 48920,
+          "start" : 48680,
+          "text" : "built"
+        },
+        {
+          "end" : 49120,
+          "start" : 48920,
+          "text" : "to"
+        },
+        {
+          "end" : 49220,
+          "start" : 49120,
+          "text" : "do"
+        },
+        {
+          "end" : 49700,
+          "start" : 49220,
+          "text" : "exactly"
+        },
+        {
+          "end" : 50060,
+          "start" : 49700,
+          "text" : "that."
+        }
+      ]
+    },
+    {
+      "end" : 51380,
+      "id" : "CA462077-0A7E-4918-8E54-6501CABFF5E5",
+      "start" : 50480,
+      "text" : "Thousands at once.",
+      "words" : [
+        {
+          "end" : 50900,
+          "start" : 50480,
+          "text" : "Thousands"
+        },
+        {
+          "end" : 51080,
+          "start" : 50900,
+          "text" : "at"
+        },
+        {
+          "end" : 51380,
+          "start" : 51080,
+          "text" : "once."
+        }
+      ]
+    },
+    {
+      "end" : 53020,
+      "id" : "C9ED82CA-C6B7-4398-AC33-B7060CDC9A4E",
+      "start" : 51860,
+      "text" : "A divider runs flops.",
+      "words" : [
+        {
+          "end" : 52000,
+          "start" : 51860,
+          "text" : "A"
+        },
+        {
+          "end" : 52320,
+          "start" : 52000,
+          "text" : "divider"
+        },
+        {
+          "end" : 52540,
+          "start" : 52320,
+          "text" : "runs"
+        },
+        {
+          "end" : 53020,
+          "start" : 52540,
+          "text" : "flops."
+        }
+      ]
+    },
+    {
+      "end" : 53980,
+      "id" : "45986400-F7AF-46CD-A4A8-8F22BBA78A3D",
+      "start" : 53240,
+      "text" : "Buy the flops.",
+      "words" : [
+        {
+          "end" : 53420,
+          "start" : 53240,
+          "text" : "Buy"
+        },
+        {
+          "end" : 53620,
+          "start" : 53420,
+          "text" : "the"
+        },
+        {
+          "end" : 53980,
+          "start" : 53620,
+          "text" : "flops."
+        }
+      ]
+    },
+    {
+      "end" : 57680,
+      "id" : "AB5B3310-EA28-4DDE-B28C-3883BD2EB475",
+      "start" : 54520,
+      "text" : "get and you have GPU hours. This is the bill.",
+      "words" : [
+        {
+          "end" : 54820,
+          "start" : 54520,
+          "text" : "get"
+        },
+        {
+          "end" : 55060,
+          "start" : 54820,
+          "text" : "and"
+        },
+        {
+          "end" : 55180,
+          "start" : 55060,
+          "text" : "you"
+        },
+        {
+          "end" : 55600,
+          "start" : 55180,
+          "text" : "have"
+        },
+        {
+          "end" : 56080,
+          "start" : 55600,
+          "text" : "GPU"
+        },
+        {
+          "end" : 56420,
+          "start" : 56080,
+          "text" : "hours."
+        },
+        {
+          "end" : 57140,
+          "start" : 56980,
+          "text" : "This"
+        },
+        {
+          "end" : 57220,
+          "start" : 57140,
+          "text" : "is"
+        },
+        {
+          "end" : 57360,
+          "start" : 57220,
+          "text" : "the"
+        },
+        {
+          "end" : 57680,
+          "start" : 57360,
+          "text" : "bill."
+        }
+      ]
+    }
+  ],
+  "text" : "A flop is one multiplier, one add, and it's the unit that all AI compute is measured in.\nFlop stands for floating point operation.\nComputers store decimals as a floating point, scientific notation in binary, a sign, digits,\nand an exponent.\nThe point floats, so one format holds a ten millionth and three millionth.\nEvery weight, activation, and gradient is one of these numbers.\nFlops with a small s is a count.\nTraining an 8 billion parameter model on 15,000 tokens costs about 720 trillion flops.\nFlops with a capital S is per second.\nThis is a rate.\nA B200 peaks near 2250 teraflops in BF16.\nTera is a trillion.\nA transformer's compute is nearly all matrix multiplies and a matmul is only multiplies\nand adds.\nGPUs are built to do exactly that.\nThousands at once.\nA divider runs flops.\nBuy the flops.\nget and you have GPU hours. This is the bill."
+}
