@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_appliance (015 ep 1, beat 5, 4.110 s): SEAM1[4] -> SEAM1[5]. "Same for an appliance. Think of NumPy, image decoding,
+         a tokenizer." Cook 3 keeps chopping; on "appliance" the food processor appears, cook 4 unfolds and walks to it, the slot
+         swaps to "appliance / native code"; when cook 4 arrives Thread 4's teal bar grows; the chip swaps on each named library. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.11" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.11;
+  const HOLD = 3.81;                                   // still from here: SEAM1[5] exactly
+  // Beat-local cues (master - 31.770), from words.json.
+  const CUE = {
+    appl:   1.19,  /* "appliance." */
+    arrive: 1.79,  /* "Think": cook 4 reaches the appliance, Thread 4's bar starts */
+    numpy:  2.05,  /* "NumPy," */
+    decode: 2.73,  /* "decoding," */
+    token:  3.37,  /* "tokenizer." */
+  };
+  const CHIPS = [
+    [CUE.numpy,  "np.dot(a, b)"],
+    [CUE.decode, "Image.open(f)"],
+    [CUE.token,  "tokenizer(text)"],
+  ];
+  const root = document.getElementById("root");
+  SC.SEAM = SC.SEAM1;
+  const kit = SC.mount(root);
+  const { seg, io, lerp, clamp01 } = SC;
+
+  // A label swap landing ON `at`: fade out over `out` s, change the text, fade back in over `inn` s ending at `at`.
+  // Returns { o, next } where next is true once the new text should show.
+  function swap(t, at, out = 0.15, inn = 0.15) {
+    const t0 = at - inn - out, t1 = at - inn;
+    if (t < t0) return { o: 1, next: false };
+    if (t < t1) return { o: 1 - seg(t, t0, t1), next: false };
+    return { o: seg(t, t1, at), next: true };
+  }
+
+  function render(t) {
+    const S = SC.state(SC.SEAM1[4]);                   // a deep copy; mutate it
+    // cook 3 chops the whole beat, finishing its carrot
+    S.chop = SC.chopAt(t, 0, HOLD, 2);
+    S.cooks[2].cut = lerp(0.8, 1.0, seg(t, 0, HOLD));
+    // "appliance": the food processor fades in, the slot swaps, cook 4 unfolds and walks to it
+    S.appl.o = seg(t, CUE.appl - 0.2, CUE.appl);
+    const sl = swap(t, CUE.appl, 0.15, 0.2);
+    S.slot = Object.assign({}, sl.next ? SC.SLOT.appl : SC.SLOT.oven, { o: sl.o });
+    S.cooks[3].wait = 1 - seg(t, CUE.appl - 0.2, CUE.appl);
+    if (t >= CUE.appl) { S.cooks[3].at = "appl"; S.cooks[3].u = io(seg(t, CUE.appl, CUE.arrive)); }
+    // when it arrives, Thread 4's teal bar grows
+    if (t >= CUE.arrive) S.panel.rows[3] = [{ a: 0.4, b: lerp(0.4, 1, seg(t, CUE.arrive, HOLD)), k: "nat" }];
+    // the chip: time.sleep(1) -> np.dot -> Image.open -> tokenizer, each on its word
+    let text = S.chip.text, o = 1;
+    for (const [at, s] of CHIPS) { const c = swap(t, at); if (c.next) text = s; if (t >= at - 0.3 && t < at) o = c.o; }
+    S.chip.text = text; S.chip.o = o;
+    if (t >= HOLD) { const E = SC.state(SC.SEAM1[5]); kit.draw(null, E); return; }
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

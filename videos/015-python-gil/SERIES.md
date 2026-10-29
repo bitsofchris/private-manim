@@ -69,5 +69,5 @@ beat 7 only. Not the spine.
 - [x] ep 1 VO recorded 2026-10-28 (`ep01-the-gil/script.md`), cut, 46.1 s
 - [x] ep 2 VO recorded 2026-10-28 (`ep02-threads-vs-processes/script.md`), cut, 58.5 s (cut list for Chris)
 - [x] kit `_kit/kitchen.js` (both episodes' seam states) and `00_layout/` per episode (canonical frame for Chris)
-- [x] ep 1 built 2026-10-29 (6 beats, every cut 0–4/255), assembled `ep01-the-gil/media/short.mp4` 46.1 s; [ ] published
-- [x] ep 2 built 2026-10-29 (6 beats, every cut 1–4/255), assembled `ep02-threads-vs-processes/media/short.mp4` 58.5 s; [ ] published
+- [x] ep 1 built 2026-10-29 (6 beats, every cut 0–4/255), assembled 46.1 s; Chris: "the animations are awful" (20 s of one cook wagging a fat knife). Rebuilt the same day on kit v2 (`_kit/kitchen.js`: the scene builds up, a Python panel turns code into a thread timeline, a chef's knife slices carrots; `ep01-the-gil/storyboard.md` v4, frames approved from `00_layout/proto.png`), every cut 0–4/255, assembled `ep01-the-gil/media/short.mp4` 46.1 s; [ ] published
+- [x] ep 2 built 2026-10-29 (6 beats, every cut 1–4/255) on kit v1 (`_kit/kitchen_v1.js`), assembled `ep02-threads-vs-processes/media/short.mp4` 58.5 s; [ ] redone on kit v2 (its beats still load `kit/kitchen.js`, so they no longer render until rebuilt); [ ] published

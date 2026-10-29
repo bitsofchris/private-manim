@@ -1,4 +1,4 @@
-// kitchen2.js — the 015 kit, second pass (Chris, 10/29: "build the scene
+// kitchen.js — the 015 kit, second pass (v1 is kitchen_v1.js) (Chris, 10/29: "build the scene
 // sequentially, go back and forth with a Python view, make the knife crisp
 // and have the cooks actually cut something"). Loaded by every beat of both
 // episodes through its `kit` symlink, BEFORE cast/cast.js (it shims
@@ -69,9 +69,9 @@
     oven: { o: 0 }, appl: { o: 0 },
     slot: { o: 0, top: "", bottom: "", hero: 0 },     // the top-right label
     chip: { o: 0, text: "" },                         // the code line inside the kitchen
-    panel: { o: 0, title: 0, code: 0, lanes: 0, rows: [[], [], [], []], pulse: { py: 0, io: 0 } },
+    panel: { o: 0, title: 0, code: 0, lanes: 0, rows: [[], [], [], []], pulse: { py: 0, io: 0 }, core: 0 },
     //   code: how many Thread lines (0..4, fractional fades the last); lanes: code lines → timeline rows;
-    //   rows[i]: [{ a, b, k }] bars from a to b (0..1 of the lane) of kind "py" | "io" | "nat"
+    //   rows[i]: [{ a, b, k }] bars from a to b (0..1 of the lane) of kind "py" | "io" | "nat"; core: the "= 1 core" tag on the title row
     ghost: { o: 0 },                                  // the dashed second kitchen
     close: { a: 0, b: 0 },
     chop: 0,
@@ -198,6 +198,7 @@
     const gPanel = node("g", {}, svg);
     node("rect", { x: PANEL.x, y: PANEL.y, width: PANEL.w, height: PANEL.h, rx: 18, fill: PAL.panel, stroke: PAL.muted, "stroke-width": 5 }, gPanel);
     const title = mono(I.label(root, "$ python main.py", { size: 60, left: PANEL.x + 30, top: PANEL.title, width: 810, align: "left", color: PAL.ink }));
+    const coreTag = I.label(root, "= 1 core", { size: 60, left: PANEL.x + 30, top: PANEL.title, width: 810, align: "right", color: PAL.hero });
     const rowY = (i) => PANEL.row0 + i * PANEL.pitch;
     const codeLines = [0, 1, 2, 3].map((i) => mono(I.label(root, "Thread(target=chop)", { size: 60, left: PANEL.x + 30, top: rowY(i), width: 810, align: "left", color: PAL.dim })));
     const laneLabs = [0, 1, 2, 3].map((i) => mono(I.label(root, `Thread ${i + 1}`, { size: 60, left: PANEL.x + 30, top: rowY(i), width: 300, align: "left", color: PAL.dim })));
@@ -277,7 +278,7 @@
       domOpac(closeA, S.close.a); domOpac(closeB, S.close.b);
       // the panel
       const P = S.panel;
-      opac(gPanel, P.o); domOpac(title, P.title * P.o);
+      opac(gPanel, P.o); domOpac(title, P.title * P.o); domOpac(coreTag, clamp01(P.core || 0) * P.o);
       const lanes = clamp01(P.lanes);
       codeLines.forEach((el, i) => domOpac(el, P.o * (1 - lanes) * clamp01(P.code - i)));
       laneLabs.forEach((el, i) => domOpac(el, P.o * lanes));

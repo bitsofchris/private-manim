@@ -7,11 +7,11 @@ of a stick figure wagging a knife … build the scene sequentially, go back
 and forth between a Python view and the kitchen … the knife looks fat and
 ridiculous; they should actively be cutting something." Same VO
 (`vo_final.wav`, 46.09 s, same `beats.json`), new picture. Kit:
-`../_kit/kitchen2.js` (prototype; replaces `kitchen.js` when approved).
-Prototype sheet: `00_proto/proto.png` (12 frames, `SC.PROTO`).
+`../_kit/kitchen.js` (v1 kept as `kitchen_v1.js` until ep 2 is redone).
+Approved frames: `00_layout/proto.png` (12 frames, `SC.PROTO`; Chris, 10/29).
 
 THE QUESTION / WHO / THE ANSWER / search phrase / titles: unchanged from
-`storyboard.md`.
+`storyboard_v3.md`.
 
 ## What changed
 
@@ -56,7 +56,7 @@ Traded away: the v3 rule "the thing the title names is on screen at frame
 | 5 | `05_appliance` | 31.770 | 4.110 | Same for an appliance. Think of NumPy, image decoding, a tokenizer. | "appliance" 32.96: the food processor appears at far left, cook 4 walks to it and runs it (no knife), slot "appliance / native code"; Thread 4 gets a teal bar beside Thread 3's magenta one. Chips: "NumPy" 33.82 `np.dot(a, b)`, "image decoding" 34.25 `Image.open(f)`, "tokenizer" 35.14 `tokenizer(text)`. |
 | 6 | `06_close` | 35.880 | 10.210 | But when threads don't help, ask one thing. Is this thread waiting, or is it running Python? If it's waiting, then threads work. But if it's running Python, you need a second kitchen or another process. | "threads don't help" 36.38: the kitchen shrinks to half size, left; the chip fades. "waiting" 38.82: the dashed bar pulses; "running Python" 39.68: the magenta bars pulse. "threads work" 41.64: "waiting → threads" lands; "running Python" 42.80: "running Python → processes" lands. "second kitchen" 44.04: the dashed kitchen draws at right; "another process" 44.50: slot "second kitchen / another process". Still from 45.0. |
 
-## Seam states (`SC.SEAM1[n]` in `../_kit/kitchen2.js`; `00_proto/proto.png` tiles 1, 4, 6(≈), 8, 10, 11, 12)
+## Seam states (`SC.SEAM1[n]` in `../_kit/kitchen.js`; `00_layout/proto.png` tiles 1, 4, 6(≈), 8, 10, 11, 12)
 
 | cut | on screen (both sides draw `SC.SEAM1[n]`, chop 0) |
 |---|---|

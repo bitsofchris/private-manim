@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_oven (21.830, 9.940 s): SEAM1[3] -> SEAM1[4]. "But a cook puts the knife down to wait on the oven. That could be
+         an I/O, a request, a file read, a sleep. The GIL is released while the thread waits, so another thread can run."
+         The staircase clears and the knife hops 4 -> 2 on "cook"; cook 2 sets it on the board on "down"; the oven appears on
+         "oven" and cook 2 walks to it while Thread 2's dashed bar grows from "wait"; three chips on their words; on "released"
+         cook 3 takes the knife and chops, and Thread 3's magenta bar grows from "another thread". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.94" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 9.94;
+  const HOLD = 9.64;                      // still from here: SEAM1[4] exactly
+  // Beat-local cues (master - 21.830), from words.json.
+  const CUE = {
+    cook: 0.43,       /* "cook": the staircase clears, the knife hops 4 -> 2 */
+    down: 1.23,       /* "down": cook 2 sets the knife on the board */
+    wait: 1.79,       /* "wait": Thread 2's dashed bar starts growing */
+    oven: 2.25,       /* "oven": the oven appears, slot "oven / I/O", cook 2 walks to it */
+    request: 4.05,    /* "request": chip requests.get(url) */
+    read: 4.89,       /* "read": chip open(f).read() */
+    sleep: 5.37,      /* "sleep": chip time.sleep(1) */
+    released: 6.63,   /* "released": cook 3 takes the knife and chops */
+    another: 8.25,    /* "another": Thread 3's magenta bar starts growing */
+  };
+  const D = { clear: 0.3, hop: 0.4, walk: 0.7, pop: 0.2, swapOut: 0.15, swapIn: 0.2, chipSwap: 0.15, unfold: 0.25 };
+
+  const root = document.getElementById("root");
+  SC.SEAM = SC.SEAM1;
+  const kit = SC.mount(root);
+  const { seg, io, lerp, chopAt } = SC;
+  const A = SC.SEAM1[3];
+
+  // A label swap: fade out over `out` before the word, change text, fade in over `inn` ending ON the word.
+  // Returns the opacity multiplier and which value (before / after) to show.
+  function swap(t, at, out, inn) {
+    if (t < at - inn - out) return { o: 1, after: false };
+    if (t < at - inn) return { o: 1 - seg(t, at - inn - out, at - inn), after: false };
+    return { o: seg(t, at - inn, at), after: true };
+  }
+
+  function render(t) {
+    const S = SC.state(A, {});
+    const clear = seg(t, CUE.cook, CUE.cook + D.clear);
+    const hop = io(seg(t, CUE.cook, CUE.cook + D.hop));
+
+    // the cooks
+    S.cooks[3].wait = hop;                                   // cook 4 folds as the knife leaves
+    S.cooks[1].wait = 1 - hop;                               // cook 2 unfolds as it arrives
+    if (t >= CUE.oven) { S.cooks[1].at = "oven"; S.cooks[1].u = io(seg(t, CUE.oven, CUE.oven + D.walk)); }
+    S.cooks[2].wait = 1 - seg(t, CUE.released - D.unfold, CUE.released);
+    S.cooks[2].cut = lerp(0.5, 0.8, seg(t, CUE.released, HOLD));
+
+    // the knife
+    S.knife.holder = t < CUE.cook ? 3
+      : t < CUE.cook + D.hop ? lerp(3, 1, hop)
+      : t < CUE.down ? 1
+      : t < CUE.released ? -1
+      : 2;
+    S.chop = chopAt(t, CUE.released, HOLD - 0.02, 2);   // strokes end a frame before HOLD: at t = HOLD float rounding left chop ~1
+
+    // the oven and the slot
+    S.oven.o = seg(t, CUE.oven - D.pop, CUE.oven);
+    const sl = swap(t, CUE.oven, D.swapOut, D.swapIn);
+    S.slot = Object.assign({}, sl.after ? SC.SLOT.oven : SC.SLOT.knife, { o: sl.o });
+
+    // the chip, three swaps
+    const chips = [[CUE.request, "requests.get(url)"], [CUE.read, "open(f).read()"], [CUE.sleep, "time.sleep(1)"]];
+    S.chip = { o: 0, text: "" };
+    chips.forEach(([at, text], i) => {
+      if (i === 0) { if (t >= at - D.chipSwap) S.chip = { o: seg(t, at - D.chipSwap, at), text }; return; }
+      const sw = swap(t, at, D.chipSwap, D.chipSwap);
+      if (sw.after) S.chip = { o: sw.o, text };
+      else if (t >= at - 2 * D.chipSwap) S.chip.o = Math.min(S.chip.o, sw.o);
+    });
+
+    // the panel rows
+    if (t < CUE.cook + D.clear) {
+      S.panel.rows = SC.STAIR.map((row) => row.map((sg) => ({ a: sg.a, b: lerp(sg.b, sg.a, clear), k: sg.k })));
+    } else {
+      S.panel.rows = [[], [], [], []];
+      if (t >= CUE.wait) S.panel.rows[1] = [{ a: 0, b: seg(t, CUE.wait, HOLD), k: "io" }];
+      if (t >= CUE.another) S.panel.rows[2] = [{ a: 0.15, b: lerp(0.15, 1, seg(t, CUE.another, HOLD)), k: "py" }];
+    }
+
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

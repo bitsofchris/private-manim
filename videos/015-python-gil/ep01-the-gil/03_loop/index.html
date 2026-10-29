@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_loop (14.800 s, 7.030 s): "This is why threading a CPU loop makes it no faster. Four threads with
+         one knife, you have one core's worth of work still." SEAM1[2] -> SEAM1[3]: the knife hops cook 1 -> 2 -> 3 -> 4,
+         only the holder chops, the thread bars form a staircase (never two growing at once); "= 1 core" lands on
+         "core's" and the magenta bars pulse once. Built on kit v2 (kit/kitchen.js); captions anchored bottom, the band
+         y 1330-1536 stays empty. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.03" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.03;
+  const HOLD = 6.73;                          // still from here (SEAM1[3], chop 0)
+  // Cues: beat-local seconds (master - 14.800) from words.json.
+  const CUE = {
+    threading: 0.66,   /* "threading": the staircase begins */
+    knife: 4.74,       /* "knife": cook 4 holds it from here */
+    one: 5.46,         /* "one" (core's): the "= 1 core" tag starts to land */
+    cores: 5.74,       /* "core's": tag landed, the magenta bars pulse once */
+  };
+  const HOP = 0.35;                           // one knife hop, SC.io
+  const HOPS = [1.00, 2.20, 3.40];            // hop i: holder i -> i+1 starts here
+  const SPAN = [[CUE.threading, HOPS[0]], [1.35, HOPS[1]], [2.55, HOPS[2]], [3.75, HOLD]];   // when cook i holds and chops
+  const STAIR = SC.STAIR;                     // the target staircase, SEAM1[3].panel.rows
+  const { seg, io, lerp, pulse, chopAt } = SC;
+
+  const root = document.getElementById("root");
+  SC.SEAM = SC.SEAM1;
+  const kit = SC.mount(root);
+  const A = SC.SEAM1[2], B = SC.SEAM1[3];
+
+  function render(t) {
+    if (t >= HOLD) { kit.draw(null, SC.state(B, { chop: 0 })); return; }
+    // the knife: hops of HOP s between holders, else with the current holder
+    let holder = 0;
+    HOPS.forEach((h0, i) => { holder += io(seg(t, h0, h0 + HOP)); if (t >= h0 + HOP) holder = i + 1; });
+    // cooks: cook i chops over SPAN[i]; folds as the knife leaves (hop start, 0.25 s), unfolds as it arrives (last 0.25 s of the hop)
+    const cooks = [0, 1, 2, 3].map((i) => {
+      const c = JSON.parse(JSON.stringify(A.cooks[i]));
+      if (i === 0) {                                   // cook 1: holds from frame 0, folds when the knife leaves
+        c.wait = seg(t, HOPS[0], HOPS[0] + 0.25);
+        c.cut = 0.5;
+      } else {
+        const arrive = HOPS[i - 1] + HOP;
+        const leave = i < 3 ? HOPS[i] : Infinity;
+        c.wait = t < arrive ? 1 - seg(t, arrive - 0.25, arrive) : seg(t, leave, leave + 0.25);
+        c.cut = 0.5 * seg(t, SPAN[i][0], SPAN[i][1]);
+      }
+      return c;
+    });
+    let chop = 0;
+    SPAN.forEach(([a, b], i) => { if (Math.round(holder) === i && Math.abs(holder - i) < 0.001) chop += chopAt(t, a, b, 2); });
+    // the bars: Thread 1 shrinks to the first stair over 0.3 s, then each holder grows its own; never two at once
+    // (a row's bar exists only once it has started growing, so S(0) matches SEAM1[2] field for field)
+    const stair = (i) => (t <= SPAN[i][0] ? [] : [{ a: STAIR[i][0].a, b: lerp(STAIR[i][0].a, STAIR[i][0].b, seg(t, SPAN[i][0], SPAN[i][1])), k: "py" }]);
+    const rows = [[{ a: 0, b: lerp(0.5, 0.25, seg(t, 0, 0.3)), k: "py" }], stair(1), stair(2), stair(3)];
+    // "= 1 core": lands on "core's", then fades out before the seam (SEAM1[3] has core 0)
+    const core = seg(t, CUE.cores - 0.2, CUE.cores) * (1 - seg(t, HOLD - 0.2, HOLD));
+    const S = SC.state(A, {
+      cooks,
+      knife: { o: 1, holder, hero: 1 },
+      panel: { rows, core, pulse: { py: pulse(t, CUE.cores, 0.5), io: 0 } },
+      chop,
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

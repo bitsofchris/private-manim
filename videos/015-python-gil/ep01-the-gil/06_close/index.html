@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 06_close (35.880 s, 10.210 s): SEAM1[5] -> SEAM1[6]. "But when threads don't help, ask one thing. Is this thread
+         waiting, or is it running Python? If it's waiting, then threads work. But if it's running Python, you need a
+         second kitchen or another process." The kitchen shrinks to half size, the bars pulse on their words, the two
+         close lines land, the dashed second kitchen draws in, the slot comes back as "second kitchen / another process". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.21" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 10.21;
+  // Beat-local cues (master - 35.880), from words.json.
+  const CUE = {
+    threads: 0.50,   /* "threads" (don't help): the chop stops, the chip and slot fade */
+    help:    1.16,   /* "help": the kitchen is at half size */
+    waiting: 2.94,   /* "waiting": the dashed bar pulses */
+    running: 3.80,   /* "running" (Python?): the magenta bars pulse */
+    work:    5.76,   /* "threads" (work): "waiting -> threads" lands */
+    python:  7.08,   /* "Python" (running Python,): "running Python -> processes" lands */
+    kitchen: 8.16,   /* "kitchen" (second kitchen): the dashed second kitchen is drawn */
+    process: 8.82,   /* "process" (another process): slot "second kitchen / another process" */
+  };
+  const HOLD = 9.30;                 // still from here (VO ends 9.1)
+  const SHRINK = 0.6, SWAP_OUT = 0.15, SWAP_IN = 0.2;
+
+  const root = document.getElementById("root");
+  SC.SEAM = SC.SEAM1;
+  const kit = SC.mount(root);
+  const A = SC.SEAM1[5], B = SC.SEAM1[6];
+  const { seg, io, pulse, lerp } = SC;
+
+  function render(t) {
+    if (t >= HOLD) t = HOLD;
+    // the slot: appliance fades out from "threads", the twin label fades in landing on "process"
+    const outA = 1 - seg(t, CUE.threads, CUE.threads + SWAP_OUT);
+    const inB = seg(t, CUE.process - SWAP_IN, CUE.process);
+    const slot = inB > 0 ? SC.merge(SC.SLOT.twin, { o: inB }) : SC.merge(SC.SLOT.appl, { o: outA });
+    const S = SC.state(A, {
+      K: { half: io(seg(t, CUE.help - SHRINK, CUE.help)) },
+      chip: { o: 1 - seg(t, CUE.threads, CUE.threads + 0.2) },
+      slot,
+      panel: { pulse: { io: pulse(t, CUE.waiting, 0.6), py: pulse(t, CUE.running, 0.6) } },
+      close: { a: seg(t, CUE.work - 0.2, CUE.work), b: seg(t, CUE.python - 0.2, CUE.python) },
+      ghost: { o: seg(t, CUE.kitchen - 0.3, CUE.kitchen) },
+      chop: SC.chopAt(t, 0, CUE.threads, 2),
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

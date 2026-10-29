@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 015 ep1 beat 1, 01_kitchen (0.000, 7.250 s): SEAM1[0] -> SEAM1[1].
+         "In Python, think of a process as a kitchen. Here, threads are cooks, and they all share the kitchen's memory."
+         The panel fades in, pulses on "process"; the box draws in on "kitchen"; Thread lines on "threads";
+         the cooks walk in on "cooks"; carrots on "share"; slot "counter / shared memory" on "memory". No knife. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.25" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.25;
+  const HOLD = 6.95;                       // still from here (SEAM1[1])
+  // beat-local cues (master - 0.000), from words.json
+  const CUE = {
+    inn: 0.42,      /* "In" */
+    process: 1.78,  /* "process" */
+    kitchen: 2.66,  /* "kitchen" */
+    threads: 4.22,  /* "threads" */
+    cooks: 4.60,    /* "cooks" */
+    share: 6.02,    /* "share" */
+    memory: 6.74,   /* "memory" */
+  };
+  const { seg, io, pulse, clamp01 } = SC;
+  const root = document.getElementById("root");
+  SC.SEAM = SC.SEAM1;
+  const kit = SC.mount(root);
+  const gPanel = kit.bars[0][0].parentNode;   // the panel group (box + lanes); the kit does not return it
+  // local: clip the kitchen group at the box's left wall, so a cook walking in from off-left appears through the wall,
+  // not floating in the left dead zone outside the box (the kit draws the walk unclipped).
+  const NS = "http://www.w3.org/2000/svg";
+  const clip = document.createElementNS(NS, "clipPath"); clip.setAttribute("id", "kitClip");
+  const clipR = document.createElementNS(NS, "rect"); clipR.setAttribute("x", SC.BOX.x - 4); clipR.setAttribute("y", 0); clipR.setAttribute("width", 1080); clipR.setAttribute("height", 1920);
+  clip.appendChild(clipR); kit.svg.appendChild(clip); kit.gKit.setAttribute("clip-path", "url(#kitClip)");
+
+  function render(t) {
+    const tt = Math.min(t, HOLD);
+    // the panel: the box is the process; it pulses once on "process" (no text pulse: the title rides P.o, so dip the box locally below)
+    const dip = 0.3 * pulse(tt, CUE.process, 0.3);
+    // the kitchen box draws in on "kitchen" (2.5 -> 3.1), then its label
+    const drawU = io(seg(tt, CUE.kitchen - 0.16, CUE.kitchen + 0.44));
+    const K = { o: tt >= CUE.kitchen - 0.16 ? 1 : 0, draw: drawU, lab: seg(tt, 3.1, 3.3), half: 0 };
+    // Thread(target=chop) lines, one every 0.2 s from "threads", each a 0.15 s fade ending on time
+    const code = [0, 1, 2, 3].reduce((n, i) => n + seg(tt, CUE.threads + 0.2 * i - 0.15, CUE.threads + 0.2 * i), 0);
+    // the cooks walk in from "cooks", 0.8 s each, 0.2 s apart, cook 1 first
+    const cooks = [0, 1, 2, 3].map((i) => ({ in: seg(tt, CUE.cooks + 0.2 * i, CUE.cooks + 0.2 * i + 0.8), at: "counter", u: 1, wait: 0, cut: 0 }));
+    // the slot: "cooks / threads" lands at 4.75; swaps to "counter / shared memory" landing on "memory" (out 0.15 s, in 0.2 s)
+    let slot;
+    if (tt < CUE.memory - 0.2) slot = SC.state(null, { slot: SC.SLOT.cooks }).slot, slot.o = seg(tt, 4.55, 4.75) * (1 - seg(tt, CUE.memory - 0.35, CUE.memory - 0.2));
+    else slot = SC.state(null, { slot: SC.SLOT.counter }).slot, slot.o = seg(tt, CUE.memory - 0.2, CUE.memory);
+    const S = SC.state(SC.SEAM1[0], {
+      K, cooks, slot,
+      veg: seg(tt, CUE.share - 0.2, CUE.share),
+      panel: { o: 1, title: 1, code },
+      chop: 0,
+    });
+    kit.draw(null, S);
+    // local: the panel box is on from frame 0, the title appears on "In" over 0.1 s, the box (not the text) dips on "process".
+    // Done after draw so the state keeps panel.o = 1 (SEAM1[0]) and the state check sees the seam.
+    const boxA = 1 - dip;   // the box is there from frame 0 (no black first frame); only the title waits for "In"
+    gPanel.setAttribute("opacity", boxA); gPanel.setAttribute("visibility", boxA > 0.001 ? "visible" : "hidden");
+    const titleA = seg(tt, CUE.inn - 0.1, CUE.inn);
+    kit.title.style.opacity = titleA; kit.title.style.visibility = titleA > 0.001 ? "visible" : "hidden";
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

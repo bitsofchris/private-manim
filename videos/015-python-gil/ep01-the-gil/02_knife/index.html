@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 02_knife (7.250 s → 14.800 s of the Short, 7.550 s): SEAM1[1] → SEAM1[2].
+         "The knife is the GIL, the global interpreter lock. Whoever holds the knife is what runs the
+         Python code while everyone else waits." The knife lands on the board on "knife", the slot goes
+         magenta on "GIL", the code lines become timeline rows on "lock", cook 1 picks the knife up and
+         chops from "holds", Thread 1's bar and the carrot's cut grow from "runs", cooks 2–4 fold on
+         "everyone / else / waits". Still from HOLD. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block; src: url("vendor/Inter-ExtraBold.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7.55" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7.55;
+  const HOLD = 7.25;                    // still from here (SEAM1[2] exactly)
+  // Beat-local cues (master − 7.250), from words.json.
+  const CUE = {
+    knife: 0.37,   /* "knife": the knife lands on the board */
+    gil: 1.23,     /* "GIL": slot → knife / GIL (magenta) */
+    lock: 2.47,    /* "lock": code lines → timeline rows */
+    holds: 3.59,   /* "holds": cook 1 takes the knife and chops */
+    runs: 5.35,    /* "runs": Thread 1's bar and the cut grow to 0.5 by HOLD */
+    everyone: 6.43, /* "everyone": cook 2 folds */
+    else_: 6.75,   /* "else": cook 3 folds */
+    waits: 7.03,   /* "waits": cook 4 folds */
+  };
+  const root = document.getElementById("root");
+  SC.SEAM = SC.SEAM1;
+  const kit = SC.mount(root);
+  const A = SC.SEAM1[1], B = SC.SEAM1[2];
+  const { seg, io, lerp } = SC;
+
+  // The slot swap: fade out over 0.15 s, change the text, fade in over 0.2 s, landing on the word.
+  function slotAt(t) {
+    const land = CUE.gil, mid = land - 0.2, start = mid - 0.15;
+    if (t < mid) return SC.merge(SC.SLOT.counter, { o: 1 - seg(t, start, mid) });
+    return SC.merge(SC.SLOT.knife, { o: seg(t, mid, land) });
+  }
+
+  function render(t) {
+    if (t >= HOLD) { kit.draw(null, SC.state(B, { chop: 0 })); return; }
+    const grow = seg(t, CUE.runs, HOLD);                       // linear 0 → 1
+    const held = t >= CUE.holds;
+    const S = SC.state(A, {
+      knife: { o: seg(t, CUE.knife - 0.15, CUE.knife), holder: held ? 0 : -1 },
+      slot: slotAt(t),
+      panel: {
+        lanes: io(seg(t, CUE.lock - 0.4, CUE.lock)),
+        rows: [grow > 0 ? [{ a: 0, b: 0.5 * grow, k: "py" }] : [], [], [], []],
+      },
+      cooks: [                                                // arrays replace, so carry A's cooks
+        { ...A.cooks[0], cut: 0.5 * grow },
+        { ...A.cooks[1], wait: seg(t, CUE.everyone - 0.3, CUE.everyone) },
+        { ...A.cooks[2], wait: seg(t, CUE.else_ - 0.3, CUE.else_) },
+        { ...A.cooks[3], wait: seg(t, CUE.waits - 0.3, CUE.waits) },
+      ],
+      chop: held ? SC.chopAt(t, CUE.holds, HOLD, 2) : 0,
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
