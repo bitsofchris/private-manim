@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep02 08_collate: hero batching -> collate on "collate" -> batch on "one tensor"; [32, 512] pulses on "shaped". SEAM[7] -> SEAM[8]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.39" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.39, START = 34.900;
+  // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
+  const CUE = {
+    collate: 0.77,     /* "collate." 35.67 */
+    tensor: 2.40,      /* "one (tensor)" 37.30 */
+    shaped: 2.96,      /* "shaped" 37.86 */
+  };
+  const PULSE_W = 0.6;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  // the batch card's shape label [32, 512]
+  const shape = kit.parts.batch.dom.find((el) => el.textContent === SC.D.series.shape);
+  function setPulse(el, s) {
+    if (s === 1) { el.style.transform = ""; el.style.transformOrigin = ""; return; }
+    el.style.transformOrigin = "50% 50%";
+    el.style.transform = `scale(${s.toFixed(4)})`;
+  }
+  function state(t) {
+    if (t <= 0 || t < CUE.collate) return SC.SEAM[7];              // hero batching (workers 2)
+    if (t < CUE.tensor) return Object.assign({}, SC.SEAM[7], { hero: "collate" });   // "collate"
+    return SC.SEAM[8];                                             // "one tensor": hero -> the batch card
+  }
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(null, state(t));
+    setPulse(shape, 1 + 0.3 * SC.pulse(t, CUE.shaped, PULSE_W));  // "shaped": [32, 512] swells once
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

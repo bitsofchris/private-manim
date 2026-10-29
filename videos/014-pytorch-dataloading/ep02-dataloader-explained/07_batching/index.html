@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep02 07_batching: hero fetch -> batching on "batching"; the ×32 pulses on "batch-sized". SEAM[6] -> SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.665" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.665, START = 31.235;
+  // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
+  const CUE = {
+    batching: 0.625,   /* "batching." 31.86 */
+    sized: 1.665,      /* "batch-sized" 32.90 */
+  };
+  const PULSE_W = 0.6;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  // the ×32 label: the batching part's DOM label that starts with ×
+  const times = kit.parts.batching.dom.find((el) => el.textContent.charAt(0) === "×");
+  function setPulse(el, s) {
+    if (s === 1) { el.style.transform = ""; el.style.transformOrigin = ""; return; }
+    el.style.transformOrigin = "50% 50%";
+    el.style.transform = `scale(${s.toFixed(4)})`;
+  }
+  function state(t) {
+    if (t <= 0) return SC.SEAM[6];
+    return t < CUE.batching ? SC.SEAM[6] : SC.SEAM[7];     // "batching": hero fetch -> batching (workers stay 2)
+  }
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(null, state(t));
+    setPulse(times, 1 + 0.3 * SC.pulse(t, CUE.sized, PULSE_W));   // "batch-sized": the ×32 swells once
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

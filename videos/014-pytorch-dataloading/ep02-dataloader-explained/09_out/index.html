@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep02 09_out: the batch card pulses on "Out comes the batch"; on "forward" a copy rides the arrow into the model chip and the hero passes to the model. SEAM[8] -> SEAM[9]; the last ~0.4 s still. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.072" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.072, START = 39.290;
+  // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
+  const CUE = {
+    out: 0.28,         /* "Out (comes the batch)" 39.57 */
+    forward: 1.88,     /* "forward" 41.17 */
+  };
+  const T = {
+    pulseW: 0.5,                 // "Out comes the batch": the card swells once
+    grow: 0.15,                  // the copy grows in off the card
+    ride: 0.70,                  // the copy rides the arrow into the chip (>= 0.6 s)
+    slowFrom: 2.17, still: 2.67, // the sample hop slows to a stop; nothing moves after `still`
+  };
+  T.arrive = CUE.forward + T.ride;   // 2.58: the hero passes to the model
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { G, PAL, lerp, seg, clamp01 } = SC;
+  const E = SC.E();
+  const bt = G.batch, md = G.model, CX = bt.x + bt.w / 2, CY = bt.y + bt.h / 2;
+  const P = kit.parts.batch;
+
+  // ---- episode-local glyph: the batch copy (a small card, two readout rows). It lives at the top of the
+  // kit's SVG layer, so it rides over the arrow and the chip but under the DOM labels ("model" stays legible).
+  const over = kit.svg;
+  const CW = 150, CH = 72;
+  const copy = SC.node("g", {}, over);
+  const copyRect = SC.node("rect", { x: -CW / 2, y: -CH / 2, width: CW, height: CH, rx: 14, fill: PAL.panel, stroke: PAL.hero, "stroke-width": 6 }, copy);
+  // two readout rows: teal dashes with a bracket either side
+  [-12, 12].forEach((dy) => {
+    SC.node("line", { x1: -48, y1: dy, x2: -6, y2: dy, stroke: PAL.data, "stroke-width": 6, "stroke-linecap": "round" }, copy);
+    SC.node("line", { x1: 6, y1: dy, x2: 38, y2: dy, stroke: PAL.data, "stroke-width": 6, "stroke-linecap": "round" }, copy);
+  });
+  [[-1, -60], [1, 50]].forEach(([s, x]) => SC.node("path", { d: `M${x - 6 * s},-24 h${6 * s} v48 h${-6 * s}`, fill: "none", stroke: PAL.dim, "stroke-width": 4, "stroke-linecap": "round" }, copy));
+  const X0 = bt.x + bt.w + 20 + 0.7 * CW / 2, X1 = md.x + md.w / 2;   // grows in at the arrow's tail (left edge x 620, clear of the shape label), rides to the chip's centre
+
+  function drawCopy(t) {
+    const g = seg(t, CUE.forward, CUE.forward + T.grow);
+    const u = E.io(seg(t, CUE.forward, T.arrive));
+    const fade = 1 - seg(t, T.arrive - 0.25, T.arrive);           // it sinks into the chip as it arrives
+    const o = g * fade;
+    if (o <= 0.001) { SC.show(copy, 0); return; }
+    const x = lerp(X0, X1, u), s = lerp(0.7, 1, E.out(g)) * lerp(1, 0.6, u);
+    copy.setAttribute("transform", `translate(${x.toFixed(1)} ${CY}) scale(${s.toFixed(4)})`);
+    SC.show(copy, o);
+  }
+  function setPulse(s) {
+    if (s === 1) {
+      P.svg.forEach((el) => el.removeAttribute("transform"));
+      P.dom.forEach((el) => { el.style.transform = ""; el.style.transformOrigin = ""; });
+      return;
+    }
+    const tr = `translate(${CX} ${CY}) scale(${s.toFixed(4)}) translate(${-CX} ${-CY})`;
+    P.svg.forEach((el) => el.setAttribute("transform", tr));
+    P.dom.forEach((el) => {
+      const left = parseFloat(el.style.left) || 0, top = parseFloat(el.style.top) || 0;
+      el.style.transformOrigin = `${CX - left}px ${CY - top}px`;
+      el.style.transform = `scale(${s.toFixed(4)})`;
+    });
+  }
+  function state(t) {
+    if (t <= 0 || t < CUE.forward) return SC.SEAM[8];                         // the batch card the hero
+    if (t < T.arrive) return Object.assign({}, SC.SEAM[8], { hero: null });   // the riding copy is the hero; the card goes teal
+    return SC.SEAM[9];                                                          // landed: the model lit
+  }
+  // the sample hop decelerates to rest, so the last frames are still
+  function clockAt(t) {
+    if (t <= T.slowFrom) return t;
+    const w = T.still - T.slowFrom, u = clamp01((t - T.slowFrom) / w);
+    return T.slowFrom + w * (u - u * u / 2);
+  }
+  function render(t) {
+    SC.clock = START + clockAt(t);
+    kit.draw(null, state(t));
+    setPulse(1 + 0.06 * SC.pulse(t, CUE.out, T.pulseW));   // "Out comes the batch": the card swells once
+    drawCopy(t);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

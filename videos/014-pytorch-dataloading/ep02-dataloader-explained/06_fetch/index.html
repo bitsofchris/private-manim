@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep02 06_fetch: SEAM[5] -> SEAM[6]. "fetch": hero -> fetch; "Workers": worker 0 firms up; "parallel": worker 1 and the x2 grow in. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.355" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.355, START = 25.88;
+  // cues, beat-local (master - START); onsets checked on the vo_final.wav envelope
+  const CUE = {
+    fetch: 0.96,     /* "fetch." 26.84 (envelope onset; words.json 26.80) */
+    workers: 1.57,   /* "Workers" 27.45 */
+    parallel: 3.98,  /* "parallel" 29.86 (the p burst; words.json 29.80 is the end of "in") */
+  };
+  const GROW = 0.3;  // worker 0 firms up / worker 1 and x2 grow in over 0.3 s; still from 4.28
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  SC.E();
+  const ease = gsap.parseEase("power2.out");
+  const [w0, w1] = Array.from(kit.stations.fetch.glyph.children);
+  const xLab = kit.parts.fetch.dom.find((el) => el !== kit.stations.fetch.lab);
+  function state(t) {
+    if (t < CUE.fetch) return SC.SEAM[5];
+    if (t < CUE.workers) return { hero: "fetch", workers: 0, flip: 0 };
+    if (t < CUE.parallel) return { hero: "fetch", workers: 1, flip: 0 };
+    return SC.SEAM[6];
+  }
+  // a worker <g> is 150 x 56 at its own translate; grow it about its centre
+  function grow(g, u) {
+    const tr = g.getAttribute("transform");
+    g.setAttribute("transform", `${tr} translate(75 28) scale(${(0.4 + 0.6 * u).toFixed(4)}) translate(-75 -28)`);
+    g.style.opacity = (parseFloat(g.style.opacity) * u).toFixed(4);
+  }
+  function render(t) {
+    SC.clock = START + t;
+    kit.draw(null, state(t));
+    // "Workers": the half-faint first photocopy firms up 0.5 -> 1
+    const a = SC.seg(t, CUE.workers, CUE.workers + GROW);
+    if (t >= CUE.workers && a < 1) w0.style.opacity = (0.5 + 0.5 * ease(a)).toFixed(4);
+    // "parallel": the second photocopy and x2 grow in from small and faint
+    const b = SC.seg(t, CUE.parallel, CUE.parallel + GROW);
+    if (t >= CUE.parallel && b < 1) {
+      const u = ease(b);
+      grow(w1, u);
+      xLab.style.transformOrigin = "0% 50%";
+      xLab.style.transform = `scale(${(0.4 + 0.6 * u).toFixed(4)})`;
+      xLab.style.opacity = u.toFixed(4);
+    } else { xLab.style.transform = ""; xLab.style.transformOrigin = ""; }
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

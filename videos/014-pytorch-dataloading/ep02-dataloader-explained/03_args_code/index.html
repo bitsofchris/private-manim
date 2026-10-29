@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep02 beat 3, 03_args_code (master 11.100–15.020): "and every argument you pass is one of those stations. Your dataset sits at the front."
+         Opens on SC.SEAM[2] (the machine, no station lit); on "and" (0.08) S.flip 0 -> 1 over 0.4 s. The loader call
+         (code.loader) types from 0.20 at 30 cps (SC_typingSeconds = 2.60, all four lines by 2.80); the line being typed
+         is the hero (dataset, batching, sampler, fetch), cursor blinking while typing, off after. On "sits" (2.96) the
+         dataset line is lit again; SC.SEAM[3] itself from there. The machine's hero goes null -> dataset while it is
+         hidden under the card (flip >= 0.6), so the flip in is clean and SEAM[3]'s machine has the Dataset card lit. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.92" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.920, MASTER = 11.100;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg } = SC, C = SC.D.code.loader;
+  // beat-local cues (master − 11.100), from words.json: and@11.18 every@11.24 argument@11.44 dataset@13.74 sits@14.06
+  const CUE = {
+    and: 0.08,       /* "and": the machine flips to the code card over 0.4 s */
+    type: 0.20,      /* typing starts (master 11.30) */
+    sits: 2.96,      /* "sits" (at the front): the dataset line is lit again */
+  };
+  const CPS = 30;                                   // the storyboard's number: SC_typingSeconds(C, 30) = 2.60
+  const T_DONE = CUE.type + SC_typingSeconds(C, CPS);   // 2.80 (master 13.90)
+  const HOLD = Math.max(T_DONE, CUE.sits);          // 2.96: SC.SEAM[3] from here; the last 0.3 s starts at 3.62
+  const TOTAL = C.reduce((a, l) => a + l.t.length, 0);
+  // the line the cursor is on: the last line with at least one character typed (line 0 before any)
+  function cursorLit(typed) {
+    let n = 0, lit = C[0].lit;
+    C.forEach((ln) => { if (typed > n) lit = ln.lit; n += ln.t.length; });
+    return lit;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t <= CUE.and) { kit.draw(null, SC.SEAM[2]); return; }
+    if (t >= HOLD) { kit.draw(null, SC.SEAM[3]); return; }
+    const flip = seg(t, CUE.and, CUE.and + 0.4);
+    const typed = SC_typedAt(C, t - CUE.type, CPS);
+    kit.draw(null, {
+      flip, workers: 0,
+      hero: flip >= 0.6 ? "dataset" : null,       // switched while the machine is mostly hidden: SEAM[3]'s machine
+      code: { o: 1, lines: C, typed, lit: cursorLit(typed), cursor: typed < TOTAL ? 1 : 0, blink: t },
+    });
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
