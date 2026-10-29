@@ -3,6 +3,10 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-28
+
+- `agents/style.md` "Code on screen": code cards use VS Code Dark+ colours, the hero line is a magenta gutter bar and a lighter row (not magenta text), and code the VO introduces is typed at a human's uneven pace (`SC_typedAt` / `SC_typingSeconds` in `videos/014-pytorch-dataloading/_kit/code.js`). Chris, 014 ep01: "not just purple", "simulate the typing like a human when it makes sense". (014)
+
 ## 2026-10-26
 
 - Runbook step 9: two titles, not one. The search title (phrase first, ≤ 50 chars) and the hook title (a stake about the viewer, then the phrase in parentheses). Chris, from 015: a scroller rolls past "GIL"; the phrase still has to be there for search. The day-10 read judges the pair. Hand-off pack item 2 carries both.

@@ -178,6 +178,21 @@ A shared part is never magenta at rest: the beat makes one thing the hero, so a 
 - `Text(font=S.FONT, ...)` — Inter if installed, Pango falls back otherwise.
 - Three sizes only: `CAPTION_SIZE`, `LABEL_SIZE`, `MATH_SM/LG`. Or use `.scale(S.CAPTION_SCALE)` etc. on `Text`.
 
+### Code on screen (every engine)
+
+Chris, 014 ep01 (2026-10-28): "have it follow like a VS Code style
+coloring, so it's not just purple", and "simulate the typing like a human
+when it makes sense". The reference implementation is the 014 code card,
+`videos/014-pytorch-dataloading/_kit/code.js` (`tokenize`, `SC_typedAt`,
+`SC_typingSeconds`); copy its colours and rhythm, don't reinvent them.
+
+| When you want | Use |
+|---|---|
+| code that reads as code | VS Code Dark+ colours on the panel: keywords `#569CD6`, calls `#DCDCAA`, names `#9CDCFE`, numbers `#B5CEA8`, strings `#CE9178`, comments `#6A9955`, punctuation `#D4D4D4`, classes `#4EC9B0`; never one block of ink, never magenta text for the whole line |
+| the hero line | a magenta bar in the gutter and a lighter row (`rgba(192,132,252,0.12)`); the text keeps its colours, so the one-magenta-hero rule still holds |
+| code appearing while the VO talks about it | type it like a person: uneven per-character pace (0.45–1.55× the mean at ~22 cps), spaces quick, a 2.5× pause at each line break, a blinking block cursor until the last line lands, then cursor off and still. Plan the cue with `SC_typingSeconds` so the last line lands before the VO moves on |
+| code that is already there when the beat starts, or a card shown as a reference | no typing; the card is fully typed from frame 0 and the hero bar moves with the VO |
+
 ## File layout
 
 - `videos/<NNN>-<slug>/<scene>.py` — one Scene class per file.
