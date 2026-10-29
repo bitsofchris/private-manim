@@ -3,6 +3,10 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-29
+
+- style.md, "Vectors and matrices as numbers": a batch drawn as an icon is still digits (rows of the ledger's readout in brackets), never a stack of squiggles. From 014 ep 1's second cut: Chris saw the batching station's squiggle stack and the `32` as "a bunch of squiggles", not data. The shared `videos/014-pytorch-dataloading/_kit/machine.js` grew `readout()` and the ledger a `series.readout`.
+
 ## 2026-10-28
 
 - `agents/style.md` Shorts rules: the scene changes about every 5 s; images may repeat (a flip to the code card and back) but no run on one image longer than ~6 s unless it is moving through states. Chris, 014 ep01: 26 s on the loop image was too long. The storyboard's beats table plans it. (014)

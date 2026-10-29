@@ -145,6 +145,7 @@ clearly helps that video, and say why in its storyboard. The code is
 | a matrix acting on the plane | the matrix is on screen whenever the VO says "this matrix" or the plane moves because of it, and the row doing the work lights while its direction moves (Chris, ep03: "show a matrix for the transformation we're about to show"; "emphasize the row as you move e1 and e2") |
 | a vector used as a column | only as a visible move ("turn x sideways") and only for that step; the row is the default |
 | a big tensor (a batch, an embedding) | at most about 4 × 4 numbers, then `⋯`, with the shape saying the size |
+| a batch as an icon (a card, a glyph on a track) | still digits: two or three rows of the ledger's readout in brackets, or in the card's own rounded outline when there is no room for brackets (014's `_kit/machine.js` `readout`); never a stack of squiggles, which reads as decoration, not data (Chris, 014 ep 1) |
 | a row and its geometry | the row's colour on its arrow from the origin on the plane, so "rows are where input directions land" is visible |
 
 ## Agents and knowledge bases (HyperFrames Shorts)
