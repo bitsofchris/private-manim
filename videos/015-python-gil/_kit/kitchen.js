@@ -12,6 +12,8 @@
 // Pure functions of their arguments: no clocks, no randomness. A beat calls
 //   const k = SC.mount(root); k.draw(null, S)   // S: a state (SC.state(SEAM1[n], patch))
 // with S.chop the knife's chop phase (0 at every seam, so the last frame is still).
+// Between seams a beat may use fractional knife.holder (the hop), cooks[i].u (the walk to
+// c.at, 0 = still at the counter), fractional cooks[i].wait, and SC.tween(A, B, u).
 //
 // Layout (px, 1080×1920; captions anchored bottom, so the stage runs to y 1330):
 //   label row     y 235–367   "kitchen / process" left, "knife / GIL" right
@@ -74,6 +76,13 @@
     chop: 0,
   };
   const state = (base, patch) => merge(merge(REST, base || {}), patch || {});
+  // tween(A, B, u): every number lerps A → B; strings (cook `at`, code text) come from B. Both full states.
+  function tween(A, B, u) {
+    if (typeof A === "number" && typeof B === "number") return lerp(A, B, u);
+    if (Array.isArray(B)) return B.map((b, i) => tween(A ? A[i] : undefined, b, u));
+    if (B && typeof B === "object") { const o = {}; for (const k of Object.keys(B)) o[k] = tween(A ? A[k] : undefined, B[k], u); return o; }
+    return B;
+  }
 
   // Episode 1 cuts (beat n ends / beat n+1 starts); SEAM1[0] is frame 0.
   const SEAM1 = {
@@ -237,28 +246,36 @@
       labKnife.set(S.knife.lab * S.K.o, S.knife.hero);
       ovenGlow.setAttribute("fill-opacity", S.cooks.some((c) => c.at === "oven") ? 0.35 : 0.12);
       // cooks
+      // c.u (default 1) is how far the cook has walked from its counter spot to c.at; c.wait may be fractional
+      // (the fold, the dim and the flat face come in together). S.knife.holder may be fractional: the knife is
+      // between the hands of cooks floor(h) and ceil(h), lifted in an arc.
+      const arrived = (c) => (c.u === undefined ? 1 : clamp01(c.u));
       cooks.forEach((p, i) => {
-        const c = S.cooks[i];
-        const x = c.at === "oven" ? SPOT.oven : c.at === "appl" ? SPOT.appl : SPOT.counter[i];
+        const c = S.cooks[i], u = arrived(c), w = clamp01(c.wait || 0);
+        const target = c.at === "oven" ? SPOT.oven : c.at === "appl" ? SPOT.appl : SPOT.counter[i];
+        const x = lerp(SPOT.counter[i], target, u);
         C.place(p, x, FEET, FIG);
         C.show(p, S.K.o);
-        const holds = S.knife.holder === i;
+        const h = S.knife.holder, holds = h >= 0 && Math.abs(h - i) < 0.5;
+        const there = u >= 0.999;
         const pose = { armL: 22, armR: 22, lean: 0, tilt: 0 };
         if (holds) { pose.armR = 70 + 28 * Math.sin(Math.PI * chop); pose.lean = -3; }
-        else if (c.at === "oven") { pose.armR = 48; pose.lean = 4; }
-        else if (c.at === "appl") { pose.armL = 64 + 10 * Math.sin(Math.PI * chop); pose.lean = -4; }
-        else if (c.wait) { pose.armL = -56; pose.armR = -56; pose.tilt = 9; }   // waiting at the counter: arms folded, head tipped
+        else if (c.at === "oven" && there) { pose.armR = 48; pose.lean = 4; }
+        else if (c.at === "appl" && there) { pose.armL = 64 + 10 * Math.sin(Math.PI * chop); pose.lean = -4; }
+        else if (c.at === "counter" || !there) { pose.armL = lerp(22, -56, w); pose.armR = lerp(22, -56, w); pose.tilt = 9 * w; }   // waiting: arms folded, head tipped
         C.pose(p, pose);
-        C.face(p, c.wait ? "flat" : "smile");
+        C.face(p, w >= 0.5 ? "flat" : "smile");
         p.el.setAttribute("stroke-opacity", 1);
-        const dim = !holds && c.at === "counter" && c.wait;
-        p.el.setAttribute("opacity", S.K.o * (dim ? 0.4 : 1));
-        bowls[i].setAttribute("opacity", c.at === "counter" ? 1 : 0.25);
+        const dim = !holds && c.at === "counter" ? w : 0;
+        p.el.setAttribute("opacity", S.K.o * lerp(1, 0.4, dim));
+        bowls[i].setAttribute("opacity", c.at === "counter" ? 1 : lerp(1, 0.25, u));
       });
       // knife
       if (S.knife.holder >= 0) {
-        const h = C.hand(cooks[S.knife.holder], 1);
-        knife.setAttribute("transform", `translate(${h[0]} ${h[1]}) rotate(${-20 + 35 * Math.sin(Math.PI * chop)}) scale(0.85)`);
+        const h = S.knife.holder, a = Math.floor(h), b = Math.min(cooks.length - 1, Math.ceil(h)), v = h - a;
+        const ha = C.hand(cooks[a], 1), hb = C.hand(cooks[b], 1), lift = 90 * Math.sin(Math.PI * v);
+        const hx = lerp(ha[0], hb[0], io(v)), hy = lerp(ha[1], hb[1], io(v)) - lift;
+        knife.setAttribute("transform", `translate(${hx} ${hy}) rotate(${-20 + 35 * Math.sin(Math.PI * chop)}) scale(0.85)`);
       } else knife.setAttribute("transform", `translate(540 ${COUNTER.y - 8}) rotate(-90) scale(0.9)`);
       opac(knife, S.K.o);
       knifeColor(S.knife.hero ? PAL.hero : PAL.ink);
@@ -314,6 +331,6 @@
   }
 
   window.SC = { PAL, BOX, FEET, FIG, SPOT, OVEN, APPL, ZONE, ROW, ROW_SMALL, ROW_BIG, PIPE, FRIDGE,
-                REST, SEAM1, SEAM2, state, merge, mount, lerp, clamp01, seg, io, pulse,
+                REST, SEAM1, SEAM2, state, tween, merge, mount, lerp, clamp01, seg, io, pulse,
                 SEAM: SEAM1 };   // beats set SC.SEAM = SC.SEAM1 or SC.SEAM2 before mounting (hf_state_check reads SC.SEAM)
 })();
