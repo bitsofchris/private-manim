@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep04 05_bf16: "bf16 keeps fp32's 8 exponent bits. Same range, less precision, and training stays stable." SEAM[4] → SEAM[5] -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.520" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.520, MASTER = 24.990;
+  const kit = EP.mount(document.getElementById("root"));
+  const { seg } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 24.990), words.json checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    bf16: 0.26,      /* "bf16" (25.28; onset 25.25): bf16's row the hero */
+    eight: 2.45,     /* "8" (27.36 in words.json; the vowel lands 27.44): exponent outlines grow over 0.6 s */
+    exp: 2.63,       /* "exponent" (27.60; onset 27.62): bf16's exponent the hero (+ fp32's, one group) */
+    same: 4.01,      /* "Same" (29.00): bf16's range bar grows the whole width over 0.7 s, under the marker */
+    less: 4.49,      /* "less" (29.48): bf16's mantissa the hero, while the bar finishes growing (to 4.71) */
+    stable: 5.87,    /* "stable" (30.86): back to bf16's exponent */
+  };
+  const OUTLINE = 0.6, GROW = 0.7;
+  const HOLD = CUE.stable;             // 5.87: SC.SEAM[5] still from here (master 30.86 ≤ 31.21)
+
+  function hero(t) {
+    if (t < CUE.bf16) return "inf";
+    if (t < CUE.exp) return "row:bf16";
+    if (t < CUE.less) return "exp:bf16";
+    if (t < CUE.stable) return "man:bf16";
+    return "exp:bf16";
+  }
+
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) { kit.draw(SC.SEAM[5]); return; }
+    kit.draw(Object.assign({}, SC.SEAM[4], {
+      same: ease(seg(t, CUE.eight, CUE.eight + OUTLINE)),
+      nlb: ease(seg(t, CUE.same, CUE.same + GROW)),
+      hero: hero(t),
+    }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

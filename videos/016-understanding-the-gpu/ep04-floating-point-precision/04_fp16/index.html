@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep04 04_fp16: "fp16 is also 16 bits, but it spends them on precision. So anything past 65,504 will overflow."
+         master 16.790–24.990; opens SEAM[3], ends SEAM[4]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.2" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8.200, MASTER = 16.790;
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg, lerp } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 16.790), from words.json, checked on a 40 ms RMS envelope of vo_final.wav
+  const CUE = {
+    fp16: 0.19,      /* "fp16" (16.98 onset): the chip fades, rows grow into the bits view over 0.8 s, split 2 → 1 under it, hero row:fp16 */
+    prec: 3.61,      /* "precision" (20.40 onset): hero man:fp16 */
+    max: 5.59,       /* "65,504" (22.38): fp16's range bar draws to 65,504 over 0.6 s, then the marker sweeps right to 0.6 */
+    over: 7.45,      /* "overflow" (24.24): the "inf" tag pops in 0.2 s, hero inf */
+  };
+  const VIEW = 0.8, BAR = 0.6, POP = 0.2;
+  const SWEEP = [CUE.max + BAR, CUE.over];   // marker 0 → 0.6, arriving as "overflow" starts
+  const HOLD = CUE.over + POP;               // 7.65 (24.44 master): SC.SEAM[4] still from here (0.55 s)
+
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) { kit.draw(SC.SEAM[4]); return; }
+    if (t < CUE.fp16) { kit.draw(SC.SEAM[3]); return; }
+    const v = ease(seg(t, CUE.fp16, CUE.fp16 + VIEW));
+    let S;
+    if (v < 1) {
+      // chip view → bits view; the ladder fades with the chip (drawLadder multiplies by 1 − view)
+      S = Object.assign({}, SC.SEAM[3], { view: v, split: 2 - v, hero: "row:fp16" });
+    } else {
+      S = Object.assign({}, SC.SEAM[4], { nl: 0, nl16: 0, marker: -1, inf: 0, hero: "row:fp16" });
+    }
+    if (t >= CUE.prec) S.hero = "man:fp16";
+    if (t >= CUE.max) {
+      S.nl = ease(seg(t, CUE.max, CUE.max + 0.2));
+      S.nl16 = ease(seg(t, CUE.max, CUE.max + BAR));
+    }
+    if (t >= SWEEP[0]) S.marker = lerp(0, 0.6, ease(seg(t, SWEEP[0], SWEEP[1])));
+    if (t >= CUE.over) {
+      S.inf = seg(t, CUE.over, CUE.over + POP);
+      S.hero = "inf";
+    }
+    kit.draw(S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

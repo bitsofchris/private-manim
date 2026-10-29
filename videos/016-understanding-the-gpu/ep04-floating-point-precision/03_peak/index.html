@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep04 03_peak: "A B200 peaks near 2,250 teraflops in bf16. fp8 doubles that."
+         master 11.210–16.790; opens SEAM[2], ends SEAM[3]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.58" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.580, MASTER = 11.210;
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 11.210), from words.json, checked on a 40 ms RMS envelope of vo_final.wav
+  const CUE = {
+    gpu: 0.39,       /* "B200" (11.60 onset): tc shrinks back to rest over 0.6 s, title "tensor cores" → "GPU", hero off tc */
+    lad: 1.67,       /* "2,250" (12.88 onset; words.json 12.76 is the end of "near"): the ladder fades in, TF32 then bf16 grow, hero rung:bf16 */
+    fp8: 4.31,       /* "fp8" (15.52 onset): the fp8 rung grows to 4,500 and cells split to four, through "doubles" (16.07), hero rung:fp8 */
+  };
+  const GROW = 0.6, LADDER = 1.2, FP8 = 0.75;
+  const HOLD = CUE.fp8 + FP8;          // 5.06 (16.27 master): SC.SEAM[3] still from here (0.52 s)
+
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) { kit.draw(SC.SEAM[3]); return; }
+    if (t < CUE.gpu) { kit.draw(SC.SEAM[2]); return; }
+    const g = ease(seg(t, CUE.gpu, CUE.gpu + GROW));          // tc back to rest
+    const S = Object.assign({}, SC.SEAM[2], {
+      tc: 1 - g,
+      title: g < 0.5 ? SC.SEAM[2].title : SC.SEAM[3].title || SC.REST.title,
+      hero: g < 0.5 ? "tc" : null,
+    });
+    if (t >= CUE.lad) {
+      S.ladder = ease(seg(t, CUE.lad, CUE.lad + 0.3));
+      S.rungs = 2 * ease(seg(t, CUE.lad, CUE.lad + LADDER));  // TF32 1,125 then bf16 2,250
+      S.hero = "rung:bf16";
+    }
+    if (t >= CUE.fp8) {
+      const f = ease(seg(t, CUE.fp8, CUE.fp8 + FP8));
+      S.rungs = 2 + f;                                         // fp8 4,500
+      S.split = 1 + f;                                         // 2 → 4 numbers a cell
+      S.hero = "rung:fp8";
+    }
+    kit.draw(S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

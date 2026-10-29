@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep04 07_close: "In PyTorch, wrap your forward pass in autocast with bf16. You get faster math without the overflow."
+         master 38.240–44.684; opens SEAM[6], ends SEAM[7] (the Short's last frame). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.444" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 6.444, MASTER = 38.240;
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg, lerp } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 38.240), from words.json, checked on a 20 ms RMS envelope of vo_final.wav
+  const CUE = {
+    torch: 0.30,     /* "PyTorch" (38.54): back to chip view, lifted; fp32 / fp16 / fp8 and the scale tag go, bf16 slides up */
+    auto: 2.14,      /* "autocast" (40.36; onset 40.40 on the envelope): `autocast` fully typed just before */
+    bf16: 2.84,      /* "bf16" (41.05; onset 41.06): the dtype line done, `dtype=torch.bfloat16` lit, hero "code" */
+  };
+  const MOVE = 0.7;                       // the lift (≥ 0.6 s: a tracked move)
+  const FADE = 0.4;                       // fp32 / fp16 / fp8 and the scale tag fade inside the first part of the lift
+  const CARD_IN = [0.85, 1.10];           // the card grows in (opacity) as the lift settles
+  const HOLD = 4.50;                      // SC.SEAM[7] still from here (master 42.74; 1.94 s before the end)
+  const FROM = SC.SEAM[6], TO = SC.SEAM[7], CARD = TO.code;
+  const LINES = CARD.lines;
+  // typist seconds at which K characters have landed (SC_typedAt inverted)
+  const sAt = (k) => { let lo = 0, hi = 30; for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2;
+    if (SC_typedAt(LINES, m) >= k) hi = m; else lo = m; } return hi; };
+  const N_AUTO = 'with torch.autocast'.length;               // 19: through "autocast"
+  const N_DTYPE = LINES[0].t.length + LINES[1].t.length;     // 53: through the dtype line
+  // beat time → typist time, piecewise linear: "autocast" done by CUE.auto − 0.14, the dtype line by CUE.bf16,
+  // the last two lines at the typist's own pace after it
+  const WARP = [[1.00, 0], [CUE.auto - 0.14, sAt(N_AUTO)], [CUE.bf16, sAt(N_DTYPE)],
+                [CUE.bf16 + SC_typingSeconds(LINES) - sAt(N_DTYPE), SC_typingSeconds(LINES)]];
+  function typist(t) {
+    if (t <= WARP[0][0]) return 0;
+    for (let i = 1; i < WARP.length; i++) {
+      const [t0, s0] = WARP[i - 1], [t1, s1] = WARP[i];
+      if (t <= t1) return lerp(s0, s1, (t - t0) / (t1 - t0));
+    }
+    return WARP[WARP.length - 1][1] + 1;
+  }
+
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) { kit.draw(TO); return; }
+    if (t < CUE.torch) { kit.draw(FROM); return; }
+    const u = ease(seg(t, CUE.torch, CUE.torch + MOVE));       // view 1 → 0, close 0 → 1 (bf16's y lerps with close)
+    const f = ease(seg(t, CUE.torch, CUE.torch + FADE));       // o32, o16, o8, scale → 0
+    const S = EP.mix(FROM, TO, u);
+    S.o32 = lerp(FROM.o32 ?? 1, 0, f); S.o16 = lerp(FROM.o16 ?? 1, 0, f);
+    S.o8 = lerp(FROM.o8, 0, f); S.scale = lerp(FROM.scale, 0, f);
+    // one hero: the scale tag while it goes, bf16's row while it slides up and the card types, then the code line
+    S.hero = t < CUE.torch + FADE / 2 ? "scale" : t < CUE.bf16 ? "row:bf16" : "code";
+    const o = ease(seg(t, CARD_IN[0], CARD_IN[1]));
+    S.code = o > 0 ? Object.assign({}, CARD, { o, typed: SC_typedAt(LINES, typist(t)), lit: t < CUE.bf16 ? null : "bf16", cursor: 0 })
+                   : Object.assign({}, CARD, { o: 0 });
+    kit.draw(S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

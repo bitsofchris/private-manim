@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep04 02_bits: SEAM[1] → SEAM[2]. "more numbers": cells split in two; "memory": the pipe the hero, number tiles stream from GPU memory into the grid; "tensor": tensor cores grow, the hero. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5.2" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 5.200, MASTER = 6.010;
+  const root = document.getElementById("root");
+  const kit = EP.mount(root);
+  const { seg, lerp, node, show, PAL, G } = SC;
+  const ease = (u) => u * u * (3 - 2 * u);
+  // beat-local cues (master − 6.010), from words.json, checked on a 30 ms RMS envelope of vo_final.wav
+  const CUE = {
+    more: 0.99,      /* "more numbers" (7.00): every cell splits in two, split 0 → 1 over 0.7 s */
+    memory: 1.69,    /* "memory" (words.json 7.74; onset 7.70 on the envelope): the pipe the hero, tiles start streaming */
+    tensor: 4.01,    /* "tensor" (10.02): tensor cores grow over 0.6 s, title "tensor cores", hero tc */
+  };
+  const SPLIT = 0.7, GROW = 0.6;
+  const HOLD = CUE.tensor + GROW;      // 4.61 (10.62 master): SC.SEAM[2] still from here (0.59 s)
+
+  // Local prop (stream): number tiles leave GPU memory's left edge, run along the three pipe lanes
+  // and fade into the grid. Each tile is two halves (2 numbers: the split cells). All gone by STREAM_END.
+  const LANES = [700, 740, 780].map((y) => y + 11);          // the kit's pipe rects (y, h 22): centres
+  const X0 = G.side.x, X1 = 520, TRAVEL = 0.75;              // slab edge → inside the grid
+  const NT = 24, SPAN = 1.40;                                 // tiles, spawn window (s)
+  const TW = 34, TH = 28, GAP = 4;
+  const svg = node("svg", { width: SC.W, height: SC.H, viewBox: `0 0 ${SC.W} ${SC.H}` });
+  svg.style.cssText = "position:absolute;left:0;top:0;overflow:visible;";
+  svg.setAttribute("data-layout-allow-overflow", "");
+  root.appendChild(svg);
+  const tiles = [...Array(NT)].map((_, i) => {
+    const g = node("g", {}, svg), y = LANES[i % 3] - TH / 2, hw = (TW - GAP) / 2;
+    node("rect", { x: 0, y, width: hw, height: TH, rx: 5, fill: PAL.data }, g);
+    node("rect", { x: hw + GAP, y, width: hw, height: TH, rx: 5, fill: PAL.data }, g);
+    return { g, t0: CUE.memory + (i * SPAN) / NT + 0.03 * SC.hash(i) };
+  });
+  const STREAM_END = CUE.memory + SPAN + 0.03 + TRAVEL;     // ≈ 3.87 (9.88 master), before "tensor"
+
+  function drawStream(t) {
+    tiles.forEach((k) => {
+      const p = seg(t, k.t0, k.t0 + TRAVEL);
+      const o = t < k.t0 || p >= 1 ? 0 : Math.min(seg(p, 0, 0.12), 1 - seg(p, 0.6, 1));
+      const s = seg(p, 0, 0.12);                             // grows out of the slab edge
+      k.g.setAttribute("transform", `translate(${lerp(X0, X1, p).toFixed(1)} 0) scale(${s.toFixed(3)} 1)`);
+      show(k.g, o);
+    });
+  }
+
+  const A = Object.assign({}, SC.SEAM[1], { split: 1, hero: "pipe" });   // after "memory": split, pipe the hero
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t >= HOLD) kit.draw(SC.SEAM[2]);
+    else if (t >= CUE.tensor) kit.draw(EP.mix(A, SC.SEAM[2], ease(seg(t, CUE.tensor, HOLD))));  // hero, title switch at u ≥ 0.5
+    else if (t >= CUE.memory) kit.draw(A);
+    else kit.draw(Object.assign({}, SC.SEAM[1], { split: ease(seg(t, CUE.more, CUE.more + SPLIT)) }));
+    drawStream(Math.min(t, HOLD));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
