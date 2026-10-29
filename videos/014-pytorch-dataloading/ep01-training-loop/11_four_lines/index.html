@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <!-- ep01 11_four_lines: "Everything downstream of it is the same four lines every time."
+         Opens on SEAM[10] (the machine at rest); "Everything" flips to the six-line card, fully typed,
+         none lit; "four lines" lights the four body lines together (LOOP.STEP) and holds: SEAM[11],
+         the Short's last frame. -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.7" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 3.700, MASTER = 39.340;
+  // cues (beat-local = master - MASTER): Everything@39.64 four@41.38 lines@41.64 time.@42.14
+  const T = { flipIn: 0.30, fourLines: 2.04, still: 2.4 };   // "Everything" / "four lines" / hold
+  const FLIP = 0.4;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg } = SC, C = LOOP.CODE;
+  function state(t) {
+    if (t <= 0) return SC.SEAM[10];                              // the machine at rest, the batch hero
+    if (t >= T.still) return SC.SEAM[11];                        // the six lines, the four lit: the last frame
+    const flip = seg(t, T.flipIn, T.flipIn + FLIP);             // the machine fades out, the card fades in
+    const S = { hero: flip < 0.5 ? "batch" : null, flip, loop: { o: 0 } };
+    if (flip > 0) S.code = { o: 1, lines: C, typed: Infinity, lit: t < T.fourLines ? null : LOOP.STEP, cursor: 0 };
+    return S;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(null, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

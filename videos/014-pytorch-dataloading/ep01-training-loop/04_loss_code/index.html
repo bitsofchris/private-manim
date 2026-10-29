@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 4, 04_loss_code (master 12.750–15.680): "We compare that prediction to the target, and that's the loss."
+         Opens on SC.SEAM[3] (the loop, the glyph beside forward, forward lit); on "We" (0.21) S.flip 0 -> 1
+         over 0.4 s (the kit's crossfade: loop out, code card in). The four body lines (LOOP.BODY) type from
+         0.55 at 42 cps: `loss = loss_fn(out, y)` lands by 1.64, all four by 2.58. The hero is the line being
+         typed until "loss" (2.37), then loss. Cursor off when typing ends; still from 2.58 on SC.SEAM[4]
+         (hf_state_check wants the last 0.3 s still: 2.63, so 42 cps rather than the brief's ~34). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.93" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.930, MASTER = 12.750;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg } = SC, C = LOOP.BODY;
+  // beat-local cues (master − 12.750), from words.json: We@12.96 compare@13.12 target,@14.30 loss.@15.12
+  const CUE = {
+    we: 0.21,        /* "We": the loop flips to the code card over 0.4 s */
+    type: 0.55,      /* typing starts */
+    loss: 2.37,      /* "loss.": loss = loss_fn(out, y) is the hero */
+  };
+  const CPS = 42;                                   // SC_typingSeconds(C, 42) = 2.03: line 2 by 1.64, all by 2.58
+  const T_DONE = CUE.type + SC_typingSeconds(C, CPS);
+  const HOLD = T_DONE;                              // 2.58: still from here (SC.SEAM[4]); BEAT_SECONDS − 0.3 = 2.63
+  const TOTAL = C.reduce((a, l) => a + l.t.length, 0);
+  // the line the cursor is on: the last line with at least one character typed (line 0 before any)
+  function cursorLit(typed) {
+    let n = 0, lit = C[0].lit;
+    C.forEach((ln) => { if (typed > n) lit = ln.lit; n += ln.t.length; });
+    return lit;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    if (t <= CUE.we) { kit.draw(null, SC.SEAM[3]); return; }
+    if (t >= HOLD) { kit.draw(null, SC.SEAM[4]); return; }
+    const flip = seg(t, CUE.we, CUE.we + 0.4);
+    const typed = SC_typedAt(C, t - CUE.type, CPS);
+    const lit = t >= CUE.loss ? "loss" : cursorLit(typed);
+    const cursor = typed < TOTAL ? 1 : 0;
+    kit.draw(null, Object.assign({}, SC.LOOP_ONLY, {
+      flip, hero: null,
+      loop: SC.SEAM[3].loop,                      // the loop fades out through the kit's crossfade
+      code: { o: 1, lines: C, typed, lit, cursor, blink: t },
+    }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

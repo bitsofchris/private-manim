@@ -50,12 +50,14 @@ If you've typed a PyTorch training loop from a tutorial and can't say what each 
 
 ## Checked against the final cut
 
-Reviewed on a 44-tile sheet of `media/short.mp4` (44.77 s) 2026-10-28.
-On screen: the DataLoader card with the batch glyph riding the loop past
-forward, loss, backward, update and back (beats 1–5, each box lit as the
-VO names it, all four on "one training step"); the six-line loop typed on
-the code card with `for batch in loader:` lit on "inner loop" and
-`for epoch in range(epochs):` on "outer loop" (beat 6); the machine at
-rest with the `[32, 512]` batch card and the model chip (beats 7–8). The
-description's "four lines" is the VO's phrase; the card shows six lines,
-two loop headers and the four. No numbers are claimed beyond `[32, 512]`.
+Reviewed on a 30-tile sheet of `media/short.mp4` (43.07 s) 2026-10-28,
+second cut. On screen: the machine with samples hopping and the
+`[32, 512]` batch card (beats 1, 9, 10); the DataLoader card and the
+glyph riding past forward, loss, backward, update and back (beats 2, 3,
+5, 7); the four body lines typed with `loss = loss_fn(out, y)` lit (beat
+4), lit together on "one training step" (beat 6), the two `for` headers
+typed above them with inner then outer lit (beat 8), and the six lines
+with the four lit on "same four lines every time" (beat 11, the last
+frame). The description's "four lines" is the VO's phrase; the card
+shows those four under the two loop headers. No number is claimed
+beyond `[32, 512]`.

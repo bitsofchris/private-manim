@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 7, 07_next_batch (22.020 s, 2.380 s): "Then we go back to the data loader for the next batch." Opens on SEAM[6] (the card, four lit); "Then" flips back to the loop with the glyph beside update; "go back" rides the dashed return up the left gutter into the slot, boxes muted, arriving on "next batch"; ends on SEAM[7]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.380" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.380, MASTER = 22.020;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg, lerp } = SC, E = SC.E(), R = "ring";
+  // cues, beat-local seconds (master - 22.020)
+  const T = {
+    then:  0.26,   // "Then" @22.28: the card flips back to the loop, glyph beside update, update lit
+    go:    0.42,   // "go"   @22.42 ("go back"): the glyph leaves update along the dashed return
+    next:  1.62,   // "next" @23.64 ("next batch"): it arrives in the slot
+    still: 1.70,   // hold SEAM[7] ("batch." @23.88)
+  };
+  const FLIP = 0.4;
+  const U_UPDATE = LOOP.at(R, "update");
+  const loop = (u, lit) => Object.assign({}, SC.LOOP_ONLY, { loop: { o: 1, take: R, u, batch: 1, slot: 0, lit } });
+
+  function state(t) {
+    if (t <= T.then) return SC.SEAM[6];                      // the four-line card, the four lit
+    if (t >= T.still) return SC.SEAM[7];                     // the loop, the batch back in the slot (u 0), lit batch
+    let u, lit;
+    if (t < T.go) { u = U_UPDATE; lit = "update"; }
+    else {
+      const p = E.out(seg(t, T.go, T.next));
+      u = p >= 1 ? 0 : lerp(U_UPDATE, 1, p);                 // u 1 == u 0 on the track; the seam says 0
+      lit = "batch";                                         // the boxes go muted as it leaves; the batch is the hero
+    }
+    const flip = 1 - seg(t, T.then, T.then + FLIP);          // the card fades out as it was, the loop fades in
+    const S = Object.assign(loop(u, lit), { flip });
+    if (flip > 0) S.code = SC.SEAM[6].code;
+    return S;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(null, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

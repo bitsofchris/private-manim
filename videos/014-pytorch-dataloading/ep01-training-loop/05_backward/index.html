@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 5, 05_backward (15.680 s, 4.320 s): "The loss is then propagated backwards, and the weights are updated as part of gradient descent." Opens on SEAM[4] (the four-line card, loss lit); "The loss" flips back to the loop with the glyph beside loss; it rides to backward, then to update, each lighting on arrival; ends on SEAM[5]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.320" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 4.320, MASTER = 15.680;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg, lerp } = SC, E = SC.E(), R = "ring";
+  // cues, beat-local seconds (master - 15.680)
+  const T = {
+    the:       0.26,   // "The" @15.94 ("The loss"): the card flips back to the loop, glyph beside loss
+    backwards: 1.36,   // "backwards" @17.04: ride loss -> backward
+    updated:   2.66,   // "updated"   @18.34: ride backward -> update
+    still:     3.50,   // hold SEAM[5] ("descent." @19.58)
+  };
+  const FLIP = 0.4, RIDE = 0.7;
+  const U = { loss: LOOP.at(R, "loss"), backward: LOOP.at(R, "backward"), update: LOOP.at(R, "update") };
+  const loop = (u, lit) => Object.assign({}, SC.LOOP_ONLY, { loop: { o: 1, take: R, u, batch: 1, slot: 0, lit } });
+
+  function state(t) {
+    if (t <= T.the) return SC.SEAM[4];                       // the four-line card, loss lit
+    if (t >= T.still) return SC.SEAM[5];                     // the loop, glyph beside update, update lit
+    let u, lit;
+    if (t < T.backwards) { u = U.loss; lit = "loss"; }
+    else if (t < T.updated) {
+      const p = E.io(seg(t, T.backwards, T.backwards + RIDE));
+      u = lerp(U.loss, U.backward, p); lit = p >= 1 ? "backward" : "loss";
+    } else {
+      const p = E.io(seg(t, T.updated, T.updated + RIDE));
+      u = lerp(U.backward, U.update, p); lit = p >= 1 ? "update" : "backward";
+    }
+    const flip = 1 - seg(t, T.the, T.the + FLIP);            // the card fades out as it was, the loop fades in
+    const S = Object.assign(loop(u, lit), { flip });
+    if (flip > 0) S.code = SC.SEAM[4].code;
+    return S;
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(null, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

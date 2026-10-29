@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 6, 06_step_code (20.000 s, 2.020 s): "That is one training step." Opens on SEAM[5] (the loop, update lit); "That" flips to the four-line card, none lit; "one" lights the four together (LOOP.STEP); ends on SEAM[6]. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.020" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.020, MASTER = 20.000;
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg } = SC;
+  // cues, beat-local seconds (master - 20.000)
+  const T = {
+    that:  0.32,   // "That" @20.32: flip from the loop to the four-line card, none lit
+    one:   0.76,   // "one"  @20.76 ("one training step"): the four lines light together
+    still: 1.00,   // hold SEAM[6] ("step." @21.48)
+  };
+  const FLIP = 0.4;
+
+  function state(t) {
+    if (t <= T.that) return SC.SEAM[5];                      // the loop, glyph beside update, update lit
+    if (t >= T.still) return SC.SEAM[6];                     // the card, the four lines lit together
+    const flip = seg(t, T.that, T.that + FLIP);              // the kit's crossfade: the loop (passed through) -> the card
+    return Object.assign({}, SC.LOOP_ONLY, {
+      flip, loop: SC.SEAM[5].loop,
+      code: { o: 1, lines: LOOP.BODY, typed: Infinity, lit: t < T.one ? null : LOOP.STEP, cursor: 0 },
+    });
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(null, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

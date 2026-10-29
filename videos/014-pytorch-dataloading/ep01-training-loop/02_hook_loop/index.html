@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep01 beat 2 "Hook: the loop" (master 5.120–8.000): the machine crossfades to the loop image.
+         "And" (5.38): the machine's four opacities 1 -> 0 and loop.o 0 -> 1 together over 0.4 s.
+         "training loop" (5.98): the whole track magenta once (0.5 s). "one batch" (7.24): the glyph in the
+         slot is the hero, with a quick opacity dip. Opens on SC.SEAM[1] (machine), ends on SC.SEAM[2] (loop, u 0, lit batch). -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/loop.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2.88" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 2.880, MASTER = 5.120;
+  // cues (beat-local = master - MASTER): And@5.38 training@5.98 loop@6.26 one@7.24 batch.@7.38
+  const T = {
+    fade: 0.26, fadeW: 0.4,      // "And": machine -> loop crossfade
+    track: 0.86, trackW: 0.5,    // "training loop": the track pulses magenta once
+    glyph: 2.12, glyphW: 0.36,   // "one batch": the glyph is the hero, with a quick opacity dip-and-return
+    still: 2.5,                  // SEAM[2] from here
+  };
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg, pulse } = SC;
+  function state(t) {
+    if (t <= 0) return SC.SEAM[1];
+    if (t >= T.still) return SC.SEAM[2];
+    const f = seg(t, T.fade, T.fade + T.fadeW), m = 1 - f;     // machine opacity 1 -> 0, loop 0 -> 1 together
+    const trackHot = t >= T.track && t < T.track + T.trackW;
+    const lit = t >= T.glyph ? "batch" : trackHot ? "track" : null;
+    const dip = pulse(t, T.glyph, T.glyphW);
+    return {
+      dataset: m, loader: m, batch: m, model: m,
+      hero: m >= 0.5 ? "batch" : null,                          // never two magenta things: the machine's hero goes as it fades
+      flip: 0,
+      loop: { o: f, take: "ring", u: 0, batch: 1 - 0.55 * dip, slot: 0, lit },
+    };
+  }
+  function render(t) {
+    SC.clock = MASTER + t;
+    kit.draw(null, state(t));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
