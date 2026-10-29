@@ -16,22 +16,20 @@ via the suggest endpoint; results page not opened).
 
 **Engine:** HyperFrames. Ledger and the cluster image: `../SERIES.md`.
 
-**Sources of the VO:** Chris's post
-[Shuffling in Spark: how to balance](https://bitsofchris.com/p/shuffling-in-spark-how-to-balance),
-sentences cut and reordered. Lines marked † are trimmed mid-sentence.
+**Sources:** facts and the story from Chris's vault notes (`MOC - Spark`, salting, optimizing notes) and his post [Shuffling in Spark: how to balance](https://bitsofchris.com/p/shuffling-in-spark-how-to-balance). The VO is written fresh to be spoken (Chris, 10/29: no VO recorded yet, write the scripts from scratch); v1 cut the post's sentences and read like writing.
 
-## VO (draft: 137 words without the if-time beat, 161 with)
+## VO (draft v2, written to be spoken: 146 words without the if-time beat, 168 with)
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | To improve Spark performance, do your best to avoid shuffling. A shuffle is when data needs to move between executors. | Frame 0 already working: the cluster, tiles in executor 1 sliding across the gap into executor 2 along arrows (magenta hero: the crossing). Gap label `network`. |
-| 02_narrow | Narrow transformations, like map and filter: each partition can be completed independently. This is Spark at its best. † | Every tile stays in its own slot and changes colour in place (`filter` drops rows: tiles shrink). No arrows. Label `narrow`. |
-| 03_wide | Wide transformations, like join, groupBy and distinct, need data from different partitions co-located. That triggers a shuffle. † | `groupBy("org_id")`: tiles split by key colour stripe; every same-stripe piece crosses to one slot. Arrows criss-cross the gap. Label `wide`. |
-| 04_cost | Shuffles are bad for performance: network I/O is slow, executors need more memory to hold the intermediate data, and data can spill to disk. † | Three items land one per clause: the arrows slow and queue at the gap (`network`); an executor's memory bar fills; overflow tiles drop into a disk glyph (`spill`). |
-| 05_story | I was preparing a large dataset for deep learning. The job was painfully inefficient because of a global sort. This was causing a massive data shuffle. † | `training_data` strip; `orderBy(...)` on screen; every tile crosses the gap at once, the arrows become a jam. |
-| 06_fix | I hashed the composite key, assigned a partition number to each row, and randomized with sortWithinPartitions. † | Code card: `.repartition("partition_id")` / `.sortWithinPartitions(...)`. One crossing, then tiles sort inside their own slots; no more arrows. |
-| 07_broadcast *(if time)* | When one side of a join is small, broadcast it: a copy of the smaller dataset goes to each executor, to avoid a shuffle. † | A small table copied into both executors; the big tiles never move. `broadcast(df_small)`. |
-| 08_close | Before you run a job, use df.explain(). Read the plan bottom-up. The Exchange is the shuffle. | Code card: `df.join(df_other, "key").groupBy("column").count().explain()` then the plan: `HashAggregate` / `+- Exchange hashpartitioning(column, 200)`; the Exchange line goes magenta. |
+| 01_hook | A Spark shuffle is your data moving across the network, between executors. It's usually the slowest part of your job. | Frame 0 already working: the cluster, tiles in executor 1 sliding across the gap into executor 2 along arrows (magenta hero: the crossing). Gap label `network`. |
+| 02_narrow | Some steps never move data. A filter or a map works on each partition right where it sits. | Every tile stays in its own slot and changes colour in place (`filter` drops rows: tiles shrink). No arrows. Label `narrow`. |
+| 03_wide | Others need every row with the same key in one place: a join, a groupBy, a distinct. To get there, Spark has to shuffle. | `groupBy("org_id")`: tiles split by key colour stripe; every same-stripe piece crosses to one slot. Arrows criss-cross the gap. Label `wide`. |
+| 04_cost | Shuffles cost you: the network is slow, they eat executor memory, and when memory runs out, data spills to disk. | Three items land one per clause: the arrows slow and queue at the gap (`network`); an executor's memory bar fills; overflow tiles drop into a disk glyph (`spill`). |
+| 05_story | I hit this prepping a big time-series dataset for model training. A global sort shuffled everything, and the job crawled. | `training_data` strip; `orderBy(...)` on screen; every tile crosses the gap at once, the arrows become a jam. |
+| 06_fix | The fix: hash the key into a partition number, repartition once, then sort inside each partition. One small shuffle instead of a giant one. | Code card: `.repartition("partition_id")` / `.sortWithinPartitions(...)`. One crossing, then tiles sort inside their own slots; no more arrows. |
+| 07_broadcast *(if time)* | If one side of a join is small, broadcast it. Every executor gets its own copy, and the big table never moves. | A small table copied into both executors; the big tiles never move. `broadcast(df_small)`. |
+| 08_close | Before you run anything, call explain. Read the plan from the bottom up. Every Exchange you see is a shuffle. | Code card: `df.join(df_other, "key").groupBy("column").count().explain()` then the plan: `HashAggregate` / `+- Exchange hashpartitioning(column, 200)`; the Exchange line goes magenta. |
 
 ## Notes for Chris
 

@@ -6,10 +6,10 @@ Spark jobs: what the driver, executors, tasks and partitions are (one
 picture of the cluster), then the two things that make a job slow, the
 shuffle and the one task that holds everyone up. Dispatched from Chris's
 2026-10-28 task (`short: makes this spark series`), storyboarded
-2026-10-28. **Status: VO is a draft cut from Chris's Spark notes and his
-shuffle post, for him to edit before recording.** The notes are mostly
-fragments ("Driver - 1 driver"), so some lines join fragments into
-sentences; each storyboard marks which.
+2026-10-28. **Status: VO v2, written fresh to be spoken (Chris, 10/29:
+nothing recorded yet, write the scripts from scratch), for him to edit
+before recording.** Facts and the stories come from his Spark notes and
+his shuffle post; v1 cut the post's sentences and read like writing.
 **When to use:** record the three in one take (`agents/series.md` step 3),
 then one session per episode, `agents/runbook.md` from step 2. Steps 0–1
 are done here.
