@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout: ep 2's frame 0 on the series chip, and every seam state, 1 s each. Not in the Short.
+         0 s   take A: SEAM[0], the top card in the CPU and queue's place, the strip off
+         1 s   take B: the series rest frame kept (CPU, queue, strip), the card in the bottom slot
+         2 s   SEAM[1] … 10 s SEAM[9] -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/flops.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 11;
+  const kit = EP.mount(document.getElementById("root"));
+  const takeB = Object.assign({}, SC.SEAM[0], { cpu: 1, queueO: 1, strip: 0,
+    card: Object.assign({}, SC.SEAM[0].card, { y: 1150 }) });
+  function render(t) {
+    SC.clock = t;
+    const i = Math.floor(t);
+    kit.draw(i === 0 ? SC.SEAM[0] : i === 1 ? takeB : SC.SEAM[Math.min(9, i - 1)]);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
