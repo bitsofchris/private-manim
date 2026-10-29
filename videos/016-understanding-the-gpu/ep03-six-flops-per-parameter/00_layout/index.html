@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 00_layout: ep 3's frame 0 on the shared kit, then every seam state (ep/seam.js) and the
+         in-between states the beats animate through, one second each, so every string the episode
+         shows is on screen once. Not in the Short; also the starter every beat copies.
+         0 SEAM0 (running)   1 flash (beat 02)   2 SEAM2   3 forward mid-pass   4 SEAM3
+         5 backward mid-pass 6 SEAM4             7 grad mid-pass   8 SEAM5  9 SEAM6
+         10 shrinking (beat 07)   11 SEAM7 (typed line 1)   12 SEAM8 -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/chip.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep.js"></script>
+    <script src="ep/layer.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 13;
+  const kit = SC.mount(document.getElementById("root"));
+  const S = SC.SEAM, EP = window.EP;
+  const ly = (n, extra) => Object.assign({}, S[n], { ly: Object.assign({}, S[n].ly, extra) });
+  const states = [
+    S[0],
+    Object.assign(ly(2, { flash: 3 }), { hero: "lines" }),
+    S[2],
+    Object.assign(ly(3, { prog: 3.3, bar: { o: 1, f: [0.55, 0, 0], split: 1 }, rd: { o: 1, text: EP.count(6) } }), { hero: "readout" }),
+    S[3],
+    ly(4, { prog: 2.7, bar: { o: 1, f: [1, 0.45, 0], split: 1 }, rd: { o: 1, text: EP.count(16) } }),
+    S[4],
+    ly(5, { prog: 4.3, mat: { o: 1, name: "dW", fill: 4.3 }, bar: { o: 1, f: [1, 1, 0.72], split: 1 }, rd: { o: 1, text: EP.count(32) } }),
+    S[5],
+    S[6],
+    Object.assign({}, S[7], { cpu: 0.5, queueO: 0.5, chip: 0.5, hbm: 0.5, code: { o: 0 },
+                              ly: Object.assign({}, S[6].ly, { shrink: 0.5, bar: { o: 0 }, rd: { o: 0 } }) }),
+    S[7],
+    S[8],
+  ];
+  function render(t) {
+    SC.clock = t;
+    kit.draw(states[Math.min(states.length - 1, Math.floor(t))]);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
