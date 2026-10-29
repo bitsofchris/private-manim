@@ -11,8 +11,15 @@
 //   y = x @ W   three 4 × 4 matrices in the bottom slot (y 1197–1313), in the
 //               code's order. `fill` says which y cells are done.
 //   wave        a bright band that sweeps the lit grid cells once (0 → 1).
+//   the network a tiny neural network, 4-4-4-2 nodes left to right, in the top
+//               slot (x 114–836, y 246–428) while the CPU is away (beats 1–2).
+//               Its first layer (column 0 → column 1, 16 edges) is W: the
+//               edges into node j are column j of W, node j's output is y's column j.
 //
 // Ep 1 fields of S (defaults merged into SC.REST, so tools/hf_state_check.js sees them):
+//   net 0..1         the network's opacity
+//   flow 0|1         activity: one layer's edges at a time light teal, left to right, on SC.clock
+//                    (like the chip's shimmer; must be 0 in a beat's still end)
 //   cpu4 0..1        the CPU's opacity
 //   big 0..1         small (top slot) → big (the chip's place); fade chip/hbm yourself
 //   cores "1111"     which of the 4 cores are lit teal
@@ -21,8 +28,10 @@
 //   fill "0…"        16 chars, row-major: 1 = that y cell is done (teal)
 //   pick -1|k        with hero "ycell": x row k/4, W column k%4 and y cell k go magenta
 //   wave 0..1        the sweep's position; 0 and 1 are off
-// Hero names added: "cpu" (this CPU), "ycell" (row, column and the one y cell),
-// "y" (every y cell). The chip's own (chip, tc, ...) are unchanged.
+// Hero names added: "cpu" (this CPU), "net" (every node of the network),
+// "layer" (the first layer's 16 edges and its 4 output nodes),
+// "ycell" (row, column and the one y cell, plus output node k%4 and its 4 incoming edges),
+// "y" (every y cell, plus the first layer's 4 output nodes). The chip's own (chip, tc, ...) are unchanged.
 (function () {
   const SC = window.SC, { PAL, lerp, node, label, show, clamp01 } = SC;
   const LIGHT = "#8FF0E2";                       // the wave's band: teal lifted toward ink
@@ -30,8 +39,12 @@
   Object.assign(SC.REST, {
     cpu: 0, queueO: 0, strip: 0,                 // the series CPU, queue and time strip: not in ep 1
     cpu4: 1, big: 0, cores: "1111", cache: 0, branch: 0,
-    mat: 1, fill: "0".repeat(16), pick: -1, wave: 0,
+    mat: 1, fill: "0".repeat(16), pick: -1, wave: 0, net: 0, flow: 0,
   });
+
+  // The network: 4 columns of nodes; column c's nodes centred on y 337, pitch 50.
+  const NET = { xs: [130, 360, 590, 820], n: [4, 4, 4, 2], cy: 337, pitch: 50, r: 16, step: 0.35 };
+  const nodeY = (c, i) => NET.cy + (i - (NET.n[c] - 1) / 2) * NET.pitch;
 
   // Small and big CPU geometry; cores lerp between the two.
   const SMALL = { x: 65, y: 250, w: 567, h: 130, lab: { x: 89, y: 280 },
@@ -48,6 +61,20 @@
     svg.style.cssText = "position:absolute;left:0;top:0;overflow:visible;";
     svg.setAttribute("data-layout-allow-overflow", "");
     root.insertBefore(svg, kit.code ? kit.code.card : null);
+
+    // the network: edges first, nodes over them
+    const netG = node("g", {}, svg);
+    const edges = [];                            // edges[c] = [{i, j, el}] from column c to c + 1
+    for (let c = 0; c < 3; c++) {
+      edges.push([]);
+      for (let i = 0; i < NET.n[c]; i++) for (let j = 0; j < NET.n[c + 1]; j++) {
+        const el = node("line", { x1: NET.xs[c], y1: nodeY(c, i), x2: NET.xs[c + 1], y2: nodeY(c + 1, j),
+                                  "stroke-width": 4, "stroke-linecap": "round" }, netG);
+        edges[c].push({ i, j, el });
+      }
+    }
+    const nodes = NET.n.map((n, c) => [...Array(n)].map((_, i) =>
+      node("circle", { cx: NET.xs[c], cy: nodeY(c, i), r: NET.r, "stroke-width": 4 }, netG)));
 
     // the CPU
     const cpuG = node("g", {}, svg);
@@ -121,6 +148,24 @@
       });
     }
 
+    function drawNet(S) {
+      show(netG, S.net);
+      if (!(S.net > 0)) return;
+      const h = S.hero, j0 = S.pick % 4;
+      const live = S.flow ? Math.floor((SC.clock || 0) / NET.step) % 3 : -1;   // the layer the activity is in
+      edges.forEach((row, c) => row.forEach((e) => {
+        const hot = (h === "layer" && c === 0) || (h === "ycell" && S.pick >= 0 && c === 0 && e.j === j0);
+        e.el.setAttribute("stroke", hot ? PAL.hero : c === live ? PAL.data : PAL.muted);
+      }));
+      nodes.forEach((col, c) => col.forEach((el, i) => {
+        const hot = h === "net" || ((h === "layer" || h === "y") && c === 1) ||
+                    (h === "ycell" && S.pick >= 0 && c === 1 && i === j0);
+        const on = c === live + 1 || (!S.flow && c === 0);
+        el.setAttribute("stroke", hot ? PAL.hero : on ? PAL.data : PAL.dim);
+        el.setAttribute("fill", hot ? PAL.hero : on ? PAL.data : PAL.panel);
+      }));
+    }
+
     // A diagonal band of lit cells turns light as `wave` runs 0 → 1.
     function drawWave(S) {
       if (!(S.wave > 0 && S.wave < 1) || !(S.chip > 0)) return;
@@ -134,9 +179,9 @@
     function draw(S) {
       S = Object.assign({}, SC.REST, S);
       kit.draw(S);
-      drawCpu(S); drawMats(S); drawWave(S);
+      drawNet(S); drawCpu(S); drawMats(S); drawWave(S);
     }
-    return Object.assign({}, kit, { draw, cpu: { box, cores, label: cpuLab }, mats, letters });
+    return Object.assign({}, kit, { draw, cpu: { box, cores, label: cpuLab }, mats, letters, net: { g: netG, edges, nodes } });
   }
 
   // A beat's state at master time: blend two seam states field by field (numbers lerp, the rest switch at u ≥ 0.5).
@@ -149,5 +194,5 @@
     return out;
   }
 
-  window.EP = { mount, mix, M, SMALL, BIG };
+  window.EP = { mount, mix, M, SMALL, BIG, NET };
 })();
