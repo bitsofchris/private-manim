@@ -157,7 +157,7 @@
       F = Object.assign({ o: 0, grow: 1, row1: 0, row2: 0, glide1: 0, glide2: 0, anat: 1, anatO: 0, lab: [0, 0, 0] }, F || {});
       const g = clamp01(F.grow), o = F.o;
       growBox(panel, o, g);
-      const inner = o * seg(g, 0.7, 1);
+      const inner = o * seg(g, 0.88, 1);
       rowsF.forEach((R, r) => {
         const N = NUMS[r], ro = inner * (r ? F.row2 : F.row1), gl = clamp01(r ? F.glide2 : F.glide1);
         const k = lerp(N.from, N.to, gl);                        // the point sits before digit k
@@ -244,7 +244,7 @@
       K = Object.assign({ o: 0, grow: 1, mode: "op", mul: 0, carry: 0, add: 0, n: 0, lit: null, step: 0 }, K || {});
       const g = clamp01(K.grow), o = K.o;
       growBox(box, o, g);
-      const inner = o * seg(g, 0.7, 1);
+      const inner = o * seg(g, 0.88, 1);
       show(head, inner);
       const isOp = K.mode === "op";
       opEls.forEach((e) => show(e, 0)); dotEls.forEach((e) => show(e, 0));
