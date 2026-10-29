@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep05 00_layout: frame 0 of the num_workers episode and every image it cuts to, one per second. Not in the Short.
+         0–2 s  frame 0, SEAM[0]: iterable, sampler struck, two workers, twin [4, 512] batches, samples hopping
+         2 s    SEAM[4]: map-style, sampler back, one batch ("you're fine")
+         3 s    the iterable card (beats 3, 5), __iter__ lit
+         4 s    SEAM[6]: the workers card, # True lit
+         5 s    SEAM[8]: the shard card, three lines typed, start/step lit
+         6 s    SEAM[10]: the shard card, # False typed, get_worker_info() lit (the last frame) -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep5.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 7;
+  const root = document.getElementById("root");
+  const kit = EP5.mount(root);
+  const S = SC.SEAM, L = EP5.LINES;
+  const iterCard = Object.assign({}, S[3], { flip: 1, code: { o: 1, lines: L.iterable, typed: Infinity, lit: "iter", cursor: 0 } });
+  function render(t) {
+    SC.clock = t;
+    const st = t < 2 ? S[0] : t < 3 ? S[4] : t < 4 ? iterCard : t < 5 ? S[6] : t < 6 ? S[8] : S[10];
+    EP5.draw(kit, st);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
