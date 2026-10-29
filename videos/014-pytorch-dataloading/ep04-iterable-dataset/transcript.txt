@@ -1,0 +1,49 @@
+00:00.001-00:03.760
+If looking up one sample isn't cheap, you use an iterable dataset.
+
+00:03.760-00:07.520
+Here we use one function iter that just yields samples
+
+00:09.140-00:11.700
+I most frequently use this when training bigger models.
+
+00:11.700-00:14.580
+You pack the data into shards and just stream them through.
+
+00:14.580-00:16.340
+There's no length no get item.
+
+00:16.340-00:19.460
+Sample I doesn't exist until the iterator produces it.
+
+00:20.439-00:21.960
+This means there's no sampler.
+
+00:21.960-00:25.320
+The loader just calls your dataset over and over and it yields the next sample.
+
+00:25.320-00:27.000
+So shuffling is now your problem.
+
+00:27.000-00:31.320
+You pre-shuffle the data into shards, load one shard into memory and yields from it.
+
+00:31.160-00:32.840
+Splits are also your problem too.
+
+00:32.840-00:37.080
+If you run multiple workers, splitting the stream between them is up to you to determine.
+
+00:37.080-00:39.640
+The data loader on top is the same though.
+
+00:39.300-00:41.780
+Same batch I, same collate, same batch out.
+
+00:41.780-00:46.899
+The only thing that changes the data loader is asking for the next sample, not for the sample at index i.
+
+00:46.899-00:52.100
+So use map until you can't, and the day sample i stops being cheap, swap to an integral dataset
+
+

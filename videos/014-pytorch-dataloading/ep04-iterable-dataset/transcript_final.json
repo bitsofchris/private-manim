@@ -1,0 +1,1041 @@
+{
+  "segments" : [
+    {
+      "end" : 3420,
+      "id" : "A383FE1F-FEC3-4711-8A4A-9C20B227425A",
+      "start" : 419,
+      "text" : "If looking up one sample isn't cheap, you use an iterable dataset.",
+      "words" : [
+        {
+          "end" : 820,
+          "start" : 419,
+          "text" : "If"
+        },
+        {
+          "end" : 1060,
+          "start" : 820,
+          "text" : "looking"
+        },
+        {
+          "end" : 1200,
+          "start" : 1060,
+          "text" : "up"
+        },
+        {
+          "end" : 1380,
+          "start" : 1200,
+          "text" : "one"
+        },
+        {
+          "end" : 1660,
+          "start" : 1380,
+          "text" : "sample"
+        },
+        {
+          "end" : 1860,
+          "start" : 1660,
+          "text" : "isn't"
+        },
+        {
+          "end" : 2200,
+          "start" : 1860,
+          "text" : "cheap,"
+        },
+        {
+          "end" : 2360,
+          "start" : 2220,
+          "text" : "you"
+        },
+        {
+          "end" : 2600,
+          "start" : 2360,
+          "text" : "use"
+        },
+        {
+          "end" : 2760,
+          "start" : 2600,
+          "text" : "an"
+        },
+        {
+          "end" : 3080,
+          "start" : 2760,
+          "text" : "iterable"
+        },
+        {
+          "end" : 3420,
+          "start" : 3080,
+          "text" : "dataset."
+        }
+      ]
+    },
+    {
+      "end" : 6960,
+      "id" : "D6E3A08A-2257-4397-BC96-8C9972ED3776",
+      "start" : 4080,
+      "text" : "Here, we use one function, iter, that just yields samples.",
+      "words" : [
+        {
+          "end" : 4260,
+          "start" : 4080,
+          "text" : "Here,"
+        },
+        {
+          "end" : 4400,
+          "start" : 4260,
+          "text" : "we"
+        },
+        {
+          "end" : 4600,
+          "start" : 4400,
+          "text" : "use"
+        },
+        {
+          "end" : 4800,
+          "start" : 4600,
+          "text" : "one"
+        },
+        {
+          "end" : 5180,
+          "start" : 4800,
+          "text" : "function,"
+        },
+        {
+          "end" : 5460,
+          "start" : 5360,
+          "text" : "iter,"
+        },
+        {
+          "end" : 5920,
+          "start" : 5820,
+          "text" : "that"
+        },
+        {
+          "end" : 6160,
+          "start" : 5920,
+          "text" : "just"
+        },
+        {
+          "end" : 6560,
+          "start" : 6160,
+          "text" : "yields"
+        },
+        {
+          "end" : 6960,
+          "start" : 6560,
+          "text" : "samples."
+        }
+      ]
+    },
+    {
+      "end" : 9520,
+      "id" : "BE997DEA-15F9-47C0-ABB5-6C0906299C13",
+      "start" : 7580,
+      "text" : "I most frequently use this when training bigger models.",
+      "words" : [
+        {
+          "end" : 7700,
+          "start" : 7580,
+          "text" : "I"
+        },
+        {
+          "end" : 7920,
+          "start" : 7700,
+          "text" : "most"
+        },
+        {
+          "end" : 8280,
+          "start" : 7920,
+          "text" : "frequently"
+        },
+        {
+          "end" : 8520,
+          "start" : 8280,
+          "text" : "use"
+        },
+        {
+          "end" : 8620,
+          "start" : 8520,
+          "text" : "this"
+        },
+        {
+          "end" : 8740,
+          "start" : 8620,
+          "text" : "when"
+        },
+        {
+          "end" : 9000,
+          "start" : 8740,
+          "text" : "training"
+        },
+        {
+          "end" : 9200,
+          "start" : 9000,
+          "text" : "bigger"
+        },
+        {
+          "end" : 9520,
+          "start" : 9200,
+          "text" : "models."
+        }
+      ]
+    },
+    {
+      "end" : 12180,
+      "id" : "D678FBD2-100E-4972-84C2-AED3AD4798C9",
+      "start" : 9660,
+      "text" : "You pack the data into shards and just stream them through.",
+      "words" : [
+        {
+          "end" : 9800,
+          "start" : 9660,
+          "text" : "You"
+        },
+        {
+          "end" : 10120,
+          "start" : 9800,
+          "text" : "pack"
+        },
+        {
+          "end" : 10240,
+          "start" : 10120,
+          "text" : "the"
+        },
+        {
+          "end" : 10440,
+          "start" : 10240,
+          "text" : "data"
+        },
+        {
+          "end" : 10620,
+          "start" : 10440,
+          "text" : "into"
+        },
+        {
+          "end" : 11040,
+          "start" : 10620,
+          "text" : "shards"
+        },
+        {
+          "end" : 11240,
+          "start" : 11040,
+          "text" : "and"
+        },
+        {
+          "end" : 11460,
+          "start" : 11240,
+          "text" : "just"
+        },
+        {
+          "end" : 11760,
+          "start" : 11460,
+          "text" : "stream"
+        },
+        {
+          "end" : 11940,
+          "start" : 11760,
+          "text" : "them"
+        },
+        {
+          "end" : 12180,
+          "start" : 11940,
+          "text" : "through."
+        }
+      ]
+    },
+    {
+      "end" : 13900,
+      "id" : "0F56F0B4-7CEE-4BA8-95C3-B56E097DD194",
+      "start" : 12440,
+      "text" : "There's no length and no getItem.",
+      "words" : [
+        {
+          "end" : 12840,
+          "start" : 12440,
+          "text" : "There's"
+        },
+        {
+          "end" : 13000,
+          "start" : 12840,
+          "text" : "no"
+        },
+        {
+          "end" : 13280,
+          "start" : 13000,
+          "text" : "length"
+        },
+        {
+          "end" : 13380,
+          "start" : 13280,
+          "text" : "and"
+        },
+        {
+          "end" : 13500,
+          "start" : 13380,
+          "text" : "no"
+        },
+        {
+          "end" : 13900,
+          "start" : 13500,
+          "text" : "getItem."
+        }
+      ]
+    },
+    {
+      "end" : 16820,
+      "id" : "FC4FDCCC-D328-4C6F-9D4E-9ED1089CE19D",
+      "start" : 14020,
+      "text" : "Sample i doesn't exist until the iterator produces it.",
+      "words" : [
+        {
+          "end" : 14460,
+          "start" : 14020,
+          "text" : "Sample"
+        },
+        {
+          "end" : 14640,
+          "start" : 14460,
+          "text" : "i"
+        },
+        {
+          "end" : 15080,
+          "start" : 14640,
+          "text" : "doesn't"
+        },
+        {
+          "end" : 15420,
+          "start" : 15080,
+          "text" : "exist"
+        },
+        {
+          "end" : 15680,
+          "start" : 15420,
+          "text" : "until"
+        },
+        {
+          "end" : 15880,
+          "start" : 15680,
+          "text" : "the"
+        },
+        {
+          "end" : 16240,
+          "start" : 15880,
+          "text" : "iterator"
+        },
+        {
+          "end" : 16560,
+          "start" : 16240,
+          "text" : "produces"
+        },
+        {
+          "end" : 16820,
+          "start" : 16560,
+          "text" : "it."
+        }
+      ]
+    },
+    {
+      "end" : 18300,
+      "id" : "47355A9A-61F9-481B-8264-A66700340CEF",
+      "start" : 17020,
+      "text" : "This means there's no sampler.",
+      "words" : [
+        {
+          "end" : 17360,
+          "start" : 17020,
+          "text" : "This"
+        },
+        {
+          "end" : 17540,
+          "start" : 17360,
+          "text" : "means"
+        },
+        {
+          "end" : 17760,
+          "start" : 17540,
+          "text" : "there's"
+        },
+        {
+          "end" : 17920,
+          "start" : 17760,
+          "text" : "no"
+        },
+        {
+          "end" : 18300,
+          "start" : 17920,
+          "text" : "sampler."
+        }
+      ]
+    },
+    {
+      "end" : 21460,
+      "id" : "FC0CBD53-CB98-4E7A-AA56-44556A2ACDBD",
+      "start" : 18480,
+      "text" : "The loader just calls your dataset over and over and it yields the next sample.",
+      "words" : [
+        {
+          "end" : 18600,
+          "start" : 18480,
+          "text" : "The"
+        },
+        {
+          "end" : 18840,
+          "start" : 18600,
+          "text" : "loader"
+        },
+        {
+          "end" : 19060,
+          "start" : 18840,
+          "text" : "just"
+        },
+        {
+          "end" : 19360,
+          "start" : 19060,
+          "text" : "calls"
+        },
+        {
+          "end" : 19500,
+          "start" : 19360,
+          "text" : "your"
+        },
+        {
+          "end" : 19700,
+          "start" : 19500,
+          "text" : "dataset"
+        },
+        {
+          "end" : 20020,
+          "start" : 19700,
+          "text" : "over"
+        },
+        {
+          "end" : 20080,
+          "start" : 20020,
+          "text" : "and"
+        },
+        {
+          "end" : 20240,
+          "start" : 20080,
+          "text" : "over"
+        },
+        {
+          "end" : 20400,
+          "start" : 20240,
+          "text" : "and"
+        },
+        {
+          "end" : 20520,
+          "start" : 20400,
+          "text" : "it"
+        },
+        {
+          "end" : 20840,
+          "start" : 20520,
+          "text" : "yields"
+        },
+        {
+          "end" : 20980,
+          "start" : 20840,
+          "text" : "the"
+        },
+        {
+          "end" : 21200,
+          "start" : 20980,
+          "text" : "next"
+        },
+        {
+          "end" : 21460,
+          "start" : 21200,
+          "text" : "sample."
+        }
+      ]
+    },
+    {
+      "end" : 23280,
+      "id" : "6A90C28F-20F7-4CFC-B06A-D659AEDBC09D",
+      "start" : 22020,
+      "text" : "So shuffling is now your problem.",
+      "words" : [
+        {
+          "end" : 22080,
+          "start" : 22020,
+          "text" : "So"
+        },
+        {
+          "end" : 22500,
+          "start" : 22080,
+          "text" : "shuffling"
+        },
+        {
+          "end" : 22640,
+          "start" : 22500,
+          "text" : "is"
+        },
+        {
+          "end" : 22760,
+          "start" : 22640,
+          "text" : "now"
+        },
+        {
+          "end" : 22940,
+          "start" : 22760,
+          "text" : "your"
+        },
+        {
+          "end" : 23280,
+          "start" : 22940,
+          "text" : "problem."
+        }
+      ]
+    },
+    {
+      "end" : 27140,
+      "id" : "CAAB710A-BE86-4A67-B1CD-798C9323FB92",
+      "start" : 23680,
+      "text" : "You pre-shuffle the data into shards, load one shard into memory, and yield from it.",
+      "words" : [
+        {
+          "end" : 23740,
+          "start" : 23680,
+          "text" : "You"
+        },
+        {
+          "end" : 24040,
+          "start" : 23740,
+          "text" : "pre"
+        },
+        {
+          "end" : 24260,
+          "start" : 24040,
+          "text" : "-shuffle"
+        },
+        {
+          "end" : 24420,
+          "start" : 24260,
+          "text" : "the"
+        },
+        {
+          "end" : 24580,
+          "start" : 24420,
+          "text" : "data"
+        },
+        {
+          "end" : 24740,
+          "start" : 24580,
+          "text" : "into"
+        },
+        {
+          "end" : 25200,
+          "start" : 24740,
+          "text" : "shards,"
+        },
+        {
+          "end" : 25580,
+          "start" : 25420,
+          "text" : "load"
+        },
+        {
+          "end" : 25820,
+          "start" : 25580,
+          "text" : "one"
+        },
+        {
+          "end" : 26040,
+          "start" : 25820,
+          "text" : "shard"
+        },
+        {
+          "end" : 26160,
+          "start" : 26040,
+          "text" : "into"
+        },
+        {
+          "end" : 26440,
+          "start" : 26160,
+          "text" : "memory,"
+        },
+        {
+          "end" : 26620,
+          "start" : 26560,
+          "text" : "and"
+        },
+        {
+          "end" : 26840,
+          "start" : 26620,
+          "text" : "yield"
+        },
+        {
+          "end" : 27040,
+          "start" : 26840,
+          "text" : "from"
+        },
+        {
+          "end" : 27140,
+          "start" : 27040,
+          "text" : "it."
+        }
+      ]
+    },
+    {
+      "end" : 28960,
+      "id" : "57F79C33-EB55-4A84-BD28-F59F6F2D8B07",
+      "start" : 27520,
+      "text" : "Splits are also your problem, too.",
+      "words" : [
+        {
+          "end" : 27940,
+          "start" : 27520,
+          "text" : "Splits"
+        },
+        {
+          "end" : 28060,
+          "start" : 27940,
+          "text" : "are"
+        },
+        {
+          "end" : 28300,
+          "start" : 28060,
+          "text" : "also"
+        },
+        {
+          "end" : 28460,
+          "start" : 28300,
+          "text" : "your"
+        },
+        {
+          "end" : 28660,
+          "start" : 28460,
+          "text" : "problem,"
+        },
+        {
+          "end" : 28960,
+          "start" : 28860,
+          "text" : "too."
+        }
+      ]
+    },
+    {
+      "end" : 32279,
+      "id" : "FB06D75A-C32A-49E0-AF6A-318EF5D73225",
+      "start" : 29000,
+      "text" : "If you run multiple workers, splitting the stream between them is up to you to determine.",
+      "words" : [
+        {
+          "end" : 29160,
+          "start" : 29000,
+          "text" : "If"
+        },
+        {
+          "end" : 29240,
+          "start" : 29160,
+          "text" : "you"
+        },
+        {
+          "end" : 29420,
+          "start" : 29240,
+          "text" : "run"
+        },
+        {
+          "end" : 29720,
+          "start" : 29420,
+          "text" : "multiple"
+        },
+        {
+          "end" : 30140,
+          "start" : 29720,
+          "text" : "workers,"
+        },
+        {
+          "end" : 30460,
+          "start" : 30280,
+          "text" : "splitting"
+        },
+        {
+          "end" : 30600,
+          "start" : 30460,
+          "text" : "the"
+        },
+        {
+          "end" : 30780,
+          "start" : 30600,
+          "text" : "stream"
+        },
+        {
+          "end" : 31060,
+          "start" : 30780,
+          "text" : "between"
+        },
+        {
+          "end" : 31260,
+          "start" : 31060,
+          "text" : "them"
+        },
+        {
+          "end" : 31460,
+          "start" : 31260,
+          "text" : "is"
+        },
+        {
+          "end" : 31620,
+          "start" : 31460,
+          "text" : "up"
+        },
+        {
+          "end" : 31780,
+          "start" : 31620,
+          "text" : "to"
+        },
+        {
+          "end" : 31840,
+          "start" : 31780,
+          "text" : "you"
+        },
+        {
+          "end" : 31980,
+          "start" : 31840,
+          "text" : "to"
+        },
+        {
+          "end" : 32279,
+          "start" : 31980,
+          "text" : "determine."
+        }
+      ]
+    },
+    {
+      "end" : 34580,
+      "id" : "BF29BC05-2C01-41C7-8026-B1994F412552",
+      "start" : 32840,
+      "text" : "The data loader on top is the same though.",
+      "words" : [
+        {
+          "end" : 32960,
+          "start" : 32840,
+          "text" : "The"
+        },
+        {
+          "end" : 33160,
+          "start" : 32960,
+          "text" : "data"
+        },
+        {
+          "end" : 33480,
+          "start" : 33160,
+          "text" : "loader"
+        },
+        {
+          "end" : 33640,
+          "start" : 33480,
+          "text" : "on"
+        },
+        {
+          "end" : 33920,
+          "start" : 33640,
+          "text" : "top"
+        },
+        {
+          "end" : 34020,
+          "start" : 33920,
+          "text" : "is"
+        },
+        {
+          "end" : 34180,
+          "start" : 34020,
+          "text" : "the"
+        },
+        {
+          "end" : 34380,
+          "start" : 34180,
+          "text" : "same"
+        },
+        {
+          "end" : 34580,
+          "start" : 34380,
+          "text" : "though."
+        }
+      ]
+    },
+    {
+      "end" : 36880,
+      "id" : "FC215614-9D5F-4C62-A015-C303D871BBCE",
+      "start" : 35080,
+      "text" : "Same batch i, same collate, same batch out.",
+      "words" : [
+        {
+          "end" : 35160,
+          "start" : 35080,
+          "text" : "Same"
+        },
+        {
+          "end" : 35420,
+          "start" : 35160,
+          "text" : "batch"
+        },
+        {
+          "end" : 35580,
+          "start" : 35420,
+          "text" : "i,"
+        },
+        {
+          "end" : 35820,
+          "start" : 35700,
+          "text" : "same"
+        },
+        {
+          "end" : 36180,
+          "start" : 35820,
+          "text" : "collate,"
+        },
+        {
+          "end" : 36400,
+          "start" : 36260,
+          "text" : "same"
+        },
+        {
+          "end" : 36640,
+          "start" : 36400,
+          "text" : "batch"
+        },
+        {
+          "end" : 36880,
+          "start" : 36640,
+          "text" : "out."
+        }
+      ]
+    },
+    {
+      "end" : 40600,
+      "id" : "AA44D0CD-A166-4021-BAC2-143ABAC8E558",
+      "start" : 37240,
+      "text" : "The only thing that changes is that the data loader is asking for the next sample, not",
+      "words" : [
+        {
+          "end" : 37300,
+          "start" : 37240,
+          "text" : "The"
+        },
+        {
+          "end" : 37460,
+          "start" : 37300,
+          "text" : "only"
+        },
+        {
+          "end" : 37620,
+          "start" : 37460,
+          "text" : "thing"
+        },
+        {
+          "end" : 37680,
+          "start" : 37620,
+          "text" : "that"
+        },
+        {
+          "end" : 38000,
+          "start" : 37680,
+          "text" : "changes"
+        },
+        {
+          "end" : 38140,
+          "start" : 38000,
+          "text" : "is"
+        },
+        {
+          "end" : 38220,
+          "start" : 38140,
+          "text" : "that"
+        },
+        {
+          "end" : 38320,
+          "start" : 38220,
+          "text" : "the"
+        },
+        {
+          "end" : 38500,
+          "start" : 38320,
+          "text" : "data"
+        },
+        {
+          "end" : 38700,
+          "start" : 38500,
+          "text" : "loader"
+        },
+        {
+          "end" : 38800,
+          "start" : 38700,
+          "text" : "is"
+        },
+        {
+          "end" : 39240,
+          "start" : 38800,
+          "text" : "asking"
+        },
+        {
+          "end" : 39380,
+          "start" : 39240,
+          "text" : "for"
+        },
+        {
+          "end" : 39500,
+          "start" : 39380,
+          "text" : "the"
+        },
+        {
+          "end" : 39780,
+          "start" : 39500,
+          "text" : "next"
+        },
+        {
+          "end" : 40140,
+          "start" : 39780,
+          "text" : "sample,"
+        },
+        {
+          "end" : 40600,
+          "start" : 40460,
+          "text" : "not"
+        }
+      ]
+    },
+    {
+      "end" : 41760,
+      "id" : "76EE2123-4DC9-473C-8B0E-86100F00D4FC",
+      "start" : 40660,
+      "text" : "for the sample at index i.",
+      "words" : [
+        {
+          "end" : 40760,
+          "start" : 40660,
+          "text" : "for"
+        },
+        {
+          "end" : 40880,
+          "start" : 40760,
+          "text" : "the"
+        },
+        {
+          "end" : 41120,
+          "start" : 40880,
+          "text" : "sample"
+        },
+        {
+          "end" : 41220,
+          "start" : 41120,
+          "text" : "at"
+        },
+        {
+          "end" : 41520,
+          "start" : 41220,
+          "text" : "index"
+        },
+        {
+          "end" : 41760,
+          "start" : 41520,
+          "text" : "i."
+        }
+      ]
+    },
+    {
+      "end" : 46640,
+      "id" : "AD19E085-539E-4831-8FA9-C1710642FB50",
+      "start" : 42320,
+      "text" : "So use map until you can't, and the day sample i stops being cheap, swap to an iterable dataset.",
+      "words" : [
+        {
+          "end" : 42380,
+          "start" : 42320,
+          "text" : "So"
+        },
+        {
+          "end" : 42600,
+          "start" : 42380,
+          "text" : "use"
+        },
+        {
+          "end" : 42820,
+          "start" : 42600,
+          "text" : "map"
+        },
+        {
+          "end" : 43000,
+          "start" : 42820,
+          "text" : "until"
+        },
+        {
+          "end" : 43180,
+          "start" : 43000,
+          "text" : "you"
+        },
+        {
+          "end" : 43440,
+          "start" : 43180,
+          "text" : "can't,"
+        },
+        {
+          "end" : 43720,
+          "start" : 43620,
+          "text" : "and"
+        },
+        {
+          "end" : 43840,
+          "start" : 43720,
+          "text" : "the"
+        },
+        {
+          "end" : 43980,
+          "start" : 43840,
+          "text" : "day"
+        },
+        {
+          "end" : 44280,
+          "start" : 43980,
+          "text" : "sample"
+        },
+        {
+          "end" : 44460,
+          "start" : 44280,
+          "text" : "i"
+        },
+        {
+          "end" : 44760,
+          "start" : 44460,
+          "text" : "stops"
+        },
+        {
+          "end" : 44920,
+          "start" : 44760,
+          "text" : "being"
+        },
+        {
+          "end" : 45240,
+          "start" : 44920,
+          "text" : "cheap,"
+        },
+        {
+          "end" : 45640,
+          "start" : 45380,
+          "text" : "swap"
+        },
+        {
+          "end" : 45820,
+          "start" : 45640,
+          "text" : "to"
+        },
+        {
+          "end" : 45920,
+          "start" : 45820,
+          "text" : "an"
+        },
+        {
+          "end" : 46160,
+          "start" : 45920,
+          "text" : "iterable"
+        },
+        {
+          "end" : 46640,
+          "start" : 46160,
+          "text" : "dataset."
+        }
+      ]
+    }
+  ],
+  "text" : "If looking up one sample isn't cheap, you use an iterable dataset.\nHere, we use one function, iter, that just yields samples.\nI most frequently use this when training bigger models.\nYou pack the data into shards and just stream them through.\nThere's no length and no getItem.\nSample i doesn't exist until the iterator produces it.\nThis means there's no sampler.\nThe loader just calls your dataset over and over and it yields the next sample.\nSo shuffling is now your problem.\nYou pre-shuffle the data into shards, load one shard into memory, and yield from it.\nSplits are also your problem, too.\nIf you run multiple workers, splitting the stream between them is up to you to determine.\nThe data loader on top is the same though.\nSame batch i, same collate, same batch out.\nThe only thing that changes is that the data loader is asking for the next sample, not\nfor the sample at index i.\nSo use map until you can't, and the day sample i stops being cheap, swap to an iterable dataset."
+}

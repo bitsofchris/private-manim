@@ -1,0 +1,44 @@
+{
+ "beats": [
+  {
+   "clip": "media/hf/01_hook_iter.mp4",
+   "end": 3.75
+  },
+  {
+   "clip": "media/hf/02_iter_code.mp4",
+   "end": 3.535
+  },
+  {
+   "clip": "media/hf/03_shards.mp4",
+   "end": 5.15
+  },
+  {
+   "clip": "media/hf/04_no_len_code.mp4",
+   "end": 4.595
+  },
+  {
+   "clip": "media/hf/05_no_sampler.mp4",
+   "end": 4.71
+  },
+  {
+   "clip": "media/hf/06_shuffle.mp4",
+   "end": 5.62
+  },
+  {
+   "clip": "media/hf/07_splits.mp4",
+   "end": 5.199
+  },
+  {
+   "clip": "media/hf/08_same_loader.mp4",
+   "end": 4.501
+  },
+  {
+   "clip": "media/hf/09_next_code.mp4",
+   "end": 4.98
+  },
+  {
+   "clip": "media/hf/10_swap.mp4",
+   "end": 5.203
+  }
+ ]
+}
