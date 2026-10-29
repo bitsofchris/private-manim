@@ -21,7 +21,7 @@ Series context: `../SERIES.md` (ledger, images, decisions). The VO is
 ## Ledger (copied from SERIES.md; every beat uses exactly these)
 
 - The data: synthetic time series, **512 points** each; a `SeriesDataset`
-  of **512 series**. One sample is a `[512]` tensor (a squiggle).
+  of **512 series**. One sample is a `[512]` tensor (one row of numbers in brackets).
 - The loader: `DataLoader(dataset, batch_size=32, shuffle=True,
   drop_last=True)`. **One batch is `[32, 512]`.**
 - The training loop (the code card, `_kit/loop.js` `LOOP.CODE`, from the
@@ -50,9 +50,9 @@ the loop was too long). Each image comes back whenever the VO returns to
 it; the seam-state kit makes a return cheap.
 
 1. **The machine** (beats 1, 9, 10; shared `_kit/machine.js`, `SC.REST`):
-   the series image, samples hopping from the Dataset card into the
-   DataLoader box, the `[32, 512]` batch going to the model chip. The
-   batch card is a readout: three rows of numbers in brackets, the shape
+   the series image, samples (one bracketed row of numbers each) hopping
+   from the Dataset card into the DataLoader box, the `[32, 512]` batch
+   going to the model chip. The batch card is a readout: three rows of numbers in brackets, the shape
    beside them (SERIES.md, "The data"); the batching station stacks the
    same rows `×32`. The batch is the hero. The Short opens on it (a batch is samples packed
    into one tensor: that is the collate station and the batch card).

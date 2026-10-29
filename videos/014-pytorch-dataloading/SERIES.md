@@ -52,7 +52,7 @@ number; `_kit/data.js` holds the ones drawn.
 
 - **The data:** synthetic time series, **512 points** each (16 patches of
   32). A `SeriesDataset` of **512 series**, seed 77. One sample is a
-  `[512]` tensor; drawn as a short squiggle in a card. A batch on screen
+  `[512]` tensor; drawn as one row of numbers in brackets. A batch on screen
   is rows of numbers in one pair of brackets with its shape beside it,
   never a stack of squiggles (Chris, ep 1's second cut: "people just see
   a bunch of squiggles"). The readout (`_kit/data.js` `series.readout`):

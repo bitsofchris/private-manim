@@ -19,7 +19,7 @@
 //     stations     y 580+       x 95–920     sampler, fetch, batching, collate; 86 tall, 12 apart
 //   batch row      y 1000–1090  the batch tensor (x 190–600) -> the model chip (x 700–920)
 //                              a tensor is rows of numbers in brackets (data.js `readout`) with its shape beside it;
-//                              one sample stays a squiggle (a series), the batching station stacks three number rows ×32
+//                              a sample in flight is one row of it in brackets; the batching station stacks three rows ×32
 //   code card      y 330–1010   kit/code.js, shown instead of the machine (S.flip)
 //
 // S fields (all optional; SC.REST is the rest state, ep 2's frame 0):
@@ -116,6 +116,15 @@
     const end = x + 44 + w;   // where the readout ends (the shape label goes after it)
     return { els, end, move: (nx) => els.forEach((el) => { el.style.left = `${nx + 26}px`; }) };
   }
+  // One sample as a vector: a row of numbers in brackets, SVG text so it can ride (centred on x = MID, y = 0).
+  function sampleGlyph(g, row) {
+    const gg = node("g", {}, g), size = 22, text = row.join(" ") + " \u22EF", w = text.length * size * 0.6;
+    const t = node("text", { x: MID, y: 8, "text-anchor": "middle", "font-size": size, "font-weight": 700, "font-family": "monospace", fill: PAL.data }, gg);
+    t.textContent = text;
+    // brackets: the bar at x, the arms pointing in toward the digits
+    [[-1, MID - w / 2 - 8], [1, MID + w / 2 + 8]].forEach(([s, x]) => node("path", { d: `M${x - 7 * s},-14 h${7 * s} v28 h${-7 * s}`, fill: "none", stroke: PAL.dim, "stroke-width": 3, "stroke-linecap": "round" }, gg));
+    return gg;
+  }
   // Hero tinting: every stroke/fill with data-tint goes magenta when its part is the hero.
   function tintable(el, col) { el.setAttribute("data-tint", col); return el; }
   function tint(part, on) {
@@ -144,8 +153,9 @@
     const mGet = domTint(parts.getitem, label(root, D.methods.map[1], { left: ds.x + 330, top: ds.y + 78, size: 44, mono: true }), PAL.data);
     const mIter = domTint(parts.iter, label(root, D.methods.iterable[0], { left: ds.x + 330, top: ds.y + 48, size: 44, mono: true }), PAL.data);
 
-    // samples in flight: dataset -> the loader box (three, phased by SC.clock)
-    const flow = [0, 1, 2].map((k) => squiggle(svg, MID - 60, 0, 120, 44, k * 0.7, {}));
+    // samples in flight: dataset -> the loader box (three, phased by SC.clock). A sample is a [512]
+    // tensor: one row of the readout in brackets (the style guide's vector), the row it becomes in the batch.
+    const flow = [0, 1].map((k) => sampleGlyph(svg, D.series.readout[k]));
 
     // loader box
     const lo = G.loader;
@@ -223,10 +233,10 @@
       show(dsG, dsO); show(dsLabel, dsO);
       const isMap = S.mode === "map";
       show(mLen, dsO * (isMap ? 1 : 0)); show(mGet, dsO * (isMap ? 1 : 0)); show(mIter, dsO * (isMap ? 0 : 1));
-      // samples in flight: one every 0.6 s, hopping from the dataset card into the loader box
+      // samples in flight: one every 0.9 s, hopping from the dataset card into the loader box
       flow.forEach((el, k) => {
-        const u = ((clock / 1.8 + k / 3) % 1 + 1) % 1;
-        const y = lerp(ds.y + ds.h + 4, lo.y - 34, u);
+        const u = ((clock / 1.8 + k / 2) % 1 + 1) % 1;
+        const y = lerp(ds.y + ds.h + 6, lo.y - 18, u);
         el.setAttribute("transform", `translate(0 ${y.toFixed(1)})`);
         show(el, S.dataset * S.loader * (u < 0.15 ? u / 0.15 : u > 0.8 ? (1 - u) / 0.2 : 1));
       });
