@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 09_bill (cut 8 -> 9, master 51.685, 6.680 s; the last beat):
+    <!-- 09_bill (cut 8 -> 9, master 45.205, 6.680 s; the last beat):
          "Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill."
          "Divide"    the card crossfades to `FLOPs ÷ FLOPS`; hero chip -> none
          "GPU-hours" `= GPU-hours` fades in under it, the hero (hours)
@@ -30,12 +30,12 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="6.68" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 6.68, START = 51.685;
+  const BEAT_SECONDS = 6.68, START = 45.205;
   // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
   const CUE = {
-    divide: 0.285,     /* "Divide" 51.97 (words.json 51.99 "Divide a") */
-    hours: 3.975,      /* "GPU-hours" 55.66 (words.json 55.60; the G lands after the gap) */
-    bill: 5.735,       /* "bill" 57.42 (words.json 57.36 is the end of "the") */
+    divide: 0.285,     /* "Divide" 45.49 (words.json 45.51 "Divide a") */
+    hours: 3.975,      /* "GPU-hours" 49.18 (words.json 49.12; the G lands after the gap) */
+    bill: 5.735,       /* "bill" 50.94 (words.json 50.88 is the end of "the") */
   };
   const T = { fade: 0.3 };
   T.still = CUE.bill + T.fade;                      // 6.035: SEAM[9] from here to the end

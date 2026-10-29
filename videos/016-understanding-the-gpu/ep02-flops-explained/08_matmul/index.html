@@ -3,14 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 08_matmul (cut 7 -> 8, master 41.955, 9.730 s):
+    <!-- 08_matmul (cut 7 -> 8, master 35.500, 9.705 s):
          "A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies
           and adds. GPUs are built to do exactly that, thousands at once."
-         0–0.4 s   the code card fades out (the rate card and its magenta T hold)
-         "matrix"  the card crossfades to `y = x @ W`; hero "tera" leaves with the rate card
-         "only"    `x1*w1 + x2*w2 + x3*w3` fades in under it, the hero (expr)
-         "thousands" every cell lights (lit 0.32 -> 1 over 0.3 s); the hero passes to the chip
-         still from "thousands" + 0.3 s: SEAM[8] -->
+         0–0.4 s     the code card and the 1 s clock fade out; hero "clock" leaves with the clock
+         "matrix"    the card crossfades to `y = x @ W`
+         "matmul"    the core panel grows out of its cell (mode "dot": x and w tiles, y = 0.0)
+         "only"      the three pairs run `y += x × w`, 0.8 s each; the running line the hero (expr),
+                     then the counter (6 FLOPs, hero count) once the last pair lands
+         "thousands" the panel shrinks back into its cell, every cell lights, the chip the hero
+         still from "thousands" + 0.6 s: SEAM[8] -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/chip.js"></script>
@@ -29,53 +31,55 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="9.73" data-fps="30" data-width="1080" data-height="1920"></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.705" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 9.73, START = 41.955;
+  const BEAT_SECONDS = 9.705, START = 35.500;
   // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
   const CUE = {
-    matrix: 2.145,     /* "matrix" 44.10 (words.json) */
-    only: 4.165,       /* "only" 46.12 (words.json 46.02 is the end of "is"; the onset follows the gap) */
-    thousands: 8.515,  /* "thousands" 50.47 */
+    matrix: 2.12,      /* "matrix" 37.62 */
+    matmul: 3.52,      /* "matmul" 39.02 (runs on from "a"; words.json kept) */
+    only: 4.14,        /* "only" 39.64 (words.json 39.54 is the end of "is"; the onset follows the gap) */
+    thousands: 8.49,   /* "thousands" 43.99 */
   };
-  const T = { codeOut: 0.4, fade: 0.3 };
-  T.still = CUE.thousands + T.fade;                 // 8.815: SEAM[8] from here on
+  const T = { out: 0.4, fade: 0.3, grow: 0.6, pair: 0.8, shrink: 0.5 };
+  T.dotEnd = CUE.only + 3 * T.pair;                 // 6.54: the last pair has landed
+  T.litFrom = CUE.thousands + T.fade;               // the cells light as the panel finishes shrinking
+  T.still = T.litFrom + T.fade;                     // 9.09: SEAM[8] from here on
   const root = document.getElementById("root");
   const kit = EP.mount(root);
   const { seg, lerp } = SC;
   const io = (u) => u * u * (3 - 2 * u);
   const S7 = SC.SEAM[7], S8 = SC.SEAM[8];
-  const RATE = S7.card.A, MM0 = { kind: "matmul", step: 0 }, MM1 = S8.card.A;
-  const EXPR = "x1*w1 + x2*w2 + x3*w3";
-
-  // beat-local helper: the kit's matmul row 2 is on/off by `step`, so its fade-in is set on the span
-  // after the kit has drawn (the kit resets every span's opacity on each draw, so this stays pure in t).
-  function spanO(text, o) {
-    root.querySelectorAll("span").forEach((sp) => { if (sp.textContent === text) sp.style.opacity = o; });
-  }
+  const RATE = S7.card.A, MM = S8.card.A;
 
   function state(t) {
     if (t <= 0) return S7;
     if (t >= T.still) return S8;
     const S = Object.assign({}, S7);
-    const co = 1 - io(seg(t, 0, T.codeOut));
-    S.code = co > 0 ? Object.assign({}, S7.code, { o: co }) : { o: 0 };
+    const out = 1 - io(seg(t, 0, T.out));                                  // code card and clock fade together
+    S.code = out > 0 ? Object.assign({}, S7.code, { o: out }) : { o: 0 };
+    const rate = Object.assign({}, RATE, { clockO: out });
+    if (out <= 0) S.hero = null;                                           // the clock (the hero) has gone
     const m = seg(t, CUE.matrix, CUE.matrix + T.fade);
-    if (m <= 0) S.card = S7.card;                                        // the rate card, its T the hero
-    else if (m < 1) S.card = { o: 1, A: RATE, B: MM0, mix: io(m) };       // "tera" leaves with its card
-    else { S.card = { o: 1, A: t >= CUE.only ? MM1 : MM0, B: null, mix: 0 }; S.hero = null; }
-    if (t >= CUE.only) S.hero = "expr";
+    S.card = m <= 0 ? { o: 1, A: rate, B: null, mix: 0 }
+           : m < 1 ? { o: 1, A: rate, B: MM, mix: io(m) } : { o: 1, A: MM, B: null, mix: 0 };
+    if (t >= CUE.matmul) {
+      const g = t < CUE.thousands ? io(seg(t, CUE.matmul, CUE.matmul + T.grow))
+                                  : 1 - io(seg(t, CUE.thousands, CUE.thousands + T.shrink));
+      const step = 3 * seg(t, CUE.only, T.dotEnd);
+      S.core = g > 0 ? { o: 1, mode: "dot", grow: g, step } : { o: 0 };
+    }
+    if (t >= CUE.only) S.hero = t < T.dotEnd ? "expr" : "count";
     if (t >= CUE.thousands) {
       S.hero = "chip";
-      S.lit = lerp(SC.REST.lit, 1, io(seg(t, CUE.thousands, T.still)));
+      S.lit = lerp(SC.REST.lit, 1, io(seg(t, T.litFrom, T.still)));
     }
     return S;
   }
   function render(t) {
-    SC.clock = START + t;
+    SC.clock = START - 1 / 30 + t;   // one frame behind: the cut (35.50) is a shimmer tick (0.25 s), so frame 0 keeps 07's last pattern
     kit.draw(state(t));
-    if (t >= CUE.only && t < CUE.only + T.fade) spanO(EXPR, io(seg(t, CUE.only, CUE.only + T.fade)));
   }
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
