@@ -13,12 +13,43 @@
 //   lines [{t, lit}]  from kit/data.js (DL_DATA.code.*)
 //   typed N         characters shown so far, over all lines in order; Infinity = all.
 //                   Use SC_typedAt(lines, seconds) for the typing look.
-//   lit NAME|null   the line whose `lit` equals NAME is drawn magenta (usually S.hero)
+//   lit NAME|null   the line whose `lit` equals NAME is the hero: a magenta bar in its
+//                   gutter and a lighter row (the text keeps its colours)
+//
+// The text is coloured like VS Code's Dark+ theme (keywords blue, calls yellow,
+// names light blue, numbers green, strings orange, comments green-grey), so a
+// line reads as code and not as one block of ink. Magenta stays the hero's.
 //   cursor 0|1      a block cursor after the last typed character
 //   blink 0..       seconds, for the cursor's 0.5 s blink (pass the beat time)
 (function () {
   const PAL = { bg: "#0B0B14", panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0", data: "#2DD4BF", hero: "#C084FC", muted: "#4A5070" };
   const CARD = { x: 65, w: 885, pad: 30, pitch: 64, size: 48, rows: 8, cy: 665 };
+  // VS Code Dark+ on the panel (every colour ≥ 5:1 on #14142B)
+  const SYN = { kw: "#569CD6", call: "#DCDCAA", name: "#9CDCFE", num: "#B5CEA8", str: "#CE9178", comment: "#6A9955", punct: "#D4D4D4", cls: "#4EC9B0" };
+  const KW = new Set(["for", "in", "def", "class", "return", "import", "from", "with", "as", "if", "else", "elif", "while", "yield", "True", "False", "None", "and", "or", "not", "is", "lambda", "pass", "break", "continue"]);
+  const TOKEN = /#.*$|"[^"]*"|'[^']*'|\d+(?:\.\d+)?|[A-Za-z_]\w*|\s+|./g;
+  // [{ s, c }]: the line split into runs with their colours
+  function tokenize(t) {
+    const out = [];
+    let m, prev = "";
+    while ((m = TOKEN.exec(t))) {
+      const s = m[0];
+      let c = SYN.punct;
+      if (s[0] === "#") c = SYN.comment;
+      else if (s[0] === '"' || s[0] === "'") c = SYN.str;
+      else if (/^\d/.test(s)) c = SYN.num;
+      else if (/^[A-Za-z_]/.test(s)) {
+        const next = t.slice(TOKEN.lastIndex).match(/^\s*\(/);
+        if (KW.has(s)) c = SYN.kw;
+        else if (prev === "class" || /^[A-Z]/.test(s)) c = SYN.cls;
+        else if (next) c = SYN.call;
+        else c = SYN.name;
+      } else if (/^\s+$/.test(s)) c = null;
+      if (s.trim()) prev = s.trim();
+      out.push({ s, c });
+    }
+    return out;
+  }
   const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 
   // How many characters a typist has landed `seconds` after starting, over
@@ -58,11 +89,27 @@
     const rows = [];
     for (let i = 0; i < CARD.rows; i++) {
       const el = document.createElement("div");
-      el.style.cssText = `position:absolute;left:${CARD.pad}px;top:${CARD.pad + i * CARD.pitch}px;height:${CARD.pitch}px;` +
-        `font-size:${CARD.size}px;line-height:${CARD.pitch}px;white-space:pre;color:${PAL.ink};`;
+      el.style.cssText = `position:absolute;left:0px;top:${CARD.pad + i * CARD.pitch}px;width:${CARD.w}px;height:${CARD.pitch}px;` +
+        `padding-left:${CARD.pad}px;font-size:${CARD.size}px;line-height:${CARD.pitch}px;white-space:pre;color:${PAL.ink};` +
+        `border-left:8px solid transparent;`;
       el.style.fontFamily = "monospace"; el.style.fontWeight = "700";
       card.appendChild(el);
       rows.push(el);
+    }
+    // the hero row: a magenta bar in the gutter and a lighter row, the text keeps its colours
+    function fill(el, t, n, hero) {
+      el.textContent = "";
+      let left = n;
+      tokenize(t).forEach((tok) => {
+        if (left <= 0) return;
+        const span = document.createElement("span");
+        span.textContent = tok.s.slice(0, left);
+        if (tok.c) span.style.color = tok.c;
+        el.appendChild(span);
+        left -= tok.s.length;
+      });
+      el.style.borderLeftColor = hero ? PAL.hero : "transparent";
+      el.style.background = hero ? "rgba(192,132,252,0.12)" : "transparent";
     }
     const cursor = document.createElement("span");
     cursor.textContent = "█";
@@ -87,9 +134,7 @@
         const s = shown[first + r];
         if (!s) { el.textContent = ""; el.style.visibility = "hidden"; return; }
         el.style.visibility = "visible";
-        const isComment = s.ln.t.trim().startsWith("#");
-        el.textContent = s.ln.t.slice(0, s.n);
-        el.style.color = s.ln.lit && C.lit && s.ln.lit === C.lit ? PAL.hero : isComment ? PAL.muted : PAL.ink;
+        fill(el, s.ln.t, s.n, !!(s.ln.lit && C.lit && s.ln.lit === C.lit));
         if (C.cursor && first + r === shown.length - 1 && blinkOn) el.appendChild(cursor);
       });
     }
