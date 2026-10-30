@@ -51,7 +51,7 @@ first cut, approved by Chris. On screen: the trap at frame 0 (iterable,
 sampler struck, two worker photocopies, twin `[4, 512]` batches lit as a
 pair), fetch then collate lit (beats 1–2); the iterable class card
 typed (beat 3); map-style with the sampler back, one batch, the
-photocopies pulsing in turn (beat 4); the strike drawn back across the
+photocopies pulsing in turn (beat 4); the strike drawn across the
 sampler and the twins returning (beat 5); the workers card
 (`batch_size=4,` / `num_workers=2)` / `torch.equal(b1, b2)  # True`,
 beat 6); `__iter__` lit (beat 7); the shard card (`info =
