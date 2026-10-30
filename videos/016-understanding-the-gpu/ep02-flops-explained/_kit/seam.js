@@ -23,7 +23,7 @@
     1: st({ hero: "chip", card: CARD_OFF, acro: acro(0) }),                              // "all AI compute": back out to the chip
     2: st({ hero: "acronym", card: CARD_OFF, acro: acro(1) }),                           // "floating-point operation"
     3: st({ hero: "exp", card: CARD_OFF, acro: acro(1), float: floatAt({}) }),           // "an exponent"
-    4: st({ hero: "exp", card: CARD_OFF, acro: acro(1), float: floatAt({ row2: 1, glide1: 1, glide2: 1, anat: 2 }) }),  // "three million"
+    4: st({ hero: "exp", card: CARD_OFF, acro: acro(1), float: floatAt({}) }),           // = SEAM[3]: beat 04 ("the point floats ... three million") was cut, 03 runs straight into 05
     5: st({ hero: "hbm", card: card({ kind: "word", word: "gradients" }) }),             // "gradient is one of these numbers"
     6: st({ hero: null, card: card({ kind: "count", o2: 1 }), code: code("count") }),    // "720 trillion FLOPs"
     7: st({ hero: "clock", card: card({ kind: "rate", clock: 1, clockO: 1 }), code: code(null) }),  // "This is a rate."
