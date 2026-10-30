@@ -87,17 +87,18 @@ line stays in `index.html`).
 ## Cues (master seconds, from words.json; beat-local = master − Start; `|` = a cut)
 
 The VO lost "A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion."
-(cut 35.50–41.98); everything from beat 08 on moved 6.48 s earlier.
+(cut 35.50–41.98) in v2. v3 lost beat 04, "The point floats, so one format holds
+a ten-millionth and three million." (cut 14.525–20.16, its exact span): 03
+runs into 05, `SEAM[4]` = `SEAM[3]`, and 05–09 moved 5.635 s earlier.
 
-A@0.40 FLOP@0.48 is@0.89 one@1.02 multiply or@1.32 one@2.10 add,@2.24 and@3.04 it's@3.10 the@3.25 unit@3.34 that@3.64 all@3.84 AI@4.08 compute@4.36 is@4.74 measured@4.90 in.@5.18 |
-FLOP@5.92 stands@6.18 for@6.40 floating@6.62 point@7.08 operation.@7.36 |
+A@0.4 FLOP@0.48 is@0.89 one@1.02 multiply or@1.32 one@2.1 add,@2.24 and@3.04 it's@3.1 the@3.25 unit@3.34 that@3.64 all@3.84 AI@4.08 compute@4.36 is@4.74 measured@4.9 in.@5.18 |
+FLOP@5.92 stands@6.18 for@6.4 floating@6.62 point@7.08 operation.@7.36 |
 Computers@8.66 store@9.04 decimals@9.28 as@9.72 a@9.92 floating@10.06 point,@10.36 scientific@11.04 notation@11.38 in@11.86 binary,@12.06 a@12.66 sign,@12.84 digits,@13.28 and@13.68 an@13.76 exponent.@13.86 |
-The@14.85 point@14.92 floats,@15.31 so@16.18 one@16.28 format@16.56 holds@16.94 a@17.36 ten-millionth@17.96 and@18.74 three@19.32 million.@19.54 |
-Every@20.40 weight,@20.54 activation,@20.92 and@21.50 gradient@21.58 is@21.78 one@22.08 of@22.26 these@22.38 numbers.@22.50 |
-FLOPs@23.52 with@23.82 a@23.98 small@24.10 s@24.36 is@24.54 a@24.68 count.@24.80 Training@25.94 an@26.08 8@26.26 billion@26.48 parameter@26.68 model@27.12 on@27.50 15,000@27.70 tokens@28.50 costs@28.96 about@29.64 720@30.10 trillion@30.92 FLOPs.@31.52 |
-FLOPS@32.62 with@32.86 a@33.02 capital@33.12 S@33.46 is@33.70 per@33.84 second.@34.06 This@34.60 is@34.72 a@34.82 rate.@34.98 |
-A@35.73 transformer's@35.84 compute@36.54 is@36.88 nearly@37.00 all@37.24 matrix@37.62 multiplies@37.98 and@38.62 a@38.94 matmul@39.02 is@39.40 only@39.54 multiplies@39.86 and@40.48 adds.@40.58 GPUs@41.40 are@42.12 built@42.20 to@42.44 do@42.64 exactly@42.74 that,@43.22 thousands@44.00 at@44.42 once.@44.60 |
-Divide a@45.51 run's@45.84 FLOPs@46.06 by@46.76 the@46.94 FLOPS you@47.14 get,@48.04 and@48.34 you@48.58 have@48.70 GPU-hours.@49.12 This@50.50 is@50.66 the@50.74 bill.@50.88
+Every@14.765 weight,@14.905 activation,@15.285 and@15.865 gradient@15.945 is@16.145 one@16.445 of@16.625 these@16.745 numbers.@16.865 |
+FLOPs@17.885 with@18.185 a@18.345 small@18.465 s@18.725 is@18.905 a@19.045 count.@19.165 Training@20.305 an@20.445 8@20.625 billion@20.845 parameter@21.045 model@21.485 on@21.865 15,000@22.065 tokens@22.865 costs@23.325 about@24.005 720@24.465 trillion@25.285 FLOPs.@25.885 |
+FLOPS@26.984 with@27.225 a@27.385 capital@27.485 S@27.825 is@28.065 per@28.205 second.@28.425 This@28.965 is@29.085 a@29.185 rate.@29.345 |
+A@30.095 transformer's@30.205 compute@30.905 is@31.245 nearly@31.365 all@31.605 matrix@31.985 multiplies@32.345 and@32.985 a@33.305 matmul@33.385 is@33.765 only@33.905 multiplies@34.225 and@34.845 adds.@34.945 GPUs@35.765 are@36.485 built@36.565 to@36.805 do@37.005 exactly@37.105 that,@37.585 thousands@38.365 at@38.785 once.@38.965 |
+Divide a@39.875 run's@40.205 FLOPs@40.425 by@41.125 the@41.305 FLOPS you@41.505 get,@42.405 and@42.705 you@42.945 have@43.065 GPU-hours.@43.485 This@44.865 is@45.025 the@45.105 bill.@45.245
 
 Some words.json starts sit 0.06–0.2 s early (the end of the word before);
 v1's agents checked onsets on vo_final.wav's envelope, and so may you.
