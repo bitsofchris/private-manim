@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 07_rate (cut 6 → 7, master 32.320–35.500): "FLOPS with a capital S is per second. This is a rate."
+    <!-- 07_rate (cut 6 → 7, master 26.685–29.865): "FLOPS with a capital S is per second. This is a rate."
          "FLOPS": the card crossfades to `FLOPS` / `per second`, the capital S the hero; the code line goes ink.
          "second": the 1 s clock appears at the card's right (0.2 s) and sweeps once (1.0 s), the hero.
          Still (SEAM[7]) from 2.80 s. -->
@@ -28,10 +28,10 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="3.18" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 3.180, MASTER = 32.320;
+  const BEAT_SECONDS = 3.180, MASTER = 26.685;
   const kit = EP.mount(document.getElementById("root"));
   const { seg } = SC;
-  // beat-local cues (master − 32.320), from words.json, checked on a 20 ms RMS envelope
+  // beat-local cues (master − 26.685), from words.json, checked on a 20 ms RMS envelope
   const CUE = {
     rate: 0.30,    /* "FLOPS" 32.62: card → FLOPS / per second, hero the S, code line unlit */
     sec: 1.74,     /* "second" 34.06: the 1 s clock appears and sweeps, hero the clock */

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 05_memory (cut 4 -> 5), master 20.160-23.190: "Every weight, activation, and gradient is one
+    <!-- 05_memory (cut 4 -> 5; cut 4 = cut 3 since 04 was cut), master 14.525-17.555: "Every weight, activation, and gradient is one
          of these numbers."
          From frame 0 the float panel shrinks back into cell (row 5, col 5) over 0.5 s (03's grow in
          reverse); once its contents are gone, memory is the hero: where these numbers live. The
@@ -32,7 +32,7 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="3.03" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 3.03, START = 20.16;
+  const BEAT_SECONDS = 3.03, START = 14.525;
   // cues, beat-local (master - START), from words.json (onsets agree on the vo_final.wav envelope)
   const CUE = {
     weights: 0.38,      /* "weight," 20.54 */

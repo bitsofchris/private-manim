@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 08_matmul (cut 7 -> 8, master 35.500, 9.705 s):
+    <!-- 08_matmul (cut 7 -> 8, master 29.865, 9.705 s):
          "A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies
           and adds. GPUs are built to do exactly that, thousands at once."
          0–0.4 s     the code card and the 1 s clock fade out; hero "clock" leaves with the clock
@@ -34,7 +34,7 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="9.705" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 9.705, START = 35.500;
+  const BEAT_SECONDS = 9.705, START = 29.865;
   // cues (beat-local = master - START; onsets checked on the vo_final.wav envelope)
   const CUE = {
     matrix: 2.12,      /* "matrix" 37.62 */
@@ -78,7 +78,7 @@
     return S;
   }
   function render(t) {
-    SC.clock = START - 1 / 30 + t;   // one frame behind: the cut (35.50) is a shimmer tick (0.25 s), so frame 0 keeps 07's last pattern
+    SC.clock = START + t;
     kit.draw(state(t));
   }
   window.__timelines = window.__timelines || {};

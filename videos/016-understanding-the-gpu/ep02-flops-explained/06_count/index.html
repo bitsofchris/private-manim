@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- 06_count (cut 5 → 6, master 23.190–32.320): "FLOPs with a small s is a count. Training an 8 billion
+    <!-- 06_count (cut 5 → 6, master 17.555–26.685): "FLOPs with a small s is a count. Training an 8 billion
          parameter model on 15,000 tokens costs about 720 trillion FLOPs."
          "FLOPs": the card crossfades `gradients` → `FLOPs`. "s": hero memory → the small s.
          "Training": the code card grows in under the chip, line 1 types (lit "count": the hero passes
@@ -31,10 +31,10 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="9.13" data-fps="30" data-width="1080" data-height="1920"></div>
     <script>
 (() => {
-  const BEAT_SECONDS = 9.130, MASTER = 23.190;
+  const BEAT_SECONDS = 9.130, MASTER = 17.555;
   const kit = EP.mount(document.getElementById("root"));
   const { seg } = SC;
-  // beat-local cues (master − 23.190), from words.json; "720" checked on a 20 ms RMS envelope (its s at 30.02–30.10)
+  // beat-local cues (master − 17.555), from words.json; "720" checked on a 20 ms RMS envelope (its s at 30.02–30.10)
   const CUE = {
     flops: 0.33,   /* "FLOPs" 23.52: the card crossfades to FLOPs */
     s: 1.17,       /* "s" 24.36: hero memory → the small s */
