@@ -90,228 +90,198 @@
   "text": "an exponent."
  },
  {
-  "start": 14.85,
-  "end": 15.25,
-  "text": "The point"
- },
- {
-  "start": 15.31,
-  "end": 16.5,
-  "text": "floats, so one"
- },
- {
-  "start": 16.56,
-  "end": 17.9,
-  "text": "format holds a"
- },
- {
-  "start": 17.96,
-  "end": 18.68,
-  "text": "ten-millionth"
- },
- {
-  "start": 18.74,
-  "end": 19.26,
-  "text": "and"
- },
- {
-  "start": 19.32,
-  "end": 19.92,
-  "text": "three million."
- },
- {
-  "start": 20.4,
-  "end": 20.86,
+  "start": 14.765,
+  "end": 15.225,
   "text": "Every weight"
  },
  {
-  "start": 20.92,
-  "end": 21.52,
+  "start": 15.285,
+  "end": 15.885,
   "text": "activation, and"
  },
  {
-  "start": 21.58,
-  "end": 22.02,
+  "start": 15.945,
+  "end": 16.385,
   "text": "gradient is"
  },
  {
-  "start": 22.08,
-  "end": 22.44,
+  "start": 16.445,
+  "end": 16.805,
   "text": "one of these"
  },
  {
-  "start": 22.5,
-  "end": 22.86,
+  "start": 16.865,
+  "end": 17.225,
   "text": "numbers."
  },
  {
-  "start": 23.52,
-  "end": 24.04,
+  "start": 17.885,
+  "end": 18.405,
   "text": "FLOPs with a"
  },
  {
-  "start": 24.1,
-  "end": 24.62,
+  "start": 18.465,
+  "end": 18.985,
   "text": "small s is"
  },
  {
-  "start": 24.68,
-  "end": 25.12,
+  "start": 19.045,
+  "end": 19.485,
   "text": "a count."
  },
  {
-  "start": 25.94,
-  "end": 26.2,
+  "start": 20.305,
+  "end": 20.565,
   "text": "Training an"
  },
  {
-  "start": 26.26,
-  "end": 26.62,
+  "start": 20.625,
+  "end": 20.985,
   "text": "8 billion"
  },
  {
-  "start": 26.68,
-  "end": 27.44,
+  "start": 21.045,
+  "end": 21.805,
   "text": "parameter model"
  },
  {
-  "start": 27.5,
-  "end": 28.44,
+  "start": 21.865,
+  "end": 22.805,
   "text": "on 15,000"
  },
  {
-  "start": 28.5,
-  "end": 29.58,
+  "start": 22.865,
+  "end": 23.945,
   "text": "tokens costs"
  },
  {
-  "start": 29.64,
-  "end": 30.86,
+  "start": 24.005,
+  "end": 25.225,
   "text": "about 720"
  },
  {
-  "start": 30.92,
-  "end": 32.02,
+  "start": 25.285,
+  "end": 26.385,
   "text": "trillion FLOPs."
  },
  {
-  "start": 32.619,
-  "end": 33.06,
+  "start": 26.984,
+  "end": 27.425,
   "text": "FLOPS with a"
  },
  {
-  "start": 33.12,
-  "end": 33.78,
+  "start": 27.485,
+  "end": 28.145,
   "text": "capital S is"
  },
  {
-  "start": 33.84,
-  "end": 34.5,
+  "start": 28.205,
+  "end": 28.865,
   "text": "per second."
  },
  {
-  "start": 34.6,
-  "end": 35.22,
+  "start": 28.965,
+  "end": 29.585,
   "text": "This is a rate."
  },
  {
-  "start": 35.73,
-  "end": 36.48,
+  "start": 30.095,
+  "end": 30.845,
   "text": "A transformer's"
  },
  {
-  "start": 36.54,
-  "end": 36.94,
+  "start": 30.905,
+  "end": 31.305,
   "text": "compute is"
  },
  {
-  "start": 37.0,
-  "end": 37.56,
+  "start": 31.365,
+  "end": 31.925,
   "text": "nearly all"
  },
  {
-  "start": 37.62,
-  "end": 37.92,
+  "start": 31.985,
+  "end": 32.285,
   "text": "matrix"
  },
  {
-  "start": 37.98,
-  "end": 38.88,
+  "start": 32.345,
+  "end": 33.245,
   "text": "multiplies and"
  },
  {
-  "start": 38.94,
-  "end": 39.48,
+  "start": 33.305,
+  "end": 33.845,
   "text": "a matmul is"
  },
  {
-  "start": 39.54,
-  "end": 40.44,
+  "start": 33.905,
+  "end": 34.805,
   "text": "only multiplies"
  },
  {
-  "start": 40.48,
-  "end": 40.86,
+  "start": 34.845,
+  "end": 35.225,
   "text": "and adds."
  },
  {
-  "start": 41.4,
-  "end": 42.38,
+  "start": 35.765,
+  "end": 36.745,
   "text": "GPUs are built"
  },
  {
-  "start": 42.44,
-  "end": 42.68,
+  "start": 36.805,
+  "end": 37.045,
   "text": "to do"
  },
  {
-  "start": 42.74,
-  "end": 43.58,
+  "start": 37.105,
+  "end": 37.945,
   "text": "exactly that"
  },
  {
-  "start": 44.0,
-  "end": 44.36,
+  "start": 38.365,
+  "end": 38.725,
   "text": "thousands"
  },
  {
-  "start": 44.42,
-  "end": 44.9,
+  "start": 38.785,
+  "end": 39.265,
   "text": "at once."
  },
  {
-  "start": 45.51,
-  "end": 46.0,
+  "start": 39.875,
+  "end": 40.365,
   "text": "Divide a run's"
  },
  {
-  "start": 46.06,
-  "end": 47.08,
+  "start": 40.425,
+  "end": 41.445,
   "text": "FLOPs by the"
  },
  {
-  "start": 47.14,
-  "end": 48.28,
+  "start": 41.505,
+  "end": 42.645,
   "text": "FLOPS you get,"
  },
  {
-  "start": 48.34,
-  "end": 49.06,
+  "start": 42.705,
+  "end": 43.425,
   "text": "and you have"
  },
  {
-  "start": 49.12,
-  "end": 50.44,
+  "start": 43.485,
+  "end": 44.805,
   "text": "GPU-hours."
  },
  {
-  "start": 50.5,
-  "end": 50.82,
+  "start": 44.865,
+  "end": 45.185,
   "text": "This is the"
  },
  {
-  "start": 50.88,
-  "end": 51.82,
+  "start": 45.245,
+  "end": 46.185,
   "text": "bill."
  }
 ]
