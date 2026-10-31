@@ -24,8 +24,10 @@ How it works:
        a gain and a peak limiter at -1.5 dBTP.
 
 --noise auto sets the pause threshold NOISE_MARGIN dB above the take's
-measured noise floor (tools/vo_floor.py). A fixed -35dB clipped word tails
-on 013 ep01 ("attacks" read as "attacked").
+measured noise floor (tools/vo_floor.py), but never below NOISE_MIN: on a
+quiet room (floor -65 to -74 dB) floor + 12 sits under the breaths, and
+014 eps 2-5 and 016 eps 1 and 3 found few or no pauses. A fixed -35dB
+clipped word tails on 013 ep01 ("attacks" read as "attacked").
 
 --map-in skips steps 1-3 and re-applies an existing time map to a new
 source, so a re-cleaned take keeps every beat's timing to the sample.
@@ -46,6 +48,7 @@ FADE = 0.008      # seconds of fade at each cut to avoid clicks
 LEAD_IN = 0.30    # silence before the first word
 TAIL = 0.50       # silence after the last word
 NOISE_MARGIN = 12.0   # --noise auto: dB above the measured noise floor
+NOISE_MIN = -45.0     # --noise auto: never lower; breaths sit above a quiet room's floor + 12
 PEAK_LIMIT = 0.84     # --level: limiter ceiling, linear (-1.5 dBFS)
 
 
@@ -212,10 +215,15 @@ def level(path: str, target: float, tol: float = 0.3, passes: int = 3) -> None:
     print(f"level: {start:.1f} -> {now:.1f} LUFS (limited at -1.5 dBFS)", file=sys.stderr)
 
 
+def auto_threshold(floor_db: float) -> float:
+    """NOISE_MARGIN dB above the floor, but never below NOISE_MIN."""
+    return max(floor_db + NOISE_MARGIN, NOISE_MIN)
+
+
 def auto_noise(path: str) -> str:
-    """--noise auto: NOISE_MARGIN dB above the take's measured floor."""
+    """--noise auto: the pause threshold from the take's measured floor."""
     from vo_floor import measure  # numpy; only needed here
-    return f"{measure(path) + NOISE_MARGIN:.1f}dB"
+    return f"{auto_threshold(measure(path)):.1f}dB"
 
 
 def parse_range(s: str) -> tuple[float, float]:

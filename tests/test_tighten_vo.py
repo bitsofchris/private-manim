@@ -116,5 +116,15 @@ class FfmpegCommand(unittest.TestCase):
         self.assertEqual(cmd[-1], "out.wav")
 
 
+
+class AutoThreshold(unittest.TestCase):
+    def test_noisy_room_is_floor_plus_margin(self):
+        self.assertEqual(tv.auto_threshold(-54.0), -42.0)
+
+    def test_quiet_room_stops_at_the_minimum(self):
+        # 014 ep02: floor -65.3 dB put auto at -53, under the breaths
+        self.assertEqual(tv.auto_threshold(-65.3), tv.NOISE_MIN)
+
+
 if __name__ == "__main__":
     unittest.main()
