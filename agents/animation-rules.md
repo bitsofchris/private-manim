@@ -31,6 +31,8 @@
    *Why:* 013 ep04's axis names ("recall" ↔ "precision") swapped on opposite vertical arcs, still crossed at one height, and collided mid-move; `check` and the contact sheet both missed it.
 8. **A mobject that stands for a thing stays that mobject through the transition. Use `Transform` only when the object keeps its identity, and `FadeOut`+`FadeIn` when it doesn't.**
    *Why:* Heer & Robertson's "respect semantic correspondence" says marks for one data point must not be reused for a different one.
+8a. **In a flow driven by the clock, anything that belongs to an item (its lane, row, colour) comes from the item's own index, never from the clock's step.**
+   *Why:* rule 8 for HyperFrames flows. 014 ep04's stream forked to two workers with each sample's lane set by `(step − k) % 2`; `step` ticks every 0.6 s, so every sample bounced left, right, left on its way down (Chris: "one goes left then bounces right over and over"). Keyed to the slot, `k % 2`, each sample keeps one lane and they alternate, round robin.
 9. **Give any move the viewer must track at least `S.BEAT`. Use `S.HOLD`-scale run times (about 1 s) for staged steps. Never use `S.QUICK` for a change that carries meaning.**
    *Why:* Heer & Robertson recommend about 1 s per stage, because half-second stages hurt tracking. Tversky's apprehension principle says animations fail when too fast to perceive.
 10. **After each key reveal, `self.beat("HOLD")` before the next change starts.**

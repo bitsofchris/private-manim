@@ -28,7 +28,7 @@ Agreed (Chris, 2026-10-25 / 10-28):
 - "NanoTST" is never in a title (zero search volume); in VO it is "a tiny
   time-series transformer" if named at all.
 
-Plan and the lecture-take line mine: `agents/plans/014-pytorch-dataloading-series.md`.
+Plan and the lecture-take line mine: `agents/archive/014-pytorch-dataloading-series.md`.
 
 ## Who it is for
 
@@ -154,6 +154,15 @@ station as it is named (ep 2), `__getitem__` (ep 3), `__iter__` with the
 sampler crossed out (ep 4), the twin batches then the fix (ep 5). Teal is
 data you can see (samples, the batch tensor's rows).
 
+One episode-only image: **the stream** (ep 4, `ep04-iterable-dataset/_kit/stream.js`,
+beats 3 and 5–7). Shards at the top, one pipe down through an `__iter__`
+gate, samples one at a time into a plain DataLoader bar; it reorders and
+loads a shard (shuffling) and forks to two workers (splitting). Chris,
+10/29: the machine's four stations say where loading happens, not what
+streaming is. Never on screen with the machine or the card; it
+crossfades like the flip. Ep 5's worker trap could reuse its fork (then
+promote it to `_kit/`).
+
 Engine: `ENGINE: hyperframes` for every episode. Nothing needs axes. Ep 1
 draws the training loop (diagram 1's six boxes) with the same card style,
 so the batch that leaves ep 1's loader is the batch that leaves ep 2's
@@ -218,7 +227,7 @@ step 7). Ep 2 ends as recorded, on the batch arriving, with no closer.
 - The DataLoader never loads your data; your Dataset does (ep 2's unread
   if-time beat).
 - Shuffling on a stream: a shuffle buffer, or pre-shuffled shards.
-- torchdata.nodes: the next series (`agents/plans/014-pytorch-dataloading-series.md`,
+- torchdata.nodes: the next series (`agents/archive/014-pytorch-dataloading-series.md`,
   "Out of scope").
 
 ## Checklist
@@ -228,7 +237,7 @@ step 7). Ep 2 ends as recorded, on the batch arriving, with no closer.
 | 1 | `ep01-training-loop/` | x | x | x | x | |
 | 2 | `ep02-dataloader-explained/` | x | x | x | x | |
 | 3 | `ep03-dataset-class/` | x | x | x | x | |
-| 4 | `ep04-iterable-dataset/` | x | | | | |
+| 4 | `ep04-iterable-dataset/` | x | x | x | x | |
 | 5 | `ep05-num-workers/` | x | x | x | x | |
 
 VO means cut into the folder's `vo_raw.m4a`, with `script.md`. Build

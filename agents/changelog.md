@@ -5,6 +5,10 @@ that forced it. Newest first.
 
 ## 2026-10-31
 
+- `agents/style.md` Shorts rules: a process the series image abstracts gets its own picture, one more image never on screen with another, crossfaded like the flip. 014 `SERIES.md`: the stream noted as ep 4's episode-only image (candidate for `_kit/` if ep 5 reuses its fork). `agents/parts.md`: the stream row (1 use). (014 ep04: Chris, "show what streaming means"; beats 3 and 5–7 rebuilt off the four-station grid)
+- `agents/animation-rules.md` 8a: in a clock-driven flow, an item's lane, row or colour comes from its own index, never the clock's step. (014 ep04: samples bounced between the two worker lanes every 0.6 s)
+- HyperFrames brief: `querySelector` crashes `hf_state_check`'s stub DOM (keep the refs `node()` returns); the kit wish list adds a flow stopped at frame 0's phase. Runbook shell traps: a commit refused for "unmerged files" means another session is mid-merge; unstage your paths and wait. Both landed inside 015's update-pass commit (9e971e8), which committed those two files whole. (014 ep04)
+- Janitor: `agents/plans/014-pytorch-dataloading-series.md` → `agents/archive/` (all five episodes assembled; `SERIES.md` and `SCRIPTS.md` links updated). 014 `SERIES.md`: ep 4 ticked Storyboard, Beats, Assembled. (014 ep04)
 - `tools/seam_check.py`: snapshots in a per-run temp folder, so parallel beat agents no longer overwrite each other's frames. (015 ep1)
 - `tools/hf_state_check.js`: a bar `{ a, b }` with `b <= a` compares as hidden. (015 ep1)
 - `videos/015-python-gil/_kit/kitchen.js`: `SC.swap`, `SC.pulseUntil`, `SC.hopKnife`, `SC.pathAlong`, `SC.cooksPatch`; `pulse` exactly 0 at both ends; `state()` takes several patches; header lists the drawing changes deferred to the next kit pass. (015 ep1, ep2)

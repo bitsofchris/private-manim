@@ -60,6 +60,16 @@ Rules that are specific to Shorts:
   ~6 s unless that image is itself moving through distinct states. The
   seam-state kit makes a return to an image cheap (the state is data),
   so reuse images rather than inventing more.
+- **A process the series image abstracts gets its own picture.** When
+  several beats explain how something works over time (a stream read
+  forward, shard by shard, one sample at a time), draw that process
+  rather than lighting stations on the series image: the series image
+  says *where* a thing happens, not *how* it flows. Plan it as one more
+  image, never on screen with another, crossfaded like the code-card
+  flip, and return to the series image on the line that does (014 ep04's
+  stream for beats 3 and 5–7, back to the machine on "the data loader on
+  top is the same"). Chris, 014 ep04: "spend a few more beats away from
+  the four-step grid and really show what streaming means".
 - **A part arrives when the VO names it.** Frame 0 shows what line 1
   talks about, not every part the Short will use. A part the VO first
   names later (016 ep01's CPU, named at 14 s) is off screen until then

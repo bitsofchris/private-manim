@@ -5,7 +5,7 @@ in his own words before recording. Every script: line 1 is the answer and
 says the search phrase; each thing said once; code on screen, not in the
 VO; the closer is the viewer's next move. One beat per script is marked
 *(if time)*: the detour the viewer would not miss, since takes run long.
-Numbers come from the ledger in `../../agents/plans/014-pytorch-dataloading-series.md`
+Numbers come from the ledger in `../../agents/archive/014-pytorch-dataloading-series.md`
 (the notebook: 512-point series, batch `[32, 512]`, two workers, batch
 size four).
 
