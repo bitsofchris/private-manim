@@ -30,6 +30,10 @@ clean").
 | Line-drawn agents and knowledge bases (human, agent with 1 and 0 eyes, janitor, layer props) | `videos/_shared/web/cast/cast.js` | the cast kit; starter and sign-off frame `prototypes/hyperframes/cast/`; rules in `agents/style.md` "Agents and knowledge bases" |
 | The Classifier Metrics series (five Shorts: the accuracy trap / confusion matrix, precision vs recall, ROC, AUC and the PR curve, the operating point) | `videos/013-classifier-metrics/` | `SERIES.md` (ledger, the two recurring images, search phrases, checklist), `_data/make_scores.py` (every number, seed 13), each episode's `_kit/score.js` |
 | The Harness Engineering series (four Shorts: the harness, the map, the four-layer knowledge base, not keeping agents busy) | `videos/012-harness-engineering/` | `SERIES.md` (the episodes, what was cut, checklist), `TRANSCRIPT.md` (the full take), each `epNN/script.md` (what was said, cut times); the dropped plan is in `_archive/` |
+| The PyTorch Dataloading series (five Shorts: the training loop, the DataLoader, the Dataset class, the IterableDataset, num_workers) | `videos/014-pytorch-dataloading/` | `SERIES.md` (ledger, search phrases, checklist), `TRANSCRIPT.md`, the shared kit `_kit/` (the machine `machine.js`, the code card `code.js`, the ledger `data.js`), each episode's `_kit/seam.js` |
+| The Python GIL series (two Shorts: the GIL, threads vs processes) | `videos/015-python-gil/` | `SERIES.md`, `_kit/` |
+| The Understanding the GPU series (eight Shorts, FLOPs to the profiler) | `videos/016-understanding-the-gpu/` | `SERIES.md`, `SCRIPTS.md`, `EPISODE_PROMPT.md`, the shared kit `_kit/` (`chip.js`, `code.js` adapted from 014's) |
+| The Apache Spark series (three Shorts: the cluster, the shuffle, skew) | `videos/017-apache-spark/` | `SERIES.md` |
 | Audio and assembly tools | `tools/` | tighten, word fixes, beat cuts, captions, assemble, contact sheets, seam check |
 | Tests | `tests/` | `uv run --no-sync python -m unittest discover -s tests` |
 | What changed in the system and why | `agents/changelog.md` | one line per rule, token, part, or tool change |
