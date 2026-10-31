@@ -4,7 +4,8 @@
 # Usage:
 #   tools/review_frames.sh [--at T1,T2,...] <video.mp4|anim.gif> [cols] [frames] [out.png]
 # Defaults: cols=4, frames=2*cols, each tile 360 px wide (a phone held at
-# arm's length), out=$REVIEW_DIR or $TMPDIR/manim-review/<name>_sheet.png.
+# arm's length), out=$REVIEW_DIR or $TMPDIR/manim-review/<name>_sheet.png,
+# where <name> is <video folder>_<clip> when the clip is under a media/ folder.
 # The first tile is frame 0 (what the viewer sees before deciding to swipe);
 # the last tile is always the final frame (the hold, and the next cut's match).
 # --at adds tiles at those seconds (cue times: did the change land on its word?),
@@ -17,6 +18,10 @@ in="${1:?usage: review_frames.sh [--at T1,T2,...] <video> [cols] [frames] [out.p
 cols="${2:-4}"
 frames="${3:-$((cols * 2))}"
 name="$(basename "${in%.*}")"
+# Prefix the folder that holds media/ (the episode), so sessions building
+# different episodes in parallel don't overwrite each other's sheets (016 ep01).
+abs="$(cd "$(dirname "$in")" && pwd)/$(basename "$in")"
+if [[ "$abs" == */media/* ]]; then name="$(basename "${abs%%/media/*}")_${name}"; fi
 dir="${REVIEW_DIR:-${TMPDIR:-/tmp}/manim-review}"
 out="${4:-$dir/${name}_sheet.png}"
 mkdir -p "$(dirname "$out")"
