@@ -1,0 +1,52 @@
+00:00.001-00:03.120
+Tensor cores are the part of a GPU that does matrix math.
+
+00:03.120-00:06.000
+They're only as fast as memory can feed them.
+
+00:06.000-00:08.400
+Your data lives in GPU memory.
+
+00:08.400-00:12.000
+Before any math happens, it flows through cache into the cores.
+
+00:12.019-00:16.180
+A B200's tensor cores do about 2250 teraflops.
+
+00:16.180-00:19.460
+Memory delivers about 8 terabytes a second.
+
+00:19.460-00:26.340
+So each byte you load needs about 280 flops done on it or the cores will sit waiting.
+
+00:26.720-00:29.280
+A matrix multiply can clear that easily.
+
+00:29.280-00:33.120
+Each number it loads gets used in thousands of multiply and ads.
+
+00:33.120-00:34.480
+It's compute bound.
+
+00:34.480-00:40.080
+RELU does one operation per number, four bytes moved, and never touches the tensor cores.
+
+00:39.820-00:41.740
+That's over a thousand times short.
+
+00:41.740-00:43.820
+It's memory bound.
+
+00:43.820-00:46.620
+At dropout layer norm and it's a similar story.
+
+00:46.620-00:48.620
+A few operations per number.
+
+00:48.620-00:52.700
+When a step is slow, look at the small operations between the matmals.
+
+00:52.700-00:54.300
+That's your GPU waiting on memory
+
+
