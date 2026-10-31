@@ -11,6 +11,8 @@ Final cut: `media/short.mp4`, 44.0 s.
 
 ## Titles
 
+**Chosen (Chris, 2026-10-31): the search title.**
+
 Search title, for the person typing the phrase (43 characters, the phrase
 first, the answer after it):
 
