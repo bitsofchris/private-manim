@@ -25,298 +25,268 @@
   "text": "per token."
  },
  {
-  "start": 4.57,
+  "start": 4.88,
   "end": 5.18,
-  "text": "You spend 2"
- },
- {
-  "start": 5.24,
-  "end": 6.0,
-  "text": "FLOPs on the"
- },
- {
-  "start": 6.06,
-  "end": 6.52,
-  "text": "forward pass"
- },
- {
-  "start": 6.58,
-  "end": 7.2,
-  "text": "and about 4"
- },
- {
-  "start": 7.26,
-  "end": 7.52,
-  "text": "on the"
- },
- {
-  "start": 7.58,
-  "end": 8.18,
-  "text": "backward pass."
- },
- {
-  "start": 9.14,
-  "end": 9.44,
   "text": "Almost every"
  },
  {
-  "start": 9.5,
-  "end": 9.78,
+  "start": 5.24,
+  "end": 5.52,
   "text": "parameter"
  },
  {
-  "start": 9.84,
-  "end": 10.32,
+  "start": 5.58,
+  "end": 6.06,
   "text": "sits in a"
  },
  {
-  "start": 10.38,
-  "end": 10.82,
+  "start": 6.12,
+  "end": 6.56,
   "text": "weight matrix."
  },
  {
-  "start": 11.58,
-  "end": 11.94,
+  "start": 7.32,
+  "end": 7.68,
   "text": "Here's a tiny"
  },
  {
-  "start": 12.0,
-  "end": 12.81,
+  "start": 7.74,
+  "end": 8.55,
   "text": "one, 3 inputs"
  },
  {
-  "start": 12.87,
-  "end": 13.34,
+  "start": 8.61,
+  "end": 9.08,
   "text": "2 outputs"
  },
  {
-  "start": 13.4,
-  "end": 13.92,
+  "start": 9.14,
+  "end": 9.66,
   "text": "6 weights."
  },
  {
-  "start": 14.4,
-  "end": 15.1,
+  "start": 10.14,
+  "end": 10.84,
   "text": "Going forward"
  },
  {
-  "start": 15.16,
-  "end": 15.62,
+  "start": 10.9,
+  "end": 11.36,
   "text": "each weight"
  },
  {
-  "start": 15.68,
-  "end": 16.1,
+  "start": 11.42,
+  "end": 11.84,
   "text": "does one"
  },
  {
-  "start": 16.16,
-  "end": 16.8,
+  "start": 11.9,
+  "end": 12.54,
   "text": "multiply and"
  },
  {
-  "start": 16.86,
-  "end": 17.32,
+  "start": 12.6,
+  "end": 13.06,
   "text": "one add."
  },
  {
-  "start": 17.92,
-  "end": 18.240000000000002,
+  "start": 13.66,
+  "end": 13.98,
   "text": "So you have 2"
  },
  {
-  "start": 18.3,
-  "end": 18.72,
+  "start": 14.04,
+  "end": 14.46,
   "text": "FLOPs per"
  },
  {
-  "start": 18.78,
-  "end": 19.16,
+  "start": 14.52,
+  "end": 14.9,
   "text": "weight,"
  },
  {
-  "start": 19.22,
-  "end": 19.62,
+  "start": 14.96,
+  "end": 15.36,
   "text": "12 for this"
  },
  {
-  "start": 19.68,
-  "end": 20.24,
+  "start": 15.42,
+  "end": 15.98,
   "text": "entire layer."
  },
  {
-  "start": 20.55,
-  "end": 20.84,
+  "start": 16.29,
+  "end": 16.58,
   "text": "Coming"
  },
  {
-  "start": 20.9,
-  "end": 21.44,
+  "start": 16.64,
+  "end": 17.18,
   "text": "backwards now"
  },
  {
-  "start": 21.5,
-  "end": 22.1,
+  "start": 17.24,
+  "end": 17.84,
   "text": "the error has"
  },
  {
-  "start": 22.16,
-  "end": 22.64,
+  "start": 17.9,
+  "end": 18.38,
   "text": "to reach the"
  },
  {
-  "start": 22.7,
-  "end": 23.24,
+  "start": 18.44,
+  "end": 18.98,
   "text": "layer before."
  },
  {
-  "start": 23.74,
-  "end": 24.1,
+  "start": 19.48,
+  "end": 19.84,
   "text": "So the same"
  },
  {
-  "start": 24.16,
-  "end": 24.42,
+  "start": 19.9,
+  "end": 20.16,
   "text": "weights in"
  },
  {
-  "start": 24.48,
-  "end": 24.94,
+  "start": 20.22,
+  "end": 20.68,
   "text": "reverse"
  },
  {
-  "start": 25.0,
-  "end": 25.4,
+  "start": 20.74,
+  "end": 21.14,
   "text": "another"
  },
  {
-  "start": 25.46,
-  "end": 25.94,
+  "start": 21.2,
+  "end": 21.68,
   "text": "multiply and"
  },
  {
-  "start": 26.0,
-  "end": 26.46,
+  "start": 21.74,
+  "end": 22.2,
   "text": "add each."
  },
  {
-  "start": 27.02,
-  "end": 27.26,
+  "start": 22.76,
+  "end": 23.0,
   "text": "Then each"
  },
  {
-  "start": 27.32,
-  "end": 27.68,
+  "start": 23.06,
+  "end": 23.42,
   "text": "weight needs"
  },
  {
-  "start": 27.74,
-  "end": 28.06,
+  "start": 23.48,
+  "end": 23.8,
   "text": "its own"
  },
  {
-  "start": 28.12,
-  "end": 28.78,
+  "start": 23.86,
+  "end": 24.52,
   "text": "gradient for"
  },
  {
-  "start": 28.84,
-  "end": 29.5,
+  "start": 24.58,
+  "end": 25.24,
   "text": "the optimizer."
  },
  {
-  "start": 29.96,
-  "end": 30.44,
+  "start": 25.7,
+  "end": 26.18,
   "text": "Error times"
  },
  {
-  "start": 30.5,
-  "end": 31.42,
+  "start": 26.24,
+  "end": 27.16,
   "text": "input added to"
  },
  {
-  "start": 31.48,
-  "end": 32.02,
+  "start": 27.22,
+  "end": 27.76,
   "text": "a running total"
  },
  {
-  "start": 32.08,
-  "end": 32.8,
+  "start": 27.82,
+  "end": 28.54,
   "text": "is 2 more."
  },
  {
-  "start": 33.28,
-  "end": 33.82,
+  "start": 29.02,
+  "end": 29.56,
   "text": "That's 6 per"
  },
  {
-  "start": 33.88,
-  "end": 34.11,
+  "start": 29.62,
+  "end": 29.85,
   "text": "weight"
  },
  {
-  "start": 34.17,
-  "end": 34.64,
+  "start": 29.91,
+  "end": 30.38,
   "text": "per token."
  },
  {
-  "start": 35.14,
-  "end": 35.6,
+  "start": 30.88,
+  "end": 31.34,
   "text": "So training"
  },
  {
-  "start": 35.66,
-  "end": 36.88,
+  "start": 31.4,
+  "end": 32.62,
   "text": "compute is 6"
  },
  {
-  "start": 36.94,
-  "end": 37.38,
+  "start": 32.68,
+  "end": 33.12,
   "text": "times"
  },
  {
-  "start": 37.44,
-  "end": 37.98,
+  "start": 33.18,
+  "end": 33.72,
   "text": "parameters"
  },
  {
-  "start": 38.04,
-  "end": 38.78,
+  "start": 33.78,
+  "end": 34.52,
   "text": "times tokens."
  },
  {
-  "start": 39.14,
-  "end": 39.68,
+  "start": 34.88,
+  "end": 35.42,
   "text": "An 8 billion"
  },
  {
-  "start": 39.74,
-  "end": 40.5,
+  "start": 35.48,
+  "end": 36.24,
   "text": "parameter model"
  },
  {
-  "start": 40.56,
-  "end": 41.32,
+  "start": 36.3,
+  "end": 37.06,
   "text": "at 15,000"
  },
  {
-  "start": 41.38,
-  "end": 41.78,
+  "start": 37.12,
+  "end": 37.52,
   "text": "tokens per"
  },
  {
-  "start": 41.84,
-  "end": 42.62,
+  "start": 37.58,
+  "end": 38.36,
   "text": "second per GPU"
  },
  {
-  "start": 42.68,
-  "end": 43.08,
+  "start": 38.42,
+  "end": 38.82,
   "text": "is doing"
  },
  {
-  "start": 43.14,
-  "end": 44.76,
+  "start": 38.88,
+  "end": 40.5,
   "text": "720 teraflops."
  }
 ]

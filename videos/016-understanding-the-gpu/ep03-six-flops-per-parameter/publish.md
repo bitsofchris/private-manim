@@ -5,7 +5,7 @@ autocomplete 10/27; second choice "scaling laws llm"). Both titles carry
 "FLOPs" and "LLM"; the description's line 1 has both in its first
 clause. Before publishing, glance at YouTube's results for it.
 
-Final cut: `media/short.mp4`, 45.4 s.
+Final cut: `media/short.mp4`, 41.1 s.
 
 ## Titles
 
@@ -42,14 +42,14 @@ Level up human.
 ## Substack note
 
 ```
-"6 × params × tokens" is in every scaling-law paper and MFU formula, but where does the 6 come from? Each weight does a multiply and an add going forward (2), then twice that coming back: once to pass the error on, once to build its own gradient (4). That's the whole rule. 45 seconds.
+"6 × params × tokens" is in every scaling-law paper and MFU formula, but where does the 6 come from? Each weight does a multiply and an add going forward (2), then twice that coming back: once to pass the error on, once to build its own gradient (4). That's the whole rule. 41 seconds.
 ```
 
 ## Checked against the final cut
 
-Reviewed on frame sheets of `media/short.mp4` (45.40 s) 2026-10-29. On
+Reviewed on frame sheets of `media/short.mp4` (41.14 s) 2026-10-31. On
 screen: `6 × params` over the full FLOP bar labelled `→ 2` / `← 4`, the
-layer `x1 x2 x3` → `y1 y2` with pulses running (beat 1); the matrix `W`
+layer `x1 x2 x3` → `y1 y2` with pulses running, the bar swelling on "6 FLOPs" (beat 1); the matrix `W`
 and `y = W x`, the six lines flashing (2); `0 FLOPs` → `12 FLOPs` with ×
 and + riding each line (3); `dx` / `dy`, `dx = Wᵀ dy`, 12 → `24 FLOPs`
 (4); `dW = dy xᵀ`, the dW cells filling, 24 → `36 FLOPs` (5); `36 = 6 ×

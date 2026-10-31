@@ -58,7 +58,7 @@ Short ends on "720 teraflops" over the chip and the card.
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | Training an LLM costs about six FLOPs per parameter per token. You spend two FLOPs on the forward pass and about four on the backward pass. | Frame 0 already working: the tiny layer mid-stage (3 input dots left, 2 output dots right, 6 weight lines, teal), a value pulse running along the lines; above it the FLOP bar, full, in three equal segments, labelled `→ 2` under the first and `← 4` under the other two; the readout `6 × params` (magenta hero). On "two FLOPs on the forward pass" the first segment pulses; on "four on the backward" the other two. |
+| 01_hook | Training an LLM costs about six FLOPs per parameter per token. | Frame 0 already working: the tiny layer mid-stage (3 input dots left, 2 output dots right, 6 weight lines, teal), a value pulse running along the lines; above it the FLOP bar, full, in three equal segments, labelled `→ 2` under the first and `← 4` under the other two; the readout `6 × params` (magenta hero). On "six FLOPs" the whole bar swells once. |
 | 02_layer | Almost every parameter sits in a weight matrix. Here's a tiny one: three inputs, two outputs, six weights. | The bar and readout clear. On "weight matrix" the matrix `W` (2 × 3 cells) grows in under the layer with `y = W x` beside it (hero: the matrix). On "three inputs" the input dots pulse, "two outputs" the output dots, "six weights" the six lines flash once in order, each with its matrix cell (hero: the lines). |
 | 03_forward | Going forward, each weight does one multiply and one add. So you have two FLOPs per weight, twelve for this entire layer. | The bar returns empty. Left to right, a value runs along each line, the line ticks `×` then `+`; the first segment fills one sixth per line; the readout counts `0 FLOPs` → `12 FLOPs`, two per line; on "twelve" it lands (magenta hero: the readout). |
 | 04_back_input | Coming backwards now, the error has to reach the layer before. So the same weights in reverse, another multiply and add each. | Output labels become `dy1 dy2`, inputs `dx1 dx2 dx3`; `dx = Wᵀ dy` replaces `y = W x`. The error runs right to left along the same six lines, each ticking `×`, `+`; the second segment fills; readout 12 → 24. Hero: the backward flow (lines and the filling segment). |
@@ -83,7 +83,7 @@ Layout (px, 1080 × 1920; safe x 65–950, y 230–1536):
   the readout → the backward flow → `dW` → `36 = 6 × 6` → the code line
   → `720 TFLOPS`.
 
-## Final beats (the contract; `vo_final.wav` 45.400 s, master seconds)
+## Final beats (the contract; `vo_final.wav` 41.140 s, master seconds)
 
 Beat brief: `agents/beat-brief-hyperframes.md` plus this table; seam
 states `SC.SEAM` in `_kit/seam.js`; links per beat: `vendor`
@@ -91,14 +91,14 @@ states `SC.SEAM` in `_kit/seam.js`; links per beat: `vendor`
 
 | # | Folder | Start | Length | VO |
 |---|---|---:|---:|---|
-| 1 | `01_hook` | 0.000 | 8.660 | Training an LLM costs about 6 FLOPs per parameter per token. You spend 2 FLOPs on the forward pass and about 4 on the backward pass. |
-| 2 | `02_layer` | 8.660 | 5.500 | Almost every parameter sits in a weight matrix. Here's a tiny one, 3 inputs, 2 outputs, 6 weights. |
-| 3 | `03_forward` | 14.160 | 6.325 | Going forward, each weight does one multiply and one add. So you have 2 FLOPs per weight, 12 for this entire layer. |
-| 4 | `04_back_input` | 20.485 | 6.255 | Coming backwards now, the error has to reach the layer before. So the same weights in reverse, another multiply and add each. |
-| 5 | `05_back_weight` | 26.740 | 6.300 | Then each weight needs its own gradient for the optimizer. Error times input added to a running total is 2 more. |
-| 6 | `06_total` | 33.040 | 1.850 | That's 6 per weight per token. |
-| 7 | `07_code` | 34.890 | 4.070 | So training compute is 6 times parameters times tokens. |
-| 8 | `08_run` | 38.960 | 6.440 | An 8 billion parameter model at 15,000 tokens per second per GPU is doing 720 teraflops. |
+| 1 | `01_hook` | 0.000 | 4.400 | Training an LLM costs about 6 FLOPs per parameter per token. |
+| 2 | `02_layer` | 4.400 | 5.500 | Almost every parameter sits in a weight matrix. Here's a tiny one, 3 inputs, 2 outputs, 6 weights. |
+| 3 | `03_forward` | 9.900 | 6.325 | Going forward, each weight does one multiply and one add. So you have 2 FLOPs per weight, 12 for this entire layer. |
+| 4 | `04_back_input` | 16.225 | 6.255 | Coming backwards now, the error has to reach the layer before. So the same weights in reverse, another multiply and add each. |
+| 5 | `05_back_weight` | 22.480 | 6.300 | Then each weight needs its own gradient for the optimizer. Error times input added to a running total is 2 more. |
+| 6 | `06_total` | 28.780 | 1.850 | That's 6 per weight per token. |
+| 7 | `07_code` | 30.630 | 4.070 | So training compute is 6 times parameters times tokens. |
+| 8 | `08_run` | 34.700 | 6.440 | An 8 billion parameter model at 15,000 tokens per second per GPU is doing 720 teraflops. |
 
 ## Seam states (`_kit/seam.js`; layer fields as `SC.LAYER.LREST`, chip fields as `SC.REST`, unless named)
 
@@ -133,6 +133,12 @@ Sound unknown, so no denoise), floor −73 dB. `tighten_vo.py --max-gap
   weights", "for this entire layer".
 - The Short ends on "teraflops." (the take's end).
 - Parakeet on `vo_final.wav` reads clean, every sentence whole.
+- After the first cut (Chris, 10/31): "You spend 2 FLOPs on the forward
+  pass and about 4 on the backward pass" cut as redundant; it dragged out
+  the opening. `cut_vo.py --cut 4.26-8.52` (both edges in digital
+  silence) → **41.14 s**. Beat 01 is 4.40 s; beats 02–08 are untouched,
+  shifted −4.26 s. Re-transcribed: "…per token. Almost every
+  parameter…" reads clean.
 
 Caption fixes in `words.json`: "in" → "an" (Training an LLM), "flops" →
 "FLOPs", "1" → "one" (one multiply, one add), "15 ,000" → "15,000",
