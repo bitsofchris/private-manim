@@ -10,6 +10,9 @@
 // Dataset card's left half, y 412–488, x 75–415 (clear of the samples hopping
 // at x ~430–590). They fade with the machine on a flip.
 //
+// Since cut 2 the Short draws its shards with the stream (ep/stream.js); S.shards here is
+// used only by 00_layout. Kept so 00_layout still renders.
+//
 // S.shards fields (all optional; off by default):
 //   o 0..1          opacity
 //   order [a,b,c]   which card sits in slot 0, 1, 2 (identity 0,1,2; a permutation
