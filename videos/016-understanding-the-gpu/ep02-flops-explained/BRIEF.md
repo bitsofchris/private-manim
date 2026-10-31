@@ -90,6 +90,8 @@ The VO lost "A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion."
 (cut 35.50–41.98) in v2. v3 lost beat 04, "The point floats, so one format holds
 a ten-millionth and three million." (cut 14.525–20.16, its exact span): 03
 runs into 05, `SEAM[4]` = `SEAM[3]`, and 05–09 moved 5.635 s earlier.
+v4 lost beat 09 ("Divide a run's FLOPs … This is the bill.", cut 39.57–end, 0.6 s
+of silence in its place): 08 is the last beat, 10.305 s, ending on `SEAM[8]`.
 
 A@0.4 FLOP@0.48 is@0.89 one@1.02 multiply or@1.32 one@2.1 add,@2.24 and@3.04 it's@3.1 the@3.25 unit@3.34 that@3.64 all@3.84 AI@4.08 compute@4.36 is@4.74 measured@4.9 in.@5.18 |
 FLOP@5.92 stands@6.18 for@6.4 floating@6.62 point@7.08 operation.@7.36 |
@@ -97,8 +99,7 @@ Computers@8.66 store@9.04 decimals@9.28 as@9.72 a@9.92 floating@10.06 point,@10.
 Every@14.765 weight,@14.905 activation,@15.285 and@15.865 gradient@15.945 is@16.145 one@16.445 of@16.625 these@16.745 numbers.@16.865 |
 FLOPs@17.885 with@18.185 a@18.345 small@18.465 s@18.725 is@18.905 a@19.045 count.@19.165 Training@20.305 an@20.445 8@20.625 billion@20.845 parameter@21.045 model@21.485 on@21.865 15,000@22.065 tokens@22.865 costs@23.325 about@24.005 720@24.465 trillion@25.285 FLOPs.@25.885 |
 FLOPS@26.984 with@27.225 a@27.385 capital@27.485 S@27.825 is@28.065 per@28.205 second.@28.425 This@28.965 is@29.085 a@29.185 rate.@29.345 |
-A@30.095 transformer's@30.205 compute@30.905 is@31.245 nearly@31.365 all@31.605 matrix@31.985 multiplies@32.345 and@32.985 a@33.305 matmul@33.385 is@33.765 only@33.905 multiplies@34.225 and@34.845 adds.@34.945 GPUs@35.765 are@36.485 built@36.565 to@36.805 do@37.005 exactly@37.105 that,@37.585 thousands@38.365 at@38.785 once.@38.965 |
-Divide a@39.875 run's@40.205 FLOPs@40.425 by@41.125 the@41.305 FLOPS you@41.505 get,@42.405 and@42.705 you@42.945 have@43.065 GPU-hours.@43.485 This@44.865 is@45.025 the@45.105 bill.@45.245
+A@30.095 transformer's@30.205 compute@30.905 is@31.245 nearly@31.365 all@31.605 matrix@31.985 multiplies@32.345 and@32.985 a@33.305 matmul@33.385 is@33.765 only@33.905 multiplies@34.225 and@34.845 adds.@34.945 GPUs@35.765 are@36.485 built@36.565 to@36.805 do@37.005 exactly@37.105 that,@37.585 thousands@38.365 at@38.785 once.@38.965
 
 Some words.json starts sit 0.06–0.2 s early (the end of the word before);
 v1's agents checked onsets on vo_final.wav's envelope, and so may you.

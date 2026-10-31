@@ -20,8 +20,12 @@ the title must say AI or GPU; "teraflops explained" is the second phrase).
 The take says "A FLOP is…" in its first two words.
 
 **One idea:** a FLOP is one multiply or one add, and AI is nearly nothing
-else, so FLOPs are the unit of AI work. **The closer** (as recorded): divide
-a run's FLOPs by the FLOPS you get and you have GPU-hours, the bill.
+else, so FLOPs are the unit of AI work. **The closer** (v4): "GPUs are
+built to do exactly that, thousands at once": every core lit. The recorded
+closer (divide FLOPs by FLOPS for GPU-hours, the bill) was cut after v3:
+Chris read it as "FLOPs have nothing to do with GPU hours; I pay for the
+hours". FLOPs ÷ FLOPS is the hours you need, but the line skipped that step;
+a later episode can say it properly.
 
 The VO is `script.md` ("As recorded"); the planned script (v2 of this file,
 `../SCRIPTS.md`) is reference only. Where the take left it: "FLOP stands for
@@ -57,7 +61,7 @@ From `../SERIES.md` and `../_kit/data.js`; ep 2's own strings are in
   2 outputs).
 - The count rolls up as `720,000,000,000,000` and lands as `720 trillion
   = 7.2 × 10¹⁴` (the ledger's 7.2e14).
-- The bill: `FLOPs ÷ FLOPS` / `= GPU-hours = $`. No numbers.
+- ~~The bill~~ (beat 09, cut in v4).
 - The chip: the series 12 × 12 grid, dark at rest, teal when working; no
   label claims a core count. Chip title `GPU` throughout.
 
@@ -70,7 +74,7 @@ ep 7's word). GPU memory stays at rest on the right. Ep 2's own parts
 
 - **The top card** (y 245–435, in the CPU and queue's place): one or two
   lines of text that change with the VO: the operation and its counter,
-  the acronym, the word, the count, the rate, the matmul, the bill.
+  the acronym, the word, the count, the rate, the matmul.
 - **The float panel** (over the chip and memory, y 450–1078), grown out of
   one cell: a decimal row and its scientific form, and the anatomy boxes.
 - **The code card** (`../_kit/code.js`) in the bottom slot, centred at y
@@ -80,8 +84,8 @@ ep 7's word). GPU memory stays at rest on the right. Ep 2's own parts
 
 Scene changes (v3): inside one core (0–5.6) → acronym (5.6–8.3) → float
 panel (8.3–14.5) → memory (14.5–17.6) → count + code (17.6–26.7) → rate
-(26.7–29.9) → matmul, inside one core then the chip (29.9–39.6) → bill
-(39.6–46.25).
+(26.7–29.9) → matmul, inside one core then the chip, held to the end
+(29.9–40.17).
 
 ## Beats (visual brief)
 
@@ -102,11 +106,11 @@ not ledger numbers.
 | 06_count | FLOPs with a small s is a count. Training an 8-billion-parameter model on 15,000 tokens costs about 720 trillion FLOPs. | `FLOPs`, small s the hero. "Training": the code line types (lit "count") and under `FLOPs` the count rolls up (mono digits) as it types, landing on "720": `720 trillion = 7.2 × 10¹⁴`. |
 | 07_rate | FLOPS with a capital S is per second. This is a rate. | `FLOPS` / `per second`, capital S the hero; the code line unlit. "per second" (34.06): the 1 s clock appears at the card's right and sweeps once, the hero. |
 | 08_matmul | A transformer's compute is nearly all matrix multiplies, and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. | The code card and clock fade. "matrix" (37.62): `y = x @ W`. "matmul" (39.02): back inside one core for one output: x and w tiles; from "only" (39.54) each pair runs `y += x·w` (× teal, then +), y going 0.5, 3.5, 4.5 and the counter to 6 FLOPs; the running line the hero. "thousands" (44.00): the panel shrinks back, every cell lights, the chip the hero. |
-| 09_bill | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. | "Divide" (45.51): `FLOPs ÷ FLOPS`, hero none. "GPU-hours" (49.12): `= GPU-hours`, the hero. "bill" (50.88): ` = $`, the hero. Still to the end; every cell lit. |
+| ~~09_bill~~ | ~~Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill.~~ | Cut in v4; 08 is the last beat. (Was:) "Divide" (45.51): `FLOPs ÷ FLOPS`, hero none. "GPU-hours" (49.12): `= GPU-hours`, the hero. "bill" (50.88): ` = $`, the hero. Still to the end; every cell lit. |
 
 ## Final beats (the contract; `beats.json`)
 
-VO 46.250 s (`vo_final.wav`). v3, Chris after v2: "The point floats, so one format holds a ten-millionth and three million." cut (`tools/cut_vo.py --cut 14.525-20.16`, exactly beat 04's span, both edges in digital silence; 51.885 → 46.250 s; beats 05–09 keep their lengths and move 5.635 s earlier). v2, Chris after the first cut: "A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion." cut (`tools/cut_vo.py --cut 35.50-41.98`, both edges in digital silence; 58.365 → 51.885 s). From 61.9 s raw: no line cut; pauses (which
+VO 40.170 s (`vo_final.wav`). v4, Chris after v3: "Cut the bill line" (`tools/cut_vo.py --cut 39.57-46.25:0.6`: everything after beat 08's end, 0.6 s of silence in its place so 08 holds its still 1.2 s, 0.9 s past "once."; 46.250 → 40.170 s; 08's length 9.705 → 10.305). v3, Chris after v2: "The point floats, so one format holds a ten-millionth and three million." cut (`tools/cut_vo.py --cut 14.525-20.16`, exactly beat 04's span, both edges in digital silence; 51.885 → 46.250 s; beats 05–09 keep their lengths and move 5.635 s earlier). v2, Chris after the first cut: "A B200 peaks near 2,250 teraFLOPS in bf16. Tera is a trillion." cut (`tools/cut_vo.py --cut 35.50-41.98`, both edges in digital silence; 58.365 → 51.885 s). From 61.9 s raw: no line cut; pauses (which
 in this take are breaths at about −50 dB, so the threshold is −45 dB, not
 `auto`'s −53.8) capped at 0.3 s.
 
@@ -119,8 +123,8 @@ in this take are breaths at about −50 dB, so the threshold is −45 dB, not
 | 5 | 14.525 | 3.030 | `05_memory` | Every weight, activation, and gradient is one of these numbers. |
 | 6 | 17.555 | 9.130 | `06_count` | FLOPs with a small s is a count. Training an 8 billion parameter model on 15,000 tokens costs about 720 trillion FLOPs. |
 | 7 | 26.685 | 3.180 | `07_rate` | FLOPS with a capital S is per second. This is a rate. |
-| 8 | 29.865 | 9.705 | `08_matmul` | A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. |
-| 9 | 39.570 | 6.680 | `09_bill` | Divide a run's FLOPs by the FLOPS you get, and you have GPU-hours. This is the bill. |
+| 8 | 29.865 | 10.305 | `08_matmul` | A transformer's compute is nearly all matrix multiplies and a matmul is only multiplies and adds. GPUs are built to do exactly that, thousands at once. |
+| — | — | — | ~~`09_bill`~~ | (cut) |
 
 ## Seam states (code: `_kit/seam.js`, `SC.SEAM[0..9]`)
 
@@ -137,8 +141,8 @@ Every state: `cpu 0, queueO 0, strip 0, shimmer 1`, memory at rest, title
 | 5 (05→06) | 17.555 | hbm | word `gradients` | off | off (stream off) | lit 0.32 | off |
 | 6 (06→07) | 26.685 | null | count, `720 trillion = 7.2 × 10¹⁴` | off | off | lit 0.32 | line 1, lit `count`, cy 1245 |
 | 7 (07→08) | 29.865 | clock | rate, clock swept (1), on | off | off | lit 0.32 | line 1, unlit |
-| 8 (08→09) | 39.570 | chip | matmul `y = x @ W` | off | off | lit 1 | off |
-| 9 (end) | 46.250 | bill | frac, `$` on | off | off | lit 1 | off |
+| 8 (end) | 40.170 | chip | matmul `y = x @ W` | off | off | lit 1 | off |
+| 9 | — | unused (beat 09 cut) | | | | | |
 
 ## Facts to keep straight (notes, not VO)
 
@@ -152,8 +156,5 @@ Every state: `cpu 0, queueO 0, strip 0, shimmer 1`, memory at rest, title
   notation and names no format; ep 4 owns bit widths.
 - **Where the numbers live:** weights, activations and gradients sit in GPU
   memory (HBM/VRAM) during training, hence memory as beat 05's hero.
-- **"Divide a run's FLOPs by the FLOPS you get"** gives seconds; GPU-hours
-  is that over 3,600 per GPU. The VO's "GPU-hours" is the unit you pay for;
-  the card shows no numbers. "The FLOPS you get" is below peak (ep 7's MFU).
 - **720 trillion FLOPs for 15,000 tokens** uses 6 × params per token (ep
   3), which ignores attention FLOPs and activation recompute.
