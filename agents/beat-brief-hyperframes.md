@@ -253,9 +253,14 @@ What the kit owes its beats (013 ep04):
 - Emphasis is a kit call or a state field, not beat code: a `pulse(part,
   k)` that scales a part (SVG and labels) about its centre for one frame,
   a handle for every label a VO line can name, and fields that can grow
-  (`workers: 1.5` is the second worker half grown). 014 ep02 and ep03:
-  seven beats wrote the same scale-and-restore pulse by hand, and beat 6
-  grew a worker by reaching into the station's `<g>`.
+  (`workers: 1.5` is the second worker half grown), on the code card's
+  rows too (a code beat where only the lit line changes fails
+  `sweep_static` unless a row swells). 014 ep02 and ep03: ten beats wrote
+  the same scale-and-restore pulse by hand, ep02's beat 6 grew a worker by
+  reaching into the station's `<g>`, and ep03's brief named the wrong
+  label (`parts.sampler.dom[0]` is the station's name; the indices are
+  `dom[1]`). Until the kit has handles, a brief names a label by its text,
+  not its index.
 
 Before rendering, check your beat's states against the table:
 `node "$(git rev-parse --show-toplevel)"/tools/hf_state_check.js NN_beat FROM TO`

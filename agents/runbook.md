@@ -332,6 +332,9 @@ are built from it in step 7, so one fix serves both. `tools/fix_words.py`
 does it in one line per fix: `--join "agent's MD," "AGENTS.md,"` (merged
 words), `--sub harnesses "harness is"`, and `--break-after WORD` where the
 recognizer ran two segments together; `WORD@SECONDS` picks one occurrence.
+A spoken code name is captioned as the card spells it: `--sub getitem
+__getitem__` (014 ep03: Chris approved `__len__` / `__getitem__` in the
+captions).
 
 Then the final beat table: `tools/beat_cuts.py words.json vo_final.wav
 01_hook 02_context=Context 03_tools=Tools ...` puts each cut mid-pause
@@ -559,8 +562,20 @@ Commands in this runbook name tools from the repo root and run from the
 video folder. In a series episode the folder is a level deeper
 (`videos/NNN-series/epNN-slug/`), so call them as
 `"$(git rev-parse --show-toplevel)"/tools/NAME` rather than counting `../`.
-The Python tools are executable; `uv run --no-sync python tools/NAME.py`
-also works.
+Run the Python tools as `uv run --no-sync python "$R"/tools/NAME.py`
+(`R=$(git rev-parse --show-toplevel)`). They are executable, but run
+directly they get the system `python3`, which has no numpy: `vo_floor.py`
+and `tighten_vo.py --noise auto` fail with `ModuleNotFoundError` (014 ep02,
+ep03).
+
+Shell traps (the orchestrator runs zsh):
+- `for f in $LIST` and `git add $LIST` don't word-split a string in zsh,
+  so an explicit-paths `git add` adds nothing (014 ep02 and ep03: a beats
+  commit held only `BRIEF.md`). Use an array, `P=(a b); git add "${P[@]}"`,
+  or list the paths inline.
+- `git commit` commits the whole index, including what another session
+  staged. Run `git diff --cached --stat` before committing, above all
+  after a `git reset --soft`.
 
 | Tool | Does | Tested |
 |---|---|---|
