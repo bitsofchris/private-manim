@@ -31,7 +31,7 @@ All AI is measured in these (FLOPs explained)
 ```
 FLOPs explained: a FLOP is one multiply or one add, the unit all AI and GPU compute is measured in.
 
-FLOP stands for floating-point operation: a number stored like scientific notation in binary: a sign, digits, an exponent.
+FLOP stands for floating-point operation, a number stored like scientific notation in binary (a sign, digits, an exponent).
 FLOPs with a small s is a count: training an 8B-parameter model on 15,000 tokens is about 720 trillion FLOPs. FLOPS with a capital S is a rate: FLOPs per second.
 A matmul is only multiplies and adds, and a GPU does thousands at once.
 
