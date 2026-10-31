@@ -4,7 +4,10 @@
 // links it as `_kit/code.js -> ../../_shared/web/code/code.js` and its kit
 // (014 machine.js, 016 chip.js) mounts it with a preset:
 //   CODE.make(root, CODE.STAGE)            014: fills the stage (y 665), Dark+ colours, gutter bar
-//   CODE.make(root, CODE.DOCK)             016: docks in the bottom slot (y 1345), type shrinks to fit
+//   CODE.make(root, CODE.DOCK)             016: docks in the bottom slot (y 1246), type shrinks to fit
+//                                          (cy 1246: a 2-row card's bottom stays at or above y 1330, where
+//                                          bottom-anchored VO captions start; was 1345, which every 016
+//                                          episode overrode by hand)
 //   CODE.make(root, Object.assign({}, CODE.STAGE, { cy: 900 }))   any other placement
 //
 // Options (a preset, or your own merged over one):
@@ -38,7 +41,7 @@
 (function () {
   const PAL = { panel: "#14142B", ink: "#ECEBE4", dim: "#8A8FB0", hero: "#C084FC" };
   const STAGE = { x: 65, w: 885, cy: 665, pad: 30, rows: 8, minRows: 3, size: 48, pitch: 64, lead: 1.4, fit: false, fitChars: 28, charW: 0.6, look: "dark+" };
-  const DOCK = { x: 65, w: 885, cy: 1345, pad: 28, rows: 6, minRows: 2, size: 40, pitch: null, lead: 1.4, fit: true, charW: 0.6, look: "plain" };
+  const DOCK = { x: 65, w: 885, cy: 1246, pad: 28, rows: 6, minRows: 2, size: 40, pitch: null, lead: 1.4, fit: true, charW: 0.6, look: "plain" };
   // VS Code Dark+ on the panel (every colour ≥ 5:1 on #14142B)
   const SYN = { kw: "#569CD6", call: "#DCDCAA", name: "#9CDCFE", num: "#B5CEA8", str: "#CE9178", comment: "#6A9955", punct: "#D4D4D4", cls: "#4EC9B0" };
   const KW = new Set(["for", "in", "def", "class", "return", "import", "from", "with", "as", "if", "else", "elif", "while", "yield", "True", "False", "None", "and", "or", "not", "is", "lambda", "pass", "break", "continue"]);

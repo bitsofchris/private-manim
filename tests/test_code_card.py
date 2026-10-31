@@ -133,7 +133,7 @@ class CodeCardTest(unittest.TestCase):
         self.assertEqual(d["size"], "27px")                    # floor((885 − 56) / (50 · 0.6))
         self.assertEqual(d["pitch"], "38px")                   # round(27 · 1.4)
         self.assertEqual(d["h"], "132px")                      # 2 rows: 2·28 + 2·38
-        self.assertEqual(d["top"], "1279px")                   # centred on 1345
+        self.assertEqual(d["top"], "1180px")                   # centred on 1246
         self.assertEqual(d["n"], 6)
         self.assertEqual(d["hero"], "#C084FC")
         self.assertEqual(d["comment"], "#8A8FB0")
