@@ -26,49 +26,43 @@
     <script>
 (() => {
   const BEAT_SECONDS = 6.730, MASTER = 31.510;
-  const root = document.getElementById("root");
-  const kit = EP.mount(root);
-  const { seg, lerp } = SC;
+  const kit = EP.mount(document.getElementById("root"));
+  const { seg } = SC;
   const ease = (u) => u * u * (3 - 2 * u);
   // beat-local cues (master − 31.510), words.json checked on a 20 ms RMS envelope of vo_final.wav
   const CUE = {
-    fp8: 0.25,       /* "fp8" (31.82 in words.json; onset 31.74): range bars, marker, inf and outlines fade
-                        while the fp8 row grows in, 0.6 s; fp8's row the hero */
-    three: 1.27,     /* "3" (32.78): fp8's mantissa the hero (spec reads "4 exponent · 3 mantissa") */
-    scaling: 3.89,   /* "scaling" (35.38, the s; vowel 35.70): the "× scale" tag clips on, 0.4 s; the tag the hero */
+    fp8: 0.25,       /* "fp8" (31.82 in words.json; onset 31.74): exponent outlines fade over 0.4 s; fp8's row the hero */
+    three: 1.27,     /* "3" (32.78): fp8's mantissa and its 0.34375 the hero */
+    scaling: 3.89,   /* "scaling" (35.38): fp8's 70,000 cell "max 448" writes in, 0.4 s */
+    tag: 4.19,       /* still "scaling" (vowel 35.70): the "× scale" tag clips on, 0.4 s; the tag the hero */
     te: 5.67,        /* "Transformer" (37.16; onset 37.18): "Transformer Engine" fades in under the tag, 0.3 s */
   };
-  const SWAP = 0.6, CLIP = 0.4, TE = 0.3;
+  const FADE = 0.4, WRITE = 0.4, CLIP = 0.4, TE = 0.3;
   const HOLD = CUE.te + TE;            // 5.97: SC.SEAM[6] still from here (master 37.48 ≤ 37.94)
 
   // Local override (teFade): the kit shows "Transformer Engine" with the tag (from scale > 0);
-  // this beat holds it back to "Transformer". EP.mount does not return the label, so find it once.
-  const teLab = [...root.children].find((el) => el.textContent === "Transformer Engine");
+  // this beat holds it back to "Transformer" by scaling kit.teLab's opacity after the draw.
   function teFade(a) {
-    if (!teLab || a >= 1) return;
-    const o = (parseFloat(teLab.style.opacity) || 0) * a;
-    SC.show(teLab, o);
+    if (a >= 1) return;
+    SC.show(kit.teLab, (parseFloat(kit.teLab.style.opacity) || 0) * a);
   }
 
   function hero(t) {
     if (t < CUE.fp8) return "exp:bf16";
     if (t < CUE.three) return "row:fp8";
-    if (t < CUE.scaling) return "man:fp8";
+    if (t < CUE.tag) return "man:fp8";
     return "scale";
   }
 
   function render(t) {
     SC.clock = MASTER + t;
     if (t >= HOLD) { kit.draw(SC.SEAM[6]); return; }
-    const u = ease(seg(t, CUE.fp8, CUE.fp8 + SWAP));
-    const S = Object.assign({}, SC.SEAM[5], {
-      nl: 1 - u, same: 1 - u, inf: 1 - u, o8: u,
-      scale: ease(seg(t, CUE.scaling, CUE.scaling + CLIP)),
+    kit.draw(Object.assign({}, SC.SEAM[5], {
+      same: 1 - ease(seg(t, CUE.fp8, CUE.fp8 + FADE)),
+      big8: ease(seg(t, CUE.scaling, CUE.scaling + WRITE)),
+      scale: ease(seg(t, CUE.tag, CUE.tag + CLIP)),
       hero: hero(t),
-    });
-    // bars and marker hold their places while they fade, then switch off (SEAM[6]: marker −1, nl16 / nlb 0)
-    if (u >= 1) Object.assign(S, { nl: 0, nl16: 0, nlb: 0, marker: -1, same: 0, inf: 0 });
-    kit.draw(S);
+    }));
     teFade(ease(seg(t, CUE.te, CUE.te + TE)));
   }
   window.__timelines = window.__timelines || {};

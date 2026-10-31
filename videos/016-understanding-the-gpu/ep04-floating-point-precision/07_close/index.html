@@ -69,7 +69,7 @@
     const f = ease(seg(t, CUE.torch, CUE.torch + FADE));       // o32, o16, o8, scale → 0
     const S = EP.mix(FROM, TO, u);
     S.o32 = lerp(FROM.o32 ?? 1, 0, f); S.o16 = lerp(FROM.o16 ?? 1, 0, f);
-    S.o8 = lerp(FROM.o8, 0, f); S.scale = lerp(FROM.scale, 0, f);
+    S.o8 = lerp(FROM.o8 ?? 1, 0, f); S.scale = lerp(FROM.scale, 0, f);
     // one hero: the scale tag while it goes, bf16's row while it slides up and the card types, then the code line
     S.hero = t < CUE.torch + FADE / 2 ? "scale" : t < CUE.bf16 ? "row:bf16" : "code";
     const o = ease(seg(t, CARD_IN[0], CARD_IN[1]));

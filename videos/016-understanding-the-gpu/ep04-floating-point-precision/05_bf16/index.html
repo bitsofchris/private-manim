@@ -34,11 +34,11 @@
     bf16: 0.26,      /* "bf16" (25.28; onset 25.25): bf16's row the hero */
     eight: 2.45,     /* "8" (27.36 in words.json; the vowel lands 27.44): exponent outlines grow over 0.6 s */
     exp: 2.63,       /* "exponent" (27.60; onset 27.62): bf16's exponent the hero (+ fp32's, one group) */
-    same: 4.01,      /* "Same" (29.00): bf16's range bar grows the whole width over 0.7 s, under the marker */
-    less: 4.49,      /* "less" (29.48): bf16's mantissa the hero, while the bar finishes growing (to 4.71) */
+    same: 4.01,      /* "Same" (29.00): bf16's 70,000 cell writes in, "70,144" (bigb 0 → 1 over 0.45 s; in the exp:bf16 hero group) */
+    less: 4.49,      /* "less" (29.48): bf16's mantissa and its 0.33398438 the hero */
     stable: 5.87,    /* "stable" (30.86): back to bf16's exponent */
   };
-  const OUTLINE = 0.6, GROW = 0.7;
+  const OUTLINE = 0.6, WRITE = 0.45;
   const HOLD = CUE.stable;             // 5.87: SC.SEAM[5] still from here (master 30.86 ≤ 31.21)
 
   function hero(t) {
@@ -54,7 +54,7 @@
     if (t >= HOLD) { kit.draw(SC.SEAM[5]); return; }
     kit.draw(Object.assign({}, SC.SEAM[4], {
       same: ease(seg(t, CUE.eight, CUE.eight + OUTLINE)),
-      nlb: ease(seg(t, CUE.same, CUE.same + GROW)),
+      bigb: ease(seg(t, CUE.same, CUE.same + WRITE)),
       hero: hero(t),
     }));
   }
