@@ -60,6 +60,21 @@ Rules that are specific to Shorts:
   ~6 s unless that image is itself moving through distinct states. The
   seam-state kit makes a return to an image cheap (the state is data),
   so reuse images rather than inventing more.
+- **A part arrives when the VO names it.** Frame 0 shows what line 1
+  talks about, not every part the Short will use. A part the VO first
+  names later (016 ep01's CPU, named at 14 s) is off screen until then
+  and fades in on its word, even when the series image has a slot for it.
+  Chris, 016 ep01: the CPU box parked in the top slot from frame 0 "we
+  don't need sitting there".
+- **An equation sits next to the picture it describes.** When the VO
+  ties a formula to a drawing (`y = x @ W` and the network layer it
+  is), stack them, the formula directly under the drawing, and let the
+  shared image (the chip) shrink for those beats; light the matching
+  parts together (an output node with its y column and its incoming
+  edges with W's column). A beat that hands the stage back moves the
+  formula to its usual slot on the next named change. Chris, 016 ep01:
+  the network in the top slot and the formula in the bottom slot read as
+  two things; stacked, with the GPU at 0.8×, they read as one.
 
 ### Manim 0.18.1 gotchas found building the Short pipeline
 
