@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- ep04 00_stream: the third image, the stream (Chris 10/29). Not in the Short.
+         0–2 s  beat 3: shards, streaming through __iter__ into the DataLoader, the shards the hero
+         2–4 s  beat 5: no sampler; the loader calls next(), __iter__ yields
+         4–6 s  beat 6: shards pre-shuffled, one loaded into memory, rows leave shuffled
+         6–8 s  beat 7: the stream forks into two workers' __iter__; who reads what is yours (?) -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="kit/data.js"></script>
+    <script src="kit/machine.js"></script>
+    <script src="kit/code.js"></script>
+    <script src="ep/ep4.js"></script>
+    <script src="ep/stream.js"></script>
+    <script src="ep/seam.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  const BEAT_SECONDS = 8;
+  const root = document.getElementById("root");
+  const ep = EP4.mount(root);
+  function render(t) {
+    SC.clock = t;
+    const M = { mode: "iterable", strike: 1, workers: 0, hero: null, flip: 0, shards: { o: 0 } };
+    const st = (o) => Object.assign({}, M, { stream: Object.assign({ o: 1 }, o) });
+    if (t < 2) ep.draw(st({ hero: "shards" }));
+    else if (t < 4) ep.draw(st({ hero: "next", ask: 1 }));
+    else if (t < 6) ep.draw(st({ order: [2, 0, 1], load: 1, hero: "memory" }));
+    else ep.draw(st({ order: [2, 0, 1], lanes: 1, hero: "split" }));
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = SC.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

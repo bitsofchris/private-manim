@@ -88,7 +88,18 @@
         SC.show(c.cg, o);
       });
     }
-    function draw(S) { kit.draw(null, S); drawShards(S); }
+    // the stream (ep/stream.js, the third image): when S.stream.o > 0 the machine fades under it, like the flip
+    const stream = window.EP4_STREAM ? window.EP4_STREAM.mount(root, kit.svg) : null;
+    function draw(S) {
+      const so = (S.stream && S.stream.o) || 0;
+      if (so > 0) {
+        const m = SC.seg(1 - so, 0.4, 1), R = SC.REST;   // the machine in over the last 60 % of the crossfade (stream.js)
+        S = Object.assign({}, S, { dataset: (S.dataset == null ? R.dataset : S.dataset) * m, loader: (S.loader == null ? R.loader : S.loader) * m,
+                                   batch: (S.batch == null ? R.batch : S.batch) * m, model: (S.model == null ? R.model : S.model) * m });
+      }
+      kit.draw(null, S); drawShards(S);
+      if (stream) stream.draw(S);
+    }
     return { draw, kit, parts: kit.parts };
   }
 
