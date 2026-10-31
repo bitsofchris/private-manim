@@ -32,7 +32,7 @@ window.DL_DATA = {
       { t: "  def __len__(self):", lit: "len" },
       { t: "    return len(self.series)", lit: null },
       { t: "  def __getitem__(self, i):", lit: "getitem" },
-      { t: "    return self.series[i]", lit: null },
+      { t: "    return self.series[i]", lit: "slice" },   // ep 3: "getitem is just a slice"
     ],
     handRolled: [
       { t: "perm = torch.randperm(n)", lit: "sampler" },
