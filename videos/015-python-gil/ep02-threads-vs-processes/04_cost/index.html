@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 04_cost: 015 ep 2 beat 4, SEAM2[3] -> SEAM2[4]. The knives go ink, the wall and the
+         pipe come between kitchens 1 and 2, a bowl is boxed, pushed through the pipe and
+         unboxed on kitchen 2's counter while Process 1's grey copy bar outgrows the magenta. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13.840" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  SC.SEAM = SC.SEAM2;
+  const BEAT_SECONDS = 13.840;
+  const HOLD = 13.54;                         // still from here (SEAM2[4], no chop in this beat)
+  // Cues: beat-local seconds (master - 24.520) from words.json.
+  const CUE = {
+    cost: 0.46,        /* "cost": knives ink, kitchens 3-4 dim, bars 0.5 -> 0.3, title back to Pool(4) */
+    counter: 2.80,     /* "counter": the wall draws down between kitchens 1 and 2 */
+    memory: 5.70,      /* "memory": slot "wall / separate memory" */
+    result: 6.76,      /* "result": the bowl appears on kitchen 1's counter */
+    pickled: 8.92,     /* "pickled": bowl -> crate, title pickle.dumps(arr), slot "through the pipe / pickled", grey bar starts */
+    pipe: 9.74,        /* "pipe": the pipe appears, the crate sets off */
+    pipeIn: 10.00,     /* "and": crate at the pipe mouth */
+    pipeOut: 10.40,    /* crate out of the pipe (PROTO2[9] is the midpoint, 10.20) */
+    unpickled: 10.54,  /* "again." (end of "unpickled again"): bowl on kitchen 2's counter, title pickle.loads(buf) */
+    compute: 13.26,    /* "compute": the grey bar reaches 0.9 */
+  };
+  const { seg, io, lerp, clamp01 } = SC;
+  const B0 = SC.BOWL;
+
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const A = SC.SEAM2[3], B = SC.SEAM2[4];
+
+  // A label swap landing on `at`: fade out 0.15 s, change the text at the bottom, fade in 0.2 s ending at `at`.
+  // swaps: [{ at, text }] in time order; `start` is the text before the first swap. Returns { o, text }.
+  function swap(t, start, swaps) {
+    let o = 1, text = start;
+    swaps.forEach(({ at, text: tx }) => {
+      o *= 1 - seg(t, at - 0.35, at - 0.2) + seg(t, at - 0.2, at);
+      if (t >= at - 0.2) text = tx;
+    });
+    return { o, text };
+  }
+  const TITLES = [{ at: CUE.cost, text: "multiprocessing.Pool(4)" }, { at: CUE.pickled, text: "pickle.dumps(arr)" }, { at: CUE.unpickled, text: "pickle.loads(buf)" }];
+  const SLOTS = [{ at: CUE.memory, text: SC.SLOT.wall }, { at: CUE.pickled, text: SC.SLOT.pipe }];
+
+  // the bowl's path: kitchen 1's counter, into the pipe, through it, out onto kitchen 2's counter
+  function bowlAt(t) {
+    const legs = [[B0.k1, B0.pipeIn, CUE.pipe, CUE.pipeIn, io], [B0.pipeIn, B0.pipeOut, CUE.pipeIn, CUE.pipeOut, (u) => u], [B0.pipeOut, B0.k2, CUE.pipeOut, CUE.unpickled, io]];
+    let [x, y] = B0.k1;
+    legs.forEach(([p, q, a, b, ease]) => { const u = ease(seg(t, a, b)); if (t > a) { x = lerp(p[0], q[0], u); y = lerp(p[1], q[1], u); } });
+    return { x, y };
+  }
+
+  function render(t) {
+    if (t >= HOLD) { kit.draw(null, SC.state(B, { chop: 0 })); return; }
+    const hero = t < CUE.cost ? 1 : 0;                                   // "cost": the knives go ink (snap)
+    const dim = lerp(1, 0.3, seg(t, CUE.cost - 0.3, CUE.cost));           // kitchens 3-4 dim with it
+    const py = lerp(0.5, 0.3, seg(t, CUE.cost - 0.3, CUE.cost));          // the four magenta bars shrink
+    const copyB = lerp(0.3, 0.9, seg(t, CUE.pickled, CUE.compute));       // Process 1's grey copy bar
+    const rows = [0, 1, 2, 3].map((i) => (i === 0 && copyB > 0.3 ? [{ a: 0, b: py, k: "py" }, { a: 0.3, b: copyB, k: "copy" }] : [{ a: 0, b: py, k: "py" }]));
+    const title = swap(t, A.panel.titleText, TITLES);
+    const slot = swap(t, A.slot, SLOTS);
+    const wallDraw = seg(t, CUE.counter - 0.3, CUE.counter);
+    const bowlO = seg(t, CUE.result - 0.2, CUE.result);
+    const box = seg(t, CUE.pickled - 0.3, CUE.pickled) * (1 - seg(t, CUE.unpickled - 0.3, CUE.unpickled));
+    const { x, y } = bowlAt(t);
+    const S = SC.state(A, {
+      knife: { hero }, chop: 0,
+      twin: { knife: { hero }, chop: 0 }, k3: { o: dim, knife: { hero }, chop: 0 }, k4: { o: dim, knife: { hero }, chop: 0 },
+      slot: Object.assign({}, slot.text, { o: slot.o }),
+      wall: { o: wallDraw > 0 ? 1 : 0, draw: wallDraw },
+      pipe: { o: seg(t, CUE.pipe - 0.2, CUE.pipe) },
+      bowl: { o: bowlO, x, y, box },
+      panel: { rows, title: title.o, titleText: title.text },
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

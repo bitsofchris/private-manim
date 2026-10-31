@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 05_fridge: 015 ep 2 beat 5, SEAM2[4] -> SEAM2[5]. "The fix here is a shared fridge or
+         shared memory. You put the big tensor in once and pass a note that says shelf 3. The
+         pipe carries the note, not the actual food." Kitchens 3-4 give way to the fridge, the
+         bowl goes back over the wall and into shelf 3, the "shelf 3" note crosses the pipe. -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="9.49" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  SC.SEAM = SC.SEAM2;
+  const BEAT_SECONDS = 9.49;
+  // Cues: beat-local seconds (master - 38.360), from words.json.
+  const CUE = {
+    shared: 1.12,   /* "shared" (kitchens 3-4 gone, fridge starts drawing) */
+    fridge: 1.42,   /* "fridge" */
+    memory: 2.30,   /* "memory." slot -> fridge / shared memory */
+    put: 3.12,      /* "put" bowl lifts back over the wall */
+    putEnd: 3.60,   /* ... lands on kitchen 1's counter */
+    drop: 3.90,     /* bowl starts dropping into the fridge */
+    once: 4.16,     /* "once" bowl on shelf 3, "3" magenta, copy bar 0.9 -> 0.36, SharedMemory(name) */
+    note: 5.02,     /* "note" the note appears on kitchen 1's counter */
+    three: 5.80,    /* "3." slot -> a note / not the data */
+    pipe: 6.64,     /* "pipe" the note enters the pipe */
+    noteEnd: 7.40,  /* "note," the note lands on kitchen 2's counter */
+    food: 8.82,     /* "food." the bowl in the fridge bobs; slot back to fridge / shared memory */
+    HOLD: 9.19,     /* still from here: SEAM2[5] */
+  };
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg, io, lerp, clamp01 } = SC;
+  const A = SC.SEAM2[4], B = SC.SEAM2[5];
+  const BW = SC.BOWL;
+
+  // A label swap landing on `land`: fade out over 0.15 s, change the text, fade in over 0.2 s.
+  const swapO = (t, land) => (t < land - 0.35 ? 1 : t < land - 0.20 ? 1 - seg(t, land - 0.35, land - 0.20) : seg(t, land - 0.20, land));
+  const swapOn = (t, land) => t >= land - 0.20;
+  // A point along a polyline (frame coordinates) at arc-length fraction u.
+  function along(pts, u) {
+    const L = []; let tot = 0;
+    for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); L.push(d); tot += d; }
+    let s = u * tot;
+    for (let i = 0; i < L.length; i++) {
+      if (s <= L[i] || i === L.length - 1) { const v = L[i] ? clamp01(s / L[i]) : 1; return [lerp(pts[i][0], pts[i + 1][0], v), lerp(pts[i][1], pts[i + 1][1], v)]; }
+      s -= L[i];
+    }
+    return pts[pts.length - 1];
+  }
+
+  function render(t) {
+    // kitchens 3-4 fade before "fridge"; the fridge slab draws in, landing on "fridge"
+    const dim = lerp(0.3, 0, seg(t, CUE.shared - 0.3, CUE.shared));
+    const fdraw = seg(t, CUE.fridge - 0.4, CUE.fridge);
+    // slot: pipe -> fridge (on "memory"), -> note (on "3."), -> fridge (on "food")
+    let slot;
+    if (t < CUE.memory) slot = Object.assign({}, swapOn(t, CUE.memory) ? SC.SLOT.fridge : SC.SLOT.pipe, { o: swapO(t, CUE.memory) });
+    else if (t < CUE.three) slot = Object.assign({}, swapOn(t, CUE.three) ? SC.SLOT.note : SC.SLOT.fridge, { o: swapO(t, CUE.three) });
+    else slot = Object.assign({}, swapOn(t, CUE.food) ? SC.SLOT.fridge : SC.SLOT.note, { o: swapO(t, CUE.food) });
+    // the bowl: kitchen 2 -> over the wall to kitchen 1 ("put"), then down into shelf 3 ("once"), a bob on "food"
+    let bx, by;
+    if (t < CUE.put) { bx = BW.k2[0]; by = BW.k2[1]; }
+    else if (t < CUE.drop) { const u = io(seg(t, CUE.put, CUE.putEnd)); bx = lerp(BW.k2[0], BW.k1[0], u); by = lerp(BW.k2[1], BW.k1[1], u) - 60 * Math.sin(Math.PI * u); }
+    else { const u = io(seg(t, CUE.drop, CUE.once)); bx = lerp(BW.k1[0], BW.fridge[0], u); by = lerp(BW.k1[1], BW.fridge[1], u); }
+    by -= 12 * SC.pulse(t, CUE.food - 0.2, 0.4);
+    const shelf = t >= CUE.once ? 1 : 0;
+    // the panel: copy bar shrinks and the title swaps, both landing on "once"
+    const copyB = lerp(0.9, 0.36, seg(t, CUE.once - 0.3, CUE.once));
+    const rows = [[{ a: 0, b: 0.3, k: "py" }, { a: 0.3, b: copyB, k: "copy" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }]];
+    const titleText = swapOn(t, CUE.once) ? "SharedMemory(name)" : "pickle.loads(buf)";
+    // the note: appears at kitchen 1 on "note", crosses the pipe "pipe" -> "note,"
+    const noteO = seg(t, CUE.note - 0.2, CUE.note);
+    const [nx, ny] = along([BW.k1, BW.pipeIn, BW.pipeOut, BW.k2], io(seg(t, CUE.pipe, CUE.noteEnd)));
+    const S = SC.state(A, {
+      k3: { o: dim }, k4: { o: dim },
+      fridge: { o: fdraw > 0 ? 1 : 0, draw: fdraw, shelf },
+      slot,
+      bowl: { o: 1, x: bx, y: by, box: 0 },
+      note: { o: noteO, x: nx, y: ny },
+      panel: { rows, titleText, title: swapO(t, CUE.once) },
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 03_processes: "Multiprocessing builds more kitchens ..." SEAM2[2] -> SEAM2[3], 10.470 s.
+         Title -> multiprocessing.Pool(4), kitchen 1 shrinks to the grid, three kitchens draw in with a cook
+         each, a knife lands in every hand on "GIL", all four chop on "parallel" while four bars grow,
+         title -> num_workers=4 on "workers". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.47" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  SC.SEAM = SC.SEAM2;
+  const BEAT_SECONDS = 10.47;
+  const FRAME = 1 / 30;
+  // beat-local cues (master - 14.050), from words.json
+  const CUE = {
+    multi:    0.41,   // "Multiprocessing": title -> multiprocessing.Pool(4), lanes -> Process n
+    kitchens: 1.37,   // "kitchens.": kitchen 1 shrinks to the grid's top-left, slot "kitchens / processes"
+    twin:     1.50,   // kitchen 2 draws in (0.3 s), then its cook walks in (0.5 s)
+    k3:       1.85,   // kitchen 3
+    k4:       2.20,   // kitchen 4
+    gil:      4.81,   // "GIL,": a knife in every hand, slot "own knife / own GIL"
+    parallel: 6.85,   // "parallel.": all four chop, four magenta bars grow 0 -> 0.5
+    workers:  8.69,   // "workers": title -> num_workers=4, slot back to "kitchens / processes"
+    hold:    10.17,   // still from here (last 0.3 s hold SEAM2[3])
+  };
+  const SWAP_OUT = 0.15, SWAP_IN = 0.2;   // a label swap: fade out, change text, fade in landing on the word
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const { seg, io, lerp, chopAt } = SC;
+  const A = SC.SEAM2[2], B = SC.SEAM2[3];
+
+  // Swap `from` -> `to` landing at `land`: returns the slot-like object with its opacity.
+  function swap(t, land, from, to) {
+    const t0 = land - SWAP_IN - SWAP_OUT, t1 = land - SWAP_IN;
+    if (t < t1) return Object.assign({}, from, { o: 1 - seg(t, t0, t1) });
+    return Object.assign({}, to, { o: seg(t, t1, land) });
+  }
+  // One small kitchen: draws in from `start`, its cook walks in after, carrot already half cut, knife on "GIL".
+  function small(t, start) {
+    const draw = seg(t, start, start + 0.3), inn = seg(t, start + 0.3, start + 0.8);
+    return SC.merge(SC.ONE(0.5, 1), {
+      o: t >= start ? 1 : 0, draw,
+      cooks: [SC.merge(SC.ONE(0.5, 1).cooks[0], { in: inn })].concat(SC.ONE(0.5, 1).cooks.slice(1)),
+      veg: inn,
+      knife: { o: seg(t, CUE.gil - 0.2, CUE.gil), holder: 0, hero: 1 },
+      chop: chopAt(t, CUE.parallel, CUE.hold, 2),
+    });
+  }
+
+  function render(t) {
+    // the title: "$ python main.py" -> multiprocessing.Pool(4) on "Multiprocessing", -> num_workers=4 on "workers"
+    const T0 = { titleText: A.panel.titleText }, T1 = { titleText: "multiprocessing.Pool(4)" }, T2 = { titleText: "num_workers=4" };
+    const ti = t < CUE.multi ? swap(t, CUE.multi, T0, T1) : t < CUE.workers ? swap(t, CUE.workers, T1, T2) : Object.assign({}, T2, { o: 1 });
+    const proc = seg(t, CUE.multi - 0.3, CUE.multi);
+    const half = io(seg(t, CUE.kitchens - 0.5, CUE.kitchens));
+    // the slot: knife -> kitchens (1.37) -> knives (4.81) -> kitchens (8.69)
+    const slot = t < CUE.kitchens ? swap(t, CUE.kitchens, SC.SLOT.knife, SC.SLOT.kitchens)
+               : t < CUE.gil ? swap(t, CUE.gil, SC.SLOT.kitchens, SC.SLOT.knives)
+               : swap(t, CUE.workers, SC.SLOT.knives, SC.SLOT.kitchens);
+    // the bars: Thread 1's goes with the lane labels; four Process bars grow together from "parallel"
+    const b = 0.5 * seg(t, CUE.parallel, CUE.hold);
+    const rows = t >= CUE.parallel + FRAME ? [0, 1, 2, 3].map(() => [{ a: 0, b, k: "py" }])
+               : proc >= 0.5 ? [[], [], [], []] : A.panel.rows;
+    const chop = chopAt(t, CUE.parallel, CUE.hold, 2);
+    const S = SC.state(A, {
+      K: { half },
+      cooks: A.cooks.map((c) => Object.assign({}, c)),
+      slot,
+      panel: { proc, title: ti.o, titleText: ti.titleText, rows },
+      twin: small(t, CUE.twin), k3: small(t, CUE.k3), k4: small(t, CUE.k4),
+      chop,
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>

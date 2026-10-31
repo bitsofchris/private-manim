@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- 01_hook (015 ep 2, 0.000–6.160): SEAM2[0] → SEAM2[1]. Ep 1's last frame; both holders
+         chop; "waiting → threads" lands on "threads", the dashed bar pulses on "waiting";
+         "running Python → processes" lands on "processes", the magenta bars pulse on "Python". -->
+    <script src="vendor/gsap.min.js"></script>
+    <script src="iso/iso.js"></script>
+    <script src="kit/kitchen.js"></script>
+    <script src="cast/cast.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter"; font-style: normal; font-weight: 800; font-display: block;
+        src: url("vendor/Inter-ExtraBold.woff2") format("woff2");
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b14;
+              font-family: "Inter", sans-serif; font-weight: 800; color: #ecebe4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.16" data-fps="30" data-width="1080" data-height="1920"></div>
+    <script>
+(() => {
+  SC.SEAM = SC.SEAM2;
+  const BEAT_SECONDS = 6.16;
+  // Beat-local cues from words.json (beat starts at master 0.000).
+  const CUE = {
+    chopFrom: 0.2,                 // both holders start chopping
+    threads: 1.20,                 /* "threads": "waiting → threads" lands */
+    waiting: 2.08,                 /* "waiting": the dashed I/O bar pulses */
+    processes: 3.42,               /* "processes": "running Python → processes" lands */
+    python: 5.28,                  /* "Python": the magenta bars pulse */
+    chopTo: 5.8,                   // chopping stops
+  };
+  const HOLD = 5.86;               /* "do.": still from here to the end */
+  const RAMP = 0.2;                // a close line fades in over this, ending on its word
+  const root = document.getElementById("root");
+  const kit = SC.mount(root);
+  const A = SC.SEAM2[0];           // frame 0: ep 1's last frame (no close lines)
+  function render(t) {
+    const tt = Math.min(t, HOLD);
+    const chop = SC.chopAt(tt, CUE.chopFrom, CUE.chopTo, 2);
+    const S = SC.state(A, {
+      chop, twin: { chop },
+      close: { a: SC.seg(tt, CUE.threads - RAMP, CUE.threads), b: SC.seg(tt, CUE.processes - RAMP, CUE.processes) },
+      panel: { pulse: { io: tt < HOLD ? SC.pulse(tt, CUE.waiting, 0.6) : 0,
+                        py: tt < HOLD ? SC.pulse(tt, CUE.python, HOLD - CUE.python) : 0 } },   // the bump ends at HOLD, so the hold is exact
+    });
+    kit.draw(null, S);
+  }
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = ISO.start(BEAT_SECONDS, render);
+})();
+    </script>
+  </body>
+</html>
