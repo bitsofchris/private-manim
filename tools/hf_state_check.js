@@ -6,7 +6,7 @@
 //   e.g. node ../../../tools/hf_state_check.js 05_swap 4 5
 //
 // For a beat built on a seam-state kit (one state object per frame, drawn by
-// `SC.mount(root).draw(g, S)`, with `SC.SEAM[n]` the state at cut n and an
+// `SC.mount(root).draw(g, S)`, or `draw(S)` as in 016, with `SC.SEAM[n]` the state at cut n and an
 // optional `SC.REST` of defaults; see agents/beat-brief-hyperframes.md), it
 // loads the beat's index.html in Node with a stub DOM and a stub GSAP, seeks
 // the registered timeline, records the state each draw receives, and compares:
@@ -65,6 +65,7 @@ function stubDom() {
   const make = (tag) => {
     const e = { tagName: tag, style: {}, children: [], textContent: "", innerHTML: "", offsetWidth: 0, offsetHeight: 0,
       appendChild(c) { this.children.push(c); c.parentNode = this; return c; },
+      insertBefore(c, ref) { const i = ref ? this.children.indexOf(ref) : -1; if (i < 0) this.children.push(c); else this.children.splice(i, 0, c); c.parentNode = this; return c; },
       get firstChild() { return this.children[0] || null; },
       querySelectorAll() { const all = []; const walk = (n) => n.children.forEach((c) => { all.push(c); walk(c); }); walk(this); return all; },
       getContext: ctx2d, setAttribute() {}, removeAttribute() {}, getAttribute() { return null; } };
@@ -109,7 +110,8 @@ function load(beatDir) {
   const wrapMount = () => {
     if (wrapped || !ctx.SC || !ctx.SC.mount) return;
     const real = ctx.SC.mount;
-    ctx.SC.mount = (root) => { const k = real(root); return Object.assign({}, k, { draw: (g, S) => { last = S; k.draw(g, S); } }); };
+    // a kit's draw is draw(g, S) (013, 014) or draw(S) (016): record whichever argument is the state
+    ctx.SC.mount = (root) => { const k = real(root); return Object.assign({}, k, { draw: (g, S) => { last = S === undefined ? g : S; k.draw(g, S); } }); };
     wrapped = true;
   };
   const tags = [...html.matchAll(/<script(?:\s+src="([^"]+)")?\s*>([\s\S]*?)<\/script>/g)];

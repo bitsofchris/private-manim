@@ -35,6 +35,32 @@ BEAT = """<!doctype html><html><head><script src="kit/k.js"></script></head><bod
 </script></body></html>"""
 
 
+# 016's kit shape: draw(S) takes the state alone, and an episode layer mounts with insertBefore.
+KIT_ONE_ARG = """
+window.SC = {
+  REST: { a: 0 },
+  SEAM: { 1: { a: 0 }, 2: { a: 1 } },
+  mount(root) {
+    const e = document.createElement("div"), under = document.createElement("div");
+    root.appendChild(e); root.insertBefore(under, e);
+    return { draw(S) { e.textContent = String(S.a); } };
+  },
+};
+"""
+
+BEAT_ONE_ARG = """<!doctype html><html><head><script src="kit/k.js"></script></head><body>
+<div id="root" data-duration="2"></div>
+<script>
+(() => {
+  const K = SC.mount(document.getElementById("root"));
+  const END = %s;
+  const tl = gsap.timeline({ paused: true, onUpdate: () => K.draw({ a: Math.min(1, tl.time() / 1.5) * END }) });
+  window.__timelines = window.__timelines || {}; window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+</script></body></html>"""
+
+
 @unittest.skipUnless(shutil.which("node"), "node not installed")
 class StateCheck(unittest.TestCase):
     def setUp(self):
@@ -78,6 +104,22 @@ class StateCheck(unittest.TestCase):
                 "if (!d) { console.log('skip'); } else { const e = d.createElementNS('svg', 'g'); e.removeAttribute('x'); console.log('ok'); }") % json.dumps(str(TOOL))
         out = subprocess.run(["node", "-e", node], capture_output=True, text=True, check=True).stdout.strip()
         self.assertEqual(out, "ok")
+
+    def run_one_arg(self, end: str):
+        (self.dir / "kit" / "k.js").write_text(KIT_ONE_ARG)
+        (self.dir / "index.html").write_text(BEAT_ONE_ARG % end)
+        return subprocess.run(["node", str(TOOL), str(self.dir), "1", "2"], capture_output=True, text=True)
+
+    def test_a_one_argument_draw_kit_is_checked(self):
+        # 016 ep01: the kit's draw is draw(S), and its episode layer mounts with insertBefore; the tool crashed on both
+        r = self.run_one_arg("1")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(r.stdout.count("ok "), 3)
+
+    def test_a_one_argument_draw_kit_still_fails_off_its_seam(self):
+        r = self.run_one_arg("0.5")
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertIn("a: beat 0.5 vs seam 1", r.stdout)
 
 
 if __name__ == "__main__":
