@@ -41,7 +41,7 @@
 //   title "…"         the label under the chip (default "GPU"; a beat may rename it, e.g. "tensor cores";
 //                     it goes magenta with the chip, or with tc when tc is the hero)
 //   cpu, queueO, loader, chip, hbm, meter, strip   opacities (queueO: the queue's)
-//   code {o, lines, typed, lit, cursor, blink, cy}   the code card (kit/code.js)
+//   code {o, lines, typed, lit, cursor, blink, cy}   the code card (kit/code.js, a link to videos/_shared/web/code/code.js, preset CODE.DOCK)
 (function () {
   const NS = "http://www.w3.org/2000/svg";
   const D = window.GPU_DATA;
@@ -168,7 +168,7 @@
     const slots = [...Array(st.n)].map((_, i) => rect(stripG, st.x + i * st.pitch, st.y, st.w, st.h, { fill: PAL.data, rx: 6 }));
     const utilLab = label(root, "", { left: st.x, top: st.readout, size: 48 });
 
-    const code = window.SC_makeCode ? window.SC_makeCode(root) : null;
+    const code = window.CODE ? window.CODE.make(root, window.CODE.DOCK) : null;
     guides(root);
 
     function draw(S) {

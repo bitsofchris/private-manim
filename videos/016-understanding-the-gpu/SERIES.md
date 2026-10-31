@@ -89,8 +89,8 @@ it is doing useful work.
 
 **Built 10/29 on take A (core grid), Chris's pick** from
 `00_layout/takes/takes.png`. The kit is `_kit/` (`chip.js`: the chip and
-its slots, state object `S`; `code.js`: the code card, docked under the
-chip; `data.js`: every string and number). `00_layout/layout.png` shows it
+its slots, state object `S`; `code.js`: a link to the shared code card
+`videos/_shared/web/code/code.js`, mounted `CODE.DOCK` under the chip; `data.js`: every string and number). `00_layout/layout.png` shows it
 in six states (rest, ep 5, ep 6, ep 7 ×3). The bottom slot holds the time
 strip or the code card, one at a time; the side slot holds HBM or the MFU
 meter, one at a time.

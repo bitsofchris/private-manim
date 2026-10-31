@@ -194,9 +194,10 @@ A shared part is never magenta at rest: the beat makes one thing the hero, so a 
 
 Chris, 014 ep01 (2026-10-28): "have it follow like a VS Code style
 coloring, so it's not just purple", and "simulate the typing like a human
-when it makes sense". The reference implementation is the 014 code card,
-`videos/014-pytorch-dataloading/_kit/code.js` (`tokenize`, `SC_typedAt`,
-`SC_typingSeconds`); copy its colours and rhythm, don't reinvent them.
+when it makes sense". In HyperFrames, use the shared code card,
+`videos/_shared/web/code/code.js` (`CODE.make` with `look: "dark+"`,
+`CODE.typedAt`, `CODE.typingSeconds`; `agents/parts.md`); link it, don't
+copy it. In Manim, match its colours and rhythm.
 
 | When you want | Use |
 |---|---|
