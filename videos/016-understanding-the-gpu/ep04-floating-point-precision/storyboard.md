@@ -121,8 +121,8 @@ card ends at y 1330), every caption one line.
 - Example values, computed with numpy (fp32, fp16) and round-to-nearest-
   even by hand (bf16, OCP E4M3): 1/3 → 0.33333334 / 0.33325195 /
   0.33398438 / 0.34375; 70,000 → 70,000 / inf / 70,144 / out of range
-  (E4M3's max is 448; it has no inf). Script: the session scratchpad
-  `fmt.py`, rerun before changing a value.
+  (E4M3's max is 448; it has no inf). Script:
+  `_kit/formats.py`; rerun it before changing a value.
 - fp8 here is E4M3 (4 exponent, 3 mantissa). The other fp8, E5M2, keeps
   2 mantissa bits; Transformer Engine's default recipe uses E4M3 forward
   and E5M2 for gradients.
