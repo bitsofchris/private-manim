@@ -43,7 +43,7 @@ overflow (bf16 vs fp16)` / `bf16 vs fp16: Why bf16 Doesn't Overflow`.
 bf16 vs fp16 for AI training: both halve fp32's bits for speed, but only bf16 keeps its range.
 
 Every weight and activation in a model is a number, and its data type sets how many bits it gets: fp32 (32), fp16 and bf16 (16), fp8 (8). Fewer bits means more numbers per memory read and more math per cycle: a B200 does about 2,250 TFLOPS in bf16 and 4,500 in fp8.
-fp16 spends its bits on precision, so 70,000 becomes inf (its max is 65,504). bf16 keeps fp32's 8 exponent bits: 70,000 becomes 70,144, less precise but in range. That's why mixed precision training defaults to bf16.
+fp16 spends its bits on precision, so 70,000 becomes inf (its max is 65,504). bf16 keeps fp32's 8 exponent bits: 70,000 becomes 70,144, less precise but in range. That's why mixed precision training on modern GPUs usually picks bf16 (PyTorch's autocast still defaults to fp16, so you name it).
 fp8 keeps 3 mantissa bits and tops out at 448, so it needs a scaling library like NVIDIA's Transformer Engine. In PyTorch it's one line: torch.autocast with dtype=torch.bfloat16.
 
 Part 4 of 8 on understanding the GPU. Next: tensor cores vs memory.
