@@ -18,7 +18,14 @@
 //                         top-right that shows the thing just named
 //   chip      y 450       one line of code inside the kitchen (requests.get(url) …)
 //   close     y 420/500   "waiting → threads", "running Python → processes" inside the
-//                         kitchen, sliding to y 690/780 as it shrinks
+//                         kitchen, sliding to y 690/780 as it shrinks; ep 2's close puts
+//                         three lines where the panel was (close.panel)
+// Episode 2 adds (SEAM2 / PROTO2): a 2×2 grid of half-size kitchens (S.K at
+// top-left, S.twin, S.k3, S.k4), a price tag on the second kitchen, a wall
+// with a pipe between kitchens 1 and 2, a bowl that gets boxed through the
+// pipe, a fridge slab across the bottom row with the bowl on shelf 3 and a
+// "shelf 3" note, and the panel as processes: title text, "Process n" lanes,
+// grey "copy" bars.
 //
 // The knife: a chef's knife with the tip resting on the cutting board; the
 // handle rocks in the holder's hand (S.chop), the carrot under the blade
@@ -61,6 +68,12 @@
   const PANEL = { x: 80, y: 965, w: 870, h: 350, title: 975, row0: 1050, pitch: 64, barX: 400, barX1: 930, barH: 44 };
   const HALF = 0.48;                                  // the kitchens' scale at the close (two fit side by side with a gap)
   const TWIN = { x: 532, y: 380 };                    // where the second kitchen's top-left lands at the close
+  const GRID = [[80, 380], [532, 380], [80, 650], [532, 650]];   // the 2×2 grid of half-size kitchens (ep 2): main, twin, k3, k4
+  const WALL = { x: 500, y: 380, w: 30, h: 250 };     // the wall in the gap between kitchens 1 and 2
+  const PIPE = { x: 400, y: 560, w: 230, h: 36 };     // the pipe through it, at the small kitchens' counter height
+  const BOWL = { k1: [300, 560], pipeIn: [430, 578], pipeOut: [600, 578], k2: [760, 560], fridge: [515, 836] };   // where the bowl rests
+  const FRIDGE = { x: 80, y: 650, w: 870, h: 250, shelves: [720, 780, 840] };
+  const CLOSE_PANEL = [1000, 1090, 1180];             // ep 2's three close lines, where the panel was
   const PANEL2 = { x: 525, w: 425, barX: 675 };        // the right half panel; the left half keeps PANEL.x with SPLIT bars
   const SPLIT = { w: 425, barX: 230, barX1: 485 };
   const CLOSE_Y = [690, 780];                         // the close lines, in the gap once the kitchen is half size
@@ -75,17 +88,27 @@
     oven: { o: 0, ding: 0 }, appl: { o: 0 },         // ding: the oven flashes (the wait is over)
     slot: { o: 0, top: "", bottom: "", hero: 0 },     // the top-right label
     chip: { o: 0, text: "" },                         // the code line inside the kitchen
-    panel: { o: 0, title: 0, code: 0, lanes: 0, rows: [[], [], [], []], pulse: { py: 0, io: 0 }, core: 0, split: 0 },
+    panel: { o: 0, title: 0, code: 0, lanes: 0, rows: [[], [], [], []], pulse: { py: 0, io: 0 }, core: 0, split: 0,
+             titleText: "$ python main.py", proc: 0 },
+    //   titleText: the title row's text; proc: lane labels "Thread n" → "Process n" (bars start further right)
     //   code: how many Thread lines (0..4, fractional fades the last); lanes: code lines → timeline rows;
     //   rows[i]: [{ a, b, k }] bars from a to b (0..1 of the lane) of kind "py" | "io" | "nat"; core: the "= 1 core" tag on the title row
     //   split: 0 = one wide panel, 1 = two halves ("process 1" with `rows`, "process 2" with panel2.rows)
     panel2: { rows: [[], [], [], []] },
-    twin: { o: 0, draw: 1, cooks: [0, 1, 2, 3].map(() => ({ in: 0, at: "counter", u: 1, wait: 0, cut: 0 })),   // the second kitchen
-            veg: 0, knife: { o: 0, holder: -1, hero: 1 }, oven: { o: 0, ding: 0 }, appl: { o: 0 }, chop: 0 },
-    close: { a: 0, b: 0 },
+    twin: kitState(), k3: kitState(), k4: kitState(),   // the other kitchens (ep 1 uses twin only)
+    tag: { o: 0 },                                    // the price tag on the second kitchen
+    wall: { o: 0, draw: 1 }, pipe: { o: 0 },
+    bowl: { o: 0, x: 300, y: 560, box: 0 },           // box: 0 = a bowl, 1 = a crate (pickled)
+    note: { o: 0, x: 760, y: 560 },                   // the "shelf 3" note
+    fridge: { o: 0, draw: 1, shelf: 0 },              // shelf: shelf 3's number lights magenta
+    close: { a: 0, b: 0, c: 0, panel: 0 },            // panel 1: the lines sit where the panel was (ep 2), c = the third
     chop: 0,
   };
-  const state = (base, patch) => merge(merge(REST, base || {}), patch || {});
+  function kitState() {
+    return { o: 0, draw: 1, cooks: [0, 1, 2, 3].map(() => ({ in: 0, at: "counter", u: 1, wait: 0, cut: 0 })),
+             veg: 0, knife: { o: 0, holder: -1, hero: 1 }, oven: { o: 0, ding: 0 }, appl: { o: 0 }, chop: 0 };
+  }
+  const state = (...parts) => parts.reduce((acc, p) => merge(acc, p || {}), copy(REST));   // REST, then each patch in turn
   function tween(A, B, u) {
     if (typeof A === "number" && typeof B === "number") return lerp(A, B, u);
     if (Array.isArray(B)) return B.map((b, i) => tween(A ? A[i] : undefined, b, u));
@@ -100,6 +123,13 @@
     oven: { o: 1, top: "oven", bottom: "I/O", hero: 0 },
     appl: { o: 1, top: "appliance", bottom: "native code", hero: 0 },
     twin: { o: 1, top: "second kitchen", bottom: "another process", hero: 0 },
+    kitchen: { o: 1, top: "kitchen", bottom: "process", hero: 0 },
+    kitchens: { o: 1, top: "kitchens", bottom: "processes", hero: 0 },
+    knives: { o: 1, top: "own knife", bottom: "own GIL", hero: 1 },
+    wall: { o: 1, top: "wall", bottom: "separate memory", hero: 0 },
+    pipe: { o: 1, top: "through the pipe", bottom: "pickled", hero: 0 },
+    fridge: { o: 1, top: "fridge", bottom: "shared memory", hero: 0 },
+    note: { o: 1, top: "a note", bottom: "not the data", hero: 1 },
   };
   const STAIR = [[{ a: 0, b: 0.25, k: "py" }], [{ a: 0.25, b: 0.5, k: "py" }], [{ a: 0.5, b: 0.75, k: "py" }], [{ a: 0.75, b: 1, k: "py" }]];
   // Thread 2 waits (dashed), Thread 3 runs meanwhile, the oven dings and Thread 2 gets the knife back (magenta again).
@@ -147,6 +177,58 @@
                  knife: { o: 1, holder: 1 }, oven: { o: 1 }, appl: { o: 1 }, panel: { lanes: 1, split: 1, rows: CLOSE_ROWS }, close: { a: 1, b: 1 },
                  twin: { o: 1, draw: 1, cooks: [{ in: 1, at: "counter", u: 1, wait: 0, cut: 0 }, { in: 0.7, at: "counter", u: 1, wait: 0, cut: 0 }, { in: 0.4, at: "counter", u: 1, wait: 0, cut: 0 }, { in: 0.1, at: "counter", u: 1, wait: 0, cut: 0 }], veg: 1 } }),   // the second kitchen fills
     SEAM1[6],
+  ];
+
+  // ---- episode 2 ----
+  const ONE = (cut, hero = 1) => ({ o: 1, draw: 1, cooks: [{ in: 1, at: "counter", u: 1, wait: 0, cut }, { in: 0, at: "counter", u: 1, wait: 0, cut: 0 }, { in: 0, at: "counter", u: 1, wait: 0, cut: 0 }, { in: 0, at: "counter", u: 1, wait: 0, cut: 0 }],
+                                    veg: 1, knife: { o: 1, holder: 0, hero } });   // a small kitchen with one cook holding the knife
+  const EP2_FRAME0 = state(KIT, { K: { half: 1 }, cooks: cooksAt([["counter", 1, 0.5], ["counter", 0, 1], ["counter", 1, 0.8], ["appl", 0, 0.5]]), veg: 1,
+                                  knife: { o: 1, holder: 1 }, oven: { o: 1 }, appl: { o: 1 }, panel: { lanes: 1, split: 1, rows: CLOSE_ROWS }, panel2: { rows: CLOSE_ROWS2 },
+                                  twin: { o: 1, draw: 1, cooks: TWIN_COOKS, veg: 1, knife: { o: 1, holder: 0 } } });
+  const RECAP = state(KIT, { cooks: cooksAt([["counter", 0, 0.5], ["counter", 1, 0.5], ["counter", 1, 0.5], ["counter", 1, 0.5]]), veg: 1, slot: SLOT.knife,
+                             knife: { o: 1, holder: 0 }, oven: { o: 1 }, appl: { o: 1 }, panel: { lanes: 1, rows: [[{ a: 0, b: 0.3, k: "py" }], [], [], []] } });
+  const PAR_ROWS = [0, 1, 2, 3].map(() => [{ a: 0, b: 0.5, k: "py" }]);
+  const PROC = { titleText: "multiprocessing.Pool(4)", proc: 1, lanes: 1, split: 0 };
+  const GRID4 = (cut, hero) => ({ K: { half: 1 }, cooks: cooksAt([["counter", 0, cut], ["counter", 1, 0.5], ["counter", 1, 0.5], ["counter", 1, 0.5]]), veg: 1,
+                                  knife: { o: 1, holder: 0, hero }, oven: { o: 1 }, appl: { o: 1 }, twin: ONE(cut, hero), k3: ONE(cut, hero), k4: ONE(cut, hero) });
+  const COST_ROWS = [[{ a: 0, b: 0.3, k: "py" }, { a: 0.3, b: 0.9, k: "copy" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }]];
+  const SHM_ROWS = [[{ a: 0, b: 0.3, k: "py" }, { a: 0.3, b: 0.36, k: "copy" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }]];
+  const DIM34 = { k3: { o: 0.3 }, k4: { o: 0.3 } };
+  const SEAM2 = {
+    0: EP2_FRAME0,
+    1: merge(EP2_FRAME0, { close: { a: 1, b: 1 } }),
+    2: RECAP,
+    3: state(KIT, GRID4(0.5, 1), { slot: SLOT.kitchens, panel: Object.assign({ titleText: "num_workers=4", rows: PAR_ROWS }, PROC, { titleText: "num_workers=4" }) }),
+    4: state(KIT, GRID4(0.5, 0), DIM34, { slot: SLOT.pipe, wall: { o: 1 }, pipe: { o: 1 }, bowl: { o: 1, x: BOWL.k2[0], y: BOWL.k2[1], box: 0 },
+                                          panel: Object.assign({ rows: COST_ROWS }, PROC, { titleText: "pickle.loads(buf)" }) }),
+    5: state(KIT, GRID4(0.5, 0), { k3: { o: 0 }, k4: { o: 0 }, slot: SLOT.fridge, wall: { o: 1 }, pipe: { o: 1 }, fridge: { o: 1, shelf: 1 },
+                                   bowl: { o: 1, x: BOWL.fridge[0], y: BOWL.fridge[1], box: 0 }, note: { o: 1, x: BOWL.k2[0], y: BOWL.k2[1] },
+                                   panel: Object.assign({ rows: SHM_ROWS }, PROC, { titleText: "SharedMemory(name)" }) }),
+    6: state(KIT, GRID4(0.5, 1), { k3: { o: 0 }, k4: { o: 0 }, wall: { o: 1 }, pipe: { o: 1 }, fridge: { o: 1, shelf: 1 },
+                                   bowl: { o: 1, x: BOWL.fridge[0], y: BOWL.fridge[1], box: 0 }, note: { o: 0.5, x: BOWL.k2[0], y: BOWL.k2[1] },
+                                   panel: { o: 0 }, close: { a: 1, b: 1, c: 1, panel: 1 } }),
+  };
+  const PROTO2 = [
+    SEAM2[0],
+    SEAM2[1],
+    merge(SEAM2[1], { close: { a: 0, b: 0 }, tag: { o: 1 } }),                                                      // "costs": the price tag
+    state(KIT, { K: { half: 0.5 }, cooks: cooksAt([["counter", 1, 0.5], ["counter", 0, 1], ["counter", 1, 0.8], ["appl", 0, 0.5]]), veg: 1, knife: { o: 1, holder: 1 }, oven: { o: 1 }, appl: { o: 1 },
+                 panel: { lanes: 1, split: 0.5, rows: CLOSE_ROWS }, panel2: { rows: CLOSE_ROWS2 }, slot: merge(SLOT.kitchen, { o: 0.5 }) }),   // "full kitchen": growing back
+    SEAM2[2],
+    state(KIT, { K: { half: 1 }, cooks: cooksAt([["counter", 0, 0.5], ["counter", 1, 0.5], ["counter", 1, 0.5], ["counter", 1, 0.5]]), veg: 1, knife: { o: 1, holder: 0 }, oven: { o: 1 }, appl: { o: 1 },
+                 twin: merge(ONE(0, 1), { knife: { o: 0 } }), k3: merge(ONE(0, 1), { knife: { o: 0 }, draw: 0.6 }), slot: SLOT.kitchens, panel: Object.assign({}, PROC) }),   // "more kitchens"
+    state(KIT, GRID4(0.5, 1), { slot: SLOT.knives, panel: Object.assign({}, PROC) }),                                    // "its own GIL": four knives
+    SEAM2[3],
+    state(KIT, GRID4(0.5, 0), DIM34, { slot: SLOT.wall, wall: { o: 1 }, pipe: { o: 1 }, bowl: { o: 1, x: BOWL.k1[0], y: BOWL.k1[1], box: 0 },
+                                       panel: Object.assign({ rows: PAR_ROWS.map((r) => [{ a: 0, b: 0.3, k: "py" }]) }, PROC, { titleText: "multiprocessing.Pool(4)" }) }),   // the wall, the bowl at kitchen 1
+    state(KIT, GRID4(0.5, 0), DIM34, { slot: SLOT.pipe, wall: { o: 1 }, pipe: { o: 1 }, bowl: { o: 1, x: 515, y: BOWL.pipeIn[1], box: 1 },
+                                       panel: Object.assign({ rows: [[{ a: 0, b: 0.3, k: "py" }, { a: 0.3, b: 0.6, k: "copy" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }], [{ a: 0, b: 0.3, k: "py" }]] }, PROC, { titleText: "pickle.dumps(arr)" }) }),   // boxed, in the pipe
+    SEAM2[4],
+    state(KIT, GRID4(0.5, 0), { k3: { o: 0 }, k4: { o: 0 }, slot: SLOT.note, wall: { o: 1 }, pipe: { o: 1 }, fridge: { o: 1, shelf: 1 },
+                                bowl: { o: 1, x: BOWL.fridge[0], y: BOWL.fridge[1], box: 0 }, note: { o: 1, x: 515, y: BOWL.pipeIn[1] },
+                                panel: Object.assign({ rows: SHM_ROWS }, PROC, { titleText: "SharedMemory(name)" }) }),   // the note in the pipe
+    SEAM2[5],
+    SEAM2[6],
   ];
 
   // ---- drawing ----
@@ -223,7 +305,7 @@
           const x = inn < 1 ? lerp(SPOT.off, SPOT.counter[i], io(inn)) : lerp(SPOT.counter[i], target, u);
           const bob = inn < 1 ? 6 * Math.abs(Math.sin(Math.PI * 4 * inn)) : 0;
           C.place(p, x, FEET - bob, FIG);
-          C.show(p, 1);
+          C.show(p, Sk.draw >= 0.999 ? 1 : 0);          // no cooks until the box is drawn
           const h = Sk.knife.holder, holds = h >= 0 && Math.abs(h - i) < 0.5 && c.at === "counter";
           const there = u >= 0.999;
           const pose = { armL: 22, armR: 22, lean: 0, tilt: 0 };
@@ -263,6 +345,30 @@
     }
     const main = kitchen("kitClipMain");
     const twin = kitchen("kitClipTwin");
+    const k3 = kitchen("kitClipK3"), k4 = kitchen("kitClipK4");
+    const at = (g, i) => `translate(${g[0]} ${g[1]}) scale(${HALF}) translate(${-BOX.x} ${-BOX.y})`;
+
+    // ---- ep 2 props (frame coordinates, drawn over the kitchens) ----
+    const gWall = node("g", {}, svg);
+    const wallEl = node("rect", { x: WALL.x, y: WALL.y, width: WALL.w, height: WALL.h, rx: 6, fill: PAL.ink }, gWall);
+    const gPipe = node("g", {}, svg);
+    node("rect", { x: PIPE.x, y: PIPE.y, width: PIPE.w, height: PIPE.h, rx: PIPE.h / 2, fill: PAL.bg, stroke: PAL.dim, "stroke-width": 6 }, gPipe);
+    const gFridge = node("g", {}, svg);
+    const fridgeEl = node("rect", { x: FRIDGE.x, y: FRIDGE.y, width: FRIDGE.w, height: FRIDGE.h, rx: 18, fill: PAL.panel, stroke: PAL.ink, "stroke-width": 7, pathLength: 1 }, gFridge);
+    const shelfLines = FRIDGE.shelves.map((y) => line(gFridge, FRIDGE.x + 150, y, FRIDGE.x + FRIDGE.w - 30, y, { stroke: PAL.dim, "stroke-width": 5 }));
+    const shelfLabs = FRIDGE.shelves.map((y, i) => mono(I.label(root, `${i + 1}`, { size: 60, left: FRIDGE.x + 40, top: y - 62, width: 80, align: "left", color: PAL.dim })));
+    const gBowl = node("g", {}, svg);
+    const bowlEl = node("path", { d: "M-30 -14 H30 C30 6 18 14 0 14 C-18 14 -30 6 -30 -14 Z", fill: PAL.data, stroke: PAL.data, "stroke-width": 4, "stroke-linejoin": "round" }, gBowl);
+    const foodEl = node("path", { d: "M-18 -14 V-30 M0 -14 V-34 M18 -14 V-30", stroke: PAL.data, "stroke-width": 6, "stroke-linecap": "round" }, gBowl);
+    const crateEl = node("rect", { x: -26, y: -26, width: 52, height: 52, rx: 6, fill: PAL.bg, stroke: PAL.dim, "stroke-width": 6 }, gBowl);
+    const crateX = node("path", { d: "M-26 -26 L26 26 M26 -26 L-26 26", stroke: PAL.dim, "stroke-width": 4 }, gBowl);
+    const gNote = node("g", {}, svg);
+    node("rect", { x: -120, y: -36, width: 240, height: 72, rx: 14, fill: PAL.bg, stroke: PAL.hero, "stroke-width": 6 }, gNote);
+    const noteLab = I.label(root, "shelf 3", { size: 60, left: 0, top: 0, width: 240, align: "center", color: PAL.hero });
+    const gTag = node("g", {}, svg);
+    node("rect", { x: TWIN.x + BOX.w * HALF - 80, y: TWIN.y - 36, width: 110, height: 72, rx: 14, fill: PAL.hero }, gTag);
+    node("line", { x1: TWIN.x + BOX.w * HALF - 80, y1: TWIN.y, x2: TWIN.x + BOX.w * HALF - 110, y2: TWIN.y + 30, stroke: PAL.hero, "stroke-width": 6 }, gTag);
+    const tagLab = I.label(root, "$", { size: 60, left: TWIN.x + BOX.w * HALF - 80, top: TWIN.y - 36, width: 110, align: "center", color: PAL.bg });
 
     // ---- labels ----
     const labK = pair("kitchen", "process", { left: BOX.x, top: 235, width: 420, align: "left" });
@@ -272,6 +378,8 @@
     closeA.innerHTML = `<span style="color:${PAL.dim}">waiting</span> → threads`;
     const closeB = I.label(root, "", { size: 60, left: 80, top: CLOSE_Y[1], width: 870, align: "center", color: PAL.ink });
     closeB.innerHTML = `<span style="color:${PAL.hero}">running Python</span> → processes`;
+    const closeC = I.label(root, "", { size: 60, left: 80, top: CLOSE_PANEL[2], width: 870, align: "center", color: PAL.ink });
+    closeC.innerHTML = `<span style="color:${PAL.data}">big data</span> → shared memory`;
 
     // ---- the Python panel (one wide panel that splits into two halves at the close) ----
     const gPanel = node("g", {}, svg);
@@ -282,6 +390,8 @@
     const rowY = (i) => PANEL.row0 + i * PANEL.pitch;
     const codeLines = [0, 1, 2, 3].map((i) => mono(I.label(root, "Thread(target=chop)", { size: 60, left: PANEL.x + 30, top: rowY(i), width: 810, align: "left", color: PAL.dim })));
     const laneLabs = [0, 1, 2, 3].map((i) => mono(I.label(root, `Thread ${i + 1}`, { size: 60, left: PANEL.x + 30, top: rowY(i), width: 300, align: "left", color: PAL.dim })));
+    const procLabs = [0, 1, 2, 3].map((i) => mono(I.label(root, `Process ${i + 1}`, { size: 60, left: PANEL.x + 30, top: rowY(i), width: 340, align: "left", color: PAL.dim })));
+    const PROC_BAR_X = 450;
     const shortLabs = [0, 1, 2, 3].map((i) => mono(I.label(root, `T${i + 1}`, { size: 60, left: PANEL.x + 30, top: rowY(i), width: 120, align: "left", color: PAL.dim })));
     const laneLines = [0, 1, 2, 3].map((i) => line(gPanel, PANEL.barX, rowY(i) + 36, PANEL.barX1, rowY(i) + 36, { stroke: PAL.muted, "stroke-width": 4, "stroke-dasharray": "6 10" }));
     const BARS = 4;
@@ -296,6 +406,7 @@
     const barStyle = (el, k, pu) => {
       if (k === "py") { el.setAttribute("fill", PAL.hero); el.setAttribute("stroke", "none"); el.setAttribute("fill-opacity", lerp(0.9, 1, pu.py)); el.setAttribute("transform", ""); }
       else if (k === "io") { el.setAttribute("fill", PAL.bg); el.setAttribute("stroke", PAL.dim); el.setAttribute("stroke-width", lerp(5, 8, pu.io)); el.setAttribute("stroke-dasharray", "14 10"); el.setAttribute("fill-opacity", 1); }
+      else if (k === "copy") { el.setAttribute("fill", PAL.muted); el.setAttribute("stroke", "none"); el.setAttribute("fill-opacity", 1); }
       else { el.setAttribute("fill", PAL.data); el.setAttribute("stroke", "none"); el.setAttribute("fill-opacity", 0.9); }
     };
     const drawRows = (els, rows, x0, x1, pu, alpha) => els.forEach((row, i) => row.forEach((el, k) => {
@@ -312,8 +423,22 @@
       const s = lerp(1, HALF, clamp01(S.K.half));
       main.drawK({ o: S.K.o, draw: S.K.draw, cooks: S.cooks, veg: S.veg, knife: S.knife, oven: S.oven, appl: S.appl, chop: S.chop || 0 },
                  `translate(${BOX.x} ${BOX.y}) scale(${s}) translate(${-BOX.x} ${-BOX.y})`);
-      twin.drawK(S.twin, `translate(${TWIN.x} ${TWIN.y}) scale(${HALF}) translate(${-BOX.x} ${-BOX.y})`);
+      twin.drawK(S.twin, at(GRID[1])); k3.drawK(S.k3, at(GRID[2])); k4.drawK(S.k4, at(GRID[3]));
       labK.set(S.K.lab * S.K.o);
+      // ep 2 props
+      opac(gWall, S.wall.o); wallEl.setAttribute("height", WALL.h * clamp01(S.wall.draw));
+      opac(gPipe, S.pipe.o);
+      opac(gFridge, S.fridge.o);
+      fridgeEl.setAttribute("stroke-dasharray", "1"); fridgeEl.setAttribute("stroke-dashoffset", 1 - clamp01(S.fridge.draw)); fridgeEl.setAttribute("fill-opacity", clamp01(S.fridge.draw));
+      shelfLines.forEach((el) => opac(el, S.fridge.draw >= 0.999 ? 1 : 0));
+      shelfLabs.forEach((el, i) => { domOpac(el, S.fridge.o * (S.fridge.draw >= 0.999 ? 1 : 0)); el.style.color = i === 2 && S.fridge.shelf >= 0.5 ? PAL.hero : PAL.dim; });
+      gBowl.setAttribute("transform", `translate(${S.bowl.x} ${S.bowl.y})`); opac(gBowl, S.bowl.o);
+      const bx = clamp01(S.bowl.box);
+      bowlEl.setAttribute("opacity", 1 - bx); foodEl.setAttribute("opacity", 1 - bx);
+      crateEl.setAttribute("opacity", bx); crateX.setAttribute("opacity", bx);
+      gNote.setAttribute("transform", `translate(${S.note.x} ${S.note.y})`); opac(gNote, S.note.o);
+      noteLab.style.left = `${S.note.x - 120}px`; noteLab.style.top = `${S.note.y - 33}px`; domOpac(noteLab, S.note.o);
+      opac(gTag, S.tag.o); domOpac(tagLab, S.tag.o);
       // labels
       slot.a.textContent = S.slot.top; slot.b.textContent = S.slot.bottom;
       slot.set(S.slot.o, S.slot.hero);
@@ -321,18 +446,21 @@
       // the close lines: inside the kitchen while it is full size, in the gap once it is half size; while it shrinks they
       // fade out in place and fade back in at the gap (a slide would cross the shrinking box)
       const half = clamp01(S.K.half), gap = half >= 0.5 ? 1 : 0, cf = seg(Math.abs(1 - 2 * half), 0.4, 1);
-      closeA.style.top = `${gap ? CLOSE_Y[0] : CLOSE_IN[0]}px`; closeB.style.top = `${gap ? CLOSE_Y[1] : CLOSE_IN[1]}px`;
-      domOpac(closeA, S.close.a * cf); domOpac(closeB, S.close.b * cf);
+      if (S.close.panel >= 0.5) { closeA.style.top = `${CLOSE_PANEL[0]}px`; closeB.style.top = `${CLOSE_PANEL[1]}px`; domOpac(closeA, S.close.a); domOpac(closeB, S.close.b); }
+      else { closeA.style.top = `${gap ? CLOSE_Y[0] : CLOSE_IN[0]}px`; closeB.style.top = `${gap ? CLOSE_Y[1] : CLOSE_IN[1]}px`; domOpac(closeA, S.close.a * cf); domOpac(closeB, S.close.b * cf); }
+      domOpac(closeC, S.close.c || 0);
       // the panel
-      const P = S.panel, split = clamp01(P.split || 0), lanes = clamp01(P.lanes);
+      const P = S.panel, split = clamp01(P.split || 0), lanes = clamp01(P.lanes), proc = clamp01(P.proc || 0);
       opac(gPanel, P.o);
+      title.textContent = P.titleText || "$ python main.py";
       panelBox.setAttribute("width", lerp(PANEL.w, SPLIT.w, split));
       domOpac(title, P.title * P.o * (1 - seg(split, 0, 0.5))); domOpac(title1, P.o * seg(split, 0.5, 1));
       domOpac(coreTag, clamp01(P.core || 0) * P.o * (1 - split));
       codeLines.forEach((el, i) => domOpac(el, P.o * (1 - lanes) * clamp01(P.code - i)));
-      laneLabs.forEach((el) => domOpac(el, P.o * lanes * (1 - seg(split, 0, 0.5))));
+      laneLabs.forEach((el) => domOpac(el, P.o * lanes * (1 - seg(split, 0, 0.5)) * (1 - seg(proc, 0, 0.5))));
+      procLabs.forEach((el) => domOpac(el, P.o * lanes * seg(proc, 0.5, 1)));
       shortLabs.forEach((el) => domOpac(el, P.o * lanes * seg(split, 0.5, 1)));
-      const x0 = lerp(PANEL.barX, SPLIT.barX, split), x1 = lerp(PANEL.barX1, SPLIT.barX1, split);
+      const x0 = lerp(lerp(PANEL.barX, PROC_BAR_X, proc), SPLIT.barX, split), x1 = lerp(PANEL.barX1, SPLIT.barX1, split);
       laneLines.forEach((el) => { el.setAttribute("x1", x0); el.setAttribute("x2", x1); opac(el, lanes); });
       const pu = { py: clamp01((P.pulse && P.pulse.py) || 0), io: clamp01((P.pulse && P.pulse.io) || 0) };
       drawRows(bars, P.rows, x0, x1, pu, lanes);
@@ -341,11 +469,13 @@
       opac(gPanel2, o2); domOpac(title2, o2); shortLabs2.forEach((el) => domOpac(el, o2));
       drawRows(bars2, (S.panel2 && S.panel2.rows) || [], PANEL2.barX, PANEL.barX1, { py: 0, io: 0 }, o2);
     }
-    return { draw, svg, gKit: main.g, gTwin: twin.g, cooks: main.cooks, knife: main.knife, twin, labels: { labK, slot }, chip, title, closeA, closeB, bars, bars2, gPanel, gPanel2 };
+    return { draw, svg, gKit: main.g, gTwin: twin.g, cooks: main.cooks, knife: main.knife, twin, k3, k4, labels: { labK, slot }, chip, title, closeA, closeB, closeC, bars, bars2, gPanel, gPanel2 };
   }
 
-  window.SC = { PAL, BOX, FEET, FIG, SPOT, OVEN, APPL, PANEL, PANEL2, SPLIT, TWIN, HALF, CLOSE_Y, CLOSE_IN, BOARD, TIP,
-                REST, SEAM1, PROTO, SLOT, STAIR, OVEN_ROWS, APPL_ROWS, CLOSE_ROWS, CLOSE_ROWS2, TWIN_COOKS, KIT, cooksAt,
+  window.SC = { PAL, BOX, FEET, FIG, SPOT, OVEN, APPL, PANEL, PANEL2, SPLIT, TWIN, GRID, HALF, CLOSE_Y, CLOSE_IN, CLOSE_PANEL, BOARD, TIP,
+                WALL, PIPE, BOWL, FRIDGE,
+                REST, SEAM1, PROTO, SEAM2, PROTO2, SLOT, STAIR, OVEN_ROWS, APPL_ROWS, CLOSE_ROWS, CLOSE_ROWS2, TWIN_COOKS, KIT, cooksAt,
+                ONE, GRID4, PAR_ROWS, COST_ROWS, SHM_ROWS, PROC, DIM34, RECAP, EP2_FRAME0, kitState,
                 state, tween, merge, mount, lerp, clamp01, seg, io, pulse, chopAt,
                 SEAM: SEAM1 };
 })();
