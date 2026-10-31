@@ -29,7 +29,8 @@ Write `SERIES.md` at the series root. It is the series' one home:
   viewer's words, who is asking, one-sentence answer, search phrase
   checked in YouTube autocomplete), a working name (no YouTube title:
   titles are proposed at runbook step 9), frame 0 and the magenta
-  hero, the code beat, the parts to reuse.
+  hero, the code beat (the code exactly as the kit's card shows it, and
+  the VO line it sits on), the parts to reuse.
 - A **checklist** table, one row per episode: working name, folder, Script, VO,
   Storyboard, Beats, Assembled, Shipped.
 

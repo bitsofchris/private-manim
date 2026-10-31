@@ -48,7 +48,7 @@ Rules that are specific to Shorts:
 
 - The Short's frame 0 (the hook beat): something is on screen and something is moving by frame 1. No title card, no empty dark opener. Later beats follow `agents/animation-rules.md` rule 1: only what the VO names moves, and a beat may hold still until its first cue (012 ep03).
 - Readable text has one floor per engine, both passed on a phone: Manim, nothing smaller than `SHORT_LABEL_SCALE` (~1/20 of frame height, ~96 px line height); HyperFrames, 60 px font-size, weight 800 (`agents/beat-brief-hyperframes.md`, "Layout, in pixels").
-- One caption at a time, 2 to 4 words, always in the band. Burned-in VO captions from `tools/assemble.py` use the same band, so a beat uses scene captions or VO captions, not both.
+- One caption at a time, on one line, always in the band (VO captions: `captions_from_transcript.py`, ≤ 15 characters; a scene's own captions: 2 to 4 words). Burned-in VO captions from `tools/assemble.py` use the same band, so a beat uses scene captions or VO captions, not both.
 - **The scene changes about every 5 s.** The message comes first, but a
   Short that holds one image for 20 s loses the scroller (Chris, 014
   ep01: the loop image held for 26 s, "we should be changing between the
@@ -202,7 +202,7 @@ when it makes sense". The reference implementation is the 014 code card,
 |---|---|
 | code that reads as code | VS Code Dark+ colours on the panel: keywords `#569CD6`, calls `#DCDCAA`, names `#9CDCFE`, numbers `#B5CEA8`, strings `#CE9178`, comments `#6A9955`, punctuation `#D4D4D4`, classes `#4EC9B0`; never one block of ink, never magenta text for the whole line |
 | the hero line | a magenta bar in the gutter and a lighter row (`rgba(192,132,252,0.12)`); the text keeps its colours, so the one-magenta-hero rule still holds |
-| code appearing while the VO talks about it | type it like a person: uneven per-character pace (0.45–1.55× the mean at ~22 cps), spaces quick, a 2.5× pause at each line break, a blinking block cursor until the last line lands, then cursor off and still. Plan the cue with `SC_typingSeconds` so the last line lands before the VO moves on |
+| code appearing while the VO talks about it | type it like a person: uneven per-character pace (0.45–1.55× the mean at ~22 cps), spaces quick, a 2.5× pause at each line break, a blinking block cursor until the last line lands, then cursor off and still. Plan the cue with `SC_typingSeconds` so the last line lands before the VO moves on. If the typing outruns the line that names the code, raise the pace to ~30 cps at most, then hold the card through the next line and flip back on the line that returns to the other image (014 ep02: four lines took 2.6 s at 30 cps, so the card held through "Your dataset sits at the front" and flipped back on "All it knows") |
 | code that is already there when the beat starts, or a card shown as a reference | no typing; the card is fully typed from frame 0 and the hero bar moves with the VO |
 
 ## File layout

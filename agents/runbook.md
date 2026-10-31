@@ -276,8 +276,8 @@ Gotchas:
    first watch).
 2. Find cut boundaries:
    - `ffmpeg silencedetect` (`d=0.45`, noise 12 dB above the floor that
-     `tools/vo_floor.py` prints, as `--noise auto` sets it) gives the
-     pause map.
+     `tools/vo_floor.py` prints but not below −45 dB, as `--noise auto`
+     sets it) gives the pause map.
    - A cut that falls mid-phrase: extract the 2–5 s region, transcribe
      just that clip (`mw` on the sub-clip gives finer segments), and run
      silencedetect at `-40dB d=0.04` for micro-pauses.
@@ -292,8 +292,12 @@ tools/tighten_vo.py vo_clean.wav --out vo_final.wav --map timemap.json \
    range, so a mid-phrase cut stays cut), caps every pause, 8 ms fades at
    each join, writes an old→new time map, then levels the result to −14
    LUFS (cutting pauses moves it: 013 ep01 went to −15.9). `--noise auto`
-   puts the pause threshold 12 dB above the take's noise floor; a fixed
-   `-35dB` clipped word tails on 013 ep01 ("attacks" → "attacked").
+   puts the pause threshold 12 dB above the take's noise floor, never
+   below −45 dB (on a quiet room floor + 12 sits under the breaths and
+   finds no pauses: 014 eps 2–5); a fixed `-35dB` clipped word tails on
+   013 ep01 ("attacks" → "attacked"). If a breath survives as its own
+   piece, rerun at `--noise=-40dB` (014 ep02: a 0.8 s breath after
+   "lives").
    A cut inside a phrase: put its edges at the envelope dips around the
    words, not at the recognizer's word times (013 ep01: "flags" started
    30 ms before its WhisperKit time, and "here's" lost its "h" at 20 ms).
@@ -569,7 +573,7 @@ also works.
 | `beat_cuts.py` | cuts mid-pause before each beat's first word → `beats.json` + the final beat table | yes |
 | `assemble.py` | concat beats, mux VO, burn captions | yes |
 | `review_frames.sh` | contact sheets at phone size, ending on the final frame; `--at` adds cue times | manual |
-| `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs; `--beat` for one beat's cuts | yes |
+| `seam_check.py` | HyperFrames cuts: snapshot both sides, pixel-diff, side-by-side PNGs; `--beat` for one beat's cuts, `--mask` for a part on the master clock | yes |
 | `hf_state_check.js` | a seam-state HyperFrames beat's first and last states against the kit's `SEAM`, in Node, before rendering | yes |
 | `word_times.py` | each word's start: the recognizer's (WhisperKit JSON) out of the silence, or estimated from the envelope → `words.json` | yes |
 | `videos/_shared/to_gif.sh` | mp4 → email-safe looping GIF (blog embeds) | manual |

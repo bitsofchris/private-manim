@@ -3,6 +3,14 @@
 One line per change to a rule, token, part, tool, or doc, with the video
 that forced it. Newest first.
 
+## 2026-10-31
+
+- `tools/tighten_vo.py --noise auto` never goes below −45 dB (`NOISE_MIN`, `auto_threshold`, tests): on a quiet room floor + 12 sits under the breaths. Runbook step 5: rerun at −40 dB if a breath survives as its own piece. (014 ep02; auto had failed on 014 eps 2–5 and 016 eps 1 and 3, each falling back by hand)
+- `tools/seam_check.py --mask x0,y0,x1,y1` (tests): blanks a part that runs on the master clock before the diff. HyperFrames brief: check by eye that the strip is the only difference, then mask it and report the box. (014 ep02: 7 of 8 cuts flagged on the sample hop alone)
+- HyperFrames brief, what a kit owes its beats: a `pulse(part, k)` call, a handle for every label the VO can name, and fields that can grow (`workers: 1.5`). (014 ep02 and ep03: seven beats hand-wrote the same pulse; beat 6 grew a worker inside the station's `<g>`)
+- `agents/style.md` code typing row: if the typing outruns the line that names the code, ≤ ~30 cps, hold the card through the next line, flip back on the line that returns to the other image. `agents/series.md`: the episode's code beat is written exactly as the kit's card shows it, with its VO line. 014 `SERIES.md` ep 2 row fixed to the shipped card (`drop_last` is the written companion's). (014 ep02)
+- Janitor: AGENTS.md map lists the 014, 015, 016 and 017 series; `agents/parts.md` lists 014's machine kit (5 uses) and code card (2 uses with 016's adapted copy → promote to `web/code/`); `agents/style.md` caption rule says one line, ≤ 15 characters for VO captions (it still said 2 to 4 words). (janitor)
+
 ## 2026-10-29
 
 - style.md, "Vectors and matrices as numbers": a batch drawn as an icon is still digits (rows of the ledger's readout in brackets), never a stack of squiggles. From 014 ep 1's second cut: Chris saw the batching station's squiggle stack and the `32` as "a bunch of squiggles", not data. The shared `videos/014-pytorch-dataloading/_kit/machine.js` grew `readout()` and the ledger a `series.readout`.

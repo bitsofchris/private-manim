@@ -250,6 +250,12 @@ What the kit owes its beats (013 ep04):
 - Its `00_layout` cycles through every seam state, so every string the
   kit can show is on screen once before beats are built. ep04's baseline
   label was wired to a field `draw` never passed and showed nowhere.
+- Emphasis is a kit call or a state field, not beat code: a `pulse(part,
+  k)` that scales a part (SVG and labels) about its centre for one frame,
+  a handle for every label a VO line can name, and fields that can grow
+  (`workers: 1.5` is the second worker half grown). 014 ep02 and ep03:
+  seven beats wrote the same scale-and-restore pulse by hand, and beat 6
+  grew a worker by reaching into the station's `<g>`.
 
 Before rendering, check your beat's states against the table:
 `node "$(git rev-parse --show-toplevel)"/tools/hf_state_check.js NN_beat FROM TO`
@@ -275,7 +281,10 @@ report which end state you assumed. Once a neighbour's render exists, run
 `"$(git rev-parse --show-toplevel)"/tools/seam_check.py beats.json` from
 the video folder and report every cut it flags, yours or not (012 ep01's
 beat 3–4 agent caught the 4 → 5 cut this way); `--beat NN_beat` checks only
-your own cuts. It compares
+your own cuts. A part that runs on the master clock (014's sample hop on
+`SC.clock`) moves in the 0.02 s between the two snapshots and flags every
+cut; check by eye that the strip is the only difference, then rerun with
+`--mask x0,y0,x1,y1` around it and report the box. It compares
 `hyperframes snapshot` PNGs, not mp4 frames: h264 noise around text reads as
 a difference of up to ~60/255 where there is none, ep03).
 
