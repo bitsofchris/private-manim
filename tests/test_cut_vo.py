@@ -14,6 +14,24 @@ import cut_vo as cv  # noqa: E402
 CUTS = [(1.0, 2.0, 0.1), (3.0, 3.5, 0.0)]
 
 
+class ParseCut(unittest.TestCase):
+    def test_range_and_silence(self):
+        self.assertEqual(cv.parse_cut("1.5-2.25:0.1"), (1.5, 2.25, 0.1))
+
+    def test_end_is_open_until_clamped(self):
+        a, b, sil = cv.parse_cut("39.57-end:0.6")
+        self.assertEqual((a, sil), (39.57, 0.6))
+        self.assertEqual(b, float("inf"))
+
+
+class CutToEnd(unittest.TestCase):
+    def test_tail_becomes_the_silence(self):
+        x = np.ones(cv.SR * 3, np.float32)
+        y = cv.cut_audio(x, [(2.0, 3.0, 0.5)])                 # what main makes of "2-end:0.5"
+        self.assertEqual(len(y), int(cv.SR * 2.5))
+        self.assertTrue(np.all(y[cv.SR * 2:] == 0))
+
+
 class Shift(unittest.TestCase):
     def test_before_any_cut_unchanged(self):
         self.assertEqual(cv.shift(0.5, CUTS), 0.5)
