@@ -9,44 +9,55 @@ Final cut: `media/short.mp4`, 44.7 s.
 
 ## Titles
 
-**Chosen (Chris, 2026-10-31): the hook title.** The day-10 read records
-its search %.
+Rewritten 2026-10-31 at Chris's ask for a more generic frame: the Short
+compares the number types AI models train in, not a PyTorch or Python
+detail. YouTube autocomplete (checked 2026-10-31): "bf16 vs fp16", "fp16
+vs fp32", "fp16 vs fp8" and "mixed precision training" (+ "pytorch") all
+complete; "pytorch data types" / "pytorch dtype" don't; "data types in
+deep learning" does, but its results are about data (images, text), not
+number formats, so it isn't used.
 
-Search title, for the person typing the phrase (39 characters, the phrase
-first, the answer after it):
+**Recommended: the hook title.** The day-10 read records which was used
+and its search %.
+
+Hook title, for the person scrolling past (the general stake, AI models;
+42 characters, the phrase starts at 29):
 
 ```
-bf16 vs fp16: Why bf16 Doesn't Overflow
+Why AI models train in bf16 (bf16 vs fp16)
 ```
 
-Hook title, for the person scrolling past (the stake first, a claim about
-them; the phrase kept for search; 46 characters, the phrase starts at 34):
+Search title, for the person typing a phrase (38 characters; the broader
+"mixed precision training" first, the comparison after it):
 
 ```
-Your fp16 training can overflow (bf16 vs fp16)
+Mixed Precision Training: bf16 vs fp16
 ```
+
+Previous pair (2026-10-31, before the rewrite): `Your fp16 training can
+overflow (bf16 vs fp16)` / `bf16 vs fp16: Why bf16 Doesn't Overflow`.
 
 ## Description
 
 ```
-bf16 vs fp16: both are 16 bits, but bf16 keeps fp32's range, so training doesn't overflow.
+bf16 vs fp16 for AI training: both halve fp32's bits for speed, but only bf16 keeps its range.
 
-Fewer bits per number means more numbers per memory read and more math per tensor-core cycle: a B200 does about 2,250 TFLOPS in bf16 and 4,500 in fp8.
-fp16 spends its bits on precision, so 70,000 becomes inf (its max is 65,504). bf16 keeps fp32's 8 exponent bits: 70,000 becomes 70,144, less precise but in range.
-fp8 keeps 3 mantissa bits and tops out at 448, so it needs a scaling library like NVIDIA's Transformer Engine. Mixed precision training in PyTorch: torch.autocast with dtype=torch.bfloat16.
+Every weight and activation in a model is a number, and its data type sets how many bits it gets: fp32 (32), fp16 and bf16 (16), fp8 (8). Fewer bits means more numbers per memory read and more math per cycle: a B200 does about 2,250 TFLOPS in bf16 and 4,500 in fp8.
+fp16 spends its bits on precision, so 70,000 becomes inf (its max is 65,504). bf16 keeps fp32's 8 exponent bits: 70,000 becomes 70,144, less precise but in range. That's why mixed precision training defaults to bf16.
+fp8 keeps 3 mantissa bits and tops out at 448, so it needs a scaling library like NVIDIA's Transformer Engine. In PyTorch it's one line: torch.autocast with dtype=torch.bfloat16.
 
 Part 4 of 8 on understanding the GPU. Next: tensor cores vs memory.
 [POST LINK]
 
 Level up human.
 
-#bf16 #deeplearning #machinelearning #pytorch #Shorts
+#machinelearning #deeplearning #llm #pytorch #Shorts
 ```
 
 ## Substack note
 
 ```
-bf16 vs fp16: both are 16 bits, so why does everyone train in bf16? fp16 spends its bits on precision and tops out at 65,504; anything bigger becomes inf. bf16 keeps fp32's 8 exponent bits, so 70,000 stays 70,144: a little less precise, never infinite. Half the bits of fp32 also means twice the peak math. 45 seconds.
+Why do AI models train in bf16 instead of fp32 or fp16? Every weight is a number, and fewer bits per number means twice the math per cycle. fp16 gets there by spending its bits on precision, so anything past 65,504 becomes inf. bf16 keeps fp32's range instead: 70,000 stays 70,144, a little less precise, never infinite. 45 seconds.
 ```
 
 ## Checked against the final cut
