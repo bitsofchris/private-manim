@@ -3,20 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 06_shuffle: beat 6, SEAM[5] (machine, iter hero, shards [0,1,2]) -> SEAM[6] (shards [2,0,1], card 2 loaded).
-         Cues (master, words.json; beat-local = master - 21.740):
-           shuffling@22.08 (0.34)    the shards the hero, machine hero null (swap at 0.24)
-           pre-shuffle@23.74 (2.00)  card 2 hops 2 -> 0 over the others (1.75-2.55), cards 0, 1 step
-                                     right one slot (1.95-2.60): order [2,0,1], via S.shards.pos
-           load@25.42 (3.68)         card 2 (slot 0) rises into the Dataset card and fades, load 0 -> 1
-                                     (3.55-4.40), done by "memory"@26.16 (4.42)
-           yield@26.62 (4.88)        __iter__ the hero, shards back to ink (swap at 4.78) = SEAM[6], held
-         Samples keep hopping throughout (SC.clock). -->
+    <!-- ep04 06_shuffle: beat 6, "So shuffling is now your problem. You pre-shuffle the data into shards, load one shard into memory, and yield from it."
+         Opens on SEAM[5], ends on SEAM[6] (shards [2,0,1], shard 2 in memory, __iter__ the hero).
+         beat-local cues (master − 21.74): shuffling@22.08 pre-shuffle@23.74 load@25.42 memory@26.16 yield@26.62
+         0.10–0.40  the next() arrow fades; "shuffling" (0.34): the shards the hero
+         1.85–2.85  "pre-shuffle": the shards reorder to [2,0,1] (card 2 lifts over, 0 and 1 dip under)
+         3.55–4.45  "load one shard into memory": card 2 drops into the memory box, the hero; its rows leave shuffled
+         4.78       "yield": __iter__ the hero; 5.30–end SEAM[6] -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
     <script src="kit/code.js"></script>
     <script src="ep/ep4.js"></script>
+    <script src="ep/stream.js"></script>
     <script src="ep/seam.js"></script>
     <style>
       @font-face {
@@ -36,21 +35,19 @@
   const BEAT_SECONDS = 5.620, MASTER = 21.740;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  const CUE = { shuffling: 0.24 /* "shuffling" 22.08 */, pre: 1.75 /* "pre-shuffle" 23.74 */,
-                load: 3.55 /* "load" 25.42 */, memory: 4.40 /* "memory" 26.16 */, yield: 4.78 /* "yield" 26.62 */ };
-  const { seg, lerp } = SC;
-  const ease = SC.E();
+  const E = SC.E(), { seg } = SC;
+  const CUE = { shuffling: 0.34, pre: 2.00, load: 3.68, yield: 4.88 };
+  const T = { move: 1.85, load: 3.55, still: 5.30 };
   function state(t) {
-    if (t <= CUE.shuffling) return SC.SEAM[5];                   // __iter__ the hero, shards at rest [0,1,2]
-    if (t >= CUE.yield) return SC.SEAM[6];                       // shuffled, card 2 loaded, __iter__ the hero
-    const u2 = ease.io(seg(t, CUE.pre, CUE.pre + 0.8));          // card 2 leads, hopping over the others
-    const u01 = ease.io(seg(t, CUE.pre + 0.2, CUE.pre + 0.85));  // cards 0, 1 step right behind it
-    const pos = [lerp(0, 1, u01), lerp(1, 2, u01), lerp(2, 0, u2)];
-    const load = ease.io(seg(t, CUE.load, CUE.memory));
-    // card 2 lifts over the other two while they dip under it (they would overlap at a 30 px hop)
-    const lift = [-30 * Math.sin(Math.PI * u01), -30 * Math.sin(Math.PI * u01), 56 * Math.sin(Math.PI * u2)];
-    const shards = { o: 1, order: [2, 0, 1], pos, lift, load, loadCard: 2, hero: 1 };
-    return Object.assign({}, SC.SEAM[5], { hero: null, shards });
+    if (t <= 0) return SC.SEAM[5];
+    if (t >= T.still) return SC.SEAM[6];
+    const u = E.io(seg(t, T.move, T.move + 1.0)), h = Math.sin(Math.PI * u);
+    const moving = u > 0 && u < 1;
+    const hero = t < CUE.shuffling - 0.1 ? "iter" : t < T.load ? "shards" : t < CUE.yield - 0.1 ? "memory" : "iter";
+    const stream = { o: 1, hero, ask: 1 - seg(t, 0.1, 0.4), load: E.io(seg(t, T.load, T.load + 0.9)),
+                     order: u >= 1 ? [2, 0, 1] : [0, 1, 2] };
+    if (moving) { stream.pos = [u, 1 + u, 2 - 2 * u]; stream.lift = [-30 * h, -30 * h, 56 * h]; }
+    return Object.assign({}, SC.SEAM[6], { stream });
   }
   function render(t) {
     SC.clock = MASTER + t;

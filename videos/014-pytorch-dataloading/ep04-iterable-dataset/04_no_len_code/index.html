@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- ep04 04_no_len_code: beat 4, "There's no length and no get item. Sample i doesn't exist until the iterator produces it."
-         Opens on SEAM[3] (the machine, the shards the hero), ends on SEAM[4] (EP4.LEN fully typed, yield lit, cursor off).
+         Opens on SEAM[3] (the stream, the shards the hero), ends on SEAM[4] (EP4.LEN fully typed, yield lit, cursor off).
          beat-local cues (master − 12.435), from words.json: There's@12.69 length@13.00 get item.@13.50 produces@16.24
          0.10–0.50  "There's": the machine flips to EP4.LEN (card in from flip 0.4, i.e. ~0.26), the four class lines
                     already there, row 5 empty with the cursor, lit len (the line being typed is the hero)
@@ -16,6 +16,7 @@
     <script src="kit/machine.js"></script>
     <script src="kit/code.js"></script>
     <script src="ep/ep4.js"></script>
+    <script src="ep/stream.js"></script>
     <script src="ep/seam.js"></script>
     <style>
       @font-face {
@@ -63,7 +64,7 @@
       code: { o: 1, lines: C, typedLines: [Infinity, Infinity, Infinity, Infinity, n],
               lit: t >= T.yield ? "yield" : "len", cursor: n < LEN4 ? 1 : 0, cursorLine: 4, blink: t - T.type },
     });
-    if (flip < 0.6) S.shards = SC.SEAM[3].shards;   // the shards fade out with the machine
+    if (flip < 0.6) S.stream = SC.SEAM[3].stream;   // the stream fades out under the flip
     return S;
   }
   function render(t) {

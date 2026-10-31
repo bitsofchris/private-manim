@@ -4,17 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- ep04 03_shards: beat 3, "I most frequently use this when training bigger models. You pack the data into shards and just stream them through."
-         Opens on SEAM[2] (the EP4.ITER card, yield lit, cursor off), ends on SEAM[3] (the machine, shards on, the shards the hero).
-         beat-local cues (master − 7.285), from words.json: I@7.61 shards@10.62 stream@11.46 through.@11.94
-         0.15–0.55  the card flips back to the machine (machine in from flip 0.6, i.e. by ~0.31, on "I"); __iter__ the hero
-         3.20–3.45  the shards fade in under the Dataset card; on "shards" (3.335) they become the magenta hero, machine hero null
-         4.10–4.45  "stream": one opacity dip of the shards (1 → 0.5 → 1); samples keep hopping (SC.clock)
-         4.60–end   SEAM[3] itself -->
+         Opens on SEAM[2] (the EP4.ITER card), ends on SEAM[3] (the stream, flowing, the shards the hero).
+         beat-local cues (master − 7.285), from words.json: I@7.61 pack@9.80 shards@10.62 stream@11.46 through.@11.94
+         0.15–0.55  the card flips to the stream: an empty pipe, __iter__ the hero, the DataLoader bar
+         2.45–3.10  "pack the data into shards": the three shards drop in at the top; the hero on "shards" (3.335)
+         3.95–4.80  "stream them through": samples fill the pipe from the top, one at a time
+         4.85–end   SEAM[3] itself -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
     <script src="kit/code.js"></script>
     <script src="ep/ep4.js"></script>
+    <script src="ep/stream.js"></script>
     <script src="ep/seam.js"></script>
     <style>
       @font-face {
@@ -34,29 +35,16 @@
   const BEAT_SECONDS = 5.150, MASTER = 7.285;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  SC.E();
-  const { seg } = SC;
-  // beat-local cues (master − 7.285)
-  const CUE = {
-    i: 0.325,       /* "I": the machine is back */
-    shards: 3.335,  /* "shards": the shards in, the hero */
-    stream: 4.175,  /* "stream": one opacity dip */
-  };
-  const T = {
-    flipOut: 0.15,               // the card starts to fade, the machine is in from ~0.31
-    shardsIn: CUE.shards - 0.135, // fade in over 0.25 s, arriving just after the word
-    dip: CUE.stream - 0.075,     // the dip, 0.35 s wide, lowest just after "stream"
-    still: 4.6,                  // SEAM[3] from here (BEAT_SECONDS − 0.3 = 4.85)
-  };
-  const FLIP = 0.4;
+  const E = SC.E(), { seg } = SC;
+  const CUE = { i: 0.325, pack: 2.515, shards: 3.335, stream: 4.175 };
+  const T = { flip: 0.15, srcIn: CUE.pack - 0.07, flowIn: CUE.stream - 0.225, still: 4.85 };
   function state(t) {
-    if (t <= T.flipOut) return SC.SEAM[2];
+    if (t <= T.flip) return SC.SEAM[2];
     if (t >= T.still) return SC.SEAM[3];
-    const flip = 1 - seg(t, T.flipOut, T.flipOut + FLIP);
-    const shardsHero = t >= CUE.shards;
-    const o = seg(t, T.shardsIn, T.shardsIn + 0.25) * (1 - 0.5 * SC.pulse(t, T.dip, 0.35));
-    const S = { mode: "iterable", strike: 1, workers: 0, hero: shardsHero ? null : "iter", flip,
-                shards: { o, order: [0, 1, 2], load: 0, hero: shardsHero ? 1 : 0 } };
+    const flip = 1 - seg(t, T.flip, T.flip + 0.4);
+    const S = Object.assign({}, SC.SEAM[3], { flip, stream: {
+      o: 1, hero: t >= CUE.shards - 0.1 ? "shards" : "iter",
+      src: E.out(seg(t, T.srcIn, T.srcIn + 0.65)), flow: seg(t, T.flowIn, T.flowIn + 0.85) } });
     if (flip > 0) S.code = SC.SEAM[2].code;
     return S;
   }

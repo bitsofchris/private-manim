@@ -3,17 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <!-- ep04 07_splits (beat 7, machine; SEAM[6] -> SEAM[7]). Master 27.360, 5.199 s.
-         0.00        SEAM[6]: __iter__ the hero, shards [2,0,1] with card 2 loaded, workers 0
-         0.12        "Splits" (27.58): the shards the hero (machine hero null), one opacity dip 1 -> 0.5 -> 1 (0.12-0.82)
-         1.96        "multiple" (29.42): fetch the hero, shards back to ink; 2.06 workers 1 (first photocopy)
-         2.36        "workers," (29.72): workers 2, the second photocopy and x2
-         3.14 - end  still on SEAM[7] (hero fetch, workers 2); samples keep hopping (SC.clock) -->
+    <!-- ep04 07_splits: beat 7, "Splits are also your problem, too. If you run multiple workers, splitting the stream between them is up to you to determine."
+         Opens on SEAM[6], ends on SEAM[7] (forked to two workers' __iter__, the "?" the hero; machine hidden: workers 2).
+         beat-local cues (master − 27.36): Splits@27.58 multiple@29.42 workers@29.72 splitting@30.30 determine.@31.98
+         0.12       "Splits": the shards the hero
+         0.30–1.10  the shard in memory goes back up to its slot (the shards are the source again)
+         1.90–2.60  "multiple workers": the pipe forks under the shards into two __iter__ gates, both the hero
+         2.85       "splitting the stream": the "?" between them the hero (which shard goes where is yours)
+         4.85–end   SEAM[7] -->
     <script src="vendor/gsap.min.js"></script>
     <script src="kit/data.js"></script>
     <script src="kit/machine.js"></script>
     <script src="kit/code.js"></script>
     <script src="ep/ep4.js"></script>
+    <script src="ep/stream.js"></script>
     <script src="ep/seam.js"></script>
     <style>
       @font-face {
@@ -33,26 +36,15 @@
   const BEAT_SECONDS = 5.199, MASTER = 27.360;   // master seconds of t = 0
   const root = document.getElementById("root");
   const ep = EP4.mount(root);
-  const E = SC.E();
-  const CUE = {
-    splits: 0.220,     /* "Splits"    27.58 */
-    multiple: 2.060,   /* "multiple"  29.42 */
-    workers: 2.360,    /* "workers,"  29.72 */
-    still: 3.140,      /* ~30.50: SEAM[7] from here */
-  };
+  const E = SC.E(), { seg } = SC;
+  const CUE = { splits: 0.22, multiple: 2.06, splitting: 2.94 };
+  const T = { fork: 1.90, still: 4.85 };
   function state(t) {
     if (t <= 0) return SC.SEAM[6];
-    if (t >= CUE.still) return SC.SEAM[7];
-    const A = SC.SEAM[6];
-    const sh = Object.assign({}, A.shards);
-    const S = Object.assign({}, A, { shards: sh });
-    if (t >= CUE.splits - 0.1 && t < CUE.multiple - 0.1) {
-      S.hero = null; sh.hero = 1;                                    // the one hero: the shards
-      sh.o = 1 - 0.5 * E.sine(SC.pulse(t, CUE.splits - 0.1, 0.7));   // one dip on "Splits"
-    }
-    if (t >= CUE.multiple - 0.1) S.hero = "fetch";
-    S.workers = t >= CUE.workers ? 2 : t >= CUE.multiple ? 1 : 0;   // the photocopies one at a time
-    return S;
+    if (t >= T.still) return SC.SEAM[7];
+    const hero = t < CUE.splits - 0.1 ? "iter" : t < CUE.multiple - 0.1 ? "shards" : t < CUE.splitting - 0.1 ? "iter" : "split";
+    return Object.assign({}, SC.SEAM[7], { stream: { o: 1, hero, order: [2, 0, 1],
+      load: 1 - E.io(seg(t, 0.3, 1.1)), lanes: E.io(seg(t, T.fork, T.fork + 0.7)) } });
   }
   function render(t) {
     SC.clock = MASTER + t;

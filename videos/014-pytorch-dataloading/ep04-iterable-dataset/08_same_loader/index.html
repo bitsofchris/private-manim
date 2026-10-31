@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
     <!-- ep04 08_same_loader (beat 8, machine; SEAM[7] -> SEAM[8]). Master 32.559, 4.501 s.
-         0.00        SEAM[7]: fetch the hero, workers 2, shards [2,0,1] with card 2 loaded
-         0.15-0.65   "data loader" (32.96): the Dataset card and shards dim 1 -> 0.45 (S.dataset); hero null at 0.30,
-                     the loader box stands alone
+         0.00        SEAM[7]: the stream, forked to two workers (the machine hidden under it: workers 2)
+         0.05-0.45   the stream crossfades to the machine (never both), hero null, landing on "data"
+         0.15-0.65   "data loader" (32.96): the Dataset card dims 1 -> 0.45 (S.dataset); the loader box stands alone
          2.50        "batch" (35.16): batching the hero
          3.16        "collate," (35.82): collate the hero
          3.74        "batch out" (36.40): the batch card the hero
@@ -17,6 +17,7 @@
     <script src="kit/machine.js"></script>
     <script src="kit/code.js"></script>
     <script src="ep/ep4.js"></script>
+    <script src="ep/stream.js"></script>
     <script src="ep/seam.js"></script>
     <style>
       @font-face {
@@ -38,6 +39,7 @@
   const ep = EP4.mount(root);
   const E = SC.E();
   const CUE = {
+    x: 0.05,           /* the crossfade, stream → machine, landing on "data" */
     data: 0.401,       /* "data"      32.96 */
     batch: 2.601,      /* "batch"     35.16 (size) */
     collate: 3.261,    /* "collate,"  35.82 */
@@ -49,11 +51,12 @@
   function state(t) {
     if (t <= 0) return SC.SEAM[7];
     if (t >= CUE.still) return SC.SEAM[8];
-    const S = Object.assign({}, SC.SEAM[7]);
+    const S = Object.assign({}, SC.SEAM[8]);
+    const so = 1 - E.io(SC.seg(t, CUE.x, CUE.x + 0.4));   // the stream fades as the machine comes up (never both: 0.4 s)
+    if (so > 0) S.stream = Object.assign({}, SC.SEAM[7].stream, { o: so });
     S.dataset = 1 - (1 - DIM) * E.io(SC.seg(t, CUE.data - 0.25, CUE.data + 0.25))
                   + (1 - DIM) * E.io(SC.seg(t, CUE.back - 0.45, CUE.back));
-    S.hero = t < CUE.data - 0.1 ? "fetch"
-           : t < CUE.batch - 0.1 ? null
+    S.hero = t < CUE.batch - 0.1 ? null
            : t < CUE.collate - 0.1 ? "batching"
            : t < CUE.out - 0.1 ? "collate" : "batch";
     return S;
