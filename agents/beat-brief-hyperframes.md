@@ -261,6 +261,12 @@ What the kit owes its beats (013 ep04):
   label (`parts.sampler.dom[0]` is the station's name; the indices are
   `dom[1]`). Until the kit has handles, a brief names a label by its text,
   not its index.
+- A hero that is a group is one name the kit lights whole (014's
+  `"twins"` lights both batch cards), and a label that shows a ledger
+  number reads it from the state (`×N` from `S.shape`). Wished for by
+  014 ep05's agents, not built yet: the mode switch as one field (the
+  dataset dip with the swap at its bottom), a cursor that follows the lit
+  line, and typing one line from a given character on.
 
 Before rendering, check your beat's states against the table:
 `node "$(git rev-parse --show-toplevel)"/tools/hf_state_check.js NN_beat FROM TO`

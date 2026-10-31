@@ -228,7 +228,7 @@ step 7). Ep 2 ends as recorded, on the batch arriving, with no closer.
 | 2 | `ep02-dataloader-explained/` | x | x | x | x | |
 | 3 | `ep03-dataset-class/` | x | x | x | x | |
 | 4 | `ep04-iterable-dataset/` | x | | | | |
-| 5 | `ep05-num-workers/` | x | | | | |
+| 5 | `ep05-num-workers/` | x | x | x | x | |
 
 VO means cut into the folder's `vo_raw.m4a`, with `script.md`. Build
 order once the kit is approved: 2, 3, 5, 4, 1 (the series image first,
