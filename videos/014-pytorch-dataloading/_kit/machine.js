@@ -19,7 +19,7 @@
 //     stations     y 580+       x 95–920     sampler, fetch, batching, collate; 86 tall, 12 apart
 //   batch row      y 1000–1090  the batch tensor (x 190–600) -> the model chip (x 700–920)
 //                              a tensor is rows of numbers in brackets (data.js `readout`) with its shape beside it;
-//                              a sample in flight is one row of it in brackets; the batching station stacks three rows ×32
+//                              a sample in flight is one row of it in brackets; the batching station stacks three rows ×N, N from S.shape
 //   code card      y 330–1010   kit/code.js, shown instead of the machine (S.flip)
 //
 // S fields (all optional; SC.REST is the rest state, ep 2's frame 0):
@@ -28,7 +28,8 @@
 //   hero NAME|null             the one magenta part: dataset, len, getitem, iter, sampler,
 //                              fetch, batching, collate, batch, model, twins
 //   strike 0..1                the sampler's strike-through (1 in SEAM states of ep 4–5)
-//   twins 0..1                 a second, identical batch beside the first (ep 5); the True/False is on the code card
+//   twins 0..1                 a second, identical batch beside the first (ep 5); hero "twins" lights both cards;
+//                              the True/False is on the code card
 //   shape "[32, 512]"          the batch card's label (ep 5: "[4, 512]")
 //   loader 0..1, batch 0..1, model 0..1, dataset 0..1   opacities
 //   flip 0..1                  0 = the machine, 1 = the code card; never both (a 0.4 s crossfade)
@@ -254,6 +255,8 @@
       });
       nWorkers.textContent = S.workers >= 2 ? "×" + S.workers : "";
       show(nWorkers, S.loader * (S.workers >= 2 ? 1 : 0));
+      // ×N is the batch size, the first number of S.shape (ep 5's "[4, 512]" reads ×4)
+      nBatch.textContent = "\u00D7" + ((/\[(\d+)/.exec(S.shape) || [])[1] || D.series.batch);
       show(nBatch, S.loader); stackRO.els.forEach((el) => show(el, S.loader));
       // batch row
       const tw = S.twins;
@@ -267,7 +270,8 @@
       show(modelG, S.model * (1 - tw)); show(modelLab, S.model * (1 - tw)); show(arrow, S.model * S.batch * (1 - tw));
       show(outArrow, S.loader * S.batch);
       // hero
-      Object.keys(parts).forEach((k) => tint(parts[k], S.hero === k));
+      // hero "twins" is the pair: both cards light, not the second alone (014 ep05)
+      Object.keys(parts).forEach((k) => tint(parts[k], S.hero === k || (S.hero === "twins" && k === "batch")));
       if (code) { const c = Object.assign({ o: 1 }, S.code || {}); c.o *= cOn; code.set(c); }
     }
     return { draw, parts, stations: st, code, svg };

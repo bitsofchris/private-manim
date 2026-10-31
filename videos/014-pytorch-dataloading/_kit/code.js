@@ -6,7 +6,8 @@
 //
 // Card: x 65–950, centred on the stage (y 665), sized to its lines (3–8 rows
 // at 64 px pitch; captions stay in the band). 48 px monospace (≈ 29 px a
-// character: 28 characters a line, the limit kit/data.js keeps).
+// character: 28 characters a line, the limit kit/data.js keeps). A longer line
+// sets every row smaller so it fits: 48 × 28 / length (30 characters → 44 px).
 //
 // S.code fields:
 //   o 0..1          opacity (machine.js multiplies in S.flip)
@@ -134,6 +135,9 @@
         if (left > 0 || i === 0) shown.push({ ln, n });
         left -= ln.t.length;
       });
+      const longest = lines.reduce((a, ln) => Math.max(a, ln.t.length), 0);
+      const size = Math.min(CARD.size, Math.floor(CARD.size * 28 / Math.max(1, longest)));
+      rows.forEach((el) => { el.style.fontSize = `${size}px`; });
       const litSet = Array.isArray(C.lit) ? C.lit : C.lit ? [C.lit] : [];
       const first = Math.max(0, shown.length - CARD.rows);
       const blinkOn = C.blink == null ? true : Math.floor(C.blink / 0.5) % 2 === 0;
