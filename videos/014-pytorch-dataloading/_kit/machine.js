@@ -33,7 +33,7 @@
 //   shape "[32, 512]"          the batch card's label (ep 5: "[4, 512]")
 //   loader 0..1, batch 0..1, model 0..1, dataset 0..1   opacities
 //   flip 0..1                  0 = the machine, 1 = the code card; never both (a 0.4 s crossfade)
-//   code {o, lines, typed, lit, cursor, blink}   the code card (kit/code.js)
+//   code {o, lines, typed, lit, cursor, blink}   the code card (kit/code.js, a link to videos/_shared/web/code/code.js, preset CODE.STAGE)
 (function () {
   const NS = "http://www.w3.org/2000/svg";
   const D = window.DL_DATA;
@@ -220,7 +220,7 @@
     line(outArrow, MID, lo.y + lo.h, MID, bt.y - 30, { stroke: PAL.dim, "stroke-width": 6 });
     node("polygon", { points: `${MID - 16},${bt.y - 30} ${MID},${bt.y - 6} ${MID + 16},${bt.y - 30}`, fill: PAL.dim }, outArrow);
 
-    const code = window.SC_makeCode ? window.SC_makeCode(root) : null;
+    const code = window.CODE ? window.CODE.make(root, window.CODE.STAGE) : null;
     guides(root);
 
     function draw(g, S) {

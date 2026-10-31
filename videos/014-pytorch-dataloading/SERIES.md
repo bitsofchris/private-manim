@@ -160,7 +160,8 @@ so the batch that leaves ep 1's loader is the batch that leaves ep 2's
 machine.
 
 Look: flat house style (Chris did not choose the isometric kit). The kit
-was built 2026-10-28 (`_kit/data.js`, `machine.js`, `code.js`; `window.SC`
+was built 2026-10-28 (`_kit/data.js`, `machine.js`, `code.js`, since 2026-10-31 a link to
+`videos/_shared/web/code/code.js` mounted `CODE.STAGE`; `window.SC`
 with `mount`, `REST`, an empty `SEAM` each episode fills in its own
 `_kit/seam.js`). The canonical frame `00_layout/layout.png` shows it in
 three states (ep 2's frame 0, ep 5's twins, ep 3's `__getitem__`);
