@@ -14,6 +14,12 @@ text reads as differences up to ~60/255 where there are none (ep03).
 Manim beats are skipped. Snapshots run with `--describe false`, so no frame
 is ever sent to a vision API.
 
+`--mask x0,y0,x1,y1` (repeatable, frame pixels) blanks a box on both
+snapshots before the diff. Use it for a part that runs on the master clock
+(014's sample hop): beat N is snapshotted 0.02 s before its end, so the
+part has moved 0.02 s by beat N+1's frame 0 (014 ep02: 7 of 8 cuts flagged
+on the hop alone). Say in the report which box was masked and why.
+
 A cut passes when no pixel differs by more than --tol (default 8/255). The
 exit code is the number of failing cuts. Pure logic (pairing, duration
 parsing, the verdict) is unit-tested in tests/test_seam_check.py.
@@ -55,6 +61,14 @@ def duration(html: str) -> float:
     return float(m.group(1))
 
 
+def parse_box(spec: str) -> tuple[int, int, int, int]:
+    """'x0,y0,x1,y1' -> a box with x0 < x1 and y0 < y1."""
+    x0, y0, x1, y1 = (int(v) for v in spec.split(","))
+    if x0 >= x1 or y0 >= y1:
+        raise ValueError(f"empty box: {spec}")
+    return x0, y0, x1, y1
+
+
 def verdict(max_diff: int, tol: int) -> str:
     return "ok" if max_diff <= tol else "DIFF"
 
@@ -67,7 +81,7 @@ def snapshot(folder: Path, t: float, out: Path) -> Path:
 
 
 def main(argv: list[str] | None = None) -> int:
-    from PIL import Image, ImageChops
+    from PIL import Image, ImageChops, ImageDraw
 
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("beats")
@@ -75,6 +89,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--tol", type=int, default=8, help="largest allowed per-pixel difference (0-255)")
     ap.add_argument("--beat", action="append", default=[],
                     help="check only the cuts into and out of this beat folder (repeatable)")
+    ap.add_argument("--mask", action="append", default=[], type=parse_box,
+                    help="x0,y0,x1,y1: ignore this box on both sides (repeatable)")
     args = ap.parse_args(argv)
     path = Path(args.beats).resolve()
     base, out = path.parent, (path.parent / args.out)
@@ -85,6 +101,9 @@ def main(argv: list[str] | None = None) -> int:
         pa = snapshot(base / a, end, out / f"{a}_end")
         pb = snapshot(base / b, 0.0, out / f"{b}_start")
         ia, ib = Image.open(pa).convert("RGB"), Image.open(pb).convert("RGB")
+        for box in args.mask:
+            for im in (ia, ib):
+                ImageDraw.Draw(im).rectangle(box, fill=(0, 0, 0))
         hist = ImageChops.difference(ia, ib).convert("L").histogram()
         mx = max(i for i, n in enumerate(hist) if n)
         side = Image.new("RGB", (720, 640))

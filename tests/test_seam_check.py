@@ -54,9 +54,6 @@ class Verdict(unittest.TestCase):
         self.assertEqual(SC.verdict(9, 8), "DIFF")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class Touching(unittest.TestCase):
     PAIRS = [("01_a", "02_b"), ("02_b", "03_c"), ("03_c", "04_d")]
@@ -69,3 +66,16 @@ class Touching(unittest.TestCase):
 
     def test_first_beat_has_only_a_cut_out(self):
         self.assertEqual(SC.touching(self.PAIRS, ["01_a"]), [("01_a", "02_b")])
+
+
+class Mask(unittest.TestCase):
+    def test_parses_a_box(self):
+        self.assertEqual(SC.parse_box("431,402,583,492"), (431, 402, 583, 492))
+
+    def test_empty_box_raises(self):
+        with self.assertRaises(ValueError):
+            SC.parse_box("500,400,500,490")
+
+
+if __name__ == "__main__":
+    unittest.main()
