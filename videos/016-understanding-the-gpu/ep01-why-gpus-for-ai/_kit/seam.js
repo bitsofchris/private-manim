@@ -11,7 +11,7 @@
   const SC = window.SC;
   const ALL = "1".repeat(16), NONE = "0".repeat(16);
   const card = { o: 1, lines: SC.D.code.matmul, typed: Infinity, lit: "at", cursor: 0, cy: 1246 };
-  const NET = { net: 1, cpu4: 0 };
+  const NET = { net: 1, cpu4: 0, focus: 1 };   // beats 1–2: network over y = x @ W, the GPU smaller below
   SC.SEAM = {
     // frame 0: already working; the network's layers firing in turn (the hero), the grid shimmering, y = x @ W empty
     0: { ...NET, flow: 1, lit: SC.D.run.mfu, shimmer: 1, hero: "net", fill: NONE },
@@ -19,7 +19,7 @@
     1: { ...NET, lit: 1, hero: "chip", fill: ALL },
     // "none of them waits on the other": every y cell done at once; the y cells and the layer's outputs the hero
     2: { ...NET, lit: 1, hero: "y", fill: ALL },
-    // "a few at a time": the CPU big in the chip's place (chip, memory, network hidden), 3 of 4 rows done
+    // "a few at a time": focus back to 0 (matrices in the bottom slot); the CPU big in the chip's place (chip, memory, network hidden), 3 of 4 rows done
     3: { lit: 0, chip: 0, hbm: 0, big: 1, cache: 1, branch: 1, hero: "cpu", fill: "1".repeat(12) + "0000" },
     // "all working at once": the CPU back in the top slot, every cell lit, every y cell done
     4: { lit: 1, cache: 1, branch: 1, hero: "chip", fill: ALL },

@@ -18,6 +18,9 @@
 //
 // Ep 1 fields of S (defaults merged into SC.REST, so tools/hf_state_check.js sees them):
 //   net 0..1         the network's opacity
+//   focus 0..1       beats 1–2's layout (1): the network on top, y = x @ W right under it at 1.3×
+//                    (centre y 540), and the whole series chip (grid, memory, title) at 0.8×
+//                    below them (centre y 925); 0 = the series layout, matrices in the bottom slot
 //   flow 0|1         activity: one layer's edges at a time light teal, left to right, on SC.clock
 //                    (like the chip's shimmer; must be 0 in a beat's still end)
 //   cpu4 0..1        the CPU's opacity
@@ -39,7 +42,7 @@
   Object.assign(SC.REST, {
     cpu: 0, queueO: 0, strip: 0,                 // the series CPU, queue and time strip: not in ep 1
     cpu4: 1, big: 0, cores: "1111", cache: 0, branch: 0,
-    mat: 1, fill: "0".repeat(16), pick: -1, wave: 0, net: 0, flow: 0,
+    mat: 1, fill: "0".repeat(16), pick: -1, wave: 0, net: 0, flow: 0, focus: 0,
   });
 
   // The network: 4 columns of nodes; column c's nodes centred on y 337, pitch 50.
@@ -53,14 +56,25 @@
                 core: (i) => ({ x: 89 + (i % 2) * 300, y: 565 + Math.floor(i / 2) * 255, w: 280, h: 235 }) };
   // The matrices: "y ▦ = x ▦ @ W ▦", 672 px wide, centred in the safe width.
   const M = { x0: 171, top: 1197, cell: 26, pitch: 30, size: 116, ty: 1220 };
+  // focus: where the matrices row and the series chip go (centre, scale) when focus = 1
+  const FOCUS = { mat: { c: [507, 1255], to: [507, 540], s: 1.3 }, gpu: { c: [507.5, 805], to: [507.5, 925], s: 0.8 } };
   const ROW = [["y", 0], ["▦y", 52], ["=", 192], ["x", 252], ["▦x", 304], ["@", 444], ["W", 504], ["▦W", 556]];
 
   function mount(root) {
-    const kit = SC.mount(root);
+    // the series chip mounts in its own layer, so `focus` can scale all of it at once
+    const layer = (parent) => {
+      const d = document.createElement("div");
+      d.style.cssText = `position:absolute;left:0;top:0;width:${SC.W}px;height:${SC.H}px;transform-origin:0 0;`;
+      parent.appendChild(d);
+      return d;
+    };
+    const kitDiv = layer(root);
+    const kit = SC.mount(kitDiv);
     const svg = node("svg", { width: SC.W, height: SC.H, viewBox: `0 0 ${SC.W} ${SC.H}` });
     svg.style.cssText = "position:absolute;left:0;top:0;overflow:visible;";
     svg.setAttribute("data-layout-allow-overflow", "");
-    root.insertBefore(svg, kit.code ? kit.code.card : null);
+    root.appendChild(svg);
+    const matDiv = layer(root);                  // the matrix letters, moved with the matrices
 
     // the network: edges first, nodes over them
     const netG = node("g", {}, svg);
@@ -95,7 +109,7 @@
     const letters = [];
     ROW.forEach(([name, dx]) => {
       if (name[0] !== "▦") {
-        const el = label(root, name, { left: M.x0 + dx, top: M.ty, size: 60, width: 36 });
+        const el = label(matDiv, name, { left: M.x0 + dx, top: M.ty, size: 60, width: 36 });
         el.style.fontFamily = "monospace"; el.style.fontWeight = "700";
         letters.push(el);
         return;
@@ -134,6 +148,19 @@
         c.fork.setAttribute("d", `M${fx} ${f0}V${f1}M${fx} ${f1}L${fx - w * 0.2} ${f2}M${fx} ${f1}L${fx + w * 0.2} ${f2}`);
         c.fork.setAttribute("stroke", on ? PAL.dataDeep : PAL.grid); show(c.fork, fo);
       });
+    }
+
+    // translate(t) scale(s) that maps centre c to centre `to` as focus runs 0 → 1
+    const fit = (F, f) => {
+      const s = lerp(1, F.s, f), cx = lerp(F.c[0], F.to[0], f), cy = lerp(F.c[1], F.to[1], f);
+      return [cx - s * F.c[0], cy - s * F.c[1], s];
+    };
+    function drawFocus(S) {
+      const f = clamp01(S.focus);
+      const [mx, my, ms] = fit(FOCUS.mat, f), [gx, gy, gs] = fit(FOCUS.gpu, f);
+      matG.setAttribute("transform", `translate(${mx.toFixed(2)} ${my.toFixed(2)}) scale(${ms.toFixed(4)})`);
+      matDiv.style.transform = `translate(${mx.toFixed(2)}px, ${my.toFixed(2)}px) scale(${ms.toFixed(4)})`;
+      kitDiv.style.transform = `translate(${gx.toFixed(2)}px, ${gy.toFixed(2)}px) scale(${gs.toFixed(4)})`;
     }
 
     function drawMats(S) {
@@ -179,9 +206,9 @@
     function draw(S) {
       S = Object.assign({}, SC.REST, S);
       kit.draw(S);
-      drawNet(S); drawCpu(S); drawMats(S); drawWave(S);
+      drawFocus(S); drawNet(S); drawCpu(S); drawMats(S); drawWave(S);
     }
-    return Object.assign({}, kit, { draw, cpu: { box, cores, label: cpuLab }, mats, letters, net: { g: netG, edges, nodes } });
+    return Object.assign({}, kit, { draw, cpu: { box, cores, label: cpuLab }, mats, letters, net: { g: netG, edges, nodes }, layers: { kit: kitDiv, mat: matDiv } });
   }
 
   // A beat's state at master time: blend two seam states field by field (numbers lerp, the rest switch at u ≥ 0.5).
@@ -194,5 +221,5 @@
     return out;
   }
 
-  window.EP = { mount, mix, M, SMALL, BIG, NET };
+  window.EP = { mount, mix, M, SMALL, BIG, NET, FOCUS };
 })();

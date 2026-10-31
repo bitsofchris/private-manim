@@ -31,7 +31,7 @@
   const kit = EP.mount(document.getElementById("root"));
   function render(t) {
     SC.clock = t;
-    const net = { net: 1, cpu4: 0, lit: 1 };
+    const net = { net: 1, cpu4: 0, focus: 1, lit: 1 };
     if (t < 7) kit.draw(SC.SEAM[Math.floor(t)]);
     else if (t < 8) kit.draw({ ...net, hero: "layer" });
     else kit.draw({ ...net, hero: "ycell", pick: 6, fill: "0000001000000000" });
