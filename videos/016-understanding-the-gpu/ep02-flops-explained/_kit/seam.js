@@ -27,7 +27,7 @@
     5: st({ hero: "hbm", card: card({ kind: "word", word: "gradients" }) }),             // "gradient is one of these numbers"
     6: st({ hero: null, card: card({ kind: "count", o2: 1 }), code: code("count") }),    // "720 trillion FLOPs"
     7: st({ hero: "clock", card: card({ kind: "rate", clock: 1, clockO: 1 }), code: code(null) }),  // "This is a rate."
-    8: st({ hero: "chip", lit: 1, card: card({ kind: "matmul" }) }),                     // "thousands at once"
-    9: st({ hero: "bill", lit: 1, card: card({ kind: "frac", dollar: 1 }) }),            // "This is the bill": the end
+    8: st({ hero: "chip", lit: 1, card: card({ kind: "matmul" }) }),                     // "thousands at once": the end since v4 (beat 09 cut)
+    9: st({ hero: "bill", lit: 1, card: card({ kind: "frac", dollar: 1 }) }),            // unused since v4: beat 09 ("Divide ... This is the bill") was cut
   };
 })();
