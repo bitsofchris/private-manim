@@ -17,8 +17,8 @@ complete; "pytorch data types" / "pytorch dtype" don't; "data types in
 deep learning" does, but its results are about data (images, text), not
 number formats, so it isn't used.
 
-**Recommended: the hook title.** The day-10 read records which was used
-and its search %.
+**Chosen (Chris, 2026-10-31): the hook title.** The day-10 read records
+its search %.
 
 Hook title, for the person scrolling past (the general stake, AI models;
 42 characters, the phrase starts at 29):
