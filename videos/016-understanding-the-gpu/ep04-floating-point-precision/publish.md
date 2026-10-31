@@ -9,7 +9,8 @@ Final cut: `media/short.mp4`, 44.7 s.
 
 ## Titles
 
-Chris picks one; the day-10 read records which and its search %.
+**Chosen (Chris, 2026-10-31): the hook title.** The day-10 read records
+its search %.
 
 Search title, for the person typing the phrase (39 characters, the phrase
 first, the answer after it):
