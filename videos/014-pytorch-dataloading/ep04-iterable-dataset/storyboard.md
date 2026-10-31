@@ -43,8 +43,10 @@ Series context: `../SERIES.md` (ledger, images, decisions). The VO is
 
 ## The look
 
-Two images, never both at once (Chris, 10/28), and something new on
-screen about every 5 s (`agents/style.md`, Shorts rules):
+Three images, never two at once (Chris, 10/28; the stream added 10/29:
+"spend a few more beats away from the four-step grid and show what
+streaming means"), and something new on screen about every 5 s
+(`agents/style.md`, Shorts rules):
 
 1. **The machine, iterable** (`kit/machine.js`, `mode: "iterable"`,
    `strike: 1`): the Dataset card shows `__iter__` only, the sampler station
@@ -62,6 +64,19 @@ screen about every 5 s (`agents/style.md`, Shorts rules):
    line is 30 characters; `_kit/ep4.js`). Three cards: `EP4.ITER` (beat 2),
    `EP4.LEN` (beat 4), `EP4.CMP` (beat 9). The hero is the lit line.
 
+3. **The stream** (`_kit/stream.js`, `S.stream`; mock `00_stream/`), beats
+   3 and 5–7: three shards at the top, one pipe down through an `__iter__`
+   gate, samples (the machine's teal glyph) moving down it one at a time
+   into a plain dashed DataLoader bar. The shard being read has a read head
+   stepping down its rows, one row per sample. Fields: `src`/`flow` (beat
+   3 builds it), `nosampler` and `ask` (`next()` up to the gate, beat 5),
+   `order`/`pos`/`lift`/`load` (pre-shuffle, a shard into a dashed memory
+   box, its rows read out mixed, beat 6), `lanes` (the pipe forks into two
+   workers' `__iter__`, a magenta "?" between, beat 7). It crossfades from
+   the code card with `S.flip` and to the machine with `stream.o` 1 → 0
+   (beat 8, shaped like the flip). The old shards prop on the machine
+   (`S.shards`) is no longer in the Short.
+
 Beat 10 flips back to the machine in **map** mode (`__len__`,
 `__getitem__`, sampler not struck; the mode change is hidden by the flip)
 and swaps it to iterable on "swap", so the last frame is frame 0 again.
@@ -75,12 +90,12 @@ kit. Seam states are code: `_kit/seam.js` (`SC.SEAM[0..10]`).
 |---|------|---|---|---|
 | 1 | Hook | If looking up one sample isn't cheap, you use an iterable dataset. | Frame 0: the iterable machine running (SEAM[0]). "iterable dataset" (2.76): `__iter__` pulses once (a `hero` dip to null and back, 0.3 s). Otherwise still; samples hop. | `__iter__` |
 | 2 | One function (code) | Here, we use one function, iter, that just yields samples. | "Here" (4.08): flip to the card, `EP4.ITER` types fast (cps ~34; the class line may land already typed so the rest fits). `def __iter__(self):` the hero by "iter" (5.36); the yield line typed and the hero by "yields" (6.16). Cursor off, still: SEAM[2]. | the line being typed → `__iter__` → yield |
-| 3 | Shards | I most frequently use this when training bigger models. You pack the data into shards and just stream them through. | "I" (7.61): flip back to the machine, `__iter__` the hero. "shards" (10.62): the three shards fade in under the Dataset card, hero passes to them (machine hero null). "stream" (11.46): samples keep hopping; the shards pulse once (opacity dip). Still: SEAM[3]. | `__iter__` → the shards |
+| 3 | Shards | I most frequently use this when training bigger models. You pack the data into shards and just stream them through. | "I" (7.61): the card flips to the stream, empty: the pipe, `__iter__` the hero, the DataLoader bar. "pack the data into shards" (9.80–10.4): the three shards drop in at the top, the hero on "shards" (10.62). "stream them through" (11.46): samples fill the pipe from the top, one at a time. Still: SEAM[3]. | `__iter__` → the shards |
 | 4 | No length (code) | There's no length and no get item. Sample i doesn't exist until the iterator produces it. | "There's" (12.69): flip to `EP4.LEN` with the four class lines already typed and row 5 empty; `len(stream)  # TypeError` types from ~12.9 and is the hero by "length" (13.00)–"get item" (13.50). "produces" (16.24): the hero passes to the yield line. Still: SEAM[4]. | the TypeError line → yield |
-| 5 | No sampler | This means there's no sampler. The loader just calls your dataset over and over and it yields the next sample. | "This" (17.24): flip back to the machine, shards on at rest. "sampler" (17.92): the struck sampler station the hero. "calls your dataset" (19.06): the Dataset card the hero. "yields" (20.54): `__iter__` the hero. Samples keep hopping. Still: SEAM[5]. | sampler → dataset → `__iter__` |
-| 6 | Shuffle | So shuffling is now your problem. You pre-shuffle the data into shards, load one shard into memory, and yield from it. | "shuffling" (22.08): the shards the hero. "pre-shuffle" (23.74–24.5): the three reorder to `[2, 0, 1]` (hop between slots, `S.shards.pos`). "load" (25.42)–"memory" (26.16): the first card (card 2) rises into the Dataset card and fades (`load` 0 → 1). "yield" (26.62): `__iter__` the hero, shards back to ink. Still: SEAM[6]. | shards → `__iter__` |
-| 7 | Splits *(if time)* | Splits are also your problem, too. If you run multiple workers, splitting the stream between them is up to you to determine. | "Splits" (27.58): the shards pulse as the hero. "multiple workers" (29.42): `workers` 0 → 2 (the second photocopy fades in, `×2` appears), fetch the hero. Still from ~30.5: SEAM[7]. | shards → fetch |
-| 8 | Same loader | The data loader on top is the same though. Same batch size, same collate, same batch out. | "data loader" (32.96): the Dataset card and shards dim to 0.45 (`S.dataset`), hero null: the loader box stands alone. "batch size" (35.16): batching the hero; "collate" (35.82): collate; "batch out" (36.40): the batch card. Dataset back to 1 by 36.6. Still: SEAM[8]. | batching → collate → batch |
+| 5 | No sampler | This means there's no sampler. The loader just calls your dataset over and over and it yields the next sample. | "This" (17.24): the card flips to the stream, flowing. "sampler" (17.92): a struck `sampler` tag left of the gate, the hero, gone by 18.8. "loader" (18.60): the DataLoader bar the hero. "calls" (19.06): a dashed `next()` arrow up to `__iter__`, the hero; it dips on each "over". "yields" (20.54): `__iter__` the hero. Still: SEAM[5]. | sampler → loader → `next()` → `__iter__` |
+| 6 | Shuffle | So shuffling is now your problem. You pre-shuffle the data into shards, load one shard into memory, and yield from it. | The `next()` arrow fades. "shuffling" (22.08): the shards the hero. "pre-shuffle" (23.6–24.6): the three reorder to `[2, 0, 1]` (card 2 lifts over, 0 and 1 dip under). "load one shard into memory" (25.3–26.2): card 2 drops into a dashed memory box, the hero; its rows are read out in a mixed order. "yield" (26.62): `__iter__` the hero. Still: SEAM[6]. | shards → memory → `__iter__` |
+| 7 | Splits | Splits are also your problem, too. If you run multiple workers, splitting the stream between them is up to you to determine. | "Splits" (27.58): the shards the hero; the shard in memory goes back up to its slot. "multiple workers" (29.26–29.96): the pipe forks under the shards, two `__iter__` gates slide apart, both the hero. "splitting the stream" (30.30): a magenta "?" between them (which shard goes to which worker is yours; ep 5 pays it off). Still: SEAM[7]. | shards → the two `__iter__` → "?" |
+| 8 | Same loader | The data loader on top is the same though. Same batch size, same collate, same batch out. | 32.61–33.01: the stream crossfades to the machine (workers 2), landing on "data loader" (32.96): the Dataset card dims to 0.45 (`S.dataset`), hero null: the loader box stands alone. "batch size" (35.16): batching the hero; "collate" (35.82): collate; "batch out" (36.40): the batch card. Dataset back to 1 by 36.6. Still: SEAM[8]. | batching → collate → batch |
 | 9 | Next, not i (code) | The only thing that changes the data loader is asking for the next sample, not for the sample at index i. | "The" (37.24): flip to `EP4.CMP`; `def __iter__(self):` types, then `def __getitem__(self, i):`, both done by ~39.3. "next sample" (39.50): `__iter__` line the hero. "index i" (41.22): the hero passes to the `__getitem__` line. The machine's hidden fields go to SEAM[9]'s (workers 0, shards off) once flip ≥ 0.6. Still: SEAM[9]. | `__iter__` → `__getitem__` |
 | 10 | Swap | So use map until you can't, and the day sample i stops being cheap, swap to an iterable dataset. | "So" (42.32): flip back to the machine in **map** mode, sampler unstruck, `__getitem__` the hero (continuing the card's lit line). "swap" (45.38): mode → iterable (methods swap), the strike draws across the sampler over 0.6 s, `__iter__` the hero by "iterable" (45.92). The last frame is frame 0's state. | `__getitem__` → `__iter__` |
 
@@ -103,19 +118,19 @@ table; seam states `SC.SEAM` in `_kit/seam.js`; links per beat: `vendor`,
 | 9 | `09_next_code` | 37.060 | 4.980 | The only thing that changes the data loader is asking for the next sample, not for the sample at index i. |
 | 10 | `10_swap` | 42.040 | 5.203 | So use map until you can't, and the day sample i stops being cheap, swap to an iterable dataset. |
 
-## Seam states (`_kit/seam.js`; machine fields: `mode: "iterable"`, `strike: 1`, `workers: 0` unless named)
+## Seam states (`_kit/seam.js`; on stream cuts the machine's opacities are 0; machine fields: `mode: "iterable"`, `strike: 1`, `workers: 0` unless named)
 
 | Cut | After beat | Image | State |
 |---|---|---|---|
 | 0 | frame 0 | machine | iterable, sampler struck, hero `iter`, shards off |
 | 1 | hook | machine | same |
 | 2 | one function | card | flip 1, `EP4.ITER` fully typed, lit `yield`, cursor 0 |
-| 3 | shards | machine | hero null, shards on `[0,1,2]`, shards hero |
+| 3 | shards | stream | flowing, shards the hero |
 | 4 | no length | card | `EP4.LEN` fully typed, lit `yield` |
-| 5 | no sampler | machine | hero `iter`, shards on `[0,1,2]` at rest |
-| 6 | shuffle | machine | hero `iter`, shards `[2,0,1]`, card 2 loaded (gone) |
-| 7 | splits | machine | hero `fetch`, shards as 6, workers 2 |
-| 8 | same loader | machine | hero `batch`, shards as 6, workers 2 |
+| 5 | no sampler | stream | `next()` arrow on, `__iter__` the hero |
+| 6 | shuffle | stream | shards `[2,0,1]`, card 2 in memory, `__iter__` the hero |
+| 7 | splits | stream | forked to two `__iter__`, "?" the hero (machine hidden: workers 2) |
+| 8 | same loader | machine | hero `batch`, workers 2 |
 | 9 | next, not i | card | `EP4.CMP`, lit `getitem` (machine fields hidden: iterable, workers 0, shards off) |
 | 10 | end | machine | = cut 0: iterable, struck, hero `iter`, shards off |
 

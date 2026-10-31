@@ -38,6 +38,11 @@ Return `SC.SEAM[N−1]` itself at t = 0 and `SC.SEAM[N]` itself for the last
 - `S.shards` (`_kit/ep4.js`): `o`, `order`, `pos` (fractional slots while
   cards move), `load` 0..1, `loadCard`, `hero` 0|1. One magenta hero: when
   `shards.hero` is 1, machine `hero` is null.
+- `S.stream` (`_kit/stream.js`, header is the API; beats 3, 5–7): the
+  third image. Fields `o`, `src`, `flow`, `nosampler`, `ask`, `order`,
+  `pos`, `lift`, `load`, `read`, `lanes`, `hero` (shards, memory, iter,
+  next, loader, sampler, split). Stream seam states set the machine's
+  opacities to 0; `stream.o` 1 → 0 crossfades to the machine (beat 8).
 - `S.flip` 0 → 1 crossfades machine → code card over 0.4 s (the machine is
   gone by flip 0.6). Never both. A beat that changes hidden machine fields
   (beat 9: workers 2 → 0, shards off; beat 10: mode iterable → map, strike
