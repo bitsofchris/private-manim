@@ -128,7 +128,7 @@
       flow.forEach((el, k) => {
         const u = ((clock / PERIOD - k) / flow.length % 1 + 1) % 1;     // 0..1 along the lane, spaced 1/6 apart
         const y = SC.lerp(y0, y1, u);
-        const side = (step - k) % 2 === 0 ? 0 : 1;                       // alternate workers when forked
+        const side = k % 2;   // round robin: each sample keeps one worker the whole way (six slots, so k and k+1 alternate)
         const x = SC.lerp(MID, SC.lerp(MID, WK[side], L), SC.E().sine(SC.seg(y, SH.y + SH.h + 40, GATE.y)));
         el.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
         const inGate = y > GATE.y - 22 && y < GATE.y + GATE.h + 22;
