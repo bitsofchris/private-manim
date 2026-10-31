@@ -24,6 +24,12 @@
 //                             "time →" right at 1285), or the code card (kit/code.js);
 //                             one at a time
 //
+// SC.mount(root) returns { draw, cells, tiles, code, svg, gauge } and a handle per part:
+// chip {g, box, title}, cpu {g, box, label, sub, wait}, hbm {g, box, pipe, labels},
+// meter {g, fill, label, value}, strip {g, slots, util, label}. Pulse a part through these;
+// never search the DOM. A beat that must scale the whole chip mounts it in its own layer
+// (016 ep01's `focus`, ep01/_kit/ep.js).
+//
 // S fields (all optional; SC.REST is the rest state):
 //   lit 0..1          share of cells lit teal (the same cells in every episode: ranked by hash)
 //   shimmer 0|1       the lit cells trade places over time (frame 0 "already working")
@@ -236,7 +242,14 @@
       utilLab.style.color = col("util", PAL.ink);
       if (code) code.set(Object.assign({ o: 0 }, S.code || {}));
     }
-    return { draw, cells, tiles, code, svg, gauge };
+    // Handles for every part a beat may pulse or a VO line may name, so no beat searches the DOM
+    // (016 ep01 reached the chip box through cells[0].body.parentNode).
+    return { draw, cells, tiles, code, svg, gauge,
+             chip: { g: chipG, box: chipBox, title },
+             cpu: { g: cpuG, box: cpuBox, label: cpuLab, sub: cpuSub, wait: waitLab },
+             hbm: { g: hbmG, box: hbmBox, pipe, labels: [hbmLab, hbmLab2, hbmAka, hbmSize, hbmBw] },
+             meter: { g: meterG, fill: meterFill, label: meterLab, value: meterVal },
+             strip: { g: stripG, slots, util: utilLab, label: stripLab } };
   }
 
   const REST = { lit: D.run.mfu, shimmer: 0, one: -1, tc: 0, hero: null, queue: null, drain: 0, cpuWait: 0,
