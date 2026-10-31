@@ -1,6 +1,6 @@
 ENGINE: hyperframes
 
-# Why GPUs for AI: storyboard (v4: the network in beats 1–2)
+# Why GPUs for AI: storyboard (v5: network over the formula in beats 1–2)
 
 THE QUESTION: "Why does AI run on GPUs and not CPUs?"
 WHO IS ASKING: a research engineer or ML learner who types `.to("cuda")`
@@ -39,6 +39,11 @@ state are rendered in `00_layout/layout.png`.
   the top slot in beats 1–2 only (`_kit/ep.js`). Its first layer is `W`:
   the 16 edges from column 0 to column 1, the edges into node j are W's
   column j, node j's output is y's column j. No labels.
+- **Beats 1–2 layout (`focus: 1`, Chris, second watch):** the network on
+  top, `y = x @ W` stacked right under it at 1.3× (centre y 540), the
+  series chip (grid, memory, title) at 0.8× below them (centre y 925).
+  Beat 3 brings it back to the series layout (`focus: 0`): the matrices
+  travel down to the bottom slot as the CPU grows.
 - **The CPU:** one box of **4 big cores** (`_kit/ep.js`), a picture of "a
   few", no number on screen. Not on screen in beats 1–2 (Chris, first
   watch); fades in on "CPU" in beat 3, big in the chip's place, then
@@ -60,9 +65,9 @@ state are rendered in `00_layout/layout.png`.
 
 | beat | VO | visual |
 |---|---|---|
-| 01_hook | A neural network is mostly multiplication and addition. GPUs allow these to all happen at the same time. | Frame 0 already working: the tiny network in the top slot, its layers firing in turn (hero `net`); the chip mid-stage, ~32 % of cells shimmering teal; `y = x @ W` in the bottom slot, y empty. On "GPUs" the hero passes to the chip and the network goes still. On "the same time" the whole grid lights at once and every y cell fills together. |
+| 01_hook | A neural network is mostly multiplication and addition. GPUs allow these to all happen at the same time. | Frame 0 already working, in the beats 1–2 layout: the tiny network on top, its layers firing in turn (hero `net`); `y = x @ W` right under it, y empty; the chip smaller below, ~32 % of cells shimmering teal. On "GPUs" the hero passes to the chip and the network goes still. On "the same time" the whole grid lights at once and every y cell fills together. |
 | 02_layer | So if you take one layer, y equals x times W, each output is its own row times column. None of them waits on the other. | On "one layer" the network's first layer goes magenta (hero `layer`) and y empties: the equation is that layer. On "its own row times column" one row of x, one column of W and their y cell go magenta (hero `ycell`) and that cell fills; the output node for that column and its 4 incoming edges light with W's column. On "none of them waits" every other y cell fills at the same moment, and the whole y matrix (with the layer's 4 output nodes) is the hero. |
-| 03_cpu | Now a CPU is built to run one thread as fast as possible. A few big cores, some big caches, some smart branching. It works through that pile a few at a time. | On "CPU" the network, the chip and memory fade and the CPU fades in and grows into the chip's place (hero `cpu`); y empties as it grows. "one thread": one core lit. "A few big cores": the 4 cores. "big caches": the cache blocks. "smart branching": the forks. "a few at a time": all 4 cores lit, y fills one row of four per tick, three rows by the end, the last row waiting. |
+| 03_cpu | Now a CPU is built to run one thread as fast as possible. A few big cores, some big caches, some smart branching. It works through that pile a few at a time. | On "CPU" the network, the chip and memory fade, the matrices travel down to the bottom slot, and the CPU fades in and grows into the chip's place (hero `cpu`); y empties as it grows. "one thread": one core lit. "A few big cores": the 4 cores. "big caches": the cache blocks. "smart branching": the forks. "a few at a time": all 4 cores lit, y fills one row of four per tick, three rows by the end, the last row waiting. |
 | 04_gpu | A GPU trades per-core speed for count. This grid is the chip. Thousands of small cores all working at once. | On "A GPU" the CPU shrinks back to the top slot, the chip and memory return dark, y empties; hero `chip`. "This grid is the chip": the grid border pulses. On "all working at once" every cell lights in one pulse and every y cell fills together. |
 | 05_tensor | Newer GPUs add tensor cores, which do a small matrix multiply in one step. | On "tensor cores" the corner sub-blocks grow (`tc: 1`), title "tensor cores", hero `tc`. On "in one step" the sub-blocks pulse once. |
 | 06_code | In PyTorch, that's one line. Move x and W to CUDA, and the same at sign runs the whole grid. | On "In PyTorch" the matrices give way to the code card (the bottom slot), tensor cores and title back to rest ("GPU"). "that's one line": `y = x @ W` lit. "Move x and W to CUDA": the `.to("cuda")` line lit. "the same at sign": `y = x @ W` lit again; "runs the whole grid": a bright wave sweeps the lit grid once. Ends still. |
@@ -96,7 +101,7 @@ code card, down to y 1330).
 
 Ep 1's defaults (all cuts): series CPU, queue and time strip hidden; the
 4-core CPU shown, cores `1111`; network hidden; matrices shown; chip and
-memory shown. Cuts 0–2: **network 1, CPU 0**.
+memory shown. Cuts 0–2: **network 1, CPU 0, focus 1**.
 
 | Cut | After beat | State |
 |---|---|---|
