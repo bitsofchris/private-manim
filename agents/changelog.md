@@ -11,7 +11,7 @@ that forced it. Newest first.
 - Shared code card: `CODE.DOCK` at cy 1246 (was 1345, in the caption band; every 016 episode overrode it by hand, so no shipped frame moves); test updated. (016 eps 1–3)
 - `tools/cut_vo.py --cut A-end[:S]` drops the closing; tests. (016 ep02's bill line)
 - `agents/parts.md`: ep 2's `flops.js` row (zoom panels via `growBox`, a promotion candidate for `chip.js`), the chip kit at 2 shipped. 016 `SERIES.md`: ep 2 ticked Storyboard v4, Beats 7, Assembled 40.2 s. (016 ep02)
-- Open for Chris: `CODE.DOCK`'s type shrinks to 40 px for 016's 35-character code lines, under the 60 px floor; the fix (a wider card, shorter lines, or two rows) changes every 016 code beat. (016 ep02)
+- `agents/style.md` text floor: a docked code card (`CODE.DOCK`) may go to 40 px, lines ≤ 35 characters; settled so eps 5–8 start clean (every 016 ledger line already fits; shipped frames unchanged). (016 ep02)
 
 - `agents/style.md` Shorts rules: a process the series image abstracts gets its own picture, one more image never on screen with another, crossfaded like the flip. 014 `SERIES.md`: the stream noted as ep 4's episode-only image (candidate for `_kit/` if ep 5 reuses its fork). `agents/parts.md`: the stream row (1 use). (014 ep04: Chris, "show what streaming means"; beats 3 and 5–7 rebuilt off the four-station grid)
 - `agents/animation-rules.md` 8a: in a clock-driven flow, an item's lane, row or colour comes from its own index, never the clock's step. (014 ep04: samples bounced between the two worker lanes every 0.6 s)
