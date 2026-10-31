@@ -70,6 +70,15 @@ Rules that are specific to Shorts:
   stream for beats 3 and 5–7, back to the machine on "the data loader on
   top is the same"). Chris, 014 ep04: "spend a few more beats away from
   the four-step grid and really show what streaming means".
+  The same holds for what one part does: zoom into it. When the VO says
+  what happens inside a part (a core's multiply and add), grow a panel out
+  of that part and show the arithmetic with real operands, then shrink
+  back into it on the line about scale; alternate the inside and the whole
+  beat by beat. A series image that only idles (cores shimmering) is not
+  "moving through states". Chris, 016 ep02: "just watching the GPU cores
+  dance around gets kind of boring and repetitive and isn't illustrating
+  much" (v2: inside one core for `1.5 × 2.0 = 3.0`, `3.0 + 0.5 = 3.5` and
+  the dot product, the chip for the count, rate and "thousands at once").
 - **A part arrives when the VO names it.** Frame 0 shows what line 1
   talks about, not every part the Short will use. A part the VO first
   names later (016 ep01's CPU, named at 14 s) is off screen until then

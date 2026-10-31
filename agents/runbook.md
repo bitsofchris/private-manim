@@ -267,8 +267,13 @@ Gotchas:
 ## 5. Tighten (Claude + Chris, the only judgment step)
 
 1. Read the transcript. Mark: flubs, repeated ideas, clauses that don't
-   earn their seconds. Propose whole-phrase cuts with per-beat second
-   counts. **Chris approves the cut list.** Under 60 s is the constraint.
+   earn their seconds. Also mark, as cut candidates: a line that serves
+   the next episode rather than this one's one idea, a spec number the
+   Short never uses again, and a closer whose formula skips a step. Chris
+   cut all three from 016 ep02 after the first watch (the B200 peak, "the
+   point floats … three million", "divide … and you have GPU-hours"), each
+   a re-render; flagging them in the cut list costs nothing. Propose
+   whole-phrase cuts with per-beat second counts. **Chris approves the cut list.** Under 60 s is the constraint.
    Send with it, as clips, anything only an ear can settle: a number the
    recognizers hear differently from the script (013 ep04: both heard
    "0.95"; Chris said 0.985) and any line spliced in from elsewhere in the

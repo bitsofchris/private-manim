@@ -42,6 +42,14 @@ runbook step 1's VO rules ("VO line 1", "Say each thing once, and get to
 it fast", 130–150 words). Chris tightens in his own words before he
 records.
 
+A formula line says what its result *is* before it names the unit: "divide
+the FLOPs by the FLOPS you get and you know how long it runs; those hours
+are the bill", not "…and you have GPU-hours". Chris, 016 ep02, on the
+second form: "Flops have nothing to do with GPU hours. I reserve my GPU, I
+pay for the hours" (the line was cut). And a spec number the episode never
+uses again (016 ep02's B200 peak, "irrelevant here") stays out of the
+script.
+
 ## 3. Record once (Chris)
 
 One file for the whole series, in script order (runbook step 2 for mic and

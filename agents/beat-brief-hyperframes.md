@@ -235,6 +235,19 @@ and `videos/009-transformer-short-iso/`.
 - **A pulse that ends inside the hold** leaves the state off by 1e-3 at
   `S(end − 0.3)`: use the kit's `pulseUntil(t, at, w, HOLD)` or size the
   width to end at the hold (015 ep2 beat 1).
+- **A panel that covers labels on purpose** (a zoom grown over the chip
+  and memory) carries `data-layout-allow-occlusion`, but `check` still
+  flags the covered *text* as `text_occluded`: waive the labels too, by
+  the handles the kit returned (016 ep02 beat 08). `check` samples only a
+  few times per beat, so a beat that passed can fail once its length
+  changes and the samples land elsewhere: re-run `check` after any change
+  to `data-duration` (beat 08 passed at 9.705 s and failed at 10.305 s).
+- **A part that steps on the master clock** (016's shimmer, every 0.25 s)
+  differs across a cut that lands exactly on a step: the next beat's
+  frame 0 reads one step ahead of the last frame. `seam_check` flags it;
+  set the later beat's clock one frame behind (`SC.clock = START − 1/30 +
+  t`) and say so in its header (016 ep02 v2, the cut at 35.50). Drop the
+  offset if the cut moves off the step.
 - **Layout budget:** Inter ExtraBold at 60 px is about 140 px per `+0.4`.
   Count rows and widths before drawing; nine numbers plus three words is
   already a 546 x 258 px card. Monospace at 60 px fits about 22 characters
@@ -285,6 +298,12 @@ What the kit owes its beats (013 ep04):
   line, and typing one line from a given character on. By 014 ep04's: a
   way to stop the clock-driven flow at frame 0's phase, so a last beat
   can hold still on frame 0.
+- Overlap that is the design is waived by the kit, not the beat: the
+  layers of a crossfading card (`card.A` / `card.B`) and the labels a zoom
+  panel covers carry `data-layout-allow-overlap` / `-occlusion` from
+  `mount`. 016 ep02's `flops.js` did not, so beats 05 and 08 each found
+  the card rows and memory labels by walking `root.children` (a DOM
+  search under another name).
 
 Before rendering, check your beat's states against the table:
 `node "$(git rev-parse --show-toplevel)"/tools/hf_state_check.js NN_beat FROM TO`
