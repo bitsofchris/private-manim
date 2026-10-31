@@ -186,12 +186,28 @@ From the split, for the episode sessions:
 - Ear checks settled by the written VO (Chris, 10/28): "Divide a run's
   FLOPs", "training step", "doing right then".
 
+From ep 2's cuts (Chris, 10/29–10/31), for the episodes still to build:
+- Ep 2 shipped without three recorded lines: the B200 peak ("irrelevant
+  here"), "the point floats, so one format holds a ten-millionth and three
+  million" (range is ep 4's), and the closer "divide a run's FLOPs by the
+  FLOPS you get, and you have GPU-hours". No 016 Short has shown a GPU
+  model or a peak yet; the arc row's B200 figure is unused.
+- On that closer, Chris: "Flops have nothing to do with GPU hours. I
+  reserve my GPU, I pay for the hours." The division gives *time*; the
+  line skipped that step. Ep 3's recorded closer makes the same leap
+  ("Divide by what one GPU actually delivers, and that's your
+  GPU-hours"): its picture should show the step (FLOPs ÷ FLOPS = seconds,
+  → hours, × $/hour), or ask Chris before keeping it.
+- Ep 2 alternates inside one core (a panel grown out of cell row 5,
+  col 5: `1.5 × 2.0 = 3.0`, the dot product) with the whole chip; Chris
+  asked for it after watching the cores only shimmer.
+
 ## Checklist
 
 | # | Folder | Storyboard | VO (Chris edited) | Recorded (raw) | Beats | Assembled | Shipped |
 |---|---|---|---|---|---|---|---|
 | 1 | `ep01-why-gpus-for-ai/` | v5 | in the take | 49.5 s | 6 | 44.0 s | |
-| 2 | `ep02-flops-explained/` | v2 | in the take | 61.9 s | | | |
+| 2 | `ep02-flops-explained/` | v4 | in the take | 61.9 s | 7 | 40.2 s | |
 | 3 | `ep03-six-flops-per-parameter/` | v2 | in the take | 48.2 s | | | |
 | 4 | `ep04-floating-point-precision/` | v2 | in the take | 51.9 s | | | |
 | 5 | `ep05-tensor-cores-vs-memory/` | v2 | in the take | 54.3 s | | | |
