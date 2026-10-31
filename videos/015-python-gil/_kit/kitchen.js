@@ -31,7 +31,19 @@
 // handle rocks in the holder's hand (S.chop), the carrot under the blade
 // shortens and slices pile up left of the tip (cooks[i].cut). Pure
 // functions of their arguments: no clocks, no randomness.
-//   const k = SC.mount(root); k.draw(null, S)   // S = SC.state(SC.SEAM[n], patch)
+//   const k = SC.mount(root); k.draw(null, S)   // S = SC.state(SC.SEAM[n], patch, …)
+// Helpers: SC.swap (label/title crossfade landing on a word), SC.hopKnife, SC.pathAlong
+// (the bowl and note over SC.BOWL waypoints), SC.pulseUntil (a pulse that ends by a
+// hold), SC.cooksPatch, SC.chopAt. `check` reports rotation_pivot_drift on knife
+// groups and content_overlap during a label crossfade: both expected.
+//
+// Next kit pass (would change the handed-off 015 cuts, so not done in the 015 update
+// pass): `holds` should need an integer holder (mid-hop the middle cook brightens);
+// pulse.py is nearly invisible (fill-opacity .9 → 1), give it a scale or tint; fade the
+// fridge's shelves over the last 10 % of `draw` instead of popping at 1; per-bar alpha
+// in panel.rows so a split → unsplit can fade bars; an "arriving" small-kitchen builder
+// (draw in, then the cook walks in) beside ONE; a cook walk as one field (`walkTo`);
+// SEAM2[5] with close.panel 1 so 06_close needs no t > 0 guard.
 (function () {
   if (typeof document !== "undefined" && !document.createElementNS)
     document.createElementNS = (ns, tag) => document.createElement(tag);   // hf_state_check stub DOM
@@ -42,7 +54,7 @@
   const clamp01 = (u) => Math.max(0, Math.min(1, u));
   const seg = (t, a, b) => clamp01((t - a) / (b - a));
   const io = (u) => (u < 0.5 ? 2 * u * u : 1 - (-2 * u + 2) ** 2 / 2);
-  const pulse = (t, at, w = 0.6) => { const u = (t - at) / w; return u < 0 || u > 1 ? 0 : Math.sin(Math.PI * u); };
+  const pulse = (t, at, w = 0.6) => { const u = (t - at) / w; return u <= 0 || u >= 1 ? 0 : Math.sin(Math.PI * u); };   // exactly 0 at both ends (sin(π) is 1e-16)
   const copy = (v) => JSON.parse(JSON.stringify(v));
   function merge(a, b) {
     const out = copy(a || {});
@@ -54,6 +66,31 @@
   }
   // A chop phase that is 0 at t = 0 and at t = end (so seams are still): `rate` chops per second.
   const chopAt = (t, from, to, rate = 2) => { if (t <= from || t >= to) return 0; const n = Math.max(1, Math.round((to - from) * rate)); return ((t - from) * n / (to - from)) % 1; };
+  // ---- helpers the beat agents kept rewriting (015 update pass) ----
+  // A label swap landing ON `at`: fade out over `out` s, change the text, fade back in over `inn` s ending at `at`.
+  // Returns { o, after }: the opacity multiplier and whether to show the new value yet.
+  const swap = (t, at, out = 0.15, inn = 0.2) => {
+    if (t < at - inn - out) return { o: 1, after: false };
+    if (t < at - inn) return { o: 1 - seg(t, at - inn - out, at - inn), after: false };
+    return { o: seg(t, at - inn, at), after: true };
+  };
+  // `pulse` that ends by `until` (a hold): the bump is squeezed so the state is exact at the hold.
+  const pulseUntil = (t, at, w, until) => pulse(t, at, Math.max(0.05, Math.min(w, until - at)));
+  // The knife hopping from cook `from` to cook `to`, starting at `t0`, over `d` s: a `knife.holder` value.
+  const hopKnife = (t, from, to, t0, d = 0.4) => (t <= t0 ? from : t >= t0 + d ? to : lerp(from, to, io(seg(t, t0, t0 + d))));
+  // A point along a polyline of [x, y] points at fraction `u` (0..1) of its arc length.
+  const pathAlong = (points, u) => {
+    const L = []; let total = 0;
+    for (let i = 1; i < points.length; i++) { const d = Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]); L.push(d); total += d; }
+    let s = clamp01(u) * total;
+    for (let i = 0; i < L.length; i++) {
+      if (s <= L[i] || i === L.length - 1) { const v = L[i] ? s / L[i] : 1; return [lerp(points[i][0], points[i + 1][0], v), lerp(points[i][1], points[i + 1][1], v)]; }
+      s -= L[i];
+    }
+    return points[points.length - 1].slice();
+  };
+  // Patch one cook of a cooks array without losing the others (merge replaces arrays wholesale).
+  const cooksPatch = (cooks, i, patch) => cooks.map((c, k) => (k === i ? Object.assign({}, c, patch) : c));
 
   // ---- geometry ----
   const BOX = { x: 80, y: 380, w: 870, h: 520, rx: 28 };
@@ -477,5 +514,6 @@
                 REST, SEAM1, PROTO, SEAM2, PROTO2, SLOT, STAIR, OVEN_ROWS, APPL_ROWS, CLOSE_ROWS, CLOSE_ROWS2, TWIN_COOKS, KIT, cooksAt,
                 ONE, GRID4, PAR_ROWS, COST_ROWS, SHM_ROWS, PROC, DIM34, RECAP, EP2_FRAME0, kitState,
                 state, tween, merge, mount, lerp, clamp01, seg, io, pulse, chopAt,
+                swap, pulseUntil, hopKnife, pathAlong, cooksPatch,
                 SEAM: SEAM1 };
 })();

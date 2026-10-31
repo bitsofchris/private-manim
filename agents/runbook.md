@@ -374,6 +374,11 @@ pixel-identical on the first render).
 - Name two or three finished beats that resemble each agent's brief as
   worked examples (same part, same kind of motion). Examples from our own
   passing scenes do more than rule lists.
+- The storyboard's beat table and the brief quote cue times from
+  `words.json`, the word itself, never the caption's first word (015 ep2's
+  storyboard said "threads" 1.04 where the word starts at 1.20; the agent
+  had to pick). Where a cue word is not the obvious one (the title landing
+  on "unpickled" is really the word "again."), the brief says so.
 - Agents place cues from `words.json` (step 5), master times, and check
   the ones that matter on their window's envelope; a sub-clip
   transcription only for a word that is missing or misheard. Cues from the
@@ -576,6 +581,11 @@ Shell traps (the orchestrator runs zsh):
 - `git commit` commits the whole index, including what another session
   staged. Run `git diff --cached --stat` before committing, above all
   after a `git reset --soft`.
+- A commit that fails with "unmerged files" means another session is
+  mid-merge on the branch. Your `git add` has already put your file in
+  that merge's index: `git restore --staged <your paths>`, leave the
+  conflicts to the session that owns them, and commit once
+  `.git/MERGE_HEAD` is gone (014 ep04's `publish.md`).
 
 | Tool | Does | Tested |
 |---|---|---|

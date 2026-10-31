@@ -15,7 +15,8 @@
 //   S(end - still)     with SEAM[TO]     (the last `still` seconds hold)
 // States are compared as flat dotted fields after merging REST; a missing
 // field equals 0 / false / "", and a part at opacity 0 (`o` / `opacity`
-// 0, or a [text, 0] pair) is compared as hidden, whatever it holds.
+// 0, or a [text, 0] pair, or a bar { a, b } with b <= a) is compared as
+// hidden, whatever it holds.
 // Numbers match within --tol. Neighbouring beats
 // can then be checked before either is rendered; tools/seam_check.py diffs
 // pixels once both renders exist. Exit code = number of failing checks.
@@ -29,6 +30,7 @@ const OPACITY = ["o", "opacity"];
 function hidden(v) {
   if (Array.isArray(v)) return v.length >= 2 && typeof v[0] === "string" && typeof v[1] === "number" && v[1] <= 0;
   if (!v || typeof v !== "object") return false;
+  if (typeof v.a === "number" && typeof v.b === "number" && v.b <= v.a) return true;   // a bar from a to a: the kit draws nothing (015)
   const k = OPACITY.find((x) => x in v);
   return k !== undefined && !(v[k] > 0);
 }

@@ -32,6 +32,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 HF = ["npx", "--yes", "--prefer-offline", "hyperframes@0.8.115", "snapshot"]
@@ -94,12 +95,16 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     path = Path(args.beats).resolve()
     base, out = path.parent, (path.parent / args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    # Snapshots go to a per-run temp folder: two agents running this at once on the
+    # same --out used to overwrite each other's frame-*.png mid-glob (015 ep1).
+    snaps = Path(tempfile.mkdtemp(prefix="seams-"))
     pairs = touching(hf_pairs(json.loads(path.read_text()), base), args.beat)
     fails = 0
     for a, b in pairs:
         end = duration((base / a / "index.html").read_text()) - 0.02
-        pa = snapshot(base / a, end, out / f"{a}_end")
-        pb = snapshot(base / b, 0.0, out / f"{b}_start")
+        pa = snapshot(base / a, end, snaps / f"{a}_end")
+        pb = snapshot(base / b, 0.0, snaps / f"{b}_start")
         ia, ib = Image.open(pa).convert("RGB"), Image.open(pb).convert("RGB")
         for box in args.mask:
             for im in (ia, ib):

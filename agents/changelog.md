@@ -5,6 +5,14 @@ that forced it. Newest first.
 
 ## 2026-10-31
 
+- `tools/seam_check.py`: snapshots in a per-run temp folder, so parallel beat agents no longer overwrite each other's frames. (015 ep1)
+- `tools/hf_state_check.js`: a bar `{ a, b }` with `b <= a` compares as hidden. (015 ep1)
+- `videos/015-python-gil/_kit/kitchen.js`: `SC.swap`, `SC.pulseUntil`, `SC.hopKnife`, `SC.pathAlong`, `SC.cooksPatch`; `pulse` exactly 0 at both ends; `state()` takes several patches; header lists the drawing changes deferred to the next kit pass. (015 ep1, ep2)
+- `agents/beat-brief-hyperframes.md`: traps for zero-length bars, cue sums on a hold boundary, pulses inside a hold. (015)
+- `agents/runbook.md`: storyboard cue tables quote `words.json` times, and name the real cue word when it is not the obvious one. (015 ep2)
+
+## 2026-10-31
+
 - `tools/hf_state_check.js`: the stub DOM has `insertBefore`, and the mount wrapper takes a one-argument `draw(S)` kit (016's) as well as `draw(g, S)`; tests for the 016 kit shape. All three ep01 beat agents had crashed on it and run a patched copy from scratch. (016 ep01)
 - `tools/review_frames.sh`: the default sheet name is `<video folder>_<clip>_sheet.png`, so parallel episode sessions stop overwriting each other's `01_hook_sheet.png`. (016 ep01)
 - 016 `_kit/chip.js`: `SC.mount` returns a handle per part (`chip`, `cpu`, `hbm`, `meter`, `strip`); additive, no frame changes. `agents/parts.md` lists the chip kit and ep 1's `ep.js` (4-core CPU, `y = x @ W`, the tiny network, `focus`). (016 ep01: beats reached the chip box through `cells[0].body.parentNode`)

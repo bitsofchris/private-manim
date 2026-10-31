@@ -74,6 +74,17 @@ beat 7 only. Not the spine.
 
 ## Update pass (step 11), collected from the beat agents of both episodes
 
+Done 2026-10-31 (`agents/changelog.md`): the kit helpers (`swap`,
+`pulseUntil`, `hopKnife`, `pathAlong`, `cooksPatch`), the state checker's
+zero-length-bar rule, seam_check's per-run temp folder, the cue-source rule
+in the runbook and the three new traps in the brief contract. Deferred to
+the next kit pass because they would change the handed-off cuts (listed in
+the kit's header): the drawing changes (`holds` integer-only, a visible
+`pulse.py`, the fridge shelves' fade, per-bar alpha, the arriving builder,
+`walkTo`, `SEAM2[5].close.panel`). The `tighten_vo --noise auto` lesson was
+already in the runbook. The original list:
+
+
 - Kit helpers every beat rewrote: `swap(t, land, from, to)` for slot and title (out 0.15 s, in 0.2 s landing on the word); `hopKnife(t, from, to, t0)`; `pathAlong(points, u)` for the bowl and note over `SC.BOWL` waypoints; a `pulse` whose width clamps to a hold; `cooksPatch`; a cook walk as one field (`walkTo`) instead of the `at`/`u` flip.
 - Kit drawing: `pulse.py` is nearly invisible (fill-opacity 0.9 → 1), give it a scale or tint; per-bar alpha in `panel.rows` so a split → unsplit can fade bars; the fridge's shelves pop at `draw` 1, fade them over the last 10 %; a small-kitchen "arriving" builder (draw in, then the cook walks in) since `ONE` is the arrived state only; `holds` should need an integer holder (mid-hop the middle cook brightens); `ghost.draw`-style draw-in for every box; a note that `rotation_pivot_drift` is expected.
 - Kit states: give `SEAM2[5]` `close.panel: 1` (no visual effect while a/b/c are 0) so 06_close needs no `t > 0` guard.

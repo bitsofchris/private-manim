@@ -219,6 +219,22 @@ and `videos/009-transformer-short-iso/`.
   (ep03). Set it from the script, on the element and every span inside it:
   `el.style.fontFamily = "monospace"` (ep01 beats 5–6, ep03 beats 6–7;
   cause not confirmed).
+- **A zero-length bar** (`{ a, b: a }` in a seam-state kit's rows) draws
+  nothing but used to fail `hf_state_check` against a seam that has no
+  bar; the checker now treats `b <= a` as absent. Still, add a bar to a
+  row only once it has length (015 ep1 beats 2–4).
+- **`querySelector` in kit or beat code** crashes `hf_state_check`: its
+  stub DOM has no `querySelector` (it has `querySelectorAll` and
+  `insertBefore`). Keep the element `node()` / `label()` returned and set
+  attributes on that (014 ep04's `stream.js` looked up its own arrow and
+  the DataLoader bar by selector and failed every beat).
+- **A cue sum on a hold boundary** (`take + hop` = 10.17 in floats is
+  10.170000000000002) misses the hold and the state check sees a missing
+  bar or a moving part: write the boundary as its own constant (015 ep1
+  beat 4).
+- **A pulse that ends inside the hold** leaves the state off by 1e-3 at
+  `S(end − 0.3)`: use the kit's `pulseUntil(t, at, w, HOLD)` or size the
+  width to end at the hold (015 ep2 beat 1).
 - **Layout budget:** Inter ExtraBold at 60 px is about 140 px per `+0.4`.
   Count rows and widths before drawing; nine numbers plus three words is
   already a 546 x 258 px card. Monospace at 60 px fits about 22 characters
@@ -266,7 +282,9 @@ What the kit owes its beats (013 ep04):
   number reads it from the state (`×N` from `S.shape`). Wished for by
   014 ep05's agents, not built yet: the mode switch as one field (the
   dataset dip with the swap at its bottom), a cursor that follows the lit
-  line, and typing one line from a given character on.
+  line, and typing one line from a given character on. By 014 ep04's: a
+  way to stop the clock-driven flow at frame 0's phase, so a last beat
+  can hold still on frame 0.
 
 Before rendering, check your beat's states against the table:
 `node "$(git rev-parse --show-toplevel)"/tools/hf_state_check.js NN_beat FROM TO`
@@ -292,7 +310,8 @@ report which end state you assumed. Once a neighbour's render exists, run
 `"$(git rev-parse --show-toplevel)"/tools/seam_check.py beats.json` from
 the video folder and report every cut it flags, yours or not (012 ep01's
 beat 3–4 agent caught the 4 → 5 cut this way); `--beat NN_beat` checks only
-your own cuts. A part that runs on the master clock (014's sample hop on
+your own cuts, and two agents may run it at once (its snapshots go to a
+per-run temp folder since 015). A part that runs on the master clock (014's sample hop on
 `SC.clock`) moves in the 0.02 s between the two snapshots and flags every
 cut; check by eye that the strip is the only difference, then rerun with
 `--mask x0,y0,x1,y1` around it and report the box. It compares
