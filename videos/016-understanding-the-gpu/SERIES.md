@@ -190,7 +190,7 @@ From the split, for the episode sessions:
 
 | # | Folder | Storyboard | VO (Chris edited) | Recorded (raw) | Beats | Assembled | Shipped |
 |---|---|---|---|---|---|---|---|
-| 1 | `ep01-why-gpus-for-ai/` | v2 | in the take | 49.5 s | | | |
+| 1 | `ep01-why-gpus-for-ai/` | v5 | in the take | 49.5 s | 6 | 44.0 s | |
 | 2 | `ep02-flops-explained/` | v2 | in the take | 61.9 s | | | |
 | 3 | `ep03-six-flops-per-parameter/` | v2 | in the take | 48.2 s | | | |
 | 4 | `ep04-floating-point-precision/` | v2 | in the take | 51.9 s | | | |
