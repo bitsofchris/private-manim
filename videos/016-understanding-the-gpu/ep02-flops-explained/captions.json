@@ -248,40 +248,5 @@
   "start": 38.785,
   "end": 39.265,
   "text": "at once."
- },
- {
-  "start": 39.875,
-  "end": 40.365,
-  "text": "Divide a run's"
- },
- {
-  "start": 40.425,
-  "end": 41.445,
-  "text": "FLOPs by the"
- },
- {
-  "start": 41.505,
-  "end": 42.645,
-  "text": "FLOPS you get,"
- },
- {
-  "start": 42.705,
-  "end": 43.425,
-  "text": "and you have"
- },
- {
-  "start": 43.485,
-  "end": 44.805,
-  "text": "GPU-hours."
- },
- {
-  "start": 44.865,
-  "end": 45.185,
-  "text": "This is the"
- },
- {
-  "start": 45.245,
-  "end": 46.185,
-  "text": "bill."
  }
 ]
